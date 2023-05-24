@@ -1,0 +1,13 @@
+2023-04-12 16:59:28,582 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\DongViet\\anaconda3\\envs\\deepwork\\lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2023-04-12 16:59:28,583 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\DongViet\anaconda3\envs\deepwork\lib\site-packages\comtypes\gen'
+2023-04-12 16:59:29,639 - root - INFO - Wait a second for startup check..
+2023-04-12 16:59:29,651 - root - INFO - Checking internet connection...
+2023-04-12 16:59:29,807 - root - INFO - Internet connection passed!
+2023-04-12 16:59:29,819 - root - INFO - Application started.
+2023-04-12 16:59:29,847 - root - INFO - Loading face detector successfully!
+2023-04-12 16:59:29,883 - root - INFO - Loading face recognizer successfully!
+2023-04-12 16:59:29,895 - root - INFO - Starting video stream...
+2023-04-12 16:59:39,689 - root - INFO - recognize boss temporarily successful
+2023-04-12 16:59:39,703 - root - INFO - I'm ready! Say something :-)
+2023-04-12 16:59:51,830 - root - INFO - Unclassified user command..
+2023-04-12 16:59:52,147 - root - INFO - Executing skill open_in_youtube
