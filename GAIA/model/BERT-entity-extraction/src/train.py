@@ -96,11 +96,13 @@ if __name__ == "__main__":
         optimizer, num_warmup_steps=0, num_training_steps=num_train_steps
     )
 
-    best_loss = 0
+    best_loss = 100
     for epoch in range(config.EPOCHS):
         train_loss = engine.train_fn(train_data_loader, model, optimizer, device, scheduler)
         test_loss = engine.eval_fn(valid_data_loader, model, device)
         print(f"Train Loss = {train_loss} / Valid Loss = {test_loss}")
         if test_loss < best_loss:
+            print("--Saving--")
             torch.save(model.state_dict(), config.MODEL_PATH)
+            print("--Saved--")
             best_loss = test_loss
