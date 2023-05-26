@@ -1,11 +1,8 @@
-import numpy as np
-
 import joblib
 import torch
 
 import config
 import dataset
-import engine
 from bert_model import EntityModel
 
 
@@ -19,12 +16,17 @@ if __name__ == "__main__":
     num_tag = len(list(enc_tag.classes_))
 
     sentence = """
-        Golde is in home
+        golde is going to london
     """
 
     tokenized_sentence = config.TOKENIZER.encode(sentence)
 
+    res_sentence = "<CLS> " + sentence + " <SEP>"
+
     sentence = sentence.split()
+    res_sentence = res_sentence.split()
+
+    print(res_sentence)
     print(sentence)
     print(tokenized_sentence)
 
@@ -45,13 +47,20 @@ if __name__ == "__main__":
             data[k] = v.to(device).unsqueeze(0)
         tag, pos, _ = model(**data)
 
+        res_tag = enc_tag.inverse_transform(
+                tag.argmax(2).cpu().numpy().reshape(-1)
+            )[:len(tokenized_sentence)]
+        res_pos = enc_pos.inverse_transform(
+                pos.argmax(2).cpu().numpy().reshape(-1)
+            )[:len(tokenized_sentence)]
+
         print(
             enc_tag.inverse_transform(
                 tag.argmax(2).cpu().numpy().reshape(-1)
-            )[:len(sentence)]
+            )[:len(tokenized_sentence)]
         )
-        print(
-            enc_pos.inverse_transform(
-                pos.argmax(2).cpu().numpy().reshape(-1)
-            )[:len(sentence)]
-        )
+
+    for s in range(0,len(tokenized_sentence)):
+        if res_tag[s] != 'O':
+            print(res_tag[s], res_pos[s], tokenized_sentence[s], config.TOKENIZER.decode(tokenized_sentence[s]))
+            print('------------------------')

@@ -3,13 +3,24 @@ import torch
 import transformers
 import torch.nn as nn
 
+def loss_calculate(output, target, mask, num_labels):
+    loss_function = nn.CrossEntropyLoss()
+    active_loss = mask.view(-1) == 1
+    active_logit = output.view(-1, num_labels)
+    active_labels = torch.where(
+        active_loss,
+        target.view(-1),
+        torch.tensor(loss_function.ignore_index).type_as(target)
+    )
+    loss = loss_function(active_logit, active_labels)
+    return loss
 
 class EntityModel(nn.Module):
     def __init__(self, num_tag, num_pos):
         super(EntityModel, self).__init__()
         self.num_tag = num_tag
         self.num_pos = num_pos
-        self.bert = transformers.BertModel.from_pretrained(config.BASE_MODEL_PATH)
+        self.bert = transformers.BertModel.from_pretrained(config.BASE_MODEL_PATH, return_dict=False)
         self.bert_drop_1 = nn.Dropout(0.3)
         self.bert_drop_2 = nn.Dropout(0.3)
         self.out_tag = nn.Linear(768, self.num_tag)
@@ -30,15 +41,3 @@ class EntityModel(nn.Module):
         loss = (loss_tag + loss_pos) / 2
 
         return tag, pos, loss
-
-def loss_calculate(output, target, mask, num_labels):
-    loss_function = nn.CrossEntropyLoss()
-    active_loss = mask.view(-1) == 1
-    active_logit = output.view(-1, num_labels)
-    active_labels = torch.where(
-        active_loss,
-        target.view(-1),
-        torch.tensor(loss_function.ignore_index).type_as(target)
-    )
-    loss = loss_function(active_logit, active_labels)
-    return loss

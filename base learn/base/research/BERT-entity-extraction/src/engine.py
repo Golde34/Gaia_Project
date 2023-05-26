@@ -17,8 +17,8 @@ def train_fn(data_loader, model, optimizer, device, scheduler):
 
     return final_loss / len(data_loader)
 
-def eval_fn(data_loader, model, device,):
-    model.train()
+def eval_fn(data_loader, model, device):
+    model.eval()
     final_loss = 0
     for data in tqdm(data_loader, total=len(data_loader)):
         for k, v in data.items():

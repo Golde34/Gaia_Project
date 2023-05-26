@@ -44,10 +44,10 @@ class EntityDataset:
         padding_length = config.MAX_LEN - len(ids)
 
         ids = ids + ([0] * padding_length)
-        target_pos = target_pos + ([0] * padding_length)
-        target_tag = target_tag + ([0] * padding_length)
         mask = mask + ([0] * padding_length)
         token_type_ids = token_type_ids + ([0] * padding_length)
+        target_pos = target_pos + ([0] * padding_length)
+        target_tag = target_tag + ([0] * padding_length)
 
         return {
             "ids": torch.tensor(ids, dtype=torch.long),
