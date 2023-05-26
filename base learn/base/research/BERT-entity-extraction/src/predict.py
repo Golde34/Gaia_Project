@@ -19,7 +19,7 @@ if __name__ == "__main__":
     num_tag = len(list(enc_tag.classes_))
 
     sentence = """
-        Golde is going to Dreamland
+        Golde is in home
     """
 
     tokenized_sentence = config.TOKENIZER.encode(sentence)
@@ -48,5 +48,10 @@ if __name__ == "__main__":
         print(
             enc_tag.inverse_transform(
                 tag.argmax(2).cpu().numpy().reshape(-1)
+            )[:len(sentence)]
+        )
+        print(
+            enc_pos.inverse_transform(
+                pos.argmax(2).cpu().numpy().reshape(-1)
             )[:len(sentence)]
         )

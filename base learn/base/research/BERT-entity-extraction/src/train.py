@@ -96,6 +96,10 @@ if __name__ == "__main__":
         optimizer, num_warmup_steps=0, num_training_steps=num_train_steps
     )
 
+    print("--Saving--")
+    torch.save(model.state_dict(), config.MODEL_PATH)
+    print("--Saved--")
+
     best_loss = 100
     for epoch in range(config.EPOCHS):
         train_loss = engine.train_fn(train_data_loader, model, optimizer, device, scheduler)
