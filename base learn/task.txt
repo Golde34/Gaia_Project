@@ -1,3 +1,0 @@
-reinforcement learning 
-chat bot answer question by source text like location, time, etc.
-from the question answering we generate text include location, time keywords.

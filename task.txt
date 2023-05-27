@@ -1,0 +1,9 @@
+reinforcement learning 
+chat bot answer question by source text like location, time, etc.
+from the question answering we generate text include location, time keywords.
+
+tasks:
+convert token to word
+add the sentence to dataset
+label for the sentence in the dataset
+if bot do not know the label or word in sentence, add person.
