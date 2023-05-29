@@ -11,7 +11,8 @@ class ConsoleManager:
     def __init__(self):
         pass
 
-    def clear(self):
+    @staticmethod
+    def clear():
         subprocess.call('output reset' if os.name == 'posix' else 'cls', shell=True)
 
     def console_output(self, text='', debug_log=None, info_log=None, warn_log=None, error_log=None,
