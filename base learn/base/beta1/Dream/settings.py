@@ -11,7 +11,7 @@ ROOT_LOG_CONF = {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
             'formatter': 'detailed',
-            'filename': 'D:\\Code\\PersonalProject\\GDS\\base\\beta1\\Dream\\dream.log',
+            'filename': 'D:\\Code\\PersonalProject\\Golde_AI_Assistant_System\\base learn\\base\\beta1\\Dream\\dream.log',
             'mode': 'a',
             'maxBytes': 10000000,
             'backupCount': 3,

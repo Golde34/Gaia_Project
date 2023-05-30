@@ -1,8 +1,21 @@
-from core.console_manager import ConsoleManager
+import colorama
+import sys
+
+import core.gaia
+from __version__ import __version__
+
+def check_python_version():
+    return sys.version_info[0] == 3
+
 def main():
-    # Startup
-    console_manager = ConsoleManager()
-    console_manager.console_output(info_log="Wait a second for startup check...")
+    # enable color on windows
+    colorama.init()
+    # start Gaia
+    print(f"Gaia version: {__version__}")
+
 
 if __name__ == '__main__':
-    main()
+    if check_python_version():
+        main()
+    else:
+        print("Sorry! Gaia run in Python 3 supported environment.")
