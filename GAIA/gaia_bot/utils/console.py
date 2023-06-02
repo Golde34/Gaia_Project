@@ -7,6 +7,7 @@ import warnings
 from colorama import Fore
 
 IS_WIN = sys.platform == 'win32'
+IS_MACOS = sys.platform == 'darwin'
 WIN_VER = None
 if IS_WIN:
     WIN_VER = win32_ver()[0]
