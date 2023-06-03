@@ -1,7 +1,7 @@
+import gaia
 import colorama
 import sys
 
-import core.gaia
 from __version__ import __version__
 
 def check_python_version():
@@ -12,6 +12,9 @@ def main():
     colorama.init()
     # start Gaia
     print(f"Gaia version: {__version__}")
+    bot = gaia.Gaia()
+    command = " ".join(sys.argv[1:]).strip()
+    bot.executor(command)
 
 
 if __name__ == '__main__':
