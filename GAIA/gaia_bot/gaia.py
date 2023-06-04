@@ -112,6 +112,7 @@ class Gaia(CmdInterpreter, object):
             # input sanitisation to not mess up urls / numbers
             data = self.regex_dot.sub("", data)
 
+        print(data)
         # Check if Jarvis has a fixed response to this data
         if data in self.fixed_responses:
             output = self.fixed_responses[data]
@@ -120,6 +121,8 @@ class Gaia(CmdInterpreter, object):
             # to an action
             output = self.find_action(
                 data, self._plugin_manager.get_plugins().keys())
+
+        print('We will handle data in this function, then transfer result to plugin or task')
         return output
 
     def find_action(self, data, actions):

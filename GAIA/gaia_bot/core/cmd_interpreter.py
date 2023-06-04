@@ -40,12 +40,12 @@ class CmdInterpreter(Cmd):
 
         self.memory = Memory()
         self.scheduler = schedule.Schedule()
-        self._api = GaiaAPI(self)
-        self.say = self._api.say
+        self.action = GaiaAPI(self)
+        self.say = self.action.say
 
         # Remember voice settings
-        self.enable_voice = self._api.get_data('enable_voice')
-        self.speech_rate = self._api.get_data('speech_rate')
+        self.enable_voice = self.action.get_data('enable_voice')
+        self.speech_rate = self.action.get_data('speech_rate')
 
         if not self.speech_rate:
             self.speech_rate = 120
@@ -53,7 +53,7 @@ class CmdInterpreter(Cmd):
         # what if the platform does not have any engines, travis doesn't have sapi5 acc to me
 
         try:
-            gtts_status = self._api.get_data('gtts_status')
+            gtts_status = self.action.get_data('gtts_status')
             self.speech = create_voice(
                 self, gtts_status, rate=self.speech_rate)
         except Exception as e:
@@ -74,7 +74,7 @@ class CmdInterpreter(Cmd):
         self._activate_plugins()
 
         if self.first_reaction:
-            self._api.say(self.first_reaction_text)
+            self.action.say(self.first_reaction_text)
 
     def _init_plugin_info(self):
         plugin_status_formatter = {
@@ -110,10 +110,10 @@ class CmdInterpreter(Cmd):
                 CmdInterpreter,
                 "help_" + plugin_name,
                 partial(
-                    self._api.say,
+                    self.action.say,
                     plugin.get_doc()))
 
-            plugin.init(self._api)
+            plugin.init(self.action)
 
     def _plugin_update_completion(self, plugin, plugin_name):
         """Return True if completion is available"""
@@ -131,22 +131,22 @@ class CmdInterpreter(Cmd):
                 + plugin_name,
                 complete(completions))
 
-    def get_api(self):
-        return self._api
+    def getaction(self):
+        return self.action
 
     def close(self):
         """Closing Jarvis."""
 
         '''Stop the spinner if it is already running'''
-        if self._api.is_spinner_running():
-            self._api.spinner_stop('Some error has occured')
+        if self.action.is_spinner_running():
+            self.action.spinner_stop('Some error has occured')
 
         self.say("Goodbye, see you later!", Fore.RED)
         self.scheduler.stop_all()
         sys.exit()
 
     def execute_once(self, command):
-        self.get_api().eval(command)
+        self.getaction().eval(command)
         sys.exit()
 
     def error(self):
@@ -218,7 +218,7 @@ class CmdInterpreter(Cmd):
                 else:
                     do(s)
             except Exception:
-                if self._api.is_spinner_running():
+                if self.action.is_spinner_running():
                     self.spinner_stop("It seems some error has occured")
                 print(
                     Fore.RED
