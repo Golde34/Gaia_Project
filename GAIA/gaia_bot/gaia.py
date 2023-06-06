@@ -17,9 +17,9 @@ PROMPT_CHAR = '~>'
 class Gaia(CmdInterpreter, object):
     first_reaction_text = ""
     first_reaction_text += Fore.BLUE + \
-                           'Jarvis\' sound is by default disabled.' + Fore.RESET
+                           'Gaia\' sound is by default disabled.' + Fore.RESET
     first_reaction_text += "\n"
-    first_reaction_text += Fore.BLUE + 'In order to let Jarvis talk out loud type: '
+    first_reaction_text += Fore.BLUE + 'In order to let Gaia talk out loud type: '
     first_reaction_text += Fore.RESET + Fore.RED + 'enable sound' + Fore.RESET
     first_reaction_text += "\n"
     first_reaction_text += Fore.BLUE + \
@@ -46,11 +46,11 @@ class Gaia(CmdInterpreter, object):
     def _rel_path_fix(self, dirs):
         dirs_abs = []
         work_dir = os.path.dirname(__file__)
-        # remove 'jarviscli/' from path
+        
         work_dir = os.path.dirname(work_dir)
 
         # fix nltk path
-        nltk.data.path.append(os.path.join(work_dir, "jarviscli/data/nltk"))
+        nltk.data.path.append(os.path.join(work_dir, "gaia_bot/data/nltk"))
 
         # relative -> absolute paths
         for directory in dirs:
