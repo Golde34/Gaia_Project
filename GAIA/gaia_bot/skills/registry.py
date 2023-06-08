@@ -8,5 +8,3 @@ SKILLS = [
         'description': 'Detect all objects in the sentence like geography, time, person, etc.'
     }
 ]
-
-skill_objects = {skill['func'].__name__: skill['func'] for skill in SKILLS}

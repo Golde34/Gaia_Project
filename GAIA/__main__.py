@@ -4,6 +4,8 @@ from colorama import Fore
 
 from gaia_bot.core.console_manager import ConsoleManager
 from gaia_bot.skills.assistant_skill import AssistantSkill
+from gaia_bot.skills.registry import SKILLS
+
 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
@@ -29,7 +31,7 @@ def main():
         console_manager.console_output(text="I will connect to dictionary of plugins to handle input",
                                        info_log="Handle input")
         assistant = AssistantSkill()
-        assistant.validate_assistant_response(i)
+        assistant.validate_assistant_response(i, SKILLS)
         _boolean_loop = simple_handle_testing(i)
 
 if __name__ == "__main__":

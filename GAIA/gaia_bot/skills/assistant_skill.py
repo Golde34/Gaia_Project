@@ -4,7 +4,6 @@ import threading
 
 import gaia_bot
 from gaia_bot.core.console_manager import ConsoleManager
-from gaia_bot.skills.registry import SKILLS, skill_objects
 
 
 class AssistantSkill:
@@ -26,7 +25,7 @@ class AssistantSkill:
         cls.console_manager.console_output(text=text, info_log="Skill Handling", refresh_console=refresh_console)
         
     @classmethod
-    def validate_assistant_response(cls, text):
+    def validate_assistant_response(cls, text, SKILLS):
         # check in here
         for skill in SKILLS:
             for tag in str(skill['tags']).split(', '):
