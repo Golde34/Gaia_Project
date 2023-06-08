@@ -11,7 +11,7 @@ from sklearn import model_selection
 from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
 
-import config
+import model_config
 import dataset
 import engine
 from bert_model import EntityModel
@@ -33,7 +33,7 @@ def process_data(data_path):
     return sentences, pos, tag, enc_pos, enc_tag
 
 if __name__ == "__main__":
-    sentences, pos, tag, enc_pos, enc_tag = process_data(config.TRAINING_FILE)
+    sentences, pos, tag, enc_pos, enc_tag = process_data(model_config.TRAINING_FILE)
 
     meta_data = {
         "enc_pos": enc_pos,
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     )
 
     train_data_loader = DataLoader(
-        train_dataset, batch_size=config.TRAIN_BATCH_SIZE, num_workers=4
+        train_dataset, batch_size=model_config.TRAIN_BATCH_SIZE, num_workers=4
     )
 
     valid_dataset = dataset.EntityDataset(
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     )
 
     valid_data_loader = DataLoader(
-        valid_dataset, batch_size=config.VALID_BATCH_SIZE, num_workers=1
+        valid_dataset, batch_size=model_config.VALID_BATCH_SIZE, num_workers=1
     )
 
     device = torch.device("cuda")
@@ -90,23 +90,23 @@ if __name__ == "__main__":
         },
     ]
 
-    num_train_steps = int(len(train_sentences) / config.TRAIN_BATCH_SIZE * config.EPOCHS)
+    num_train_steps = int(len(train_sentences) / model_config.TRAIN_BATCH_SIZE * model_config.EPOCHS)
     optimizer = AdamW(optimizer_parameters, lr=3e-5)
     scheduler = get_linear_schedule_with_warmup(
         optimizer, num_warmup_steps=0, num_training_steps=num_train_steps
     )
 
     print("--Saving--")
-    torch.save(model.state_dict(), config.MODEL_PATH)
+    torch.save(model.state_dict(), model_config.MODEL_PATH)
     print("--Saved--")
 
     best_loss = 100
-    for epoch in range(config.EPOCHS):
+    for epoch in range(model_config.EPOCHS):
         train_loss = engine.train_fn(train_data_loader, model, optimizer, device, scheduler)
         test_loss = engine.eval_fn(valid_data_loader, model, device)
         print(f"Train Loss = {train_loss} / Valid Loss = {test_loss}")
         if test_loss < best_loss:
             print("--Saving--")
-            torch.save(model.state_dict(), config.MODEL_PATH)
+            torch.save(model.state_dict(), model_config.MODEL_PATH)
             print("--Saved--")
             best_loss = test_loss

@@ -1,8 +1,9 @@
-from gaia_bot.__version__ import __version__
+from gaia_bot.configs.__version__ import __version__
 import colorama
 from colorama import Fore
 
 from gaia_bot.core.console_manager import ConsoleManager
+from gaia_bot.skills.assistant_skill import AssistantSkill
 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
@@ -22,9 +23,13 @@ def main():
                            refresh_console=True)
     _boolean_loop = True
     while _boolean_loop:
-        print(Fore.CYAN + "Listen command" + Fore.MAGENTA)
+        console_manager.console_output(text="Listen your command",
+                                       info_log="Listen command")
         i = str(input())
-        print(Fore.CYAN + "Handle input" + Fore.MAGENTA)
+        console_manager.console_output(text="I will connect to dictionary of plugins to handle input",
+                                       info_log="Handle input")
+        assistant = AssistantSkill()
+        assistant.validate_assistant_response(i)
         _boolean_loop = simple_handle_testing(i)
 
 if __name__ == "__main__":

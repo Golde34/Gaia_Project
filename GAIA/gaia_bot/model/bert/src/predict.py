@@ -1,14 +1,14 @@
 import joblib
 import torch
 
-import config
-import dataset
-from bert_model import EntityModel
+from gaia_bot.model.bert.src import model_config
+from gaia_bot.model.bert.src import dataset
+from gaia_bot.model.bert.src.bert_model import EntityModel
 
 
 def handle_input(sentence):
     # transfer the output tag and pos with tokenized sentence
-    tokenized_sentence = config.TOKENIZER.encode(sentence)
+    tokenized_sentence = model_config.TOKENIZER.encode(sentence)
     sentenceList = sentence.split()
 
     return tokenized_sentence, sentenceList
@@ -17,7 +17,7 @@ def handle_input(sentence):
 def predict(token, sentenceList):
     test_dataset = predict_setup_dataset(sentenceList)
 
-    meta_data = joblib.load("meta.bin")
+    meta_data = joblib.load(model_config.META_MODEL)
     enc_pos = meta_data["enc_pos"]
     enc_tag = meta_data["enc_tag"]
 
@@ -27,7 +27,7 @@ def predict(token, sentenceList):
     num_tag = len_num_tag(enc_tag=enc_tag)
 
     model = EntityModel(num_tag=num_tag, num_pos=num_pos)
-    model.load_state_dict(torch.load(config.MODEL_PATH))
+    model.load_state_dict(torch.load(model_config.MODEL_PATH))
     model.to(device)
 
     with torch.no_grad():
@@ -103,7 +103,7 @@ def make_word_list(res_tag, res_pos, token):
     return word_list
 
 def decode(token):
-    return config.TOKENIZER.decode(token)
+    return model_config.TOKENIZER.decode(token)
 
 def replace_decoded_token_string_to_word(token):
     token = token.replace(" ", "")
@@ -230,10 +230,10 @@ def add_phrase(tag_list, word_combinations, current_combination):
 
 
 # run the def main
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    ip = str(input())
-    token_sentence, sentence_list = handle_input(ip)
-    _tag, _pos, _token = predict(token_sentence, sentence_list)
-    json_output = predict_output(_tag, _pos, _token)
-    print(json_output)
+#     ip = str(input())
+#     token_sentence, sentence_list = handle_input(ip)
+#     _tag, _pos, _token = predict(token_sentence, sentence_list)
+#     json_output = predict_output(_tag, _pos, _token)
+#     print(json_output)

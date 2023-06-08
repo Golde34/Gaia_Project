@@ -1,4 +1,4 @@
-import config
+from gaia_bot.model.bert.src import model_config
 import torch
 
 
@@ -21,7 +21,7 @@ class EntityDataset:
         target_tag = []
 
         for i, s in enumerate(text):
-            inputs = config.TOKENIZER.encode(
+            inputs = model_config.TOKENIZER.encode(
                 s,
                 add_special_tokens=False
             )
@@ -30,9 +30,9 @@ class EntityDataset:
             target_pos.extend([pos[i]] * input_length)
             target_tag.extend([tags[i]] * input_length)
 
-        ids = ids[:config.MAX_LEN - 2]
-        target_pos = target_pos[:config.MAX_LEN - 2]
-        target_tag = target_tag[:config.MAX_LEN - 2]
+        ids = ids[:model_config.MAX_LEN - 2]
+        target_pos = target_pos[:model_config.MAX_LEN - 2]
+        target_tag = target_tag[:model_config.MAX_LEN - 2]
 
         ids = [101] + ids + [102]
         target_pos = [0] + target_pos + [0]
@@ -41,7 +41,7 @@ class EntityDataset:
         mask = [1] * len(ids)
         token_type_ids = [0] * len(ids)
 
-        padding_length = config.MAX_LEN - len(ids)
+        padding_length = model_config.MAX_LEN - len(ids)
 
         ids = ids + ([0] * padding_length)
         mask = mask + ([0] * padding_length)
