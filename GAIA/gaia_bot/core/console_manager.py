@@ -4,6 +4,9 @@ import logging
 
 from colorama import Fore
 
+from gaia_bot.utils.console_log import start_text, OutputStyler, headerize
+from gaia_bot.configs import settings
+
 class ConsoleManager:
 
     def __init__(self) -> None:
@@ -13,17 +16,21 @@ class ConsoleManager:
         if refresh_console is True:
             self.clear()
 
-            self._stdout_print('+++++ GAIA +++++')
+            self._stdout_print(start_text)
             self._stdout_print(" Note: CTRL+C if you weant to quit GAIA console.")
 
             if info_log:
                 logging.info(info_log)
             
+            self._logging_file()
+            
+            print(OutputStyler.HEADER + headerize('ASSISTANT') + OutputStyler.ENDC)
             if text:
-                print(Fore.CYAN + '> ' + text + '\r' + Fore.MAGENTA)
+                print(OutputStyler.BOLD + '> ' + text + '\r' + OutputStyler.ENDC)
+                print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
         else:
             if text:
-                print(Fore.CYAN + text + '\r' + Fore.MAGENTA)
+                print(OutputStyler.BOLD + text + '\r' + OutputStyler.ENDC)
 
     def clear(self):
         subprocess.call('output reset' if os.name == 'posix' else 'cls', shell=True)
@@ -31,3 +38,26 @@ class ConsoleManager:
     @staticmethod
     def _stdout_print(text):
         print(Fore.CYAN + text + Fore.MAGENTA)
+
+    @staticmethod
+    def _logging_file():
+        MAX_NUMBER_OF_LOG_LINES = 100
+        log_path = settings.ROOT_LOG_CONFIG['handlers']['file']['filename']
+        actual_number_of_log_lines = 0
+        
+        gaia_file = open(log_path, "r", encoding='utf-8')
+        lines=""
+        current_line = gaia_file.readline()
+        lines += current_line + '\n'
+        
+        while current_line and actual_number_of_log_lines < MAX_NUMBER_OF_LOG_LINES:
+            current_line = gaia_file.readline()
+            lines += current_line + '\n'
+            actual_number_of_log_lines +=1
+        
+        lines = lines[0:-2]
+        gaia_file.close()
+        
+        print(OutputStyler.HEADER + headerize(
+                'LOG - {0} (Total Lines: {1})'.format(log_path, actual_number_of_log_lines)) + OutputStyler.ENDC)
+        print(OutputStyler.BOLD + lines + OutputStyler.ENDC)

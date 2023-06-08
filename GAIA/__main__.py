@@ -17,11 +17,10 @@ def main():
     print(f"Gaia version: ${__version__}")
     # Startup
     console_manager = ConsoleManager()
-    console_manager.wakeup(text="Hello bot, I'm available now",
+    console_manager.wakeup(text="Hello boss, I'm available now",
                            info_log="Bot wakeup...",
                            refresh_console=True)
     _boolean_loop = True
-    print(_boolean_loop)
     while _boolean_loop:
         print(Fore.CYAN + "Listen command" + Fore.MAGENTA)
         i = str(input())
