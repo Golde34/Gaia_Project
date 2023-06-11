@@ -1,4 +1,4 @@
-from gaia_bot.model.bert.src import model_config
+from gaia_bot.model.bert import model_config
 import torch
 import transformers
 import torch.nn as nn

@@ -1,9 +1,8 @@
 import joblib
 import torch
 
-from gaia_bot.model.bert.src import model_config
-from gaia_bot.model.bert.src import dataset
-from gaia_bot.model.bert.src.bert_model import EntityModel
+from gaia_bot.model.bert import model_config, dataset
+from gaia_bot.model.bert.bert_model import EntityModel
 
 
 def handle_input(sentence):
