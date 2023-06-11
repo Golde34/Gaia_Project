@@ -1,1 +1,0 @@
-__filename__ = 'D:/CodeDeveloper/BigThinking/Project/Golde_AI_Assistant_System/GAIA/gaia_bot/GAIA.log'

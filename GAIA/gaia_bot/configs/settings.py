@@ -4,7 +4,7 @@ ROOT_LOG_CONFIG = {
     'version': 1,
     'root': {
         'level': 'INFO',
-        'handlers':['file'],
+        'handlers': ['file'],
     },
     'handlers': {
         'file': {
