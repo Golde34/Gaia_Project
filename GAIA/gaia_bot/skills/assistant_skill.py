@@ -23,7 +23,15 @@ class AssistantSkill:
     @classmethod
     def response(cls, text, refresh_console=False):
         cls.console_manager.console_output(text=text, info_log="Skill Handling", refresh_console=refresh_console)
-        
+
+    @classmethod
+    def sentence_detect(cls, text, SKILLS):
+        for skill in SKILLS:
+            for tag in str(skill['tags']).split(', '):
+                if tag == 'default skill' or tag == 'fist skill':
+                    cls.execute_skill(skill['func'], text)
+                    break
+
     @classmethod
     def validate_assistant_response(cls, text, SKILLS):
         # check in here

@@ -31,7 +31,8 @@ def main():
         console_manager.console_output(text="I will connect to dictionary of plugins to handle input",
                                        info_log="Handle input")
         assistant = AssistantSkill()
-        assistant.validate_assistant_response(i, SKILLS)
+        assistant.sentence_detect(i, SKILLS)
+        # assistant.validate_assistant_response(i, SKILLS)
         _boolean_loop = simple_handle_testing(i)
 
 if __name__ == "__main__":
