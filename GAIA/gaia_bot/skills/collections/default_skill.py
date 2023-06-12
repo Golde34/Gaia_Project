@@ -12,7 +12,6 @@ class DefaultSkill(AssistantSkill):
         token_sentence, sentence_list = handle_input(text)
         _tag, _pos, _token = predict(token_sentence, sentence_list)
         json_output = predict_output(_tag, _pos, _token)
-        print(json_output)
 
         try:
             cls.response(str(json_output))
