@@ -1,4 +1,6 @@
 import dataset
+import model
+import hyperparameters
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -7,6 +9,7 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    dataset
+    # dataset
+    model.inference(hyperparameters)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
