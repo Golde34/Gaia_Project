@@ -1,4 +1,4 @@
-import csv_to_parquet
+from data.write_parquet import csv_to_parquet
 import pandas as pd
 import csv
 
@@ -16,5 +16,11 @@ def append_data_to_parquet(prompt, response, tag, csv_file):
     csv_to_parquet.write_parquet_file()
     csv_to_parquet.display_parquet_data()
 
-if __name__ == "__main__":
-    append_data_to_parquet('test prompt', 'test response', 'test tag', '../data.csv')
+def load_parquet(parquet_file):
+    df = pd.read_parquet(parquet_file, engine='fastparquet')
+    # print(df)
+    return df
+
+
+# if __name__ == "__main__":
+#     append_data_to_parquet('test prompt', 'test response', 'test tag', '../data.csv')
