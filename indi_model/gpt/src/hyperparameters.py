@@ -13,3 +13,5 @@ n_layer = 6
 dropout = 0.2
 seed = 1337
 max_length = 2150
+dataset_path = ""
+num_proc = 32
