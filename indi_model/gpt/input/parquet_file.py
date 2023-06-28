@@ -3,12 +3,16 @@ import pyarrow.parquet as pq
 import os
 
 
-DATA_PATH = ''
-DATA_FILE_1 = DATA_PATH + 'nomic_ai_parquet1.parquet'
+DATA_FILE_1 = 'nomic_ai_parquet1.parquet'
+DATA_FILE_2 = "nomic_ai_parquet2.parquet"
+DATA_FILE_3 = "nomic_ai_parquet3.parquet"
+DATA_FILE_4 = "nomic_ai_parquet4.parquet"
+
+DATA_FILES = [DATA_FILE_1, DATA_FILE_2, DATA_FILE_3, DATA_FILE_4]
 
 
-def slit_parquet_file():
-    parquet_file = pq.ParquetFile(DATA_FILE_1)
+def split_parquet_file(data_file):
+    parquet_file = pq.ParquetFile(data_file)
 
     num_row_groups = parquet_file.num_row_groups
     num_rows = 0
@@ -20,8 +24,9 @@ def slit_parquet_file():
         # 100 element per file
         df_slice = df[1:999]
 
-        df_slice.to_csv(f'data/output_{i}.csv', index=False)
-        write_parquet_file(f'data/output_{i}.csv', f'data/output_{i}.parquet')
+        df_slice.to_csv(f'data/{data_file}_{i}.csv', index=False)
+        write_parquet_file(f'data/{data_file}_{i}.csv',
+                           f'data/{data_file}_{i}.parquet')
 
 def write_parquet_file(from_file, to_file):
     df = pd.read_csv(from_file, encoding='utf-8')
@@ -36,5 +41,6 @@ def display_parquet_data(to_file):
     print(df)
 
 if __name__ == "__main__":
-    # slit_parquet_file()
-    display_parquet_data(f'data/output_{99}.parquet')
+    # for file in DATA_FILES:
+    #     split_parquet_file(file)
+    display_parquet_data('data/nomic_ai_parquet1.parquet_2.parquet')
