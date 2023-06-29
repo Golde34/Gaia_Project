@@ -5,7 +5,7 @@ tokenizer_name: "EleutherAI/gpt-j-6B"
 # dataset
 streaming: false
 num_proc: 64
-dataset_path: "nomic-ai/turbo-500k-multi"
+dataset_path: "../input/data/nomic_ai_parquet1.parquet_0.parquet"
 max_length: 1024
 batch_size: 32
 
