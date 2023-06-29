@@ -11,7 +11,6 @@ from transformers import DefaultDataCollator, AutoTokenizer
 
 import model_config
 import hyperparameters
-import tokenization
 
 random_seed = 1337
 np.random.seed(random_seed)
@@ -25,7 +24,7 @@ print(data_df.columns)
 
 
 def tokenize_inputs(config, tokenizer, df):
-    max_length = config.max_length
+    max_length = config['max_length']
 
     different_eos = tokenizer.eos_token != "</s>"
     out = {"labels": [], "input_ids": []}
@@ -75,7 +74,7 @@ def tokenize_inputs(config, tokenizer, df):
     return out
 
 def load_data(config, tokenizer):
-    dataset_path = config.dataset_path
+    dataset_path = config['dataset_path']
 
     if os.path.exists(dataset_path):
         if os.path.isdir(dataset_path):
@@ -90,12 +89,12 @@ def load_data(config, tokenizer):
     else:
         dataset = load_dataset(dataset_path, split="train")
 
-    dataset = dataset.train_test_split(test_size=.05, seed=config.seed)
+    dataset = dataset.train_test_split(test_size=.05, seed=config['seed'])
 
     train_dataset, val_dataset = dataset["train"], dataset["test"]
 
     if config["streaming"] is False:
-        kwargs = {"num_proc": config.num_proc}
+        kwargs = {"num_proc": config['num_proc']}
     else:
         kwargs = {}
 
@@ -114,18 +113,18 @@ def load_data(config, tokenizer):
     train_dataloader = DataLoader(
         train_dataset,
         collate_fn=DefaultDataCollator(),
-        batch_size=config.batch_size,
+        batch_size=config['batch_size'],
     )
     val_dataloader = DataLoader(
         val_dataset,
         collate_fn=DefaultDataCollator(),
-        batch_size=config.batch_size,
+        batch_size=config['batch_size'],
     )
 
     return train_dataloader, val_dataloader
 
 def load_data_for_inference(config, tokenizer):
-    dataset_path = config.dataset_path
+    dataset_path = config['dataset_path']
 
     if os.path.exists(dataset_path):
         if os.path.isdir(dataset_path):
@@ -140,19 +139,19 @@ def load_data_for_inference(config, tokenizer):
     else:
         dataset = load_dataset(dataset_path, split="train")
 
-    dataset = dataset.train_test_split(test_size=.05, seed=config.seed)
+    dataset = dataset.train_test_split(test_size=.05, seed=config['seed'])
 
     train_dataset, val_dataset = dataset["train"], dataset["test"]
 
     train_dataset = train_dataset.add_column("index", list(range(len(train_dataset))))
     # select first N batches that are divisible by batch_size
     # gather is a bit annoying to get uneven batches as it duplicates data
-    train_dataset = train_dataset.select(range((len(train_dataset) // config.batch_size) * config.batch_size))
+    train_dataset = train_dataset.select(range((len(train_dataset) // config['batch_size']) * config['batch_size']))
     val_dataset = val_dataset.add_column("index", list(range(len(val_dataset))))
-    val_dataset = val_dataset.select(range((len(val_dataset) // config.batch_size) * config.batch_size))
+    val_dataset = val_dataset.select(range((len(val_dataset) // config['batch_size']) * config['batch_size']))
 
     if config["streaming"] is False:
-        kwargs = {"num_proc": config.num_proc}
+        kwargs = {"num_proc": config['num_proc']}
     else:
         kwargs = {}
 
@@ -176,8 +175,8 @@ def load_data_for_inference(config, tokenizer):
 
 from transformers import GPTNeoForCausalLM, GPT2Tokenizer
 
-if __name__ == "__main__":
-    tokenizer = GPT2Tokenizer.from_pretrained("EleutherAI/gpt-neo-1.3B", truncation=True, max_length=512)
-    tokenizer.pad_token = tokenizer.eos_token
-    out = tokenize_inputs(hyperparameters, tokenizer, data_df.head())
-    print(out)
+# if __name__ == "__main__":
+#     tokenizer = GPT2Tokenizer.from_pretrained("EleutherAI/gpt-neo-1.3B", truncation=True, max_length=512)
+#     tokenizer.pad_token = tokenizer.eos_token
+#     out = tokenize_inputs(hyperparameters, tokenizer, data_df.head())
+#     print(out)
