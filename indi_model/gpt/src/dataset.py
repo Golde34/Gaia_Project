@@ -35,16 +35,16 @@ def tokenize_inputs(config, tokenizer, df):
 
         prompt_len = len(tokenizer(prompt + "\n", return_tensors="pt")["input_ids"][0])
 
-        if prompt_len >= max_length // 4:
+        if prompt_len >= max_length // 2:
             # if prompt is too long, truncate
             # but make sure to truncate to at max 1024 tokens
-            new_len = min(max_length // 2, len(prompt) // 4)
+            new_len = min(max_length // 2, len(prompt) // 2)
             prompt = prompt[:new_len]
             # get new prompt length
             prompt_len = tokenizer(prompt + "\n", return_tensors="pt", max_length=512,
                                    truncation=True).input_ids.ne(tokenizer.eos_token_id).sum().item()
 
-        assert prompt_len <= max_length // 4, f"prompt length {prompt_len} exceeds max length {max_length}"
+        assert prompt_len <= max_length // 2, f"prompt length {prompt_len} exceeds max length {max_length}"
 
         input_tokens = tokenizer(prompt + "\n" + response + tokenizer.eos_token,
                                  truncation=True, max_length=max_length, return_tensors="pt")["input_ids"].squeeze()
@@ -78,13 +78,13 @@ def load_data(config, tokenizer):
 
     if os.path.exists(dataset_path):
         if os.path.isdir(dataset_path):
-            files = glob.glob(os.path.join(dataset_path, "_*clean.json"))
+            files = glob.glob(os.path.join(dataset_path, "_*clean.parquet"))
         else:
             files = [dataset_path]
 
         print(f"Reading files {files}")
 
-        dataset = load_dataset("json", data_files=files, split="train")
+        dataset = load_dataset("parquet", data_files=files, split="train")
 
     else:
         dataset = load_dataset(dataset_path, split="train")
@@ -128,13 +128,13 @@ def load_data_for_inference(config, tokenizer):
 
     if os.path.exists(dataset_path):
         if os.path.isdir(dataset_path):
-            files = glob.glob(os.path.join(dataset_path, "_*clean.json"))
+            files = glob.glob(os.path.join(dataset_path, "_*clean.parquet"))
         else:
             files = [dataset_path]
 
         print(f"Reading files {files}")
 
-        dataset = load_dataset("json", data_files=files, split="train")
+        dataset = load_dataset("parquet", data_files=files, split="train")
 
     else:
         dataset = load_dataset(dataset_path, split="train")

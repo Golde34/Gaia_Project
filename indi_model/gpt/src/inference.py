@@ -189,9 +189,9 @@ def inference(config):
                              num_proc=64)
 
 def main():
-    dist.init_process_group("nccl")
+    # dist.init_process_group("nccl", rank=0)
     parser = ArgumentParser()
-    parser.add_argument("--config", type=str, default="config.yaml")
+    parser.add_argument("--config", type=str, default="configs/inference/gptj.yaml")
 
     args = parser.parse_args()
     config = read_config(args.config)
