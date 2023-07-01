@@ -24,10 +24,10 @@ print(data_df.columns)
 
 
 def tokenize_inputs(config, tokenizer, df):
-    max_length = config['max_length']
+    max_length = config.max_length
 
     different_eos = tokenizer.eos_token != "</s>"
-    out = {"labels": [], "input_ids": []}
+    out = {"labels": [], "input_ids": [], "prompt": "", "response": ""}
     for prompt, response in zip(df['prompt'], df['response']):
         if different_eos:
             if response.count("</s> \n") > 0:
@@ -41,8 +41,8 @@ def tokenize_inputs(config, tokenizer, df):
             new_len = min(max_length // 2, len(prompt) // 2)
             prompt = prompt[:new_len]
             # get new prompt length
-            prompt_len = tokenizer(prompt + "\n", return_tensors="pt", max_length=512,
-                                   truncation=True).input_ids.ne(tokenizer.eos_token_id).sum().item()
+            prompt_len = tokenizer(prompt + "\n", return_tensors="pt", max_length=max_length // 2,
+                                   truncation=True).input_ids.ne(tokenizer.pad_token_id).sum().item()
 
         assert prompt_len <= max_length // 2, f"prompt length {prompt_len} exceeds max length {max_length}"
 
@@ -67,6 +67,8 @@ def tokenize_inputs(config, tokenizer, df):
             "input_ids"]
         out["labels"].append(labels)
         out["input_ids"].append(input_tokens)
+        out['prompt'] = prompt
+        out['response'] = response
         print(out)
 
     out = {k: torch.stack(v) if isinstance(v, list) else v for k, v in out.items()}
@@ -74,8 +76,8 @@ def tokenize_inputs(config, tokenizer, df):
     return out
 
 def load_data(config, tokenizer):
-    dataset_path = config['dataset_path']
-
+    dataset_path = config.dataset_path
+    files = None
     if os.path.exists(dataset_path):
         if os.path.isdir(dataset_path):
             files = glob.glob(os.path.join(dataset_path, "_*clean.parquet"))
@@ -84,17 +86,16 @@ def load_data(config, tokenizer):
 
         print(f"Reading files {files}")
 
-        dataset = load_dataset("parquet", data_files=files, split="train")
+    dataset = load_dataset("parquet", data_files=files, split="train")
 
-    else:
-        dataset = load_dataset(dataset_path, split="train")
-
-    dataset = dataset.train_test_split(test_size=.05, seed=config['seed'])
+    dataset = dataset.train_test_split(test_size=.05, seed=config.seed)
 
     train_dataset, val_dataset = dataset["train"], dataset["test"]
+    print(train_dataset)
+    print(val_dataset)
 
-    if config["streaming"] is False:
-        kwargs = {"num_proc": config['num_proc']}
+    if config.streaming is False:
+        kwargs = {"num_proc": config.num_proc}
     else:
         kwargs = {}
 
@@ -105,6 +106,7 @@ def load_data(config, tokenizer):
         remove_columns=["source", "prompt"],
         **kwargs
     )
+    print(train_dataset)
 
     train_dataset = train_dataset.with_format("torch")
     val_dataset = val_dataset.with_format("torch")
@@ -113,70 +115,23 @@ def load_data(config, tokenizer):
     train_dataloader = DataLoader(
         train_dataset,
         collate_fn=DefaultDataCollator(),
-        batch_size=config['batch_size'],
+        batch_size=config.batch_size,
     )
     val_dataloader = DataLoader(
         val_dataset,
         collate_fn=DefaultDataCollator(),
-        batch_size=config['batch_size'],
+        batch_size=config.batch_size,
     )
 
     return train_dataloader, val_dataloader
 
-def load_data_for_inference(config, tokenizer):
-    dataset_path = config['dataset_path']
-
-    if os.path.exists(dataset_path):
-        if os.path.isdir(dataset_path):
-            files = glob.glob(os.path.join(dataset_path, "_*clean.parquet"))
-        else:
-            files = [dataset_path]
-
-        print(f"Reading files {files}")
-
-        dataset = load_dataset("parquet", data_files=files, split="train")
-
-    else:
-        dataset = load_dataset(dataset_path, split="train")
-
-    dataset = dataset.train_test_split(test_size=.05, seed=config['seed'])
-
-    train_dataset, val_dataset = dataset["train"], dataset["test"]
-
-    train_dataset = train_dataset.add_column("index", list(range(len(train_dataset))))
-    # select first N batches that are divisible by batch_size
-    # gather is a bit annoying to get uneven batches as it duplicates data
-    train_dataset = train_dataset.select(range((len(train_dataset) // config['batch_size']) * config['batch_size']))
-    val_dataset = val_dataset.add_column("index", list(range(len(val_dataset))))
-    val_dataset = val_dataset.select(range((len(val_dataset) // config['batch_size']) * config['batch_size']))
-
-    if config["streaming"] is False:
-        kwargs = {"num_proc": config['num_proc']}
-    else:
-        kwargs = {}
-
-    # tokenize inputs and return labels and attention mask
-    train_dataset = train_dataset.map(
-        lambda ele: tokenize_inputs(config, tokenizer, ele),
-        batched=True,
-        **kwargs
-    )
-    val_dataset = val_dataset.map(
-        lambda ele: tokenize_inputs(config, tokenizer, ele),
-        batched=True,
-        **kwargs
-    )
-
-    train_dataset = train_dataset.with_format("torch")
-    val_dataset = val_dataset.with_format("torch")
-
-    return train_dataset, val_dataset
-
-
 from transformers import GPTNeoForCausalLM, GPT2Tokenizer
 
-# if __name__ == "__main__":
-#     tokenizer = GPT2Tokenizer.from_pretrained("EleutherAI/gpt-neo-1.3B", truncation=True, max_length=512)
-#     tokenizer.pad_token = tokenizer.eos_token
-#     out = tokenize_inputs(hyperparameters, tokenizer, data_df.head())
-#     print(out)
+if __name__ == "__main__":
+    tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B", model_max_length=hyperparameters.max_length)
+    tokenizer.pad_token = tokenizer.eos_token
+    out = tokenize_inputs(hyperparameters, tokenizer, data_df.head())
+    print(out)
+    # train, val = load_data(hyperparameters, tokenizer)
+    # print(train)
+    # print(val)

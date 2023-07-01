@@ -13,5 +13,6 @@ n_layer = 6
 dropout = 0.2
 seed = 1337
 max_length = 1024
-dataset_path = "../input/data/nomic_ai_parquet1.parquet0.parquet"
+dataset_path = "../input/data/nomic_ai_parquet1.parquet_0.parquet"
 num_proc = 32
+streaming = False

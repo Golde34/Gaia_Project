@@ -211,7 +211,7 @@ def train(accelerator, config):
 if __name__ == "__main__":
     # parse arguments by reading in a config
     parser = ArgumentParser()
-    parser.add_argument("--config", type=str, default="config.yaml")
+    parser.add_argument("--config", type=str, default="configs/train/finetune_gptj.yaml")
 
     args = parser.parse_args()
 
