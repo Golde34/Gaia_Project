@@ -1,0 +1,49 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.9.16",
+    "heartbeatAt": "2023-07-02T12:27:38.758757",
+    "startedAt": "2023-07-02T12:27:37.770244",
+    "docker": null,
+    "cuda": null,
+    "args": null,
+    "state": "running",
+    "program": "PersonalProject/Golde_AI_Assistant_System/indi_model/gpt/test_gpt/gpt-2.ipynb",
+    "root": "D:/Code/PersonalProject/Golde_AI_Assistant_System",
+    "git": {
+        "remote": "https://github.com/Golde34/Golde_AI_Assistant_System.git",
+        "commit": "da8401f571de0af7aa1f9bac4bbdad2fdb371d81"
+    },
+    "email": "nguyendongducviet2001@gmail.com",
+    "host": "DESKTOP-OAP2ON9",
+    "username": "DongViet",
+    "executable": "C:\\Users\\DongViet\\anaconda3\\envs\\deepwork\\python.exe",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 2500.0,
+        "min": 0.0,
+        "max": 2500.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2500.0,
+            "min": 0.0,
+            "max": 2500.0
+        }
+    ],
+    "disk": {
+        "total": 390.62401962280273,
+        "used": 204.8685073852539
+    },
+    "gpu": "NVIDIA GeForce RTX 3070 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3070 Ti",
+            "memory_total": 8589934592
+        }
+    ],
+    "memory": {
+        "total": 15.840850830078125
+    }
+}
