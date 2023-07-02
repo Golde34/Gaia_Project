@@ -228,7 +228,7 @@ def train_loop(new_data, old_data, stats = None):
     return stats
 
 def evaluate_loop(data):
-    dataloader = DataLoader(data, batch_size=1, shuffle=True, num_workers=16); del data
+    dataloader = DataLoader(data, batch_size=1, shuffle=True, num_workers=2); del data
     data_iter = iter(dataloader)
     with torch.no_grad():
         eval_stats, total_steps, val_loss, val_f1_score = {}, 0, 0.0, 0.0
