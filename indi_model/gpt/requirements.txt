@@ -1,5 +1,0 @@
-transformers
-fastparquet
-datasets
-torch
-cuda-toolkit
