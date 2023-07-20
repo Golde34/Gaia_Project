@@ -1,4 +1,6 @@
 from gaia_bot.configs.__config__ import __filename__
+from gaia_bot.configs.enums import InputMode
+
 
 ROOT_LOG_CONFIG = {
     'version': 1,
@@ -22,4 +24,11 @@ ROOT_LOG_CONFIG = {
             'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         },
     }
+}
+
+DEFAULT_GENERAL_SETTINGS = {
+    'assistant_name': 'gaia',
+    'input_mode': InputMode.TEXT.value,
+    'input_language': 'en',
+    # 'response_in_speech': False
 }
