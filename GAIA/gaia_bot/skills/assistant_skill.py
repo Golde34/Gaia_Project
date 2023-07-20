@@ -28,7 +28,7 @@ class AssistantSkill:
     def sentence_detect(cls, text, SKILLS):
         for skill in SKILLS:
             for tag in str(skill['tags']).split(', '):
-                if tag == 'default skill' or tag == 'fist skill':
+                if tag == 'default skill' or tag == 'first skill':
                     cls.execute_skill(skill['func'], text)
                     break
 
