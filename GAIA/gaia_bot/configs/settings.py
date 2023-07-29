@@ -30,5 +30,5 @@ DEFAULT_GENERAL_SETTINGS = {
     'assistant_name': 'gaia',
     'input_mode': InputMode.TEXT.value,
     'input_language': 'en',
-    # 'response_in_speech': False
+    'response_in_speech': False
 }

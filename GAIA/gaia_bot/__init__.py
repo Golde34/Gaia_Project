@@ -4,6 +4,7 @@ from gaia_bot.configs.settings import ROOT_LOG_CONFIG
 from gaia_bot.engines import stt, tts, ttt
 from gaia_bot.configs.settings import DEFAULT_GENERAL_SETTINGS
 from gaia_bot.configs.enums import InputMode
+from gaia_bot.core.console_manager import ConsoleManager
 
 
 config.dictConfig(ROOT_LOG_CONFIG)
@@ -16,5 +17,8 @@ input_mode = DEFAULT_GENERAL_SETTINGS['input_mode']
 input_language = DEFAULT_GENERAL_SETTINGS['input_language']
 response_in_speech = DEFAULT_GENERAL_SETTINGS['response_in_speech']
 
-input_engine = stt.STTEngine(input_language=input_language) if input_mode == InputMode.VOICE.value else ttt.TTTEngine(input_language=input_language)
-output_engine = tts.TTSEngine() if response_in_speech else ttt.TTTEngine(input_language=input_language)
+console_manager = ConsoleManager()
+
+input_engine = stt.STTEngine(input_language=input_language, console_manager=console_manager) \
+    if input_mode == InputMode.VOICE.value else ttt.TTTEngine(input_language=input_language, console_manager=console_manager)
+output_engine = tts.TTSEngine() if response_in_speech else ttt.TTTEngine(input_language=input_language, console_manager=console_manager)
