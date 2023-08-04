@@ -16,9 +16,9 @@ class DataProcessing:
         self.ps = PorterStemmer()
         self.spell = SpellChecker()
         self.pre_data = self.convert_to_lowercase(data)
-        self.pre_data = self.correct_spellings(data)
         self.pre_data = self.data_remove_punc(data)
         self.pre_data = self.data_remove_stopwords(data)
+        # self.pre_data = self.correct_spellings(data)
         self.pre_data = self.stemming(data)
 
         # # preprocessing by word count
@@ -63,7 +63,7 @@ class DataProcessing:
                 corrected_text.append(self.spell.correction(word))
             else:
                 corrected_text.append(word)
-
+        print(corrected_text)
         return " ".join(corrected_text)
 
     def _stemming_words(self, text):
