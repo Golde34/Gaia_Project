@@ -5,6 +5,7 @@
 *\dist
 *\.bin
 *\.csv
+*\.pt
 
 .ipynb_checkpoints
 __config__.py
