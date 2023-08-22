@@ -1,11 +1,9 @@
 import tqdm
 import torch
 from config import device
-from finetune_gpt2_model import EntityModel
 from config import epochs
 
 def train_engine(chatData, model, optim):
-
     for i in tqdm.tqdm(range(epochs)):
         for X, a in chatData:
             X = X.to(device)
@@ -17,5 +15,3 @@ def train_engine(chatData, model, optim):
             optim.step()
  
         torch.save(model.state_dict(), "model.pt")
-
-    print(model)

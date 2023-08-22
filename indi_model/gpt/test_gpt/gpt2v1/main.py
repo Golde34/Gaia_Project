@@ -6,7 +6,8 @@ if __name__ == "__main__":
     print("Console test")
     choose = str(input())
     if choose == 'train':
-        train.train()
+        dataset = "./chat_data.json"
+        train.train(dataset)
     if choose == 'inf':
         while True:
             inp = str(input())
