@@ -32,3 +32,7 @@ DEFAULT_GENERAL_SETTINGS = {
     'input_language': 'en',
     'response_in_speech': False
 }
+
+AI_MODEL_LOCATION = {
+    'gpt2': "./gaia_bot/model/gpt/model.pt",
+}

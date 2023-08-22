@@ -1,5 +1,6 @@
 import gaia_bot
 
+from gaia_bot.core.response_creator import ResponseCreator
 
 class Process:
 
@@ -8,7 +9,7 @@ class Process:
         self.settings = settings
         self.assistant = assistant
         self.skills = skills
-        # Maybe in here I need to create a response creator
+        self.response_creator = ResponseCreator()
 
     def run(self):
         transcript = gaia_bot.input_engine.recognize_input()
@@ -17,5 +18,6 @@ class Process:
 
         self.assistant.sentence_detect(transcript, self.skills)
         # assistant.validate_assistant_response(i, SKILLS)
-        return transcript
+        response_transcript = self.response_creator.generate_response(transcript)
+        return response_transcript
 

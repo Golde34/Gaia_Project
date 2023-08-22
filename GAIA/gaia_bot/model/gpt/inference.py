@@ -1,10 +1,10 @@
-from config import device
-from tokenizer_config import gpt2_tokenizer
 import torch
-from finetune_gpt2_model import EntityModel
+from gaia_bot.model.gpt.config import device
+from gaia_bot.model.gpt.tokenizer_config import gpt2_tokenizer
+from gaia_bot.model.gpt.finetune_gpt2_model import EntityModel
+from gaia_bot.configs.settings import AI_MODEL_LOCATION
 
-
-def infer(inp):
+def inference(inp):
     tokenizer = gpt2_tokenizer
     model = load_model().to(device)
     inp = "<startofstring> "+ inp +" <bot>: "
@@ -22,7 +22,7 @@ def load_model():
     model.gpt2.resize_token_embeddings(len(tokenizer))
     model = model.to(device)
 
-    model.load_state_dict(torch.load('./model.pt'))
+    model.load_state_dict(torch.load(AI_MODEL_LOCATION['gpt2']))
     model.eval()
 
     print(model)
