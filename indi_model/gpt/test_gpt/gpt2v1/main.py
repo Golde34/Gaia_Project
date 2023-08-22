@@ -13,3 +13,5 @@ if __name__ == "__main__":
             print(inference.infer(inp))
     if choose == 'load model':
         inference.load_model()
+    if choose == 'pretrained':
+        train.pretrained()

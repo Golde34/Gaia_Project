@@ -17,7 +17,7 @@ class ChatData(Dataset):
             except:
                 break
 
-        self.X = self.X[:5]
+        self.X = self.X[:5000]
 
         self.X_encoded = tokenizer(self.X,max_length=40, truncation=True, padding="max_length", return_tensors="pt")
         self.input_ids = self.X_encoded['input_ids']
