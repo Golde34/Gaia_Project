@@ -12,7 +12,7 @@ def inference(inp):
     X = inp["input_ids"].to(device)
     a = inp["attention_mask"].to(device)
     output = model.gpt2.generate(X, attention_mask=a)
-    output = tokenizer.decode(output[0])
+    output = tokenizer.decode(output[0], skip_special_tokens=True)
     return output
 
 def load_model():
@@ -25,5 +25,4 @@ def load_model():
     model.load_state_dict(torch.load(AI_MODEL_LOCATION['gpt2']))
     model.eval()
 
-    print(model)
     return model

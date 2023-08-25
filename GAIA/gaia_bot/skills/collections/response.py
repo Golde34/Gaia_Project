@@ -1,6 +1,5 @@
 from gaia_bot.model.gpt.inference import inference
 from gaia_bot.skills.assistant_skill import AssistantSkill
-import re
 
 
 class GPT2GenerateResponse(AssistantSkill):
