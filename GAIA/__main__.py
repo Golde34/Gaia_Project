@@ -32,6 +32,7 @@ def main():
     while _boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
+        # process
         i = process.run()
         _boolean_loop = simple_handle_testing(i)
 

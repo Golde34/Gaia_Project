@@ -13,11 +13,16 @@ class Process:
 
     def run(self):
         transcript = gaia_bot.input_engine.recognize_input()
-        self.console_manager.console_output(text="I will connect to dictionary of plugins to handle input",
+        self.console_manager.console_output(text="Handling your command",
                                             info_log="Handle input")
-
-        self.assistant.sentence_detect(transcript, self.skills)
-        # assistant.validate_assistant_response(i, SKILLS)
+        # Response
         response_transcript = self.response_creator.generate_response(transcript)
+        # Execute Script
+
+
+
+        # self.assistant.sentence_detect(transcript, self.skills)
+        # assistant.validate_assistant_response(i, SKILLS)
+
         return response_transcript
 

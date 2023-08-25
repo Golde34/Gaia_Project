@@ -9,17 +9,14 @@ class GPT2GenerateResponse(AssistantSkill):
     def generate_response(cls, text, **kwargs):
         try:
             response = inference(inp=text)
-            cls.response(cls._format_response(response))
+            last_response = cls._format_response(response)
+            cls.response(last_response)
+            return last_response
         except Exception as e:
             cls.console_manager.console_output('Failed to generate response.')
 
     @staticmethod
     def _format_response(response):
-        pattern = r"<bot>:(.*?)<endofstring>"
-        match = re.search(pattern, response)
-
-        if match:
-            extracted_sentence = match.group(1).strip()
-            return extracted_sentence
-        else:
-            return "Failed to generate response."
+        response_boundary = response.find("<bot>:") + len("<bot>:")
+        extracted_sentence = response[response_boundary:].strip()
+        return extracted_sentence
