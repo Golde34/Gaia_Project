@@ -27,8 +27,7 @@ def main():
                            refresh_console=True)
     # initiate
     _boolean_loop = True
-    process = Processor(console_manager=console_manager, assistant=assistant,
-                        settings=settings, skills=SKILLS)
+    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings) 
     while _boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
