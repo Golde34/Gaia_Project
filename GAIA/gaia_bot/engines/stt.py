@@ -1,6 +1,5 @@
 import speech_recognition as sr
 
-import gaia_bot
 from gaia_bot.configs.settings import DEFAULT_GENERAL_SETTINGS
 from gaia_bot.engines.ltl import L2L
 

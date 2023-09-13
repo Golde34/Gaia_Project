@@ -22,7 +22,7 @@ class Process:
 
 
         # self.assistant.sentence_detect(transcript, self.skills)
-        # assistant.validate_assistant_response(i, SKILLS)
+        self.assistant.validate_assistant_response(transcript, self.skills)
 
         return response_transcript
 

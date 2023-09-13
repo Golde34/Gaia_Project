@@ -34,5 +34,5 @@ DEFAULT_GENERAL_SETTINGS = {
 }
 
 AI_MODEL_LOCATION = {
-    'gpt2': "./gaia_bot/model/gpt/model.pt",
+    'gpt2': "./gaia_bot/models/gpt/model.pt",
 }

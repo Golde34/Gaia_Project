@@ -1,4 +1,4 @@
-from gaia_bot.model.bert.predict import predict, handle_input, predict_output
+from gaia_bot.models.bert.predict import predict, handle_input, predict_output
 from gaia_bot.skills.assistant_skill import AssistantSkill
 
 
