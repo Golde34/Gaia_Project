@@ -5,7 +5,7 @@ from colorama import Fore
 from gaia_bot.core.console_manager import ConsoleManager
 from gaia_bot.skills.assistant_skill import AssistantSkill
 from gaia_bot.skills.registry import SKILLS
-from gaia_bot.core.process import Process
+from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
 
 def simple_handle_testing(console_input):
@@ -27,14 +27,14 @@ def main():
                            refresh_console=True)
     # initiate
     _boolean_loop = True
-    process = Process(console_manager=console_manager, assistant=assistant,
+    process = Processor(console_manager=console_manager, assistant=assistant,
                         settings=settings, skills=SKILLS)
     while _boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
         # process
-        i = process.run()
-        _boolean_loop = simple_handle_testing(i)
+        process.run()
+        # _boolean_loop = simple_handle_testing(i)
 
 if __name__ == "__main__":
     main()

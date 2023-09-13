@@ -2,7 +2,7 @@ import gaia_bot
 
 from gaia_bot.core.response_creator import ResponseCreator
 
-class Process:
+class Processor:
 
     def __init__(self, console_manager, settings, assistant, skills):
         self.console_manager = console_manager
