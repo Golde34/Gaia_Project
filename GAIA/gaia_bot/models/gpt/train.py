@@ -1,14 +1,14 @@
 import argparse
-from gaia_bot.model.gpt.dataset import ChatData
+from gaia_bot.models.gpt.dataset import ChatData
 from torch.optim import Adam
 import torch
 from torch.utils.data import DataLoader
 
 # from utils.gpu_print import print_gpu_utilization
-from gaia_bot.model.gpt.config import device, batch_size, learning_rate
-from gaia_bot.model.gpt.engine import train_engine
-from gaia_bot.model.gpt.tokenizer_config import gpt2_tokenizer
-from gaia_bot.model.gpt.finetune_gpt2_model import EntityModel
+from gaia_bot.models.gpt.config import device, batch_size, learning_rate
+from gaia_bot.models.gpt.engine import train_engine
+from gaia_bot.models.gpt.tokenizer_config import gpt2_tokenizer
+from gaia_bot.models.gpt.finetune_gpt2_model import EntityModel
 
 
 def train(dataset):

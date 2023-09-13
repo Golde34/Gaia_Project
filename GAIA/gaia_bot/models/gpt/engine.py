@@ -1,6 +1,6 @@
 import tqdm
 import torch
-from gaia_bot.model.gpt.config import device, epochs
+from gaia_bot.models.gpt.config import device, epochs
 
 def train_engine(chatData, model, optim):
     for i in tqdm.tqdm(range(epochs)):
