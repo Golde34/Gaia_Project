@@ -11,3 +11,5 @@
 __config__.py
 *\.parquet
 *\tmp
+
+.env

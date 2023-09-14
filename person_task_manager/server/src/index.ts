@@ -4,16 +4,17 @@ import { MongoHelper } from "./database/mongodb.db";
 
 
 async function main(): Promise<void> {
-  // validateEnvironmentVars()
+  validateEnvironmentVars()
 
-  // const mongoHelper = new MongoHelper(
-  //   config.database.host,
-  //   config.database.port,
-  //   config.database.name,
-  //   config.database.username,
-  //   config.database.password,
-  // )
-  // await mongoHelper.connect();
+  const mongoHelper = new MongoHelper(
+    config.database.host,
+    config.database.port,
+    config.database.name,
+    config.database.username,
+    config.database.password,
+  )
+  await mongoHelper.connect();
+  console.log("Connected to MongoDB");
 
   const app: Application = express();
   const port = process.env.PORT || 3000;
