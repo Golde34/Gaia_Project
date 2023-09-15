@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
 import { IResponse } from "./response";
+import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UnauthorizedError } from "./error-handler";
 
 export function msg400(message: string): IResponse {
     return {
@@ -56,23 +57,23 @@ export function sendResponse(result: IResponse, response: Response, next: NextFu
             break;
         }
         case 400: {
-            // next(new BadRequestError(result.message));
+            next(new BadRequestError(result.message));
             break;
         }
         case 401: {
-            // next(new UnauthorizedError(result.message));
+            next(new UnauthorizedError(result.message));
             break;
         }
         case 403: {
-            // next(new ForbiddenError(result.message));
+            next(new ForbiddenError(result.message));
             break;
         }
         case 404: {
-            // next(new NotFoundError(result.message));
+            next(new NotFoundError(result.message));
             break;
         }
         case 500: {
-            // next(new InternalServerError(result.message));
+            next(new InternalServerError(result.message));
             break;
         }
     }

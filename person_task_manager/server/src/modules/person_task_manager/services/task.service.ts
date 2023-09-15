@@ -1,6 +1,6 @@
 import { HydratedDocument } from "mongoose";
 import { ITaskEntity, TaskEntity } from "../entities/task.entity";
-import { msg200 } from "../../../common/helpers";
+import { msg200 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
 
 export class TaskService {
@@ -13,9 +13,11 @@ export class TaskService {
         });
     }
 
-    async getAllTasks(): Promise<HydratedDocument<ITaskEntity>[]> {
+    async getAllTasks(): Promise<IResponse> {
         const tasks = await TaskEntity.find();
-        return tasks;
+        return msg200({
+            tasks
+        });
     }
 
     async createTask(task: any): Promise<IResponse> {

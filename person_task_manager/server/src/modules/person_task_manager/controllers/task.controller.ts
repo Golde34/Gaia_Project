@@ -1,6 +1,6 @@
 import {type Request, type Response, Router, NextFunction} from "express";
 import { taskService } from "../services/task.service";
-import { sendResponse } from "../../../common/helpers";
+import { sendResponse } from "../../../common/response_helpers";
 
 export const taskRouter = Router();
 
@@ -23,7 +23,7 @@ taskRouter.get("/", async (req: Request, res: Response, next: NextFunction): Pro
     try {
         const taskResult = await taskService.getAllTasks();
 
-        res.status(200).send(taskResult);
+        sendResponse(taskResult, res, next);
     }
     catch (err) {
         next(err);
