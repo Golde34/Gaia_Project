@@ -5,7 +5,7 @@ import { sendResponse } from "../../../common/response_helpers";
 export const taskRouter = Router();
 
 //get one task
-taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
 
@@ -19,7 +19,7 @@ taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): 
 });
 
 // get all tasks
-taskRouter.get("/", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/task", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskResult = await taskService.getAllTasks();
 
