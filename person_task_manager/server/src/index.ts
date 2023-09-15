@@ -1,6 +1,7 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./config/configuration";
 import { MongoHelper } from "./database/mongodb.db";
+import { taskRouter } from "./modules/person_task_manager/controllers/task.controller";
 
 
 async function main(): Promise<void> {
@@ -23,9 +24,13 @@ async function main(): Promise<void> {
     res.send("Hello World!");
   });
 
-  app.listen(port, () => {
+  app.use("/", taskRouter)
+  app.use((req: Request, res: Response, next: NextFunction) => next(new Error("Not Found")))
+
+  app.listen(config.server.listenPort, () => {
     console.log(`Server running on port ${port}`);
   });
+
 }
 
 main();

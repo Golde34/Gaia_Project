@@ -7,3 +7,6 @@ convert token to word
 add the sentence to dataset
 label for the sentence in the dataset
 if bot do not know the label or word in sentence, add person.
+
+15-9-23
+if bot doesnt know which task is, then create a "Add new Skill mechanism"
