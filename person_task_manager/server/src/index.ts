@@ -2,6 +2,7 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./config/configuration";
 import { MongoHelper } from "./database/mongodb.db";
 import { taskRouter } from "./modules/person_task_manager/controllers/task.controller";
+import { groupTaskRouter } from "./modules/person_task_manager/controllers/group-task.controller";
 
 
 async function main(): Promise<void> {
@@ -25,6 +26,7 @@ async function main(): Promise<void> {
   });
 
   app.use("/", taskRouter)
+  app.use("/group-task", groupTaskRouter)
   app.use((req: Request, res: Response, next: NextFunction) => next(new Error("Not Found")))
 
   app.listen(config.server.listenPort, () => {

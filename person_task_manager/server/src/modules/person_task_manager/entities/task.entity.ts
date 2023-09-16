@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-export interface ITaskEntity {
+export interface ITaskEntity extends Document {
+    _id: string;
     title: string;
     description: string;
     priority: string[];
@@ -49,7 +50,7 @@ export const taskSchema = new mongoose.Schema<ITaskEntity>(
 );
 
 taskSchema.virtual("id").get(function () {
-    return this._id.toHexString();
+    return this._id.toString();
 });
 
 export const TaskEntity = mongoose.model<ITaskEntity>("Task", taskSchema);
