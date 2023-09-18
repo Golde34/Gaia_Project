@@ -1,18 +1,17 @@
 import mongoose, { Schema } from "mongoose";
-import { ITaskEntity } from "./task.entity";
+import { IGroupTaskEntity } from "./group-task.entity";
 
-export interface IGroupTaskEntity extends Document{
+export interface IProjectEntity extends Document {
     _id: string;
-    title: string;
+    name: string;
     description: string;
-    priority: string[];
     status: string;
-    tasks: ITaskEntity["_id"][];
+    groupTasks: IGroupTaskEntity["_id"][];
 }
 
-export const groupTaskSchema = new mongoose.Schema(
+export const projectSchema = new mongoose.Schema(
     {
-        title: {
+        name: {
             type: String,
             required: true,
         },
@@ -20,17 +19,13 @@ export const groupTaskSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
-        priority: {
-            type: [String],
-            required: true,
-        },
         status: {
             type: String,
             required: true,
         },
-        tasks: {
+        groupTasks: {
             type: [Schema.Types.ObjectId],
-            ref: 'Task',
+            ref: 'GroupTask',
             required: false,
         },
     },
@@ -41,10 +36,8 @@ export const groupTaskSchema = new mongoose.Schema(
     },
 );
 
-groupTaskSchema.virtual("id").get(function () {
+projectSchema.virtual("id").get(function () {
     return this._id.toString();
 });
 
-
-
-export const GroupTaskEntity = mongoose.model<IGroupTaskEntity>("GroupTask", groupTaskSchema);
+export const ProjectEntity = mongoose.model<IProjectEntity>("Project", projectSchema);

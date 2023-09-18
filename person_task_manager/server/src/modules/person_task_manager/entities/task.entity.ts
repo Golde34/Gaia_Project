@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { ISubTaskEntity } from "./sub-task.entity";
+import { ICommentEntity } from "./comment.entity";
 
 export interface ITaskEntity extends Document {
     _id: string;
@@ -8,10 +10,11 @@ export interface ITaskEntity extends Document {
     status: string;
     createdAt: Date;
     updatedAt: Date;
-    subTasks: string[];
+    subTasks: ISubTaskEntity["_id"][];
+    comments: ICommentEntity ["_id"][];
 }
 
-export const taskSchema = new mongoose.Schema<ITaskEntity>(
+export const taskSchema = new mongoose.Schema(
     {
         title: {
             type: String,
@@ -29,10 +32,6 @@ export const taskSchema = new mongoose.Schema<ITaskEntity>(
             type: String,
             required: true,
         },
-        subTasks: {
-            type: [String],
-            required: false,
-        },
         createdAt: {
             type: Date,
             required: true,
@@ -41,6 +40,16 @@ export const taskSchema = new mongoose.Schema<ITaskEntity>(
             type: Date,
             required: true,
         },
+        subTasks: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: 'SubTask',
+            required: false,
+        },
+        comments: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: 'Comment',
+            required: false,
+        }
     },
     {
         toJSON: { virtuals: true },
