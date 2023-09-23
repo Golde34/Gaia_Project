@@ -12,15 +12,16 @@ public class UserDto {
     private String username;
     
     @NotNull
+    @ValidEmail
     @Size(min=1, message="{Size.userDto.email}")
     private String email;
 
     @ValidPassword
     private String password;
 
-    private boolean enabled;
+    @NotNull
+    @Size(min=1)
+    private String matchingPassword;
 
     private boolean isUsing2FA;
-    
-    private String secret;
 }
