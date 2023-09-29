@@ -72,13 +72,6 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setDefaultLocale(new Locale("en"));
-        return cookieLocaleResolver;
-    }
-
-    @Bean
     public EmailValidator usernameValidator() {
         return new EmailValidator();
     }
