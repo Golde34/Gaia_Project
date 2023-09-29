@@ -1,9 +1,8 @@
 package auth.authentication_service.validations;
 
+import auth.authentication_service.modules.dto.UserDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import auth.authentication_service.modules.dtos.UserDto;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 

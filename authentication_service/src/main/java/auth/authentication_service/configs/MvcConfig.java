@@ -1,6 +1,26 @@
 package auth.authentication_service.configs;
 
 
+import auth.authentication_service.validations.EmailValidator;
+import auth.authentication_service.validations.PasswordMatchesValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+
+import java.util.Locale;
+
 @Configuration
 @ComponentScan(basePackages = "auth.authentication_service.modules")
 @EnableWebMvc
@@ -14,7 +34,7 @@ public class MvcConfig implements WebMvcConfigurer {
     private MessageSource messageSource;
 
     @Override
-    public void addViewController(final ViewControllerRegistry registry) {
+    public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/login");
         registry.addViewController("/registration.html");
@@ -47,8 +67,8 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry) {
         // final localeChangeInterceptor localeChangeInterceptor = new localeChangeInterceptor();
         // localeChangeInterceptor.setParamName("lang");
-        registry.addInterceptor(localeChangeInterceptor());
-        registry.addInterceptor(new RequestInterceptor());
+//        registry.addInterceptor(localeChangeInterceptor());
+//        registry.addInterceptor(new RequestInterceptor());
     }
 
     @Bean
@@ -82,7 +102,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
-        return factory -> factory.setRegisterDefaultServlet(true);
+    WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
+        return (factory) -> factory.setRegisterDefaultServlet(true);
     }
 }

@@ -1,7 +1,7 @@
 package auth.authentication_service.persistence.repositories;
 
-import auth.authentication_service.entities.VerificationToken;
-import auth.authentication_service.entities.User;
+import auth.authentication_service.persistence.entities.VerificationToken;
+import auth.authentication_service.persistence.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;

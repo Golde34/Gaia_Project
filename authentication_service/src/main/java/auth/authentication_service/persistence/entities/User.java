@@ -1,5 +1,11 @@
 package auth.authentication_service.persistence.entities;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.Collection;
+
+@Entity
 @Data
 @Table(name = "user_account")
 public class User {
@@ -20,8 +26,10 @@ public class User {
     private boolean enabled;
 
     private boolean isUsing2FA;
-    
+
     private String secret;
 
-    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 }

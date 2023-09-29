@@ -1,6 +1,15 @@
 package auth.authentication_service.modules.dto;
 
+import auth.authentication_service.validations.PasswordMatches;
+import auth.authentication_service.validations.ValidEmail;
+import auth.authentication_service.validations.ValidPassword;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+
 @PasswordMatches
+@Data
 public class UserDto {
 
     @NotNull

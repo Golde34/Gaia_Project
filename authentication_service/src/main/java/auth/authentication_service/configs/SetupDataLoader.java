@@ -1,19 +1,10 @@
 package auth.authentication_service.configs;
 
+import auth.authentication_service.persistence.repositories.UserRepository;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
+
 @Component
-public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
-
-    private boolean alreadySetup;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private Privilege privilefeRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class SetupDataLoader {
 }

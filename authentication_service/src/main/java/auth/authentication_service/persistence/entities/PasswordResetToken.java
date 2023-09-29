@@ -1,7 +1,13 @@
 package auth.authentication_service.persaistence.entities;
 
+import auth.authentication_service.persistence.entities.User;
+import jakarta.persistence.*;
+
+import java.util.Calendar;
+import java.util.Date;
+
 @Entity
-public class PassResetToken {
+public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
 
@@ -16,6 +22,14 @@ public class PassResetToken {
     private User user;
 
     private Date expiryDate;
+
+    public PasswordResetToken(String token, User user) {
+        super();
+
+        this.token = token;
+        this.user = user;
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
         final Calendar cal = Calendar.getInstance();

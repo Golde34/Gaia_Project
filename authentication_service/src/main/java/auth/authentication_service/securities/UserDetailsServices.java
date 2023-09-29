@@ -1,4 +1,21 @@
-package auth.authentication_service.security;
+package auth.authentication_service.securities;
+
+import auth.authentication_service.persistence.entities.Privilege;
+import auth.authentication_service.persistence.entities.Role;
+import auth.authentication_service.persistence.entities.User;
+import auth.authentication_service.persistence.repositories.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service("userDetailsServices")
 @Transactional
@@ -7,10 +24,10 @@ public class UserDetailsServices implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private LoginAttemptService loginAttemptService;
+//    @Autowired
+//    private LoginAttemptService loginAttemptService;
 
-    public MyUserDetailsService() {
+    public UserDetailsServices() {
         super();
     }
 
