@@ -1,12 +1,13 @@
-package auth.authentication_service.persaistence.entities;
+package auth.authentication_service.persistence.entities;
 
-import auth.authentication_service.persistence.entities.User;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
+@Data
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
@@ -29,6 +30,10 @@ public class PasswordResetToken {
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
+
+    public PasswordResetToken() {
+        super();
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {

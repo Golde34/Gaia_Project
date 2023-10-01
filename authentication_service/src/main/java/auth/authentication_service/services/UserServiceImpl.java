@@ -1,6 +1,7 @@
 package auth.authentication_service.services;
 
 import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.persistence.entities.PasswordResetToken;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.entities.VerificationToken;
 import auth.authentication_service.persistence.repositories.PasswordResetTokenRepository;
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
         if (verificationToken != null) {
             verificationTokenRepository.delete(verificationToken);
         }
-        final auth.authentication_service.persaistence.entities.PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByUser(user);
+        final PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByUser(user);
         if (passwordResetToken != null) {
             passwordResetTokenRepository.delete(passwordResetToken);
         }
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createPasswordResetTokenForUser(final User user, final String token) {
-        final auth.authentication_service.persaistence.entities.PasswordResetToken myToken = new auth.authentication_service.persaistence.entities.PasswordResetToken(token, user);
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordResetTokenRepository.save(myToken);
     }
 

@@ -23,7 +23,6 @@ public class RestResponseEntityException extends ResponseEntityExceptionHandler 
     public RestResponseEntityException() {
         super();
     }
-
     // API
 
     // 400
