@@ -2,6 +2,7 @@ package auth.authentication_service.modules.controllers;
 
 import auth.authentication_service.modules.dto.AccountDto;
 import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,20 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "<h1>This authentication service was created by master Dong Viet </h1>";
-    }
-
-    @GetMapping("/user")
-    public String user() {
-        return "<h1>Test user role.</h1>";
-    }
-
-    @GetMapping("/admin")
-    public String admin() {
-        return "<h1>Test admin role.</h1>";
-    }
+//    @GetMapping("/")
+//    public String home() {
+//        return "<h1>This authentication service was created by master Dong Viet </h1>";
+//    }
+//
+//    @GetMapping("/user")
+//    public String user() {
+//        return "<h1>Test user role.</h1>";
+//    }
+//
+//    @GetMapping("/admin")
+//    public String admin() {
+//        return "<h1>Test admin role.</h1>";
+//    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AccountDto accountDto) throws Exception {
@@ -57,4 +58,8 @@ public class AuthController {
         return ResponseEntity.ok(new TokenDto(jwt));
     }
 
+//    @PostMapping("/register")
+//    public ResponseEntity<?> registerAccount(@RequestBody UserDto userDto) throws Exception {
+//        return ResponseEntity.ok(userDetailService.save(userDto));
+//    }
 }

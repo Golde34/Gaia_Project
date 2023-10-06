@@ -1,7 +1,9 @@
 package auth.authentication_service.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.Collection;
 
@@ -15,6 +17,7 @@ public class Privilege {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
 

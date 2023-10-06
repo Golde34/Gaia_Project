@@ -32,5 +32,6 @@ public class UserDto {
     @Size(min=1)
     private String matchingPassword;
 
-    private boolean isUsing2FA;
+    private boolean isUsing2FA = false;
+    private boolean isBoss = false;
 }

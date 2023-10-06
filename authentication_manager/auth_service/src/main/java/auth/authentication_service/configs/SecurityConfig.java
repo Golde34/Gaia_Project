@@ -2,6 +2,7 @@ package auth.authentication_service.configs;
 
 import auth.authentication_service.persistence.repositories.UserRepository;
 
+import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.task.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
@@ -32,9 +32,8 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServices userDetailsServices;
 
     private final JwtRequestFilter jwtF;
 
@@ -67,7 +66,7 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        roleHierarchy.setHierarchy("ROLE_BOSS > ROLE_ADMIN \n ROLE_ADMIN > ROLE_USER");
         return roleHierarchy;
     }
 
@@ -77,9 +76,10 @@ public class SecurityConfig {
                 .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .authorizeHttpRequests(authz -> {
                     authz
+                            .requestMatchers(new AntPathRequestMatcher("/auth/authenticate")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
                             .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                     ;
                 });
         http.addFilterBefore(jwtF, UsernamePasswordAuthenticationFilter.class);

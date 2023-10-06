@@ -18,15 +18,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service("userDetailsServices")
+@Service
 @Transactional
 public class UserDetailsServices implements UserDetailsService {
     
     @Autowired
     private UserRepository userRepository;
-
-//    @Autowired
-//    private LoginAttemptService loginAttemptService;
 
     public UserDetailsServices() {
         super();
@@ -36,25 +33,16 @@ public class UserDetailsServices implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        System.out.println("loadUserByUsername");
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String newPassword = passwordEncoder.encode("483777");
-        System.out.println(newPassword);
-        return new org.springframework.security.core.userdetails.User("golde", newPassword, new ArrayList<>());
-//        // if (loginAttemptService.isBlocked()) {
-//        //     throw new RuntimeException("blocked");
-//        // }
-//
-//        try {
-//            final User user = userRepository.findByEmail(email);
-//            if (user == null) {
-//                throw new UsernameNotFoundException("No user found with username: " + email);
-//            }
-//
-//            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
-//        } catch (final Exception e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            final User user = userRepository.findByEmail(email);
+            if (user == null) {
+                throw new UsernameNotFoundException("No user found with username: " + email);
+            }
+
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // UTIL
