@@ -2,7 +2,7 @@ import { IResponse } from "../../../common/response";
 import { msg200 } from "../../../common/response_helpers";
 import { ProjectEntity } from "../entities/project.entity";
 
-export class ProjectService {
+class ProjectService {
     constructor() {}
 
     async getProject(projectId: string): Promise<IResponse> {
@@ -40,3 +40,5 @@ export class ProjectService {
         });
     }
 }
+
+export const projectService = new ProjectService();

@@ -2,7 +2,7 @@ import { IResponse } from "../../../common/response";
 import { msg200 } from "../../../common/response_helpers";
 import { SubTaskEntity } from "../entities/sub-task.entity";
 
-export class SubTaskService {
+class SubTaskService {
     constructor() {}
     
     async getSubTask(subTaskId: string): Promise<IResponse> {
@@ -40,3 +40,5 @@ export class SubTaskService {
         });
     }
 }
+
+export const subTaskService = new SubTaskService();

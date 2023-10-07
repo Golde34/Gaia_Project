@@ -2,7 +2,7 @@ import { IResponse } from "../../../common/response";
 import { msg200 } from "../../../common/response_helpers";
 import { CommentEntity } from "../entities/comment.entity";
 
-export class CommentService {
+class CommentService {
     constructor() {
     }
 
@@ -40,6 +40,7 @@ export class CommentService {
         return msg200({
             message: (deleteComment as any).message
         });
-    }
-    
+    }    
 }
+
+export const commentService = new CommentService();

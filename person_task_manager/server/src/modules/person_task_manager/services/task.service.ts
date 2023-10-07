@@ -4,7 +4,7 @@ import { msg200 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 
-export class TaskService {
+class TaskService {
     constructor() {}
 
     async getTask(taskId: string): Promise<IResponse> {

@@ -21,6 +21,8 @@ async function main(): Promise<void> {
   const app: Application = express();
   const port = process.env.PORT || 3000;
 
+  // default route if have no authen then redirect to login page
+  // else project page
   app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!");
   });
