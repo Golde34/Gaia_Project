@@ -46,7 +46,7 @@ export function msg200(data: any): IResponse {
     return {
         status: true,
         statusCode: 200,
-        ...data,
+        message: data,
     };
 }
 

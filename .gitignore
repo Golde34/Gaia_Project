@@ -13,3 +13,4 @@ __config__.py
 *\tmp
 
 .env
+token.json

@@ -22,6 +22,10 @@ interface Configuration {
     server: {
         listenPort: number;
     };
+    authServer: {
+        host: string;
+        port: number;
+    }
 }
 
 export const config: Configuration = {
@@ -34,6 +38,10 @@ export const config: Configuration = {
     },
     server: {
         listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3000,
+    },
+    authServer: {
+        host: process.env.AUTH_SERVICE_HOST ?? 'localhost',
+        port: Number(String(process.env.AUTH_SERVICE_PORT)) ?? 3001,
     },
 };
 
