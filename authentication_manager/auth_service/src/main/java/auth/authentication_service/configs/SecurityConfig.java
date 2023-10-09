@@ -1,10 +1,6 @@
 package auth.authentication_service.configs;
 
-import auth.authentication_service.persistence.repositories.UserRepository;
-
-import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.task.JwtRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -29,11 +25,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserDetailsServices userDetailsServices;
 
     private final JwtRequestFilter jwtF;
 

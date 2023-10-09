@@ -2,11 +2,9 @@ package auth.authentication_service.modules.controllers;
 
 import auth.authentication_service.modules.dto.AccountDto;
 import auth.authentication_service.modules.dto.TokenDto;
-import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,20 +25,20 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-//    @GetMapping("/")
-//    public String home() {
-//        return "<h1>This authentication service was created by master Dong Viet </h1>";
-//    }
-//
-//    @GetMapping("/user")
-//    public String user() {
-//        return "<h1>Test user role.</h1>";
-//    }
-//
-//    @GetMapping("/admin")
-//    public String admin() {
-//        return "<h1>Test admin role.</h1>";
-//    }
+   @GetMapping("/")
+   public ResponseEntity<?> home() {
+       return ResponseEntity.ok("<h1>This authentication service was created by master Dong Viet </h1>");
+   }
+
+   @GetMapping("/user")
+   public ResponseEntity<?> user() {
+       return ResponseEntity.ok("<h1>Test user role.</h1>");
+   }
+
+   @GetMapping("/admin")
+   public ResponseEntity<?> admin() {
+       return ResponseEntity.ok("<h1>Test admin role.</h1>");
+   }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AccountDto accountDto) throws Exception {
@@ -58,8 +56,5 @@ public class AuthController {
         return ResponseEntity.ok(new TokenDto(jwt));
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<?> registerAccount(@RequestBody UserDto userDto) throws Exception {
-//        return ResponseEntity.ok(userDetailService.save(userDto));
-//    }
+    
 }

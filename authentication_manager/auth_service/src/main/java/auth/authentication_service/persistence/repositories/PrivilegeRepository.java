@@ -1,7 +1,6 @@
 package auth.authentication_service.persistence.repositories;
 
 import auth.authentication_service.persistence.entities.Privilege;
-import auth.authentication_service.persistence.entities.Privilege;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
