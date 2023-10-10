@@ -178,9 +178,9 @@ public class UserServiceImpl implements UserService {
         if (loggerType == LoggerType.TRACE) { logger.trace(message);}
         if (loggerType == LoggerType.WARN) { logger.warn(message);}
     }
-    private UserDto _mapperEntityToDto(User user) {
-        return modelMapperConfig.modelMapper().map(user, UserDto.class);
-    }
+    // private UserDto _mapperEntityToDto(User user) {
+    //     return modelMapperConfig.modelMapper().map(user, UserDto.class);
+    // }
     private User _mapperDtoToEntity(UserDto userDto) {
         return modelMapperConfig.modelMapper().map(userDto, User.class);
     }

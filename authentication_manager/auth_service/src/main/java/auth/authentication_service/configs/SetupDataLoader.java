@@ -44,19 +44,25 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        // == create initial privileges
+        // == create initial privileges  
         final Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        final Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+        final Privilege writPrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
         final Privilege passwordPrivilege = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
-
+        final Privilege readRole = createPrivilegeIfNotFound("READ_ROLE");
+        final Privilege writeRole = createPrivilegeIfNotFound("WRITE_ROLE");
+        final Privilege readUser = createPrivilegeIfNotFound("READ_USER");
+        final Privilege writeUser = createPrivilegeIfNotFound("WRITE_USER");
+        final Privilege readTaskService = createPrivilegeIfNotFound("READ_TASK_SERVICE");
+        final Privilege writeTaskService = createPrivilegeIfNotFound("WRITE_TASK_SERVICE");
+  
         // == create initial roles
-        final List<Privilege> bossPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
-        final List<Privilege> adminPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
-        final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
+        final List<Privilege> bossPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writPrivilege, passwordPrivilege, readRole, writeRole, readUser, writeUser, readTaskService, writeTaskService));
+        final List<Privilege> authAdminPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, readRole, readUser, writeUser));
+        final List<Privilege> serviceUserPrivileges = new ArrayList<>(Arrays.asList(readTaskService, writeTaskService));
 
         final Role bossRole = createRoleIfNotFound("ROLE_BOSS", bossPrivileges);
-        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_USER", userPrivileges);
+        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", authAdminPrivileges);
+        createRoleIfNotFound("ROLE_USER", serviceUserPrivileges);
 
         // == create initial user
         createUserIfNotFound("nguyendongducviet2001@gmail.com", "Nguyen Dong Duc Viet", "golde", "483777", new ArrayList<>(Arrays.asList(bossRole)));
