@@ -3,6 +3,7 @@ package auth.authentication_service.services;
 import java.util.List;
 import java.util.Objects;
 
+import auth.authentication_service.utils.LoggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,29 @@ import auth.authentication_service.services.interfaces.PrivilegeService;
 
 @Service
 public class PrivilegeServiceImpl implements PrivilegeService{
-    
-    final Logger logger = LoggerFactory.getLogger(PrivilegeServiceImpl.class);
-    
+
+    @Autowired
+    private LoggerUtils _logger;
+
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
-    public PrivilegeServiceImpl(PrivilegeRepository privilegeRepository) {
+
+    public PrivilegeServiceImpl(PrivilegeRepository privilegeRepository, LoggerUtils _logger) {
         this.privilegeRepository = privilegeRepository;
+        this._logger = _logger;
     } 
 
     @Override
     public Privilege createPrivilege(String privilegeName) {
         if (_checkExistPrivilege(privilegeName)) {
-            _logger("Check exist privilege failed", LoggerType.ERROR);
+            _logger.log("Check exist privilege failed", LoggerType.ERROR);
             throw new RuntimeException("Privilege existed");
         } else {
             Privilege newPrivilege = new Privilege();
             newPrivilege.setName(privilegeName);
             privilegeRepository.save(newPrivilege);
-            _logger("Create privilege: " + privilegeName, LoggerType.INFO);
+            _logger.log("Create privilege: " + privilegeName, LoggerType.INFO);
             return newPrivilege;
         }
     }
@@ -45,14 +49,14 @@ public class PrivilegeServiceImpl implements PrivilegeService{
             if (_checkExistPrivilege(privilegeName)) {
                 Privilege privilege = getPrivilegeByName(privilegeName);
                 privilegeRepository.save(privilege);
-                _logger("Update privilege: " + privilege.getName(), LoggerType.INFO);
+                _logger.log("Update privilege: " + privilege.getName(), LoggerType.INFO);
                 return privilege;
             } else {
-                _logger("Privilege not found", LoggerType.INFO);
+                _logger.log("Privilege not found", LoggerType.INFO);
                 throw new RuntimeException("Privilege not found");
             }
         } catch (Exception e) {
-            _logger("Update privilege failed", LoggerType.ERROR);
+            _logger.log("Update privilege failed", LoggerType.ERROR);
             throw new RuntimeException("Update privilege failed");
         }
     }
@@ -63,13 +67,13 @@ public class PrivilegeServiceImpl implements PrivilegeService{
             if (_checkExistPrivilege(privilegeName)) {
                 Privilege privilege = getPrivilegeByName(privilegeName);
                 privilegeRepository.delete(privilege);
-                _logger("Delete privilege: " + privilege.getName(), LoggerType.INFO);
+                _logger.log("Delete privilege: " + privilege.getName(), LoggerType.INFO);
             } else {
-                _logger("Privilege not found", LoggerType.INFO);
+                _logger.log("Privilege not found", LoggerType.INFO);
                 throw new RuntimeException("Privilege not found");
             }
         } catch (Exception e) {
-            _logger("Delete privilege failed", LoggerType.ERROR);
+            _logger.log("Delete privilege failed", LoggerType.ERROR);
             throw new RuntimeException("Delete privilege failed");
         }
     }
@@ -93,16 +97,9 @@ public class PrivilegeServiceImpl implements PrivilegeService{
             } 
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Check exist privilege failed", LoggerType.ERROR);
+            _logger.log("Check exist privilege failed", LoggerType.ERROR);
         }
         return false;
-    }
-    private void _logger(String message, LoggerType loggerType) {
-        if (loggerType == LoggerType.ERROR) { logger.error(message);}
-        if (loggerType == LoggerType.INFO) { logger.info(message);}
-        if (loggerType == LoggerType.DEBUG) { logger.debug(message);}
-        if (loggerType == LoggerType.TRACE) { logger.trace(message);}
-        if (loggerType == LoggerType.WARN) { logger.warn(message);}
     }
 
 }

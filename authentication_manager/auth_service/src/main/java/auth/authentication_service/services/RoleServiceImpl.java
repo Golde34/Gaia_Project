@@ -3,6 +3,7 @@ package auth.authentication_service.services;
 import java.util.List;
 import java.util.Objects;
 
+import auth.authentication_service.utils.LoggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,27 @@ import auth.authentication_service.services.interfaces.RoleService;
 @Service
 public class RoleServiceImpl implements RoleService {
     
-    final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
+   @Autowired
+   private LoggerUtils _logger;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    public RoleServiceImpl (RoleRepository roleRepository) {
+    public RoleServiceImpl (RoleRepository roleRepository, LoggerUtils _logger) {
         this.roleRepository = roleRepository;
+        this._logger = _logger;
     }
 
     @Override 
     public Role createRole(String roleName) {
         if (_checkExistRole(roleName)) {
-            _logger("Create role failed", LoggerType.ERROR);
+            _logger.log("Create role failed", LoggerType.ERROR);
             throw new RuntimeException("Role existed");
         } else {
             Role newRole = new Role();
             newRole.setName(roleName);
             roleRepository.save(newRole);
-            _logger("Create role: " + roleName, LoggerType.INFO);
+            _logger.log("Create role: " + roleName, LoggerType.INFO);
             return newRole;
         }
     }
@@ -46,14 +49,14 @@ public class RoleServiceImpl implements RoleService {
             if (_checkExistRole(roleName)) {
                 Role role = getRoleByName(roleName);
                 roleRepository.save(role);
-                _logger("Update role: " + role.getName(), LoggerType.INFO);
+                _logger.log("Update role: " + role.getName(), LoggerType.INFO);
                 return role;
             } else {
-                _logger("Role not found", LoggerType.INFO);
+                _logger.log("Role not found", LoggerType.INFO);
                 throw new RuntimeException("Role not found");
             }
         } catch (Exception e){
-            _logger("Update role failed", LoggerType.ERROR);
+            _logger.log("Update role failed", LoggerType.ERROR);
             throw new RuntimeException("Update role failed");
         }
     }
@@ -64,13 +67,13 @@ public class RoleServiceImpl implements RoleService {
             if (_checkExistRole(roleName)) {
                 Role role = getRoleByName(roleName);
                 roleRepository.delete(role);
-                _logger("Delete role: " + role.getName(), LoggerType.INFO);
+                _logger.log("Delete role: " + role.getName(), LoggerType.INFO);
             } else {
-                _logger("Role not found", LoggerType.INFO);
+                _logger.log("Role not found", LoggerType.INFO);
                 throw new RuntimeException("Role not found");
             }
         } catch (Exception e) {
-            _logger("Delete role failed", LoggerType.ERROR);
+            _logger.log("Delete role failed", LoggerType.ERROR);
             throw new RuntimeException("Delete role failed");
         }
     }
@@ -94,11 +97,11 @@ public class RoleServiceImpl implements RoleService {
             } else {
                 role.setPrivileges(privileges);
                 roleRepository.save(role);
-                _logger("Add privilege to role: " + role.getName(), LoggerType.INFO);
+                _logger.log("Add privilege to role: " + role.getName(), LoggerType.INFO);
                 return role;
             }
         } catch (Exception e) {
-            _logger("Add privilege to role failed", LoggerType.ERROR);
+            _logger.log("Add privilege to role failed", LoggerType.ERROR);
             throw new RuntimeException("Add privilege to role failed");
         }
     }
@@ -112,15 +115,8 @@ public class RoleServiceImpl implements RoleService {
             } 
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Check exist role failed", LoggerType.ERROR);
+            _logger.log("Check exist role failed", LoggerType.ERROR);
         }
         return false;
-    }
-    private void _logger(String message, LoggerType loggerType) {
-        if (loggerType == LoggerType.ERROR) { logger.error(message);}
-        if (loggerType == LoggerType.INFO) { logger.info(message);}
-        if (loggerType == LoggerType.DEBUG) { logger.debug(message);}
-        if (loggerType == LoggerType.TRACE) { logger.trace(message);}
-        if (loggerType == LoggerType.WARN) { logger.warn(message);}
     }
 }

@@ -8,6 +8,7 @@ import auth.authentication_service.persistence.repositories.RoleRepository;
 import auth.authentication_service.persistence.repositories.UserRepository;
 import auth.authentication_service.services.interfaces.UserService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
+import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
 import auth.authentication_service.validations.EmailExistsException;
 import jakarta.transaction.Transactional;
@@ -24,7 +25,8 @@ import java.util.Objects;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    @Autowired
+    private LoggerUtils _logger;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -32,10 +34,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapperConfig modelMapperConfig) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.modelMapperConfig = modelMapperConfig;
+        this._logger = _logger;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapperConfig.modelMapper().map(userDto, User.class);
         user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
-        _logger("Create user: " + user.getUsername(), LoggerType.INFO);
+        _logger.log("Create user: " + user.getUsername(), LoggerType.INFO);
         return userRepository.save(user);
     }
     private boolean _emailExist(final String email) {
@@ -66,12 +69,12 @@ public class UserServiceImpl implements UserService {
             User user = _mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
                 userRepository.save(user);
-                _logger("Update user: " + user.getUsername(), LoggerType.INFO);
+                _logger.log("Update user: " + user.getUsername(), LoggerType.INFO);
             }
             return user;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Update user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
+            _logger.log("Update user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
             return null;
         }
     }
@@ -82,11 +85,11 @@ public class UserServiceImpl implements UserService {
             User user = _mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
                 userRepository.delete(user);
-                _logger("Delete user: " + user.getUsername(), LoggerType.INFO);
+                _logger.log("Delete user: " + user.getUsername(), LoggerType.INFO);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Delete user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
+            _logger.log("Delete user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
         }
     }
 
@@ -94,11 +97,11 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         try {
             List<User> users = userRepository.findAll();
-            _logger("Get all users", LoggerType.INFO);
+            _logger.log("Get all users", LoggerType.INFO);
             return users;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Get all users failed", LoggerType.ERROR);
+            _logger.log("Get all users failed", LoggerType.ERROR);
             return null;
         }
     }
@@ -108,12 +111,12 @@ public class UserServiceImpl implements UserService {
         try {
             User user = _mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())) {
-                _logger("Get user: " + user.getUsername(), LoggerType.INFO);
+                _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             }
             return user;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Get user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
+            _logger.log("Get user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
             return null;
         }
     }
@@ -122,11 +125,11 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         try {
             User user = userRepository.findByUsername(username);
-            _logger("Get user: " + user.getUsername(), LoggerType.INFO);
+            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Get user: " + username + " failed", LoggerType.ERROR);
+            _logger.log("Get user: " + username + " failed", LoggerType.ERROR);
             return null;
         }
     }
@@ -135,11 +138,11 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         try {
             User user = userRepository.findByEmail(email);
-            _logger("Get user: " + user.getUsername(), LoggerType.INFO);
+            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Get user: " + email + " failed", LoggerType.ERROR);
+            _logger.log("Get user: " + email + " failed", LoggerType.ERROR);
             return null;
         }
     }
@@ -153,17 +156,11 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            _logger("Check exist user: " + id + " failed", LoggerType.ERROR);
+            _logger.log("Check exist user: " + id + " failed", LoggerType.ERROR);
         }
         return false;
     }
-    private void _logger(String message, LoggerType loggerType) {
-        if (loggerType == LoggerType.ERROR) { logger.error(message);}
-        if (loggerType == LoggerType.INFO) { logger.info(message);}
-        if (loggerType == LoggerType.DEBUG) { logger.debug(message);}
-        if (loggerType == LoggerType.TRACE) { logger.trace(message);}
-        if (loggerType == LoggerType.WARN) { logger.warn(message);}
-    }
+
     // private UserDto _mapperEntityToDto(User user) {
     //     return modelMapperConfig.modelMapper().map(user, UserDto.class);
     // }

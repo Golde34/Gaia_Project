@@ -1,5 +1,6 @@
 package auth.authentication_service.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ public class AuthToken {
     
     private String refreshToken;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "token")
     private User user;    
 }
