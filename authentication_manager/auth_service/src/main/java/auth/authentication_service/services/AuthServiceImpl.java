@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtil = jwtUtil;
     }
 
+    // This function is similar to the Sign-in function
     public String authenticated(String username, String password) throws Exception {
         try {
             authenticationManager.getAuthenticationManager().authenticate(
@@ -71,16 +72,17 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("User not found");
         }
         
-        AuthToken authToken = tokenRepository.findByUser(user.getId());
+        AuthToken authToken = tokenRepository.findByUserId(user.getId());
         if (tokenType == TokenType.ACCESS_TOKEN) {
             authToken.setAccessToken(token);
         } else {
             authToken.setRefreshToken(token);
         }
+        authToken.setUser(user);
         tokenRepository.save(authToken);
     }
 
-    // public String checkTokenExpired(String token, UserDetails user, TokenType tokenType) {
+    // public String regenerateToken(String token, UserDetails user, TokenType tokenType) {
     //     String response = "";
     //     if (jwtUtil.validateToken(token, user) && tokenType == TokenType.ACCESS_TOKEN) {
     //         generateAccessToken(user);
@@ -97,15 +99,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String getUsernameFromToken(String accessToken) {
-        return null;
+        return jwtUtil.exactUsername(accessToken);
     }
 
-    @Override
     public boolean validateAccessToken(String accessToken) {
         return false;
     }
 
-    @Override
     public boolean validateRefreshToken(String refreshToken) {
         return false;
     }

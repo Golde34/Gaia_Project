@@ -72,6 +72,8 @@ public class SecurityConfig {
                             .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
                             .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/privilege/")).hasRole("ADMIN")
                     ;
                 });
         http.addFilterBefore(jwtF, UsernamePasswordAuthenticationFilter.class);

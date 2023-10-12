@@ -46,9 +46,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapperConfig.modelMapper().map(userDto, User.class);
         user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
-
         _logger("Create user: " + user.getUsername(), LoggerType.INFO);
-
         return userRepository.save(user);
     }
     private boolean _emailExist(final String email) {
@@ -106,18 +104,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
-        try {
-            User user = userRepository.findById(id).get();
-            _logger("Get user: " + user.getUsername(), LoggerType.INFO);
-            return user;
-        } catch (Exception e) {
-            e.printStackTrace();
-            _logger("Get user: " + id + " failed", LoggerType.ERROR);
-            return null;
-        }
-    }
-
     public User getUserById(UserDto userDto) {
         try {
             User user = _mapperDtoToEntity(userDto);
