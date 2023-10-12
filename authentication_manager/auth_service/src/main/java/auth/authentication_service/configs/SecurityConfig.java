@@ -69,11 +69,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> {
                     authz
                             .requestMatchers(new AntPathRequestMatcher("/auth/authenticate")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
-                            .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
-                            .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
+                            .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")
-                            .requestMatchers(new AntPathRequestMatcher("/privilege/")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/privilege/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
+                            .anyRequest().authenticated();
                     ;
                 });
         http.addFilterBefore(jwtF, UsernamePasswordAuthenticationFilter.class);
