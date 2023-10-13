@@ -28,13 +28,13 @@ public class PrivilegeController {
 
     @RequestMapping(value = "/updatePrivilege", method = RequestMethod.POST)
     public ResponseEntity<Privilege> updatePrivilege(@RequestBody PrivilegeDto privilegeDto) {
-        Privilege privilege = privilegeService.updatePrivilege(privilegeDto.getName());
+        Privilege privilege = privilegeService.updatePrivilege(privilegeDto);
         return ResponseEntity.ok(privilege);
     }
 
     @RequestMapping(value = "/deletePrivilege", method = RequestMethod.POST)
     public ResponseEntity<String> deletePrivilege(@RequestBody PrivilegeDto privilegeDto) {
-        privilegeService.deletePrivilege(privilegeDto.getName());
+        privilegeService.deletePrivilege(privilegeDto);
         return ResponseEntity.ok("Delete privilege successfully");
     }
 
@@ -46,7 +46,7 @@ public class PrivilegeController {
 
     @RequestMapping(value = "/getPrivilege")
     public ResponseEntity<Privilege> getPrivilege(@RequestBody PrivilegeDto privilegeDto) {
-        Privilege privilege = privilegeService.getPrivilegeByName(privilegeDto.getName());
+        Privilege privilege = privilegeService.getPrivilegeByName(privilegeDto);
         return ResponseEntity.ok(privilege);
     }    
 }

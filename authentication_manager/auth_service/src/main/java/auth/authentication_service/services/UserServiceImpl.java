@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserDto userDto) {
         try {
-            User user = _mapperDtoToEntity(userDto);
+            User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
                 userRepository.save(user);
                 _logger.log("Update user: " + user.getUsername(), LoggerType.INFO);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(UserDto userDto) {
         try {
-            User user = _mapperDtoToEntity(userDto);
+            User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
                 userRepository.delete(user);
                 _logger.log("Delete user: " + user.getUsername(), LoggerType.INFO);
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(UserDto userDto) {
         try {
-            User user = _mapperDtoToEntity(userDto);
+            User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())) {
                 _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             }
@@ -159,12 +159,5 @@ public class UserServiceImpl implements UserService {
             _logger.log("Check exist user: " + id + " failed", LoggerType.ERROR);
         }
         return false;
-    }
-
-    // private UserDto _mapperEntityToDto(User user) {
-    //     return modelMapperConfig.modelMapper().map(user, UserDto.class);
-    // }
-    private User _mapperDtoToEntity(UserDto userDto) {
-        return modelMapperConfig.modelMapper().map(userDto, User.class);
     }
 }

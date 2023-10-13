@@ -1,9 +1,15 @@
 package auth.authentication_service.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import auth.authentication_service.modules.dto.PrivilegeDto;
+import auth.authentication_service.modules.dto.RoleDto;
+import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.utils.LoggerUtils;
+import auth.authentication_service.utils.ModelMapperConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +24,24 @@ import auth.authentication_service.services.interfaces.RoleService;
 @Service
 public class RoleServiceImpl implements RoleService {
     
-   @Autowired
-   private LoggerUtils _logger;
+    @Autowired
+    private LoggerUtils _logger;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    public RoleServiceImpl (RoleRepository roleRepository, LoggerUtils _logger) {
+    @Autowired
+    private ModelMapperConfig modelMapperConfig;
+
+    public RoleServiceImpl (RoleRepository roleRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
         this.roleRepository = roleRepository;
+        this.modelMapperConfig = modelMapperConfig;
         this._logger = _logger;
     }
 
     @Override 
     public Role createRole(String roleName) {
-        if (_checkExistRole(roleName)) {
+        if (_checkExistRoleName(roleName)) {
             _logger.log("Create role failed", LoggerType.ERROR);
             throw new RuntimeException("Role existed");
         } else {
@@ -44,13 +54,18 @@ public class RoleServiceImpl implements RoleService {
     }
     
     @Override 
-    public Role updateRole(String roleName){
+    public Role updateRole(RoleDto roleDto){
         try {
-            if (_checkExistRole(roleName)) {
-                Role role = getRoleByName(roleName);
-                roleRepository.save(role);
-                _logger.log("Update role: " + role.getName(), LoggerType.INFO);
-                return role;
+            Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
+            if (_checkExistRole(role)) {
+                if (!_checkExistRoleName(role.getName())) {
+                    roleRepository.save(role);
+                    _logger.log("Update role: " + role.getName(), LoggerType.INFO);
+                    return role;
+                } else {
+                    _logger.log("Role name existed!", LoggerType.ERROR);
+                    throw new RuntimeException("Role name existed");
+                }
             } else {
                 _logger.log("Role not found", LoggerType.INFO);
                 throw new RuntimeException("Role not found");
@@ -62,10 +77,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override 
-    public void deleteRole(String roleName) {
+    public void deleteRole(RoleDto roleDto) {
         try {
-            if (_checkExistRole(roleName)) {
-                Role role = getRoleByName(roleName);
+            Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
+            if (_checkExistRole(role)) {
                 roleRepository.delete(role);
                 _logger.log("Delete role: " + role.getName(), LoggerType.INFO);
             } else {
@@ -84,17 +99,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override 
-    public Role getRoleByName(String roleName) {
-        return roleRepository.findByName(roleName);
+    public Role getRoleByName(RoleDto roleDto) {
+        return roleRepository.findByName(roleDto.getName());
     }
 
     @Override
-    public Role addPrivilegeToRole(String roleName, List<Privilege> privileges) {
+    public Role addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegesDto) {
         try { 
-            Role role = getRoleByName(roleName);
-            if (role == null) {
-                throw new Exception("Role not found");
-            } else {
+            Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
+            List<Privilege> privileges = _mapperListPrivilegesDto(privilegesDto);
+            if (_checkExistRole(role)) {
                 role.setPrivileges(privileges);
                 roleRepository.save(role);
                 _logger.log("Add privilege to role: " + role.getName(), LoggerType.INFO);
@@ -104,12 +118,13 @@ public class RoleServiceImpl implements RoleService {
             _logger.log("Add privilege to role failed", LoggerType.ERROR);
             throw new RuntimeException("Add privilege to role failed");
         }
+        return null;
     }
 
-    private boolean _checkExistRole(String roleName) {
+    private boolean _checkExistRole(Role role) {
         try {
-            for (Role role: roleRepository.findAll()) {
-                if (Objects.equals(role.getName(), roleName)) {
+            for (Role item: roleRepository.findAll()) {
+                if (Objects.equals(item.getId(), role.getId())) {
                     return true;
                 }
             } 
@@ -118,5 +133,28 @@ public class RoleServiceImpl implements RoleService {
             _logger.log("Check exist role failed", LoggerType.ERROR);
         }
         return false;
+    }
+
+    private boolean _checkExistRoleName(String roleName) {
+        try {
+            for (Role item: roleRepository.findAll()) {
+                if (Objects.equals(item.getName(), roleName)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            _logger.log("Check exist role name failed", LoggerType.ERROR);
+        }
+        return false;
+    }
+
+    private List<Privilege> _mapperListPrivilegesDto(List<PrivilegeDto> privilegeDtos) {
+        List<Privilege> privileges= new ArrayList<>();
+        for (PrivilegeDto privilegeDto: privilegeDtos) {
+            Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
+            privileges.add(privilege);
+        }
+        return privileges;
     }
 }

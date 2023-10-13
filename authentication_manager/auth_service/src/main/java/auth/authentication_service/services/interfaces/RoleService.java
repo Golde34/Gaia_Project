@@ -2,14 +2,15 @@ package auth.authentication_service.services.interfaces;
 
 import java.util.List;
 
-import auth.authentication_service.persistence.entities.Privilege;
+import auth.authentication_service.modules.dto.PrivilegeDto;
+import auth.authentication_service.modules.dto.RoleDto;
 import auth.authentication_service.persistence.entities.Role;
 
 public interface RoleService {
     public Role createRole(String roleName);
-    public Role updateRole(String roleName);
-    public void deleteRole(String roleName);
+    public Role updateRole(RoleDto roleDto);
+    public void deleteRole(RoleDto roleDto);
     public List<Role> getAllRoles();
-    public Role getRoleByName(String roleName);
-    public Role addPrivilegeToRole(String roleName, List<Privilege> privilegeNames);
+    public Role getRoleByName(RoleDto roleDto);
+    public Role addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegeNames);
 }

@@ -9,6 +9,8 @@ public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
     
     Privilege findByName(String name);
 
+    Privilege findPrivilegeById(Long Id);
+
     @Override
     void delete(Privilege privilege);
 }

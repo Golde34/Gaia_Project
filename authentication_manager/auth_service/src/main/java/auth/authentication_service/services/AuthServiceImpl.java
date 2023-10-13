@@ -90,13 +90,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public String generateAccessToken(UserDetails user) {
-        Long expiration = 1000L * 60 * 10; // 10m
+        Long expiration = 1000L * 60 * 60 * 2; // 2h
         String accessToken = jwtUtil.generateToken(user, expiration);
         return accessToken;
     }
 
     public String generateRefreshToken(UserDetails user) {
-        Long expiration = 1000L * 60 * 60; // 1h
+        Long expiration = 1000L * 60 * 60 * 24; // 1d
         String refreshToken = jwtUtil.generateToken(user, expiration);
         return refreshToken;
     }

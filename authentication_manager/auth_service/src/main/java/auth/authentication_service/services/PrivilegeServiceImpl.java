@@ -1,9 +1,14 @@
 package auth.authentication_service.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import auth.authentication_service.modules.dto.PrivilegeDto;
+import auth.authentication_service.modules.dto.PrivilegeDto;
+import auth.authentication_service.persistence.entities.Privilege;
 import auth.authentication_service.utils.LoggerUtils;
+import auth.authentication_service.utils.ModelMapperConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +28,19 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
+    @Autowired
+    private ModelMapperConfig modelMapperConfig;
 
-    public PrivilegeServiceImpl(PrivilegeRepository privilegeRepository, LoggerUtils _logger) {
+    public PrivilegeServiceImpl(PrivilegeRepository privilegeRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
         this.privilegeRepository = privilegeRepository;
+        this.modelMapperConfig = modelMapperConfig;
         this._logger = _logger;
-    } 
+    }
 
     @Override
     public Privilege createPrivilege(String privilegeName) {
-        if (_checkExistPrivilege(privilegeName)) {
-            _logger.log("Check exist privilege failed", LoggerType.ERROR);
+        if (_checkExistPrivilegeName(privilegeName)) {
+            _logger.log("Create privilege failed", LoggerType.ERROR);
             throw new RuntimeException("Privilege existed");
         } else {
             Privilege newPrivilege = new Privilege();
@@ -42,30 +50,35 @@ public class PrivilegeServiceImpl implements PrivilegeService{
             return newPrivilege;
         }
     }
-    
+
     @Override
-    public Privilege updatePrivilege(String privilegeName) {
+    public Privilege updatePrivilege(PrivilegeDto privilegeDto){
         try {
-            if (_checkExistPrivilege(privilegeName)) {
-                Privilege privilege = getPrivilegeByName(privilegeName);
-                privilegeRepository.save(privilege);
-                _logger.log("Update privilege: " + privilege.getName(), LoggerType.INFO);
-                return privilege;
+            Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
+            if (_checkExistPrivilege(privilege)) {
+                if (!_checkExistPrivilegeName(privilege.getName())) {
+                    privilegeRepository.save(privilege);
+                    _logger.log("Update privilege: " + privilege.getName(), LoggerType.INFO);
+                    return privilege;
+                } else {
+                    _logger.log("Privilege name existed!", LoggerType.ERROR);
+                    throw new RuntimeException("Privilege name existed");
+                }
             } else {
                 _logger.log("Privilege not found", LoggerType.INFO);
                 throw new RuntimeException("Privilege not found");
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             _logger.log("Update privilege failed", LoggerType.ERROR);
             throw new RuntimeException("Update privilege failed");
         }
     }
 
     @Override
-    public void deletePrivilege(String privilegeName) {
+    public void deletePrivilege(PrivilegeDto privilegeDto) {
         try {
-            if (_checkExistPrivilege(privilegeName)) {
-                Privilege privilege = getPrivilegeByName(privilegeName);
+            Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
+            if (_checkExistPrivilege(privilege)) {
                 privilegeRepository.delete(privilege);
                 _logger.log("Delete privilege: " + privilege.getName(), LoggerType.INFO);
             } else {
@@ -84,22 +97,45 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     }
 
     @Override
-    public Privilege getPrivilegeByName(String name) {
-        return privilegeRepository.findByName(name);
+    public Privilege getPrivilegeByName(PrivilegeDto privilegeDto) {
+        return privilegeRepository.findByName(privilegeDto.getName());
     }
 
-    private boolean _checkExistPrivilege(String privilegeName) {
+    private boolean _checkExistPrivilege(Privilege privilege) {
         try {
-            for (Privilege privilege: privilegeRepository.findAll()) {
-                if (Objects.equals(privilege.getName(), privilegeName)) {
+            for (Privilege item: privilegeRepository.findAll()) {
+                if (Objects.equals(item.getId(), privilege.getId())) {
                     return true;
                 }
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
             _logger.log("Check exist privilege failed", LoggerType.ERROR);
         }
         return false;
+    }
+
+    private boolean _checkExistPrivilegeName(String privilegeName) {
+        try {
+            for (Privilege item: privilegeRepository.findAll()) {
+                if (Objects.equals(item.getName(), privilegeName)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            _logger.log("Check exist privilege name failed", LoggerType.ERROR);
+        }
+        return false;
+    }
+
+    private List<Privilege> _mapperListPrivilegesDto(List<PrivilegeDto> privilegeDtos) {
+        List<Privilege> privileges= new ArrayList<>();
+        for (PrivilegeDto privilegeDto: privilegeDtos) {
+            Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
+            privileges.add(privilege);
+        }
+        return privileges;
     }
 
 }
