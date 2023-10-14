@@ -1,5 +1,6 @@
 package auth.authentication_service.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class User {
     private String email;
 
     @Column(length=60)
+    @JsonIgnore
     private String password;
 
     private boolean enabled;
@@ -40,5 +42,6 @@ public class User {
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "token_id", referencedColumnName = "id")
+    @JsonIgnore
     private AuthToken token;
 }

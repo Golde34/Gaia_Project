@@ -1,9 +1,11 @@
 package auth.authentication_service.securities;
 
+import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.persistence.entities.Privilege;
 import auth.authentication_service.persistence.entities.Role;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.UserRepository;
+import auth.authentication_service.utils.LoggerUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,9 +22,12 @@ import java.util.List;
 @Service
 @Transactional
 public class UserDetailsServices implements UserDetailsService {
-    
+
+    @Autowired
+    LoggerUtils _logger;
     @Autowired
     private UserRepository userRepository;
+
 
     public UserDetailsServices() {
         super();
@@ -35,7 +40,8 @@ public class UserDetailsServices implements UserDetailsService {
         try {
             final User user = userRepository.findByUsername(username);
             if (user == null) {
-                throw new UsernameNotFoundException("No user found with username: " + username);
+                _logger.log("No user found with username: " + username, LoggerType.ERROR);
+                return null;
             }
 
             return new org.springframework.security.core.userdetails.User(

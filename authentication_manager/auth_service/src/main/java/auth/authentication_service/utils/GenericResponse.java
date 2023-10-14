@@ -24,22 +24,22 @@ public class GenericResponse<T> {
     public GenericResponse() {
     }
 
-    public ResponseEntity<T> matchingResponseMessage(ResponseMessage responseMessage) {
-        switch (responseMessage) {
+    public ResponseEntity<?> matchingResponseMessage(GenericResponse<T> genericResponse) {
+        switch (genericResponse.getResponseMessage()) {
             case msg200 -> {
-                return ResponseEntity.ok(this.message);
+                return ResponseEntity.ok(genericResponse.message);
             }
             case msg400 -> {
-                return ResponseEntity.badRequest().body(this.message);
+                return ResponseEntity.badRequest().body(genericResponse.message);
             }
             case msg401 -> {
-                return ResponseEntity.status(401).body(this.message);
+                return ResponseEntity.status(401).body(genericResponse.message);
             }
             case msg403 -> {
-                return ResponseEntity.status(403).body(this.message);
+                return ResponseEntity.status(403).body(genericResponse.message);
             }
             case msg404 -> {
-                return ResponseEntity.status(404).body(this.message);
+                return ResponseEntity.status(404).body(genericResponse.message);
             }
             case msg500 -> {
                 return ResponseEntity.status(500).body(this.message);

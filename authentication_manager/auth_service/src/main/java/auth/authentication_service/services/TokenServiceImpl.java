@@ -17,19 +17,22 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String generateAccessToken(UserDetails user) {
         Long expiration = 1000L * 60 * 60 * 2; // 2h
-        String accessToken = jwtUtil.generateToken(user, expiration);
-        return accessToken;
+        return jwtUtil.generateToken(user, expiration);
     }
 
     @Override
     public String generateRefreshToken(UserDetails user) {
         Long expiration = 1000L * 60 * 60 * 24; // 1d
-        String refreshToken = jwtUtil.generateToken(user, expiration);
-        return refreshToken;
+        return jwtUtil.generateToken(user, expiration);
     }
 
     @Override
     public String getUsernameFromToken(String accessToken) {
         return jwtUtil.exactUsername(accessToken);
+    }
+
+    @Override
+    public boolean validateToken(String token, UserDetails userDetails) {
+        return jwtUtil.validateToken(token, userDetails);
     }
 }

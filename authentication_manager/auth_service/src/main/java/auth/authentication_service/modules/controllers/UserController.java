@@ -1,9 +1,10 @@
 package auth.authentication_service.modules.controllers;
 
 import auth.authentication_service.modules.dto.RegisterDto;
+import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.services.UserServiceImpl;
-import auth.authentication_service.validations.EmailExistsException;
+import auth.authentication_service.utils.ModelMapperConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,12 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private ModelMapperConfig modelMapperConfig;
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public ResponseEntity<User> createUser(@RequestBody RegisterDto userDto) throws EmailExistsException {
-        User user = userService.createUser(userDto);
+    public ResponseEntity<?> createUser(@RequestBody RegisterDto userDto) {
+        ResponseEntity<?> user = userService.createUser(userDto);
         return ResponseEntity.ok(user);
     }
 
@@ -42,8 +45,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getUser")
-    public ResponseEntity<User> getUser(@RequestBody RegisterDto userDto) {
-        User user = userService.getUserById(userDto);
+    public ResponseEntity<User> getUser(@RequestBody UserDto userDto) {
+        User user = userService.getUserByUsername(userDto.getUsername());
         return ResponseEntity.ok(user);
     }
 }

@@ -6,4 +6,5 @@ public interface TokenService {
     public String generateAccessToken(UserDetails userDetails);
     public String generateRefreshToken(UserDetails userDetails);
     public String getUsernameFromToken(String accessToken);
+    public boolean validateToken(String token, UserDetails userDetails);
 }

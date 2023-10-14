@@ -47,17 +47,25 @@ public class AuthServiceImpl implements AuthService {
 
     // This function is similar to the Sign-in function
     public ResponseEntity authenticated(String username, String password) throws Exception {
-        final UserDetails userDetails = userDetailService.loadUserByUsername(username);
         User user = userRepository.findByUsername(username);
+        final UserDetails userDetails = userDetailService.loadUserByUsername(username);
+
+        //Validate UserDetails
+        if (userDetails == null) {
+            _logger.log("Check again your username, or you forgot to sign-up", LoggerType.ERROR);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>("User not found", ResponseMessage.msg401));
+        }
 
         //Validate user authentication
         GenericResponse<String> validation = _validateAuthentication(username, password, user);
         if (validation.getResponseMessage() != ResponseMessage.msg200) {
-            return genericResponse.matchingResponseMessage(validation.getResponseMessage());
+            // return http status code base on validate response message
+            return genericResponse.matchingResponseMessage(validation);
         }
 
-        // Generate token
+        // Generate sign-in information
         SignInDtoResponse token = _generateSignInToken(user, userDetails);
+        _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
 
         return ResponseEntity.ok(token);
     }
@@ -88,6 +96,9 @@ public class AuthServiceImpl implements AuthService {
         }
         return new GenericResponse<>("Validate success", ResponseMessage.msg200);
     }
+    private boolean _checkMatchingPassword(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
+    }
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails) {
         AuthToken authToken = new AuthToken();
         authToken.setUser(user);
@@ -97,8 +108,24 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         return new SignInDtoResponse(authToken.getAccessToken(), authToken.getRefreshToken(), user.getName(), user.getUsername(), user.getEmail());
     }
-    public boolean _checkMatchingPassword(String password, String encodedPassword) {
-        return passwordEncoder.matches(password, encodedPassword);
+
+    public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
+        final UserDetails userDetails = userDetailService.loadUserByUsername(tokenService.getUsernameFromToken(refreshToken));
+        User user = userRepository.findByUsername(tokenService.getUsernameFromToken(refreshToken));
+        if (user == null) {
+            _logger.log("User not found", LoggerType.ERROR);
+            return new GenericResponse<>("User not found", ResponseMessage.msg401);
+        }
+        if (!user.isEnabled()) {
+            _logger.log("User is inactive", LoggerType.ERROR);
+            return new GenericResponse<>("User is inactive", ResponseMessage.msg401);
+        }
+        if (!tokenService.validateToken(refreshToken, userDetails)) {
+            _logger.log("Invalid refresh token", LoggerType.ERROR);
+            return new GenericResponse<>("Invalid refresh token", ResponseMessage.msg401);
+        }
+        String newAccessToken = tokenService.generateAccessToken(userDetails);
+        return new GenericResponse<>(newAccessToken, ResponseMessage.msg200);
     }
 }
 
