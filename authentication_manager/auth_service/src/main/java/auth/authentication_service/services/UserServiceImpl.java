@@ -3,6 +3,7 @@ package auth.authentication_service.services;
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
 import auth.authentication_service.modules.dto.RegisterDto;
+import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.persistence.entities.Role;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.RoleRepository;
@@ -12,8 +13,10 @@ import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
 import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
+import auth.authentication_service.validations.service_validations.UserServiceValidation;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
+@Primary
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -36,44 +40,24 @@ public class UserServiceImpl implements UserService {
     @Autowired
     GenericResponse genericResponse;
 
+    @Autowired
+    UserServiceValidation userServiceValidation;
+
     @Override
     public ResponseEntity createUser(RegisterDto userDto) {
-        GenericResponse<?> validation = _validateUser(userDto);
+        User user = modelMapperConfig._mapperDtoToEntity(userDto);
+
+        GenericResponse<?> validation = userServiceValidation._validateUserCreation(userDto, user);
         if (validation.getResponseMessage() != ResponseMessage.msg200) {
             // return http status code base on validate response message
             return genericResponse.matchingResponseMessage(validation);
         }
-        User user = modelMapperConfig.modelMapper().map(userDto, User.class);
+
         user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
         userRepository.save(user);
         _logger.log("Create user: " + user.getUsername(), LoggerType.INFO);
         return ResponseEntity.ok(user);
-    }
-
-    // <editor-fold desc="Private User Creation functions">
-    private GenericResponse<String> _validateUser(RegisterDto userDto) {
-        if (_emailExist(userDto.getEmail())) {
-            _logger.log("There is an account with that email address: " + userDto.getEmail(), LoggerType.ERROR);
-            return new GenericResponse<>("There is an account with that email address: " + userDto.getEmail(), ResponseMessage.msg400);
-        }
-
-        if (_checkExistUsername(userDto.getUsername())) {
-            _logger.log("There is an account with that username: " + userDto.getUsername(), LoggerType.ERROR);
-            return new GenericResponse<>("There is an account with that username: " + userDto.getUsername(), ResponseMessage.msg400);
-        }
-
-        if (!_matchingPassword(userDto.getPassword(), userDto.getMatchingPassword())) {
-            _logger.log("Password and Confirm Password do not match", LoggerType.ERROR);
-            return new GenericResponse<>("Password and Confirm Password do not match", ResponseMessage.msg400);
-        }
-        return new GenericResponse<>("Validate User Create successfully", ResponseMessage.msg200);
-    }
-    private boolean _emailExist(final String email) {
-        return userRepository.findByEmail(email) != null;
-    }
-    private boolean _matchingPassword(final String password, final String confirmPassword) {
-        return password.equals(confirmPassword);
     }
     private Role _isBoss(final boolean isBoss) {
         if (isBoss) {
@@ -82,57 +66,49 @@ public class UserServiceImpl implements UserService {
             return roleRepository.findByName("ROLE_USER");
         }
     }
-    // </editor-fold>
+
     @Override
-    public User updateUser(RegisterDto userDto) {
+    public ResponseEntity updateUser(UserDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
-            GenericResponse<?> validation = _validateUserCreation(userDto);
-        }
-//        try {
-//            Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
-//            if (_checkExistRole(role)) {
-//                if (!_checkExistRoleName(role.getName())) {
-//                    roleRepository.save(role);
-//                    _logger.log("Update role: " + role.getName(), LoggerType.INFO);
-//                    return role;
-//                } else {
-//                    _logger.log("Role name existed!", LoggerType.ERROR);
-//                    throw new RuntimeException("Role name existed");
-//                }
-//            } else {
-//                _logger.log("Role not found", LoggerType.INFO);
-//                throw new RuntimeException("Role not found");
-//            }
-//        } catch (Exception e){
-//            _logger.log("Update role failed", LoggerType.ERROR);
-//            throw new RuntimeException("Update role failed");
-//        }
-        try {
-            User user = modelMapperConfig._mapperDtoToEntity(userDto);
-            if (_checkExistUser(user.getId())){
-                userRepository.save(user);
-                _logger.log("Update user: " + user.getUsername(), LoggerType.INFO);
+            GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
+            if (validation.getResponseMessage() != ResponseMessage.msg200) {
+                // return http status code base on validate response message
+                return genericResponse.matchingResponseMessage(validation);
             }
-            return user;
+
+            User updatedUser = userRepository.getUserById(user.getId());
+            updatedUser.setUsername(userDto.getUsername());
+            updatedUser.setEmail(userDto.getEmail());
+            updatedUser.setName(userDto.getName());
+            userRepository.save(updatedUser);
+            _logger.log("Update user: " + userDto.getUsername() + " to: " + updatedUser.getUsername(), LoggerType.INFO);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             e.printStackTrace();
             _logger.log("Update user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
-            return null;
+            return ResponseEntity.badRequest().body("Update user failed");
         }
     }
 
     @Override
-    public void deleteUser(RegisterDto userDto) {
+    public ResponseEntity deleteUser(UserDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
-            if (_checkExistUser(user.getId())){
-                userRepository.delete(user);
-                _logger.log("Delete user: " + user.getUsername(), LoggerType.INFO);
+            GenericResponse<?> validation = userServiceValidation._validateUserDeletion(user);
+            if (validation.getResponseMessage() != ResponseMessage.msg200) {
+                // return http status code base on validate response message
+                return genericResponse.matchingResponseMessage(validation);
             }
+
+            User deleteUser = userRepository.getUserById(user.getId());
+            userRepository.delete(deleteUser);
+            _logger.log("Delete user: " + userDto.getUsername(), LoggerType.INFO);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             e.printStackTrace();
             _logger.log("Delete user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
+            return ResponseEntity.badRequest().body("Delete user failed");
         }
     }
 
@@ -153,7 +129,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(RegisterDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
-            if (_checkExistUser(user.getId())) {
+            if (_checkExistUserById(user.getId())) {
                 _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             }
             return user;
@@ -190,7 +166,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private boolean _checkExistUser(Long id) {
+    private boolean _checkExistUserById(Long id) {
         try {
             for (User user : userRepository.findAll()) {
                 if (Objects.equals(user.getId(), id)) {
@@ -204,17 +180,4 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    private boolean _checkExistUsername(String username) {
-        try {
-            for (User user : userRepository.findAll()) {
-                if (Objects.equals(user.getUsername(), username)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            _logger.log("Check exist username: " + username + " failed", LoggerType.ERROR);
-        }
-        return false;
-    }
 }

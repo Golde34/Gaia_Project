@@ -26,16 +26,16 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUser(@RequestBody RegisterDto userDto) {
-        User user = userService.updateUser(userDto);
+    @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
+        ResponseEntity<?> user = userService.updateUser(userDto);
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteUser(@RequestBody RegisterDto userDto){
-        userService.deleteUser(userDto);
-        return ResponseEntity.ok("Delete user successfully");
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUser(@RequestBody UserDto userDto){
+        ResponseEntity<?> user = userService.deleteUser(userDto);
+        return ResponseEntity.ok(user);
     }
 
     @RequestMapping(value = "/getAllUsers")

@@ -25,6 +25,9 @@ public class ModelMapperConfig {
     public User _mapperDtoToEntity(RegisterDto userDto) {
         return modelMapper().map(userDto, User.class);
     }
+    public User _mapperDtoToEntity(UserDto userDto) {
+        return modelMapper().map(userDto, User.class);
+    }
 
     public Role _mapperDtoToEntity(RoleDto roleDto) {
         return modelMapper().map(roleDto, Role.class);

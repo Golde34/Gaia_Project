@@ -1,8 +1,8 @@
 package auth.authentication_service.modules.dto;
 
-import auth.authentication_service.validations.PasswordMatches;
-import auth.authentication_service.validations.ValidEmail;
-import auth.authentication_service.validations.ValidPassword;
+import auth.authentication_service.validations.dto_validations.PasswordMatches;
+import auth.authentication_service.validations.dto_validations.ValidEmail;
+import auth.authentication_service.validations.dto_validations.ValidPassword;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package auth.authentication_service.validations;
+package auth.authentication_service.validations.dto_validations;
 
 import jakarta.validation.Constraint;
 

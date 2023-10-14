@@ -1,4 +1,4 @@
-package auth.authentication_service.validations;
+package auth.authentication_service.validations.dto_validations;
 
 import auth.authentication_service.modules.dto.RegisterDto;
 import jakarta.validation.ConstraintValidator;

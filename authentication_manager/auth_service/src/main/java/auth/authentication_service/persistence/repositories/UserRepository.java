@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User getUserById(Long id);
     User findByEmail(String email);
-//    @Query("SELECT u FROM User u WHERE u.username = ?1")
     User findByUsername(String username);
     @Override
     void delete(User user);

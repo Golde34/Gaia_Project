@@ -1,4 +1,4 @@
-package auth.authentication_service.validations;
+package auth.authentication_service.validations.dto_validations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;

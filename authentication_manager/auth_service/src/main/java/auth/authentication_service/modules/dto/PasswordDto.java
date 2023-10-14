@@ -1,6 +1,6 @@
 package auth.authentication_service.modules.dto;
 
-//import auth.authentication_service.validations.ValidPassword;
+//import auth.authentication_service.validations.dto_validations.ValidPassword;
 import lombok.Data;
 
 @Data
