@@ -1,7 +1,6 @@
 package auth.authentication_service.modules.controllers;
 
-import auth.authentication_service.modules.dto.LoginDto;
-import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.SignInDtoRequest;
 import auth.authentication_service.services.interfaces.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,9 @@ public class AuthController {
        return ResponseEntity.ok("<h1>Test admin role.</h1>");
    }
 
-    @RequestMapping (value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginDto accountDto) throws Exception {
-        String jwtResponse = tokenService.authenticated(accountDto.getUsername(), accountDto.getPassword());
-        return ResponseEntity.ok(new TokenDto(jwtResponse));
+    @RequestMapping (value = "/sign-in", method = RequestMethod.POST)
+    public ResponseEntity<?> signIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
+        return tokenService.authenticated(accountDto.getUsername(), accountDto.getPassword());
     }
 
 //    @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)

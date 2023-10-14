@@ -1,6 +1,9 @@
 package auth.authentication_service.utils;
 
+import auth.authentication_service.enums.ResponseMessage;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
@@ -8,46 +11,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class GenericResponse {
-    private String message;
-    private String error;
+@Component
+public class GenericResponse<T> {
+    private T message;
+    private ResponseMessage responseMessage;
 
-    public GenericResponse(final String message) {
-        super();
+    public GenericResponse(T message, ResponseMessage responseMessage) {
         this.message = message;
+        this.responseMessage = responseMessage;
     }
 
-    public GenericResponse(final String message, final String error) {
-        super();
-        this.message = message;
-        this.error = error;
+    public GenericResponse() {
     }
 
-    public GenericResponse(List<ObjectError> allErrors, String error) {
-        this.error = error;
-        String temp = allErrors.stream().map(e -> {
-            if (e instanceof FieldError) {
-                return "{\"field\":\"" + ((FieldError) e).getField() + "\",\"defaultMessage\":\"" + e.getDefaultMessage() + "\"}";
-            } else {
-                return "{\"object\":\"" + e.getObjectName() + "\",\"defaultMessage\":\"" + e.getDefaultMessage() + "\"}";
+    public ResponseEntity<T> matchingResponseMessage(ResponseMessage responseMessage) {
+        switch (responseMessage) {
+            case msg200 -> {
+                return ResponseEntity.ok(this.message);
             }
-        }).collect(Collectors.joining(","));
-        this.message = "[" + temp + "]";
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(final String message) {
-        this.message = message;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(final String error) {
-        this.error = error;
+            case msg400 -> {
+                return ResponseEntity.badRequest().body(this.message);
+            }
+            case msg401 -> {
+                return ResponseEntity.status(401).body(this.message);
+            }
+            case msg403 -> {
+                return ResponseEntity.status(403).body(this.message);
+            }
+            case msg404 -> {
+                return ResponseEntity.status(404).body(this.message);
+            }
+            case msg500 -> {
+                return ResponseEntity.status(500).body(this.message);
+            }
+            default -> {
+                return ResponseEntity.badRequest().body(this.message);
+            }
+        }
     }
 }

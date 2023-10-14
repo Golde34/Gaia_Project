@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .authorizeHttpRequests(authz -> {
                     authz
-                            .requestMatchers(new AntPathRequestMatcher("/auth/authenticate")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/auth/sign-in")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")

@@ -29,12 +29,6 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
 
-    public RoleServiceImpl (RoleRepository roleRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
-        this.roleRepository = roleRepository;
-        this.modelMapperConfig = modelMapperConfig;
-        this._logger = _logger;
-    }
-
     @Override 
     public Role createRole(String roleName) {
         if (_checkExistRoleName(roleName)) {

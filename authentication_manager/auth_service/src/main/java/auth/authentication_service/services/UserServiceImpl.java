@@ -32,13 +32,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.modelMapperConfig = modelMapperConfig;
-        this._logger = _logger;
-    }
-
     @Override
     public User createUser(RegisterDto userDto) throws EmailExistsException {
         if (_emailExist(userDto.getEmail())) {

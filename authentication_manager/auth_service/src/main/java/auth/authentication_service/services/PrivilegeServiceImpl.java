@@ -5,17 +5,13 @@ import java.util.List;
 import java.util.Objects;
 
 import auth.authentication_service.modules.dto.PrivilegeDto;
-import auth.authentication_service.modules.dto.PrivilegeDto;
 import auth.authentication_service.persistence.entities.Privilege;
 import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import auth.authentication_service.enums.LoggerType;
-import auth.authentication_service.persistence.entities.Privilege;
 import auth.authentication_service.persistence.repositories.PrivilegeRepository;
 import auth.authentication_service.services.interfaces.PrivilegeService;
 
@@ -30,12 +26,6 @@ public class PrivilegeServiceImpl implements PrivilegeService{
 
     @Autowired
     private ModelMapperConfig modelMapperConfig;
-
-    public PrivilegeServiceImpl(PrivilegeRepository privilegeRepository, ModelMapperConfig modelMapperConfig, LoggerUtils _logger) {
-        this.privilegeRepository = privilegeRepository;
-        this.modelMapperConfig = modelMapperConfig;
-        this._logger = _logger;
-    }
 
     @Override
     public Privilege createPrivilege(String privilegeName) {
