@@ -2,7 +2,7 @@ package auth.authentication_service.utils;
 
 import auth.authentication_service.modules.dto.PrivilegeDto;
 import auth.authentication_service.modules.dto.RoleDto;
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.modules.dto.RegisterDto;
 import auth.authentication_service.persistence.entities.Privilege;
 import auth.authentication_service.persistence.entities.Role;
 import auth.authentication_service.persistence.entities.User;
@@ -24,7 +24,7 @@ public class ModelMapperConfig {
     // private UserDto _mapperEntityToDto(User user) {
     //     return modelMapperConfig.modelMapper().map(user, UserDto.class);
     // }
-    public User _mapperDtoToEntity(UserDto userDto) {
+    public User _mapperDtoToEntity(RegisterDto userDto) {
         return modelMapper().map(userDto, User.class);
     }
 

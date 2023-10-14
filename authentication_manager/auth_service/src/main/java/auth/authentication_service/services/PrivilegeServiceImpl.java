@@ -129,13 +129,4 @@ public class PrivilegeServiceImpl implements PrivilegeService{
         return false;
     }
 
-    private List<Privilege> _mapperListPrivilegesDto(List<PrivilegeDto> privilegeDtos) {
-        List<Privilege> privileges= new ArrayList<>();
-        for (PrivilegeDto privilegeDto: privilegeDtos) {
-            Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
-            privileges.add(privilege);
-        }
-        return privileges;
-    }
-
 }

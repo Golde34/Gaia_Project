@@ -1,6 +1,6 @@
 package auth.authentication_service.validations;
 
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.modules.dto.RegisterDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -9,7 +9,7 @@ public class UserValidator implements Validator {
     
     @Override
     public boolean supports(Class<?> clazz) {
-        return UserDto.class.isAssignableFrom(clazz);
+        return RegisterDto.class.isAssignableFrom(clazz);
     }
 
     @Override

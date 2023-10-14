@@ -6,12 +6,8 @@ import java.util.Objects;
 
 import auth.authentication_service.modules.dto.PrivilegeDto;
 import auth.authentication_service.modules.dto.RoleDto;
-import auth.authentication_service.modules.dto.UserDto;
-import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package auth.authentication_service.modules.controllers;
 
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.modules.dto.RegisterDto;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.services.UserServiceImpl;
 import auth.authentication_service.validations.EmailExistsException;
@@ -18,19 +18,19 @@ public class UserController {
     private UserServiceImpl userService;
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public ResponseEntity<User> createUser(@RequestBody UserDto userDto) throws EmailExistsException {
+    public ResponseEntity<User> createUser(@RequestBody RegisterDto userDto) throws EmailExistsException {
         User user = userService.createUser(userDto);
         return ResponseEntity.ok(user);
     }
 
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<User> updateUser(@RequestBody RegisterDto userDto) {
         User user = userService.updateUser(userDto);
         return ResponseEntity.ok(user);
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteUser(@RequestBody UserDto userDto){
+    public ResponseEntity<String> deleteUser(@RequestBody RegisterDto userDto){
         userService.deleteUser(userDto);
         return ResponseEntity.ok("Delete user successfully");
     }
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getUser")
-    public ResponseEntity<User> getUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<User> getUser(@RequestBody RegisterDto userDto) {
         User user = userService.getUserById(userDto);
         return ResponseEntity.ok(user);
     }

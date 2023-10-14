@@ -10,7 +10,7 @@ import lombok.Data;
 
 @PasswordMatches
 @Data
-public class UserDto {
+public class RegisterDto {
 
     @NotNull
     @Size(min=1, message="{Size.userDto.name}")

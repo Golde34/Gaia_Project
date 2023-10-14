@@ -1,6 +1,6 @@
 package auth.authentication_service.validations;
 
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.modules.dto.RegisterDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -13,7 +13,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(final Object obj, final ConstraintValidatorContext context) {
-        final UserDto user = (UserDto) obj;
+        final RegisterDto user = (RegisterDto) obj;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

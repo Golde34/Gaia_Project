@@ -1,7 +1,7 @@
 package auth.authentication_service.services;
 
 import auth.authentication_service.enums.LoggerType;
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.modules.dto.RegisterDto;
 import auth.authentication_service.persistence.entities.Role;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.RoleRepository;
@@ -12,8 +12,6 @@ import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
 import auth.authentication_service.validations.EmailExistsException;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(UserDto userDto) throws EmailExistsException {
+    public User createUser(RegisterDto userDto) throws EmailExistsException {
         if (_emailExist(userDto.getEmail())) {
             throw new EmailExistsException("There is an account with that email address: " + userDto.getEmail());
         }
@@ -64,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserDto userDto) {
+    public User updateUser(RegisterDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
@@ -80,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UserDto userDto) {
+    public void deleteUser(RegisterDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())){
@@ -107,7 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(UserDto userDto) {
+    public User getUserById(RegisterDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             if (_checkExistUser(user.getId())) {

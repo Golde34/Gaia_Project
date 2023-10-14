@@ -1,6 +1,7 @@
 package auth.authentication_service.services;
 
 import auth.authentication_service.enums.LoggerType;
+import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.LoggerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,22 +28,19 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     LoggerUtils _logger;
     @Autowired
-    private TokenRepository tokenRepository;
+    private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
 
     private final AuthenticationConfiguration authenticationManager;
     private final UserDetailsServices userDetailService;
-    private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(TokenRepository tokenRepository, UserRepository userRepository,
-                           AuthenticationConfiguration authenticationManager, UserDetailsServices userDetailsServices,
-                           JwtUtil jwtUtil, LoggerUtils _logger) {
-        this.tokenRepository = tokenRepository;
+    public AuthServiceImpl(UserRepository userRepository, TokenService tokenService, AuthenticationConfiguration authenticationManager,
+                           UserDetailsServices userDetailsServices, LoggerUtils _logger) {
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
         this.userDetailService = userDetailsServices;
-        this.jwtUtil = jwtUtil;
         this._logger = _logger;
     }
 
@@ -69,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
             _createFirstToken(user, userDetails);
             accessToken = user.getToken().getAccessToken();
         }  else {
-            accessToken = generateAccessToken(userDetails);
+            accessToken = tokenService.generateAccessToken(userDetails);
             user.getToken().setAccessToken(accessToken);
             userRepository.save(user);
         }
@@ -83,51 +81,10 @@ public class AuthServiceImpl implements AuthService {
     public void _createFirstToken(User user, UserDetails userDetails) {
         AuthToken authToken = new AuthToken();
         authToken.setUser(user);
-        authToken.setAccessToken(generateAccessToken(userDetails));
-        authToken.setRefreshToken(generateRefreshToken(userDetails));
+        authToken.setAccessToken(tokenService.generateAccessToken(userDetails));
+        authToken.setRefreshToken(tokenService.generateRefreshToken(userDetails));
         user.setToken(authToken);
         userRepository.save(user);
     }
-
-    public String generateAccessToken(UserDetails user) {
-        Long expiration = 1000L * 60 * 60 * 2; // 2h
-        String accessToken = jwtUtil.generateToken(user, expiration);
-        return accessToken;
-    }
-
-    public String generateRefreshToken(UserDetails user) {
-        Long expiration = 1000L * 60 * 60 * 24; // 1d
-        String refreshToken = jwtUtil.generateToken(user, expiration);
-        return refreshToken;
-    }
-
-    // public String regenerateToken(String token, UserDetails user, TokenType tokenType) {
-    //     String response = "";
-    //     if (jwtUtil.validateToken(token, user) && tokenType == TokenType.ACCESS_TOKEN) {
-    //         generateAccessToken(user);
-    //         response = "Regenerate access token successfully";
-    //     } else if (jwtUtil.validateToken(token, user) && tokenType == TokenType.REFRESH_TOKEN) {
-    //         generateRefreshToken(user);
-    //         response = "Regenerate refresh token successfully";
-    //     } else {
-    //         response = "Token is invalid. Regenerate failed";
-    //         throw new RuntimeException("Token is invalid");
-    //     }
-    //     return response;
-    // }
-
-    @Override
-    public String getUsernameFromToken(String accessToken) {
-        return jwtUtil.exactUsername(accessToken);
-    }
-
-    public boolean validateAccessToken(String accessToken) {
-        return false;
-    }
-
-    public boolean validateRefreshToken(String refreshToken) {
-        return false;
-    }
-    
 }
 
