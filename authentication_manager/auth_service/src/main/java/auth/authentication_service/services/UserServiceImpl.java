@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
     @Autowired
-    GenericResponse genericResponse;
+    private GenericResponse<String> genericResponse;
 
     @Autowired
     UserServiceValidation userServiceValidation;

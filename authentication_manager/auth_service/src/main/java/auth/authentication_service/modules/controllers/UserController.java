@@ -4,7 +4,6 @@ import auth.authentication_service.modules.dto.RegisterDto;
 import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.services.UserServiceImpl;
-import auth.authentication_service.utils.ModelMapperConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-    @Autowired
-    private ModelMapperConfig modelMapperConfig;
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody RegisterDto userDto) {

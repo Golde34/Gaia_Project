@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private GenericResponse genericResponse;
+    private GenericResponse<String> genericResponse;
 
     public AuthServiceImpl(AuthenticationConfiguration authenticationManager, UserDetailsServices userDetailService) {
         this.authenticationManager = authenticationManager;
