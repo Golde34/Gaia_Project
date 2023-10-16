@@ -1,0 +1,14 @@
+# /proto/buf.gen.yaml
+version: v1beta1
+plugins:
+  - name: js
+    out: ../src/proto
+    opt: import_style=commonjs,binary
+  - name: grpc
+    out: ../src/proto
+    opt: grpc_js
+    path: D:/CodeDeveloper/BigThinking/Project/Golde_AI_Assistant_System/person_task_manager/server/node_modules/.bin/protoc-gen-js
+  - name: ts
+    out: ../src/proto
+    opt: grpc_js
+  
