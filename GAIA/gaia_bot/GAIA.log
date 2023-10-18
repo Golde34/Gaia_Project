@@ -1,6 +1,5 @@
-2023-10-18 15:13:03,444 - numexpr.utils - INFO - Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
-2023-10-18 15:13:03,444 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
-2023-10-18 15:13:05,718 - root - INFO - Bot wakeup...
-2023-10-18 15:13:05,722 - root - INFO - Listen command
-2023-10-18 15:13:27,679 - root - INFO - Handle input
-2023-10-18 15:13:30,375 - root - INFO - Listen command
+2023-10-18 16:40:45,610 - root - INFO - Bot wakeup...
+2023-10-18 16:40:45,610 - root - INFO - Listen command
+2023-10-18 16:40:50,493 - root - INFO - Handle input
+2023-10-18 16:40:52,790 - root - INFO - Skill Handling
+2023-10-18 16:40:52,790 - root - INFO - Listen command
