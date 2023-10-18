@@ -1,4 +1,4 @@
-from gaia_bot.models.gpt.inference import inference
+from gaia_bot.modules.local.models.gpt.inference import inference
 from gaia_bot.skills.assistant_skill import AssistantSkill
 
 

@@ -1,9 +1,6 @@
-2023-10-15 23:06:22,318 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
-2023-10-15 23:06:36,916 - root - INFO - Bot wakeup...
-2023-10-15 23:06:36,926 - root - INFO - Listen command
-2023-10-15 23:07:02,222 - root - INFO - Handle input
-2023-10-15 23:07:11,366 - root - INFO - Listen command
-2023-10-15 23:07:16,433 - root - INFO - Handle input
-2023-10-15 23:07:19,833 - root - INFO - Listen command
-2023-10-15 23:07:22,771 - root - ERROR - Failed to recognize uer input with message 
-2023-10-15 23:07:22,772 - root - INFO - Handle input
+2023-10-18 15:13:03,444 - numexpr.utils - INFO - Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2023-10-18 15:13:03,444 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2023-10-18 15:13:05,718 - root - INFO - Bot wakeup...
+2023-10-18 15:13:05,722 - root - INFO - Listen command
+2023-10-18 15:13:27,679 - root - INFO - Handle input
+2023-10-18 15:13:30,375 - root - INFO - Listen command

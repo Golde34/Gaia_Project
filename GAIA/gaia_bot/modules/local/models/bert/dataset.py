@@ -1,4 +1,4 @@
-from gaia_bot.models.bert import model_config
+from gaia_bot.modules.local.models.bert import model_config
 import torch
 
 
