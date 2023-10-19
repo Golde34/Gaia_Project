@@ -29,9 +29,14 @@ public class AuthController {
        return ResponseEntity.ok("<h1>Test admin role.</h1>");
    }
 
-    @RequestMapping (value = "/sign-in", method = RequestMethod.POST)
+    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
     public ResponseEntity<?> signIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
         return tokenService.authenticated(accountDto.getUsername(), accountDto.getPassword());
+    }
+
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public ResponseEntity<String> status() {
+        return ResponseEntity.ok("OK");
     }
 
 //    @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)
