@@ -1,5 +1,6 @@
 import os
 from gaia_bot.modules.ports.commands.authen_command import AuthenticationConnector 
+# from gaia_bot.modules.ports.microservice_connectors.connectors_api import run_flask
 
 def recognize_owner_by_voice():
     pass
@@ -21,6 +22,10 @@ def recognize_owner_by_authen_service(is_owner, username, password):
     
     username = 'golde'
     password = '483777'
+    
+    # activate port 5000 by bash shell
+    # run_flask()    
+    
     authentication = AuthenticationConnector()
     authentication.activate_authentication_command()
     

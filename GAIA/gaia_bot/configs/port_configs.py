@@ -6,7 +6,7 @@ PORTS = {
         "description": "GAIA Connector to others microservices",
         "database": "MongoDB",
         "database_name": "gaia",
-        "shell_path": None
+        "shell_path": "gaia_bot/modules/ports/bash_shells/gaia_connector.sh"
     },
     "authentication_service": {
         "name": "Authentication Service",
@@ -15,7 +15,7 @@ PORTS = {
         "description": "Authentication Service API",
         "database": "MySQL",
         "database_name": "authentication_service",
-        "shell_path": "gaia_bot/modules/ports/microservice_connectors/authentication_service.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/auth_service.sh"
     },
     "task_manager": {
         "name": "Task Manager",
@@ -24,6 +24,6 @@ PORTS = {
         "description": "Task Manager API",
         "database": "MongoDB",
         "database_name": "task_manager",
-        "shell_path": "gaia_bot/modules/ports/microservice_connectors/task_manager.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/task_manager.sh"
     }
 }
