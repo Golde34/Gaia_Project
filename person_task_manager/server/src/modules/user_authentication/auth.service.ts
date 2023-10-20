@@ -24,15 +24,15 @@ export class AuthService {
         return msg200(response.data);
     }
 
-    async getInformation(token: string): Promise<string> {
-        // read accountId from token
-        const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/getInformation`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorizarion': `Bearer ${token}`,
-            },
-        });
-    }
+    // async getInformation(token: string): Promise<string> {
+    //     // read accountId from token
+    //     const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/getInformation`, {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorizarion': `Bearer ${token}`,
+    //         },
+    //     });
+    // }
 }
 
 export const authService = new AuthService(config.authServer.host, config.authServer.port);

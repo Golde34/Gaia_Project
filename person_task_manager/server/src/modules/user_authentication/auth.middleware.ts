@@ -15,6 +15,6 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
-    res['locals'].accountId = await authService.getInformation(token);
+    // res['locals'].accountId = await authService.getInformation(token);
     res.setHeader('access-token', token);
 }
