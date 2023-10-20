@@ -1,6 +1,7 @@
 import logging
 import colorama
 from colorama import Fore
+import asyncio
 
 from gaia_bot.configs.__version__ import __version__
 from gaia_bot.core.console_manager import ConsoleManager
@@ -9,8 +10,14 @@ from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
 from gaia_bot.utils.startup import recognize_owner_by_authen_service
-from gaia_bot.utils.activate_microservice import activate_microservice
+from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices
 
+
+# async def activate_microservices():
+#     gaia_connector, auth_service, task_manager = await activate_microservice()
+#     await gaia_connector.wait()
+#     await auth_service.wait()
+#     await task_manager.wait()
 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
@@ -20,7 +27,11 @@ def simple_handle_testing(console_input):
     
     return boolean_loop
 
-def main():
+async def main():
+    # Activate microservices
+    await activate_microservice()
+    await wait_for_all_microservices()
+    # Initiate bot console
     colorama.init()
     print(f"Gaia version: ${__version__}")
     # Startup
@@ -30,7 +41,7 @@ def main():
                            info_log="Bot wakeup...",
                            refresh_console=True)
     
-    is_owner = recognize_owner_by_authen_service('golde', '483777')
+    is_owner = await recognize_owner_by_authen_service('golde', '483777')
     print(is_owner)
     
     # initiate
@@ -45,5 +56,4 @@ def main():
 
 
 if __name__ == "__main__":
-    activate_microservice()
-    main()
+    asyncio.run(main())
