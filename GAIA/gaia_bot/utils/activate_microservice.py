@@ -1,11 +1,11 @@
-from gaia_bot.configs.port_configs import PORTS
+from systemn_configs.port_configs import PORTS
 import subprocess
 
 
 def activate_microservice():
     activate_gaia_connector()
-    # activate_auth_service()
-    # activate_task_manager()
+    activate_auth_service()
+    activate_task_manager()
 
 def activate_gaia_connector():
     bash_script_path = PORTS['gaia_connector']['shell_path']

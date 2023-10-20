@@ -43,6 +43,5 @@ def main():
 
 import subprocess
 if __name__ == "__main__":
-    subprocess.call(['bash', 'gaia_bot/modules/ports/bash_shells/gaia_connector.sh'])
-    # activate_microservice()
-    # main()
+    activate_microservice()
+    main()
