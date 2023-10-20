@@ -1,6 +1,6 @@
 from gaia_bot.configs.port_configs import PORTS
 import os
-import subprocess
+import socket
 import asyncio
 
 
@@ -42,12 +42,38 @@ async def is_microservice_ready(lock_file):
     return os.path.exists(lock_file)
 
 async def wait_authen_microservice():
-    auth_lock_file = '/tmp/auth_service_lock'
     while True:
-        auth_service_ready = os.path.exists(auth_lock_file)
+        auth_service_ready = check_port_in_use(PORTS['authentication_service']['port'])
         print("Check wait function")
         print(auth_service_ready)
         if auth_service_ready:
             return True
         await asyncio.sleep(1)
     return False
+
+def microservice_activated_port():
+    count = 0
+    if check_port_in_use(PORTS['gaia_connector']['port']): #  if true is running
+        count += 1
+    if check_port_in_use(PORTS['authentication_service']['port']):
+        count += 1
+    if check_port_in_use(PORTS['task_manager']['port']):
+        count += 1
+    if count == 3: # all microservices are running
+        return True
+    else:
+        return False
+
+def check_port_in_use(port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    
+    try:
+        sock.bind(('localhost', port))
+        available = False # not running
+    except OSError:
+        available = True # running
+        
+    sock.close()
+    
+    return available

@@ -10,14 +10,8 @@ from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
 from gaia_bot.utils.startup import recognize_owner_by_authen_service
-from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices
+from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices, microservice_activated_port
 
-
-# async def activate_microservices():
-#     gaia_connector, auth_service, task_manager = await activate_microservice()
-#     await gaia_connector.wait()
-#     await auth_service.wait()
-#     await task_manager.wait()
 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
@@ -29,8 +23,9 @@ def simple_handle_testing(console_input):
 
 async def main():
     # Activate microservices
-    await activate_microservice()
-    await wait_for_all_microservices()
+    if microservice_activated_port() == False:
+        await activate_microservice()
+        await wait_for_all_microservices()
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: ${__version__}")
