@@ -1,4 +1,4 @@
-from systemn_configs.port_configs import PORTS
+from gaia_bot.configs.port_configs import PORTS
 import subprocess
 
 

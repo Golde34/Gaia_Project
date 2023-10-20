@@ -18,15 +18,8 @@ def recognize_owner_by_face(is_owner):
     # result = master_recognize(proto_path, model_path, embedder_path, recognizer_path, le_path)
     # return result
 
-def recognize_owner_by_authen_service(is_owner, username, password):
+def recognize_owner_by_authen_service(username, password):
     
-    username = 'golde'
-    password = '483777'
-    
-    # activate port 5000 by bash shell
-    # run_flask()    
-    
-    authentication = AuthenticationConnector()
-    authentication.activate_authentication_command()
-    
-        
+    authentication = AuthenticationConnector(username, password)
+    token_string = authentication.activate_authentication_command()
+    return token_string

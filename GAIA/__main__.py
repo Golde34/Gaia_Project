@@ -11,6 +11,7 @@ from gaia_bot.configs import settings
 from gaia_bot.utils.startup import recognize_owner_by_authen_service
 from gaia_bot.utils.activate_microservice import activate_microservice
 
+
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
         boolean_loop = False
@@ -29,7 +30,8 @@ def main():
                            info_log="Bot wakeup...",
                            refresh_console=True)
     
-    # is_owner = recognize_owner_by_authen_service(False, 'golde', '483777')
+    is_owner = recognize_owner_by_authen_service('golde', '483777')
+    print(is_owner)
     
     # initiate
     _boolean_loop = True
@@ -41,7 +43,7 @@ def main():
         process.run()
         # _boolean_loop = simple_handle_testing(i)    
 
-import subprocess
+
 if __name__ == "__main__":
     activate_microservice()
     main()
