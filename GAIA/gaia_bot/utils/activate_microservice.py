@@ -44,8 +44,6 @@ async def is_microservice_ready(lock_file):
 async def wait_authen_microservice():
     while True:
         auth_service_ready = check_port_in_use(PORTS['authentication_service']['port'])
-        print("Check wait function")
-        print(auth_service_ready)
         if auth_service_ready:
             return True
         await asyncio.sleep(1)
