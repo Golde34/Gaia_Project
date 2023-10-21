@@ -9,8 +9,7 @@ from gaia_bot.skills.assistant_skill import AssistantSkill
 from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
-from gaia_bot.configs.enums import AuthenType
-from gaia_bot.utils.startup import owner_recognize
+from gaia_bot.utils.startup import multi_authenticate, recognize_owner_by_authen_service
 from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices, microservice_activated_port
 
 
@@ -32,7 +31,8 @@ async def main():
                            info_log="Bot wakeup...",
                            refresh_console=True)
     
-    access_token = await owner_recognize(AuthenType.TOKEN)
+    # access_token = await multi_authenticate(console_manager)
+    access_token = await recognize_owner_by_authen_service(username="golde", password="483777")
     print(access_token)
     
     # initiate

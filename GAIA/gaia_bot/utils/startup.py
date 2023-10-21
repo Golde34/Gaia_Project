@@ -1,29 +1,39 @@
 import os
+import speech_recognition as sr
+
 from gaia_bot.modules.ports.commands.authen_command import AuthenticationConnector 
 from gaia_bot.utils.activate_microservice import wait_authen_microservice
 from gaia_bot.skills.collections.face_security import master_recognize
-from gaia_bot.configs.enums import AuthenType
 
 
-async def owner_recognize(type_recognize):
-    if type_recognize == AuthenType.VOICE:
-        await recognize_owner_by_voice()
+async def multi_authenticate(console_manager):
+    voice_result = await recognize_owner_by_voice()
+    if voice_result:
         return "authenticate by voice"
-    elif type_recognize == AuthenType.FACE:
-        await recognize_owner_by_face(False)
-        return "authenticate by face"
-    elif type_recognize == AuthenType.TOKEN:
-        username = "golde"
-        password = "483777"
-        access_token = await recognize_owner_by_authen_service(username=username, password=password)
-        return access_token
     else:
-        print("Not support this type of recognize")
-
+        console_manager.console_output(error_log="Voice authentication failed")
+        face_result = await recognize_owner_by_face(False)
+        if face_result:
+            return "authenticate by face"
+        else:
+            console_manager.console_output(error_log="Face authentication failed")
+            username = "golde"
+            password = "483777"
+            access_token = await recognize_owner_by_authen_service(username=username, password=password)
+            return access_token
+        
 
 async def recognize_owner_by_voice():
-    pass
-
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Say something!")
+        audio = recognizer.listen(source)
+    try: 
+        text = await recognizer.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        return None
+    
 async def recognize_owner_by_face(is_owner):
     if is_owner:
         return True
