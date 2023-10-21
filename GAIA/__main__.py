@@ -9,26 +9,22 @@ from gaia_bot.skills.assistant_skill import AssistantSkill
 from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
-from gaia_bot.utils.startup import recognize_owner_by_authen_service
+from gaia_bot.configs.enums import AuthenType
+from gaia_bot.utils.startup import owner_recognize
 from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices, microservice_activated_port
 
 
-def simple_handle_testing(console_input):
-    if console_input == "bye" or console_input == "off":
-        boolean_loop = False
-    else:
-        boolean_loop = True
-    
-    return boolean_loop
-
 async def main():
+    
     # Activate microservices
     if microservice_activated_port() == False:
         await activate_microservice()
         await wait_for_all_microservices()
+    
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: ${__version__}")
+    
     # Startup
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
@@ -36,8 +32,8 @@ async def main():
                            info_log="Bot wakeup...",
                            refresh_console=True)
     
-    is_owner = await recognize_owner_by_authen_service('golde', '483777')
-    print(is_owner)
+    access_token = await owner_recognize(AuthenType.TOKEN)
+    print(access_token)
     
     # initiate
     _boolean_loop = True
@@ -49,6 +45,13 @@ async def main():
         process.run()
         # _boolean_loop = simple_handle_testing(i)    
 
+def simple_handle_testing(console_input):
+    if console_input == "bye" or console_input == "off":
+        boolean_loop = False
+    else:
+        boolean_loop = True
+    
+    return boolean_loop
 
 if __name__ == "__main__":
     asyncio.run(main())
