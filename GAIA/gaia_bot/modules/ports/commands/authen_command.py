@@ -10,8 +10,8 @@ class AuthenticationConnector:
         self.username = username
         self.password = password
         self.gaia_port = PORTS['gaia_connector']['port']
-        self.auth_port = PORTS['authentication_service']['port']
         self.auth_bash = PORTS['authentication_service']['shell_path']
+        self.gaia_url = f"http://localhost:{self.gaia_port}"
     
     def activate_authentication_command(self):
         if (self._check_microservice_status() == False):
@@ -25,9 +25,7 @@ class AuthenticationConnector:
         username = USER_PROFILE['username']
         password = USER_PROFILE['password']
         
-        flask_url = f"http://localhost:{self.gaia_port}/auth"
-        
-        response = requests.post(f"{flask_url}", json={'username': username, 'password': password})
+        response = requests.post(f"{self.gaia_url}/auth/sign-in", json={'username': username, 'password': password})
         
         if response.status_code == 200:
             result = response.json()
@@ -46,9 +44,8 @@ class AuthenticationConnector:
             print("Error running the bash script: ", e)
 
     def _check_microservice_status(self):
-        flask_url = f"http://localhost:{self.gaia_port}/"
         
-        response = requests.get(f"{flask_url}/status")
+        response = requests.get(f"{self.gaia_url}/status")
         
         if response.status_code == 200:
             return True
