@@ -3,6 +3,8 @@ package auth.authentication_service.services;
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
+import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
@@ -120,12 +122,17 @@ public class AuthServiceImpl implements AuthService {
             _logger.log("User is inactive", LoggerType.ERROR);
             return new GenericResponse<>("User is inactive", ResponseMessage.msg401);
         }
-        if (!tokenService.validateToken(refreshToken, userDetails)) {
+        if (!tokenService.validateToken(refreshToken)) {
             _logger.log("Invalid refresh token", LoggerType.ERROR);
             return new GenericResponse<>("Invalid refresh token", ResponseMessage.msg401);
         }
         String newAccessToken = tokenService.generateAccessToken(userDetails);
         return new GenericResponse<>(newAccessToken, ResponseMessage.msg200);
+    }
+
+    public ResponseEntity checkToken(TokenDto token) {
+        UserDto userResponse = tokenService.checkToken(token.getToken());
+        return ResponseEntity.ok(userResponse);
     }
 }
 
