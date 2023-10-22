@@ -24,6 +24,17 @@ export class AuthService {
         return msg200(response.data);
     }
 
+    async checkToken(token: string) { 
+        const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/validate-token`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        console.log(response.data);
+        return response.data;
+    }
+
     // async getInformation(token: string): Promise<string> {
     //     // read accountId from token
     //     const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/getInformation`, {
