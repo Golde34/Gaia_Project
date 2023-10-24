@@ -8,6 +8,7 @@ import auth.authentication_service.enums.TokenType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -26,6 +27,6 @@ public class AuthToken {
     private Date expiryDate;
     
     @JsonBackReference
-    @OneToOne(mappedBy = "token")
-    private User user;    
+    @OneToMany(mappedBy = "token")
+    private User user;
 }

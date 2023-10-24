@@ -43,8 +43,7 @@ public class User {
     private Collection<Role> roles;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "token_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private AuthToken token;
+    private Collection<AuthToken> tokens;
 }

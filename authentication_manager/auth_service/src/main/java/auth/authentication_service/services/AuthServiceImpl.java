@@ -10,6 +10,11 @@ import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
 import auth.authentication_service.utils.LoggerUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -69,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
         // Generate sign-in information
         SignInDtoResponse token = _generateSignInToken(user, userDetails);
         _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
-
+        
         return ResponseEntity.ok(token);
     }
     private GenericResponse<String> _validateAuthentication(String username, String password, User user) throws Exception {
@@ -139,7 +144,7 @@ public class AuthServiceImpl implements AuthService {
         String generatedToken = tokenService.generateAccessToken(userDetails);
         accessToken.setToken(generatedToken);
         accessToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
-        user.setToken(accessToken);
+        user.setTokens(new ArrayList<>(Arrays.asList(accessToken)));
         userRepository.save(user);
         return generatedToken;
     }
@@ -151,7 +156,8 @@ public class AuthServiceImpl implements AuthService {
         String generatedToken = tokenService.generateRefreshToken(userDetails);
         refreshToken.setToken(generatedToken);
         refreshToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
-        user.setToken(refreshToken);
+        user.setTokens(new ArrayList<>(Arrays.asList(refreshToken)));
+        user.setLastLogin(new Date());
         userRepository.save(user);
         return generatedToken;
     }
