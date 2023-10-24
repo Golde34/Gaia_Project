@@ -31,8 +31,8 @@ def check_port_in_use(port):
 def check_microservice_state():
     microservice_state = {
         "gaia_connector": False, # Default, false is not running
-        # "authentication_service": False,
-        # "task_manager": False
+        "authentication_service": False,
+        "task_manager": False
     }
     for microservice in PORT_COMPONENTS:
         if check_port_in_use(PORTS[microservice]['port']) == False:
@@ -48,85 +48,3 @@ async def wait_microservice(microservice_name):
             return True
         await asyncio.sleep(1)
     return False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# async def wait_for_all_microservices():
-#     gaia_lock_file = '/tmp/gaia_connector_lock'
-#     auth_lock_file = '/tmp/auth_service_lock'
-#     task_lock_file = '/tmp/task_manager_lock'
-
-#     while True:
-#         gaia_connector_ready = await is_microservice_ready(gaia_lock_file)
-#         auth_service_ready = await is_microservice_ready(auth_lock_file)
-#         task_manager_ready = await is_microservice_ready(task_lock_file)
-        
-#         if gaia_connector_ready and auth_service_ready and task_manager_ready:
-#             break
-        
-#         await asyncio.sleep(1)
-
-# async def is_microservice_ready(lock_file):
-#     return os.path.exists(lock_file)
-
-# def microservice_activated_port():
-#     count = 0
-#     if check_port_in_use(PORTS['gaia_connector']['port']): #  if true is running
-#         count += 1
-#     if check_port_in_use(PORTS['authentication_service']['port']):
-#         count += 1
-#     if check_port_in_use(PORTS['task_manager']['port']):
-#         count += 1
-#     if count == 3: # all microservices are running
-#         return True
-#     else:
-#         return False
-
-# def check_port_in_use(port):
-#     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     sock.settimeout(1)
-    
-#     try:
-#         sock.bind(('localhost', port))
-#         available = False # not running
-#     except OSError:
-#         available = True # running
-        
-#     sock.close()
-    
-#     return available

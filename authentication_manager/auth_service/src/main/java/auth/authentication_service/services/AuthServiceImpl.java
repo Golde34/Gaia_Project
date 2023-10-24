@@ -3,6 +3,7 @@ package auth.authentication_service.services;
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
 import auth.authentication_service.enums.TokenType;
+import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserDto;
@@ -75,10 +76,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // Generate sign-in information
-        SignInDtoResponse token = _generateSignInToken(user, userDetails);
+        SignInDtoResponse response = _generateSignInToken(user, userDetails);
         _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
         
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(response);
     }
     private GenericResponse<String> _validateAuthentication(String username, String password, User user) throws Exception {
         try {
@@ -113,33 +114,8 @@ public class AuthServiceImpl implements AuthService {
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails) {
         String accessToken = _generateAccessToken(user, userDetails);
         String refreshToken = _generateRefreshToken(user, userDetails);
-        return new SignInDtoResponse(accessToken, refreshToken, user.getName(), user.getUsername(), user.getEmail());
+        return new SignInDtoResponse(accessToken, refreshToken, user.getName(), user.getUsername(), user.getEmail(), user.getLastLogin());
     }
-
-    public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
-        final UserDetails userDetails = userDetailService.loadUserByUsername(tokenService.getUsernameFromToken(refreshToken));
-        User user = userRepository.findByUsername(tokenService.getUsernameFromToken(refreshToken));
-        if (user == null) {
-            _logger.log("User not found", LoggerType.ERROR);
-            return new GenericResponse<>("User not found", ResponseMessage.msg401);
-        }
-        if (!user.isEnabled()) {
-            _logger.log("User is inactive", LoggerType.ERROR);
-            return new GenericResponse<>("User is inactive", ResponseMessage.msg401);
-        }
-        if (!tokenService.validateToken(refreshToken)) {
-            _logger.log("Invalid refresh token", LoggerType.ERROR);
-            return new GenericResponse<>("Invalid refresh token", ResponseMessage.msg401);
-        }
-        String newAccessToken = tokenService.generateAccessToken(userDetails);
-        return new GenericResponse<>(newAccessToken, ResponseMessage.msg200);
-    }
-
-    public ResponseEntity checkToken(TokenDto token) {
-        UserDto userResponse = tokenService.checkToken(token.getToken());
-        return ResponseEntity.ok(userResponse);
-    }
-
     private String _generateAccessToken(User user, UserDetails userDetails) {
         AuthToken accessToken = new AuthToken();
         accessToken.setUser(user);
@@ -150,7 +126,6 @@ public class AuthServiceImpl implements AuthService {
         tokenRepository.save(accessToken);
         return generatedToken;
     }
-
     private String _generateRefreshToken(User user, UserDetails userDetails) {
         AuthToken refreshToken = new AuthToken();
         refreshToken.setUser(user);
@@ -163,5 +138,29 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         return generatedToken;
     }
+
+    public ResponseEntity checkToken(TokenDto token) {
+        CheckTokenDtoResponse userResponse = tokenService.checkToken(token.getToken());
+        return ResponseEntity.ok(userResponse);
+    }
+
+    // public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
+    //     final UserDetails userDetails = userDetailService.loadUserByUsername(tokenService.getUsernameFromToken(refreshToken));
+    //     User user = userRepository.findByUsername(tokenService.getUsernameFromToken(refreshToken));
+    //     if (user == null) {
+    //         _logger.log("User not found", LoggerType.ERROR);
+    //         return new GenericResponse<>("User not found", ResponseMessage.msg401);
+    //     }
+    //     if (!user.isEnabled()) {
+    //         _logger.log("User is inactive", LoggerType.ERROR);
+    //         return new GenericResponse<>("User is inactive", ResponseMessage.msg401);
+    //     }
+    //     if (!tokenService.validateToken(refreshToken)) {
+    //         _logger.log("Invalid refresh token", LoggerType.ERROR);
+    //         return new GenericResponse<>("Invalid refresh token", ResponseMessage.msg401);
+    //     }
+    //     String newAccessToken = tokenService.generateAccessToken(userDetails);
+    //     return new GenericResponse<>(newAccessToken, ResponseMessage.msg200);
+    // } 
 }
 
