@@ -17,8 +17,11 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
 
     const cachedResult: any = cache.get(token);
     if (cachedResult !== undefined) {
-
-        setTokenInCheckToken(res, cachedResult);
+        if (_checkInvalidToken(cachedResult)) {
+            next(new UnauthorizedError("Invalid token"));
+            return;
+        }
+        _setTokenInCheckFunc(res, cachedResult);
 
         let elapsedTime = performance.now() - startTime;
         console.log(`elapsedTime: ${elapsedTime} ms`);
@@ -28,12 +31,12 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
         return;
     } else {
         const jwtPayload = (await authService.checkToken(token)) as any;
-        if (!jwtPayload) {
+        if (jwtPayload === undefined || _checkInvalidToken(jwtPayload)) {
             next(new UnauthorizedError("Invalid token"));
             return;
         }
 
-        setTokenInCheckToken(res, jwtPayload);
+        _setTokenInCheckFunc(res, jwtPayload);
 
         cache.set(token, jwtPayload, 60);
 
@@ -44,7 +47,14 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
     next();
 }
 
-function setTokenInCheckToken(res: Response, data: { id: string, username: string, accessToken: string }): void {
+function _checkInvalidToken(data: {id: string, username: string, accessToken: string, expiryDate: Date }): boolean {
+    if (performance.now() - Number(data.expiryDate) <= 0) {
+        return true;
+    }
+    return false;
+}
+
+function _setTokenInCheckFunc(res: Response, data: { id: string, username: string, accessToken: string, expiryDate: Date }): void {
     const { id, username, accessToken } = data;
     res.setHeader('accessToken', accessToken);
     res['locals'].username = username;

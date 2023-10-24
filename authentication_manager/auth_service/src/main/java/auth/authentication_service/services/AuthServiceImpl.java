@@ -6,7 +6,6 @@ import auth.authentication_service.enums.TokenType;
 import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
-import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
