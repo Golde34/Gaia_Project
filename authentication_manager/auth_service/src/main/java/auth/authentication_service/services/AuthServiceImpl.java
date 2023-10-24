@@ -6,6 +6,7 @@ import auth.authentication_service.enums.TokenType;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
@@ -39,6 +40,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
     private final AuthenticationConfiguration authenticationManager;
     private final UserDetailsServices userDetailService;
@@ -144,8 +147,7 @@ public class AuthServiceImpl implements AuthService {
         String generatedToken = tokenService.generateAccessToken(userDetails);
         accessToken.setToken(generatedToken);
         accessToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
-        user.setTokens(new ArrayList<>(Arrays.asList(accessToken)));
-        userRepository.save(user);
+        tokenRepository.save(accessToken);
         return generatedToken;
     }
 
@@ -156,7 +158,7 @@ public class AuthServiceImpl implements AuthService {
         String generatedToken = tokenService.generateRefreshToken(userDetails);
         refreshToken.setToken(generatedToken);
         refreshToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
-        user.setTokens(new ArrayList<>(Arrays.asList(refreshToken)));
+        tokenRepository.save(refreshToken);
         user.setLastLogin(new Date());
         userRepository.save(user);
         return generatedToken;
