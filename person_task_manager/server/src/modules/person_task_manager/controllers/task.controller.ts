@@ -1,6 +1,7 @@
 import {type Request, type Response, Router, NextFunction} from "express";
 import { taskService } from "../services/task.service";
 import { sendResponse } from "../../../common/response_helpers";
+import { checkToken } from "../../user_authentication/auth.middleware";
 
 export const taskRouter = Router();
 
@@ -19,7 +20,9 @@ taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFuncti
 });
 
 // get all tasks
-taskRouter.get("/task", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/task", 
+    checkToken, 
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskResult = await taskService.getAllTasks();
 
