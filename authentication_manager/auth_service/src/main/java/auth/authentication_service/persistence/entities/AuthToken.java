@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.Data;
