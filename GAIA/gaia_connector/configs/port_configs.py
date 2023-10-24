@@ -27,3 +27,9 @@ PORTS = {
         "shell_path": "gaia_bot/modules/ports/bash_shells/task_manager.sh"
     }
 }
+
+PORT_COMPONENTS = [
+    "gaia_connector",
+    "authentication_service",
+    "task_manager"
+]
