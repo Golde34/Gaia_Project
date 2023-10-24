@@ -1,10 +1,16 @@
 package auth.authentication_service.services.interfaces;
 
+import java.util.Date;
+
 import org.springframework.security.core.userdetails.UserDetails;
+
+import auth.authentication_service.modules.dto.UserDto;
 
 public interface TokenService {
     public String generateAccessToken(UserDetails userDetails);
     public String generateRefreshToken(UserDetails userDetails);
     public String getUsernameFromToken(String accessToken);
-    public boolean validateToken(String token, UserDetails userDetails);
+    public Date getExpirationDateFromToken(String token);
+    public UserDto checkToken(String token);
+    public Boolean validateToken(String token);
 }

@@ -25,7 +25,11 @@ interface Configuration {
     authServer: {
         host: string;
         port: number;
-    }
+    };
+    jwt: {
+        accessSecret: string;
+        refreshSecret: string;
+    };
 }
 
 export const config: Configuration = {
@@ -42,6 +46,10 @@ export const config: Configuration = {
     authServer: {
         host: process.env.AUTH_SERVICE_HOST ?? 'localhost',
         port: Number(String(process.env.AUTH_SERVICE_PORT)) ?? 3001,
+    },
+    jwt: {
+        accessSecret: String(process.env.ACCESS_SECRET),
+        refreshSecret: String(process.env.REFRESH_SECRET)
     },
 };
 
