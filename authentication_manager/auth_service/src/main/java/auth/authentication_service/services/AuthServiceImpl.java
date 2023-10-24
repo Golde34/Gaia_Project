@@ -2,6 +2,7 @@ package auth.authentication_service.services;
 
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
+import auth.authentication_service.enums.TokenType;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserDto;
@@ -102,13 +103,9 @@ public class AuthServiceImpl implements AuthService {
         return passwordEncoder.matches(password, encodedPassword);
     }
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails) {
-        AuthToken authToken = new AuthToken();
-        authToken.setUser(user);
-        authToken.setAccessToken(tokenService.generateAccessToken(userDetails));
-        authToken.setRefreshToken(tokenService.generateRefreshToken(userDetails));
-        user.setToken(authToken);
-        userRepository.save(user);
-        return new SignInDtoResponse(authToken.getAccessToken(), authToken.getRefreshToken(), user.getName(), user.getUsername(), user.getEmail());
+        String accessToken = _generateAccessToken(user, userDetails);
+        String refreshToken = _generateRefreshToken(user, userDetails);
+        return new SignInDtoResponse(accessToken, refreshToken, user.getName(), user.getUsername(), user.getEmail());
     }
 
     public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
@@ -133,6 +130,30 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity checkToken(TokenDto token) {
         UserDto userResponse = tokenService.checkToken(token.getToken());
         return ResponseEntity.ok(userResponse);
+    }
+
+    private String _generateAccessToken(User user, UserDetails userDetails) {
+        AuthToken accessToken = new AuthToken();
+        accessToken.setUser(user);
+        accessToken.setTokenType(TokenType.ACCESS_TOKEN);
+        String generatedToken = tokenService.generateAccessToken(userDetails);
+        accessToken.setToken(generatedToken);
+        accessToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
+        user.setToken(accessToken);
+        userRepository.save(user);
+        return generatedToken;
+    }
+
+    private String _generateRefreshToken(User user, UserDetails userDetails) {
+        AuthToken refreshToken = new AuthToken();
+        refreshToken.setUser(user);
+        refreshToken.setTokenType(TokenType.REFRESH_TOKEN);
+        String generatedToken = tokenService.generateRefreshToken(userDetails);
+        refreshToken.setToken(generatedToken);
+        refreshToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
+        user.setToken(refreshToken);
+        userRepository.save(user);
+        return generatedToken;
     }
 }
 

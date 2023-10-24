@@ -1,6 +1,10 @@
 package auth.authentication_service.persistence.entities;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import auth.authentication_service.enums.TokenType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,10 +19,12 @@ public class AuthToken {
     @GeneratedValue(generator = "token_id")
     private Long id;
 
-    private String accessToken;
-    
-    private String refreshToken;
+    private String token;
 
+    private TokenType tokenType;
+
+    private Date expiryDate;
+    
     @JsonBackReference
     @OneToOne(mappedBy = "token")
     private User user;    

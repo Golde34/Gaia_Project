@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,6 +26,8 @@ public class User {
     @Column(length=60)
     @JsonIgnore
     private String password;
+
+    private Date lastLogin;    
 
     private boolean enabled;
 
