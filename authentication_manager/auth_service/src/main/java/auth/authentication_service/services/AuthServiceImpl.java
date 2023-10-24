@@ -2,13 +2,20 @@ package auth.authentication_service.services;
 
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
+import auth.authentication_service.enums.TokenType;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
 import auth.authentication_service.utils.LoggerUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,6 +40,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
     private final AuthenticationConfiguration authenticationManager;
     private final UserDetailsServices userDetailService;
@@ -68,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
         // Generate sign-in information
         SignInDtoResponse token = _generateSignInToken(user, userDetails);
         _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
-
+        
         return ResponseEntity.ok(token);
     }
     private GenericResponse<String> _validateAuthentication(String username, String password, User user) throws Exception {
@@ -102,13 +111,9 @@ public class AuthServiceImpl implements AuthService {
         return passwordEncoder.matches(password, encodedPassword);
     }
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails) {
-        AuthToken authToken = new AuthToken();
-        authToken.setUser(user);
-        authToken.setAccessToken(tokenService.generateAccessToken(userDetails));
-        authToken.setRefreshToken(tokenService.generateRefreshToken(userDetails));
-        user.setToken(authToken);
-        userRepository.save(user);
-        return new SignInDtoResponse(authToken.getAccessToken(), authToken.getRefreshToken(), user.getName(), user.getUsername(), user.getEmail());
+        String accessToken = _generateAccessToken(user, userDetails);
+        String refreshToken = _generateRefreshToken(user, userDetails);
+        return new SignInDtoResponse(accessToken, refreshToken, user.getName(), user.getUsername(), user.getEmail());
     }
 
     public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
@@ -133,6 +138,30 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity checkToken(TokenDto token) {
         UserDto userResponse = tokenService.checkToken(token.getToken());
         return ResponseEntity.ok(userResponse);
+    }
+
+    private String _generateAccessToken(User user, UserDetails userDetails) {
+        AuthToken accessToken = new AuthToken();
+        accessToken.setUser(user);
+        accessToken.setTokenType(TokenType.ACCESS_TOKEN);
+        String generatedToken = tokenService.generateAccessToken(userDetails);
+        accessToken.setToken(generatedToken);
+        accessToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
+        tokenRepository.save(accessToken);
+        return generatedToken;
+    }
+
+    private String _generateRefreshToken(User user, UserDetails userDetails) {
+        AuthToken refreshToken = new AuthToken();
+        refreshToken.setUser(user);
+        refreshToken.setTokenType(TokenType.REFRESH_TOKEN);
+        String generatedToken = tokenService.generateRefreshToken(userDetails);
+        refreshToken.setToken(generatedToken);
+        refreshToken.setExpiryDate(tokenService.getExpirationDateFromToken(generatedToken));
+        tokenRepository.save(refreshToken);
+        user.setLastLogin(new Date());
+        userRepository.save(user);
+        return generatedToken;
     }
 }
 

@@ -8,6 +8,8 @@ import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.JwtUtil;
 import auth.authentication_service.utils.ModelMapperConfig;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String getUsernameFromToken(String accessToken) {
         return jwtUtil.exactUsername(accessToken);
+    }
+
+    @Override
+    public Date getExpirationDateFromToken(String token) {
+        return jwtUtil.extractExpiration(token);
     }
 
     @Override
