@@ -9,16 +9,14 @@ from gaia_bot.skills.assistant_skill import AssistantSkill
 from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
 from gaia_bot.configs import settings
-from gaia_bot.utils.startup import multi_authenticate, recognize_owner_by_authen_service
-from gaia_bot.utils.activate_microservice import activate_microservice, wait_for_all_microservices, microservice_activated_port
+from gaia_bot.utils.startup import recognize_owner_by_authen_service
+from gaia_bot.utils.activate_microservice import activate_microservice
 
 
 async def main():
     
     # Activate microservices
-    if microservice_activated_port() == False:
-        await activate_microservice()
-        await wait_for_all_microservices()
+    await activate_microservice()
     
     # Initiate bot console
     colorama.init()
@@ -54,4 +52,15 @@ def simple_handle_testing(console_input):
     return boolean_loop
 
 if __name__ == "__main__":
+    # asyncio.run(why_you_always_die_gaia_connector())
     asyncio.run(main())
+    
+
+## TEST BETA FUNCTION
+# async def why_you_always_die_gaia_connector():
+#     bash_script = "gaia_bot/modules/ports/bash_shells/gaia_connector.sh"
+#     return await asyncio.create_subprocess_exec('gnome-terminal', '--', 'bash', '-c', f'bash {bash_script}')
+#
+# if __name__ == "__main__":
+#     asyncio.run(why_you_always_die_gaia_connector())
+#     asyncio.run(main())

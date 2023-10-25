@@ -2,7 +2,7 @@ import os
 import speech_recognition as sr
 
 from gaia_bot.modules.ports.commands.authen_command import AuthenticationConnector 
-from gaia_bot.utils.activate_microservice import wait_authen_microservice
+from gaia_bot.utils.activate_microservice import wait_microservice
 from gaia_bot.skills.collections.face_security import master_recognize
 
 
@@ -48,7 +48,7 @@ async def recognize_owner_by_face(is_owner):
     return result
 
 async def recognize_owner_by_authen_service(username, password):
-    wait = await wait_authen_microservice()
+    wait = await wait_microservice('authentication_service')
     if wait == True:
         authentication = AuthenticationConnector(username, password)
         token_string = authentication.activate_authentication_command()

@@ -1,5 +1,6 @@
 package auth.authentication_service.services;
 
+import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
 import auth.authentication_service.modules.dto.UserDto;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.UserRepository;
@@ -7,6 +8,8 @@ import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.utils.JwtUtil;
 import auth.authentication_service.utils.ModelMapperConfig;
+
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,14 +49,19 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public UserDto checkToken(String token) {
+    public Date getExpirationDateFromToken(String token) {
+        return jwtUtil.extractExpiration(token);
+    }
+
+    @Override
+    public CheckTokenDtoResponse checkToken(String token) {
         // find user by token
         String username = jwtUtil.exactUsername(token);
         UserDetails userDetails = userDetailsServices.loadUserByUsername(username);
         if (jwtUtil.validateToken(token, userDetails)) {
             User user = userRepository.findByUsername(username);
-            UserDto userDto = modelMapper._mapperEntityToDto(user);
-            return userDto;
+            CheckTokenDtoResponse tokenResponse = new CheckTokenDtoResponse(user.getId(), user.getUsername(), token);
+            return tokenResponse;
         } else {
             return null;
         }
