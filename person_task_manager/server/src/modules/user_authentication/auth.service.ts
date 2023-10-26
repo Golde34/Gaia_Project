@@ -53,7 +53,7 @@ export class AuthService {
         });
         console.log(response.data);
 
-        return response.data.equals(requiredPermission);
+        return response.data['name'] == requiredPermission;
     }
 
     // async getInformation(token: string): Promise<string> {

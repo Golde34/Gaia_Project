@@ -59,7 +59,6 @@ function _setTokenInCheckFunc(res: Response, data: { id: string, username: strin
     res.setHeader('accessToken', accessToken);
     res['locals'].username = username;
     res['locals'].id = id;
-    res['locals'].accessToken = accessToken;
 }
 
 export const checkPermission = (requiredPermission: Permission) => 
