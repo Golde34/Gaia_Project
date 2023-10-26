@@ -2,7 +2,6 @@ import { NextFunction, Request, Response, Router } from "express";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../common/response_helpers";
 import { checkToken } from "./auth.middleware";
-// import { checkToken } from "./auth.middleware";
 
 export const authRouter = Router();
 

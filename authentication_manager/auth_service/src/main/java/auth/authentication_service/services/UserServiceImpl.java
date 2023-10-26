@@ -163,19 +163,4 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
-
-    private boolean _checkExistUserById(Long id) {
-        try {
-            for (User user : userRepository.findAll()) {
-                if (Objects.equals(user.getId(), id)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            _logger.log("Check exist user: " + id + " failed", LoggerType.ERROR);
-        }
-        return false;
-    }
-
 }

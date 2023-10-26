@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     @Autowired
     private TokenRepository tokenRepository;
-    
+
 
     private final AuthenticationConfiguration authenticationManager;
     private final UserDetailsServices userDetailService;
@@ -157,8 +157,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public ResponseEntity checkPermission(UserPermissionDto permission) {
-        // User user = userRepository.findByUsername(permission.getUsername());
-        // User user = userRepository.getUserById(permission.getId());
         User user = userService.getUserById(permission.getUserId());
         Collection<Role> userRole = user.getRoles();
         for (Role role : userRole) {

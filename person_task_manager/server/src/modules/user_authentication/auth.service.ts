@@ -40,22 +40,20 @@ export class AuthService {
         return response.data;
     }
 
-    async checkPermission(userId: number, requiredPermission: Permission, token: string) {
+    async checkPermission(userId: number, requiredPermission: Permission) {
         let data = {
             "userId": userId,
             "permission": requiredPermission,
         }
-        console.log(data)
         const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/check-permission`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
             },
             data: data,
         });
-
         console.log(response.data);
-        return response.data;
+
+        return response.data.equals(requiredPermission);
     }
 
     // async getInformation(token: string): Promise<string> {

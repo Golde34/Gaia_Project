@@ -3,9 +3,7 @@ import { config, validateEnvironmentVars } from "./config/configuration";
 import { MongoHelper } from "./database/mongodb.db";
 import { taskRouter } from "./modules/person_task_manager/controllers/task.controller";
 import { groupTaskRouter } from "./modules/person_task_manager/controllers/group-task.controller";
-import { authService } from "./modules/user_authentication/auth.service";
 import { authRouter } from "./modules/user_authentication/auth.controller";
-import jwt from "jsonwebtoken";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()

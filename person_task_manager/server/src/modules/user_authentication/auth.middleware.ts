@@ -65,8 +65,7 @@ function _setTokenInCheckFunc(res: Response, data: { id: string, username: strin
 export const checkPermission = (requiredPermission: Permission) => 
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const userId = res['locals'].id;
-        const token = res['locals'].accessToken;
-        const hasPermission = await authService.checkPermission(userId, requiredPermission, token);
+        const hasPermission = await authService.checkPermission(userId, requiredPermission);
         if (!hasPermission) {
             next(new UnauthorizedError("You don't have permission"));
             return;
