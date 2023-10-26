@@ -7,5 +7,5 @@ import auth.authentication_service.persistence.entities.AuthToken;
 public interface TokenRepository extends JpaRepository<AuthToken, Long>{
     
     AuthToken findByUserId(Long id);
-
+    AuthToken findByToken(String token);
 }
