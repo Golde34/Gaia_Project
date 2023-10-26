@@ -6,14 +6,19 @@ import auth.authentication_service.enums.TokenType;
 import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.UserPermissionDto;
+import auth.authentication_service.persistence.repositories.PrivilegeRepository;
+import auth.authentication_service.persistence.repositories.RoleRepository;
 import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
+import auth.authentication_service.services.interfaces.UserService;
 import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
 import auth.authentication_service.utils.LoggerUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +30,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import auth.authentication_service.persistence.entities.AuthToken;
+import auth.authentication_service.persistence.entities.Privilege;
+import auth.authentication_service.persistence.entities.Role;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.UserRepository;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.services.interfaces.AuthService;
+import auth.authentication_service.services.interfaces.PrivilegeService;
+import auth.authentication_service.services.interfaces.RoleService;
 
 
 @Service
@@ -39,9 +48,13 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private TokenService tokenService;
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private TokenRepository tokenRepository;
+    
 
     private final AuthenticationConfiguration authenticationManager;
     private final UserDetailsServices userDetailService;
@@ -141,6 +154,23 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity checkToken(TokenDto token) {
         CheckTokenDtoResponse userResponse = tokenService.checkToken(token.getToken());
         return ResponseEntity.ok(userResponse);
+    }
+
+    public ResponseEntity checkPermission(UserPermissionDto permission) {
+        // User user = userRepository.findByUsername(permission.getUsername());
+        // User user = userRepository.getUserById(permission.getId());
+        User user = userService.getUserById(permission.getUserId());
+        Collection<Role> userRole = user.getRoles();
+        for (Role role : userRole) {
+            Collection<Privilege> rolePrivilege = role.getPrivileges();
+            for (Privilege privilege : rolePrivilege) {
+                if (privilege.getName().equals(permission.getPermission())) {
+                    return ResponseEntity.ok(privilege);
+                }
+            }
+        }
+        return ResponseEntity.badRequest().body("Permission denied");
+
     }
 
     // public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {

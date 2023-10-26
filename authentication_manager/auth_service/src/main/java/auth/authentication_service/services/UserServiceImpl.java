@@ -126,16 +126,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(RegisterDto userDto) {
+    public User getUserById(Long id) {
         try {
-            User user = modelMapperConfig._mapperDtoToEntity(userDto);
-            if (_checkExistUserById(user.getId())) {
-                _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
-            }
+            User user = userRepository.getUserById(id);
+            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Get user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
+            _logger.log("Get user: " + id + " failed", LoggerType.ERROR);
             return null;
         }
     }

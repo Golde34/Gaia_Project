@@ -2,6 +2,7 @@ import axios from "axios";
 import { config } from "../../config/configuration";
 import { msg200 } from "../../common/response_helpers";
 import { IResponse } from "../../common/response";
+import { Permission } from "../../loaders/enums";
 
 export class AuthService {
     
@@ -35,6 +36,24 @@ export class AuthService {
             },
             data: data,
         });
+        console.log(response.data);
+        return response.data;
+    }
+
+    async checkPermission(userId: number, requiredPermission: Permission, token: string) {
+        let data = {
+            "userId": userId,
+            "permission": requiredPermission,
+        }
+        console.log(data)
+        const response = await axios.get(`http://${this.authServerHost}:${this.authServerPort}/auth/check-permission`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            data: data,
+        });
+
         console.log(response.data);
         return response.data;
     }

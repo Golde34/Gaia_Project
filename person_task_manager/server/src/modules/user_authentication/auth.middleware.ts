@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { UnauthorizedError } from "../../common/error-handler";
 import { authService } from "./auth.service";
 import NodeCache from "node-cache";
+import { Permission } from "../../loaders/enums";
+import { calculatedTimeResult } from "../../util/performance.calculate";
 
 const cache = new NodeCache();
 
@@ -23,8 +25,7 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
         }
         _setTokenInCheckFunc(res, cachedResult);
 
-        let elapsedTime = performance.now() - startTime;
-        console.log(`elapsedTime: ${elapsedTime} ms`);
+        console.log(calculatedTimeResult(startTime, next));
 
         next();
 
@@ -40,8 +41,7 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
 
         cache.set(token, jwtPayload, 60);
 
-        let elapsedTime = performance.now() - startTime;
-        console.log(`elapsedTime: ${elapsedTime} ms`);
+        console.log(calculatedTimeResult(startTime, next));
     }
     
     next();
@@ -59,6 +59,20 @@ function _setTokenInCheckFunc(res: Response, data: { id: string, username: strin
     res.setHeader('accessToken', accessToken);
     res['locals'].username = username;
     res['locals'].id = id;
+    res['locals'].accessToken = accessToken;
+}
+
+export const checkPermission = (requiredPermission: Permission) => 
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const userId = res['locals'].id;
+        const token = res['locals'].accessToken;
+        const hasPermission = await authService.checkPermission(userId, requiredPermission, token);
+        if (!hasPermission) {
+            next(new UnauthorizedError("You don't have permission"));
+            return;
+        }
+    
+    next();
 }
 
 
