@@ -14,20 +14,13 @@ class TaskService {
         });
     }
 
-    async getAllTasks(): Promise<IResponse> {
-        const tasks = await TaskEntity.find();
-        return msg200({
-            tasks
-        });
-    }
-
-    async createTask(task: any): Promise<IResponse> {
+    async createTaskInGroupTask(task: any, groupTaskId: string): Promise<IResponse> {
         const createTask = await TaskEntity.create(task);
-
+        const taskId = (createTask as any)._id;
+        const taskUpdate = await TaskEntity.updateOne({ _id: taskId }, { $push: { groupTasks: groupTaskId } });
         return msg200({
-            message: (createTask as any).message
+            message: (taskUpdate as any).message
         });
- 
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
@@ -44,10 +37,25 @@ class TaskService {
         });
     }
 
-    async addTaskToGroupTask(taskId: string, groupTaskId: string): Promise<IResponse> {
-        const groupTaskUpdate = await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $push: { tasks: taskId } });
+    async getSubTasks(taskId: string): Promise<IResponse> {
+        const getSubTasks = await TaskEntity.findOne({ _id: taskId }).populate('subTasks');
         return msg200({
-            message: (groupTaskUpdate as any).message
+            message: (getSubTasks as any).message
+        });
+    }
+
+    async getComments(taskId: string): Promise<IResponse> {
+        const getComments = await TaskEntity.findOne({ _id: taskId }).populate('comments');
+        return msg200({
+            message: (getComments as any).message
+        });
+    }
+
+    // This fucntion is for boss only
+    async getAllTasks(): Promise<IResponse> {
+        const tasks = await TaskEntity.find();
+        return msg200({
+            tasks
         });
     }
 }

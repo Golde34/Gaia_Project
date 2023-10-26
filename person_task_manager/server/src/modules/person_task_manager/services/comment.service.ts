@@ -13,18 +13,12 @@ class CommentService {
         });
     }
 
-    async getAllComments(): Promise<IResponse> {
-        const comments = await CommentEntity.find();
-        return msg200({
-            comments
-        });
-
-    }
-
-    async createComment(comment: any): Promise<IResponse> {
+    async createComment(comment: any, taskId: string): Promise<IResponse> {
         const createComment = await CommentEntity.create(comment);
+        const commentId = (createComment as any)._id;
+        const commentUpdate = await CommentEntity.updateOne({ _id: commentId }, { $push: { tasks: taskId } });
         return msg200({
-            message: (createComment as any).message
+            message: (commentUpdate as any).message
         });
     }
 

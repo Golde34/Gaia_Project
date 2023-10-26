@@ -12,17 +12,12 @@ class SubTaskService {
         });
     }
 
-    async getAllSubTasks(): Promise<IResponse> {
-        const subTasks = await SubTaskEntity.find();
-        return msg200({
-            subTasks
-        });
-    }
-
-    async createSubTask(subTask: any): Promise<IResponse> {
+    async createSubTask(subTask: any, taskId: string): Promise<IResponse> {
         const createSubTask = await SubTaskEntity.create(subTask);
+        const subTaskId = (createSubTask as any)._id;
+        const subTaskUpdate = await SubTaskEntity.updateOne({ _id: subTaskId }, { $push: { tasks: taskId } });
         return msg200({
-            message: (createSubTask as any).message
+            message: (subTaskUpdate as any).message
         });
     }
 

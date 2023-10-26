@@ -13,7 +13,7 @@ class ProjectService {
     }
 
     async getAllProjects(): Promise<IResponse> {
-        const projects = await ProjectEntity.find();
+        const projects = await ProjectEntity.find({ ownerId: 1});
         return msg200({
             projects
         });
@@ -37,6 +37,13 @@ class ProjectService {
         const deleteProject = await ProjectEntity.deleteOne({_id: projectId});
         return msg200({
             message: (deleteProject as any).message
+        });
+    }
+
+    async getGroupTasks(projectId: string): Promise<IResponse> {
+        const groupTasks = await ProjectEntity.findOne({_id: projectId}).populate('groupTasks');
+        return msg200({
+            message: (groupTasks as any).message
         });
     }
 }
