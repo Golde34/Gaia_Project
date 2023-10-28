@@ -33,7 +33,7 @@ projectRouter.post("/create", async (req, res, next) => {
     try {
         const data = req.body;
         const projectResult = await projectService.createProject(data);
-
+        console.log(projectResult);
         sendResponse(projectResult, res, next);
     } catch (err) {
         next(err);

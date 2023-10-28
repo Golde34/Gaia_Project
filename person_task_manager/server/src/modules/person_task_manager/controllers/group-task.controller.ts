@@ -32,7 +32,7 @@ groupTaskRouter.post("/create", async (req: Request, res: Response, next: NextFu
         const projectId = req.body.projectId;
 
         const groupTaskResult = await groupTaskService.createGroupTaskToProject(groupTask, projectId);
-
+        console.log(groupTaskResult);
         sendResponse(groupTaskResult, res, next);
     }
     catch (err) {
