@@ -25,7 +25,6 @@ taskRouter.get("/task",
 taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-
         const taskResult = await taskService.getTask(taskId);
 
         sendResponse(taskResult, res, next);
@@ -38,18 +37,8 @@ taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFuncti
 // create task
 taskRouter.post("/task/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // const task = {
-        //     title: "New Task",
-        //     description: "This is a new task",
-        //     priority: ["High"],
-        //     status: "Open",
-        //     createdAt: new Date(),
-        //     updatedAt: new Date(),
-        //     subTasks: [],
-        // }
         const task = req.body;
         const groupTaskId = req.body.groupTaskId;
-
         const taskResult = await taskService.createTaskInGroupTask(task, groupTaskId);
 
         sendResponse(taskResult, res, next);
@@ -64,7 +53,6 @@ taskRouter.put("/task/:id", async (req: Request, res: Response, next: NextFuncti
     try {
         const taskId = req.params.id;
         const task = req.body;
-
         const taskResult = await taskService.updateTask(taskId, task);
 
         sendResponse(taskResult, res, next);
@@ -78,7 +66,6 @@ taskRouter.put("/task/:id", async (req: Request, res: Response, next: NextFuncti
 taskRouter.delete("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-
         const taskResult = await taskService.deleteTask(taskId);
 
         sendResponse(taskResult, res, next);
@@ -92,7 +79,6 @@ taskRouter.delete("/task/:id", async (req: Request, res: Response, next: NextFun
 taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-
         const subTaskResult = await taskService.getSubTasks(taskId);
 
         sendResponse(subTaskResult, res, next);
@@ -106,7 +92,6 @@ taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: Ne
 taskRouter.get("/task/:id/comment", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-
         const commentResult = await taskService.getComments(taskId);
 
         sendResponse(commentResult, res, next);
