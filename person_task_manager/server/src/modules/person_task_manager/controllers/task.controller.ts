@@ -79,7 +79,7 @@ taskRouter.delete("/task/:id", async (req: Request, res: Response, next: NextFun
 taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-        const subTaskResult = await taskService.getSubTasks(taskId);
+        const subTaskResult = await taskService.getSubTasksInTask(taskId);
 
         sendResponse(subTaskResult, res, next);
     }
@@ -92,7 +92,7 @@ taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: Ne
 taskRouter.get("/task/:id/comment", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-        const commentResult = await taskService.getComments(taskId);
+        const commentResult = await taskService.getCommentsInTask(taskId);
 
         sendResponse(commentResult, res, next);
     }

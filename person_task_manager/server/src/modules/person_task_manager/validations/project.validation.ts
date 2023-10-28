@@ -1,6 +1,6 @@
 import { ProjectEntity } from "../entities/project.entity";
 
-export const projectVaildation = {
+export const projectValidation = {
     async checkExistedProjectByProjectId(projectId: string): Promise<boolean> {
         if (await ProjectEntity.findOne({ _id: projectId }) != null) {
             return true; // existed

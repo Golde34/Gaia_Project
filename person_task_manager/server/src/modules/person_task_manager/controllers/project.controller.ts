@@ -69,7 +69,7 @@ projectRouter.delete("/:id", async (req, res, next) => {
 projectRouter.get("/:id/group-tasks", async (req, res, next) => {
     try {
         const projectId = req.params.id;
-        const projectResult = await projectService.getGroupTasks(projectId);
+        const projectResult = await projectService.getGroupTasksInProject(projectId);
 
         sendResponse(projectResult, res, next);
     } catch (err) {
