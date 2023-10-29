@@ -20,7 +20,7 @@ commentRouter.get("/:id", async (req, res, next) => {
 commentRouter.post("/create", async (req, res, next) => {
     try {
         const comment = req.body;
-        const taskId = req.body.taskId;
+        const taskId = req.body.taskId;        
         const commentResult = await commentService.createComment(comment, taskId);
 
         sendResponse(commentResult, res, next);
@@ -33,7 +33,7 @@ commentRouter.post("/create", async (req, res, next) => {
 commentRouter.put("/:id", async (req, res, next) => {
     try {
         const commentId = req.params.id;
-        const comment = req.body;
+        const comment = req.body;        
         const commentResult = await commentService.updateComment(commentId, comment);
 
         sendResponse(commentResult, res, next);
