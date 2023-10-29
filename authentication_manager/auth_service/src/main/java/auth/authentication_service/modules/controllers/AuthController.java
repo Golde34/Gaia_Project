@@ -2,6 +2,7 @@ package auth.authentication_service.modules.controllers;
 
 import auth.authentication_service.modules.dto.SignInDtoRequest;
 import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.UserPermissionDto;
 import auth.authentication_service.services.interfaces.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class AuthController {
     @RequestMapping(value = "/check-token", method = RequestMethod.GET)
     public ResponseEntity<?> checkToken(@RequestBody TokenDto token) throws Exception {
         return authService.checkToken(token);
+    }
+
+    @RequestMapping(value = "/check-permission", method = RequestMethod.GET)
+    public ResponseEntity<?> checkPermission(@RequestBody UserPermissionDto permission) throws Exception{
+        return authService.checkPermission(permission);
     }
 
 //    @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)

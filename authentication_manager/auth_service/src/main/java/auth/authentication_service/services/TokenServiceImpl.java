@@ -1,8 +1,9 @@
 package auth.authentication_service.services;
 
 import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
-import auth.authentication_service.modules.dto.UserDto;
+import auth.authentication_service.persistence.entities.AuthToken;
 import auth.authentication_service.persistence.entities.User;
+import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.persistence.repositories.UserRepository;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.services.interfaces.TokenService;
@@ -22,6 +23,8 @@ public class TokenServiceImpl implements TokenService {
     UserRepository userRepository;
     @Autowired
     ModelMapperConfig modelMapper;
+    @Autowired
+    TokenRepository tokenRepository;
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServices userDetailsServices;
@@ -59,8 +62,11 @@ public class TokenServiceImpl implements TokenService {
         String username = jwtUtil.exactUsername(token);
         UserDetails userDetails = userDetailsServices.loadUserByUsername(username);
         if (jwtUtil.validateToken(token, userDetails)) {
+            Date expiryDate = jwtUtil.extractExpiration(token);
+            // AuthToken authToken = tokenRepository.findByToken(token);
+            // Date expiryDate = authToken.getExpiryDate();
             User user = userRepository.findByUsername(username);
-            CheckTokenDtoResponse tokenResponse = new CheckTokenDtoResponse(user.getId(), user.getUsername(), token);
+            CheckTokenDtoResponse tokenResponse = new CheckTokenDtoResponse(user.getId(), user.getUsername(), token, expiryDate);
             return tokenResponse;
         } else {
             return null;
