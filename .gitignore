@@ -6,6 +6,7 @@
 *\.bin
 *\.csv
 *\.pt
+*\.zip
 
 .ipynb_checkpoints
 __config__.py
