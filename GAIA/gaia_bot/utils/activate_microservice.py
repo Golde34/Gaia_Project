@@ -1,5 +1,4 @@
 from gaia_bot.configs.port_configs import PORTS, PORT_COMPONENTS
-import os
 import socket
 import asyncio
 
