@@ -41,7 +41,7 @@ export const config: Configuration = {
         password: process.env.DATABASE_PASSWORD ?? 'root',
     },
     server: {
-        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3000,
+        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3002,
     },
     authServer: {
         host: process.env.AUTH_SERVICE_HOST ?? 'localhost',

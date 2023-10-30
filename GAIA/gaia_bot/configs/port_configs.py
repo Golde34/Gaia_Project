@@ -1,7 +1,7 @@
 PORTS = {
     "gaia_connector": {
         "name": "GAIA",
-        "port": 5000,
+        "port": 3000,
         "program_language": "Python",
         "description": "GAIA Connector to others microservices",
         "database": "MongoDB",
@@ -19,7 +19,7 @@ PORTS = {
     },
     "task_manager": {
         "name": "Task Manager",
-        "port": 3000,
+        "port": 3002,
         "program_language": "NodeJS",
         "description": "Task Manager API",
         "database": "MongoDB",
