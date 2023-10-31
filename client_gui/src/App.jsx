@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { userEffect } from 'react'
+import { useSelector } from 'react-redux'
 import './App.css'
+import Dashboard from './views/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const gaiaSignin = useSelector((state) => state.botSignin)
+  const { gaiaInfo } = gaiaSignin;
+  const userSignin = useSelector((state) => state.userSignin)
+  const { userInfo } = userSignin;
 
+  const isAuthenticated = gaiaSignin?.accessToken || userSignin?.username;
+  
+  // userEffect(() => {
+  //   console.log("App compoenent rendered! ");
+  // }, [gaiaSignin, userSignin]);
+  console.log("User is signed in:", !!isAuthenticated);
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isAuthenticated ? (
+        <main className="flex">
+          < Dashboard />
+        </main>  
+      ) : (
+        <p>Please sign in.</p>  
+      )}
     </>
   )
 }
 
-export default App
+export default App;
