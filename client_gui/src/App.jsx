@@ -1,29 +1,32 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import LeftColumn from './components/LeftColumn'
-import RightColumn from './components/RightColumn'
+import React, { userEffect } from 'react'
+import { useSelector } from 'react-redux'
 import './App.css'
+import Dashboard from './views/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const gaiaSignin = useSelector((state) => state.botSignin)
+  const { gaiaInfo } = gaiaSignin;
+  const userSignin = useSelector((state) => state.userSignin)
+  const { userInfo } = userSignin;
 
+  const isAuthenticated = gaiaSignin?.accessToken || userSignin?.username;
+  
+  // userEffect(() => {
+  //   console.log("App compoenent rendered! ");
+  // }, [gaiaSignin, userSignin]);
+  console.log("User is signed in:", !!isAuthenticated);
+  
   return (
-    <main className="flex">
-      <Sidebar />
-      <div className="flex flex-col flex-1 relative">
-        <Navbar />
-        <div className="grid md:grid-cols-3 grid-cols-1 w-full">
-          <div className="col-span-2">
-            <LeftColumn />
-          </div>
-          <div className="w-full">
-            <RightColumn />
-          </div>
-        </div>
-      </div>
-    </main>
+    <>
+      {isAuthenticated ? (
+        <main className="flex">
+          < Dashboard />
+        </main>  
+      ) : (
+        <p>Please sign in.</p>  
+      )}
+    </>
   )
 }
 
-export default App
+export default App;
