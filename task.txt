@@ -10,3 +10,8 @@ if bot do not know the label or word in sentence, add person.
 
 15-9-23
 if bot doesnt know which task is, then create a "Add new Skill mechanism"
+
+29-10-23
+gaia connector has access token and refresh token -> open client port 
+-> require sign in  -> call back to gaia connector to get token 
+-> open dashboard
