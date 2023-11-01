@@ -1,31 +1,20 @@
 import React, { userEffect } from 'react'
-import { useSelector } from 'react-redux'
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
 import Dashboard from './views/Dashboard'
+// import Project from './views/Project'
 
 function App() {
-  const gaiaSignin = useSelector((state) => state.botSignin)
-  const { gaiaInfo } = gaiaSignin;
-  const userSignin = useSelector((state) => state.userSignin)
-  const { userInfo } = userSignin;
-
-  const isAuthenticated = gaiaSignin?.accessToken || userSignin?.username;
-  
-  // userEffect(() => {
-  //   console.log("App compoenent rendered! ");
-  // }, [gaiaSignin, userSignin]);
-  console.log("User is signed in:", !!isAuthenticated);
-  
   return (
-    <>
-      {isAuthenticated ? (
-        <main className="flex">
-          < Dashboard />
-        </main>  
-      ) : (
-        <p>Please sign in.</p>  
-      )}
-    </>
+    <main className='flex'>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Dashboard />} />
+          {/* <Route path='/project' element={<Project />} /> */}
+        </Routes>
+      </Router>
+    </main>
   )
 }
 

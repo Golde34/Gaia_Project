@@ -34,10 +34,14 @@ const Sidebar = () => {
           width={40}
           className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
         />
-        <BellIcon
-          width={40}
-          className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
-        />
+        <a href="/project">
+        <Button variant="secondary" className="p-2" color="indigo">
+          <BellIcon
+            width={40}
+            className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
+          />
+        </Button>
+        </a>
       </div>
       <div className="fixed bottom-4 left-3 sm:left-6">
         <a href="#top">
@@ -47,9 +51,9 @@ const Sidebar = () => {
           />
         </a>
         <Button variant="secondary" className="p-2" color="indigo">
-        <ExternalLinkIcon
-          width={20}
-        />
+          <ExternalLinkIcon
+            width={20}
+          />
         </Button>
       </div>
     </div>
