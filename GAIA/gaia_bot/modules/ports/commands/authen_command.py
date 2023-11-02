@@ -1,5 +1,6 @@
 import requests
 import subprocess
+import json
 
 from gaia_bot.configs.port_configs import PORTS
 from gaia_bot.configs.settings import USER_PROFILE
@@ -29,6 +30,7 @@ class AuthenticationConnector:
         
         if response.status_code == 200:
             result = response.json()
+            self._save_resposne_to_file(result['data'])
             if result['authenticated']:
                 token = result['data']['accessToken']
                 return f"Authenticated successfully. Token: {token}"
@@ -51,3 +53,8 @@ class AuthenticationConnector:
             return True
         else:
             return False 
+        
+    def _save_resposne_to_file(self, result):
+        filepath = "..\\..\\local\\resources\\authen_cache\\response.json"
+        with open(filepath, 'w') as f:
+            json.dump(result, f)
