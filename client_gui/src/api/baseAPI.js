@@ -1,0 +1,70 @@
+import { config } from '../configs/configuration';
+
+const HttpMethods = {
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT',
+    DELETE: 'DELETE',
+};
+
+const getDefaultHeaders  = () => {
+    const headers = new Headers();
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+
+    return headers;
+};
+
+const baseRequest = async (api, method, portConfig, body, headers) => {
+    const { portName, timeout } = portConfig;
+
+    const url = `http://${config.serverHost}:${config[portName]}${api}`;
+
+    headers = headers || getDefaultHeaders();
+    const requestHeaders = {};
+    for (let [key, value] of headers.entries()) {
+        requestHeaders[key] = value;
+    }
+
+    const controller = new AbortController();
+    const timerId = setTimeout(() => controller.abort(), timeout); 
+    const requestConfig = {
+        method, 
+        headers: requestHeaders,
+        body: body == null ? null : JSON.stringify(body),
+        signal: controller.signal,
+    };
+
+    console.log(
+        `Requesting to ${method} ${url} with config: ${JSON.stringify(requestConfig)}`
+    );
+
+    const response = await fetch(url, requestConfig);
+    clearTimeout(timerId);
+    return response;
+}
+
+const serverRequest = async(api, method, portName, body, headers) => {
+    const apiHost = config[portName]; 
+
+    if (apiHost == null) {
+        console.log(`No port config for ${portName}`);
+        return null;
+    }
+
+    let timeOut  = config.serverTimeout;
+    if (isNaN(timeOut)) {
+        console.log(`Invalid timeout config for ${portName}`);
+        timeOut = 10000;
+    }
+
+    return await baseRequest(api, method, { portName, timeOut}, body, headers);
+}
+
+export {
+    HttpMethods,
+    getDefaultHeaders,
+    baseRequest,
+    serverRequest,
+}

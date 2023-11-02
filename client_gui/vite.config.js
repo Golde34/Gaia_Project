@@ -17,6 +17,7 @@ export default defineConfig({
     gaia_connector_port: 3000,
     authentication_service_port: 3001,
     task_manager_port: 3002,
+    server_timeout: 10000,
     open: true,
   },
   build: {

@@ -1,21 +1,20 @@
 import * as dotenv from 'dotenv';
-
-dotenv.config( { path: './src/.env' } );
+import defineConfig from 'vite.config.js'
 
 const REQUIRED_ENV_VARS = [
-    'LISTEN_PORT',
     'SERVER_HOST',
     'AUTHENTICATION_SERVICE_PORT',
     'GAIA_CONNECTOR_PORT',
     'TASK_MANAGER_PORT',
+    'SERVER_TIMEOUT'
 ];
 
 export const config = {
-    listenPort: parseInt( process.env.LISTEN_PORT ),
-    serverHost: process.env.SERVER_HOST,
-    authenticationServicePort: parseInt( process.env.AUTHENTICATION_SERVICE_PORT ),
-    gaiaConnectorPort: parseInt( process.env.GAIA_CONNECTOR_PORT ),
-    taskManagerPort: parseInt( process.env.TASK_MANAGER_PORT ),
+    serverHost: defineConfig.server.host,
+    authenticationServicePort: parseInt( defineConfig.server.authentication_service_port ),
+    gaiaConnectorPort: parseInt( defineConfig.server.gaia_connector_port ),
+    taskManagerPort: parseInt( defineConfig.server.task_manager_port ),
+    serverTimeout: parseInt( defineConfig.server.server_timeout ),
 }
 
 export const validateEnvironmentVars = () => {
