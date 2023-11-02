@@ -4,7 +4,7 @@ from torch.optim import Adam
 import torch
 from torch.utils.data import DataLoader
 
-from utils.gpu_print import print_gpu_utilization
+# from utils.gpu_print import print_gpu_utilization
 from config import device, batch_size, learning_rate
 from engine import train_engine
 from tokenizer_config import gpt2_tokenizer
@@ -25,7 +25,7 @@ def train(dataset):
     chatData = DataLoader(chatData, batch_size=batch_size)
 
     model.train()
-    print_gpu_utilization()
+    # print_gpu_utilization()
 
     optim = Adam(model.parameters(), lr=learning_rate)
     criterion = torch.nn.CrossEntropyLoss(ignore_index=tokenizer.pad_token_id)
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     parser.add_argument("--train", action="store_true", help="Train the model")
     parser.add_argument("--dataset", required=True, help="Path to the dataset")
     parser.add_argument("--num_epochs", type=int, default=10, help="Number of epochs")
-    parser.add_argument("--batch_size", type=int, default=32, help="Batch size")
+    parser.add_argument("--batch_size", type=int, default=4, help="Batch size")
     parser.add_argument("--learning_rate", type=float, default=1e-4, help="Learning rate")
     parser.add_argument("--max_length", type=int, default=40, help="Maximum length of the input sequence")
     parser.add_argument("--model_path", default="./model_state.pt", help="Path to save the model")

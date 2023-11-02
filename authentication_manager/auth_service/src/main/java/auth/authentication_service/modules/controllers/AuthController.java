@@ -1,6 +1,8 @@
 package auth.authentication_service.modules.controllers;
 
 import auth.authentication_service.modules.dto.SignInDtoRequest;
+import auth.authentication_service.modules.dto.TokenDto;
+import auth.authentication_service.modules.dto.UserPermissionDto;
 import auth.authentication_service.services.interfaces.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthService tokenService;
+    private AuthService authService;
 
    @GetMapping("/")
    public ResponseEntity<?> home() {
@@ -29,9 +31,24 @@ public class AuthController {
        return ResponseEntity.ok("<h1>Test admin role.</h1>");
    }
 
-    @RequestMapping (value = "/sign-in", method = RequestMethod.POST)
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public ResponseEntity<String> status() {
+        return ResponseEntity.ok("OK");
+    }
+
+    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
     public ResponseEntity<?> signIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
-        return tokenService.authenticated(accountDto.getUsername(), accountDto.getPassword());
+        return authService.authenticated(accountDto.getUsername(), accountDto.getPassword());
+    }
+
+    @RequestMapping(value = "/check-token", method = RequestMethod.GET)
+    public ResponseEntity<?> checkToken(@RequestBody TokenDto token) throws Exception {
+        return authService.checkToken(token);
+    }
+
+    @RequestMapping(value = "/check-permission", method = RequestMethod.GET)
+    public ResponseEntity<?> checkPermission(@RequestBody UserPermissionDto permission) throws Exception{
+        return authService.checkPermission(permission);
     }
 
 //    @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)

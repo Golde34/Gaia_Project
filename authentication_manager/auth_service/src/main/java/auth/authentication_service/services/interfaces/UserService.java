@@ -12,8 +12,7 @@ public interface UserService {
     public ResponseEntity<String> updateUser(UserDto userDto);
     public ResponseEntity<String> deleteUser(UserDto userDto);
     public List<User> getAllUsers();
-    public User getUserById(RegisterDto userDto);
     public User getUserByUsername(String username);
     public User getUserByEmail(String email);
-
+    public User getUserById(Long id);
 }

@@ -1,5 +1,4 @@
-import os
-from gaia_bot.models.bert.predict import predict, handle_input, predict_output
+from gaia_bot.modules.local.models.bert.predict import predict, handle_input, predict_output
 from gaia_bot.skills.assistant_skill import AssistantSkill
 
 class DefaultSkill(AssistantSkill):

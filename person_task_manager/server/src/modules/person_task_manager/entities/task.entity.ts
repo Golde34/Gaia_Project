@@ -10,6 +10,7 @@ export interface ITaskEntity extends Document {
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    deadline: Date;
     subTasks: ISubTaskEntity["_id"][];
     comments: ICommentEntity ["_id"][];
 }
@@ -39,6 +40,10 @@ export const taskSchema = new mongoose.Schema(
         updatedAt: {
             type: Date,
             required: true,
+        },
+        deadline: {
+            type: Date,
+            required: false,
         },
         subTasks: {
             type: [mongoose.Schema.Types.ObjectId],

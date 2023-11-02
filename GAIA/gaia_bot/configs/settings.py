@@ -34,5 +34,14 @@ DEFAULT_GENERAL_SETTINGS = {
 }
 
 AI_MODEL_LOCATION = {
-    'gpt2': "./gaia_bot/models/gpt/model.pt",
+    'gpt2': "./gaia_bot/modules/local/models/gpt/model.pt",
+    'task_detect': "./gaia_bot/modules/local/models/task_detect/prompt_to_response/TrainData.pth",
+}
+
+USER_PROFILE = {
+    'username': 'golde',
+    'name': 'Nguyen Dong Duc Viet',
+    'password': '483777',
+    'email': 'nguyendongducviet2001@gmail.com',
+    'email_password': 'Gegterss03042001@'
 }

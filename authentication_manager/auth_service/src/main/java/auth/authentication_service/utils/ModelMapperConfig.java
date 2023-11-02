@@ -22,6 +22,8 @@ public class ModelMapperConfig {
         return modelMapper;
     }
 
+    // DTO -> Entity
+
     public User _mapperDtoToEntity(RegisterDto userDto) {
         return modelMapper().map(userDto, User.class);
     }
@@ -36,6 +38,8 @@ public class ModelMapperConfig {
     public Privilege _mapperDtoToEntity(PrivilegeDto privilegeDto) {
         return modelMapper().map(privilegeDto, Privilege.class);
     }
+
+    // Entity -> DTO
 
     public UserDto _mapperEntityToDto(User user) {
         return modelMapper().map(user, UserDto.class);

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Data
@@ -26,6 +27,8 @@ public class User {
     @JsonIgnore
     private String password;
 
+    private Date lastLogin;    
+
     private boolean enabled;
 
     private boolean isUsing2FA;
@@ -40,8 +43,7 @@ public class User {
     private Collection<Role> roles;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "token_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private AuthToken token;
+    private Collection<AuthToken> tokens;
 }
