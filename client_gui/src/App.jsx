@@ -1,19 +1,17 @@
-import React, { userEffect } from 'react'
+import React, { useState, userEffect } from 'react'
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom'
 
 import Dashboard from './views/Dashboard'
+import RenderRouter from './routers'
 // import Project from './views/Project'
 
 function App() {
   return (
     <main className='flex'>
-      <Router>
-        <Routes>
-          <Route path='/' element={<Dashboard />} />
-          {/* <Route path='/project' element={<Project />} /> */}
-        </Routes>
-      </Router>
+      <BrowserRouter basename='/client-gui'>
+        <RenderRouter />
+      </BrowserRouter>
     </main>
   )
 }
