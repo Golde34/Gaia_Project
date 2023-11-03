@@ -1,10 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-
-const initialState = {
-}
-
-const reducer = {}
+import { initialState } from './reducers/initialState';
+import { reducer } from './reducers/reducers';
 
 const store = configureStore({
     reducer,

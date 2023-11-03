@@ -1,7 +1,7 @@
 import {
     USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS, USER_SIGNIN_FAIL, 
     BOT_SIGNIN_REQUEST, BOT_SIGNIN_SUCCESS, BOT_SIGNIN_FAIL,
-} from '../constants/userConstants';
+} from './../../constants/auth_service/userConstants';
 
 export const gaiaSigninReducer = (state = {}, action) => {
     switch (action.type) {
