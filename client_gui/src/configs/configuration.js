@@ -1,5 +1,8 @@
-import * as dotenv from 'dotenv';
-import defineConfig from 'vite.config.js'
+const serverHost = import.meta.env.SERVER_HOST ?? 'localhost';
+const gaiaConnectorPort = parseInt( import.meta.env.GAIA_CONNECTOR_PORT ?? '3000' );
+const authenticationServicePort = parseInt( import.meta.env.AUTHENTICATION_SERVICE_PORT ?? '3001' );
+const taskManagerPort = parseInt( import.meta.env.TASK_MANAGER_PORT ?? '3002' );
+const serverTimeout = parseInt( import.meta.env.SERVER_TIMEOUT ?? '10000' );
 
 const REQUIRED_ENV_VARS = [
     'SERVER_HOST',
@@ -10,12 +13,12 @@ const REQUIRED_ENV_VARS = [
 ];
 
 export const config = {
-    serverHost: defineConfig.server.host,
-    authenticationServicePort: parseInt( defineConfig.server.authentication_service_port ),
-    gaiaConnectorPort: parseInt( defineConfig.server.gaia_connector_port ),
-    taskManagerPort: parseInt( defineConfig.server.task_manager_port ),
-    serverTimeout: parseInt( defineConfig.server.server_timeout ),
-}
+    serverHost: serverHost,
+    gaiaConnectorPort: gaiaConnectorPort,
+    authenticationServicePort: authenticationServicePort,
+    taskManagerPort: taskManagerPort,
+    serverTimeout: serverTimeout
+};
 
 export const validateEnvironmentVars = () => {
     const missingRequirements = [];

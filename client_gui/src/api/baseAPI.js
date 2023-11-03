@@ -1,4 +1,5 @@
 import { config } from '../configs/configuration';
+import Axios from 'axios';
 
 const HttpMethods = {
     GET: 'GET',
@@ -7,7 +8,7 @@ const HttpMethods = {
     DELETE: 'DELETE',
 };
 
-const getDefaultHeaders  = () => {
+const getDefaultHeaders = () => {
     const headers = new Headers();
 
     headers.append('Content-Type', 'application/json');
@@ -28,38 +29,88 @@ const baseRequest = async (api, method, portConfig, body, headers) => {
     }
 
     const controller = new AbortController();
-    const timerId = setTimeout(() => controller.abort(), timeout); 
+    const timerId = setTimeout(() => controller.abort(), timeout);
     const requestConfig = {
-        method, 
+        method,
         headers: requestHeaders,
-        body: body == null ? null : JSON.stringify(body),
-        signal: controller.signal,
+        body: body == null ? null : JSON.stringify(body)
     };
 
     console.log(
         `Requesting to ${method} ${url} with config: ${JSON.stringify(requestConfig)}`
     );
-
-    const response = await fetch(url, requestConfig);
-    clearTimeout(timerId);
-    return response;
+    try {
+        const response = await _fetchData(url, method, body, headers);
+        clearTimeout(timerId);
+        return response;
+    } catch (error) {
+        clearTimeout(timerId);
+        return error;
+    }
 }
 
-const serverRequest = async(api, method, portName, body, headers) => {
-    const apiHost = config[portName]; 
+const serverRequest = async (api, method, portName, body, headers) => {
+    const apiHost = config[portName];
 
     if (apiHost == null) {
         console.log(`No port config for ${portName}`);
         return null;
     }
 
-    let timeOut  = config.serverTimeout;
+    let timeOut = config.serverTimeout;
     if (isNaN(timeOut)) {
         console.log(`Invalid timeout config for ${portName}`);
         timeOut = 10000;
     }
 
-    return await baseRequest(api, method, { portName, timeOut}, body, headers);
+    return await baseRequest(api, method, { portName, timeOut }, body, headers);
+}
+
+const _fetchData = async (url, method, body, headers) => {
+    switch (method) {
+        case "GET":
+            try {
+                const getResponse = await Axios.get(url, {
+                    headers: headers,
+                    body: body,
+                })
+                return getResponse;
+            } catch (error) {
+                return error;
+            }
+        case "POST":
+            try {
+                const postResponse = await Axios.post(url, {
+                    headers: headers,
+                    body: body,
+                })
+                return postResponse;
+            } catch (error) {
+                return error;
+            }
+        case "PUT":
+            try {
+                const putResponse = await Axios.put(url, {
+                    headers: headers,
+                    body: body,
+                })
+                return putResponse;
+            } catch (error) {
+                return error;
+            }
+        case "DELETE":
+            try {
+                const deleteResponse = await Axios.delete(url, {
+                    headers: headers,
+                    body: body,
+                })
+                return deleteResponse;
+            } catch (error) {
+                return error;
+            }
+        default:
+            return null;
+    }
 }
 
 export {
