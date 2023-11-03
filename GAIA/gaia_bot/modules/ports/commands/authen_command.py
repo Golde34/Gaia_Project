@@ -1,6 +1,7 @@
 import requests
 import subprocess
 import json
+import os
 
 from gaia_bot.configs.port_configs import PORTS
 from gaia_bot.configs.settings import USER_PROFILE
@@ -55,6 +56,12 @@ class AuthenticationConnector:
             return False 
         
     def _save_resposne_to_file(self, result):
-        filepath = "..\\..\\local\\resources\\authen_cache\\response.json"
-        with open(filepath, 'w') as f:
+        filepath = "../../local/resources/authen_cache/token.json"
+        
+        script_dir = os.path.dirname(__file__)
+        absolute_path = os.path.join(script_dir, filepath)
+        
+        os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
+        
+        with open(absolute_path, 'w') as f:
             json.dump(result, f)

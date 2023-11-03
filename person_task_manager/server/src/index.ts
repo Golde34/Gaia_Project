@@ -26,7 +26,7 @@ async function main(): Promise<void> {
     console.log("Connected to MongoDB");
 
     const app: Application = express();
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 3002;
 
     app.use(
         bodyParser.urlencoded({

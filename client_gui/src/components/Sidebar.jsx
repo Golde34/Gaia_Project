@@ -35,12 +35,10 @@ const Sidebar = () => {
           className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
         />
         <a href="/project">
-        <Button variant="secondary" className="p-2" color="indigo">
-          <BellIcon
-            width={40}
-            className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
-          />
-        </Button>
+          <Button variant="primary"
+            className="p-2" color="indigo">
+            <BellIcon width={20} />
+          </Button>
         </a>
       </div>
       <div className="fixed bottom-4 left-3 sm:left-6">
@@ -50,10 +48,8 @@ const Sidebar = () => {
             className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
           />
         </a>
-        <Button variant="secondary" className="p-2" color="indigo">
-          <ExternalLinkIcon
-            width={20}
-          />
+        <Button variant="secondary" className="p-2" color="indigo" >
+          <ExternalLinkIcon width={20} />
         </Button>
       </div>
     </div>
