@@ -9,6 +9,7 @@ const portName = {
     gaia: 'gaiaConnectorPort',
 }
 
+// Automatically authenticate function
 export const authenticate = async () => {
     const response = await serverRequest('/client/gaia-connect', HttpMethods.GET, 'gaiaConnectorPort', null);
     const data = await JSON.stringify(response.data);
@@ -27,7 +28,6 @@ export const signinFromBot = () => async (dispatch) => {
         const { data } = await serverRequest('/client/gaia-connect', HttpMethods.GET, portName.gaia, null);
         dispatch({ type: BOT_SIGNIN_SUCCESS, payload: data });
         localStorage.setItem('userInfo', JSON.stringify(data.data));
-        console.log('Something need to display in here' + data.data)
     } catch (error) {
         dispatch({
             type: BOT_SIGNIN_FAIL,

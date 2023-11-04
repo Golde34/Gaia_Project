@@ -10,7 +10,7 @@ import { commentRouter } from "./modules/person_task_manager/controllers/comment
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
-
+import morgan from "morgan";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -38,6 +38,7 @@ async function main(): Promise<void> {
     app.use(bodyParser.json({ limit: "50mb" }));
     app.use(cors());
 	app.use(helmet());
+    app.use(morgan("dev"));
 
 
     app.use("/auth", authRouter)

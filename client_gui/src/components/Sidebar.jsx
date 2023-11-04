@@ -34,7 +34,7 @@ const Sidebar = () => {
           width={40}
           className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
         />
-        <a href="/project">
+        <a href="/client-gui/project">
           <Button variant="primary"
             className="p-2" color="indigo">
             <BellIcon width={20} />

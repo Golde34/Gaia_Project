@@ -50,6 +50,7 @@ const baseRequest = async (api, method, portConfig, body, headers) => {
 }
 
 const serverRequest = async (api, method, portName, body, headers) => {
+    console.log('test Project' + api)
     const apiHost = config[portName];
 
     if (apiHost == null) {

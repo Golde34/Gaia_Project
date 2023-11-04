@@ -1,11 +1,20 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+
+import { getProjects } from "../store/actions/task_manager/projectActions";
 
 export default function Project() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const listProjects = useSelector((state) => state.listProjects);
+    const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
+    
+    useEffect(() => {
+        dispatch(getProjects());
+    }, [dispatch]);
+
+    console.log("projects should be there " + projects);
 
     return (
         <div>
