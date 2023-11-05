@@ -3,6 +3,30 @@ import { useRoutes } from 'react-router-dom';
 
 import Dashboard from '../views/Dashboard';
 import Project from '../views/Project';
+import SchedulingTable from '../views/SchedulingTable';
+
+// const schedule = [
+//   {
+//     id: 1,
+//     title: "Opening Remarks",
+//     startTime: "8:00am",
+//     endTime: "8:30am",
+//     track: 1,
+//     presenter: "Jane Doe",
+//     color: "#457b9d", // Dark blue
+//   },
+//   {
+//     id: 2,
+//     title: "Keynote: The Future of Tech",
+//     startTime: "8:30am",
+//     endTime: "10:00am",
+//     track: 2,
+//     presenter: "John Smith",
+//     color: "#1d3557", // Navy blue
+//   },
+//   // More sessions...
+// ];
+
 
 const routeList = [
     {
@@ -19,7 +43,12 @@ const routeList = [
         path: '/project',
         key: 'project',
         element: <Project />,
-    }
+    },
+    // {
+    //     path: '/scheduling-table',
+    //     key: 'scheduling-table',
+    //     element: <SchedulingTable schedule={schedule}/>,
+    // }
 ]
 
 const RenderRouter = () => {
