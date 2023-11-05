@@ -1,6 +1,9 @@
 import { HttpMethods, serverRequest } from "../../../api/baseAPI";
-import { PROJECT_CREATE_REQUEST, PROJECT_CREATE_SUCCESS, PROJECT_DELETE_FAIL, PROJECT_DELETE_REQUEST, PROJECT_DELETE_SUCCESS, PROJECT_DETAIL_FAIL, PROJECT_DETAIL_REQUEST, PROJECT_DETAIL_SUCCESS, 
-    PROJECT_LIST_FAIL, PROJECT_LIST_REQUEST, PROJECT_LIST_SUCCESS, PROJECT_UPDATE_FAIL, PROJECT_UPDATE_REQUEST, PROJECT_UPDATE_SUCCESS 
+import { PROJECT_CREATE_FAIL, PROJECT_CREATE_REQUEST, PROJECT_CREATE_SUCCESS, PROJECT_DELETE_FAIL, 
+    PROJECT_DELETE_REQUEST, PROJECT_DELETE_SUCCESS, PROJECT_DETAIL_FAIL, 
+    PROJECT_DETAIL_REQUEST, PROJECT_DETAIL_SUCCESS, PROJECT_LIST_FAIL, 
+    PROJECT_LIST_REQUEST, PROJECT_LIST_SUCCESS, 
+    PROJECT_UPDATE_FAIL, PROJECT_UPDATE_REQUEST, PROJECT_UPDATE_SUCCESS 
 } from "../../constants/task_manager/project.constants";
 
 const portName = {
@@ -13,7 +16,6 @@ export const getProjects = () => async (dispatch) => {
         const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.taskManager, null);      
         dispatch({ type: PROJECT_LIST_SUCCESS, payload: data.message });
     } catch (error) {
-        console.log(error);
         dispatch({
             type: PROJECT_LIST_FAIL,
             payload: error.response && error.response.data.message
@@ -68,7 +70,7 @@ export const updateProject = (project) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/project/update/${project._id}`, HttpMethods.PUT, portName.taskManager, project);
+        const { data } = await serverRequest(`/project/${project._id}`, HttpMethods.PUT, portName.taskManager, project);
         dispatch({ type: PROJECT_UPDATE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({
@@ -89,7 +91,7 @@ export const deleteProject = (projectId) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/project/delete/${projectId}`, HttpMethods.DELETE, portName.taskManager, null);
+        const { data } = await serverRequest(`/project/${projectId}`, HttpMethods.DELETE, portName.taskManager, null);
         dispatch({ type: PROJECT_DELETE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({
