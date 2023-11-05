@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 
-import { getProjects } from "../store/actions/task_manager/projectActions";
+import { getProjects } from "../store/actions/task_manager/project.actions";
+import Template from "./template";
+import CardButton from "../components/subComponents/CardButton";
+import { Metric } from "@tremor/react";
 
-export default function Project() {
+function ContentArea() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
     
@@ -23,26 +24,30 @@ export default function Project() {
             ) : error ? (
                 <p> Error </p>
             ) : (
-                <div>
+                <>
+                <Metric style={{marginBottom:'30px', marginTop:'30px'}} 
+                    className="text-2xl font-bold text-gray-800"> Projects 
+                </Metric>
+                <div className="grid md:grid-cols-3 w-full"> 
                     {projects.map((project) => (
-                        <div key={project._id}>
-                            <div>
-                                <h2>{project.name}</h2>
-                                <p>{project.description}</p>
-                            </div>
-                            <div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate(`/project/${project._id}`)}
-                                >
-                                    View Project
-                                </button>
-                            </div>
-                        </div>
+                        <CardButton name={project.name} description={project.description} 
+                            url={`/project/${project._id}`} buttonText="View Project"
+                        />
                     ))}
                 </div>
+                </>
             )
         }
         </div>
     )
 }
+
+const Project = () => {
+    return (
+        <Template>
+            <ContentArea />
+        </Template>
+    )
+}
+
+export default Project;

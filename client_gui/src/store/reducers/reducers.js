@@ -7,7 +7,7 @@ import {
 
 import {
     projectListReducer
-} from './task_manager/projectReducers'
+} from './task_manager/project.reducers'
 
 export const reducer = combineReducers({
     // auth service

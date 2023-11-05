@@ -9,19 +9,19 @@ function App() {
 
   const [ accessToken, setAccessToken ] = useState(null);
 
-  // useEffect(() => { 
-  //   const checkGaiaConnected = async () => {
-  //     const data = await authenticate();
-  //     if (data) {
-  //       setAccessToken(data);
-  //     }
-  //   }
-  //   checkGaiaConnected();
-  // }, []);
+  useEffect(() => { 
+    const checkGaiaConnected = async () => {
+      const data = await authenticate();
+      if (data) {
+        setAccessToken(data);
+      }
+    }
+    checkGaiaConnected();
+  }, []);
 
   return (
     <>
-    {/* {accessToken ? (
+    {accessToken ? (
       <main className='flex'>
         <BrowserRouter basename='/client-gui'>
           <RenderRouter />
@@ -32,12 +32,7 @@ function App() {
         <p> GAIA is not connected.</p>
       </main>
     )  
-    } */}
-    <main className='flex'>
-      <BrowserRouter basename='/client-gui'>
-        <RenderRouter />
-      </BrowserRouter>
-    </main>
+    }
     </>
   )
 }

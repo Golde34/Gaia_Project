@@ -7,7 +7,7 @@ import { Permission } from "../../../loaders/enums";
 export const taskRouter = Router();
 
 // get all tasks - this function is for boss only
-taskRouter.get("/task", 
+taskRouter.get("/", 
     checkToken,
     checkPermission(Permission.readTask), 
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -22,7 +22,7 @@ taskRouter.get("/task",
 });
 
 //get one task
-taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
         const taskResult = await taskService.getTask(taskId);
@@ -35,7 +35,7 @@ taskRouter.get("/task/:id", async (req: Request, res: Response, next: NextFuncti
 });
 
 // create task
-taskRouter.post("/task/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.post("/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const task = req.body;
         const groupTaskId = req.body.groupTaskId;
@@ -49,7 +49,7 @@ taskRouter.post("/task/create", async (req: Request, res: Response, next: NextFu
 });
 
 // update task
-taskRouter.put("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.put("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
         const task = req.body;
@@ -63,7 +63,7 @@ taskRouter.put("/task/:id", async (req: Request, res: Response, next: NextFuncti
 });
 
 // delete task
-taskRouter.delete("/task/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
         const taskResult = await taskService.deleteTask(taskId);
@@ -76,7 +76,7 @@ taskRouter.delete("/task/:id", async (req: Request, res: Response, next: NextFun
 });
 
 // get subtasks of a task
-taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/:id/sub-tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
         const subTaskResult = await taskService.getSubTasksInTask(taskId);
@@ -89,7 +89,7 @@ taskRouter.get("/task/:id/subtask", async (req: Request, res: Response, next: Ne
 });
 
 // get comments of a task
-taskRouter.get("/task/:id/comment", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.get("/:id/comments", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
         const commentResult = await taskService.getCommentsInTask(taskId);

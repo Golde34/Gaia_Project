@@ -11,7 +11,7 @@ const portName = {
 
 // Automatically authenticate function
 export const authenticate = async () => {
-    const response = await serverRequest('/client/gaia-connect', HttpMethods.GET, 'gaiaConnectorPort', null);
+    const response = await serverRequest('/client/gaia-connect', HttpMethods.GET, portName.gaia, null);
     const data = await JSON.stringify(response.data);
     if (data !== null && data !== undefined && data !== '') {
         localStorage.setItem('gaiaToken', data);
