@@ -5,7 +5,7 @@ import { SUB_TASK_CREATE_FAIL, SUB_TASK_CREATE_REQUEST, SUB_TASK_CREATE_SUCCESS,
     SUB_TASK_UPDATE_FAIL, SUB_TASK_UPDATE_REQUEST, SUB_TASK_UPDATE_SUCCESS 
 } from "../../constants/task_manager/sub-task.constants";
 
-export const subTaskReducer = (
+export const subTaskListReducer = (
     state = { loading: true }, action) => {
     switch (action.type) {
         case SUB_TASK_LIST_REQUEST:
