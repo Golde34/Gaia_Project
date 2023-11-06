@@ -13,14 +13,17 @@ export const groupTaskValidation = {
         if (await GroupTaskEntity.findOne({ title: title }) != null) {
             return true; // existed
         }
-        return false;
+        return Promise.resolve(false);
     },
 
     async checkExistedGroupTaskInProject(groupTaskId: string, projectId: string): Promise<boolean> {
-        const project = ProjectEntity.findOne({ _id: projectId, groupTasks: groupTaskId });
-        if (await project != null) {
+        const project = await ProjectEntity.findOne({ _id: projectId, groupTasks: groupTaskId });
+        console.log('go here');
+        if (project != null || project != undefined) {
+            console.log('true');
             return true; // existed
         }
+        console.log('false');
         return false;
     }
 }

@@ -22,6 +22,7 @@ groupTaskRouter.post("/create", async (req: Request, res: Response, next: NextFu
     try {
         const groupTask = req.body;
         const projectId = req.body.projectId;
+        console.log(projectId);
         const groupTaskResult = await groupTaskService.createGroupTaskToProject(groupTask, projectId);
 
         sendResponse(groupTaskResult, res, next);

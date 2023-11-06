@@ -66,8 +66,10 @@ class ProjectService {
     }
 
     async getGroupTasksInProject(projectId: string): Promise<IResponse> {
-        const groupTasks = await ProjectEntity.findOne({_id: projectId}).populate('groupTasks');
-        
+        const groupTasksInProject = await ProjectEntity.findOne({_id: projectId}).populate('groupTasks');
+       
+        const groupTasks = groupTasksInProject?.groupTasks; 
+
         return msg200({
             message: (groupTasks as any)
         });

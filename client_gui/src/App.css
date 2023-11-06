@@ -1,8 +1,32 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+@media screen and (min-width: 768px) {
+  #root {
+    max-width: 720px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  #root {
+    max-width: 1000px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  #root {
+    max-width: 1200px;
+  }
+}
+@media screen and (min-width: 1600px) {
+  #root {
+    max-width: 1400px;
+  }
+}
+@media screen and (min-width: 1920px) {
+  #root {
+    max-width: 1720px;
+  }
 }
 
 .logo {

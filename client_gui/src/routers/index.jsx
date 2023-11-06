@@ -4,6 +4,7 @@ import { useRoutes } from 'react-router-dom';
 import Dashboard from '../views/Dashboard';
 import Project from '../views/Project';
 import SchedulingTable from '../views/SchedulingTable';
+import TaskDashboard from '../views/TaskDashboard';
 
 // const schedule = [
 //   {
@@ -44,6 +45,11 @@ const routeList = [
         key: 'project',
         element: <Project />,
     },
+    {
+        path: '/project/:id',
+        key: 'project-id',
+        element: <TaskDashboard />,
+    }
     // {
     //     path: '/scheduling-table',
     //     key: 'scheduling-table',

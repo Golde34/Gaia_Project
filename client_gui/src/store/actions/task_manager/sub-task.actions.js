@@ -7,7 +7,7 @@ import { SUB_TASK_LIST_REQUEST, SUB_TASK_LIST_SUCCESS, SUB_TASK_LIST_FAIL,
 } from "../../constants/task_manager/sub-task.constants";
 
 const portName = {
-    taskManager: 'task-manager'
+    taskManager: 'taskManagerPort'
 }
 
 export const getSubTaskList = (taskId) => async (dispatch) => {
