@@ -11,8 +11,6 @@ function ContentArea() {
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
    
-    console.log(projects)
-
     useEffect(() => {
         dispatch(getProjects());
     }, [dispatch]);
