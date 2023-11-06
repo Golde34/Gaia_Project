@@ -8,7 +8,7 @@ import {
 } from "../../constants/task_manager/comment.constants";
 
 const portName = {
-    taskManager: 'task-manager'
+    taskManager: 'taskManagerPort'
 }
 
 export const getCommentList = (taskId) => async (dispatch) => {

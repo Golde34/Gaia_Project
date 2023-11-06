@@ -10,13 +10,13 @@ function ContentArea() {
     const dispatch = useDispatch();
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
-    
+   
+    console.log(projects)
+
     useEffect(() => {
         dispatch(getProjects());
     }, [dispatch]);
-
-    console.log("projects should be there " + projects);
-
+ 
     return (
         <div>
             { loading ? (

@@ -7,7 +7,7 @@ import { GROUP_TASK_CREATE_FAIL, GROUP_TASK_CREATE_REQUEST, GROUP_TASK_CREATE_SU
 } from "../../constants/task_manager/group-task.constants";
 
 const portName = {
-    taskManager: 'task-manager'
+    taskManager: 'taskManagerPort'
 }
 
 export const getGroupTaskList = (projectId) => async (dispatch) => {
