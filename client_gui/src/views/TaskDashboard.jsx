@@ -5,6 +5,7 @@ import { getGroupTaskList } from "../store/actions/task_manager/group-task.actio
 import { useParams } from "react-router-dom";
 import { Metric } from "@tremor/react";
 import TabGroupTask from "../components/taskDashboard/TabGroupTask";
+import TaskList from "../components/taskDashboard/TaskList";
 
 function ContentArea() {
 
@@ -29,7 +30,9 @@ function ContentArea() {
                     className="text-2xl font-bold text-gray-800"> Group Tasks
                 </Metric>
                 <div className="gird md:grid-cols-3 w-full">
-                    <TabGroupTask groupTasks={groupTasks} />
+                    <TabGroupTask groupTasks={groupTasks} >
+                        <TaskList></TaskList>
+                    </TabGroupTask>
                 </div>
                 </>
             )    
