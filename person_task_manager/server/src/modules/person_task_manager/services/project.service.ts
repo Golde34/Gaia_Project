@@ -8,6 +8,7 @@ const projectValidationImpl = projectValidation;
 class ProjectService {
     constructor() {}
 
+    // Add Authen mechanism and try catch
     async createProject(project: any): Promise<IResponse> {
         const createProject = await ProjectEntity.create(project);
         
@@ -18,7 +19,7 @@ class ProjectService {
 
     async updateProject(projectId: string, project: any): Promise<IResponse> {
         try {
-            if (await projectValidationImpl.checkExistedProjectByProjectId(projectId)) {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
                 const updateProject = await ProjectEntity.updateOne({_id: projectId}, project);
                 
                 return msg200({
@@ -35,7 +36,7 @@ class ProjectService {
 
     async deleteProject(projectId: string): Promise<IResponse> {
         try {
-            if (await projectValidationImpl.checkExistedProjectByProjectId(projectId)) {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
                 const deleteProject = await ProjectEntity.deleteOne({_id: projectId});
                 
                 return msg200({
