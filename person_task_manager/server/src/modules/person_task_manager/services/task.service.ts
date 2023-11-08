@@ -8,25 +8,32 @@ const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
 
 class TaskService {
-    constructor() {}
+    constructor() { }
 
     async createTaskInGroupTask(task: any, groupTaskId: string): Promise<IResponse> {
-        const createTask = await TaskEntity.create(task);
-        const taskId = (createTask as any)._id;
-        if (await !taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId)) {
-            groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
+        try {
+            const createTask = await TaskEntity.create(task);
+            const taskId = (createTask as any)._id;
+            if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
+                groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
+            
+                return msg200({
+                    message: (createTask as any)
+                });
+            } else {
+                const deletedInitTask = await TaskEntity.deleteOne({ _id: taskId });
+                return msg400('Task is not created successfully');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
         }
-
-        return msg200({
-            message: (createTask as any)
-        });
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const updateTask = await TaskEntity.updateOne({ _id: taskId }, task);
-                
+
                 return msg200({
                     message: (updateTask as any)
                 });
@@ -36,14 +43,14 @@ class TaskService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
-    }    
+    }
 
     async deleteTask(taskId: string): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
-                if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
-                    groupTaskServiceImpl.updateManyGroupTasks({ data: { tasks: taskId } }, 
+                if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                    groupTaskServiceImpl.updateManyGroupTasks({ data: { tasks: taskId } },
                         { $pull: { tasks: taskId } });
                 }
 
@@ -88,7 +95,7 @@ class TaskService {
     }
 
     async updateManyTasks(filter: any, update: any): Promise<IResponse> {
-        const updateManyTasks = await TaskEntity.updateMany({filter}, update);
+        const updateManyTasks = await TaskEntity.updateMany({ filter }, update);
 
         return msg200({
             message: (updateManyTasks as any)
@@ -96,10 +103,10 @@ class TaskService {
     }
 
     // disable task
-    
+
     // enable task
 
     // add subTask
-}   
+}
 
 export const taskService = new TaskService();

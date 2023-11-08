@@ -11,30 +11,29 @@ class GroupTaskService {
     constructor() {}
 
     async createGroupTaskToProject(groupTask: any, projectId: string): Promise<IResponse> {
-        const createGroupTask = await GroupTaskEntity.create(groupTask);
-        const groupTaskId = (createGroupTask as any)._id;
-        console.log(projectId);
-        if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
-            console.log("check successfully" + projectId)
-            projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
-            return msg200({
-                message: (createGroupTask as any)
-            });
-        } else {
-            const deletedInitGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-            return msg400('Group task is not created successfully');
+        try {
+            const createGroupTask = await GroupTaskEntity.create(groupTask);
+            const groupTaskId = (createGroupTask as any)._id;
+
+            if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
+                projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
+    
+                return msg200({
+                    message: (createGroupTask as any)
+                });
+            } else {
+                const deletedInitGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
+                return msg400('Group task is not created successfully');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
         }
-        // TODO
-        // add try catch when create project, group task must in 1 project
-        return msg200({
-            message: (createGroupTask as any)
-        });
     }
 
 
     async updateGroupTask(groupTaskId: string, groupTask: any): Promise<IResponse> {
         try {
-            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId)) {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const updateGroupTask = await GroupTaskEntity.updateOne({ _id: groupTaskId }, groupTask);
                 
                 return msg200({
@@ -50,9 +49,9 @@ class GroupTaskService {
 
     async deleteGroupTask(groupTaskId: string): Promise<IResponse> {
         try {
-            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId)) {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-                if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId)) {
+                if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                     projectServiceImpl.updateManyProjects({ data: { groupTasks: groupTaskId } }, 
                         { $pull: { groupTasks: groupTaskId } });
                 }
