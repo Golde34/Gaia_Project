@@ -1,13 +1,14 @@
 import { PlusIcon } from "@heroicons/react/outline";
 import { TagIcon, UserGroupIcon } from "@heroicons/react/solid";
-import { Card, Tab, TabGroup, TabList, TabPanels } from "@tremor/react"
+import { Card, Tab, TabGroup, TabList } from "@tremor/react"
 import { useState } from "react";
+import EllipsisMenu from "./EllipsisMenu";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
 
     const [activeTab, setActiveTab] = useState(groupTasks[0]._id);
- 
+
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
     }
@@ -20,24 +21,29 @@ const TabGroupTask = (props) => {
             <TabGroup className="mt-3" color="indigo">
                 <TabList>
                     {groupTasks.map((groupTask) => (
-                        <div>
-                            <Tab
-                                key={groupTask._id}
-                                icon={activeTab === groupTask._id ? UserGroupIcon : TagIcon}
-                                onClick={() => handleTabChange(groupTask._id)}
-                                style={
-                                    activeTab === groupTask._id
-                                        ? { color: "#6366f1", fontSize: "20px" }
-                                        : { color: "white", fontSize: "20px" }
-                                }
-                            >
-                                {groupTask.title}
-                            </Tab>
-                        </div>
+                        <Tab
+                            key={groupTask._id}
+                            icon={activeTab === groupTask._id ? UserGroupIcon : TagIcon}
+                            onClick={() => handleTabChange(groupTask._id)}
+                            style={
+                                activeTab === groupTask._id
+                                    ? { color: "#6366f1", fontSize: "20px" }
+                                    : { color: "white", fontSize: "20px" }
+                            }
+                        >
+                            <div className="grid grid-flow-col gap-4">
+                                <div className="col-span-2" >{groupTask.title}</div>
+                                <div className="col-span-2" >
+                                    <EllipsisMenu elementName="Group-Task" />
+                                </div>
+                            </div>
+                        </Tab>
                     ))}
+                    <a href="/client-gui/">
                     <Tab icon={PlusIcon} onClick={() => createNewGroupTask()}></Tab>
+                    </a>
                 </TabList>
-                {props.children} 
+                {props.children}
             </TabGroup>
         </Card>
     )
