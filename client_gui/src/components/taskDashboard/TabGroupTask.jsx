@@ -34,7 +34,7 @@ const TabGroupTask = (props) => {
                             <div className="grid grid-flow-col gap-4">
                                 <div className="col-span-2" >{groupTask.title}</div>
                                 <div className="col-span-2" >
-                                    <EllipsisMenu elementName="Group-Task" />
+                                    <EllipsisMenu elementName="Group Task" elementId={groupTask._id}/>
                                 </div>
                             </div>
                         </Tab>

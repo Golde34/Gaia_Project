@@ -3,6 +3,7 @@ import { GROUP_TASK_CREATE_FAIL, GROUP_TASK_CREATE_REQUEST, GROUP_TASK_CREATE_SU
     GROUP_TASK_DELETE_FAIL, GROUP_TASK_DELETE_REQUEST, GROUP_TASK_DELETE_SUCCESS, 
     GROUP_TASK_DETAIL_FAIL, GROUP_TASK_DETAIL_REQUEST, GROUP_TASK_DETAIL_SUCCESS, 
     GROUP_TASK_LIST_FAIL, GROUP_TASK_LIST_REQUEST, GROUP_TASK_LIST_SUCCESS, 
+    GROUP_TASK_NAME_UPDATE_FAIL, GROUP_TASK_NAME_UPDATE_REQUEST, GROUP_TASK_NAME_UPDATE_SUCCESS, 
     GROUP_TASK_UPDATE_FAIL, GROUP_TASK_UPDATE_REQUEST, GROUP_TASK_UPDATE_SUCCESS 
 } from "../../constants/task_manager/group-task.constants";
 
@@ -96,6 +97,22 @@ export const deleteGroupTasl = (groupTaskId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: GROUP_TASK_DELETE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+};
+
+export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) => {
+    dispatch({ type: GROUP_TASK_NAME_UPDATE_REQUEST, payload: groupTaskId });
+    try {
+        console.log(groupTaskId, newName);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
+        dispatch({ type: GROUP_TASK_NAME_UPDATE_SUCCESS, payload: data.message });
+    } catch (error) {
+        dispatch({
+            type: GROUP_TASK_NAME_UPDATE_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,

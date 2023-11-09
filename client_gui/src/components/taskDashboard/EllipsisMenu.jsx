@@ -1,9 +1,16 @@
 import { Button, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react"
 import EllipsisIcon from "../icons/EllipsisIcon"
 import { InputDialog } from "../subComponents/InputDialog";
+import { AlertDialog } from "../subComponents/AlertDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
+    const elementId = props.elementId;
+    
+    const updateTag = "Update " + elementName;
+    const deleteTag = "Delete " + elementName;
+    const archiveTag = "Archive " + elementName;
+
     return (
         <>
             <div className="flex gap-3">
@@ -18,10 +25,18 @@ const EllipsisMenu = (props) => {
                             <EllipsisIcon />
                         </Button>
                     </MenuHandler>
-                    <MenuList className="rounded-md bg-white">
-                        <InputDialog component="Update Name" elementName={elementName}></InputDialog>
-                        <MenuItem>Delete {props.elementName}</MenuItem>
-                        <MenuItem>Archive {props.elementName}</MenuItem>
+                    <MenuList className="grid grid-rows-3 rounded-md bg-white">
+                        <InputDialog 
+                        className="col-span-1" component={updateTag} elementName={elementName}
+                        elementId={elementId}>
+                        </InputDialog>
+                        <AlertDialog 
+                        className="col-span-1" component={deleteTag} 
+                        action="Delete" elementName={elementName}>
+                        </AlertDialog>
+                        <AlertDialog className="col-span-1" component={archiveTag} 
+                        action="Archive" elementName={elementName}>
+                        </AlertDialog>
                     </MenuList>
                 </Menu>
             </div>
