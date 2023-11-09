@@ -30,6 +30,7 @@ export const reducer = combineReducers({
     groupTaskCreate: groupTaskCreateReducer,
     groupTaskUpdate: groupTaskUpdateReducer,
     groupTaskDelete: groupTaskDeleteReducer,
+    groupTaskUpdateName: groupTaskUpdateReducer,
     taskList: taskListReducer,
     taskDetail: taskDetailReducer,
     taskCreate: taskCreateReducer,

@@ -8,7 +8,7 @@ const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
 
 class GroupTaskService {
-    constructor() {}
+    constructor() { }
 
     async createGroupTaskToProject(groupTask: any, projectId: string): Promise<IResponse> {
         try {
@@ -17,7 +17,7 @@ class GroupTaskService {
 
             if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
                 projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
-    
+
                 return msg200({
                     message: (createGroupTask as any)
                 });
@@ -34,8 +34,9 @@ class GroupTaskService {
     async updateGroupTask(groupTaskId: string, groupTask: any): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+
                 const updateGroupTask = await GroupTaskEntity.updateOne({ _id: groupTaskId }, groupTask);
-                
+
                 return msg200({
                     message: (updateGroupTask as any)
                 });
@@ -52,10 +53,10 @@ class GroupTaskService {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
                 if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                    projectServiceImpl.updateManyProjects({ data: { groupTasks: groupTaskId } }, 
+                    projectServiceImpl.updateManyProjects({ data: { groupTasks: groupTaskId } },
                         { $pull: { groupTasks: groupTaskId } });
                 }
-                
+
                 return msg200({
                     message: (deleteGroupTask as any)
                 });
@@ -69,7 +70,7 @@ class GroupTaskService {
 
     async getGroupTask(groupTaskId: string): Promise<IResponse> {
         const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
-        
+
         return msg200({
             groupTask
         });
@@ -77,22 +78,46 @@ class GroupTaskService {
 
     async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
         const getTasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-        
+
         return msg200({
             message: (getTasks as any)
         });
     }
 
     async updateManyGroupTasks(filter: any, update: any): Promise<IResponse> {
-        const updateManyGroupTasks = await GroupTaskEntity.updateMany({filter}, update);
-        
+        const updateManyGroupTasks = await GroupTaskEntity.updateMany({ filter }, update);
+
         return msg200({
             message: (updateManyGroupTasks as any)
         });
     }
 
+    async updateGroupTaskName(groupTaskId: string, name: string): Promise<IResponse> {
+        try {
+            console.log('test')
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                console.log('wtf')
+                const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
+                if (groupTask === null) {
+                    return msg400('Group task not found');
+                } else {
+                    console.log(name);
+                    groupTask.title = name;
+                    await groupTask.save();
+                    console.log(groupTask);
+                    return msg200({
+                        message: 'Group task name updated successfully'
+                    });
+                }
+            }
+            return msg400('Group task not found');
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+
     // disable groupTask
-    
+
     // enable groupTask
 
     // archive groupTask

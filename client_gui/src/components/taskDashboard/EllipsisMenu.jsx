@@ -5,6 +5,8 @@ import { AlertDialog } from "../subComponents/AlertDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
+    const elementId = props.elementId;
+    
     const updateTag = "Update " + elementName;
     const deleteTag = "Delete " + elementName;
     const archiveTag = "Archive " + elementName;
@@ -25,7 +27,8 @@ const EllipsisMenu = (props) => {
                     </MenuHandler>
                     <MenuList className="grid grid-rows-3 rounded-md bg-white">
                         <InputDialog 
-                        className="col-span-1" component={updateTag} elementName={elementName}>
+                        className="col-span-1" component={updateTag} elementName={elementName}
+                        elementId={elementId}>
                         </InputDialog>
                         <AlertDialog 
                         className="col-span-1" component={deleteTag} 

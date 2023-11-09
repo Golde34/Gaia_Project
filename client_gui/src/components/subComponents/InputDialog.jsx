@@ -1,9 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Input } from '@material-tailwind/react';
 import { Fragment, useState } from 'react'
+import useUpdateNameUrlDispatch from '../../utils/EllipsisIconUpdateName';
 
 export const InputDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
+    let [newName, setNewName] = useState("");
 
     function closeModal() {
         setIsOpen(false)
@@ -11,6 +13,13 @@ export const InputDialog = (props) => {
 
     function openModal() {
         setIsOpen(true)
+    }
+
+    const updateNameUrlDispatch = useUpdateNameUrlDispatch();
+
+    const updateNewName = (newName) => {
+        updateNameUrlDispatch(props.elementId, newName, props.elementName);
+        window.location.reload();
     }
 
     return (
@@ -56,14 +65,24 @@ export const InputDialog = (props) => {
                                         Change {props.elementName} Name
                                     </Dialog.Title>
                                     <div className="mt-2">
-                                        <Input />
+                                        <Input
+                                            type="text"
+                                            color="indigo"
+                                            size="regular"
+                                            outline={true}
+                                            placeholder={props.elementName + " Name"}
+                                            value={newName}
+                                            onChange={(e) => setNewName(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="mt-4">
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
+                                            onClick={() => {
+                                                updateNewName(newName); 
+                                                closeModal(); }}
                                         >
                                             OK
                                         </button>
