@@ -16,11 +16,18 @@ export const InputDialog = (props) => {
     }
 
     const updateNameUrlDispatch = useUpdateNameUrlDispatch();
-
     const updateNewName = (newName) => {
         updateNameUrlDispatch(props.elementId, newName, props.elementName);
         window.location.reload();
     }
+
+    const spaceBug = document.getElementById("space-bug");
+    if (spaceBug !== null) { 
+        spaceBug.addEventListener('keydown', function(e) {
+            if (e.keyCode === 32) {
+                setNewName(newName + " ");
+            }}
+    )};
 
     return (
         <>
@@ -65,10 +72,9 @@ export const InputDialog = (props) => {
                                         Change {props.elementName} Name
                                     </Dialog.Title>
                                     <div className="mt-2">
-                                        <Input
+                                        <Input 
+                                            id="space-bug"
                                             type="text"
-                                            color="indigo"
-                                            size="regular"
                                             outline={true}
                                             placeholder={props.elementName + " Name"}
                                             value={newName}
