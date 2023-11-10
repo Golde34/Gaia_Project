@@ -3,6 +3,7 @@ import { TagIcon, UserGroupIcon } from "@heroicons/react/solid";
 import { Card, Tab, TabGroup, TabList } from "@tremor/react"
 import { useState } from "react";
 import EllipsisMenu from "./EllipsisMenu";
+import { CreateNewGroupTask } from "./CreateNewGroupTask";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
@@ -39,9 +40,7 @@ const TabGroupTask = (props) => {
                             </div>
                         </Tab>
                     ))}
-                    <a href="/client-gui/">
-                    <Tab icon={PlusIcon} onClick={() => createNewGroupTask()}></Tab>
-                    </a>
+                    <CreateNewGroupTask />
                 </TabList>
                 {props.children}
             </TabGroup>

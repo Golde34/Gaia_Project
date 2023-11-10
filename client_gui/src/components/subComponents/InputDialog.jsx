@@ -10,7 +10,6 @@ export const InputDialog = (props) => {
     function closeModal() {
         setIsOpen(false)
     }
-
     function openModal() {
         setIsOpen(true)
     }
