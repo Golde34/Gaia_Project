@@ -75,8 +75,10 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
 // update Group task name
 groupTaskRouter.put("/:id/update-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+        
         const groupTaskId = req.params.id;
-        const name = req.body.body.newName;
+        const name = bodyJson.newName;
         const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, name);
 
         sendResponse(groupTaskResult, res, next);

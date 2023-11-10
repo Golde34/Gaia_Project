@@ -107,7 +107,6 @@ export const deleteGroupTasl = (groupTaskId) => async (dispatch) => {
 export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_NAME_UPDATE_REQUEST, payload: groupTaskId });
     try {
-        console.log(groupTaskId, newName);
         const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
         dispatch({ type: GROUP_TASK_NAME_UPDATE_SUCCESS, payload: data.message });
     } catch (error) {
