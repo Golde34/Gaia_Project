@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { createGroupTask, updateGroupTaskName } from "../store/actions/task_manager/group-task.actions";
+import { createGroupTask, updateGroupTaskName, deleteGroupTask } from "../store/actions/task_manager/group-task.actions";
 
-export const useUpdateNameUrlDispatch = () => {
+export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
 
-    const updateNAmeUrlDispatch = (id, newName, field) => {
+    const updateComponentNameDispatch = (id, newName, field) => {
         switch (field) {
             case "Group Task":
                 dispatch(updateGroupTaskName(id, newName));
@@ -12,8 +12,32 @@ export const useUpdateNameUrlDispatch = () => {
         }
     }
 
-    return updateNAmeUrlDispatch;
+    return updateComponentNameDispatch;
 };
+
+export const useDeleteComponentDispatch = () => {
+    const dispatch = useDispatch();
+
+    const deleteComponentDispatch = (groupTaskId, field) => {
+        switch (field) {
+            case "Group Task":
+                dispatch(deleteGroupTask(groupTaskId));
+                break;
+        }
+    }
+
+    return deleteComponentDispatch;
+};
+
+// export const useArchiveGroupTaskDispatch = () => {
+//     const dispatch = useDispatch();
+
+//     const archiveGroupTaskDispatch = (groupTaskId) => {
+//         dispatch(archiveGroupTask(groupTaskId));
+//     }
+
+//     return archiveGroupTaskDispatch;
+// }
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -23,4 +47,4 @@ export const useCreateGroupTaskDispatch = () => {
     }
 
     return createGroupTaskDispatch;
-}
+};

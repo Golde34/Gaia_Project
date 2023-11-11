@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Input } from '@material-tailwind/react';
 import { Fragment, useState } from 'react'
-import { useUpdateNameUrlDispatch } from '../../utils/DialogAPIRequest';
+import { useUpdateComponentNameDispatch } from '../../utils/DialogAPIRequest';
 
 export const InputDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,7 @@ export const InputDialog = (props) => {
         setIsOpen(true)
     }
 
-    const updateNameUrlDispatch = useUpdateNameUrlDispatch();
+    const updateNameUrlDispatch = useUpdateComponentNameDispatch();
     const updateNewName = (newName) => {
         updateNameUrlDispatch(props.elementId, newName, props.elementName);
         window.location.reload();

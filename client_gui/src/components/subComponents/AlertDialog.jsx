@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import { useDeleteComponentDispatch } from "../../utils/DialogAPIRequest";
 
 export const AlertDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,16 @@ export const AlertDialog = (props) => {
 
     function openModal() {
         setIsOpen(true)
+    }
+
+    const deleteComponentDispatch = useDeleteComponentDispatch();
+    const actionComponent = (action, elementName) => {
+        if (action === "Delete") {
+            deleteComponentDispatch(props.elementId, elementName);
+        } else if (action === "Archive") {
+            console.log("This Archive function is not implemented yet.");
+        }
+        window.location.reload();
     }
 
     return (
@@ -64,7 +75,9 @@ export const AlertDialog = (props) => {
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
+                                            onClick={() => {
+                                                actionComponent(props.action, props.elementName);
+                                                closeModal(); }}
                                         >
                                             OK
                                         </button>

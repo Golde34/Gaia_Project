@@ -83,8 +83,8 @@ export const updateGroupTask = (groupTask) => async (dispatch) => {
     }
 }
 
-export const deleteGroupTasl = (groupTaskId) => async (dispatch) => {
-    distpatch({ type: GROUP_TASK_DELETE_REQUEST, payload: groupTaskId });
+export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
+    dispatch({ type: GROUP_TASK_DELETE_REQUEST, payload: groupTaskId });
     try {
         // header is here maybe need it
         // const { userSignin: { userInfo } } = getState();
