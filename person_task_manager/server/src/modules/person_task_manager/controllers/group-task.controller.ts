@@ -20,9 +20,9 @@ groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 // create group task
 groupTaskRouter.post("/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const groupTask = req.body;
-        const projectId = req.body.projectId;
-        console.log(projectId);
+        const bodyJson = req.body.body;
+        const groupTask = bodyJson;
+        const projectId = bodyJson.projectId;
         const groupTaskResult = await groupTaskService.createGroupTaskToProject(groupTask, projectId);
 
         sendResponse(groupTaskResult, res, next);
@@ -75,8 +75,10 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
 // update Group task name
 groupTaskRouter.put("/:id/update-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+        
         const groupTaskId = req.params.id;
-        const name = req.body.body.newName;
+        const name = bodyJson.newName;
         const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, name);
 
         sendResponse(groupTaskResult, res, next);

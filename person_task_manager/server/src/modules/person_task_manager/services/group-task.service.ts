@@ -94,17 +94,13 @@ class GroupTaskService {
 
     async updateGroupTaskName(groupTaskId: string, name: string): Promise<IResponse> {
         try {
-            console.log('test')
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                console.log('wtf')
                 const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
                 if (groupTask === null) {
                     return msg400('Group task not found');
                 } else {
-                    console.log(name);
                     groupTask.title = name;
                     await groupTask.save();
-                    console.log(groupTask);
                     return msg200({
                         message: 'Group task name updated successfully'
                     });

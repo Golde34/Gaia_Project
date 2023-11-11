@@ -31,11 +31,12 @@ const EllipsisMenu = (props) => {
                         elementId={elementId}>
                         </InputDialog>
                         <AlertDialog 
-                        className="col-span-1" component={deleteTag} 
-                        action="Delete" elementName={elementName}>
+                        className="col-span-1" component={deleteTag} elementName={elementName} 
+                        action="Delete" elementId={elementId}>
                         </AlertDialog>
-                        <AlertDialog className="col-span-1" component={archiveTag} 
-                        action="Archive" elementName={elementName}>
+                        <AlertDialog 
+                        className="col-span-1" component={archiveTag} elementName={elementName} 
+                        action="Archive" elementId={elementId}>
                         </AlertDialog>
                     </MenuList>
                 </Menu>

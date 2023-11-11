@@ -83,8 +83,8 @@ export const updateGroupTask = (groupTask) => async (dispatch) => {
     }
 }
 
-export const deleteGroupTasl = (groupTaskId) => async (dispatch) => {
-    distpatch({ type: GROUP_TASK_DELETE_REQUEST, payload: groupTaskId });
+export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
+    dispatch({ type: GROUP_TASK_DELETE_REQUEST, payload: groupTaskId });
     try {
         // header is here maybe need it
         // const { userSignin: { userInfo } } = getState();
@@ -107,7 +107,6 @@ export const deleteGroupTasl = (groupTaskId) => async (dispatch) => {
 export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_NAME_UPDATE_REQUEST, payload: groupTaskId });
     try {
-        console.log(groupTaskId, newName);
         const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
         dispatch({ type: GROUP_TASK_NAME_UPDATE_SUCCESS, payload: data.message });
     } catch (error) {
