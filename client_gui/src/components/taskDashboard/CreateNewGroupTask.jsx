@@ -1,12 +1,13 @@
 import { useDispatch } from "react-redux";
-import { createGroupTask } from "../../store/actions/task_manager/group-task.actions";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
+import { useParams } from "react-router-dom";
+import { useCreateGroupTaskDispatch } from '../../utils/DialogAPIRequest';
 
 export const CreateNewGroupTask = (props) => {
-    const dispatch = useDispatch();
+    const useParam = useParams();
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -21,16 +22,20 @@ export const CreateNewGroupTask = (props) => {
     const [description, setDescription] = useState('');
     const [isPriority, setIsPriority] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
-    const [groupTask, setGroupTask] = useState({});
+    const [groupTask] = useState({});
+    const projectId = useParam.id;
 
+    const createNewGroupTask = useCreateGroupTaskDispatch();
     const setObjectGroupTask = (title, description, priority, status) => {
-        setGroupTask({ title, description, priority, status });
+        groupTask.title = title;
+        groupTask.description = description;
+        groupTask.priority = priority;
+        groupTask.status = status;
+        groupTask.projectId = projectId; 
         console.log(groupTask);
-    };
-
-    useEffect(() => {
-        dispatch(createGroupTask(groupTask))
-    }, [dispatch]);
+        createNewGroupTask(groupTask);
+        window.location.reload();
+    }
 
     return (
         <>
@@ -76,8 +81,8 @@ export const CreateNewGroupTask = (props) => {
                                     </Dialog.Title>
                                     {/* Task Title Input */}
                                     <div className="mt-2">
-                                        <label htmlFor="task-title" className="block text-sm font-medium text-gray-700">Title</label>
-                                        <input
+                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700">Title</label>
+                                        <Input
                                             id="task-title"
                                             type="text"
                                             value={newName}
@@ -90,7 +95,7 @@ export const CreateNewGroupTask = (props) => {
                                     {/* Task Description Input */}
                                     <div className="mt-4">
                                         <label htmlFor="task-description" className="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea
+                                        <Textarea
                                             id="task-description"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
@@ -142,6 +147,7 @@ export const CreateNewGroupTask = (props) => {
                                             onClick={() => {
                                                 setObjectGroupTask(newName, description, isPriority, isComplete);
                                                 closeModal();
+                                                // window.location.reload();
                                             }}
                                         >
                                             Create
