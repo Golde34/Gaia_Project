@@ -1,8 +1,10 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
 import { GroupTaskEntity } from "../entities/group-task.entity";
+import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
+import { taskService } from "./task.service";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -103,6 +105,41 @@ class GroupTaskService {
                     await groupTask.save();
                     return msg200({
                         message: 'Group task name updated successfully'
+                    });
+                }
+            }
+            return msg400('Group task not found');
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+
+    // calculate totalTasks, totalTasksCompleted
+    async calculateTotalTasks(groupTaskId: string): Promise<IResponse> {
+        try {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
+                if (groupTask === null) {
+                    return msg400('Group task not found');
+                } else {
+                    const totalTasks = groupTask.tasks.length;
+                    let totalTasksCompleted = 0;
+                    for (let i = 0; i < groupTask.tasks.length; i++) {
+                        const taskId = groupTask.tasks[i];
+                        const task = await TaskEntity.findOne({ _id: taskId });
+                        if (task !== null) {
+                            if (task.status === 'DONE') {
+                                totalTasksCompleted++;
+                            }
+                        } else {
+                            continue;
+                        } 
+                    }
+                    groupTask.totalTasks = totalTasks;
+                    groupTask.totalTasksCompleted = totalTasksCompleted;
+                    await groupTask.save();
+                    return msg200({
+                        message: 'Total tasks in group task calculated successfully'
                     });
                 }
             }
