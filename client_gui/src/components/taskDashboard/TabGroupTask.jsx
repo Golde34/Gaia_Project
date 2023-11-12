@@ -56,8 +56,11 @@ const TabGroupTask = (props) => {
                                         </Flex>
                                         <ProgressBar value={38} className="mt-2 w-300" />
                                     </Col>
-                                    <Col className="mt-4 ms-7">
-                                        <Button>Create new Task</Button>
+                                    <Col numColSpan={2} className="mt-4">
+                                        <div className="flex justify-center">
+                                            <Button id="create-new-task">Create new Task</Button>
+                                        </div>
+
                                     </Col>
                                 </Grid>
                             </div>
