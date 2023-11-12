@@ -1,5 +1,4 @@
 import { IsOptional, IsString } from "class-validator";
-import { Priority, Status } from "../../../loaders/enums";
 
 export class CreateGroupTaskRequestDto {
     @IsString()
@@ -8,10 +7,10 @@ export class CreateGroupTaskRequestDto {
     @IsString()
     description?: string;
     @IsOptional()
-    prioriry?: Priority;
+    prioriry?: string[];
     @IsOptional()
     @IsString()
-    status?: Status;
+    status?: string;
     @IsOptional()
     @IsString()
     tasks?: string[];

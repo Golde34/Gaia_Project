@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { groupTaskService } from "../services/group-task.service";
 import { sendResponse } from "../../../common/response_helpers";
+import { RequestValidator } from "../../../common/error-handler";
+import { CreateGroupTaskRequestDto } from "../dtos/group-task.dto";
+import { plainToInstance } from "class-transformer";
 
 export const groupTaskRouter = Router();
 
@@ -18,12 +21,14 @@ groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 });
 
 // create group task
-groupTaskRouter.post("/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.post("/create",
+    RequestValidator.validate(CreateGroupTaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const createGroupTaskObjectDto = plainToInstance(CreateGroupTaskRequestDto, req.body.body);
         const bodyJson = req.body.body;
-        const groupTask = bodyJson;
         const projectId = bodyJson.projectId;
-        const groupTaskResult = await groupTaskService.createGroupTaskToProject(groupTask, projectId);
+        const groupTaskResult = await groupTaskService.createGroupTaskToProject(createGroupTaskObjectDto, projectId);
 
         sendResponse(groupTaskResult, res, next);
     }
