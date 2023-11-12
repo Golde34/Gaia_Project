@@ -1,11 +1,14 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { subTaskService } from "../services/sub-task.service";
 import { sendResponse } from "../../../common/response_helpers";
+import { RequestValidator } from "../../../common/error-handler";
+import { SubTaskRequestDto } from "../dtos/sub-task.dto";
+import { plainToInstance } from "class-transformer";
 
 export const subTaskRouter = Router();
 
 // get one sub task
-subTaskRouter.get("/:id", async (req, res, next) => {
+subTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const subTaskId = req.params.id;
         const subTaskResult = await subTaskService.getSubTask(subTaskId);
@@ -17,11 +20,15 @@ subTaskRouter.get("/:id", async (req, res, next) => {
 });
 
 // create sub task
-subTaskRouter.post("/create", async (req, res, next) => {
+subTaskRouter.post("/create", 
+    RequestValidator.validate(SubTaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const subTask = req.body;
-        const taskId = req.body.taskId;
-        const subTaskResult = await subTaskService.createSubTask(subTask, taskId);
+        const bodyJson = req.body.body;
+
+        const createSubTaskObjectDto = plainToInstance(SubTaskRequestDto, bodyJson);   
+        const taskId = bodyJson.taskId;
+        const subTaskResult = await subTaskService.createSubTask(createSubTaskObjectDto, taskId);
 
         sendResponse(subTaskResult, res, next);
     } catch (err) {
@@ -30,11 +37,15 @@ subTaskRouter.post("/create", async (req, res, next) => {
 });
 
 // update sub task
-subTaskRouter.put("/:id", async (req, res, next) => {
+subTaskRouter.put("/:id", 
+    RequestValidator.validate(SubTaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+
         const subTaskId = req.params.id;
-        const subTask = req.body;
-        const subTaskResult = await subTaskService.updateSubTask(subTaskId, subTask);
+        const updateSubTaskObjectDto = plainToInstance(SubTaskRequestDto, bodyJson);
+        const subTaskResult = await subTaskService.updateSubTask(updateSubTaskObjectDto, subTaskId);
 
         sendResponse(subTaskResult, res, next);
     } catch (err) {
@@ -43,7 +54,7 @@ subTaskRouter.put("/:id", async (req, res, next) => {
 });
 
 // delete sub task
-subTaskRouter.delete("/:id", async (req, res, next) => {
+subTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const subTaskId = req.params.id;
         const subTaskResult = await subTaskService.deleteSubTask(subTaskId);

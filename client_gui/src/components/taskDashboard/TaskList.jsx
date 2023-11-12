@@ -1,38 +1,24 @@
-import { Flex, ProgressBar, TabPanel, TabPanels, Text } from "@tremor/react"
+import { Card, Flex, Text } from "@tremor/react"
 
 const TaskList = (props) => {
-    // const taskList = props.taskList;
 
-    return (
-        <>
-        <TabPanels>
-          <TabPanel>
-            <div className="mt-10">
-              <Flex className="mt-4">
-                <Text className="w-full">Product Y</Text>
-                <Flex className="space-x-2" justifyContent="end">
-                  <Text>$ 108,799</Text>
-                  <Text>38%</Text>
-                </Flex>
+  const groupTasks = props.groupTasks;
+
+  return (
+    <>
+      <div className="grid grid-cols-3 rounded-sm mt-9">
+        {groupTasks.map((groupTask) => (
+          <div key={groupTask._id} className="ms-2 me-2">
+            <Card className="mt-3" decoration="left" decorationColor="indigo">
+              <Flex justifyContent="between" alignItems="center">
+                <Text>{groupTask.title}</Text>
               </Flex>
-              <ProgressBar value={38} className="mt-2" />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="mt-10">
-              <Flex className="mt-4">
-                <Text className="w-full">Product Z</Text>
-                <Flex className="space-x-2" justifyContent="end">
-                  <Text>$ 99,484</Text>
-                  <Text>16%</Text>
-                </Flex>
-              </Flex>
-              <ProgressBar value={12} className="mt-2" />
-            </div>
-          </TabPanel>
-        </TabPanels>
-        </>
-    )
+            </Card>
+          </div>
+        ))}
+      </div>
+    </>
+  )
 }
 
 export default TaskList;

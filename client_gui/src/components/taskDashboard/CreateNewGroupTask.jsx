@@ -1,10 +1,12 @@
-import { useDispatch } from "react-redux";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useParams } from "react-router-dom";
 import { useCreateGroupTaskDispatch } from '../../utils/DialogAPIRequest';
+import { Grid } from "@tremor/react";
+import CheckBoxIcon from "../icons/CheckboxIcon";
+import RaidoButtonIcon from "../icons/RadioButtonIcon";
 
 export const CreateNewGroupTask = (props) => {
     const useParam = useParams();
@@ -20,21 +22,41 @@ export const CreateNewGroupTask = (props) => {
 
     const [newName, setNewName] = useState("");
     const [description, setDescription] = useState('');
-    const [isPriority, setIsPriority] = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
     const [groupTask] = useState({});
     const projectId = useParam.id;
+    // Radio button
+    const [status, setStatus] = useState('');
+    // Checkbox
+    const [isHighPriority, setIsHighPriority] = useState(false);
+    const [isMediumPriority, setIsMediumPriority] = useState(false);
+    const [isLowPriority, setIsLowPriority] = useState(false);
+    const [isStarPriority, setIsStarPriority] = useState(false);
 
     const createNewGroupTask = useCreateGroupTaskDispatch();
-    const setObjectGroupTask = (title, description, priority, status) => {
+    const setObjectGroupTask = (title, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         groupTask.title = title;
         groupTask.description = description;
-        groupTask.priority = priority;
+        groupTask.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         groupTask.status = status;
-        groupTask.projectId = projectId; 
-        console.log(groupTask);
+        groupTask.projectId = projectId;
         createNewGroupTask(groupTask);
         window.location.reload();
+    }
+    const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
+        let priority = [];
+        if (isHighPriority) {
+            priority.push("HIGH");
+        }
+        if (isMediumPriority) {
+            priority.push("MEDIUM");
+        }
+        if (isLowPriority) {
+            priority.push("LOW");
+        }
+        if (isStarPriority) {
+            priority.push("STAR");
+        }
+        return priority;
     }
 
     return (
@@ -81,7 +103,7 @@ export const CreateNewGroupTask = (props) => {
                                     </Dialog.Title>
                                     {/* Task Title Input */}
                                     <div className="mt-2">
-                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700">Title</label>
+                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Title</label>
                                         <Input
                                             id="task-title"
                                             type="text"
@@ -94,7 +116,7 @@ export const CreateNewGroupTask = (props) => {
 
                                     {/* Task Description Input */}
                                     <div className="mt-4">
-                                        <label htmlFor="task-description" className="block text-sm font-medium text-gray-700">Description</label>
+                                        <label htmlFor="task-description" className="block text-md font-medium text-gray-700 mb-3">Description</label>
                                         <Textarea
                                             id="task-description"
                                             value={description}
@@ -106,30 +128,138 @@ export const CreateNewGroupTask = (props) => {
 
                                     {/* Priority Checkbox */}
                                     <div className="mt-4">
-                                        <label htmlFor="priority-checkbox" className="inline-flex items-center">
-                                            <input
-                                                id="priority-checkbox"
-                                                type="checkbox"
-                                                checked={isPriority}
-                                                onChange={(e) => setIsPriority(e.target.checked)}
-                                                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                            />
-                                            <span className="ml-2 text-sm text-gray-700">Priority</span>
-                                        </label>
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
+                                        <div className="grid grid-cols-4 m-2">
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    for="priority-checkbos-high" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-high"
+                                                        type="checkbox"
+                                                        checked={isHighPriority}
+                                                        onChange={() => setIsHighPriority(!isHighPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-red-500 checked:bg-red-500 checked:before:bg-red-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">High</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    for="priority-checkbos-medium" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-medium"
+                                                        type="checkbox"
+                                                        checked={isMediumPriority}
+                                                        onChange={() => setIsMediumPriority(!isMediumPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Medium</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    for="priority-checkbos-low" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-low"
+                                                        type="checkbox"
+                                                        checked={isLowPriority}
+                                                        onChange={() => setIsLowPriority(!isLowPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:bg-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Low</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    for="priority-checkbos-star" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-star"
+                                                        type="checkbox"
+                                                        checked={isStarPriority}
+                                                        onChange={() => setIsStarPriority(!isStarPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:bg-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Star</label>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     {/* Status Checkbox */}
                                     <div className="mt-4">
-                                        <label htmlFor="status-checkbox" className="inline-flex items-center">
-                                            <input
-                                                id="status-checkbox"
-                                                type="checkbox"
-                                                checked={isComplete}
-                                                onChange={(e) => setIsComplete(e.target.checked)}
-                                                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                            />
-                                            <span className="ml-2 text-sm text-gray-700">Complete</span>
-                                        </label>
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
+                                        <div className="grid grid-cols-3 m-2">
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-todo" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-todo"
+                                                        type="radio"
+                                                        value="TODO"
+                                                        checked={status === 'TODO'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RaidoButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-todo">
+                                                    TO DO
+                                                </label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-doing" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-doing"
+                                                        type="radio"
+                                                        value="IN_PROGRESS"
+                                                        checked={status === 'IN_PROGRESS'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RaidoButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-doing">
+                                                    IN PROGRESS
+                                                </label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-done" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-done"
+                                                        type="radio"
+                                                        value="DONE"
+                                                        checked={status === 'DONE'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RaidoButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-done">
+                                                    DONE
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     {/* Action Buttons */}
@@ -145,7 +275,7 @@ export const CreateNewGroupTask = (props) => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                setObjectGroupTask(newName, description, isPriority, isComplete);
+                                                setObjectGroupTask(newName, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
                                                 // window.location.reload();
                                             }}

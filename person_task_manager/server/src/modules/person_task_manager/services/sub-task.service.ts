@@ -1,7 +1,6 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
 import { SubTaskEntity } from "../entities/sub-task.entity";
-import { TaskEntity } from "../entities/task.entity";
 import { subTaskValidation } from "../validations/sub-task.validation";
 import { taskService } from "./task.service";
 
@@ -31,7 +30,7 @@ class SubTaskService {
         }
     }
 
-    async updateSubTask(subTaskId: string, subTask: any): Promise<IResponse> {
+    async updateSubTask(subTask: any, subTaskId: string): Promise<IResponse> {
         try {
             if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const updateSubTask = await SubTaskEntity.updateOne({ _id: subTaskId }, subTask);
@@ -50,11 +49,8 @@ class SubTaskService {
         try {
             if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const deleteSubTask = await SubTaskEntity.deleteOne({ _id: subTaskId });
-                if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
-                    taskServiceImpl.updateManyTasks({ data: { subTasks: subTaskId } },
-                        { $pull: { subTasks: subTaskId } });
-                }
-
+                taskServiceImpl.updateManySubTasksInTask(subTaskId);
+ 
                 return msg200({
                     message: (deleteSubTask as any)
                 });

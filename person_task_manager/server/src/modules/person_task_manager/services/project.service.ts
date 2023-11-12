@@ -76,8 +76,8 @@ class ProjectService {
         });
     }
 
-    async updateManyProjects(data: any, project: any): Promise<IResponse> {
-        const updateManyProjects = await ProjectEntity.updateMany({data}, project);
+    async updateManyProjects(groupTaskId: string): Promise<IResponse> {
+        const updateManyProjects = await ProjectEntity.updateMany({groupTasks: groupTaskId}, {$pull: {groupTasks: groupTaskId}});
         
         return msg200({
             message: (updateManyProjects as any)

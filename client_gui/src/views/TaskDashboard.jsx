@@ -3,14 +3,14 @@ import Template from "./template";
 import { useEffect } from "react";
 import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
-import { Metric } from "@tremor/react";
+import { Metric, Text } from "@tremor/react";
 import TabGroupTask from "../components/taskDashboard/TabGroupTask";
 import TaskList from "../components/taskDashboard/TaskList";
 
 function ContentArea() {
-
     const projectId = useParams().id;
     const dispatch = useDispatch();
+
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
 
@@ -20,23 +20,21 @@ function ContentArea() {
 
     return (
         <div>
-            { loading ? (
-                <p> Loading </p>    
+            {loading ? (
+                <Text>Loading...</Text>
             ) : error ? (
-                <p> Error </p>
+                <Text>{error}</Text>
             ) : (
                 <>
-                <Metric style={{marginBottom:'30px', marginTop:'30px'}} 
-                    className="text-2xl font-bold text-gray-800"> Group Tasks
-                </Metric>
-                <div className="gird md:grid-cols-3 w-full">
+                    <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
+                        className="text-2xl font-bold text-gray-800"> Group Tasks
+                    </Metric>
                     <TabGroupTask groupTasks={groupTasks} >
-                        <TaskList></TaskList>
+                        <TaskList groupTasks={groupTasks}></TaskList>
                     </TabGroupTask>
-                </div>
                 </>
-            )    
-        }
+            )
+            }
         </div>
     )
 }

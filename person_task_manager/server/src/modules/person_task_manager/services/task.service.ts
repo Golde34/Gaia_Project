@@ -49,10 +49,7 @@ class TaskService {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
-                if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                    groupTaskServiceImpl.updateManyGroupTasks({ data: { tasks: taskId } },
-                        { $pull: { tasks: taskId } });
-                }
+                groupTaskServiceImpl.updateManyTasksInGroupTask(taskId);
 
                 return msg200({
                     message: (deleteTask as any)
@@ -94,8 +91,16 @@ class TaskService {
         });
     }
 
-    async updateManyTasks(filter: any, update: any): Promise<IResponse> {
-        const updateManyTasks = await TaskEntity.updateMany({ filter }, update);
+    async updateManyCommentsInTask(commentId: string): Promise<IResponse> {
+        const updateManyTasks = await TaskEntity.updateMany({ comments: commentId }, { $pull: { comments: commentId } });
+
+        return msg200({
+            message: (updateManyTasks as any)
+        });
+    }
+
+    async updateManySubTasksInTask(subTaskId: string): Promise<IResponse> {
+        const updateManyTasks = await TaskEntity.updateMany({ subTasks: subTaskId }, { $pull: { subTasks: subTaskId } });
 
         return msg200({
             message: (updateManyTasks as any)

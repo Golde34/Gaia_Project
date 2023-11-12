@@ -3,11 +3,12 @@ import {
   ArrowUpIcon,
   BellIcon,
   ChartBarIcon,
-  CreditCardIcon,
+  ClipboardCheckIcon,
   DocumentSearchIcon,
   ExternalLinkIcon,
   HomeIcon,
   MailIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/solid";
 import { Button } from "@tremor/react";
 
@@ -20,6 +21,16 @@ const Sidebar = () => {
         </a>
       </div>
       <div className="fixed left-3 sm:left-6 top-[100px]">
+        <ShieldCheckIcon
+          width={40}
+          className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
+        />
+        <a href="/client-gui/project">
+          <Button variant="primary" color="indigo"
+            className="p-2 rounded-lg mb-4">
+            <ClipboardCheckIcon width={20} />
+          </Button>
+        </a>
         <ChartBarIcon
           width={40}
           className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
@@ -38,12 +49,10 @@ const Sidebar = () => {
             className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
           />
         </a> */}
-        <a href="/client-gui/project">
-          <Button variant="primary"
-            className="p-2" color="indigo">
-            <BellIcon width={20} />
-          </Button>
-        </a>
+        <BellIcon
+          width={40}
+          className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
+        />
       </div>
       <div className="fixed bottom-4 left-3 sm:left-6">
         <a href="#top">
