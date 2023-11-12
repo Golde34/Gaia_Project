@@ -1,6 +1,7 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
 import { GroupTaskEntity } from "../entities/group-task.entity";
+import { ProjectEntity } from "../entities/project.entity";
 import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
@@ -148,14 +149,23 @@ class GroupTaskService {
     async updateOrdinalNumber(projectId:string, groupTaskId: string): Promise<IResponse> {
        try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-                if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                    projectServiceImpl.updateManyProjects(groupTaskId);
+                const project = await ProjectEntity.findOne({ _id: projectId });
+                if (project === null) {
+                    return msg400('Project not found');
+                } else {
+                    const groupTasks = project.groupTasks;
+                    const groupTaskIndex = groupTasks.indexOf(groupTaskId);
+                    if (groupTaskIndex > -1) {
+                        // Remove the group task from its current position
+                        groupTasks.splice(groupTaskIndex, 1);
+                        // Move the group task to the beginning of the array
+                        groupTasks.unshift(groupTaskId);
+                    }
+                    projectServiceImpl.updateOrdinalNumber(projectId, groupTasks);
+                    return msg200({
+                        message: 'Ordinal number in group task updated successfully'
+                    });
                 }
-
-                return msg200({
-                    message: (deleteGroupTask as any)
-                });
             } else {
                 return msg400('Group task not found');
             }
