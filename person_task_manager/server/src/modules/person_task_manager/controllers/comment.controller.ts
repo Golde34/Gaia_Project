@@ -1,11 +1,14 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { sendResponse } from "../../../common/response_helpers";
 import { commentService } from "../services/comment.service";
+import { RequestValidator } from "../../../common/error-handler";
+import { CommentRequestDto } from "../dtos/comment.dto";
+import { plainToInstance } from "class-transformer";
 
 export const commentRouter = Router();
 
 // get one comment
-commentRouter.get("/:id", async (req, res, next) => {
+commentRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const commentId = req.params.id;
         const commentResult = await commentService.getComment(commentId);
@@ -17,10 +20,14 @@ commentRouter.get("/:id", async (req, res, next) => {
 });
 
 // create comment
-commentRouter.post("/create", async (req, res, next) => {
+commentRouter.post("/create", 
+    RequestValidator.validate(CommentRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const comment = req.body;
-        const taskId = req.body.taskId;        
+        const bodyJson = req.body.body;
+        
+        const comment = plainToInstance(CommentRequestDto, bodyJson);
+        const taskId = bodyJson.taskId;
         const commentResult = await commentService.createComment(comment, taskId);
 
         sendResponse(commentResult, res, next);
@@ -30,10 +37,14 @@ commentRouter.post("/create", async (req, res, next) => {
 });
 
 // update comment
-commentRouter.put("/:id", async (req, res, next) => {
+commentRouter.put("/:id", 
+    RequestValidator.validate(CommentRequestDto),
+    async (req: Request, res: Response, next:NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+
         const commentId = req.params.id;
-        const comment = req.body;        
+        const comment = plainToInstance(CommentRequestDto, bodyJson);        
         const commentResult = await commentService.updateComment(commentId, comment);
 
         sendResponse(commentResult, res, next);
@@ -43,7 +54,7 @@ commentRouter.put("/:id", async (req, res, next) => {
 });
 
 // delete comment
-commentRouter.delete("/:id", async (req, res, next) => {
+commentRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const commentId = req.params.id;
         const commentResult = await commentService.deleteComment(commentId);

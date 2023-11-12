@@ -3,6 +3,9 @@ import { taskService } from "../services/task.service";
 import { sendResponse } from "../../../common/response_helpers";
 import { checkPermission, checkToken } from "../../user_authentication/auth.middleware";
 import { Permission } from "../../../loaders/enums";
+import { plainToInstance } from "class-transformer";
+import { RequestValidator } from "../../../common/error-handler";
+import { TaskRequestDto } from "../dtos/task.dto";
 
 export const taskRouter = Router();
 
@@ -35,11 +38,15 @@ taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): 
 });
 
 // create task
-taskRouter.post("/create", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.post("/create", 
+    RequestValidator.validate(TaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const task = req.body;
-        const groupTaskId = req.body.groupTaskId;
-        const taskResult = await taskService.createTaskInGroupTask(task, groupTaskId);
+        const bodyJson = req.body.body;
+
+        const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
+        const groupTaskId = bodyJson.groupTaskId;
+        const taskResult = await taskService.createTaskInGroupTask(createTaskObjectDto, groupTaskId);
 
         sendResponse(taskResult, res, next);
     }
@@ -49,11 +56,15 @@ taskRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 });
 
 // update task
-taskRouter.put("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.put("/:id", 
+    RequestValidator.validate(TaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+
         const taskId = req.params.id;
-        const task = req.body;
-        const taskResult = await taskService.updateTask(taskId, task);
+        const updateTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
+        const taskResult = await taskService.updateTask(taskId, updateTaskObjectDto);
 
         sendResponse(taskResult, res, next);
     }

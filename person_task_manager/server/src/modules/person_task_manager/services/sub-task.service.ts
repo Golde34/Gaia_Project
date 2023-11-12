@@ -31,7 +31,7 @@ class SubTaskService {
         }
     }
 
-    async updateSubTask(subTaskId: string, subTask: any): Promise<IResponse> {
+    async updateSubTask(subTask: any, subTaskId: string): Promise<IResponse> {
         try {
             if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const updateSubTask = await SubTaskEntity.updateOne({ _id: subTaskId }, subTask);

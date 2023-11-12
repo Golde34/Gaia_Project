@@ -27,7 +27,7 @@ groupTaskRouter.post("/create",
     try {
         const bodyJson = req.body.body;
 
-        const createGroupTaskObjectDto = plainToInstance(GroupTaskRequestDto, req.body.body);
+        const createGroupTaskObjectDto = plainToInstance(GroupTaskRequestDto, bodyJson);
         const projectId = bodyJson.projectId;
         const groupTaskResult = await groupTaskService.createGroupTaskToProject(createGroupTaskObjectDto, projectId);
 
@@ -43,8 +43,10 @@ groupTaskRouter.put("/:id",
     RequestValidator.validate(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const bodyJson = req.body.body;
+
         const groupTaskId = req.params.id;
-        const groupTask = plainToInstance(GroupTaskRequestDto, req.body.body);
+        const groupTask = plainToInstance(GroupTaskRequestDto, bodyJson);
         const groupTaskResult = await groupTaskService.updateGroupTask(groupTaskId, groupTask);
 
         sendResponse(groupTaskResult, res, next);
