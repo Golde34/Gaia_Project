@@ -4,7 +4,6 @@ import { GroupTaskEntity } from "../entities/group-task.entity";
 import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
-import { taskService } from "./task.service";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -54,10 +53,7 @@ class GroupTaskService {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-                if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                    projectServiceImpl.updateManyProjects({ data: { groupTasks: groupTaskId } },
-                        { $pull: { groupTasks: groupTaskId } });
-                }
+                await projectServiceImpl.updateManyProjects(groupTaskId);
 
                 return msg200({
                     message: (deleteGroupTask as any)
@@ -86,8 +82,8 @@ class GroupTaskService {
         });
     }
 
-    async updateManyGroupTasks(filter: any, update: any): Promise<IResponse> {
-        const updateManyGroupTasks = await GroupTaskEntity.updateMany({ filter }, update);
+    async updateManyTasksInGroupTask(taskId: string): Promise<IResponse> {
+        const updateManyGroupTasks = await GroupTaskEntity.updateMany({ tasks: taskId }, { $pull: { tasks: taskId } });
 
         return msg200({
             message: (updateManyGroupTasks as any)
@@ -147,6 +143,25 @@ class GroupTaskService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
+
+    async updateOrdinalNumber(projectId:string, groupTaskId: string): Promise<IResponse> {
+       try {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
+                if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                    projectServiceImpl.updateManyProjects(groupTaskId);
+                }
+
+                return msg200({
+                    message: (deleteGroupTask as any)
+                });
+            } else {
+                return msg400('Group task not found');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        } 
     }
 
     // disable groupTask

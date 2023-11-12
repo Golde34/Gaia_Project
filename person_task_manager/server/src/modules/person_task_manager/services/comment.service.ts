@@ -50,6 +50,7 @@ class CommentService {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
                 const deleteComment = await CommentEntity.deleteOne({ _id: commentId });
+                taskServiceImpl.updateManyCommentsInTask(commentId); 
 
                 return msg200({
                     message: (deleteComment as any)
