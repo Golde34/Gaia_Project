@@ -112,3 +112,19 @@ groupTaskRouter.put("/:id/calculate-total-tasks", async (req: Request, res: Resp
         next(err);
     }
 });
+
+// update ordinal number
+groupTaskRouter.put("/:id/update-ordinal-number", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const bodyJson = req.body.body;
+
+        const projectId = bodyJson.projectId;
+        const groupTaskId = req.params.id;
+        const groupTaskResult = await groupTaskService.updateOrdinalNumber(projectId, groupTaskId);
+
+        sendResponse(groupTaskResult, res, next);
+    }
+    catch (err) {
+        next(err);
+    }
+});

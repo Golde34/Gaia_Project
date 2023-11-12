@@ -84,6 +84,14 @@ class ProjectService {
         });
     }
 
+    async updateOrdinalNumber(projectId: string, groupTasks: string[]): Promise<IResponse> {
+        const updateProject = await ProjectEntity.updateMany({_id: projectId}, {groupTasks: groupTasks});
+
+        return msg200({
+            message: (updateProject as any)
+        });
+    }
+
     // disable project
 
     // enable project
