@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { groupTaskService } from "../services/group-task.service";
 import { sendResponse } from "../../../common/response_helpers";
 import { RequestValidator } from "../../../common/error-handler";
-import { CreateGroupTaskRequestDto } from "../dtos/group-task.dto";
+import { GroupTaskRequestDto, updateGroupTaskNameRequestDto } from "../dtos/group-task.dto";
 import { plainToInstance } from "class-transformer";
 
 export const groupTaskRouter = Router();
@@ -22,11 +22,12 @@ groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 
 // create group task
 groupTaskRouter.post("/create",
-    RequestValidator.validate(CreateGroupTaskRequestDto),
+    RequestValidator.validate(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const createGroupTaskObjectDto = plainToInstance(CreateGroupTaskRequestDto, req.body.body);
         const bodyJson = req.body.body;
+
+        const createGroupTaskObjectDto = plainToInstance(GroupTaskRequestDto, req.body.body);
         const projectId = bodyJson.projectId;
         const groupTaskResult = await groupTaskService.createGroupTaskToProject(createGroupTaskObjectDto, projectId);
 
@@ -38,10 +39,12 @@ groupTaskRouter.post("/create",
 });
 
 // update group task
-groupTaskRouter.put("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.put("/:id", 
+    RequestValidator.validate(GroupTaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
-        const groupTask = req.body;
+        const groupTask = plainToInstance(GroupTaskRequestDto, req.body.body);
         const groupTaskResult = await groupTaskService.updateGroupTask(groupTaskId, groupTask);
 
         sendResponse(groupTaskResult, res, next);
@@ -78,7 +81,9 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
 });
 
 // update Group task name
-groupTaskRouter.put("/:id/update-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.put("/:id/update-name", 
+    RequestValidator.validate(updateGroupTaskNameRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const bodyJson = req.body.body;
         

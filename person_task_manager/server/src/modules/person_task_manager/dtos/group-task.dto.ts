@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from "class-validator";
 
-export class CreateGroupTaskRequestDto {
+export class GroupTaskRequestDto {
     @IsString()
     title!: string;
     @IsOptional()
@@ -16,4 +16,9 @@ export class CreateGroupTaskRequestDto {
     tasks?: string[];
     @IsString()
     projectId!: string;
+}
+
+export class updateGroupTaskNameRequestDto {
+    @IsString()
+    title!: string;
 }
