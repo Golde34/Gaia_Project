@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { createGroupTask, updateGroupTaskName, deleteGroupTask } from "../store/actions/task_manager/group-task.actions";
+import { createProject } from "../store/actions/task_manager/project.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -48,3 +49,13 @@ export const useCreateGroupTaskDispatch = () => {
 
     return createGroupTaskDispatch;
 };
+
+export const useCreateProjectDispatch = () => {
+    const dispatch = useDispatch();
+
+    const createProjectDispatch = (project) => {
+        dispatch(createProject(project));
+    }
+
+    return createProjectDispatch;
+}
