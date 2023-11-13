@@ -5,6 +5,7 @@ import { getProjects } from "../store/actions/task_manager/project.actions";
 import Template from "./template";
 import CardButton from "../components/subComponents/CardButton";
 import { Button, Card, Metric, Text, Title } from "@tremor/react";
+import { CreateNewProject } from "../components/projectScreen/CreateNewProject";
 
 function ContentArea() {
     const dispatch = useDispatch();
@@ -35,9 +36,7 @@ function ContentArea() {
                             </div>
                         ))}
                         <div key={'create-project'} className="m-3 flex justify-center">
-                            <Card className="flex flex-col justify-center items-center border-dashed border-2 border-sky-500 hover:border-solid hover:cursor-pointer text-center font-bold w-full h-full">
-                                <Title> Create Project </Title>
-                            </Card>
+                            <CreateNewProject />
                         </div>
                     </div>
 

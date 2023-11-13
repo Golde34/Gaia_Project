@@ -1,4 +1,4 @@
-const RaidoButtonIcon = () => {
+const RadioButtonIcon = () => {
 
     return (
         <svg
@@ -12,4 +12,4 @@ const RaidoButtonIcon = () => {
     )
 }
 
-export default RaidoButtonIcon;
+export default RadioButtonIcon;

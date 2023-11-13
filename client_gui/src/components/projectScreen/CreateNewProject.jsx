@@ -1,15 +1,15 @@
-import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { PlusIcon } from "@heroicons/react/outline";
-import { useParams } from "react-router-dom";
-import { useCreateGroupTaskDispatch } from '../../utils/DialogAPIRequest';
-import { Grid } from "@tremor/react";
+import { Card, Title } from "@tremor/react";
+import { Fragment, useState } from "react";
+import { useParams } from "react-router-dom"
 import CheckBoxIcon from "../icons/CheckboxIcon";
-import RaidoButtonIcon from "../icons/RadioButtonIcon";
+import RadioButtonIcon from "../icons/RadioButtonIcon";
 
-export const CreateNewGroupTask = (props) => {
+export const CreateNewProject = () => {
     const useParam = useParams();
+
+    let projectId = useParam.projectId;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -23,8 +23,7 @@ export const CreateNewGroupTask = (props) => {
     const [newName, setNewName] = useState("");
     const [description, setDescription] = useState('');
     const [groupTask] = useState({});
-    const projectId = useParam.id;
-    // Radio button
+     // Radio button
     const [status, setStatus] = useState('');
     // Checkbox
     const [isHighPriority, setIsHighPriority] = useState(false);
@@ -32,42 +31,12 @@ export const CreateNewGroupTask = (props) => {
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
 
-    const createNewGroupTask = useCreateGroupTaskDispatch();
-    const setObjectGroupTask = (title, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        groupTask.title = title;
-        groupTask.description = description;
-        groupTask.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
-        groupTask.status = status;
-        groupTask.projectId = projectId;
-        createNewGroupTask(groupTask);
-        window.location.reload();
-    }
-    const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        let priority = [];
-        if (isHighPriority) {
-            priority.push("HIGH");
-        }
-        if (isMediumPriority) {
-            priority.push("MEDIUM");
-        }
-        if (isLowPriority) {
-            priority.push("LOW");
-        }
-        if (isStarPriority) {
-            priority.push("STAR");
-        }
-        return priority;
-    }
-
     return (
         <>
-            <button
-                className="text-white"
-                type="button"
-                onClick={openModal}
-            >
-                <PlusIcon className="w-6" />
-            </button>
+            <Card className="flex flex-col justify-center items-center border-dashed border-2 border-sky-500 hover:border-solid hover:cursor-pointer text-center font-bold w-full h-full"
+                onClick={openModal}>
+                <Title> Create Project </Title>
+            </Card>
 
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -214,7 +183,7 @@ export const CreateNewGroupTask = (props) => {
                                                         class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
                                                     <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RaidoButtonIcon />
+                                                        <RadioButtonIcon />
                                                     </div>
                                                 </label>
                                                 <label class="text-sm text-gray-700" for="status-radio-todo">
@@ -233,7 +202,7 @@ export const CreateNewGroupTask = (props) => {
                                                         class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
                                                     <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RaidoButtonIcon />
+                                                        <RadioButtonIcon />
                                                     </div>
                                                 </label>
                                                 <label class="text-sm text-gray-700" for="status-radio-doing">
@@ -252,7 +221,7 @@ export const CreateNewGroupTask = (props) => {
                                                         class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
                                                     <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RaidoButtonIcon />
+                                                        <RadioButtonIcon />
                                                     </div>
                                                 </label>
                                                 <label class="text-sm text-gray-700" for="status-radio-done">
