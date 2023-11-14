@@ -1,7 +1,7 @@
 import { ArrowCircleRightIcon, TagIcon, UserGroupIcon } from "@heroicons/react/solid";
 import { Button, Card, Col, Flex, Grid, ProgressBar, Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
 import { useState } from "react";
-import EllipsisMenu from "./EllipsisMenu";
+import EllipsisMenu from "../subComponents/EllipsisMenu";
 import { CreateNewGroupTask } from "./CreateNewGroupTask";
 
 const TabGroupTask = (props) => {
@@ -32,9 +32,10 @@ const TabGroupTask = (props) => {
                             }
                         >
                             <div className="grid grid-flow-col gap-4">
-                                <div className="col-span-2" >{groupTask.title}</div>
+                                <div className="col-span-2 mt-1" >{groupTask.title}</div>
                                 <div className="col-span-2" >
-                                    <EllipsisMenu elementName="Group Task" elementId={groupTask._id} />
+                                    <EllipsisMenu color="white" backgroundColor="#111827"
+                                        elementName="Group Task" elementId={groupTask._id} />
                                 </div>
                             </div>
                         </Tab>

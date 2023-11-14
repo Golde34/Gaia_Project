@@ -1,5 +1,6 @@
-import { BadgeDelta, Button, Card, Flex, Metric, Text } from "@tremor/react";
+import { Badge, Button, Card, Flex, Metric, Text } from "@tremor/react";
 import { useNavigate } from "react-router-dom";
+import EllipsisMenu from "./EllipsisMenu";
 
 const CardButton = (props) => {
 
@@ -9,7 +10,10 @@ const CardButton = (props) => {
         <Card className="w-xs" decoration="top" decorationColor="indigo">
             <Flex justifyContent="between" alignItems="center">
                 <Metric>{props.name}</Metric>
-                <BadgeDelta deltaType="moderateIncrease">+12.5%</BadgeDelta>
+                <Badge color={'green'}>
+                    <EllipsisMenu color='green' backgroundColor="#164335"
+                        elementName="Project" id={props._id} />
+                </Badge>
             </Flex>
 
             <Flex className="mt-4">
