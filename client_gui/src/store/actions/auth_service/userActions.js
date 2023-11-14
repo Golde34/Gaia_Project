@@ -15,6 +15,8 @@ export const authenticate = async () => {
     const data = await JSON.stringify(response.data);
     if (data !== null && data !== undefined && data !== '') {
         localStorage.setItem('gaiaToken', data);
+        // temporary
+        localStorage.setItem('userId', 1);
         console.log('GAIA is activated');
         return data;
     } else {

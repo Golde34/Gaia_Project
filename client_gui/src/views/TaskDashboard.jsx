@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
 import { Metric, Text } from "@tremor/react";
-import TabGroupTask from "../components/taskDashboard/TabGroupTask";
-import TaskList from "../components/taskDashboard/TaskList";
+import TabGroupTask from "../components/taskDashboardScreen/TabGroupTask";
+import TaskList from "../components/taskDashboardScreen/TaskList";
 
 function ContentArea() {
     const projectId = useParams().id;
