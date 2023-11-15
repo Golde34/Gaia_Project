@@ -31,7 +31,7 @@ function ContentArea() {
                         {projects.map((project) => (
                             <div key={project._id} className="m-3">
                                 <CardButton name={project.name} description={project.description}
-                                    url={`/project/${project._id}`} buttonText="View Project" id={project._id}
+                                    url={`/project/${project._id}`} buttonText="View Project" elementId={project._id}
                                 />
                             </div>
                         ))}

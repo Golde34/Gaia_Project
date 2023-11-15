@@ -3,6 +3,9 @@ import { PROJECT_CREATE_FAIL, PROJECT_CREATE_REQUEST, PROJECT_CREATE_SUCCESS, PR
     PROJECT_DELETE_REQUEST, PROJECT_DELETE_SUCCESS, PROJECT_DETAIL_FAIL, 
     PROJECT_DETAIL_REQUEST, PROJECT_DETAIL_SUCCESS, PROJECT_LIST_FAIL, 
     PROJECT_LIST_REQUEST, PROJECT_LIST_SUCCESS, 
+    PROJECT_NAME_UPDATE_FAIL, 
+    PROJECT_NAME_UPDATE_REQUEST, 
+    PROJECT_NAME_UPDATE_SUCCESS, 
     PROJECT_UPDATE_FAIL, PROJECT_UPDATE_REQUEST, PROJECT_UPDATE_SUCCESS 
 } from "../../constants/task_manager/project.constants";
 
@@ -96,6 +99,21 @@ export const deleteProject = (projectId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: PROJECT_DELETE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
+
+export const updateProjectName = (projectId, newName) => async (dispatch) => {
+    dispatch({ type: PROJECT_NAME_UPDATE_REQUEST, payload: projectId });
+    try {
+        const { data } = await serverRequest(`/project/${projectId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
+        dispatch({ type: PROJECT_NAME_UPDATE_SUCCESS, payload: data.message });
+    } catch (error) {
+        dispatch({
+            type: PROJECT_NAME_UPDATE_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,

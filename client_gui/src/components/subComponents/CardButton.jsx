@@ -12,7 +12,7 @@ const CardButton = (props) => {
                 <Metric>{props.name}</Metric>
                 <Badge color={'green'}>
                     <EllipsisMenu color='green' backgroundColor="#164335"
-                        elementName="Project" id={props._id} />
+                        elementName="Project" elementId={props.elementId} />
                 </Badge>
             </Flex>
 

@@ -1,12 +1,15 @@
 import { useDispatch } from "react-redux";
 import { createGroupTask, updateGroupTaskName, deleteGroupTask } from "../store/actions/task_manager/group-task.actions";
-import { createProject } from "../store/actions/task_manager/project.actions";
+import { createProject, deleteProject, updateProjectName } from "../store/actions/task_manager/project.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
 
     const updateComponentNameDispatch = (id, newName, field) => {
         switch (field) {
+            case "Project":
+                dispatch(updateProjectName(id, newName));
+                break;
             case "Group Task":
                 dispatch(updateGroupTaskName(id, newName));
                 break;
@@ -21,6 +24,9 @@ export const useDeleteComponentDispatch = () => {
 
     const deleteComponentDispatch = (groupTaskId, field) => {
         switch (field) {
+            case "Project":
+                dispatch(deleteProject(groupTaskId));
+                break;
             case "Group Task":
                 dispatch(deleteGroupTask(groupTaskId));
                 break;

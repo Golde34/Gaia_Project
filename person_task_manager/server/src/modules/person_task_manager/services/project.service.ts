@@ -92,6 +92,26 @@ class ProjectService {
         });
     }
 
+    async updateProjectName(projectId: string, name: string): Promise<IResponse> {
+        try {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
+                const project = await ProjectEntity.findOne({_id: projectId});
+                if (project === null) {
+                    return msg400("Project not found");
+                } else {
+                    project.name = name;
+                    await project.save();
+                    return msg200({
+                        message: "Project name updated successfully"
+                    });
+                }
+            }
+            return msg400("Project not found");
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
+    
     // disable project
 
     // enable project

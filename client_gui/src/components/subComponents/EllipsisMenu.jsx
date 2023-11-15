@@ -23,7 +23,7 @@ const EllipsisMenu = (props) => {
                 >
                     <MenuHandler>
                         <Badge color={props.backgroundColor}>
-                            <Button style={{
+                            <Button style={{ 
                                 padding: 0, color: props.color, 
                                 backgroundColor: props.backgroundColor,
                             }}>
