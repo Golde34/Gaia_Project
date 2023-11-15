@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { sendResponse } from "../../../common/response_helpers";
 import { projectService } from "../services/project.service";
 import { RequestValidator } from "../../../common/error-handler";
-import { ProjectRequestDto } from "../dtos/project.dto";
+import { ProjectRequestDto, UpdateColorDto } from "../dtos/project.dto";
 import { plainToInstance } from "class-transformer";
 import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
 
@@ -89,7 +89,7 @@ projectRouter.get("/:id/group-tasks", async (req: Request, res: Response, next: 
     }
 });
 
-// update Group task name
+// update Project name
 projectRouter.put("/:id/update-name", 
     RequestValidator.validate(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -105,6 +105,23 @@ projectRouter.put("/:id/update-name",
         sendResponse(projectResult, res, next);
     }
     catch (err) {
+        next(err);
+    }
+});
+
+// update Project color
+projectRouter.put("/:id/update-color",
+    RequestValidator.validate(UpdateColorDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const bodyJson = req.body.body;
+
+        const projectId = req.params.id;
+        const color = bodyJson.color;
+        const projectResult = await projectService.updateProjectColor(projectId, color);
+
+        sendResponse(projectResult, res, next);
+    } catch (err) {
         next(err);
     }
 });
