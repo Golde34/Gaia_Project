@@ -22,14 +22,9 @@ const EllipsisMenu = (props) => {
                     }}
                 >
                     <MenuHandler>
-                        <Badge color={props.backgroundColor}>
-                            <Button style={{ 
-                                padding: 0, color: props.color, 
-                                backgroundColor: props.backgroundColor,
-                            }}>
-                                <EllipsisIcon />
-                            </Button>
-                        </ Badge>
+                        <Button style={{ padding: 0 }}>
+                            <EllipsisIcon width={60} />
+                        </Button>
                     </MenuHandler>
                     <MenuList className="grid grid-rows-3 rounded-md bg-white">
                         <InputDialog

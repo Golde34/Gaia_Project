@@ -10,10 +10,7 @@ const CardButton = (props) => {
         <Card className="w-xs" decoration="top" decorationColor="indigo">
             <Flex justifyContent="between" alignItems="center">
                 <Metric>{props.name}</Metric>
-                <Badge color={'green'}>
-                    <EllipsisMenu color='green' backgroundColor="#164335"
-                        elementName="Project" elementId={props.elementId} />
-                </Badge>
+                <EllipsisMenu elementName="Project" elementId={props.elementId} />
             </Flex>
 
             <Flex className="mt-4">
