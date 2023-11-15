@@ -21,7 +21,7 @@ export const InputDialog = (props) => {
     }
 
     const spaceBug = document.getElementById("space-bug");
-    if (spaceBug !== null) { 
+    if (spaceBug !== null && props.elementName === "Group Task") { 
         spaceBug.addEventListener('keydown', function(e) {
             if (e.keyCode === 32) {
                 setNewName(newName + " ");

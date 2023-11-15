@@ -2,8 +2,9 @@ import { NextFunction, Request, Response, Router } from "express";
 import { groupTaskService } from "../services/group-task.service";
 import { sendResponse } from "../../../common/response_helpers";
 import { RequestValidator } from "../../../common/error-handler";
-import { GroupTaskRequestDto, updateGroupTaskNameRequestDto } from "../dtos/group-task.dto";
+import { GroupTaskRequestDto } from "../dtos/group-task.dto";
 import { plainToInstance } from "class-transformer";
+import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
 
 export const groupTaskRouter = Router();
 
@@ -84,7 +85,7 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
 
 // update Group task name
 groupTaskRouter.put("/:id/update-name", 
-    RequestValidator.validate(updateGroupTaskNameRequestDto),
+    RequestValidator.validate(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const bodyJson = req.body.body;

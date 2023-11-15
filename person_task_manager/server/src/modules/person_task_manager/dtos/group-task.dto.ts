@@ -17,8 +17,3 @@ export class GroupTaskRequestDto {
     @IsString()
     projectId!: string;
 }
-
-export class updateGroupTaskNameRequestDto {
-    @IsString()
-    title!: string;
-}

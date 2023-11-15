@@ -4,6 +4,7 @@ import { projectService } from "../services/project.service";
 import { RequestValidator } from "../../../common/error-handler";
 import { ProjectRequestDto } from "../dtos/project.dto";
 import { plainToInstance } from "class-transformer";
+import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
 
 export const projectRouter = Router();
 
@@ -88,4 +89,22 @@ projectRouter.get("/:id/group-tasks", async (req: Request, res: Response, next: 
     }
 });
 
+// update Group task name
+projectRouter.put("/:id/update-name", 
+    RequestValidator.validate(updateNameRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const bodyJson = req.body.body;
+        
+        const projectId = req.params.id;
+        const name = bodyJson.newName;
+        console.log(name);
+        console.log(projectId);
+        const projectResult = await projectService.updateProjectName(projectId, name);
 
+        sendResponse(projectResult, res, next);
+    }
+    catch (err) {
+        next(err);
+    }
+});
