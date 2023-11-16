@@ -91,3 +91,17 @@ export const projectNameUpdateReducer = (
             return state;
     }
 }
+
+export const projectColorUpdateReducer = (
+    state = { }, action) => {
+    switch (action.type) {
+        case PROJECT_NAME_UPDATE_REQUEST:
+            return { loading: true };
+        case PROJECT_NAME_UPDATE_SUCCESS:
+            return { loading: false, project: action.payload.project };
+        case PROJECT_NAME_UPDATE_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
