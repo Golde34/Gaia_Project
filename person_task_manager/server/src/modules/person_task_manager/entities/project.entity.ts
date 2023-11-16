@@ -27,7 +27,7 @@ export const projectSchema = new mongoose.Schema(
         },
         color: {
             type: String,
-            required: true,
+            required: false,
         },
         groupTasks: {
             type: [Schema.Types.ObjectId],

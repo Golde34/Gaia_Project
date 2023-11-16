@@ -2,7 +2,7 @@ import { Button, Menu, MenuHandler, MenuList } from "@material-tailwind/react"
 import EllipsisIcon from "../../icons/EllipsisIcon"
 import { InputDialog } from "../InputDialog";
 import { AlertDialog } from "../AlertDialog";
-import { OptionDialog } from "../ColorDialog";
+import { ColorDialog } from "../ColorDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
@@ -37,10 +37,10 @@ const EllipsisMenu = (props) => {
                         </AlertDialog>
                         { elementName === "Project" ? 
                         (
-                            <OptionDialog
+                            <ColorDialog
                                 className="col-span-1" component="Change color" elementName={elementName}
                                 elementId={elementId}>
-                            </OptionDialog>
+                            </ColorDialog>
                         ) : (<></>)
                         }                        
                         <AlertDialog

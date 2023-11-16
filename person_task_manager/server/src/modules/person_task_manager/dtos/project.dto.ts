@@ -21,5 +21,5 @@ export class ProjectRequestDto {
 
 export class UpdateColorDto {
     @IsString()
-    newColor!: string;
+    color!: string;
 }
