@@ -1,8 +1,8 @@
-import { Button, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react"
-import EllipsisIcon from "../icons/EllipsisIcon"
-import { InputDialog } from "./InputDialog";
-import { AlertDialog } from "./AlertDialog";
-import { OptionDialog } from "./OptionDialog";
+import { Button, Menu, MenuHandler, MenuList } from "@material-tailwind/react"
+import EllipsisIcon from "../../icons/EllipsisIcon"
+import { InputDialog } from "../InputDialog";
+import { AlertDialog } from "../AlertDialog";
+import { OptionDialog } from "../ColorDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;

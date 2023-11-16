@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Flex, Metric, Text } from "@tremor/react";
 import { useNavigate } from "react-router-dom";
-import EllipsisMenu from "./EllipsisMenu";
+import EllipsisMenu from "./impl/EllipsisMenu";
 
 const CardButton = (props) => {
 

@@ -1,5 +1,5 @@
-import Item from "./subComponents/Item";
-import ScoreList from "./subComponents/ScoreList";
+import Item from "../Item";
+import ScoreList from "../ScoreList";
 
 const RightColumn = () => {
   return (

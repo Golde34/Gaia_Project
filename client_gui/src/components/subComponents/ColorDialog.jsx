@@ -1,13 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import CheckBoxIcon from '../icons/CheckboxIcon';
 import RadioButtonIcon from '../icons/RadioButtonIcon';
+import { useUpdateColorDispatch } from '../../utils/DialogAPIRequest';
 
 export const OptionDialog = (props) => {
 
     let [isOpen, setIsOpen] = useState(false)
     let [color, setColor] = useState("");
-    let [project, setProject] = useState({});
 
     function closeModal() {
         setIsOpen(false)
@@ -16,11 +15,11 @@ export const OptionDialog = (props) => {
         setIsOpen(true)
     }
 
-    // const updateNameUrlDispatch = useUpdateComponentNameDispatch();
-    // const updateNewName = (newName) => {
-    //     updateNameUrlDispatch(props.elementId, newName, props.elementName);
-    //     window.location.reload();
-    // }
+    const updateColorDispatch = useUpdateColorDispatch();
+    const updateColor = (color) => {
+        updateColorDispatch(props.elementId, color);
+        window.location.reload();
+    }
 
     return (
         <>
@@ -191,6 +190,7 @@ export const OptionDialog = (props) => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
+                                                updateColor(color);
                                                 closeModal();
                                             }}
                                         >

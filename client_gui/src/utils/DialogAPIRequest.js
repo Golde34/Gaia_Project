@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { createGroupTask, updateGroupTaskName, deleteGroupTask } from "../store/actions/task_manager/group-task.actions";
-import { createProject, deleteProject, updateProjectName } from "../store/actions/task_manager/project.actions";
+import { createProject, deleteProject, updateProjectColor, updateProjectName } from "../store/actions/task_manager/project.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -64,4 +64,14 @@ export const useCreateProjectDispatch = () => {
     }
 
     return createProjectDispatch;
+}
+
+export const useUpdateColorDispatch = () => {
+    const dispatch = useDispatch();
+
+    const updateColor = (projectId, color) => {
+        dispatch(updateProjectColor(projectId, color));
+    }
+
+    return updateColor;
 }
