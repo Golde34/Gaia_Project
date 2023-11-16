@@ -111,6 +111,26 @@ class ProjectService {
             return msg400(err.message.toString());
         }
     }
+
+    async updateProjectColor(projectId: string, color: string): Promise<IResponse> {
+        try {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
+                const project = await ProjectEntity.findOne({_id: projectId});
+                if (project === null) {
+                    return msg400("Project not found");
+                } else {
+                    project.color = color;
+                    await project.save();
+                    return msg200({
+                        message: "Project color updated successfully"
+                    });
+                }
+            }
+            return msg400("Project not found");
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
     
     // disable project
 

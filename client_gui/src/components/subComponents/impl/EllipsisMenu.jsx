@@ -1,8 +1,8 @@
-import { Button, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react"
-import EllipsisIcon from "../icons/EllipsisIcon"
-import { InputDialog } from "./InputDialog";
-import { AlertDialog } from "./AlertDialog";
-import { Badge } from "@tremor/react";
+import { Button, Menu, MenuHandler, MenuList } from "@material-tailwind/react"
+import EllipsisIcon from "../../icons/EllipsisIcon"
+import { InputDialog } from "../InputDialog";
+import { AlertDialog } from "../AlertDialog";
+import { ColorDialog } from "../ColorDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
@@ -35,6 +35,14 @@ const EllipsisMenu = (props) => {
                             className="col-span-1" component={deleteTag} elementName={elementName}
                             action="Delete" elementId={elementId}>
                         </AlertDialog>
+                        { elementName === "Project" ? 
+                        (
+                            <ColorDialog
+                                className="col-span-1" component="Change color" elementName={elementName}
+                                elementId={elementId}>
+                            </ColorDialog>
+                        ) : (<></>)
+                        }                        
                         <AlertDialog
                             className="col-span-1" component={archiveTag} elementName={elementName}
                             action="Archive" elementId={elementId}>

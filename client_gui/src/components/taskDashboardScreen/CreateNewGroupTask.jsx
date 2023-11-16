@@ -131,7 +131,7 @@ export const CreateNewGroupTask = () => {
                                         <div className="grid grid-cols-4 m-2">
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbos-high" data-ripple-dark="true">
+                                                    for="priority-checkbox-high" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-high"
                                                         type="checkbox"
@@ -147,7 +147,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbos-medium" data-ripple-dark="true">
+                                                    for="priority-checkbox-medium" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-medium"
                                                         type="checkbox"
@@ -163,7 +163,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbos-low" data-ripple-dark="true">
+                                                    for="priority-checkbox-low" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-low"
                                                         type="checkbox"
@@ -179,7 +179,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbos-star" data-ripple-dark="true">
+                                                    for="priority-checkbox-star" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-star"
                                                         type="checkbox"

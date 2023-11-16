@@ -30,7 +30,7 @@ function ContentArea() {
                     <div className="grid md:grid-cols-3 w-full h-full items-center">
                         {projects.map((project) => (
                             <div key={project._id} className="m-3">
-                                <CardButton name={project.name} description={project.description}
+                                <CardButton name={project.name} description={project.description} color={project.color}
                                     url={`/project/${project._id}`} buttonText="View Project" elementId={project._id}
                                 />
                             </div>
