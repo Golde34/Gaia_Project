@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Metric, Text } from "@tremor/react";
 import TabGroupTask from "../components/taskDashboardScreen/TabGroupTask";
 import TaskList from "../components/taskDashboardScreen/TaskList";
+import { GenerateNewProjectContent } from "../components/taskDashboardScreen/GenerateNewProjectContent";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -27,11 +28,19 @@ function ContentArea() {
             ) : (
                 <>
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
-                        className="text-2xl font-bold text-gray-800"> Group Tasks
+                        className="text-2xl font-bold text-gray-800"> Task Dashboard
                     </Metric>
-                    <TabGroupTask groupTasks={groupTasks} >
-                        <TaskList groupTasks={groupTasks}></TaskList>
-                    </TabGroupTask>
+                    {
+                        groupTasks.length === 0 ? (
+                            <>
+                                <GenerateNewProjectContent />
+                            </>
+                        ) : (
+                            <TabGroupTask groupTasks={groupTasks} >
+                                <TaskList groupTasks={groupTasks}></TaskList>
+                            </TabGroupTask>
+                        )
+                    }
                 </>
             )
             }
