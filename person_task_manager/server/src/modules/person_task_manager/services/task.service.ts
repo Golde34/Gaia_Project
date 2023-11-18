@@ -10,13 +10,15 @@ const taskValidationImpl = taskValidation;
 class TaskService {
     constructor() { }
 
-    async createTaskInGroupTask(task: any, groupTaskId: string): Promise<IResponse> {
+    async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
         try {
+            if (groupTaskId === undefined) return msg400('Group task not found');
+
             task.createdAt = new Date();
             task.updatedAt = new Date();
-            console.log(task)
             const createTask = await TaskEntity.create(task);
             const taskId = (createTask as any)._id;
+
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
                 groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
             

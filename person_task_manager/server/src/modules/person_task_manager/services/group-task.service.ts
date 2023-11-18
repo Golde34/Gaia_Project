@@ -32,7 +32,7 @@ class GroupTaskService {
         }
     }
 
-    async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string> {
+    async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             const createGroupTask = await GroupTaskEntity.create(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
@@ -42,11 +42,11 @@ class GroupTaskService {
 
                 return groupTaskId;
             } else {
-                return "undefined";
+                return undefined;
             }
         } catch (error: any) { 
             console.log(error.message.toString());
-            return "undefined";
+            return undefined;
         }
     }
 
