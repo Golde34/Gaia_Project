@@ -1,6 +1,6 @@
-import CardItem from "../CardItem"
-import AreaChartComponent from "../AreaChartComponent"
-import TableComponent from "../TableComponent"
+import CardItem from "../components/subComponents/CardItem"
+import AreaChartComponent from "../components/subComponents/AreaChartComponent"
+import TableComponent from "../components/subComponents/TableComponent"
 
 const LeftColumn = () => {
     return (

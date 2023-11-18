@@ -4,8 +4,8 @@ import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useParams } from "react-router-dom";
 import { useCreateGroupTaskDispatch } from '../../utils/dialog-api-requests';
-import CheckBoxIcon from "../icons/CheckboxIcon";
-import RadioButtonIcon from "../icons/RadioButtonIcon";
+import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 
 export const CreateNewGroupTask = () => {
     const useParam = useParams();

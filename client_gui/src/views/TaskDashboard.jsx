@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
 import { Metric, Text } from "@tremor/react";
-import TabGroupTask from "../components/taskDashboardScreen/TabGroupTask";
-import TaskList from "../components/taskDashboardScreen/TaskList";
-import { GenerateNewProjectContent } from "../components/taskDashboardScreen/GenerateNewProjectContent";
+import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
+import TaskList from "../screens/taskScreen/TaskList";
+import { GenerateNewProjectContent } from "../screens/taskScreen/GenerateNewProjectContent";
 
 function ContentArea() {
     const projectId = useParams().id;

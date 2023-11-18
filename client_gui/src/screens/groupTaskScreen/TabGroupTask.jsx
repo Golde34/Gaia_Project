@@ -1,7 +1,7 @@
-import { ArrowCircleRightIcon, TagIcon, UserGroupIcon } from "@heroicons/react/solid";
+import { ArrowCircleRightIcon } from "@heroicons/react/solid";
 import { Button, Card, Col, Flex, Grid, ProgressBar, Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
 import { useState } from "react";
-import EllipsisMenu from "../subComponents/impl/EllipsisMenu";
+import EllipsisMenu from "../../components/EllipsisMenu";
 import { CreateNewGroupTask } from "./CreateNewGroupTask";
 
 const TabGroupTask = (props) => {
