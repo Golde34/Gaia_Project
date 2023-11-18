@@ -1,8 +1,19 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  mode: "jit",
+  purge: {
+    enabled: process.env.NODE_ENV === "production",
+    preserveHtmlElements: false,
+    layers: ["base", "components", "utilities"],
+    options: {
+      keyframes: true,
+      fontFace: true,
+    },
+  },
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   theme: {
     transparent: "transparent",
@@ -126,5 +137,5 @@ export default {
         /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
     },
   ],
-  plugins: [],
+  plugins: [[require("@headlessui/tailwindcss")]],
 };
