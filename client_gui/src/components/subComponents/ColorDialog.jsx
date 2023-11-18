@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import RadioButtonIcon from '../icons/RadioButtonIcon';
 import { useUpdateColorDispatch } from '../../utils/DialogAPIRequest';
 
-export const OptionDialog = (props) => {
+export const ColorDialog = (props) => {
 
     let [isOpen, setIsOpen] = useState(false)
     let [color, setColor] = useState("");

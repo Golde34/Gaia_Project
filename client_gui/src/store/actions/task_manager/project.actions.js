@@ -120,10 +120,10 @@ export const updateProjectName = (projectId, newName) => async (dispatch) => {
     }
 }
 
-export const updateProjectColor = (projectId, newColor) => async (dispatch) => {
+export const updateProjectColor = (projectId, color) => async (dispatch) => {
     dispatch({ type: PROJECT_COLOR_UPDATE_REQUEST, payload: projectId });
     try {
-        const { data } = await serverRequest(`/project/${projectId}/update-color`, HttpMethods.PUT, portName.taskManager, { newColor });
+        const { data } = await serverRequest(`/project/${projectId}/update-color`, HttpMethods.PUT, portName.taskManager, { color });
         dispatch({ type: PROJECT_COLOR_UPDATE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({
