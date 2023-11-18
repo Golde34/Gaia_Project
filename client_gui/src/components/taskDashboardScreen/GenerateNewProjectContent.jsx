@@ -2,14 +2,16 @@ import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button, DateRangePicker } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import RadioButtonIcon from "../icons/RadioButtonIcon";
 import CheckBoxIcon from "../icons/CheckboxIcon";
 import vi from 'date-fns/locale/vi';
 import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
+import { useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
 
 export const GenerateNewProjectContent = () => {
-    const dispatch = useDispatch();
+    const param = useParams();
+    const projectId = param.id;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -26,7 +28,7 @@ export const GenerateNewProjectContent = () => {
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState([]);
     const [status, setStatus] = useState('');
-    const [task, setTask] = useState({});
+    const [task] = useState({});
     const [deadline, setDeadline] = useState({
         from: currentDate,
         to: currentDate, 
@@ -38,17 +40,7 @@ export const GenerateNewProjectContent = () => {
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
 
-    // const createNewGroupTask = useCreateGroupTaskDispatch();
-    // const setObjectTask = (title, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-    //     groupTask.title = title;
-    //     groupTask.description = description;
-    //     groupTask.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
-    //     groupTask.status = status;
-    //     groupTask.projectId = projectId;
-    //     createNewGroupTask(groupTask);
-    //     window.location.reload();
-    // }
-
+    const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         setPriority(pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority));
         const datePicker = validateDatePicker(deadline.from, deadline.to);
@@ -59,7 +51,10 @@ export const GenerateNewProjectContent = () => {
         task.priority = priority;
         task.status = status;
         task.deadline = deadlineTask;
+        task.projectId = projectId;
         console.log(task);
+        generateTaskFromScratch(task);
+        window.location.reload();
     }
     
     const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
