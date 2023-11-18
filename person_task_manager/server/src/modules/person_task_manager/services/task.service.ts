@@ -12,6 +12,9 @@ class TaskService {
 
     async createTaskInGroupTask(task: any, groupTaskId: string): Promise<IResponse> {
         try {
+            task.createdAt = new Date();
+            task.updatedAt = new Date();
+            console.log(task)
             const createTask = await TaskEntity.create(task);
             const taskId = (createTask as any)._id;
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {

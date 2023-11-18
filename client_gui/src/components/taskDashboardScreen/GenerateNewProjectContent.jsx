@@ -28,7 +28,7 @@ export const GenerateNewProjectContent = () => {
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState([]);
     const [status, setStatus] = useState('');
-    const [task, setTask] = useState({});
+    const [task] = useState({});
     const [deadline, setDeadline] = useState({
         from: currentDate,
         to: currentDate, 
@@ -40,16 +40,6 @@ export const GenerateNewProjectContent = () => {
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
 
-    // const createNewGroupTask = useCreateGroupTaskDispatch();
-    // const setObjectTask = (title, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-    //     groupTask.title = title;
-    //     groupTask.description = description;
-    //     groupTask.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
-    //     groupTask.status = status;
-    //     groupTask.projectId = projectId;
-    //     createNewGroupTask(groupTask);
-    //     window.location.reload();
-    // }
     const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         setPriority(pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority));
@@ -61,8 +51,9 @@ export const GenerateNewProjectContent = () => {
         task.priority = priority;
         task.status = status;
         task.deadline = deadlineTask;
+        task.projectId = projectId;
         console.log(task);
-        generateTaskFromScratch(task, projectId);
+        generateTaskFromScratch(task);
         window.location.reload();
     }
     

@@ -1,15 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  mode: "jit",
-  purge: {
-    enabled: process.env.NODE_ENV === "production",
-    preserveHtmlElements: false,
-    layers: ["base", "components", "utilities"],
-    options: {
-      keyframes: true,
-      fontFace: true,
-    },
-  },
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",

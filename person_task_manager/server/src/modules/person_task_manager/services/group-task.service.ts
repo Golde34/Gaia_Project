@@ -32,6 +32,23 @@ class GroupTaskService {
         }
     }
 
+    async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string> {
+        try {
+            const createGroupTask = await GroupTaskEntity.create(groupTask);
+            const groupTaskId = (createGroupTask as any)._id;
+
+            if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
+                projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
+
+                return groupTaskId;
+            } else {
+                return "undefined";
+            }
+        } catch (error: any) { 
+            console.log(error.message.toString());
+            return "undefined";
+        }
+    }
 
     async updateGroupTask(groupTaskId: string, groupTask: any): Promise<IResponse> {
         try {

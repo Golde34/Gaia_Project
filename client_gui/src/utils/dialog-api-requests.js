@@ -80,8 +80,8 @@ export const useUpdateColorDispatch = () => {
 export const useGenerateTaskFromScratchDispatch = () => {
     const dispatch = useDispatch();
 
-    const generateTaskFromScratchDispatch = (task, projectId) => {
-        dispatch(generateTaskFromScratch(task, projectId));
+    const generateTaskFromScratchDispatch = (task) => {
+        dispatch(generateTaskFromScratch(task));
     }
 
     return generateTaskFromScratchDispatch;

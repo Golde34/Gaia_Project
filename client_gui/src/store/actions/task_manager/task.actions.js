@@ -1,4 +1,4 @@
-import { HttpMethods, portName, serverRequest } from '../../../api/baseAPI';
+import { HttpMethods, serverRequest } from '../../../api/baseAPI';
 import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL, 
     TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS, TASK_DETAIL_FAIL, 
     TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS, TASK_CREATE_FAIL,
@@ -104,7 +104,7 @@ export const deleteTask = (taskId) => async (dispatch) => {
     }
 }
 
-export const generateTaskFromScratch = (task, projectId) => async (dispatch) => {
+export const generateTaskFromScratch = (task) => async (dispatch) => {
     dispatch({ type: TASK_GENERATE_REQUEST, payload: task });
     try {
         // header is here maybe need it
@@ -113,7 +113,8 @@ export const generateTaskFromScratch = (task, projectId) => async (dispatch) => 
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest('/task/generate', HttpMethods.POST, portName.taskManager, { task: task, projectId: projectId });
+        console.log('here')
+        const { data } = await serverRequest('/task/generate', HttpMethods.POST, portName.taskManager, task);
         dispatch({ type: TASK_GENERATE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({
