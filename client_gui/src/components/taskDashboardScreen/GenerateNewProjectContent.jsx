@@ -2,14 +2,16 @@ import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button, DateRangePicker } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import RadioButtonIcon from "../icons/RadioButtonIcon";
 import CheckBoxIcon from "../icons/CheckboxIcon";
 import vi from 'date-fns/locale/vi';
 import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
+import { useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
 
 export const GenerateNewProjectContent = () => {
-    const dispatch = useDispatch();
+    const param = useParams();
+    const projectId = param.id;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -48,7 +50,7 @@ export const GenerateNewProjectContent = () => {
     //     createNewGroupTask(groupTask);
     //     window.location.reload();
     // }
-
+    const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         setPriority(pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority));
         const datePicker = validateDatePicker(deadline.from, deadline.to);
@@ -60,6 +62,8 @@ export const GenerateNewProjectContent = () => {
         task.status = status;
         task.deadline = deadlineTask;
         console.log(task);
+        generateTaskFromScratch(task, projectId);
+        window.location.reload();
     }
     
     const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
