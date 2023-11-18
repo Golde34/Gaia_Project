@@ -4,7 +4,7 @@ import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom"
 import RadioButtonIcon from "../icons/RadioButtonIcon";
-import { useCreateProjectDispatch } from "../../utils/DialogAPIRequest";
+import { useCreateProjectDispatch } from "../../utils/dialog-api-requests";
 
 export const CreateNewProject = () => {
     const useParam = useParams();
@@ -20,10 +20,10 @@ export const CreateNewProject = () => {
         setIsOpen(true)
     }
 
+    const [project] = useState({});
     const [newName, setNewName] = useState("");
     const [description, setDescription] = useState('');
-    const [project] = useState({});
-     // Radio button
+    // Radio button
     const [status, setStatus] = useState('');
 
     const createNewProject = useCreateProjectDispatch();
@@ -77,26 +77,26 @@ export const CreateNewProject = () => {
                                     </Dialog.Title>
                                     {/* Task Title Input */}
                                     <div className="mt-2">
-                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Project Name</label>
+                                        <label htmlFor="project-title" className="block text-md font-medium text-gray-700 mb-3">Project Name</label>
                                         <Input
-                                            id="task-title"
+                                            id="project-title"
                                             type="text"
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
                                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                            placeholder="Task Title"
+                                            placeholder="Project Name"
                                         />
                                     </div>
 
                                     {/* Task Description Input */}
                                     <div className="mt-4">
-                                        <label htmlFor="task-description" className="block text-md font-medium text-gray-700 mb-3">Description</label>
+                                        <label htmlFor="project-description" className="block text-md font-medium text-gray-700 mb-3">Description</label>
                                         <Textarea
-                                            id="task-description"
+                                            id="project-description"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
                                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                            placeholder="Task Description"
+                                            placeholder="Project Description"
                                         />
                                     </div>
 

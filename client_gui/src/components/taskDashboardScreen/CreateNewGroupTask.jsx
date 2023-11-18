@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useParams } from "react-router-dom";
-import { useCreateGroupTaskDispatch } from '../../utils/DialogAPIRequest';
+import { useCreateGroupTaskDispatch } from '../../utils/dialog-api-requests';
 import CheckBoxIcon from "../icons/CheckboxIcon";
 import RadioButtonIcon from "../icons/RadioButtonIcon";
 
@@ -19,7 +19,7 @@ export const CreateNewGroupTask = () => {
         setIsOpen(true)
     }
 
-    const [newName, setNewName] = useState("");
+    const [newName, setNewName] = useState('');
     const [description, setDescription] = useState('');
     const [groupTask] = useState({});
     const projectId = useParam.id;
@@ -131,7 +131,7 @@ export const CreateNewGroupTask = () => {
                                         <div className="grid grid-cols-4 m-2">
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbox-high" data-ripple-dark="true">
+                                                    htmlFor="priority-checkbox-high" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-high"
                                                         type="checkbox"
@@ -147,7 +147,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbox-medium" data-ripple-dark="true">
+                                                    htmlFor="priority-checkbox-medium" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-medium"
                                                         type="checkbox"
@@ -163,7 +163,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbox-low" data-ripple-dark="true">
+                                                    htmlFor="priority-checkbox-low" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-low"
                                                         type="checkbox"
@@ -179,7 +179,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex items-center p-3 rounded-full cursor-pointer"
-                                                    for="priority-checkbox-star" data-ripple-dark="true">
+                                                    htmlFor="priority-checkbox-star" data-ripple-dark="true">
                                                     <input
                                                         id="priority-checkbox-star"
                                                         type="checkbox"
@@ -203,7 +203,7 @@ export const CreateNewGroupTask = () => {
                                         <div className="grid grid-cols-3 m-2">
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-todo" data-ripple-dark="true">
+                                                    htmlFor="status-radio-todo" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-todo"
                                                         type="radio"
@@ -222,7 +222,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-doing" data-ripple-dark="true">
+                                                    htmlFor="status-radio-doing" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-doing"
                                                         type="radio"
@@ -241,7 +241,7 @@ export const CreateNewGroupTask = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-done" data-ripple-dark="true">
+                                                    htmlFor="status-radio-done" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-done"
                                                         type="radio"
