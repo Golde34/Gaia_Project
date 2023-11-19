@@ -1,75 +1,82 @@
+import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
+import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button, DateRangePicker } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useParams } from "react-router-dom";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import vi from 'date-fns/locale/vi';
-import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
-import { useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
 
-export const GenerateNewProjectContent = () => {
-    const param = useParams();
-    const projectId = param.id;
+export const CreateTaskDialog = (props) => {
+    const projectId = props.projectId;
 
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
-        setIsOpen(false)
+        setIsOpen(false);
     }
     function openModal() {
-        setIsOpen(true)
+        setIsOpen(true);
     }
-
-    let currentDate = new Date();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState([]);
     const [status, setStatus] = useState('');
-    const [task] = useState({});
     const [deadline, setDeadline] = useState({
-        from: currentDate,
-        to: currentDate, 
+        from: new Date(),
+        to: new Date(),
     });
 
-    // Priority Checkboxes
+    const [task] = useState({ });
+
+    // Priority Checboxes
     const [isHighPriority, setIsHighPriority] = useState(false);
     const [isMediumPriority, setIsMediumPriority] = useState(false);
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
 
     const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
+    const createTask = useCreateTaskDispatch(); 
+
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         setPriority(pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority));
         const datePicker = validateDatePicker(deadline.from, deadline.to);
         const deadlineTask = validateFromDate(datePicker.from, datePicker.to);
-        
+
         task.title = title;
         task.description = description;
         task.priority = priority;
         task.status = status;
         task.deadline = deadlineTask;
-        task.projectId = projectId;
-        console.log(task);
-        generateTaskFromScratch(task);
+
+        initiateTaskDispatch(projectId, task);
         window.location.reload();
     }
-    
+
+    const initiateTaskDispatch  = (projectId, task) => {
+        if (projectId === null || projectId === undefined) {
+            createTask(task);
+        } else {
+            task.projectId = projectId;
+            generateTaskFromScratch(task);
+        }
+    }
+
     const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         let priority = [];
         if (isHighPriority) {
-            priority.push("HIGH");
+            priority.push('High');
         }
         if (isMediumPriority) {
-            priority.push("MEDIUM");
+            priority.push('Medium');
         }
         if (isLowPriority) {
-            priority.push("LOW");
+            priority.push('Low');
         }
         if (isStarPriority) {
-            priority.push("STAR");
+            priority.push('Star');
         }
         return priority;
     }

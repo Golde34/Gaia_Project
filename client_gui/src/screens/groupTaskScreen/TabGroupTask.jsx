@@ -1,8 +1,9 @@
 import { ArrowCircleRightIcon } from "@heroicons/react/solid";
-import { Button, Card, Col, Flex, Grid, ProgressBar, Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
+import { Card, Col, Flex, Grid, ProgressBar, Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
 import { useState } from "react";
 import EllipsisMenu from "../../components/EllipsisMenu";
 import { CreateNewGroupTask } from "./CreateNewGroupTask";
+import { CreateTaskDialog } from "../taskScreen/CreateTaskDialog";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
@@ -59,7 +60,7 @@ const TabGroupTask = (props) => {
                                     </Col>
                                     <Col numColSpan={2} className="mt-4">
                                         <div className="flex justify-center">
-                                            <Button id="create-new-task">Create new Task</Button>
+                                            <CreateTaskDialog />
                                         </div>
 
                                     </Col>

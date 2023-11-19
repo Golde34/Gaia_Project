@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
 import TaskList from "../screens/taskScreen/TaskList";
-import { GenerateNewProjectContent } from "../screens/taskScreen/GenerateNewProjectContent";
+import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -33,7 +33,7 @@ function ContentArea() {
                     {
                         groupTasks.length === 0 ? (
                             <>
-                                <GenerateNewProjectContent />
+                                <CreateTaskDialog projectId={projectId} />
                             </>
                         ) : (
                             <TabGroupTask groupTasks={groupTasks} >
