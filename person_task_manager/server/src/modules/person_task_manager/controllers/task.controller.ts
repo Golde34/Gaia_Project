@@ -6,7 +6,6 @@ import { Permission } from "../../../loaders/enums";
 import { plainToInstance } from "class-transformer";
 import { RequestValidator } from "../../../common/error-handler";
 import { GenerateTaskFromScratchRequestDTO, TaskRequestDto } from "../dtos/task.dto";
-import { projectService } from "../services/project.service";
 import { groupTaskService } from "../services/group-task.service";
 
 export const taskRouter = Router();
