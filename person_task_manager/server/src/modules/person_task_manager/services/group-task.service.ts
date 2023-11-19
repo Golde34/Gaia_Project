@@ -5,6 +5,7 @@ import { ProjectEntity } from "../entities/project.entity";
 import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
+import { taskService } from "./task.service";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -32,7 +33,7 @@ class GroupTaskService {
         }
     }
 
-    async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string> {
+    async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             const createGroupTask = await GroupTaskEntity.create(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
@@ -42,11 +43,11 @@ class GroupTaskService {
 
                 return groupTaskId;
             } else {
-                return "undefined";
+                return undefined;
             }
         } catch (error: any) { 
             console.log(error.message.toString());
-            return "undefined";
+            return undefined;
         }
     }
 
@@ -70,8 +71,14 @@ class GroupTaskService {
     async deleteGroupTask(groupTaskId: string): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                // delete all tasks in group task
+                const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+                if (tasks !== null) {
+                    for (let i = 0; i < tasks.tasks.length; i++) {
+                        await taskService.deleteTask(tasks.tasks[i]);
+                    }
+                }
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-                await projectServiceImpl.updateManyProjects(groupTaskId);
 
                 return msg200({
                     message: (deleteGroupTask as any)
@@ -93,7 +100,9 @@ class GroupTaskService {
     }
 
     async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
-        const getTasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+        const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+        console.log(getTasksInGroupTask);
+        const getTasks = getTasksInGroupTask?.tasks;
 
         return msg200({
             message: (getTasks as any)

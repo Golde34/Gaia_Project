@@ -3,7 +3,7 @@ import { Input, Textarea } from "@material-tailwind/react";
 import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom"
-import RadioButtonIcon from "../icons/RadioButtonIcon";
+import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useCreateProjectDispatch } from "../../utils/dialog-api-requests";
 
 export const CreateNewProject = () => {

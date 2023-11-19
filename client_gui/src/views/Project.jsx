@@ -5,7 +5,7 @@ import { getProjects } from "../store/actions/task_manager/project.actions";
 import Template from "./template";
 import CardButton from "../components/subComponents/CardButton";
 import { Button, Card, Metric, Text, Title } from "@tremor/react";
-import { CreateNewProject } from "../components/projectScreen/CreateNewProject";
+import { CreateNewProject } from "../screens/projectScreen/CreateNewProject";
 
 function ContentArea() {
     const dispatch = useDispatch();

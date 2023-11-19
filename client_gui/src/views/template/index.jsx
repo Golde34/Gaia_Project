@@ -1,5 +1,5 @@
-import Sidebar from '../../components/subComponents/impl/Sidebar';
-import Navbar from '../../components/subComponents/impl/Navbar';
+import Sidebar from '../../components/Sidebar';
+import Navbar from '../../components/Navbar';
 
 const Template = (props) => {
   return (

@@ -6,7 +6,6 @@ import { Permission } from "../../../loaders/enums";
 import { plainToInstance } from "class-transformer";
 import { RequestValidator } from "../../../common/error-handler";
 import { GenerateTaskFromScratchRequestDTO, TaskRequestDto } from "../dtos/task.dto";
-import { projectService } from "../services/project.service";
 import { groupTaskService } from "../services/group-task.service";
 
 export const taskRouter = Router();
@@ -123,9 +122,7 @@ taskRouter.post("/generate",
 
             const task = plainToInstance(TaskRequestDto, bodyJson);
             const projectId = bodyJson.projectId;
-
-            console.log(task);
-
+            // geneate new group task contains created task
             let groupTask = {
                 title: task.title,
                 description: task.description,
@@ -137,10 +134,10 @@ taskRouter.post("/generate",
             if (projectId) {
                 groupTaskCreate = await groupTaskService.createGroupTaskFromTask(groupTask, projectId);
             } else {
-                throw new Error("projectId is undefined");
+                next(new Error("projectId is undefined"));
             }
 
-            if (groupTaskCreate !== "undefined") {
+            if (groupTaskCreate !== undefined) {
                 const taskCreate = await taskService.createTaskInGroupTask(task, groupTaskCreate);
                 sendResponse(taskCreate, res, next);
             }

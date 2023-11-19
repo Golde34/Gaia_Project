@@ -6,7 +6,6 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     description?: string;
-    @IsString()
     @IsOptional()
     priority?: string[];
     @IsString()
