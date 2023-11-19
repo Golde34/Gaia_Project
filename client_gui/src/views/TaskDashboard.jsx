@@ -3,9 +3,8 @@ import Template from "./template";
 import { useEffect } from "react";
 import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
-import { Metric, Text } from "@tremor/react";
+import { Button, Flex, Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
-import TaskList from "../screens/taskScreen/TaskList";
 import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
 
 function ContentArea() {
@@ -32,11 +31,16 @@ function ContentArea() {
                     </Metric>
                     {
                         groupTasks.length === 0 ? (
-                            <>
-                                <CreateTaskDialog projectId={projectId} />
-                            </>
+                            <CreateTaskDialog projectId={projectId} />
                         ) : (
-                            <TabGroupTask groupTasks={groupTasks} /> 
+                            <>
+                                <TabGroupTask groupTasks={groupTasks} />
+                                <Flex className="mt-5" justifyContent="end">
+                                    <a href="/client-gui/project">
+                                        <Button>Back</Button>
+                                    </a>
+                                </Flex>
+                            </>
                         )
                     }
                 </>
