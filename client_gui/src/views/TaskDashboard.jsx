@@ -36,9 +36,7 @@ function ContentArea() {
                                 <CreateTaskDialog projectId={projectId} />
                             </>
                         ) : (
-                            <TabGroupTask groupTasks={groupTasks} >
-                                <TaskList groupTasks={groupTasks}></TaskList>
-                            </TabGroupTask>
+                            <TabGroupTask groupTasks={groupTasks} /> 
                         )
                     }
                 </>

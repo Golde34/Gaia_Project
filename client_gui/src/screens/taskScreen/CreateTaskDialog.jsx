@@ -83,7 +83,8 @@ export const CreateTaskDialog = (props) => {
 
     return (
         <>
-            <Button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <Button onClick={openModal} id='create-new-task'
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create New Task
             </Button>
 
