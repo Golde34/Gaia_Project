@@ -8,11 +8,13 @@ import TaskList from "../taskScreen/TaskList";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
-
+    
     const [activeTab, setActiveTab] = useState(groupTasks[0]._id);
-
+    const [groupTaskId, setGroupTaskId] = useState(groupTasks[0]._id);
+    console.log(groupTaskId);
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
+        setGroupTaskId(tabId);
     }
 
     return (
@@ -59,17 +61,16 @@ const TabGroupTask = (props) => {
                                         </Col>
                                         <Col numColSpan={2} className="mt-4">
                                             <div className="flex justify-center">
-                                                <CreateTaskDialog />
+                                                <CreateTaskDialog groupTaskId={groupTask._id}/>
                                             </div>
                                         </Col>
                                     </Grid>
                                 </div>
                             </TabPanel>
-                            <TaskList groupTaskId={groupTask._id} />
                         </>
                     ))}
                 </TabPanels>
-
+                <TaskList groupTaskId={groupTaskId} />
             </TabGroup>
         </Card>
     )

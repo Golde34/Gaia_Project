@@ -10,7 +10,7 @@ import vi from 'date-fns/locale/vi';
 
 export const CreateTaskDialog = (props) => {
     const projectId = props.projectId;
-
+    const groupTaskId = props.groupTaskId;
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -57,6 +57,7 @@ export const CreateTaskDialog = (props) => {
 
     const initiateTaskDispatch  = (projectId, task) => {
         if (projectId === null || projectId === undefined) {
+            task.groupTaskId = groupTaskId;
             createTask(task);
         } else {
             task.projectId = projectId;
