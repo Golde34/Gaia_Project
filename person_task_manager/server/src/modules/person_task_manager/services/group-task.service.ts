@@ -5,6 +5,7 @@ import { ProjectEntity } from "../entities/project.entity";
 import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
+import { taskService } from "./task.service";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -70,8 +71,14 @@ class GroupTaskService {
     async deleteGroupTask(groupTaskId: string): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                // delete all tasks in group task
+                const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+                if (tasks !== null) {
+                    for (let i = 0; i < tasks.tasks.length; i++) {
+                        await taskService.deleteTask(tasks.tasks[i]);
+                    }
+                }
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
-                await projectServiceImpl.updateManyProjects(groupTaskId);
 
                 return msg200({
                     message: (deleteGroupTask as any)
