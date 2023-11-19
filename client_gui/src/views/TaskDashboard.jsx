@@ -31,7 +31,14 @@ function ContentArea() {
                     </Metric>
                     {
                         groupTasks.length === 0 ? (
-                            <CreateTaskDialog projectId={projectId} />
+                            <>
+                                <CreateTaskDialog projectId={projectId} />
+                                <Text className="mt-5">Creating new Task is similar to creating new Group Task, helping users to easily classify task types.</Text>
+                                <Text className="mt-5">Make sure you create correctly because the first group task and the task are totally the same.</Text>
+                                <a href="/client-gui/project">
+                                    <Button className="mt-5">Back</Button>
+                                </a>
+                            </>
                         ) : (
                             <>
                                 <TabGroupTask groupTasks={groupTasks} />

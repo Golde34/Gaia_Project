@@ -22,7 +22,6 @@ export const CreateTaskDialog = (props) => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [priority, setPriority] = useState([]);
     const [status, setStatus] = useState('');
     const [deadline, setDeadline] = useState({
         from: new Date(),
@@ -41,16 +40,16 @@ export const CreateTaskDialog = (props) => {
     const createTask = useCreateTaskDispatch(); 
 
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        setPriority(pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority));
+        console.log(title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         const datePicker = validateDatePicker(deadline.from, deadline.to);
         const deadlineTask = validateFromDate(datePicker.from, datePicker.to);
 
         task.title = title;
         task.description = description;
-        task.priority = priority;
+        task.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         task.status = status;
         task.deadline = deadlineTask;
-
+        
         initiateTaskDispatch(projectId, task);
         window.location.reload();
     }

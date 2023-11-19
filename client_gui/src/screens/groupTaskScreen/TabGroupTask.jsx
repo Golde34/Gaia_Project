@@ -11,7 +11,7 @@ const TabGroupTask = (props) => {
     
     const [activeTab, setActiveTab] = useState(groupTasks[0]._id);
     const [groupTaskId, setGroupTaskId] = useState(groupTasks[0]._id);
-    console.log(groupTaskId);
+
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
         setGroupTaskId(tabId);
