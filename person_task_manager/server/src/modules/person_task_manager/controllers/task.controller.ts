@@ -1,28 +1,29 @@
-import {type Request, type Response, Router, NextFunction} from "express";
+import { type Request, type Response, Router, NextFunction } from "express";
 import { taskService } from "../services/task.service";
 import { sendResponse } from "../../../common/response_helpers";
 import { checkPermission, checkToken } from "../../user_authentication/auth.middleware";
 import { Permission } from "../../../loaders/enums";
 import { plainToInstance } from "class-transformer";
 import { RequestValidator } from "../../../common/error-handler";
-import { TaskRequestDto } from "../dtos/task.dto";
+import { GenerateTaskFromScratchRequestDTO, TaskRequestDto } from "../dtos/task.dto";
+import { groupTaskService } from "../services/group-task.service";
 
 export const taskRouter = Router();
 
 // get all tasks - this function is for boss only
-taskRouter.get("/", 
+taskRouter.get("/",
     checkToken,
-    checkPermission(Permission.readTask), 
+    checkPermission(Permission.readTask),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const taskResult = await taskService.getAllTasks();
+        try {
+            const taskResult = await taskService.getAllTasks();
 
-        sendResponse(taskResult, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+            sendResponse(taskResult, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 //get one task
 taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -38,40 +39,40 @@ taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): 
 });
 
 // create task
-taskRouter.post("/create", 
+taskRouter.post("/create",
     RequestValidator.validate(TaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
+        try {
+            const bodyJson = req.body.body;
 
-        const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
-        const groupTaskId = bodyJson.groupTaskId;
-        const taskResult = await taskService.createTaskInGroupTask(createTaskObjectDto, groupTaskId);
+            const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
+            const groupTaskId = bodyJson.groupTaskId;
+            const taskResult = await taskService.createTaskInGroupTask(createTaskObjectDto, groupTaskId);
 
-        sendResponse(taskResult, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+            sendResponse(taskResult, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // update task
-taskRouter.put("/:id", 
+taskRouter.put("/:id",
     RequestValidator.validate(TaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
+        try {
+            const bodyJson = req.body.body;
 
-        const taskId = req.params.id;
-        const updateTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
-        const taskResult = await taskService.updateTask(taskId, updateTaskObjectDto);
+            const taskId = req.params.id;
+            const updateTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
+            const taskResult = await taskService.updateTask(taskId, updateTaskObjectDto);
 
-        sendResponse(taskResult, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+            sendResponse(taskResult, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // delete task
 taskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -111,6 +112,40 @@ taskRouter.get("/:id/comments", async (req: Request, res: Response, next: NextFu
         next(err);
     }
 });
+
+// generate task from scratch
+taskRouter.post("/generate",
+    RequestValidator.validate(GenerateTaskFromScratchRequestDTO),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const bodyJson = req.body.body;
+
+            const task = plainToInstance(TaskRequestDto, bodyJson);
+            const projectId = bodyJson.projectId;
+            // geneate new group task contains created task
+            let groupTask = {
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                ordinalNumber: 1,
+            }
+
+            let groupTaskCreate;
+            if (projectId) {
+                groupTaskCreate = await groupTaskService.createGroupTaskFromTask(groupTask, projectId);
+            } else {
+                next(new Error("projectId is undefined"));
+            }
+
+            if (groupTaskCreate !== undefined) {
+                const taskCreate = await taskService.createTaskInGroupTask(task, groupTaskCreate);
+                sendResponse(taskCreate, res, next);
+            }
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // create subtask
 

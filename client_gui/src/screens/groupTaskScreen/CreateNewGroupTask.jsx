@@ -1,15 +1,14 @@
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { Card, Title } from "@tremor/react";
-import { Fragment, useState } from "react";
-import { useParams } from "react-router-dom"
-import RadioButtonIcon from "../icons/RadioButtonIcon";
-import { useCreateProjectDispatch } from "../../utils/DialogAPIRequest";
+import { PlusIcon } from "@heroicons/react/outline";
+import { useParams } from "react-router-dom";
+import { useCreateGroupTaskDispatch } from '../../utils/dialog-api-requests';
+import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 
-export const CreateNewProject = () => {
+export const CreateNewGroupTask = () => {
     const useParam = useParams();
-
-    let projectId = useParam.projectId;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -20,28 +19,54 @@ export const CreateNewProject = () => {
         setIsOpen(true)
     }
 
-    const [newName, setNewName] = useState("");
+    const [newName, setNewName] = useState('');
     const [description, setDescription] = useState('');
-    const [project] = useState({});
-     // Radio button
+    const [groupTask] = useState({});
+    const projectId = useParam.id;
+    // Radio button
     const [status, setStatus] = useState('');
+    // Checkbox
+    const [isHighPriority, setIsHighPriority] = useState(false);
+    const [isMediumPriority, setIsMediumPriority] = useState(false);
+    const [isLowPriority, setIsLowPriority] = useState(false);
+    const [isStarPriority, setIsStarPriority] = useState(false);
 
-    const createNewProject = useCreateProjectDispatch();
-    const setObjectProject = (name, description, status) => {
-        project.name = name;
-        project.description = description;
-        project.status = status;
-        project.ownerId = localStorage.getItem('userId');
-        createNewProject(project);
+    const createNewGroupTask = useCreateGroupTaskDispatch();
+    const setObjectGroupTask = (title, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
+        groupTask.title = title;
+        groupTask.description = description;
+        groupTask.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
+        groupTask.status = status;
+        groupTask.projectId = projectId;
+        createNewGroupTask(groupTask);
         window.location.reload();
+    }
+    const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
+        let priority = [];
+        if (isHighPriority) {
+            priority.push("HIGH");
+        }
+        if (isMediumPriority) {
+            priority.push("MEDIUM");
+        }
+        if (isLowPriority) {
+            priority.push("LOW");
+        }
+        if (isStarPriority) {
+            priority.push("STAR");
+        }
+        return priority;
     }
 
     return (
         <>
-            <Card className="flex flex-col justify-center items-center border-dashed border-2 border-sky-500 hover:border-solid hover:cursor-pointer text-center font-bold w-full h-full"
-                onClick={openModal}>
-                <Title> Create Project </Title>
-            </Card>
+            <button
+                className="text-white"
+                type="button"
+                onClick={openModal}
+            >
+                <PlusIcon className="w-6" />
+            </button>
 
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -73,11 +98,11 @@ export const CreateNewProject = () => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create New Project
+                                        Create New Group Task
                                     </Dialog.Title>
                                     {/* Task Title Input */}
                                     <div className="mt-2">
-                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Project Name</label>
+                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Title</label>
                                         <Input
                                             id="task-title"
                                             type="text"
@@ -100,13 +125,85 @@ export const CreateNewProject = () => {
                                         />
                                     </div>
 
-                                    {/* Status Radio Button */}
+                                    {/* Priority Checkbox */}
+                                    <div className="mt-4">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
+                                        <div className="grid grid-cols-4 m-2">
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    htmlFor="priority-checkbox-high" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-high"
+                                                        type="checkbox"
+                                                        checked={isHighPriority}
+                                                        onChange={() => setIsHighPriority(!isHighPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-red-500 checked:bg-red-500 checked:before:bg-red-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">High</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    htmlFor="priority-checkbox-medium" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-medium"
+                                                        type="checkbox"
+                                                        checked={isMediumPriority}
+                                                        onChange={() => setIsMediumPriority(!isMediumPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Medium</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    htmlFor="priority-checkbox-low" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-low"
+                                                        type="checkbox"
+                                                        checked={isLowPriority}
+                                                        onChange={() => setIsLowPriority(!isLowPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:bg-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Low</label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                    htmlFor="priority-checkbox-star" data-ripple-dark="true">
+                                                    <input
+                                                        id="priority-checkbox-star"
+                                                        type="checkbox"
+                                                        checked={isStarPriority}
+                                                        onChange={() => setIsStarPriority(!isStarPriority)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:bg-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                        <CheckBoxIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700">Star</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    {/* Status Checkbox */}
                                     <div className="mt-4">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
                                         <div className="grid grid-cols-3 m-2">
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-todo" data-ripple-dark="true">
+                                                    htmlFor="status-radio-todo" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-todo"
                                                         type="radio"
@@ -125,7 +222,7 @@ export const CreateNewProject = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-doing" data-ripple-dark="true">
+                                                    htmlFor="status-radio-doing" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-doing"
                                                         type="radio"
@@ -144,7 +241,7 @@ export const CreateNewProject = () => {
                                             </div>
                                             <div class="inline-flex items-center">
                                                 <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-done" data-ripple-dark="true">
+                                                    htmlFor="status-radio-done" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-done"
                                                         type="radio"
@@ -177,8 +274,9 @@ export const CreateNewProject = () => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                setObjectProject(newName, description, status);
+                                                setObjectGroupTask(newName, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
+                                                // window.location.reload();
                                             }}
                                         >
                                             Create

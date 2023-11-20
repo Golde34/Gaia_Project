@@ -25,10 +25,16 @@
   #root {
     max-width: 1200px;
   }
+  #create-new-task {
+    width: 150px;
+  }
 }
 @media screen and (min-width: 1600px) {
   #root {
     max-width: 1400px;
+  }
+  #create-new-task {
+    width: 180px;
   }
 }
 @media screen and (min-width: 1920px) {

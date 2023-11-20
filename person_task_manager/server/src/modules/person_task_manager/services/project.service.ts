@@ -1,7 +1,9 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
+import { GroupTaskEntity } from "../entities/group-task.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { projectValidation } from "../validations/project.validation";
+import { groupTaskService } from "./group-task.service";
 
 const projectValidationImpl = projectValidation;
 
@@ -37,6 +39,15 @@ class ProjectService {
     async deleteProject(projectId: string): Promise<IResponse> {
         try {
             if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
+
+                // delete all group tasks in project
+                const groupTasks = await ProjectEntity.findOne({ _id: projectId }).select('groupTasks');
+                if (groupTasks !== null) {
+                    for (let i = 0; i < groupTasks.groupTasks.length; i++) {
+                        await groupTaskService.deleteGroupTask(groupTasks.groupTasks[i]);
+                    }
+                }
+
                 const deleteProject = await ProjectEntity.deleteOne({ _id: projectId });
 
                 return msg200({

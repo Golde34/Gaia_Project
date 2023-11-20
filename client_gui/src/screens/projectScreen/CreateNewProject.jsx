@@ -1,12 +1,15 @@
-import { Transition } from "@headlessui/react";
-import { Dialog, Input, Textarea } from "@material-tailwind/react";
-import { Button, Card, Title } from "@tremor/react";
+import { Dialog, Transition } from "@headlessui/react";
+import { Input, Textarea } from "@material-tailwind/react";
+import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
-import RadioButtonIcon from "../icons/RadioButtonIcon";
+import { useParams } from "react-router-dom"
+import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
+import { useCreateProjectDispatch } from "../../utils/dialog-api-requests";
 
-export const GenerateNewProjectContent = () => {
-    const dispatch = useDispatch();
+export const CreateNewProject = () => {
+    const useParam = useParams();
+
+    let projectId = useParam.projectId;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -17,13 +20,13 @@ export const GenerateNewProjectContent = () => {
         setIsOpen(true)
     }
 
+    const [project] = useState({});
     const [newName, setNewName] = useState("");
     const [description, setDescription] = useState('');
-    const [project] = useState({});
     // Radio button
     const [status, setStatus] = useState('');
 
-    const createNewProject = null;
+    const createNewProject = useCreateProjectDispatch();
     const setObjectProject = (name, description, status) => {
         project.name = name;
         project.description = description;
@@ -35,10 +38,7 @@ export const GenerateNewProjectContent = () => {
 
     return (
         <>
-            <Button onClick={() => dispatch({ type: 'OPEN_MODAL', payload: { modalType: 'CREATE_PROJECT' } })} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Create New Task
-            </Button>
-            {/* <Card className="flex flex-col justify-center items-center border-dashed border-2 border-sky-500 hover:border-solid hover:cursor-pointer text-center font-bold w-full h-full"
+            <Card className="flex flex-col justify-center items-center border-dashed border-2 border-sky-500 hover:border-solid hover:cursor-pointer text-center font-bold w-full h-full"
                 onClick={openModal}>
                 <Title> Create Project </Title>
             </Card>
@@ -75,29 +75,32 @@ export const GenerateNewProjectContent = () => {
                                     >
                                         Create New Project
                                     </Dialog.Title>
+                                    {/* Task Title Input */}
                                     <div className="mt-2">
-                                        <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Project Name</label>
+                                        <label htmlFor="project-title" className="block text-md font-medium text-gray-700 mb-3">Project Name</label>
                                         <Input
-                                            id="task-title"
+                                            id="project-title"
                                             type="text"
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
                                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                            placeholder="Task Title"
+                                            placeholder="Project Name"
                                         />
                                     </div>
 
+                                    {/* Task Description Input */}
                                     <div className="mt-4">
-                                        <label htmlFor="task-description" className="block text-md font-medium text-gray-700 mb-3">Description</label>
+                                        <label htmlFor="project-description" className="block text-md font-medium text-gray-700 mb-3">Description</label>
                                         <Textarea
-                                            id="task-description"
+                                            id="project-description"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
                                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                            placeholder="Task Description"
+                                            placeholder="Project Description"
                                         />
                                     </div>
 
+                                    {/* Status Radio Button */}
                                     <div className="mt-4">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
                                         <div className="grid grid-cols-3 m-2">
@@ -161,6 +164,7 @@ export const GenerateNewProjectContent = () => {
                                         </div>
                                     </div>
 
+                                    {/* Action Buttons */}
                                     <div className="mt-4 flex justify-end">
                                         <button
                                             type="button"
@@ -186,7 +190,7 @@ export const GenerateNewProjectContent = () => {
                         </div>
                     </div>
                 </Dialog>
-            </Transition> */}
+            </Transition>
         </>
     )
 }

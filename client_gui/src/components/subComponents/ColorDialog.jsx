@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import RadioButtonIcon from '../icons/RadioButtonIcon';
-import { useUpdateColorDispatch } from '../../utils/DialogAPIRequest';
+import { useUpdateColorDispatch } from '../../utils/dialog-api-requests';
 
 export const ColorDialog = (props) => {
 
