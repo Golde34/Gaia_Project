@@ -118,7 +118,7 @@ export const CreateTaskDialog = (props) => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create New Project
+                                        Create New Task
                                     </Dialog.Title>
 
                                     <div className="mt-5">
