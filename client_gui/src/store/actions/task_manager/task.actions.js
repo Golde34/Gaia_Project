@@ -124,3 +124,24 @@ export const generateTaskFromScratch = (task) => async (dispatch) => {
         });
     }
 }
+
+export const updateTaskInDialog = (task) => async (dispatch) => {
+    dispatch({ type: TASK_UPDATE_REQUEST, payload: task });
+    try {
+        // header is here maybe need it
+        // const { userSignin: { userInfo } } = getState();
+        // const header = {
+        //     'Content-Type': 'multipart/form-data',
+        //     'Authorization': `Bearer ${userInfo.token}`
+        // }
+        const { data } = await serverRequest(`/task/update-task-in-dialog/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
+        dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.message });
+    } catch (error) {
+        dispatch({
+            type: TASK_UPDATE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
