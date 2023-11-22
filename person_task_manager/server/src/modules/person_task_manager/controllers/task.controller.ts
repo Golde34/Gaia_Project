@@ -148,7 +148,7 @@ taskRouter.post("/generate",
     });
 
 // update task in dialog
-taskRouter.put("/update-in-dialog/:id",
+taskRouter.put("/update-task-in-dialog/:id",
     RequestValidator.validate(UpdaetTaskInDialogDTO),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
         try {

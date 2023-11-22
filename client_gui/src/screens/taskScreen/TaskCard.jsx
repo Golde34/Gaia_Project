@@ -1,10 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Input, Textarea } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import { Badge, BadgeDelta, Button, Card, Flex, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../utils/date-picker";
+import { useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
 
 export const TaskCard = (props) => {
     const task = props.task;
@@ -72,14 +73,13 @@ export const TaskCard = (props) => {
     
     const [taskForm] = useState({ });
 
-    // const updateTask = use
+    const updateTask = useUpdateTaskInDialogDispatch();
     const setObjectTask = (title, description, status) => {
+        taskForm._id = task._id;
         taskForm.title = title;
         taskForm.description = description;
         taskForm.status = status;
-
-        console.log(taskForm);
-
+        updateTask(taskForm);
         // window.location.reload();
     }
 
@@ -163,7 +163,7 @@ export const TaskCard = (props) => {
                                     <div className="mt-4">
                                         <label htmlFor="description" className="block text-md font-medium text-gray-700 mb-2">Description</label>
                                         {isEditingDescription || description === '' ? (
-                                            <Textarea
+                                            <Input
                                                 type="text"
                                                 className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                 value={description}
