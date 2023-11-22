@@ -1,13 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Input, Menu, MenuHandler, MenuList } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, DateRangePicker, Flex, Text, Title } from "@tremor/react";
+import { Input, Textarea } from "@material-tailwind/react";
+import { Badge, BadgeDelta, Button, Card, Flex, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
-import vi from 'date-fns/locale/vi';
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
-import EllipsisIcon from "../../components/icons/EllipsisIcon";
+import { useNavigate } from "react-router-dom";
+import { convertTimestampToDate } from "../../utils/date-picker";
 
 export const TaskCard = (props) => {
     const task = props.task;
+
+    const navigate = useNavigate();
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -64,12 +66,6 @@ export const TaskCard = (props) => {
     const toggleEditingDescription = () => {
         setIsEditingDescription(!isEditingDescription);
     }
-
-    // Set deadline frontend
-    const [deadline, setDeadline] = useState({
-        from: new Date(),
-        to: new Date(),
-    });
 
     // Set status frontend
     const [status, setStatus] = useState(task.status);
@@ -145,16 +141,16 @@ export const TaskCard = (props) => {
                                                     {title}
                                                 </h1>
                                             )}
-                                            <a href="/client-gui/project/">
-                                               <Button className="ms-2">Details</Button> 
-                                            </a>
+                                            <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task._id}/details`)}>
+                                                Details
+                                            </Button>
                                         </Flex>
 
                                     </Dialog.Title>
                                     <div className="mt-4">
                                         <label htmlFor="description" className="block text-md font-medium text-gray-700 mb-2">Description</label>
                                         {isEditingDescription || description === '' ? (
-                                            <Input
+                                            <Textarea
                                                 type="text"
                                                 className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                 value={description}
@@ -175,17 +171,12 @@ export const TaskCard = (props) => {
                                     <div className="mt-6">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
                                         <div className="grid grid-cols-1 m-2">
-                                            <div class="inline-flex items-center bg-white">
-                                                <DateRangePicker
-                                                    className="max-w-md mx-auto"
-                                                    value={deadline}
-                                                    onValueChange={setDeadline}
-                                                    locale={vi}
-                                                    selectPlaceholder="Select a date"
-                                                    colors="rose"
-                                                >
-                                                </DateRangePicker>
-                                            </div>
+                                            <Flex>
+                                                <p>{convertTimestampToDate(task.deadline)}</p>
+                                                <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task._id}/update-deadline`)}>
+                                                    Update Deadline
+                                                </Button>
+                                            </Flex>
                                         </div>
                                     </div>
 
