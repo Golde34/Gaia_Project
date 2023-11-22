@@ -40,7 +40,6 @@ export const CreateTaskDialog = (props) => {
     const createTask = useCreateTaskDispatch(); 
 
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        console.log(title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         const datePicker = validateDatePicker(deadline.from, deadline.to);
         const deadlineTask = validateFromDate(datePicker.from, datePicker.to);
 

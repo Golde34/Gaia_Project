@@ -69,6 +69,19 @@ export const TaskCard = (props) => {
 
     // Set status frontend
     const [status, setStatus] = useState(task.status);
+    
+    const [taskForm] = useState({ });
+
+    // const updateTask = use
+    const setObjectTask = (title, description, status) => {
+        taskForm.title = title;
+        taskForm.description = description;
+        taskForm.status = status;
+
+        console.log(taskForm);
+
+        // window.location.reload();
+    }
 
     return (
         <>
@@ -255,7 +268,7 @@ export const TaskCard = (props) => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                updateNewName(newName);
+                                                setObjectTask(title, description, status)
                                                 closeModal();
                                             }}
                                         >
