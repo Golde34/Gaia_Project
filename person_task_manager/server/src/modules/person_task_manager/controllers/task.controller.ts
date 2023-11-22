@@ -5,7 +5,7 @@ import { checkPermission, checkToken } from "../../user_authentication/auth.midd
 import { Permission } from "../../../loaders/enums";
 import { plainToInstance } from "class-transformer";
 import { RequestValidator } from "../../../common/error-handler";
-import { GenerateTaskFromScratchRequestDTO, TaskRequestDto } from "../dtos/task.dto";
+import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 import { groupTaskService } from "../services/group-task.service";
 
 export const taskRouter = Router();
@@ -147,6 +147,22 @@ taskRouter.post("/generate",
         }
     });
 
+// update task in dialog
+taskRouter.put("/update-in-dialog/:id",
+    RequestValidator.validate(UpdaetTaskInDialogDTO),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
+        try {
+            const bodyJson = req.body.body;
+
+            const task = plainToInstance(UpdaetTaskInDialogDTO, bodyJson);
+            const taskId = req.params.id;
+
+            const taskResult = await taskService.updateTaskInDialog(taskId, task);
+            sendResponse(taskResult, res, next);
+        } catch (err) {
+            next(err);
+        }
+    });
 // create subtask
 
 // update subtask

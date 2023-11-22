@@ -134,7 +134,7 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/${task._id}/update-task-in-dialog`, HttpMethods.PUT, portName.taskManager, task);
+        const { data } = await serverRequest(`/task/update-task-in-dialog/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
         dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({
