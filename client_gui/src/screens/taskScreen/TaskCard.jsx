@@ -1,7 +1,10 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Input } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Card, Flex, Text, Title } from "@tremor/react";
+import { Input, Menu, MenuHandler, MenuList } from "@material-tailwind/react";
+import { Badge, BadgeDelta, Button, Card, DateRangePicker, Flex, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
+import vi from 'date-fns/locale/vi';
+import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
+import EllipsisIcon from "../../components/icons/EllipsisIcon";
 
 export const TaskCard = (props) => {
     const task = props.task;
@@ -62,8 +65,14 @@ export const TaskCard = (props) => {
         setIsEditingDescription(!isEditingDescription);
     }
 
-    // Set priority frontend
-    const [priority, setPriority] = useState(task.priority);
+    // Set deadline frontend
+    const [deadline, setDeadline] = useState({
+        from: new Date(),
+        to: new Date(),
+    });
+
+    // Set status frontend
+    const [status, setStatus] = useState(task.status);
 
     return (
         <>
@@ -113,28 +122,34 @@ export const TaskCard = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        {isEditingTitle ? (
-                                            <Input
-                                                type="text"
-                                                className="border-2 border-gray-200 p-2 rounded-md w-full"
-                                                value={title}
-                                                onChange={handleTitleChange}
-                                                onBlur={toggleEditingTitle}
-                                                autoFocus
-                                            />
-                                        ) : (
-                                            <h1
-                                                className="text-lg cursor-pointer"
-                                                onClick={toggleEditingTitle}
-                                            >
-                                                {title}
-                                            </h1>
-                                        )}
+                                        <Flex>
+                                            {isEditingTitle ? (
+                                                <Input
+                                                    type="text"
+                                                    className="border-2 border-gray-200 p-2 rounded-md w-full"
+                                                    value={title}
+                                                    onChange={handleTitleChange}
+                                                    onBlur={toggleEditingTitle}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <h1
+                                                    className="text-lg cursor-pointer"
+                                                    onClick={toggleEditingTitle}
+                                                >
+                                                    {title}
+                                                </h1>
+                                            )}
+                                            <a href="/client-gui/project/">
+                                               <Button className="ms-2">Details</Button> 
+                                            </a>
+                                        </Flex>
+
                                     </Dialog.Title>
                                     <div className="mt-4">
                                         <label htmlFor="description" className="block text-md font-medium text-gray-700 mb-2">Description</label>
@@ -157,6 +172,93 @@ export const TaskCard = (props) => {
                                         )}
                                     </div>
 
+                                    <div className="mt-6">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
+                                        <div className="grid grid-cols-1 m-2">
+                                            <div class="inline-flex items-center bg-white">
+                                                <DateRangePicker
+                                                    className="max-w-md mx-auto"
+                                                    value={deadline}
+                                                    onValueChange={setDeadline}
+                                                    locale={vi}
+                                                    selectPlaceholder="Select a date"
+                                                    colors="rose"
+                                                >
+                                                </DateRangePicker>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-6">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
+                                        <div className="grid grid-cols-3 m-2">
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-todo" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-todo"
+                                                        type="radio"
+                                                        value="TODO"
+                                                        checked={status === 'TODO'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-todo">
+                                                    TO DO
+                                                </label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-doing" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-doing"
+                                                        type="radio"
+                                                        value="IN_PROGRESS"
+                                                        checked={status === 'IN_PROGRESS'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-doing">
+                                                    IN PROGRESS
+                                                </label>
+                                            </div>
+                                            <div class="inline-flex items-center">
+                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    for="status-radio-done" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-done"
+                                                        type="radio"
+                                                        value="DONE"
+                                                        checked={status === 'DONE'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label class="text-sm text-gray-700" for="status-radio-done">
+                                                    DONE
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-6">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Sub Task (Do it later)</p>
+                                    </div>
+
+                                    <div className="mt-6">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Comment(Do it later)</p>
+                                    </div>
                                     <div className="mt-4">
                                         <button
                                             type="button"
