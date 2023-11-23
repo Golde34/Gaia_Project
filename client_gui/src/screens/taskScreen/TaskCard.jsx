@@ -37,13 +37,13 @@ export const TaskCard = (props) => {
     }
 
     const statusColor = (status) => {
-        if (status === "To Do") {
+        if (status === "TODO") {
             return "decrease";
         }
-        else if (status === "In Progress") {
+        else if (status === "IN_PROGRESS") {
             return "unchanged";
         }
-        else if (status === "Done") {
+        else if (status === "DONE") {
             return "increase";
         }
     }

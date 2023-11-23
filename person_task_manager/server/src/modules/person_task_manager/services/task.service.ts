@@ -54,7 +54,6 @@ class TaskService {
     async deleteTask(taskId: string): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                console.log('task id: ', taskId);
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 
                 return msg200({
