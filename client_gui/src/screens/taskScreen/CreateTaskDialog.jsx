@@ -40,7 +40,6 @@ export const CreateTaskDialog = (props) => {
     const createTask = useCreateTaskDispatch(); 
 
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        console.log(title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         const datePicker = validateDatePicker(deadline.from, deadline.to);
         const deadlineTask = validateFromDate(datePicker.from, datePicker.to);
 
@@ -118,7 +117,7 @@ export const CreateTaskDialog = (props) => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create New Project
+                                        Create New Task
                                     </Dialog.Title>
 
                                     <div className="mt-5">

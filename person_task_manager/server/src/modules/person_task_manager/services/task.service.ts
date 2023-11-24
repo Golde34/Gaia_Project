@@ -3,6 +3,7 @@ import { msg200, msg400 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
+import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -53,7 +54,6 @@ class TaskService {
     async deleteTask(taskId: string): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                console.log('task id: ', taskId);
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 
                 return msg200({
@@ -112,6 +112,29 @@ class TaskService {
         });
     }
 
+    async updateTaskInDialog(taskId: string, task: UpdaetTaskInDialogDTO): Promise<IResponse> {
+        try {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                const taskUpdate = await TaskEntity.findOne({ _id: taskId });
+
+                if (taskUpdate === null) return msg400('Task not found');
+
+                taskUpdate.title = task.title;
+                taskUpdate.description = task.description ?? ''; // Use optional chaining operator and provide a default value
+                taskUpdate.status = task.status;
+
+                const updateTask = await TaskEntity.updateOne({ _id: taskId }, taskUpdate);
+
+                return msg200({
+                    message: (updateTask as any)
+                });
+            } else {
+                return msg400('Task not found');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
     // disable task
 
     // enable task
