@@ -1,7 +1,7 @@
 import { Text } from "@tremor/react"
 import {useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTaskList } from "../../store/actions/task_manager/task.actions";
+import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
 import { TaskCard } from "./TaskCard";
 
 const TaskList = (props) => {

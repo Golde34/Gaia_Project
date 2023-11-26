@@ -1,4 +1,4 @@
-import { HttpMethods, serverRequest } from '../../../api/baseAPI';
+import { HttpMethods, serverRequest } from '../../../baseAPI';
 import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL, 
     TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS, TASK_DETAIL_FAIL, 
     TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS, TASK_CREATE_FAIL,

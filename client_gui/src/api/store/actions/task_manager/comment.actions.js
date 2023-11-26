@@ -1,4 +1,4 @@
-import { HttpMethods, serverRequest } from "../../../api/baseAPI";
+import { HttpMethods, serverRequest } from "../../../baseAPI";
 import {
     COMMENT_CREATE_FAIL, COMMENT_CREATE_REQUEST, COMMENT_CREATE_SUCCESS,
     COMMENT_DELETE_FAIL, COMMENT_DELETE_REQUEST, COMMENT_DELETE_SUCCESS,

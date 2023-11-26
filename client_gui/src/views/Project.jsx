@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getProjects } from "../store/actions/task_manager/project.actions";
+import { getProjects } from "../api/store/actions/task_manager/project.actions";
 import Template from "./template";
 import CardButton from "../components/subComponents/CardButton";
 import { Button, Card, Metric, Text, Title } from "@tremor/react";

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Template from "./template";
 import { useCallback, useEffect } from "react";
-import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
+import { getGroupTaskList } from "../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
 import { Button, Flex, Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
