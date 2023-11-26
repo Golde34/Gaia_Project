@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Template from "./template";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { getGroupTaskList } from "../store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
 import { Button, Flex, Metric, Text } from "@tremor/react";
@@ -14,9 +14,13 @@ function ContentArea() {
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
 
-    useEffect(() => {
+    const getGroupTask = useCallback(() => { 
         dispatch(getGroupTaskList(projectId));
-    }, [dispatch]);
+    }, [dispatch, projectId]);
+
+    useEffect(() => {
+        getGroupTask();
+    }, [projectId]);
 
     return (
         <div>

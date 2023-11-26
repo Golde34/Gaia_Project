@@ -1,5 +1,5 @@
-import { Badge, BadgeDelta, Card, Flex, Metric, Text, Title } from "@tremor/react"
-import { useEffect } from "react";
+import { Text } from "@tremor/react"
+import {useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskList } from "../../store/actions/task_manager/task.actions";
 import { TaskCard } from "./TaskCard";
@@ -12,8 +12,10 @@ const TaskList = (props) => {
 	const { loading, error, tasks } = listTasks;	
 
 	useEffect(() => {
-		dispatch(getTaskList(groupTaskId));
-	}, [dispatch]);
+		if (groupTaskId) {
+			dispatch(getTaskList(groupTaskId));
+		}
+	}, [groupTaskId]);
 
 	return (
 		<div>

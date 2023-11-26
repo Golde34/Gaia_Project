@@ -98,8 +98,7 @@ projectRouter.put("/:id/update-name",
         
         const projectId = req.params.id;
         const name = bodyJson.newName;
-        console.log(name);
-        console.log(projectId);
+
         const projectResult = await projectService.updateProjectName(projectId, name);
 
         sendResponse(projectResult, res, next);

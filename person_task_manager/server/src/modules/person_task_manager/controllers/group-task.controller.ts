@@ -75,7 +75,7 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
     try {
         const groupTaskId = req.params.id;
         const groupTaskResult = await groupTaskService.getTasksInGroupTask(groupTaskId);
-        console.log(groupTaskResult);
+
         sendResponse(groupTaskResult, res, next);
     }
     catch (err) {
