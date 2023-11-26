@@ -9,12 +9,20 @@ import TaskList from "../taskScreen/TaskList";
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
 
-    const [activeTab, setActiveTab] = useState(groupTasks[0]._id);
-    const [selectedGroupTaskId, setSelectedGroupTaskId] = useState(groupTasks[0]._id);
+    const [activeTab, setActiveTab] = useState(null);
+
+    if (activeTab === null) {
+        if (localStorage.getItem("activeTab") === undefined) {
+            localStorage.setItem("activeTab", groupTasks[0]._id);
+            setActiveTab(groupTasks[0]._id);
+        } else {
+            setActiveTab(localStorage.getItem("activeTab"));
+        }
+    }
 
     const handleTabChange = (tabId) => {
-        setActiveTab(tabId);
-        setSelectedGroupTaskId(tabId);
+        localStorage.setItem("activeTab", tabId);
+        setActiveTab(localStorage.getItem("activeTab"));
     }
 
     return (
@@ -64,8 +72,8 @@ const TabGroupTask = (props) => {
                                     </Col>
                                 </Grid>
                             </div>
-                            {selectedGroupTaskId && (
-                                <TaskList groupTaskId={selectedGroupTaskId} />
+                            {activeTab && (
+                                <TaskList groupTaskId={activeTab} />
                             )}
                         </TabPanel>
                     ))}

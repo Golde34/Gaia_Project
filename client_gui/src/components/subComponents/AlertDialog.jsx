@@ -20,6 +20,7 @@ export const AlertDialog = (props) => {
         } else if (action === "Archive") {
             console.log("This Archive function is not implemented yet.");
         }
+        
         window.location.reload();
     }
 

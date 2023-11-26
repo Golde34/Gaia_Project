@@ -9,8 +9,6 @@ import { useCreateProjectDispatch } from "../../utils/dialog-api-requests";
 export const CreateNewProject = () => {
     const useParam = useParams();
 
-    let projectId = useParam.projectId;
-
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -33,7 +31,9 @@ export const CreateNewProject = () => {
         project.status = status;
         project.ownerId = localStorage.getItem('userId');
         createNewProject(project);
-        window.location.reload();
+        
+        localStorage.addItem('projects', project);
+        // window.location.reload();
     }
 
     return (

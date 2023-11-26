@@ -80,7 +80,7 @@ export const TaskCard = (props) => {
         taskForm.description = description;
         taskForm.status = status;
         updateTask(taskForm);
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (
@@ -94,7 +94,7 @@ export const TaskCard = (props) => {
                                 <Badge color="gray">No Priority</Badge>
                             ) : (
                                 task.priority.map((priority) => (
-                                    <Badge className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                                    <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
                                 ))
                             )
                         }

@@ -31,7 +31,7 @@ const TaskList = (props) => {
 						) : (
 							tasks.map((task) => (
 								<div key={task._id} className="ms-2 me-2">
-									<TaskCard task={task} />	
+									<TaskCard key={task._id} task={task} />	
 								</div>
 							))
 						)

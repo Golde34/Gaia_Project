@@ -50,7 +50,9 @@ export const CreateTaskDialog = (props) => {
         task.deadline = deadlineTask;
         
         initiateTaskDispatch(projectId, task);
+
         window.location.reload();
+        localStorage.setItem("activeTab", groupTaskId);
     }
 
     const initiateTaskDispatch  = (projectId, task) => {

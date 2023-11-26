@@ -40,6 +40,7 @@ export const CreateNewGroupTask = () => {
         groupTask.projectId = projectId;
         createNewGroupTask(groupTask);
         window.location.reload();
+        localStorage.setItem("newGroupTask", true);
     }
     const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         let priority = [];
