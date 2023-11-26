@@ -1,22 +1,24 @@
-import * as dotenv from 'dotenv';
-
-dotenv.config( { path: './src/.env' } );
+const serverHost = import.meta.env.SERVER_HOST ?? 'localhost';
+const gaiaConnectorPort = parseInt( import.meta.env.GAIA_CONNECTOR_PORT ?? '3000' );
+const authenticationServicePort = parseInt( import.meta.env.AUTHENTICATION_SERVICE_PORT ?? '3001' );
+const taskManagerPort = parseInt( import.meta.env.TASK_MANAGER_PORT ?? '3002' );
+const serverTimeout = parseInt( import.meta.env.SERVER_TIMEOUT ?? '10000' );
 
 const REQUIRED_ENV_VARS = [
-    'LISTEN_PORT',
     'SERVER_HOST',
     'AUTHENTICATION_SERVICE_PORT',
     'GAIA_CONNECTOR_PORT',
     'TASK_MANAGER_PORT',
+    'SERVER_TIMEOUT'
 ];
 
 export const config = {
-    listenPort: parseInt( process.env.LISTEN_PORT ),
-    serverHost: process.env.SERVER_HOST,
-    authenticationServicePort: parseInt( process.env.AUTHENTICATION_SERVICE_PORT ),
-    gaiaConnectorPort: parseInt( process.env.GAIA_CONNECTOR_PORT ),
-    taskManagerPort: parseInt( process.env.TASK_MANAGER_PORT ),
-}
+    serverHost: serverHost,
+    gaiaConnectorPort: gaiaConnectorPort,
+    authenticationServicePort: authenticationServicePort,
+    taskManagerPort: taskManagerPort,
+    serverTimeout: serverTimeout
+};
 
 export const validateEnvironmentVars = () => {
     const missingRequirements = [];

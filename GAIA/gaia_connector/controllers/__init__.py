@@ -4,4 +4,5 @@ from flask_cors import CORS
 app = Flask(__name__)
 cors = CORS(app)
 
-from controllers import auth_service_controller, task_manager_controller
+CORS(app, resources={r"/*": {"origins": "*"}})
+from controllers import auth_service_controller, task_manager_controller, client_gui_controller

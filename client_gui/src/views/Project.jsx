@@ -1,39 +1,58 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 
-export default function Project() {
+import { getProjects } from "../store/actions/task_manager/project.actions";
+import Template from "./template";
+import CardButton from "../components/subComponents/CardButton";
+import { Button, Card, Metric, Text, Title } from "@tremor/react";
+import { CreateNewProject } from "../screens/projectScreen/CreateNewProject";
+
+function ContentArea() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const listProjects = useSelector((state) => state.listProjects);
+    const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
+
+    useEffect(() => {
+        dispatch(getProjects());
+    }, [dispatch]);
 
     return (
         <div>
-            { loading ? (
-                <p> Loading </p>    
+            {loading ? (
+                <p> Loading </p>
             ) : error ? (
                 <p> Error </p>
             ) : (
-                <div>
-                    {projects.map((project) => (
-                        <div key={project._id}>
-                            <div>
-                                <h2>{project.name}</h2>
-                                <p>{project.description}</p>
+                <>
+                    <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
+                        className="text-2xl font-bold text-gray-800"> Projects
+                    </Metric>
+                    <div className="grid md:grid-cols-3 w-full h-full items-center">
+                        {projects.map((project) => (
+                            <div key={project._id} className="m-3">
+                                <CardButton name={project.name} description={project.description} color={project.color}
+                                    url={`/project/${project._id}`} buttonText="View Project" elementId={project._id}
+                                />
                             </div>
-                            <div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate(`/project/${project._id}`)}
-                                >
-                                    View Project
-                                </button>
-                            </div>
+                        ))}
+                        <div key={'create-project'} className="m-3 flex justify-center">
+                            <CreateNewProject />
                         </div>
-                    ))}
-                </div>
+                    </div>
+
+                </>
             )
-        }
+            }
         </div>
     )
 }
+
+const Project = () => {
+    return (
+        <Template>
+            <ContentArea />
+        </Template>
+    )
+}
+
+export default Project;
