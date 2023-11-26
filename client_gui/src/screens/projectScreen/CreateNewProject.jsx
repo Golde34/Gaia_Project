@@ -31,9 +31,7 @@ export const CreateNewProject = () => {
         project.status = status;
         project.ownerId = localStorage.getItem('userId');
         createNewProject(project);
-        
-        localStorage.addItem('projects', project);
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (

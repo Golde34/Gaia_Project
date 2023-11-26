@@ -11,8 +11,8 @@ const TabGroupTask = (props) => {
 
     const [activeTab, setActiveTab] = useState(null);
 
-    if (activeTab === null) {
-        if (localStorage.getItem("activeTab") === undefined) {
+    if (activeTab === null || activeTab === undefined) {
+        if (localStorage.getItem("activeTab") === 'none') {
             localStorage.setItem("activeTab", groupTasks[0]._id);
             setActiveTab(groupTasks[0]._id);
         } else {

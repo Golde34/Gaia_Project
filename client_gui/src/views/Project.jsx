@@ -15,6 +15,8 @@ function ContentArea() {
         dispatch(getProjects());
     }, [dispatch]);
 
+    localStorage.setItem("activeTab", 'none');  
+
     return (
         <div>
             {loading ? (
