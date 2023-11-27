@@ -83,7 +83,7 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
     }
 });
 
-// update Group task name
+// update group task name
 groupTaskRouter.put("/:id/update-name", 
     RequestValidator.validate(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -1,5 +1,5 @@
 import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
-import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
+import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button, DateRangePicker } from "@tremor/react";
