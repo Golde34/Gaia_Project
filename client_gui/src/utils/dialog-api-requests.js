@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { updateGroupTaskName, deleteGroupTask } from "../api/store/actions/task_manager/group-task.actions";
+import { updateGroupTaskName, deleteGroupTask, updateOrdinalNumber } from "../api/store/actions/task_manager/group-task.actions";
 import { deleteProject, updateProjectColor, updateProjectName } from "../api/store/actions/task_manager/project.actions";
 import { updateTaskInDialog } from "../api/store/actions/task_manager/task.actions";
 
@@ -30,6 +30,9 @@ export const useDeleteComponentDispatch = () => {
                 break;
             case "Group Task":
                 dispatch(deleteGroupTask(groupTaskId));
+                break;
+            case "Ordinal":
+                dispatch(updateOrdinalNumber(groupTaskId));
                 break;
         }
     }

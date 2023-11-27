@@ -19,6 +19,8 @@ export const AlertDialog = (props) => {
             deleteComponentDispatch(props.elementId, elementName);
         } else if (action === "Archive") {
             console.log("This Archive function is not implemented yet.");
+        } else if (action === Ördinal ) {
+            console.log("This Ördinal function is not implemented yet.");
         }
         
         window.location.reload();
