@@ -6,16 +6,11 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     description?: string;
-    @IsString()
     @IsOptional()
     priority?: string[];
     @IsString()
     @IsOptional()
     status?: string;
-    @IsString()
-    createdAt!: Date;
-    @IsString()
-    updatedAt!: Date;
     @IsString()
     @IsOptional()
     deadline?: Date;
@@ -25,4 +20,32 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     comments?: string[];
+}
+
+export class GenerateTaskFromScratchRequestDTO {
+    @IsString()
+    title!: string;
+    @IsString()
+    @IsOptional()
+    description?: string;
+    @IsOptional()
+    prioriry?: string[];
+    @IsString()
+    @IsOptional()
+    status?: string;
+    @IsString()
+    @IsOptional()
+    deadline?: Date;
+    @IsString()
+    projectId!: string;
+}
+
+export class UpdaetTaskInDialogDTO {
+    @IsString()
+    title!: string;
+    @IsString()
+    @IsOptional()
+    description?: string;
+    @IsString()
+    status!: string;
 }

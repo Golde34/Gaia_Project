@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Metric, Text } from "@tremor/react";
 import { useNavigate } from "react-router-dom";
-import EllipsisMenu from "./impl/EllipsisMenu";
+import EllipsisMenu from "../EllipsisMenu";
 
 const CardButton = (props) => {
     const navigate = useNavigate();
