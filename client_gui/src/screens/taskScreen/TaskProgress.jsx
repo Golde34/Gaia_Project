@@ -42,11 +42,11 @@ const TaskProgress = (props) => {
                                 <Flex className="space-x-2" justifyContent="end">
                                     {/* TODO: NUMBER OF TOTAL TASKS AND TASKS DONE -> CALCULATE PERCENTAGE */}
                                     <Text>
-                                        {Math.floor(task.totalTasksCompleted / task.totalTasks) * 100} TASKS DONE / TOTAL TASKS
+                                        {task.totalTasksCompleted} TASKS DONE / TOTAL TASKS: {task.totalTasks}
                                     </Text>
                                 </Flex>
                             </Flex>
-                            <ProgressBar value={Math.floor(task.totalTasksCompleted / task.totalTasks) * 100}
+                            <ProgressBar value={task.totalTasksCompleted / task.totalTasks * 100}
                                 className="mt-2 w-300" />
                         </>
                     ))
