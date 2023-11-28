@@ -83,7 +83,7 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
     }
 });
 
-// update Group task name
+// update group task name
 groupTaskRouter.put("/:id/update-name", 
     RequestValidator.validate(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -102,11 +102,10 @@ groupTaskRouter.put("/:id/update-name",
 });
 
 // calculate total tasks and total tasks completed
-groupTaskRouter.put("/:id/calculate-total-tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.get("/:id/tasks-complete", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
         const groupTaskResult = await groupTaskService.calculateTotalTasks(groupTaskId);
-
         sendResponse(groupTaskResult, res, next);
     }
     catch (err) {

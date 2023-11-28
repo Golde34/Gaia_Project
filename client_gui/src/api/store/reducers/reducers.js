@@ -8,7 +8,7 @@ import { projectCreateReducer, projectDeleteReducer, projectDetailReducer,
     projectListReducer, projectUpdateReducer } from './task_manager/project.reducers'
 import { groupTaskCreateReducer, groupTaskDeleteReducer, groupTaskDetailReducer,
     groupTaskListReducer, groupTaskUpdateReducer } from './task_manager/group-task.reducers'
-import { taskCreateReducer, taskDeleteReducer, taskDetailReducer, 
+import { taskCompletedReducer, taskCreateReducer, taskDeleteReducer, taskDetailReducer, 
     taskListReducer, taskUpdateReducer } from './task_manager/task.reducers'
 import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer, 
     subTaskListReducer, subTaskUpdateReducer } from './task_manager/sub-task.reducers'
@@ -36,6 +36,7 @@ export const reducer = combineReducers({
     taskCreate: taskCreateReducer,
     taskUpdate: taskUpdateReducer,
     taskDelete: taskDeleteReducer,
+    taskCompleted: taskCompletedReducer,
     subTaskList: subTaskListReducer,
     subTaskDetail: subTaskDetailReducer,
     subTaskCreate: subTaskCreateReducer,

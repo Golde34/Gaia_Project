@@ -1,10 +1,11 @@
-import { HttpMethods, serverRequest } from '../../../api/baseAPI';
+import { HttpMethods, serverRequest } from '../../../baseAPI';
 import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL, 
     TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS, TASK_DETAIL_FAIL, 
     TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS, TASK_CREATE_FAIL,
     TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS, TASK_UPDATE_FAIL, 
     TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS, TASK_DELETE_FAIL, 
-    TASK_GENERATE_REQUEST, TASK_GENERATE_FAIL, TASK_GENERATE_SUCCESS
+    TASK_GENERATE_REQUEST, TASK_GENERATE_FAIL, TASK_GENERATE_SUCCESS, 
+    TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS, TASK_COMPLETED_FAIL
 } from '../../constants/task_manager/task.constants';
 
 const portName = {
@@ -143,5 +144,20 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
                 ? error.response.data.message
                 : error.message,
         });
+    }
+}
+
+export const getTasksCompleted = (groupTaskId) => async (dispatch) => {
+    dispatch({ type: TASK_COMPLETED_REQUEST, payload: groupTaskId });
+    try {
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks-complete`, HttpMethods.GET, portName.taskManager);
+        dispatch({ type: TASK_COMPLETED_SUCCESS, payload: data.message });
+    } catch (error) {
+        dispatch({
+            type: TASK_COMPLETED_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        })
     }
 }

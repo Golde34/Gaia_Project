@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 
 import RenderRouter from './routers'
-import { authenticate } from './store/actions/auth_service/userActions'
+import { authenticate } from './api/store/actions/auth_service/userActions'
 
 function App() {
 

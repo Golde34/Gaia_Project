@@ -162,7 +162,7 @@ class GroupTaskService {
                     groupTask.totalTasksCompleted = totalTasksCompleted;
                     await groupTask.save();
                     return msg200({
-                        message: 'Total tasks in group task calculated successfully'
+                        message: groupTask,
                     });
                 }
             }

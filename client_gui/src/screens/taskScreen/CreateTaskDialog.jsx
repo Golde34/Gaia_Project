@@ -1,5 +1,5 @@
 import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
-import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/dialog-api-requests";
+import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { Button, DateRangePicker } from "@tremor/react";
@@ -28,7 +28,7 @@ export const CreateTaskDialog = (props) => {
         to: new Date(),
     });
 
-    const [task] = useState({ });
+    const [task] = useState({});
 
     // Priority Checboxes
     const [isHighPriority, setIsHighPriority] = useState(false);
@@ -37,7 +37,7 @@ export const CreateTaskDialog = (props) => {
     const [isStarPriority, setIsStarPriority] = useState(false);
 
     const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
-    const createTask = useCreateTaskDispatch(); 
+    const createTask = useCreateTaskDispatch();
 
     const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         const datePicker = validateDatePicker(deadline.from, deadline.to);
@@ -48,18 +48,21 @@ export const CreateTaskDialog = (props) => {
         task.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         task.status = status;
         task.deadline = deadlineTask;
-        
+
         initiateTaskDispatch(projectId, task);
+
         window.location.reload();
     }
 
-    const initiateTaskDispatch  = (projectId, task) => {
+    const initiateTaskDispatch = (projectId, task) => {
         if (projectId === null || projectId === undefined) {
             task.groupTaskId = groupTaskId;
             createTask(task);
+            localStorage.setItem("activeTab", groupTaskId);
         } else {
             task.projectId = projectId;
             generateTaskFromScratch(task);
+            localStorage.setItem("activeTab", 'none');
         }
     }
 

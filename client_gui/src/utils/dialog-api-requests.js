@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { createGroupTask, updateGroupTaskName, deleteGroupTask } from "../store/actions/task_manager/group-task.actions";
-import { createProject, deleteProject, updateProjectColor, updateProjectName } from "../store/actions/task_manager/project.actions";
-import { createTask, generateTaskFromScratch, updateTaskInDialog } from "../store/actions/task_manager/task.actions";
+import { updateGroupTaskName, deleteGroupTask, updateOrdinalNumber } from "../api/store/actions/task_manager/group-task.actions";
+import { deleteProject, updateProjectColor, updateProjectName } from "../api/store/actions/task_manager/project.actions";
+import { updateTaskInDialog } from "../api/store/actions/task_manager/task.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -31,6 +31,9 @@ export const useDeleteComponentDispatch = () => {
             case "Group Task":
                 dispatch(deleteGroupTask(groupTaskId));
                 break;
+            case "Ordinal":
+                dispatch(updateOrdinalNumber(groupTaskId));
+                break;
         }
     }
 
@@ -47,36 +50,6 @@ export const useDeleteComponentDispatch = () => {
 //     return archiveGroupTaskDispatch;
 // }
 
-export const useCreateGroupTaskDispatch = () => {
-    const dispatch = useDispatch();
-
-    const createGroupTaskDispatch = (groupTask) => {
-        dispatch(createGroupTask(groupTask));
-    }
-
-    return createGroupTaskDispatch;
-};
-
-export const useCreateProjectDispatch = () => {
-    const dispatch = useDispatch();
-
-    const createProjectDispatch = (project) => {
-        dispatch(createProject(project));
-    }
-
-    return createProjectDispatch;
-}
-
-export const useCreateTaskDispatch = () => {
-    const dispatch = useDispatch();
-
-    const createTaskDispatch = (task) => {
-        dispatch(createTask(task));
-    }
-
-    return createTaskDispatch;
-}
-
 export const useUpdateColorDispatch = () => {
     const dispatch = useDispatch();
 
@@ -85,16 +58,6 @@ export const useUpdateColorDispatch = () => {
     }
 
     return updateColor;
-}
-
-export const useGenerateTaskFromScratchDispatch = () => {
-    const dispatch = useDispatch();
-
-    const generateTaskFromScratchDispatch = (task) => {
-        dispatch(generateTaskFromScratch(task));
-    }
-
-    return generateTaskFromScratchDispatch;
 }
 
 export const useUpdateTaskInDialogDispatch = () => {

@@ -1,20 +1,29 @@
 import { ArrowCircleRightIcon } from "@heroicons/react/solid";
-import { Card, Col, Flex, Grid, ProgressBar, Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
+import { Card, Col, Grid, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react"
 import { useState } from "react";
 import EllipsisMenu from "../../components/EllipsisMenu";
 import { CreateNewGroupTask } from "./CreateNewGroupTask";
 import { CreateTaskDialog } from "../taskScreen/CreateTaskDialog";
 import TaskList from "../taskScreen/TaskList";
+import TaskProgress from "../taskScreen/TaskProgress";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
 
-    const [activeTab, setActiveTab] = useState(groupTasks[0]._id);
-    const [selectedGroupTaskId, setSelectedGroupTaskId] = useState(groupTasks[0]._id);
+    const [activeTab, setActiveTab] = useState(null);
+
+    if (activeTab === null || activeTab === undefined) {
+        if (localStorage.getItem("activeTab") === 'none') {
+            localStorage.setItem("activeTab", groupTasks[0]._id);
+            setActiveTab(groupTasks[0]._id);
+        } else {
+            setActiveTab(localStorage.getItem("activeTab"));
+        }
+    }
 
     const handleTabChange = (tabId) => {
-        setActiveTab(tabId);
-        setSelectedGroupTaskId(tabId);
+        localStorage.setItem("activeTab", tabId);
+        setActiveTab(localStorage.getItem("activeTab"));
     }
 
     return (
@@ -48,14 +57,9 @@ const TabGroupTask = (props) => {
                             <div className="mt-10">
                                 <Grid numItems={12} className="gap-2">
                                     <Col numColSpan={10}>
-                                        <Flex className="mt-4">
-                                            <Text className="w-full">{groupTask.description}</Text>
-                                            <Flex className="space-x-2" justifyContent="end">
-                                                {/* TODO: NUMBER OF TOTAL TASKS AND TASKS DONE -> CALCULATE PERCENTAGE */}
-                                                <Text>38% TASKS DONE / TOTAL TASKS</Text>
-                                            </Flex>
-                                        </Flex>
-                                        <ProgressBar value={38} className="mt-2 w-300" />
+                                        {activeTab && (
+                                            <TaskProgress groupTaskId={activeTab} />
+                                        )}
                                     </Col>
                                     <Col numColSpan={2} className="mt-4">
                                         <div className="flex justify-center">
@@ -64,8 +68,8 @@ const TabGroupTask = (props) => {
                                     </Col>
                                 </Grid>
                             </div>
-                            {selectedGroupTaskId && (
-                                <TaskList groupTaskId={selectedGroupTaskId} />
+                            {activeTab && (
+                                <TaskList groupTaskId={activeTab} />
                             )}
                         </TabPanel>
                     ))}
