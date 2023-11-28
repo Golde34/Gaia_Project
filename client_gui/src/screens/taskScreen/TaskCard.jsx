@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../utils/date-picker";
-import { useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
 
 export const TaskCard = (props) => {
     const task = props.task;
@@ -70,8 +70,8 @@ export const TaskCard = (props) => {
 
     // Set status frontend
     const [status, setStatus] = useState(task.status);
-    
-    const [taskForm] = useState({ });
+
+    const [taskForm] = useState({});
 
     const updateTask = useUpdateTaskInDialogDispatch();
     const setObjectTask = (title, description, status) => {
@@ -80,6 +80,12 @@ export const TaskCard = (props) => {
         taskForm.description = description;
         taskForm.status = status;
         updateTask(taskForm);
+        window.location.reload();
+    }
+
+    const deleteTaskApi = useDeleteComponentDispatch();
+    const deleteTask = (taskId) => {
+        deleteTaskApi(taskId, "Task");
         window.location.reload();
     }
 
@@ -263,24 +269,47 @@ export const TaskCard = (props) => {
                                     <div className="mt-6">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Comment(Do it later)</p>
                                     </div>
-                                    <div className="mt-4">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={() => {
-                                                setObjectTask(title, description, status)
-                                                closeModal();
-                                            }}
-                                        >
-                                            OK
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
-                                            onClick={closeModal}
-                                        >
-                                            Cancel
-                                        </button>
+
+                                    <div className="mt-4 justify-end">
+                                        <Flex>
+                                            <button
+                                                type="button"
+                                                className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                                onClick={() => {
+                                                    deleteTask(task._id);
+                                                    closeModal();
+                                                }}
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:bg-yellow-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2"
+                                                onClick={() => {
+                                                    archiveTask(task._id);
+                                                    closeModal();
+                                                }}
+                                            >
+                                                Archive
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                onClick={() => {
+                                                    setObjectTask(title, description, status)
+                                                    closeModal();
+                                                }}
+                                            >
+                                                Update
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
+                                                onClick={closeModal}
+                                            >
+                                                Cancel
+                                            </button>
+                                        </Flex>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
