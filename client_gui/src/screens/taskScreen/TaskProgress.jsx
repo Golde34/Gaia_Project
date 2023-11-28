@@ -21,7 +21,7 @@ const TaskProgress = (props) => {
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
-                <p>{error}</p>                                                                  
+                <p>{error}</p>
             ) : (
                 task === undefined ? (
                     <></>
@@ -29,7 +29,7 @@ const TaskProgress = (props) => {
                     task.totalTasks === 0 || task.totalTasksCompleted === 0 ? (
                         <>
                             <Flex className="mt-4">
-                                {/* <Text className="w-full">{groupTask.description}</Text> */}
+                                <Text className="w-full">{task.description}</Text>
                                 <Flex className="space-x-2" justifyContent="start">
                                     <Title>DO AT LEAST 1 TASK DONE TO SEE YOUR PROGRESS</Title>
                                 </Flex>
@@ -38,7 +38,7 @@ const TaskProgress = (props) => {
                     ) : (
                         <>
                             <Flex className="mt-4">
-                                {/* <Text className="w-full">{groupTask.description}</Text> */}
+                                <Text className="w-full">{task.description}</Text>
                                 <Flex className="space-x-2" justifyContent="end">
                                     {/* TODO: NUMBER OF TOTAL TASKS AND TASKS DONE -> CALCULATE PERCENTAGE */}
                                     <Text>
@@ -50,7 +50,7 @@ const TaskProgress = (props) => {
                                 className="mt-2 w-300" />
                         </>
                     ))
-                )}
+            )}
         </div>
     )
 }
