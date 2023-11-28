@@ -57,7 +57,9 @@ const TabGroupTask = (props) => {
                             <div className="mt-10">
                                 <Grid numItems={12} className="gap-2">
                                     <Col numColSpan={10}>
-                                        <TaskProgress groupTaskId={groupTask._id} />
+                                        {activeTab && (
+                                            <TaskProgress groupTaskId={activeTab} />
+                                        )}
                                     </Col>
                                     <Col numColSpan={2} className="mt-4">
                                         <div className="flex justify-center">
