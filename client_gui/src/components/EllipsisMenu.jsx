@@ -11,6 +11,7 @@ const EllipsisMenu = (props) => {
     const updateTag = "Update " + elementName;
     const deleteTag = "Delete " + elementName;
     const archiveTag = "Archive " + elementName;
+    const ordinalTag = "Push " + elementName + " to the top";
 
     return (
         <>
@@ -31,18 +32,26 @@ const EllipsisMenu = (props) => {
                             className="col-span-1" component={updateTag} elementName={elementName}
                             elementId={elementId}>
                         </InputDialog>
+                        {/* {elementName === "Group Task" ?
+                            (
+                                <AlertDialog
+                                    className="col-span-1" component={ordinalTag} elementName={elementName}
+                                    action="Delete all tasks" elementId={elementId}>
+                                </AlertDialog>
+                            ) : (<></>)
+                        } */}
                         <AlertDialog
                             className="col-span-1" component={deleteTag} elementName={elementName}
                             action="Delete" elementId={elementId}>
                         </AlertDialog>
-                        { elementName === "Project" ? 
-                        (
-                            <ColorDialog
-                                className="col-span-1" component="Change color" elementName={elementName}
-                                elementId={elementId}>
-                            </ColorDialog>
-                        ) : (<></>)
-                        }                        
+                        {elementName === "Project" ?
+                            (
+                                <ColorDialog
+                                    className="col-span-1" component="Change color" elementName={elementName}
+                                    elementId={elementId}>
+                                </ColorDialog>
+                            ) : (<></>)
+                        }
                         <AlertDialog
                             className="col-span-1" component={archiveTag} elementName={elementName}
                             action="Archive" elementId={elementId}>

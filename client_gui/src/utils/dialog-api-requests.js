@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { updateGroupTaskName, deleteGroupTask, updateOrdinalNumber } from "../api/store/actions/task_manager/group-task.actions";
 import { deleteProject, updateProjectColor, updateProjectName } from "../api/store/actions/task_manager/project.actions";
-import { updateTaskInDialog } from "../api/store/actions/task_manager/task.actions";
+import { deleteTask, updateTaskInDialog } from "../api/store/actions/task_manager/task.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -23,16 +23,19 @@ export const useUpdateComponentNameDispatch = () => {
 export const useDeleteComponentDispatch = () => {
     const dispatch = useDispatch();
 
-    const deleteComponentDispatch = (groupTaskId, field) => {
+    const deleteComponentDispatch = (id, field) => {
         switch (field) {
             case "Project":
-                dispatch(deleteProject(groupTaskId));
+                dispatch(deleteProject(id));
                 break;
             case "Group Task":
-                dispatch(deleteGroupTask(groupTaskId));
+                dispatch(deleteGroupTask(id));
+                break;
+            case "Task":
+                dispatch(deleteTask(id));
                 break;
             case "Ordinal":
-                dispatch(updateOrdinalNumber(groupTaskId));
+                dispatch(updateOrdinalNumber(id));
                 break;
         }
     }

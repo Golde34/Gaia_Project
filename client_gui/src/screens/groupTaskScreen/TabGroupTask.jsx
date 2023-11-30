@@ -63,7 +63,7 @@ const TabGroupTask = (props) => {
                                     </Col>
                                     <Col numColSpan={2} className="mt-4">
                                         <div className="flex justify-center">
-                                            <CreateTaskDialog groupTaskId={groupTask._id} />
+                                            <CreateTaskDialog groupTaskId={activeTab} />
                                         </div>
                                     </Col>
                                 </Grid>
