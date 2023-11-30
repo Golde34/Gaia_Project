@@ -4,12 +4,10 @@ import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom"
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
-import { useCreateProjectDispatch } from "../../utils/dialog-api-requests";
+import { useCreateProjectDispatch } from "../../utils/create-dialog-api-requests";
 
 export const CreateNewProject = () => {
     const useParam = useParams();
-
-    let projectId = useParam.projectId;
 
     let [isOpen, setIsOpen] = useState(false);
 
@@ -104,60 +102,60 @@ export const CreateNewProject = () => {
                                     <div className="mt-4">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
                                         <div className="grid grid-cols-3 m-2">
-                                            <div class="inline-flex items-center">
-                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-todo" data-ripple-dark="true">
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="status-radio-todo" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-todo"
                                                         type="radio"
                                                         value="TODO"
                                                         checked={status === 'TODO'}
                                                         onChange={(e) => setStatus(e.target.value)}
-                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
-                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
                                                         <RadioButtonIcon />
                                                     </div>
                                                 </label>
-                                                <label class="text-sm text-gray-700" for="status-radio-todo">
+                                                <label className="text-sm text-gray-700" htmlFor="status-radio-todo">
                                                     TO DO
                                                 </label>
                                             </div>
-                                            <div class="inline-flex items-center">
-                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-doing" data-ripple-dark="true">
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="status-radio-doing" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-doing"
                                                         type="radio"
                                                         value="IN_PROGRESS"
                                                         checked={status === 'IN_PROGRESS'}
                                                         onChange={(e) => setStatus(e.target.value)}
-                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
-                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
                                                         <RadioButtonIcon />
                                                     </div>
                                                 </label>
-                                                <label class="text-sm text-gray-700" for="status-radio-doing">
+                                                <label className="text-sm text-gray-700" htmlFor="status-radio-doing">
                                                     IN PROGRESS
                                                 </label>
                                             </div>
-                                            <div class="inline-flex items-center">
-                                                <label class="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    for="status-radio-done" data-ripple-dark="true">
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="status-radio-done" data-ripple-dark="true">
                                                     <input
                                                         id="status-radio-done"
                                                         type="radio"
                                                         value="DONE"
                                                         checked={status === 'DONE'}
                                                         onChange={(e) => setStatus(e.target.value)}
-                                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                     />
-                                                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
                                                         <RadioButtonIcon />
                                                     </div>
                                                 </label>
-                                                <label class="text-sm text-gray-700" for="status-radio-done">
+                                                <label className="text-sm text-gray-700" htmlFor="status-radio-done">
                                                     DONE
                                                 </label>
                                             </div>

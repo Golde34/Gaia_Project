@@ -39,3 +39,13 @@ export class GenerateTaskFromScratchRequestDTO {
     @IsString()
     projectId!: string;
 }
+
+export class UpdaetTaskInDialogDTO {
+    @IsString()
+    title!: string;
+    @IsString()
+    @IsOptional()
+    description?: string;
+    @IsString()
+    status!: string;
+}
