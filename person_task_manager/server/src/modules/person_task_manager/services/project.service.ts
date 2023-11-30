@@ -35,7 +35,6 @@ class ProjectService {
         }
     }
 
-
     async deleteProject(projectId: string): Promise<IResponse> {
         try {
             if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
@@ -44,7 +43,7 @@ class ProjectService {
                 const groupTasks = await ProjectEntity.findOne({ _id: projectId }).select('groupTasks');
                 if (groupTasks !== null) {
                     for (let i = 0; i < groupTasks.groupTasks.length; i++) {
-                        await groupTaskService.deleteGroupTask(groupTasks.groupTasks[i]);
+                        await groupTaskService.deleteGroupTask(groupTasks.groupTasks[i], projectId);
                     }
                 }
 
@@ -81,7 +80,7 @@ class ProjectService {
         try {
             const groupTasksInProject = await ProjectEntity.findOne({ _id: projectId }).populate('groupTasks');
             const groupTasks = groupTasksInProject?.groupTasks;
-            
+
             return msg200({
                 message: (groupTasks as any)
             });
@@ -89,7 +88,6 @@ class ProjectService {
             return msg400(err.message.toString())
         }
     }
-
 
     async updateManyProjects(groupTaskId: string): Promise<IResponse> {
         const updateManyProjects = await ProjectEntity.updateMany({ groupTasks: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
@@ -152,6 +150,22 @@ class ProjectService {
     // enable project
 
     // archive project
+    
+    // MINI SERVICES
+
+    async getProjectByGroupTaskId(groupTaskId: string): Promise<string> {
+        try {
+            const project = await ProjectEntity.findOne({ groupTasks: groupTaskId });
+            if (project === null) {
+                return 'Project not found';
+            } else {
+                return project._id;
+            }
+        } catch (err: any) {
+            return err.message.toString();
+        }
+    }
+
 }
 
 export const projectService = new ProjectService();

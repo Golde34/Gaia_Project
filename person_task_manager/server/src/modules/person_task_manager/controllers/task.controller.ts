@@ -78,7 +78,11 @@ taskRouter.put("/:id",
 taskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskId = req.params.id;
-        const taskResult = await taskService.deleteTask(taskId);
+        const groupTaskByTaskId = await groupTaskService.getGroupTaskByTaskId(taskId);
+        if (groupTaskByTaskId === 'error' || groupTaskByTaskId === 'Group Task not found') {
+            next(new Error("Group Task is undefined"));
+        }
+        const taskResult = await taskService.deleteTask(taskId, groupTaskByTaskId);
 
         sendResponse(taskResult, res, next);
     }
