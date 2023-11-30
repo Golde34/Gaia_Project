@@ -5,6 +5,7 @@ import { RequestValidator } from "../../../common/error-handler";
 import { GroupTaskRequestDto } from "../dtos/group-task.dto";
 import { plainToInstance } from "class-transformer";
 import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
+import { projectService } from "../services/project.service";
 
 export const groupTaskRouter = Router();
 
@@ -61,7 +62,11 @@ groupTaskRouter.put("/:id",
 groupTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
-        const groupTaskResult = await groupTaskService.deleteGroupTask(groupTaskId);
+        const projectByGroupTaskId = await projectService.getProjectByGroupTaskId(groupTaskId);
+        if (projectByGroupTaskId === 'Project not found' || projectByGroupTaskId === 'error') {
+            next(new Error('Project is undefined'));
+        }
+        const groupTaskResult = await groupTaskService.deleteGroupTask(groupTaskId, projectByGroupTaskId);
 
         sendResponse(groupTaskResult, res, next);
     }
@@ -83,7 +88,7 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
     }
 });
 
-// update Group task name
+// update group task name
 groupTaskRouter.put("/:id/update-name", 
     RequestValidator.validate(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -102,11 +107,10 @@ groupTaskRouter.put("/:id/update-name",
 });
 
 // calculate total tasks and total tasks completed
-groupTaskRouter.put("/:id/calculate-total-tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.get("/:id/tasks-complete", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
         const groupTaskResult = await groupTaskService.calculateTotalTasks(groupTaskId);
-
         sendResponse(groupTaskResult, res, next);
     }
     catch (err) {

@@ -1,4 +1,7 @@
 import {
+    TASK_COMPLETED_FAIL,
+    TASK_COMPLETED_REQUEST,
+    TASK_COMPLETED_SUCCESS,
     TASK_CREATE_FAIL, TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS,
     TASK_DELETE_FAIL, TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS,
     TASK_DETAIL_FAIL, TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS,
@@ -87,6 +90,20 @@ export const generateTaskFromScratchReducer = (
         case TASK_GENERATE_SUCCESS:
             return { loading: false, task: action.payload.task };
         case TASK_GENERATE_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const taskCompletedReducer = (
+    state = {}, action) => {
+    switch (action.type) {
+        case TASK_COMPLETED_REQUEST:
+            return { loading: true };
+        case TASK_COMPLETED_SUCCESS:
+            return { loading: false, task: action.payload.message };
+        case TASK_COMPLETED_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;

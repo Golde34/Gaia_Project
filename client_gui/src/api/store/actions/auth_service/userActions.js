@@ -1,4 +1,4 @@
-import { HttpMethods, serverRequest } from '../../../api/baseAPI';
+import { HttpMethods, serverRequest } from '../../../baseAPI';
 import {
     USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS, USER_SIGNIN_FAIL,
     BOT_SIGNIN_REQUEST, BOT_SIGNIN_SUCCESS, BOT_SIGNIN_FAIL,
