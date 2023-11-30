@@ -1,7 +1,6 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
 import { SubTaskEntity } from "../entities/sub-task.entity";
-import { TaskEntity } from "../entities/task.entity";
 import { subTaskValidation } from "../validations/sub-task.validation";
 import { taskService } from "./task.service";
 
@@ -9,23 +8,31 @@ const taskServiceImpl = taskService;
 const subTaskValidationImpl = subTaskValidation;
 
 class SubTaskService {
-    constructor() {}
+    constructor() { }
 
     async createSubTask(subTask: any, taskId: string): Promise<IResponse> {
-        const createSubTask = await SubTaskEntity.create(subTask);
-        const subTaskId = (createSubTask as any)._id;
-        if (await !subTaskValidationImpl.checkExistedSubTaskInTask(subTaskId, taskId)) {
-            taskServiceImpl.updateTask(taskId, { $push: { subTasks: subTaskId } });
-        }
+        try {
+            const createSubTask = await SubTaskEntity.create(subTask);
+            const subTaskId = (createSubTask as any)._id;
+            
+            if (await subTaskValidationImpl.checkExistedSubTaskInTask(subTaskId, taskId) === false) {
+                taskServiceImpl.updateTask(taskId, { $push: { subTasks: subTaskId } });
 
-        return msg200({
-            message: (createSubTask as any)
-        });
+                return msg200({
+                    message: (createSubTask as any)
+                });
+            } else {
+                const deletedInitSubTask = await SubTaskEntity.deleteOne({ _id: subTaskId });
+                return msg400('Sub task is not created successfully');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
     }
 
-    async updateSubTask(subTaskId: string, subTask: any): Promise<IResponse> {
+    async updateSubTask(subTask: any, subTaskId: string): Promise<IResponse> {
         try {
-            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId)) {
+            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const updateSubTask = await SubTaskEntity.updateOne({ _id: subTaskId }, subTask);
                 return msg200({
                     message: (updateSubTask as any)
@@ -40,13 +47,10 @@ class SubTaskService {
 
     async deleteSubTask(subTaskId: string): Promise<IResponse> {
         try {
-            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId)) {
+            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const deleteSubTask = await SubTaskEntity.deleteOne({ _id: subTaskId });
-                if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId)) {
-                    taskServiceImpl.updateManyTasks({ data: { subTasks: subTaskId } }, 
-                        { $pull: { subTasks: subTaskId } });
-                }
-
+                taskServiceImpl.updateManySubTasksInTask(subTaskId);
+ 
                 return msg200({
                     message: (deleteSubTask as any)
                 });

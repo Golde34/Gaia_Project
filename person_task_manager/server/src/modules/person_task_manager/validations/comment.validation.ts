@@ -1,17 +1,29 @@
 import { CommentEntity } from "../entities/comment.entity"
 
 export const commentValidation = {
-    async checkExistedCommentByCommentId(commentId: string): Promise<boolean> {
-        if (await CommentEntity.findOne({ _id: commentId }) != null) {
-            return true; // existed
+    async checkExistedCommentById(commentId: string): Promise<boolean> {
+        try {
+            if (await CommentEntity.findOne({ _id: commentId }) != null) {
+                return true; // existed
+            } else {
+                return false;
+            }
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return false;
         }
-        return false;
     },
 
     async checkExistedCommentInTask(commentId: string, taskId: string): Promise<boolean> {
-        if (await CommentEntity.findOne({ _id: commentId, task: taskId }) != null) {
-            return true; // existed
+        try {
+            if (await CommentEntity.findOne({ _id: commentId, task: taskId }) != null) {
+                return true; // existed
+            } else {
+                return false;
+            }
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return false;
         }
-        return false;
     },
 }

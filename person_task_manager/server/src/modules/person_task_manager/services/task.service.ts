@@ -3,30 +3,44 @@ import { msg200, msg400 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
+import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
+import { GroupTaskEntity } from "../entities/group-task.entity";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
 
 class TaskService {
-    constructor() {}
+    constructor() { }
 
-    async createTaskInGroupTask(task: any, groupTaskId: string): Promise<IResponse> {
-        const createTask = await TaskEntity.create(task);
-        const taskId = (createTask as any)._id;
-        if (await !taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId)) {
-            groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
+    async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
+        try {
+            if (groupTaskId === undefined) return msg400('Group task not found');
+
+            task.createdAt = new Date();
+            task.updatedAt = new Date();
+            const createTask = await TaskEntity.create(task);
+            const taskId = (createTask as any)._id;
+
+            if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
+                groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
+            
+                return msg200({
+                    message: (createTask as any)
+                });
+            } else {
+                const deletedInitTask = await TaskEntity.deleteOne({ _id: taskId });
+                return msg400('Task is not created successfully');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
         }
-
-        return msg200({
-            message: (createTask as any)
-        });
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const updateTask = await TaskEntity.updateOne({ _id: taskId }, task);
-                
+
                 return msg200({
                     message: (updateTask as any)
                 });
@@ -36,16 +50,14 @@ class TaskService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
-    }    
+    }
 
-    async deleteTask(taskId: string): Promise<IResponse> {
+    async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
-                if (await taskValidationImpl.checkExistedTaskByTaskId(taskId)) {
-                    groupTaskServiceImpl.updateManyGroupTasks({ data: { tasks: taskId } }, 
-                        { $pull: { tasks: taskId } });
-                }
+                // delete task id in group task
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
 
                 return msg200({
                     message: (deleteTask as any)
@@ -87,19 +99,66 @@ class TaskService {
         });
     }
 
-    async updateManyTasks(filter: any, update: any): Promise<IResponse> {
-        const updateManyTasks = await TaskEntity.updateMany({filter}, update);
+    async updateManyCommentsInTask(commentId: string): Promise<IResponse> {
+        const updateManyTasks = await TaskEntity.updateMany({ comments: commentId }, { $pull: { comments: commentId } });
 
         return msg200({
             message: (updateManyTasks as any)
         });
     }
 
+    async updateManySubTasksInTask(subTaskId: string): Promise<IResponse> {
+        const updateManyTasks = await TaskEntity.updateMany({ subTasks: subTaskId }, { $pull: { subTasks: subTaskId } });
+
+        return msg200({
+            message: (updateManyTasks as any)
+        });
+    }
+
+    async updateTaskInDialog(taskId: string, task: UpdaetTaskInDialogDTO): Promise<IResponse> {
+        try {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                const taskUpdate = await TaskEntity.findOne({ _id: taskId });
+
+                if (taskUpdate === null) return msg400('Task not found');
+
+                taskUpdate.title = task.title;
+                taskUpdate.description = task.description ?? ''; // Use optional chaining operator and provide a default value
+                taskUpdate.status = task.status;
+
+                const updateTask = await TaskEntity.updateOne({ _id: taskId }, taskUpdate);
+
+                return msg200({
+                    message: (updateTask as any)
+                });
+            } else {
+                return msg400('Task not found');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
     // disable task
-    
+
     // enable task
 
+    // archive task
+
     // add subTask
-}   
+
+    // MINI SERVICES
+    async getTaskBySubTaskId(subTaskId: string): Promise<string> {
+        try {
+            const task = await TaskEntity.findOne({ subTasks: subTaskId });
+            if (task === null) {
+                return 'Task not found';
+            } else {
+                return task._id;
+            }
+        } catch (err: any) {
+            return err.message.toString();
+        }
+    }
+}
 
 export const taskService = new TaskService();

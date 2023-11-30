@@ -1,20 +1,39 @@
-import React, { userEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
-import Dashboard from './views/Dashboard'
-// import Project from './views/Project'
+import RenderRouter from './routers'
+import { authenticate } from './api/store/actions/auth_service/userActions'
 
 function App() {
+
+  const [ accessToken, setAccessToken ] = useState(null);
+
+  useEffect(() => { 
+    const checkGaiaConnected = async () => {
+      const data = await authenticate();
+      if (data) {
+        setAccessToken(data);
+      }
+    }
+    checkGaiaConnected();
+  }, []);
+
   return (
-    <main className='flex'>
-      <Router>
-        <Routes>
-          <Route path='/' element={<Dashboard />} />
-          {/* <Route path='/project' element={<Project />} /> */}
-        </Routes>
-      </Router>
-    </main>
+    <>
+    {accessToken ? (
+      <main className='flex'>
+        <BrowserRouter basename='/client-gui'>
+          <RenderRouter />
+        </BrowserRouter>
+      </main> 
+    ) : (
+      <main className='flex'>
+        <p> GAIA is not connected.</p>
+      </main>
+    )  
+    }
+    </>
   )
 }
 

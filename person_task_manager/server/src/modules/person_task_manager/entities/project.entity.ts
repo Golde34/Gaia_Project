@@ -6,6 +6,7 @@ export interface IProjectEntity extends Document {
     name: string;
     description: string;
     status: string;
+    color: string;
     groupTasks: IGroupTaskEntity["_id"][];
     ownerId: number;
 }
@@ -23,6 +24,10 @@ export const projectSchema = new mongoose.Schema(
         status: {
             type: String,
             required: true,
+        },
+        color: {
+            type: String,
+            required: false,
         },
         groupTasks: {
             type: [Schema.Types.ObjectId],
