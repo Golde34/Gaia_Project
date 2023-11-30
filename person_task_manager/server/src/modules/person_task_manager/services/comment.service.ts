@@ -12,22 +12,29 @@ class CommentService {
     }
 
     async createComment(comment: any, taskId: string): Promise<IResponse> {
-        const createComment = await CommentEntity.create(comment);
-        const commentId = (createComment as any)._id;
-        if (await !commentValidationImpl.checkExistedCommentInTask(commentId, taskId)) {
-            taskServiceImpl.updateTask(taskId, { $push: { comments: commentId } });
-        }
+        try {
+            const createComment = await CommentEntity.create(comment);
+            const commentId = (createComment as any)._id;
 
-        return msg200({
-            message: (createComment as any)
-        });
+            if (await commentValidationImpl.checkExistedCommentInTask(commentId, taskId) === false) {
+                taskServiceImpl.updateTask(taskId, { $push: { comments: commentId } });
+                return msg200({
+                    message: (createComment as any)
+                });
+            } else {
+                const deletedInitComment = await CommentEntity.deleteOne({ _id: commentId });
+                return msg400('Comment is not created successfully');
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
     }
 
     async updateComment(commentId: string, comment: any): Promise<IResponse> {
         try {
-            if (await commentValidationImpl.checkExistedCommentByCommentId(commentId)) {
+            if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
                 const updateComment = await CommentEntity.updateOne({ _id: commentId }, comment);
-            
+
                 return msg200({
                     message: (updateComment as any)
                 });
@@ -41,9 +48,10 @@ class CommentService {
 
     async deleteComment(commentId: string): Promise<IResponse> {
         try {
-            if (await commentValidationImpl.checkExistedCommentByCommentId(commentId)) {
-                const deleteComment = await CommentEntity.deleteOne({_id: commentId});
-        
+            if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
+                const deleteComment = await CommentEntity.deleteOne({ _id: commentId });
+                taskServiceImpl.updateManyCommentsInTask(commentId); 
+
                 return msg200({
                     message: (deleteComment as any)
                 });
@@ -53,7 +61,7 @@ class CommentService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
-    }    
+    }
 
     async getComment(commentId: string): Promise<IResponse> {
         const comment = await CommentEntity.findOne({ _id: commentId });

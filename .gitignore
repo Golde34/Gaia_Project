@@ -4,9 +4,16 @@
 *\node_modules
 *\dist
 *\.bin
-*\.csv
 *\.pt
+
+*\.csv
 *\.zip
+
+*\.vite
+
+*\.vs
+*\obj
+*\bin
 
 .ipynb_checkpoints
 __config__.py

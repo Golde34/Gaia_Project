@@ -72,13 +72,14 @@ export class ErrorHandler {
 export class RequestValidator {
     static validate = <T extends object>(classInstance: ClassConstructor<T>) => {
         return async (req: Request, res: Response, next: NextFunction) => {
-            const convertObject = plainToInstance(classInstance, req.body);
+            const convertObject = plainToInstance(classInstance, req.body.body);
             await validate(convertObject).then((errors) => {
                 if (errors.length > 0) {
                     let rawErrors: string[] = [];
                     for (const errorItem of errors) {
                         rawErrors = rawErrors.concat(...rawErrors, Object.values(errorItem.constraints ?? []));
                     }
+                    console.log(rawErrors);
                     const validateionErrorText = 'Request validation failed.';
                     next(new BadRequestError(validateionErrorText, rawErrors));
                 }

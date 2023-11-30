@@ -8,6 +8,9 @@ export interface IGroupTaskEntity extends Document{
     priority: string[];
     status: string;
     tasks: ITaskEntity["_id"][];
+    totalTasks: number;
+    totalTasksCompleted: number;
+    ordinalNumber: number;
 }
 
 export const groupTaskSchema = new mongoose.Schema(
@@ -31,6 +34,18 @@ export const groupTaskSchema = new mongoose.Schema(
         tasks: {
             type: [Schema.Types.ObjectId],
             ref: 'Task',
+            required: false,
+        },
+        totalTasks: {
+            type: Number,
+            required: false,
+        },
+        totalTasksCompleted: {
+            type: Number,
+            required: false,
+        },
+        ordinalNumber: {
+            type: Number,
             required: false,
         },
     },
