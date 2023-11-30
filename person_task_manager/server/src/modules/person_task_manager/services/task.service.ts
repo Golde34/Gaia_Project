@@ -4,6 +4,7 @@ import { IResponse } from "../../../common/response";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
 import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
+import { GroupTaskEntity } from "../entities/group-task.entity";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -51,11 +52,13 @@ class TaskService {
         }
     }
 
-    async deleteTask(taskId: string): Promise<IResponse> {
+    async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
-                
+                // delete task id in group task
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
+
                 return msg200({
                     message: (deleteTask as any)
                 });

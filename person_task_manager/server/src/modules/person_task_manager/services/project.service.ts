@@ -44,7 +44,7 @@ class ProjectService {
                 const groupTasks = await ProjectEntity.findOne({ _id: projectId }).select('groupTasks');
                 if (groupTasks !== null) {
                     for (let i = 0; i < groupTasks.groupTasks.length; i++) {
-                        await groupTaskService.deleteGroupTask(groupTasks.groupTasks[i]);
+                        await groupTaskService.deleteGroupTask(groupTasks.groupTasks[i], projectId);
                     }
                 }
 

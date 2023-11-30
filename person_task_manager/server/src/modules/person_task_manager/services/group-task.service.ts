@@ -68,17 +68,18 @@ class GroupTaskService {
         }
     }
 
-    async deleteGroupTask(groupTaskId: string): Promise<IResponse> {
+    async deleteGroupTask(groupTaskId: string, projectId: string): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 // delete all tasks in group task
                 const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
                 if (tasks !== null) {
                     for (let i = 0; i < tasks.tasks.length; i++) {
-                        await taskService.deleteTask(tasks.tasks[i]);
+                        await taskService.deleteTask(tasks.tasks[i], groupTaskId);
                     }
                 }
                 const deleteGroupTask = await GroupTaskEntity.deleteOne({ _id: groupTaskId });
+                await ProjectEntity.updateOne({ _id: projectId }, { $pull: { groupTasks: groupTaskId } });
 
                 return msg200({
                     message: (deleteGroupTask as any)
