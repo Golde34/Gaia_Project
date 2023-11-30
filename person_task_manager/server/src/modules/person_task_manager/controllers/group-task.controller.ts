@@ -5,6 +5,7 @@ import { RequestValidator } from "../../../common/error-handler";
 import { GroupTaskRequestDto } from "../dtos/group-task.dto";
 import { plainToInstance } from "class-transformer";
 import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
+import { projectService } from "../services/project.service";
 
 export const groupTaskRouter = Router();
 
@@ -61,7 +62,11 @@ groupTaskRouter.put("/:id",
 groupTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
-        const groupTaskResult = await groupTaskService.deleteGroupTask(groupTaskId);
+        const projectByGroupTaskId = await projectService.getProjectByGroupTaskId(groupTaskId);
+        if (projectByGroupTaskId === 'Project not found' || projectByGroupTaskId === 'error') {
+            next(new Error('Project is undefined'));
+        }
+        const groupTaskResult = await groupTaskService.deleteGroupTask(groupTaskId, projectByGroupTaskId);
 
         sendResponse(groupTaskResult, res, next);
     }

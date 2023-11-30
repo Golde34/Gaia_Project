@@ -45,7 +45,7 @@ class GroupTaskService {
             } else {
                 return undefined;
             }
-        } catch (error: any) { 
+        } catch (error: any) {
             console.log(error.message.toString());
             return undefined;
         }
@@ -157,7 +157,7 @@ class GroupTaskService {
                             }
                         } else {
                             continue;
-                        } 
+                        }
                     }
                     groupTask.totalTasks = totalTasks;
                     groupTask.totalTasksCompleted = totalTasksCompleted;
@@ -173,8 +173,8 @@ class GroupTaskService {
         }
     }
 
-    async updateOrdinalNumber(projectId:string, groupTaskId: string): Promise<IResponse> {
-       try {
+    async updateOrdinalNumber(projectId: string, groupTaskId: string): Promise<IResponse> {
+        try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const project = await ProjectEntity.findOne({ _id: projectId });
                 if (project === null) {
@@ -198,7 +198,7 @@ class GroupTaskService {
             }
         } catch (error: any) {
             return msg400(error.message.toString());
-        } 
+        }
     }
 
     // disable groupTask
@@ -206,6 +206,22 @@ class GroupTaskService {
     // enable groupTask
 
     // archive groupTask
+
+    // MINI SERVICES
+
+    async getGroupTaskByTaskId(taskId: string): Promise<string> {
+        try {
+            const groupTask = await GroupTaskEntity.findOne({ tasks: taskId });
+            if (groupTask === null) {
+                return 'Group Task not found';
+            } else {
+                return groupTask._id;
+            }
+        } catch (err: any) {
+            console.log(err.message.toString());
+            return 'error';
+        }
+    }
 }
 
 export const groupTaskService = new GroupTaskService();

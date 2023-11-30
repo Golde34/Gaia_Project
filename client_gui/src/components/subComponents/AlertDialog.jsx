@@ -17,6 +17,7 @@ export const AlertDialog = (props) => {
     const actionComponent = (action, elementName) => {
         if (action === "Delete") {
             deleteComponentDispatch(props.elementId, elementName);
+            localStorage.setItem('activeTab', 'none');
         } else if (action === "Archive") {
             console.log("This Archive function is not implemented yet.");
         } else if (action === Ördinal ) {
