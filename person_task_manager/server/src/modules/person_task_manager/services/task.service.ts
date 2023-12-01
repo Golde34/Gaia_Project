@@ -145,20 +145,7 @@ class TaskService {
     // archive task
 
     // add subTask
-
-    // MINI SERVICES
-    async getTaskBySubTaskId(subTaskId: string): Promise<string> {
-        try {
-            const task = await TaskEntity.findOne({ subTasks: subTaskId });
-            if (task === null) {
-                return 'Task not found';
-            } else {
-                return task._id;
-            }
-        } catch (err: any) {
-            return err.message.toString();
-        }
-    }
+    
 }
 
 export const taskService = new TaskService();

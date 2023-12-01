@@ -79,7 +79,7 @@ groupTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFun
 groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
-        const groupTaskResult = await groupTaskService.getTasksInGroupTask(groupTaskId);
+        const groupTaskResult = await groupTaskService.getTasksInGroupTaskByTimestamp(groupTaskId);
 
         sendResponse(groupTaskResult, res, next);
     }
