@@ -28,7 +28,7 @@ class TaskServiceUtils {
         }
     }
 
-    async getOtherTasksByEnteredStatus(groupTaskId: string, status: string): Promise < string[] > {
+    async getOtherTasksByEnteredStatus(groupTaskId: string, status: string): Promise < ITaskEntity[] > {
         try {
             const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks').select('tasks');
         
