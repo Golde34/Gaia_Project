@@ -5,6 +5,7 @@ import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
 import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 import { GroupTaskEntity } from "../entities/group-task.entity";
+import { Priority } from "../../../loaders/enums";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -23,7 +24,7 @@ class TaskService {
 
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
                 groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
-            
+
                 return msg200({
                     message: (createTask as any)
                 });
@@ -138,6 +139,21 @@ class TaskService {
             return msg400(error.message.toString());
         }
     }
+
+    // get top task 
+    async getTopTasks(limit: number): Promise<IResponse> {
+        try {
+            const tasks = await TaskEntity.find()
+                .where('priority').equals([Priority.star, Priority.high]).limit(limit);
+
+            return msg200({
+                tasks
+            });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+
     // disable task
 
     // enable task

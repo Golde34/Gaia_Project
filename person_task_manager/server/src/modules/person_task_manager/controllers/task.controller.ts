@@ -167,6 +167,18 @@ taskRouter.put("/update-task-in-dialog/:id",
             next(err);
         }
     });
+
+// get 3 top tasks
+taskRouter.get("/top-tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const taskResult = await taskService.getTopTasks(3); 
+
+        sendResponse(taskResult, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // create subtask
 
 // update subtask
