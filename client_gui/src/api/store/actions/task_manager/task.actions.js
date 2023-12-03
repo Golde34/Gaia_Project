@@ -5,7 +5,8 @@ import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL,
     TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS, TASK_UPDATE_FAIL, 
     TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS, TASK_DELETE_FAIL, 
     TASK_GENERATE_REQUEST, TASK_GENERATE_FAIL, TASK_GENERATE_SUCCESS, 
-    TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS, TASK_COMPLETED_FAIL
+    TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS, TASK_COMPLETED_FAIL, 
+    TOP_TASK_REQUEST, TOP_TASK_SUCCESS, TOP_TASK_FAIL
 } from '../../constants/task_manager/task.constants';
 
 const portName = {
@@ -155,6 +156,21 @@ export const getTasksCompleted = (groupTaskId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: TASK_COMPLETED_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        })
+    }
+}
+
+export const getTopTasks = (groupTaskId) => async (dispatch) => {
+    dispatch({ type: TOP_TASK_REQUEST, payload: groupTaskId });
+    try {
+        const { data } = await serverRequest(`/task/top-tasks`, HttpMethods.GET, portName.taskManager);
+        dispatch({ type: TOP_TASK_SUCCESS, payload: data.message });
+    } catch (error) {
+        dispatch({
+            type: TOP_TASK_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,
