@@ -119,7 +119,7 @@ export const topTaskReducer = (
         case TOP_TASK_REQUEST:
             return { loading: true };
         case TOP_TASK_SUCCESS:
-            return { loading: false, tasks: action.payload.message };
+            return { loading: false, tasks: action.payload.topTasks };
         case TOP_TASK_FAIL:
             return { loading: false, error: action.payload };
         default:

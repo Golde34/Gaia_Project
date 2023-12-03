@@ -1,13 +1,13 @@
-import { BadgeDelta, Card, Flex, Metric, Text } from "@tremor/react"
+import { BadgeDelta, Card, Flex, Metric, Text, Title } from "@tremor/react"
 
 const CardItem = (props) => {
     return (
         <Card className="w-xs" decoration="top" decorationColor="indigo">
             <Flex justifyContent="between" alignItems="center">
-                <Text>{props.name}</Text>
+                <Metric>{props.name}</Metric>
                 <BadgeDelta deltaType="moderateIncrease">+12.5%</BadgeDelta>    
             </Flex>
-            <Metric> {props.description} </Metric>
+            <Text> {props.description} </Text>
         </Card>
     );
 };

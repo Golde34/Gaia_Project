@@ -6,6 +6,7 @@ import { groupTaskService } from "./group-task.service";
 import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 import { Priority } from "../../../loaders/enums";
+import { projectService } from "./project.service";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -143,17 +144,37 @@ class TaskService {
     // get top task 
     async getTopTasks(limit: number): Promise<IResponse> {
         try {
+            const topTasks: any[] = [];
             const tasks = await TaskEntity.find()
-                .where('priority').equals([Priority.star, Priority.high]).limit(limit);
+                .where('priority').equals(Priority.star).limit(limit);
+
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
+                const groupTaskId = await groupTaskService.getGroupTaskByTaskId(task._id);
+                const project = await projectService.getProjectByGroupTaskId(groupTaskId);
+
+                topTasks.push({
+                    task,
+                    groupTaskId,
+                    project
+                });
+            }
+
+            console.log(topTasks);
 
             return msg200({
-                tasks
+                topTasks
             });
         } catch (error: any) {
             return msg400(error.message.toString());
         }
     }
-
+    // async getAllTasks(): Promise<IResponse> {
+    //     const tasks = await TaskEntity.find();
+    //     return msg200({
+    //         tasks
+    //     });
+    // }
     // disable task
 
     // enable task
