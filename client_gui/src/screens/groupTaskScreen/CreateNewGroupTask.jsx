@@ -6,8 +6,9 @@ import { useParams } from "react-router-dom";
 import { useCreateGroupTaskDispatch } from '../../utils/create-dialog-api-requests';
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
+import { Button } from "@tremor/react";
 
-export const CreateNewGroupTask = () => {
+export const CreateNewGroupTask = (props) => {
     const useParam = useParams();
 
     let [isOpen, setIsOpen] = useState(false);
@@ -60,13 +61,19 @@ export const CreateNewGroupTask = () => {
 
     return (
         <>
-            <button
-                className="text-white"
-                type="button"
-                onClick={openModal}
-            >
-                <PlusIcon className="w-6" />
-            </button>
+            {props.gtStatus === 'new' ? (
+                <Button onClick={openModal}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Create New Group Task
+                </Button>
+            ) : (
+                <Button onClick={openModal}
+                    className="text-whitebg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <PlusIcon className="w-6" />
+                </Button>
+            )
+
+            }
 
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>

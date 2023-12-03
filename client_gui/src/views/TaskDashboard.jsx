@@ -3,9 +3,10 @@ import Template from "./template";
 import { useCallback, useEffect } from "react";
 import { getGroupTaskList } from "../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
-import { Button, Flex, Metric, Text } from "@tremor/react";
+import { Button, Flex, Grid, Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
+import { CreateNewGroupTask } from "../screens/groupTaskScreen/CreateNewGroupTask";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -14,7 +15,7 @@ function ContentArea() {
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
 
-    const getGroupTask = useCallback(() => { 
+    const getGroupTask = useCallback(() => {
         dispatch(getGroupTaskList(projectId));
     }, [dispatch, projectId]);
 
@@ -38,8 +39,9 @@ function ContentArea() {
                             <>
                                 <CreateTaskDialog projectId={projectId} />
                                 <Text className="mt-5">Creating new Task is similar to creating new Group Task, helping users to easily classify task types.</Text>
-                                <Text className="mt-5">Make sure you create correctly because the first group task and the task are totally the same.</Text>
-                                <a href="/client-gui/project">
+                                <Text className="mt-5 mb-5">Make sure you create correctly because the first group task and the task are totally the same.</Text>
+                                <CreateNewGroupTask gtStatus="new" />
+                                <a href="/client-gui/project" className="flex justify-center">
                                     <Button className="mt-5">Back</Button>
                                 </a>
                             </>
