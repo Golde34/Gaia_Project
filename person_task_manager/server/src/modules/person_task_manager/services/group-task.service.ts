@@ -33,6 +33,7 @@ class GroupTaskService {
         }
     }
 
+    // This fucntion doesnot response to client
     async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             const createGroupTask = await GroupTaskEntity.create(groupTask);
@@ -102,7 +103,7 @@ class GroupTaskService {
 
     async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
         const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-        console.log(getTasksInGroupTask);
+        
         const getTasks = getTasksInGroupTask?.tasks;
 
         return msg200({
