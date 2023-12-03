@@ -112,14 +112,14 @@ export const taskCompletedReducer = (
 }
 
 export const topTaskReducer = (
-    state = { loading: true, tasks: [] },
+    state = { loading: true, topTasks: [] },
     action
 ) => {
     switch (action.type) {
         case TOP_TASK_REQUEST:
             return { loading: true };
         case TOP_TASK_SUCCESS:
-            return { loading: false, tasks: action.payload.topTasks };
+            return { loading: false, topTasks: action.payload.topTasks };
         case TOP_TASK_FAIL:
             return { loading: false, error: action.payload };
         default:

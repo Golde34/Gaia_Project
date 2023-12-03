@@ -151,12 +151,12 @@ class TaskService {
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
                 const groupTaskId = await groupTaskService.getGroupTaskByTaskId(task._id);
-                const project = await projectService.getProjectByGroupTaskId(groupTaskId);
+                const projectId = await projectService.getProjectByGroupTaskId(groupTaskId);
 
                 topTasks.push({
                     task,
                     groupTaskId,
-                    project
+                    projectId
                 });
             }
 

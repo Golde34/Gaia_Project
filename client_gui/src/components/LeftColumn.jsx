@@ -9,8 +9,8 @@ const LeftColumn = () => {
     const dispatch = useDispatch();
 
     const taskList = useSelector((state) => state.topTask);
-    const { loading, error, tasks } = taskList;
-    console.log(tasks);
+    const { loading, error, topTasks } = taskList;
+    console.log(topTasks);
      useEffect(() => {
         dispatch(getTopTasks());
     }, [dispatch]);
@@ -24,8 +24,9 @@ const LeftColumn = () => {
                     ) : error ? (
                         <div>{error}</div>
                     ) : (
-                        tasks.map((task) => (
-                            <CardItem key={task.id} name={task.title} description={task.description} />
+                        topTasks.map((topTask) => (
+                            <CardItem key={topTask.task._id} task={topTask.task} 
+                                groupTaskId={topTask.groupTaskId} projectId={topTask.projectId} />
                         ))
                     )
                 }
