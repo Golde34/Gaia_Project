@@ -67,12 +67,14 @@ export const CreateNewGroupTask = (props) => {
                     Create New Group Task
                 </Button>
             ) : (
-                <Button onClick={openModal}
-                    className="text-whitebg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                    className="text-white"
+                    type="button"
+                    onClick={openModal}
+                >
                     <PlusIcon className="w-6" />
-                </Button>
+                </button>
             )
-
             }
 
             <Transition appear show={isOpen} as={Fragment}>
