@@ -103,7 +103,7 @@ class GroupTaskService {
 
     async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
         const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-        console.log(getTasksInGroupTask);
+        
         const getTasks = getTasksInGroupTask?.tasks;
 
         return msg200({
