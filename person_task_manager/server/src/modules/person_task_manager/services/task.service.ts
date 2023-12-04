@@ -1,4 +1,4 @@
-import { TaskEntity } from "../entities/task.entity";
+import { ITaskEntity, TaskEntity } from "../entities/task.entity";
 import { msg200, msg400 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
 import { taskValidation } from "../validations/task.validation";
@@ -7,6 +7,7 @@ import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 import { Priority } from "../../../loaders/enums";
 import { projectService } from "./project.service";
+import { taskServiceUtils } from "./service_utils/task.service-utils";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -169,12 +170,25 @@ class TaskService {
             return msg400(error.message.toString());
         }
     }
-    // async getAllTasks(): Promise<IResponse> {
-    //     const tasks = await TaskEntity.find();
-    //     return msg200({
-    //         tasks
-    //     });
-    // }
+    
+    async getTaskDashboard(groupTaskId: string): Promise<IResponse> {
+        const taskDashboard = {
+            doneTaskList: [] as ITaskEntity[],
+            notDoneTaskList: [] as ITaskEntity[],
+        };
+
+        const doneTasks = await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE");
+        const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE");
+
+        taskDashboard.doneTaskList = doneTasks;
+        taskDashboard.notDoneTaskList = notDoneTasks;
+
+        return msg200({
+            message: taskDashboard as any,
+        });
+    }
+
+
     // disable task
 
     // enable task

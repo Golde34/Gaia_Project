@@ -93,7 +93,7 @@ export const TaskCard = (props) => {
 
     return (
         <>
-            <Card onClick={openModal} className="mt-3 hover:cursor-pointer" decoration="left" decorationColor="indigo">
+            <Card onClick={openModal} className="w-xs hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300" decoration="left" decorationColor="indigo">
                 <Flex justifyContent="between" alignItems="center">
                     <Title className="w-full">{task.title}</Title>
                     <Flex className="space-x-2 m-1" justifyContent="end">

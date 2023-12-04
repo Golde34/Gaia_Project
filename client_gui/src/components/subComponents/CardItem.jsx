@@ -1,4 +1,4 @@
-import { BadgeDelta, Card, Flex, Metric, Text, Title } from "@tremor/react"
+import { BadgeDelta, Card, Flex, Metric, Text } from "@tremor/react"
 import { useNavigate } from "react-router-dom";
 
 const CardItem = (props) => {

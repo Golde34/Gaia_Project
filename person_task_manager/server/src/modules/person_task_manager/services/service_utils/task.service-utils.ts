@@ -18,12 +18,16 @@ class TaskServiceUtils {
 
     async getTaskByStatus(groupTaskId: string, status: string): Promise<ITaskEntity[]> {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks').select('tasks');
+            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
 
-            return tasks.filter((task: { status: string }) => task.status === status).map(async (task: { _id: string }) => {
-                const taskEntity = await TaskEntity.findOne({ _id: task._id });
-                return taskEntity;
+            const tasksByStatus: ITaskEntity[] = [];
+            tasks?.tasks.forEach((task: any) => {
+                if (typeof task !== 'string' && task.status === status) {
+                    tasksByStatus.push(task);
+                }
             });
+
+            return tasksByStatus;
         } catch (error: any) {
             console.log(error.message.toString());
             return [];
@@ -32,13 +36,16 @@ class TaskServiceUtils {
 
     async getOtherTasksByEnteredStatus(groupTaskId: string, status: string): Promise < ITaskEntity[] > {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks').select('tasks');
-        
-            const isntStatusTasks = tasks.filter((task: { status: string }) => task.status !== status).map(async (task: { _id: string }) => {
-                return await TaskEntity.findOne({ _id: task._id });
+            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+            
+            const tasksByStatus: ITaskEntity[] = [];
+            tasks?.tasks.forEach((task: any) => {
+                if (typeof task !== 'string' && task.status !== status) {
+                    tasksByStatus.push(task);
+                }
             });
 
-            return isntStatusTasks;
+            return tasksByStatus;
         } catch (error: any) {
             console.log(error.message.toString());
             return [];
