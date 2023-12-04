@@ -179,7 +179,7 @@ class TaskService {
 
         const doneTasks = await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE");
         const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE");
-
+        // const tasks = await taskServiceUtils.orderByPriority(taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
         taskDashboard.doneTaskList = doneTasks;
         taskDashboard.notDoneTaskList = notDoneTasks;
 

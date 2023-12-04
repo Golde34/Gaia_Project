@@ -1,5 +1,3 @@
-import { Priority } from "../../../../loaders/enums";
-import { orderPriorityNumber } from "../../../../util/order-enums";
 import { GroupTaskEntity } from "../../entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../../entities/task.entity";
 
@@ -46,6 +44,16 @@ class TaskServiceUtils {
             });
 
             return tasksByStatus;
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return [];
+        }
+    }
+
+    async orderTaskByPriority(tasks: ITaskEntity[]): Promise<ITaskEntity[]> {
+        try {
+            const tasksByPriority: ITaskEntity[] = [];
+            return [];   
         } catch (error: any) {
             console.log(error.message.toString());
             return [];

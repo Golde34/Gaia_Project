@@ -52,7 +52,6 @@ const TaskList = (props) => {
 											))}
 										</Grid>
 									</>
-
 								)
 								}
 							</>
