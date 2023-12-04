@@ -9,11 +9,11 @@ export enum Permission {
 }
 
 export enum Priority {
-    low = "LOW",
-    medium = "MEDIUM",
-    high = "HIGH",
-    star = "STAR",
-    custom = "CUSTOM",
+    star = "Star",
+    high = "High",
+    medium = "Medium",
+    low = "Low",
+    custom = "Custom",
 }
 
 export enum Status {

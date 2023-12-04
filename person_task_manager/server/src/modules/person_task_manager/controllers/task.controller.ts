@@ -154,7 +154,7 @@ taskRouter.post("/generate",
 // update task in dialog
 taskRouter.put("/update-task-in-dialog/:id",
     RequestValidator.validate(UpdaetTaskInDialogDTO),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const bodyJson = req.body.body;
 
@@ -167,6 +167,7 @@ taskRouter.put("/update-task-in-dialog/:id",
             next(err);
         }
     });
+
 // create subtask
 
 // update subtask

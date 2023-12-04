@@ -3,9 +3,10 @@ import Template from "./template";
 import { useCallback, useEffect } from "react";
 import { getGroupTaskList } from "../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
-import { Button, Flex, Metric, Text } from "@tremor/react";
+import { Button, Card, Col, Flex, Grid, Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
+import { CreateNewGroupTask } from "../screens/groupTaskScreen/CreateNewGroupTask";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -14,7 +15,7 @@ function ContentArea() {
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
 
-    const getGroupTask = useCallback(() => { 
+    const getGroupTask = useCallback(() => {
         dispatch(getGroupTaskList(projectId));
     }, [dispatch, projectId]);
 
@@ -36,10 +37,24 @@ function ContentArea() {
                     {
                         groupTasks.length === 0 ? (
                             <>
-                                <CreateTaskDialog projectId={projectId} />
-                                <Text className="mt-5">Creating new Task is similar to creating new Group Task, helping users to easily classify task types.</Text>
-                                <Text className="mt-5">Make sure you create correctly because the first group task and the task are totally the same.</Text>
-                                <a href="/client-gui/project">
+                                <Grid numItems={4} className="gap-2">
+                                    <Col numColSpan={2}>
+                                        <Card className="mt-5" style={{ textAlign: "center" }}>
+                                            <CreateNewGroupTask gtStatus="new" />
+                                            <Text className="mt-5">Creating a Group Task according to the correct process will help you control specific groups of tasks in your project.</Text>
+                                            <Text className="mt-5 mb-5">Next, you will create Tasks and classify them into each Task Group.</Text>
+                                        </Card>
+                                    </Col>
+                                    <Col numColSpan={2}>
+                                        <Card className="mt-5" style={{ textAlign: "center" }}>
+                                            <CreateTaskDialog projectId={projectId} />
+                                            <Text className="mt-5">I also help you Create the Quick Task.</Text>
+                                            <Text className="mt-5 mb-5">You will create a first task and Group Task will be your first Task. Rest assured that changes can be made later.</Text>
+                                        </Card>
+                                    </Col>
+
+                                </Grid>
+                                <a href="/client-gui/project" className="flex justify-center">
                                     <Button className="mt-5">Back</Button>
                                 </a>
                             </>

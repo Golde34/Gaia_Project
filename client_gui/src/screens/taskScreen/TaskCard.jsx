@@ -38,13 +38,15 @@ export const TaskCard = (props) => {
 
     const statusColor = (status) => {
         if (status === "TODO") {
-            return "decrease";
+            return "moderateDecrease";
         }
         else if (status === "IN_PROGRESS") {
             return "unchanged";
         }
         else if (status === "DONE") {
             return "increase";
+        } else if (status === "PENDING") {
+            return "decrease";
         }
     }
 
@@ -201,7 +203,7 @@ export const TaskCard = (props) => {
 
                                     <div className="mt-6">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
-                                        <div className="grid grid-cols-3 m-2">
+                                        <div className="grid grid-cols-2 m-2">
                                             <div className="inline-flex items-center">
                                                 <label className="relative flex cursor-pointer items-center rounded-full p-3"
                                                     htmlFor="status-radio-todo" data-ripple-dark="true">
@@ -257,6 +259,25 @@ export const TaskCard = (props) => {
                                                 </label>
                                                 <label className="text-sm text-gray-700" htmlFor="status-radio-done">
                                                     DONE
+                                                </label>
+                                            </div>
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="status-radio-pending" data-ripple-dark="true">
+                                                    <input
+                                                        id="status-radio-pending"
+                                                        type="radio"
+                                                        value="PENDING"
+                                                        checked={status === 'PENDING'}
+                                                        onChange={(e) => setStatus(e.target.value)}
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                                    />
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label className="text-sm text-gray-700" htmlFor="status-radio-done">
+                                                    PENDING
                                                 </label>
                                             </div>
                                         </div>
