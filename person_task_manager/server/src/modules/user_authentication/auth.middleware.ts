@@ -3,7 +3,7 @@ import { UnauthorizedError } from "../../common/error-handler";
 import { authService } from "./auth.service";
 import NodeCache from "node-cache";
 import { Permission } from "../../loaders/enums";
-import { calculatedTimeResult } from "../../util/performance.calculate";
+import { calculatedTimeResult } from "../../util/performance-calculate";
 
 const cache = new NodeCache();
 

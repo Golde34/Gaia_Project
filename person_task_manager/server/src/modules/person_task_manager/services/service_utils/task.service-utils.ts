@@ -1,5 +1,7 @@
-import { GroupTaskEntity } from "../entities/group-task.entity";
-import { ITaskEntity, TaskEntity } from "../entities/task.entity";
+import { Priority } from "../../../../loaders/enums";
+import { orderPriorityNumber } from "../../../../util/order-enums";
+import { GroupTaskEntity } from "../../entities/group-task.entity";
+import { ITaskEntity, TaskEntity } from "../../entities/task.entity";
 
 class TaskServiceUtils {
     constructor() { }
@@ -32,10 +34,11 @@ class TaskServiceUtils {
         try {
             const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks').select('tasks');
         
-            return tasks.filter((task: { status: string }) => task.status !== status).map(async (task: { _id: string }) => {
-                const taskEntity = await TaskEntity.findOne({ _id: task._id });
-                return taskEntity;
+            const isntStatusTasks = tasks.filter((task: { status: string }) => task.status !== status).map(async (task: { _id: string }) => {
+                return await TaskEntity.findOne({ _id: task._id });
             });
+
+            return isntStatusTasks;
         } catch (error: any) {
             console.log(error.message.toString());
             return [];
