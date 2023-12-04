@@ -3,9 +3,11 @@ import { msg200, msg400 } from "../../../common/response_helpers";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { TaskEntity } from "../entities/task.entity";
+import { taskServiceUtils } from "../service_utils/task.sutils";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
+import { ITaskEntity } from '../entities/task.entity';
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -101,13 +103,29 @@ class GroupTaskService {
         });
     }
 
-    async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
+    async getTasksInGroupTaskByTimeStamp(groupTaskId: string): Promise<IResponse> {
         const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-        
         const getTasks = getTasksInGroupTask?.tasks;
 
         return msg200({
             message: (getTasks as any)
+        });
+    }
+
+    async getTaskDashboard(groupTask: string): Promise<IResponse> {
+        const taskDashboard = {
+            doneTaskList: [] as ITaskEntity[],
+            notDoneTaskList: [] as ITaskEntity[],
+        };
+
+        const doneTasks = await taskServiceUtils.getTaskByStatus(groupTask, 'DONE');
+        const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTask, 'DONE');
+
+        taskDashboard.doneTaskList = doneTasks;
+        taskDashboard.notDoneTaskList = notDoneTasks;
+
+        return msg200({
+            message: taskDashboard as any,
         });
     }
 
@@ -208,21 +226,6 @@ class GroupTaskService {
 
     // archive groupTask
 
-    // MINI SERVICES
-
-    async getGroupTaskByTaskId(taskId: string): Promise<string> {
-        try {
-            const groupTask = await GroupTaskEntity.findOne({ tasks: taskId });
-            if (groupTask === null) {
-                return 'Group Task not found';
-            } else {
-                return groupTask._id;
-            }
-        } catch (err: any) {
-            console.log(err.message.toString());
-            return 'error';
-        }
-    }
 }
 
 export const groupTaskService = new GroupTaskService();
