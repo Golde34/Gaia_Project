@@ -21,5 +21,5 @@ export enum Status {
     inProgress = "IN_PROGRESS",
     done = "DONE",
     pending = "PENDING",
-    archiced = "ARCHIVED",
+    archived = "ARCHIVED",
 }

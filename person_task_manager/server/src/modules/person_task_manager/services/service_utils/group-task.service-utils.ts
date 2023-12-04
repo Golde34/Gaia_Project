@@ -1,8 +1,8 @@
-import { GroupTaskEntity } from "../entities/group-task.entity";
-import { ProjectEntity } from "../entities/project.entity";
-import { TaskEntity } from "../entities/task.entity";
-import { groupTaskService } from "../services/group-task.service";
-import { groupTaskValidation } from "../validations/group-task.validation";
+import { GroupTaskEntity } from "../../entities/group-task.entity";
+import { ProjectEntity } from "../../entities/project.entity";
+import { TaskEntity } from "../../entities/task.entity";
+import { groupTaskService } from "../group-task.service";
+import { groupTaskValidation } from "../../validations/group-task.validation";
 
 const groupTaskValidationImpl = groupTaskValidation;
 

@@ -3,7 +3,7 @@ import { msg200, msg400 } from "../../../common/response_helpers";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { TaskEntity } from "../entities/task.entity";
-import { taskServiceUtils } from "../service_utils/task.sutils";
+import { taskServiceUtils } from "./service_utils/task.service-utils";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
@@ -103,7 +103,7 @@ class GroupTaskService {
         });
     }
 
-    async getTasksInGroupTaskByTimeStamp(groupTaskId: string): Promise<IResponse> {
+    async getTasksInGroupTaskByTimestamp(groupTaskId: string): Promise<IResponse> {
         const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
         const getTasks = getTasksInGroupTask?.tasks;
 
