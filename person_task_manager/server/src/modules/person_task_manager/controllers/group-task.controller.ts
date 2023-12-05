@@ -6,6 +6,7 @@ import { GroupTaskRequestDto } from "../dtos/group-task.dto";
 import { plainToInstance } from "class-transformer";
 import { updateNameRequestDto } from "../dtos/request_dtos/update-name-request.dto";
 import { projectService } from "../services/project.service";
+import { taskService } from "../services/task.service";
 
 export const groupTaskRouter = Router();
 
@@ -79,8 +80,8 @@ groupTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFun
 groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskId = req.params.id;
-        const groupTaskResult = await groupTaskService.getTasksInGroupTaskByTimestamp(groupTaskId);
-
+        // const groupTaskResult = await groupTaskService.getTasksInGroupTaskByTimestamp(groupTaskId);
+        const groupTaskResult = await taskService.getTaskDashboard(groupTaskId);
         sendResponse(groupTaskResult, res, next);
     }
     catch (err) {
