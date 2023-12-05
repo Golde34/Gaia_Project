@@ -8,6 +8,7 @@ import { GroupTaskEntity } from "../entities/group-task.entity";
 import { Priority } from "../../../loaders/enums";
 import { projectService } from "./project.service";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
+import { orderByPriority } from "../../../util/order-enums";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -177,9 +178,12 @@ class TaskService {
             notDoneTaskList: [] as ITaskEntity[],
         };
 
-        const doneTasks = await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE");
-        const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE");
+        // const doneTasks = await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE");
+        // const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE");
         // const tasks = await taskServiceUtils.orderByPriority(taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
+        const doneTasks = orderByPriority(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
+        const notDoneTasks = orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
+        
         taskDashboard.doneTaskList = doneTasks;
         taskDashboard.notDoneTaskList = notDoneTasks;
 
