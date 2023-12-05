@@ -177,13 +177,10 @@ class TaskService {
             doneTaskList: [] as ITaskEntity[],
             notDoneTaskList: [] as ITaskEntity[],
         };
-
-        // const doneTasks = await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE");
-        // const notDoneTasks = await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE");
-        // const tasks = await taskServiceUtils.orderByPriority(taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
-        const doneTasks = orderByPriority(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
-        const notDoneTasks = orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
         
+        const doneTasks = await orderByPriority(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
+        const notDoneTasks = await orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
+
         taskDashboard.doneTaskList = doneTasks;
         taskDashboard.notDoneTaskList = notDoneTasks;
 

@@ -1,36 +1,33 @@
 import { Priority, Status } from "../loaders/enums";
 import { ITaskEntity, TaskEntity } from "../modules/person_task_manager/entities/task.entity";
 
-export const orderByPriority = (tasks: ITaskEntity[]): ITaskEntity[] => {
-    let taskArray = [{
-        taskId: '',
-        priority: [],
-        number: 0
-    }] as any[];
+export const orderByPriority = async (tasks: ITaskEntity[]): Promise<ITaskEntity[]> => {
+    let taskArray = [] as any[];
+
     tasks.forEach(task => {
         taskArray.push({ taskId: task._id, priority: task.priority });
     })
-    console.log(taskArray);
-
+ 
     //decrease priority dimension, from array to number
     taskArray = decreasePriorityDimension(taskArray);
 
     // quick sort task array
     taskArray = quickSort(taskArray, 0, taskArray.length - 1);
+    console.log("taskArray: ", taskArray);
+    let orderedTasks = [] as ITaskEntity[];
 
-    const orderedTasks = [] as ITaskEntity[];
-
-    taskArray.forEach(async task => {
-        const tasks = await TaskEntity.findOne({ id: task.taskId })
+    const tasksPromises = taskArray.map(async task => {
+        let tasks = await TaskEntity.findOne({ _id: task.taskId })
         orderedTasks.push(tasks!);
     });
+    await Promise.all(tasksPromises);
 
     return orderedTasks;
 }
 const decreasePriorityDimension = (taskArray: any[]): any => {
-    let min = 10;
     let priorityDict = priorityDefo();
     taskArray.forEach(task => {
+        let min = 10;
         for (let i = 0; i < task.priority.length; i++) {
             let number = priorityDict.find((item: any) => item.priority === task.priority[i])!.order;
             if (number < min) {
