@@ -8,7 +8,6 @@ import { GroupTaskEntity } from "../entities/group-task.entity";
 import { Priority } from "../../../loaders/enums";
 import { projectService } from "./project.service";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
-import { orderByPriority } from "../../../util/order-enums";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -162,8 +161,6 @@ class TaskService {
                 });
             }
 
-            console.log(topTasks);
-
             return msg200({
                 topTasks
             });
@@ -177,10 +174,10 @@ class TaskService {
             doneTaskList: [] as ITaskEntity[],
             notDoneTaskList: [] as ITaskEntity[],
         };
-        
-        const doneTasks = await orderByPriority(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
-        const notDoneTasks = await orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
 
+        const notDoneTasks = await taskServiceUtils.orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
+        const doneTasks = taskServiceUtils.revertTaskOrder(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
+        
         taskDashboard.doneTaskList = doneTasks;
         taskDashboard.notDoneTaskList = notDoneTasks;
 
