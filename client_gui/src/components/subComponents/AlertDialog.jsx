@@ -22,8 +22,7 @@ export const AlertDialog = (props) => {
         } else if (action === "Archive") {
             console.log("This Archive function is not implemented yet.");
         } else if (action === "push" ) {
-            const projectId = localStorage.getItem('currentProjectId');
-            updateOrdinalDispatch(props.elementId, projectId);
+            updateOrdinalDispatch(props.elementId, props.projectId);
         }
         
         window.location.reload();

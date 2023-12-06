@@ -116,7 +116,7 @@ export const TaskCard = (props) => {
                                 </Col>
                                 <Col numColSpan={1}>
                                     <Flex justifyContent="center">
-                                        <BadgeDelta color={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                        <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
                                     </Flex>
                                 </Col>
                             </Grid>

@@ -9,6 +9,7 @@ import TaskProgress from "../taskScreen/TaskProgress";
 
 const TabGroupTask = (props) => {
     const groupTasks = props.groupTasks;
+    const projectId = props.projectId;
 
     const [activeTab, setActiveTab] = useState(null);
 
@@ -44,7 +45,7 @@ const TabGroupTask = (props) => {
                             <div className="grid grid-flow-col gap-4">
                                 <div className="col-span-2 mt-1" >{groupTask.title}</div>
                                 <div className="col-span-2" >
-                                    <EllipsisMenu elementName="Group Task" elementId={groupTask._id} />
+                                    <EllipsisMenu elementName="Group Task" elementId={groupTask._id} projectId={projectId} />
                                 </div>
                             </div>
                         </Tab>

@@ -36,7 +36,7 @@ const EllipsisMenu = (props) => {
                             (
                                 <AlertDialog
                                     className="col-span-1" component={ordinalTag} elementName={elementName}
-                                    action="push" elementId={elementId}>
+                                    action="push" elementId={elementId} projectId={props.projectId}>
                                 </AlertDialog>
                             ) : (<></>)
                         }
