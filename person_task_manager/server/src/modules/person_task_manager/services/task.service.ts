@@ -146,8 +146,10 @@ class TaskService {
     async getTopTasks(limit: number): Promise<IResponse> {
         try {
             const topTasks: any[] = [];
-            const tasks = await TaskEntity.find()
-                .where('priority').equals(Priority.star).limit(limit);
+            const tasks = await TaskEntity.find({
+                priority: Priority.star,
+                status: { $in: ['TODO', 'IN_PROGRESS', 'CUSTOM'] }
+            }).limit(limit);
 
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
@@ -168,7 +170,7 @@ class TaskService {
             return msg400(error.message.toString());
         }
     }
-    
+
     async getTaskDashboard(groupTaskId: string): Promise<IResponse> {
         const taskDashboard = {
             doneTaskList: [] as ITaskEntity[],
@@ -177,7 +179,7 @@ class TaskService {
 
         const notDoneTasks = await taskServiceUtils.orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
         const doneTasks = taskServiceUtils.revertTaskOrder(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
-        
+
         taskDashboard.doneTaskList = doneTasks;
         taskDashboard.notDoneTaskList = notDoneTasks;
 
@@ -194,7 +196,7 @@ class TaskService {
     // archive task
 
     // add subTask
-    
+
 }
 
 export const taskService = new TaskService();

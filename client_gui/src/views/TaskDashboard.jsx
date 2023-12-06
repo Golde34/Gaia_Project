@@ -60,7 +60,7 @@ function ContentArea() {
                             </>
                         ) : (
                             <>
-                                <TabGroupTask groupTasks={groupTasks} />
+                                <TabGroupTask groupTasks={groupTasks} projectId={projectId} />
                                 <Flex className="mt-5" justifyContent="end">
                                     <a href="/client-gui/project">
                                         <Button>Back</Button>

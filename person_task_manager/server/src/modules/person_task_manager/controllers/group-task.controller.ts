@@ -120,7 +120,7 @@ groupTaskRouter.get("/:id/tasks-complete", async (req: Request, res: Response, n
 });
 
 // update ordinal number
-groupTaskRouter.put("/:id/update-ordinal-number", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+groupTaskRouter.put("/:id/update-ordinal", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const bodyJson = req.body.body;
 
