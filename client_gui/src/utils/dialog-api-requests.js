@@ -72,3 +72,13 @@ export const useUpdateTaskInDialogDispatch = () => {
 
     return updateTaskInDialogDispatch;
 }
+
+export const useUpdateOrdinalNumberDispatch = () => {
+    const dispatch = useDispatch();
+
+    const updateOrdinalNumberDispatch = (groupTaskId, projectId) => {
+        dispatch(updateOrdinalNumber(groupTaskId, projectId));
+    }
+
+    return updateOrdinalNumberDispatch;
+}

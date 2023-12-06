@@ -32,14 +32,14 @@ const EllipsisMenu = (props) => {
                             className="col-span-1" component={updateTag} elementName={elementName}
                             elementId={elementId}>
                         </InputDialog>
-                        {/* {elementName === "Group Task" ?
+                        {elementName === "Group Task" ?
                             (
                                 <AlertDialog
                                     className="col-span-1" component={ordinalTag} elementName={elementName}
-                                    action="Delete all tasks" elementId={elementId}>
+                                    action="push" elementId={elementId}>
                                 </AlertDialog>
                             ) : (<></>)
-                        } */}
+                        }
                         <AlertDialog
                             className="col-span-1" component={deleteTag} elementName={elementName}
                             action="Delete" elementId={elementId}>
