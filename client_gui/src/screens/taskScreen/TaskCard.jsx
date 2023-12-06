@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, Flex, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
@@ -94,23 +94,33 @@ export const TaskCard = (props) => {
     return (
         <>
             <Card onClick={openModal} className="w-xs hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300" decoration="left" decorationColor="indigo">
-                <Flex justifyContent="between" alignItems="center">
-                    <Title className="w-full">{task.title}</Title>
-                    <Flex className="space-x-2 m-1" justifyContent="end">
-                        {
-                            task.priority.length === 0 ? (
-                                <Badge color="gray">No Priority</Badge>
-                            ) : (
-                                task.priority.map((priority) => (
-                                    <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
-                                ))
-                            )
-                        }
-                        <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
-                    </Flex>
-                </Flex>
-                <Flex className="space-x-2 m-1" justifyContent="end">
-                    <Text>{task.deadline}</Text>
+                <Grid numItems={6} className="gap-2">
+                    <Col numColSpan={4}>
+                        <Title className="text-2xl">{task.title}</Title>
+                    </Col>
+                    <Col numColSpan={2}>
+                        <Flex className="space-x-2" justifyContent="center">
+                            <Grid numItems={1}>
+                                <Col numColSpan={1}>
+                                    {
+                                        task.priority.length === 0 ? (
+                                            <Badge color="gray">No Priority</Badge>
+                                        ) : (
+                                            task.priority.map((priority) => (
+                                                <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                                            ))
+                                        )
+                                    }
+                                </Col>
+                                <Col numColSpan={1}>
+                                    <BadgeDelta color={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                </Col>
+                            </Grid>
+                        </Flex>
+                    </Col>
+                </Grid>
+                <Flex className="space-x-2 mt-5" justifyContent="start">
+                    <Text>{convertTimestampToDate(task.deadline)}</Text>
                 </Flex>
             </Card>
 
