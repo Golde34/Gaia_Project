@@ -102,26 +102,35 @@ export const TaskCard = (props) => {
                         <Flex className="space-x-2" justifyContent="center">
                             <Grid numItems={1}>
                                 <Col numColSpan={1}>
-                                    {
-                                        task.priority.length === 0 ? (
-                                            <Badge color="gray">No Priority</Badge>
-                                        ) : (
-                                            task.priority.map((priority) => (
-                                                <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
-                                            ))
-                                        )
-                                    }
+                                    <Flex justifyContent="center">
+                                        {
+                                            task.priority.length === 0 ? (
+                                                <Badge color="gray">No Priority</Badge>
+                                            ) : (
+                                                task.priority.map((priority) => (
+                                                    <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                                                ))
+                                            )
+                                        }
+                                    </Flex>
                                 </Col>
                                 <Col numColSpan={1}>
-                                    <BadgeDelta color={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                    <Flex justifyContent="center">
+                                        <BadgeDelta color={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                    </Flex>
                                 </Col>
                             </Grid>
                         </Flex>
                     </Col>
+                    <Col numColSpan={3}>
+                        <Text className="text-sm">Start Date: {convertTimestampToDate(task.deadline)}</Text>
+                    </Col>
+                    <Col numColSpan={3}>
+                        <Flex justifyContent="center">
+                            <Text className="text-sm">Duration: </Text>
+                        </Flex>
+                    </Col>
                 </Grid>
-                <Flex className="space-x-2 mt-5" justifyContent="start">
-                    <Text>{convertTimestampToDate(task.deadline)}</Text>
-                </Flex>
             </Card>
 
             <Transition appear show={isOpen} as={Fragment}>
