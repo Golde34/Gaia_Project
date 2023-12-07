@@ -10,7 +10,6 @@ import { projectService } from "./project.service";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
 import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
 
-const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
 
 class TaskService {
@@ -22,6 +21,7 @@ class TaskService {
 
             task.createdAt = new Date();
             task.updatedAt = new Date();
+            if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 1;
             const createTask = await TaskEntity.create(task);
             const taskId = (createTask as any)._id;
 

@@ -127,7 +127,7 @@ export const TaskCard = (props) => {
                     </Col>
                     <Col numColSpan={3}>
                         <Flex justifyContent="center">
-                            <Text className="text-sm">Duration: </Text>
+                            <Text className="text-sm">Duration: {task.duration}h</Text>
                         </Flex>
                     </Col>
                 </Grid>
