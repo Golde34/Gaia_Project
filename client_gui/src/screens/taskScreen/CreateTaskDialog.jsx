@@ -2,7 +2,7 @@ import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
 import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { Button, Col, DatePicker, Grid } from "@tremor/react";
+import { Button, Col, DatePicker, Flex, Grid } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
@@ -182,16 +182,17 @@ export const CreateTaskDialog = (props) => {
                                         <p className="block text-md font-medium text-gray-700 mb-3">Due Date</p>
                                         <div className="grid grid-cols-1 m-2">
                                             <div className="inline-flex items-center bg-white">
-                                                <DatePicker
-                                                    className="max-w-md mx-auto"
-                                                    onValueChange={setDeadline}
-                                                    minDate={new Date()}
-                                                    value={deadline}
-                                                    locale={vi}
-                                                    selectPlaceholder="Select a date"
-                                                    displayFormat="dd/MM/yyyy HH:mm"
-                                                >
-                                                </DatePicker>
+                                                <Flex>
+                                                    <DatePicker
+                                                        className="max-w-md mx-auto"
+                                                        onValueChange={setDeadline}
+                                                        minDate={new Date()}
+                                                        value={deadline}
+                                                        locale={vi}
+                                                        selectPlaceholder="Select a date"
+                                                        displayFormat="dd/MM/yyyy HH:mm"
+                                                    ></DatePicker>
+                                                </Flex>
                                             </div>
                                         </div>
                                     </div>
