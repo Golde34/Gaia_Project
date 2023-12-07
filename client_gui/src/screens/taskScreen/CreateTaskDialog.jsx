@@ -2,7 +2,7 @@ import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
 import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { Button, DateRangePicker } from "@tremor/react";
+import { Button, Col, DatePicker, Grid } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
@@ -11,7 +11,7 @@ import vi from 'date-fns/locale/vi';
 export const CreateTaskDialog = (props) => {
     const projectId = props.projectId;
     const groupTaskId = props.groupTaskId;
-    
+
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -24,10 +24,8 @@ export const CreateTaskDialog = (props) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('');
-    const [deadline, setDeadline] = useState({
-        from: new Date(),
-        to: new Date(),
-    });
+    const [deadline, setDeadline] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
 
     const [task] = useState({});
 
@@ -116,7 +114,7 @@ export const CreateTaskDialog = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
@@ -148,25 +146,59 @@ export const CreateTaskDialog = (props) => {
                                     </div>
 
                                     <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
+                                        <Grid numItems={5}>
+                                            <Col numColSpan={3}>
+                                                <p className="block text-md font-medium text-gray-700 mb-3">Start Date</p>
+                                                <div className="grid grid-cols-1 m-2">
+                                                    <div className="inline-flex items-center bg-white">
+                                                        <DatePicker
+                                                            className="max-w-md mx-auto"
+                                                            onValueChange={setStartDate}
+                                                            minDate={new Date()}
+                                                            value={startDate}
+                                                            locale={vi}
+                                                            selectPlaceholder="Select a date"
+                                                            displayFormat="dd/MM/yyyy HH:mm"
+                                                        >
+                                                        </DatePicker>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                            <Col numColSpan={2}>
+                                                <p className="block text-md font-medium text-gray-700 mb-3">Duration</p>
+                                                <Input
+                                                    id="task-title"
+                                                    type="number"
+                                                    value={title}
+                                                    // onChange={(e) => setDuration(e.target.value)}
+                                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                    placeholder="Duration"
+                                                />
+                                            </Col>
+                                        </Grid>
+                                    </div>
+
+                                    <div className="mt-2">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Due Date</p>
                                         <div className="grid grid-cols-1 m-2">
                                             <div className="inline-flex items-center bg-white">
-                                                <DateRangePicker
+                                                <DatePicker
                                                     className="max-w-md mx-auto"
-                                                    value={deadline}
                                                     onValueChange={setDeadline}
+                                                    minDate={new Date()}
+                                                    value={deadline}
                                                     locale={vi}
                                                     selectPlaceholder="Select a date"
-                                                    colors="rose"
+                                                    displayFormat="dd/MM/yyyy HH:mm"
                                                 >
-                                                </DateRangePicker>
+                                                </DatePicker>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
-                                        <div className="grid grid-cols-4 m-2">
+                                    <div className="mt-8">
+                                        <p className="block text-md font-medium text-gray-700 mb-1">Priority</p>
+                                        <div className="grid grid-cols-4 m-1">
                                             <div className="inline-flex items-center">
                                                 <label className="relative flex items-center p-3 rounded-full cursor-pointer"
                                                     htmlFor="priority-checkbox-high" data-ripple-dark="true">
@@ -234,10 +266,9 @@ export const CreateTaskDialog = (props) => {
                                         </div>
                                     </div>
 
-
-                                    <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
-                                        <div className="grid grid-cols-3 m-2">
+                                    <div className="mt-2">
+                                        <p className="block text-md font-medium text-gray-700 mb-1">Status</p>
+                                        <div className="grid grid-cols-3 m-1">
                                             <div className="inline-flex items-center">
                                                 <label className="relative flex cursor-pointer items-center rounded-full p-3"
                                                     htmlFor="status-radio-todo" data-ripple-dark="true">
@@ -310,7 +341,7 @@ export const CreateTaskDialog = (props) => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                setObjectTask(title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
+                                                setObjectTask(title, description, status, startDate, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
                                             }}
                                         >
@@ -323,7 +354,7 @@ export const CreateTaskDialog = (props) => {
                         </div>
                     </div>
                 </Dialog>
-            </Transition>
+            </Transition >
         </>
     )
 }
