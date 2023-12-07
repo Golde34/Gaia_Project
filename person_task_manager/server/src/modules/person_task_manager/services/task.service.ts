@@ -8,6 +8,7 @@ import { GroupTaskEntity } from "../entities/group-task.entity";
 import { Priority } from "../../../loaders/enums";
 import { projectService } from "./project.service";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
+import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
 
 const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
@@ -25,8 +26,9 @@ class TaskService {
             const taskId = (createTask as any)._id;
 
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
-                groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
-
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $push: { tasks: taskId } });
+                groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
+ 
                 return msg200({
                     message: (createTask as any)
                 });
@@ -58,10 +60,11 @@ class TaskService {
     async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 // delete task id in group task
-                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { tasks: taskId} });
+                groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
+                const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 return msg200({
                     message: (deleteTask as any)
                 });
