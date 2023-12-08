@@ -21,7 +21,7 @@ class TaskService {
 
             task.createdAt = new Date();
             task.updatedAt = new Date();
-            if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 1;
+            if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
             const createTask = await TaskEntity.create(task);
             const taskId = (createTask as any)._id;
 

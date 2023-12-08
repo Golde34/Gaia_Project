@@ -13,7 +13,13 @@ export class TaskRequestDto {
     status?: string;
     @IsString()
     @IsOptional()
+    startDate?: Date;
+    @IsString()
+    @IsOptional()
     deadline?: Date;
+    @IsString()
+    @IsOptional()
+    duration?: number;
     @IsString()
     @IsOptional()
     subTasks?: string[];
@@ -35,7 +41,13 @@ export class GenerateTaskFromScratchRequestDTO {
     status?: string;
     @IsString()
     @IsOptional()
+    startDate?: Date;
+    @IsString()
+    @IsOptional()
     deadline?: Date;
+    @IsString()
+    @IsOptional()
+    duration?: number;
     @IsString()
     projectId!: string;
 }
