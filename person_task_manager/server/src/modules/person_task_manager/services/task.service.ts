@@ -191,7 +191,21 @@ class TaskService {
         });
     }
 
+    async moveTask(taskId: string, oldGroupTaskId: string, newGroupTaskId: string): Promise<IResponse> {
+        try {
+            await GroupTaskEntity.updateOne({ _id: oldGroupTaskId }, { $pull: { tasks: taskId } });
+            await GroupTaskEntity.updateOne({ _id: newGroupTaskId }, { $push: { tasks: taskId } });
+            groupTaskServiceUtils.calculateTotalTasks(oldGroupTaskId);
+            groupTaskServiceUtils.calculateTotalTasks(newGroupTaskId);
 
+            return msg200({
+                message: 'Move task successfully'
+            });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+    
     // disable task
 
     // enable task

@@ -222,18 +222,6 @@ export const TaskCard = (props) => {
                                         </div>
                                     </div>
 
-                                    {/* <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
-                                        <div className="grid grid-cols-1 m-2">
-                                            <Flex>
-                                                <p>{convertTimestampToDate(task.deadline)}</p>
-                                                <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task._id}/update-deadline`)}>
-                                                    Update Deadline
-                                                </Button>
-                                            </Flex>
-                                        </div>
-                                    </div> */}
-
                                     <div className="mt-6">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
                                         <div className="grid grid-cols-2 m-2">
