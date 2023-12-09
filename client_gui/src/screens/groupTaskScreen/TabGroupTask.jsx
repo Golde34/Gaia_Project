@@ -70,7 +70,7 @@ const TabGroupTask = (props) => {
                                 </Grid>
                             </div>
                             {activeTab && (
-                                <TaskList groupTaskId={activeTab} />
+                                <TaskList groupTaskId={activeTab} projectId={projectId} />
                             )}
                         </TabPanel>
                     ))}

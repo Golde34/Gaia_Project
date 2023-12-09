@@ -6,9 +6,12 @@ import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../utils/date-picker";
 import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { MoveTask } from "./MoveTask";
 
 export const TaskCard = (props) => {
     const task = props.task;
+    const projectId = props.projectId;
+    const groupTaskId = props.groupTaskId;
 
     const navigate = useNavigate();
 
@@ -302,6 +305,10 @@ export const TaskCard = (props) => {
                                                 </label>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-3">
+                                       <MoveTask taskId={task._id} projectId={projectId} groupTaskId={groupTaskId}/> 
                                     </div>
 
                                     <div className="mt-6">

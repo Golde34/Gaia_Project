@@ -64,7 +64,6 @@ class TaskServiceUtils {
 
         // quick sort task array
         taskArray = priorityOrder.quickSort(taskArray, 0, taskArray.length - 1);
-        console.log("taskArray: ", taskArray);
         let orderedTasks = [] as ITaskEntity[];
 
         const tasksPromises = taskArray.map(async task => {

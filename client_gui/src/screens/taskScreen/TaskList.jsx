@@ -7,6 +7,7 @@ import { TaskCard } from "./TaskCard";
 const TaskList = (props) => {
 	const dispatch = useDispatch();
 
+	const projectId = props.projectId;
 	const groupTaskId = props.groupTaskId;
 	const listTasks = useSelector((state) => state.taskList);
 	const { loading, error, tasks } = listTasks;
@@ -36,7 +37,8 @@ const TaskList = (props) => {
 									<>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.notDoneTaskList.map((task) => (
-												<TaskCard key={task._id} task={task} />
+												<TaskCard key={task._id} task={task} 
+													projectId={projectId} groupTaskId={groupTaskId} />
 											))}
 										</Grid>
 									</>
@@ -48,7 +50,8 @@ const TaskList = (props) => {
 									<>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.doneTaskList.map((task) => (
-												<TaskCard key={task._id} task={task} />
+												<TaskCard key={task._id} task={task} 
+													projectId={projectId} groupTaskId={groupTaskId} />
 											))}
 										</Grid>
 									</>
