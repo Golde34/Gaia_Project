@@ -1,14 +1,17 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../utils/date-picker";
 import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { MoveTask } from "./MoveTask";
 
 export const TaskCard = (props) => {
     const task = props.task;
+    const projectId = props.projectId;
+    const groupTaskId = props.groupTaskId;
 
     const navigate = useNavigate();
 
@@ -122,12 +125,13 @@ export const TaskCard = (props) => {
                             </Grid>
                         </Flex>
                     </Col>
-                    <Col numColSpan={3}>
-                        <Text className="text-sm">Start Date: {convertTimestampToDate(task.deadline)}</Text>
+                    <Col numColSpan={4}>
+                        <Text className="text-sm">Start Date: {convertTimestampToDate(task.startDate)}</Text>
+                        <Text className="text-sm">Deadline: {convertTimestampToDate(task.deadline)}</Text>
                     </Col>
-                    <Col numColSpan={3}>
-                        <Flex justifyContent="center">
-                            <Text className="text-sm">Duration: </Text>
+                    <Col numColSpan={2}>
+                        <Flex className="space-x-2" justifyContent="center">
+                            <Subtitle className="text">Duration: {task.duration}h</Subtitle>
                         </Flex>
                     </Col>
                 </Grid>
@@ -212,7 +216,8 @@ export const TaskCard = (props) => {
                                         <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
                                         <div className="grid grid-cols-1 m-2">
                                             <Flex>
-                                                <p>{convertTimestampToDate(task.deadline)}</p>
+                                                <Subtitle>{convertTimestampToDate(task.deadline)}</Subtitle>
+                                                <Subtitle>Duration: {task.duration}h</Subtitle>
                                                 <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task._id}/update-deadline`)}>
                                                     Update Deadline
                                                 </Button>
@@ -300,6 +305,10 @@ export const TaskCard = (props) => {
                                                 </label>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-3">
+                                       <MoveTask taskId={task._id} projectId={projectId} groupTaskId={groupTaskId}/> 
                                     </div>
 
                                     <div className="mt-6">

@@ -15,13 +15,15 @@ function ContentArea() {
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
 
-    const getGroupTask = useCallback(() => {
+    const getGroupTasks = useCallback(() => {
         dispatch(getGroupTaskList(projectId));
     }, [dispatch, projectId]);
 
     useEffect(() => {
-        getGroupTask();
+        getGroupTasks();
     }, [projectId]);
+
+    localStorage.setItem(projectId, JSON.stringify(groupTasks));
 
     return (
         <div>

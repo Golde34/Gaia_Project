@@ -1,5 +1,5 @@
 import { Button, Menu, MenuHandler, MenuList } from "@material-tailwind/react"
-import EllipsisIcon from "../components/icons/EllipsisIcon"
+import EllipsisIcon from "./icons/EllipsisIcon"
 import { InputDialog } from "../components/subComponents/InputDialog";
 import { AlertDialog } from "../components/subComponents/AlertDialog";
 import { ColorDialog } from "../components/subComponents/ColorDialog";
