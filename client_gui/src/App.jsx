@@ -4,9 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 
 import RenderRouter from './routers'
 import { authenticate } from './api/store/actions/auth_service/userActions'
+import { checkLocalStorage } from './utils/set-interval'
 
 function App() {
-
+  let interval = 60 * 60 * 1000;
+  checkLocalStorage(interval);
   const [ accessToken, setAccessToken ] = useState(null);
 
   useEffect(() => { 
