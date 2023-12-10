@@ -11,6 +11,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { dashboardRouter } from "./modules/person_task_manager/controllers/dashboard.controller";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -40,7 +41,7 @@ async function main(): Promise<void> {
 	app.use(helmet());
     app.use(morgan("dev"));
 
-
+    app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
     app.use("/project", projectRouter);
     app.use("/group-task", groupTaskRouter);

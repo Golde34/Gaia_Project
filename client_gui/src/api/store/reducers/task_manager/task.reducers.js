@@ -1,13 +1,13 @@
 import {
-    TASK_COMPLETED_FAIL,
-    TASK_COMPLETED_REQUEST,
-    TASK_COMPLETED_SUCCESS,
+    MOVE_TASK_FAIL, MOVE_TASK_REQUEST, MOVE_TASK_SUCCESS,
+    TASK_COMPLETED_FAIL, TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS,
     TASK_CREATE_FAIL, TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS,
     TASK_DELETE_FAIL, TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS,
     TASK_DETAIL_FAIL, TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS,
     TASK_GENERATE_FAIL, TASK_GENERATE_REQUEST, TASK_GENERATE_SUCCESS,
     TASK_LIST_FAIL, TASK_LIST_REQUEST, TASK_LIST_SUCCESS,
-    TASK_UPDATE_FAIL, TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS
+    TASK_UPDATE_FAIL, TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS, 
+    TOP_TASK_FAIL, TOP_TASK_REQUEST, TOP_TASK_SUCCESS
 } from '../../constants/task_manager/task.constants';
 
 export const taskListReducer = (
@@ -104,6 +104,37 @@ export const taskCompletedReducer = (
         case TASK_COMPLETED_SUCCESS:
             return { loading: false, task: action.payload.message };
         case TASK_COMPLETED_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const topTaskReducer = (
+    state = { loading: true, topTasks: [] },
+    action
+) => {
+    switch (action.type) {
+        case TOP_TASK_REQUEST:
+            return { loading: true };
+        case TOP_TASK_SUCCESS:
+            return { loading: false, topTasks: action.payload.topTasks };
+        case TOP_TASK_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const moveTaskReducer = (
+    state = { loading: true }, action
+) => {
+    switch (action.type) {
+        case MOVE_TASK_REQUEST:
+            return { loading: true };
+        case MOVE_TASK_SUCCESS:
+            return { loading: false, message: action.payload.message };
+        case MOVE_TASK_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;

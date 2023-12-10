@@ -6,6 +6,7 @@ import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
+import { ITaskEntity } from '../entities/task.entity';
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -33,6 +34,7 @@ class GroupTaskService {
         }
     }
 
+    // This fucntion doesnot response to client
     async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             const createGroupTask = await GroupTaskEntity.create(groupTask);
@@ -99,10 +101,23 @@ class GroupTaskService {
             groupTask
         });
     }
+    
+    async getGroupTaskByTaskId(taskId: string): Promise<string> {
+        try {
+            const groupTask = await GroupTaskEntity.findOne({ tasks: taskId });
+            if (groupTask === null) {
+                return 'Group Task not found';
+            } else {
+                return groupTask._id;
+            }
+        } catch (err: any) {
+            console.log(err.message.toString());
+            return 'error';
+        }
+    }
 
-    async getTasksInGroupTask(groupTaskId: string): Promise<IResponse> {
+    async getTasksInGroupTaskByTimestamp(groupTaskId: string): Promise<IResponse> {
         const getTasksInGroupTask = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-        console.log(getTasksInGroupTask);
         const getTasks = getTasksInGroupTask?.tasks;
 
         return msg200({
@@ -207,21 +222,6 @@ class GroupTaskService {
 
     // archive groupTask
 
-    // MINI SERVICES
-
-    async getGroupTaskByTaskId(taskId: string): Promise<string> {
-        try {
-            const groupTask = await GroupTaskEntity.findOne({ tasks: taskId });
-            if (groupTask === null) {
-                return 'Group Task not found';
-            } else {
-                return groupTask._id;
-            }
-        } catch (err: any) {
-            console.log(err.message.toString());
-            return 'error';
-        }
-    }
 }
 
 export const groupTaskService = new GroupTaskService();
