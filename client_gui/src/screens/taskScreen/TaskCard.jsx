@@ -1,14 +1,17 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, Flex, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../utils/date-picker";
 import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { MoveTask } from "./MoveTask";
 
 export const TaskCard = (props) => {
     const task = props.task;
+    const projectId = props.projectId;
+    const groupTaskId = props.groupTaskId;
 
     const navigate = useNavigate();
 
@@ -93,25 +96,45 @@ export const TaskCard = (props) => {
 
     return (
         <>
-            <Card onClick={openModal} className="mt-3 hover:cursor-pointer" decoration="left" decorationColor="indigo">
-                <Flex justifyContent="between" alignItems="center">
-                    <Title className="w-full">{task.title}</Title>
-                    <Flex className="space-x-2 m-1" justifyContent="end">
-                        {
-                            task.priority.length === 0 ? (
-                                <Badge color="gray">No Priority</Badge>
-                            ) : (
-                                task.priority.map((priority) => (
-                                    <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
-                                ))
-                            )
-                        }
-                        <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
-                    </Flex>
-                </Flex>
-                <Flex className="space-x-2 m-1" justifyContent="end">
-                    <Text>{task.deadline}</Text>
-                </Flex>
+            <Card onClick={openModal} className="w-xs hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300" decoration="left" decorationColor="indigo">
+                <Grid numItems={6} className="gap-2">
+                    <Col numColSpan={4}>
+                        <Title className="text-2xl">{task.title}</Title>
+                    </Col>
+                    <Col numColSpan={2}>
+                        <Flex className="space-x-2" justifyContent="center">
+                            <Grid numItems={1}>
+                                <Col numColSpan={1}>
+                                    <Flex justifyContent="center">
+                                        {
+                                            task.priority.length === 0 ? (
+                                                <Badge color="gray">No Priority</Badge>
+                                            ) : (
+                                                task.priority.map((priority) => (
+                                                    <Badge key={`${task._id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                                                ))
+                                            )
+                                        }
+                                    </Flex>
+                                </Col>
+                                <Col numColSpan={1}>
+                                    <Flex justifyContent="center">
+                                        <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                    </Flex>
+                                </Col>
+                            </Grid>
+                        </Flex>
+                    </Col>
+                    <Col numColSpan={4}>
+                        <Text className="text-sm">Start Date: {convertTimestampToDate(task.startDate)}</Text>
+                        <Text className="text-sm">Deadline: {convertTimestampToDate(task.deadline)}</Text>
+                    </Col>
+                    <Col numColSpan={2}>
+                        <Flex className="space-x-2" justifyContent="center">
+                            <Subtitle className="text">Duration: {task.duration}h</Subtitle>
+                        </Flex>
+                    </Col>
+                </Grid>
             </Card>
 
             <Transition appear show={isOpen} as={Fragment}>
@@ -193,7 +216,8 @@ export const TaskCard = (props) => {
                                         <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
                                         <div className="grid grid-cols-1 m-2">
                                             <Flex>
-                                                <p>{convertTimestampToDate(task.deadline)}</p>
+                                                <Subtitle>{convertTimestampToDate(task.deadline)}</Subtitle>
+                                                <Subtitle>Duration: {task.duration}h</Subtitle>
                                                 <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task._id}/update-deadline`)}>
                                                     Update Deadline
                                                 </Button>
@@ -281,6 +305,10 @@ export const TaskCard = (props) => {
                                                 </label>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-3">
+                                       <MoveTask taskId={task._id} projectId={projectId} groupTaskId={groupTaskId}/> 
                                     </div>
 
                                     <div className="mt-6">

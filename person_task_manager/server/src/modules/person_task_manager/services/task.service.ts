@@ -1,14 +1,15 @@
-import { TaskEntity } from "../entities/task.entity";
-import { msg200, msg400 } from "../../../common/response_helpers";
 import { IResponse } from "../../../common/response";
-import { taskValidation } from "../validations/task.validation";
-import { groupTaskService } from "./group-task.service";
+import { msg200, msg400 } from "../../../common/response_helpers";
+import { Priority } from "../../../loaders/enums";
 import { UpdaetTaskInDialogDTO } from "../dtos/task.dto";
 import { GroupTaskEntity } from "../entities/group-task.entity";
-import { Priority } from "../../../loaders/enums";
+import { ITaskEntity, TaskEntity } from "../entities/task.entity";
+import { taskValidation } from "../validations/task.validation";
+import { groupTaskService } from "./group-task.service";
 import { projectService } from "./project.service";
+import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
+import { taskServiceUtils } from "./service_utils/task.service-utils";
 
-const groupTaskServiceImpl = groupTaskService;
 const taskValidationImpl = taskValidation;
 
 class TaskService {
@@ -20,12 +21,14 @@ class TaskService {
 
             task.createdAt = new Date();
             task.updatedAt = new Date();
+            if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
             const createTask = await TaskEntity.create(task);
             const taskId = (createTask as any)._id;
 
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
-                groupTaskServiceImpl.updateGroupTask(groupTaskId, { $push: { tasks: taskId } });
-
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $push: { tasks: taskId } });
+                groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
+ 
                 return msg200({
                     message: (createTask as any)
                 });
@@ -57,10 +60,11 @@ class TaskService {
     async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 // delete task id in group task
-                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { tasks: taskId} });
+                groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
+                const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
                 return msg200({
                     message: (deleteTask as any)
                 });
@@ -145,8 +149,10 @@ class TaskService {
     async getTopTasks(limit: number): Promise<IResponse> {
         try {
             const topTasks: any[] = [];
-            const tasks = await TaskEntity.find()
-                .where('priority').equals(Priority.star).limit(limit);
+            const tasks = await TaskEntity.find({
+                priority: Priority.star,
+                status: { $in: ['TODO', 'IN_PROGRESS', 'CUSTOM'] }
+            }).limit(limit);
 
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
@@ -160,8 +166,6 @@ class TaskService {
                 });
             }
 
-            console.log(topTasks);
-
             return msg200({
                 topTasks
             });
@@ -169,12 +173,39 @@ class TaskService {
             return msg400(error.message.toString());
         }
     }
-    // async getAllTasks(): Promise<IResponse> {
-    //     const tasks = await TaskEntity.find();
-    //     return msg200({
-    //         tasks
-    //     });
-    // }
+
+    async getTaskDashboard(groupTaskId: string): Promise<IResponse> {
+        const taskDashboard = {
+            doneTaskList: [] as ITaskEntity[],
+            notDoneTaskList: [] as ITaskEntity[],
+        };
+
+        const notDoneTasks = await taskServiceUtils.orderByPriority(await taskServiceUtils.getOtherTasksByEnteredStatus(groupTaskId, "DONE"));
+        const doneTasks = taskServiceUtils.revertTaskOrder(await taskServiceUtils.getTaskByStatus(groupTaskId, "DONE"));
+
+        taskDashboard.doneTaskList = doneTasks;
+        taskDashboard.notDoneTaskList = notDoneTasks;
+
+        return msg200({
+            message: taskDashboard as any,
+        });
+    }
+
+    async moveTask(taskId: string, oldGroupTaskId: string, newGroupTaskId: string): Promise<IResponse> {
+        try {
+            await GroupTaskEntity.updateOne({ _id: oldGroupTaskId }, { $pull: { tasks: taskId } });
+            await GroupTaskEntity.updateOne({ _id: newGroupTaskId }, { $push: { tasks: taskId } });
+            groupTaskServiceUtils.calculateTotalTasks(oldGroupTaskId);
+            groupTaskServiceUtils.calculateTotalTasks(newGroupTaskId);
+
+            return msg200({
+                message: 'Move task successfully'
+            });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+    
     // disable task
 
     // enable task
@@ -182,7 +213,7 @@ class TaskService {
     // archive task
 
     // add subTask
-    
+
 }
 
 export const taskService = new TaskService();

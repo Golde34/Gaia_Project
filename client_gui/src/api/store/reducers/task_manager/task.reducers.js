@@ -1,7 +1,6 @@
 import {
-    TASK_COMPLETED_FAIL,
-    TASK_COMPLETED_REQUEST,
-    TASK_COMPLETED_SUCCESS,
+    MOVE_TASK_FAIL, MOVE_TASK_REQUEST, MOVE_TASK_SUCCESS,
+    TASK_COMPLETED_FAIL, TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS,
     TASK_CREATE_FAIL, TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS,
     TASK_DELETE_FAIL, TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS,
     TASK_DETAIL_FAIL, TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS,
@@ -121,6 +120,21 @@ export const topTaskReducer = (
         case TOP_TASK_SUCCESS:
             return { loading: false, topTasks: action.payload.topTasks };
         case TOP_TASK_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const moveTaskReducer = (
+    state = { loading: true }, action
+) => {
+    switch (action.type) {
+        case MOVE_TASK_REQUEST:
+            return { loading: true };
+        case MOVE_TASK_SUCCESS:
+            return { loading: false, message: action.payload.message };
+        case MOVE_TASK_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;

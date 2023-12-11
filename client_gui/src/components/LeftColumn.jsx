@@ -10,8 +10,7 @@ const LeftColumn = () => {
 
     const taskList = useSelector((state) => state.topTask);
     const { loading, error, topTasks } = taskList;
-    console.log(topTasks);
-     useEffect(() => {
+    useEffect(() => {
         dispatch(getTopTasks());
     }, [dispatch]);
 
