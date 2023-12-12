@@ -15,35 +15,41 @@ from gaia_bot.utils.activate_microservice import activate_microservice
 
 
 async def process_bot():
-    
     # Activate microservices
     await activate_microservice()
-    
+    # Authenticate user
+    auth_info = {
+        "username": "golde",
+        "password": "483777"
+    }
+    access_token = await recognize_owner_by_authen_service(auth_info.username, auth_info.password)
+    logging.info(access_token)
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: ${__version__}")
-    
     # Startup
+    console_manager, assistant = _startup()
+    # initiate
+    _initiate_gaia_command(console_manager=console_manager, assistant=assistant, settings=settings) 
+
+def _startup():
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
     console_manager.wakeup(text="Hello boss, I'm available now",
-                           info_log="Bot wakeup...",
-                           refresh_console=True)
-    
-    # access_token = await multi_authenticate(console_manager)
-    access_token = await recognize_owner_by_authen_service(username="golde", password="483777")
-    print(access_token)
-    
-    # initiate
-    _boolean_loop = True
-    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings) 
-    while _boolean_loop:
+                          info_log="Bot wakeup...",
+                          refresh_console=True)
+    return console_manager, assistant
+
+def _initiate_gaia_command(console_manager, assistant, settings):
+    boolean_loop = True
+    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings)
+    while boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
-        # process
-        process.run()
-        # _boolean_loop = simple_handle_testing(i)    
-
+        response_transcript, skill = process.run()
+        console_manager.console_output(text=response_transcript, info_log="Response transcript with skill: " + skill)
+        # _boolean_loop = simple_handle_testing(i)
+ 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
         boolean_loop = False
@@ -67,7 +73,6 @@ async def main():
         await process_bot()
 
 if __name__ == "__main__":
-    # asyncio.run(why_you_always_die_gaia_connector())
     asyncio.run(main())
     
 
