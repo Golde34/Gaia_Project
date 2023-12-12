@@ -9,7 +9,6 @@ class GPT2GenerateResponse(AssistantSkill):
         try:
             response = inference(inp=text)
             last_response = cls._format_response(response)
-            cls.response(last_response)
             return last_response
         except Exception as e:
             cls.console_manager.console_output('Failed to generate response.')
