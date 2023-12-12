@@ -22,5 +22,6 @@ SKILLS = [
     {
         'func': DetectSkill.detect_skill_tag,
         'tags': 'detect skill, create task, create a new task, detect task, check task, delete task, update task',
-    }
+    },
+    
 ]
