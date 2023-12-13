@@ -1,0 +1,6 @@
+/bramble
+.vscode
+.history
+.idea
+.DS_Store
+coverage.out
