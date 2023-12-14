@@ -45,7 +45,7 @@ class GroupTaskServiceUtils {
         }
     }
 
-    // calculate totalTasks, totalTasksCompleted
+    // calculate totalTasks, completedTasks
     async calculateTotalTasks(groupTaskId: string): Promise<IGroupTaskEntity> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
@@ -54,20 +54,20 @@ class GroupTaskServiceUtils {
                     throw new Error('Group task not found');
                 } else {
                     const totalTasks = groupTask.tasks.length;
-                    let totalTasksCompleted = 0;
+                    let completedTasks = 0;
                     for (let i = 0; i < groupTask.tasks.length; i++) {
                         const taskId = groupTask.tasks[i];
                         const task = await TaskEntity.findOne({ _id: taskId });
                         if (task !== null) {
                             if (task.status === 'DONE') {
-                                totalTasksCompleted++;
+                                completedTasks++;
                             }
                         } else {
                             continue;
                         }
                     }
                     groupTask.totalTasks = totalTasks;
-                    groupTask.totalTasksCompleted = totalTasksCompleted;
+                    groupTask.completedTasks = completedTasks;
                     await groupTask.save();
                    
                     return groupTask;
