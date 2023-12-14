@@ -6,9 +6,10 @@ require('dotenv').config();
 const user = 'Golde34';
 const token = process.env.TOKEN;
 const repo = process.env.REPO;
-const startDate = '2023-12-04T00:00:00Z';
+const sinceDate = '2023-12-04T00:00:00Z';
+const untilDate = '2023-12-04T23:59:59Z';
 const commitMessages = [] as any;
-const url = `https://api.github.com/repos/${user}/${repo}/commits?per_page=100&since=${startDate}`;
+const url = `https://api.github.com/repos/${user}/${repo}/commits?per_page=100&since=${sinceDate}&until=${untilDate}`;
 
 type CommitResponse = {
     commit: {
@@ -24,7 +25,7 @@ export async function fetchCommits(): Promise<void> {
         'Content-Type': 'application/json',
         'Authorization': `${token}`,
     };
-    console.log(user, token, repo, startDate, url)
+    
     try {
         const response = await fetch(url, { headers });
         const commitResponse = await response.json() as CommitResponse[];

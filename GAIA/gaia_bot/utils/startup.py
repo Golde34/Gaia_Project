@@ -52,7 +52,7 @@ async def recognize_owner_by_authen_service(username, password):
     if wait == True:
         authentication = AuthenticationConnector(username, password)
         token_string = authentication.activate_authentication_command()
-        return token_string
+        return "Authentication successfully with token id: " + token_string
     else:
         return "Later kickoff authen skill"
     

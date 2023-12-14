@@ -2,6 +2,7 @@ import logging
 import colorama
 from colorama import Fore
 import asyncio
+import argparse
 
 from gaia_bot.configs.__version__ import __version__
 from gaia_bot.core.console_manager import ConsoleManager
@@ -13,36 +14,42 @@ from gaia_bot.utils.startup import recognize_owner_by_authen_service
 from gaia_bot.utils.activate_microservice import activate_microservice
 
 
-async def main():
-    
+async def process_bot():
     # Activate microservices
     await activate_microservice()
-    
+    # Authenticate user
+    auth_info = {
+        "username": "golde",
+        "password": "483777"
+    }
+    access_token = await recognize_owner_by_authen_service(auth_info.username, auth_info.password)
+    logging.info(access_token)
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: ${__version__}")
-    
     # Startup
+    console_manager, assistant = _startup()
+    # initiate
+    _initiate_gaia_command(console_manager=console_manager, assistant=assistant, settings=settings) 
+
+def _startup():
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
     console_manager.wakeup(text="Hello boss, I'm available now",
-                           info_log="Bot wakeup...",
-                           refresh_console=True)
-    
-    # access_token = await multi_authenticate(console_manager)
-    access_token = await recognize_owner_by_authen_service(username="golde", password="483777")
-    print(access_token)
-    
-    # initiate
-    _boolean_loop = True
-    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings) 
-    while _boolean_loop:
+                          info_log="Bot wakeup...",
+                          refresh_console=True)
+    return console_manager, assistant
+
+def _initiate_gaia_command(console_manager, assistant, settings):
+    boolean_loop = True
+    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings)
+    while boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
-        # process
-        process.run()
-        # _boolean_loop = simple_handle_testing(i)    
-
+        response_transcript, skill = process.run()
+        console_manager.console_output(text=response_transcript, info_log="Response transcript with skill: " + skill)
+        # _boolean_loop = simple_handle_testing(i)
+ 
 def simple_handle_testing(console_input):
     if console_input == "bye" or console_input == "off":
         boolean_loop = False
@@ -51,8 +58,21 @@ def simple_handle_testing(console_input):
     
     return boolean_loop
 
+async def main():
+    parser = argparse.ArgumentParser(description='Gaia Bot')
+    parser.add_argument('--process', action='store_true', help='Initiate bot process')
+    # parser.add_argument('-v', '--version', action='version', version=f'Gaia version: ${__version__}')
+    # parser.add_argument('-t', '--test', action='store_true', help='test mode')
+    # parser.add_argument('-d', '--debug', action='store_true', help='debug mode')
+    # parser.add_argument('-s', '--skill', action='store_true', help='skill mode')
+    # parser.add_argument('-a', '--authen', action='store_true', help='authen mode')
+    # parser.add_argument('-m', '--microservice', action='store_true', help='microservice mode')
+    args = parser.parse_args()
+    
+    if args.process:
+        await process_bot()
+
 if __name__ == "__main__":
-    # asyncio.run(why_you_always_die_gaia_connector())
     asyncio.run(main())
     
 
