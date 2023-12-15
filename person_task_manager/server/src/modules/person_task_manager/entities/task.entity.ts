@@ -14,7 +14,7 @@ export interface ITaskEntity extends Document {
     subTasks: ISubTaskEntity["_id"][];
     comments: ICommentEntity["_id"][];
     createdAt: Date;
-
+    updatedAt: Date;
 }
 
 export const taskSchema = new mongoose.Schema(
