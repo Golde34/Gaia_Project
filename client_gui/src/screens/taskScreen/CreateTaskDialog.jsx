@@ -61,11 +61,13 @@ export const CreateTaskDialog = (props) => {
         task.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         task.status = status;
         task.deadline = deadline;
-        task.duration = duration;
         task.startDate = startDate;
+        if (duration === 0) {
+            task.duration = defaultDuration.toString();
+        }
 
         initiateTaskDispatch(projectId, task);
-
+        
         window.location.reload();
     }
 
@@ -182,10 +184,12 @@ export const CreateTaskDialog = (props) => {
                                         <TextInput
                                             type="number"
                                             value={duration === 0 ? defaultDuration : duration}
-                                            onChange={(event) => setDuration(event.target.value)}
+                                            onChange={(event) => {
+                                                    setDuration(event.target.value);
+                                            }}
                                             className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                             placeholder="Input working hours"
-                                            error={duration < 1 || duration > 16}
+                                            error={(duration < 1 || duration > 16) && defaultDuration !== 2}
                                             errorMessage="Duration must be between 1 and 16 hours"
                                         />
                                     </div>
