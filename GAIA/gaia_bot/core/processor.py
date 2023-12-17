@@ -18,7 +18,7 @@ class Processor:
                                             info_log="Handle input")
         # Response transcript
         response_transcript = self.response_creator.generate_response(transcript)        
-        tag_skill = self.assistant.detect_skill_tag(transcript, self.skills)
+        tag_skill = self.assistant.detect_skill_tag(transcript)
 
         # self.assistant.sentence_detect(transcript, self.skills)
         self.assistant.validate_assistant_response(tag_skill, self.skills)
