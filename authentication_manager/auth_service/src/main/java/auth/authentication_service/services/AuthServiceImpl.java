@@ -7,8 +7,6 @@ import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
 import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserPermissionDto;
-import auth.authentication_service.persistence.repositories.PrivilegeRepository;
-import auth.authentication_service.persistence.repositories.RoleRepository;
 import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.services.interfaces.UserService;
@@ -16,8 +14,6 @@ import auth.authentication_service.utils.BCryptPasswordEncoder;
 import auth.authentication_service.utils.GenericResponse;
 import auth.authentication_service.utils.LoggerUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -36,8 +32,6 @@ import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.UserRepository;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.services.interfaces.AuthService;
-import auth.authentication_service.services.interfaces.PrivilegeService;
-import auth.authentication_service.services.interfaces.RoleService;
 
 
 @Service
@@ -70,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // This function is similar to the Sign-in function
-    public ResponseEntity authenticated(String username, String password) throws Exception {
+    public ResponseEntity<?> authenticated(String username, String password) throws Exception {
         User user = userRepository.findByUsername(username);
         final UserDetails userDetails = userDetailService.loadUserByUsername(username);
 
@@ -151,12 +145,12 @@ public class AuthServiceImpl implements AuthService {
         return generatedToken;
     }
 
-    public ResponseEntity checkToken(TokenDto token) {
+    public ResponseEntity<?> checkToken(TokenDto token) {
         CheckTokenDtoResponse userResponse = tokenService.checkToken(token.getToken());
         return ResponseEntity.ok(userResponse);
     }
 
-    public ResponseEntity checkPermission(UserPermissionDto permission) {
+    public ResponseEntity<?> checkPermission(UserPermissionDto permission) {
         User user = userService.getUserById(permission.getUserId());
         Collection<Role> userRole = user.getRoles();
         for (Role role : userRole) {
