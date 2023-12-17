@@ -1,7 +1,6 @@
 package auth.authentication_service.services;
 
 import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
-import auth.authentication_service.persistence.entities.AuthToken;
 import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.persistence.repositories.UserRepository;
