@@ -1,5 +1,5 @@
 import { Button, Menu, MenuHandler, MenuList } from "@material-tailwind/react"
-import EllipsisIcon from "../components/icons/EllipsisIcon"
+import EllipsisIcon from "./icons/EllipsisIcon"
 import { InputDialog } from "../components/subComponents/InputDialog";
 import { AlertDialog } from "../components/subComponents/AlertDialog";
 import { ColorDialog } from "../components/subComponents/ColorDialog";
@@ -32,14 +32,14 @@ const EllipsisMenu = (props) => {
                             className="col-span-1" component={updateTag} elementName={elementName}
                             elementId={elementId}>
                         </InputDialog>
-                        {/* {elementName === "Group Task" ?
+                        {elementName === "Group Task" ?
                             (
                                 <AlertDialog
                                     className="col-span-1" component={ordinalTag} elementName={elementName}
-                                    action="Delete all tasks" elementId={elementId}>
+                                    action="push" elementId={elementId} projectId={props.projectId}>
                                 </AlertDialog>
                             ) : (<></>)
-                        } */}
+                        }
                         <AlertDialog
                             className="col-span-1" component={deleteTag} elementName={elementName}
                             action="Delete" elementId={elementId}>

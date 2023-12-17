@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { useDeleteComponentDispatch } from "../../utils/dialog-api-requests";
+import { useDeleteComponentDispatch, useUpdateOrdinalNumberDispatch } from "../../utils/dialog-api-requests";
 
 export const AlertDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
@@ -14,14 +14,15 @@ export const AlertDialog = (props) => {
     }
 
     const deleteComponentDispatch = useDeleteComponentDispatch();
+    const updateOrdinalDispatch = useUpdateOrdinalNumberDispatch();
     const actionComponent = (action, elementName) => {
         if (action === "Delete") {
             deleteComponentDispatch(props.elementId, elementName);
             localStorage.setItem('activeTab', 'none');
         } else if (action === "Archive") {
             console.log("This Archive function is not implemented yet.");
-        } else if (action === Ördinal ) {
-            console.log("This Ördinal function is not implemented yet.");
+        } else if (action === "push" ) {
+            updateOrdinalDispatch(props.elementId, props.projectId);
         }
         
         window.location.reload();

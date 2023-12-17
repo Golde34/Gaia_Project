@@ -154,7 +154,7 @@ taskRouter.post("/generate",
 // update task in dialog
 taskRouter.put("/update-task-in-dialog/:id",
     RequestValidator.validate(UpdaetTaskInDialogDTO),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const bodyJson = req.body.body;
 
@@ -167,6 +167,24 @@ taskRouter.put("/update-task-in-dialog/:id",
             next(err);
         }
     });
+
+// move task to another group task
+taskRouter.put("/:id/move-task",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const bodyJson = req.body.body;
+
+            const taskId = req.params.id;
+            const oldGroupTaskId = bodyJson.oldGroupTaskId;
+            const newGroupTaskId = bodyJson.newGroupTaskId;
+
+            const stringResult = await taskService.moveTask(taskId, oldGroupTaskId, newGroupTaskId);
+            sendResponse(stringResult, res, next);
+        } catch (err) {
+            next(err);
+        }
+    });
+
 // create subtask
 
 // update subtask

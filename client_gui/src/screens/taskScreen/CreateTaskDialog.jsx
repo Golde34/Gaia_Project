@@ -1,17 +1,16 @@
-import { validateDatePicker, validateFromDate } from "../../utils/date-picker";
 import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
-import { Input, Textarea } from "@material-tailwind/react";
-import { Button, DateRangePicker } from "@tremor/react";
+import { Textarea } from "@material-tailwind/react";
+import { Button, Col, DatePicker, Grid, TextInput } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
-import vi from 'date-fns/locale/vi';
 
 export const CreateTaskDialog = (props) => {
     const projectId = props.projectId;
     const groupTaskId = props.groupTaskId;
-    
+
+    let defaultDuration = 2;
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -24,10 +23,9 @@ export const CreateTaskDialog = (props) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('');
-    const [deadline, setDeadline] = useState({
-        from: new Date(),
-        to: new Date(),
-    });
+    const [deadline, setDeadline] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
+    const [duration, setDuration] = useState(0);
 
     const [task] = useState({});
 
@@ -36,36 +34,6 @@ export const CreateTaskDialog = (props) => {
     const [isMediumPriority, setIsMediumPriority] = useState(false);
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
-
-    const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
-    const createTask = useCreateTaskDispatch();
-
-    const setObjectTask = (title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        const datePicker = validateDatePicker(deadline.from, deadline.to);
-        const deadlineTask = validateFromDate(datePicker.from, datePicker.to);
-
-        task.title = title;
-        task.description = description;
-        task.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
-        task.status = status;
-        task.deadline = deadlineTask;
-
-        initiateTaskDispatch(projectId, task);
-
-        window.location.reload();
-    }
-
-    const initiateTaskDispatch = (projectId, task) => {
-        if (projectId === null || projectId === undefined) {
-            task.groupTaskId = groupTaskId;
-            createTask(task);
-            localStorage.setItem("activeTab", groupTaskId);
-        } else {
-            task.projectId = projectId;
-            generateTaskFromScratch(task);
-            localStorage.setItem("activeTab", 'none');
-        }
-    }
 
     const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
         let priority = [];
@@ -82,6 +50,37 @@ export const CreateTaskDialog = (props) => {
             priority.push('Star');
         }
         return priority;
+    }
+
+    const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
+    const createTask = useCreateTaskDispatch();
+
+    const setObjectTask = (title, description, status, startDate, deadline, duration, isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
+        task.title = title;
+        task.description = description;
+        task.priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
+        task.status = status;
+        task.deadline = deadline;
+        task.startDate = startDate;
+        if (duration === 0) {
+            task.duration = defaultDuration.toString();
+        }
+
+        initiateTaskDispatch(projectId, task);
+        
+        window.location.reload();
+    }
+
+    const initiateTaskDispatch = (projectId, task) => {
+        if (projectId === null || projectId === undefined) {
+            task.groupTaskId = groupTaskId;
+            createTask(task);
+            localStorage.setItem("activeTab", groupTaskId);
+        } else {
+            task.projectId = projectId;
+            generateTaskFromScratch(task);
+            localStorage.setItem("activeTab", 'none');
+        }
     }
 
     return (
@@ -116,7 +115,7 @@ export const CreateTaskDialog = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
@@ -126,7 +125,7 @@ export const CreateTaskDialog = (props) => {
 
                                     <div className="mt-5">
                                         <label htmlFor="task-title" className="block text-md font-medium text-gray-700 mb-3">Task Title</label>
-                                        <Input
+                                        <TextInput
                                             id="task-title"
                                             type="text"
                                             value={title}
@@ -148,25 +147,56 @@ export const CreateTaskDialog = (props) => {
                                     </div>
 
                                     <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
-                                        <div className="grid grid-cols-1 m-2">
-                                            <div className="inline-flex items-center bg-white">
-                                                <DateRangePicker
-                                                    className="max-w-md mx-auto"
-                                                    value={deadline}
-                                                    onValueChange={setDeadline}
-                                                    locale={vi}
-                                                    selectPlaceholder="Select a date"
-                                                    colors="rose"
-                                                >
-                                                </DateRangePicker>
-                                            </div>
-                                        </div>
+                                        <Grid numItems={6}>
+                                            <Col numColSpan={3}>
+                                                <p className="block text-md font-medium text-gray-700 mb-3">Start Date</p>
+                                                <div className="grid grid-cols-1 m-1">
+                                                    <div className="inline-flex items-center bg-white">
+                                                        <DatePicker
+                                                            className="max-w-md mx-auto"
+                                                            onValueChange={setStartDate}
+                                                            minDate={new Date()}
+                                                            value={startDate}
+                                                            displayFormat="dd/MM/yyyy"
+                                                        ></DatePicker>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                            <Col numColSpan={3}>
+                                                <p className="block text-md font-medium text-gray-700 mb-3">Due Date</p>
+                                                <div className="grid grid-cols-1 m-1">
+                                                    <div className="inline-flex items-center bg-white">
+                                                        <DatePicker
+                                                            className="max-w-md mx-auto"
+                                                            onValueChange={setDeadline}
+                                                            minDate={new Date()}
+                                                            value={deadline}
+                                                            displayFormat="dd/MM/yyyy"
+                                                        ></DatePicker>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Grid>
                                     </div>
 
-                                    <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
-                                        <div className="grid grid-cols-4 m-2">
+                                    <div className="mt-2">
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Duration</p>
+                                        <TextInput
+                                            type="number"
+                                            value={duration === 0 ? defaultDuration : duration}
+                                            onChange={(event) => {
+                                                    setDuration(event.target.value);
+                                            }}
+                                            className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                            placeholder="Input working hours"
+                                            error={(duration < 1 || duration > 16) && defaultDuration !== 2}
+                                            errorMessage="Duration must be between 1 and 16 hours"
+                                        />
+                                    </div>
+
+                                    <div className="mt-8">
+                                        <p className="block text-md font-medium text-gray-700 mb-1">Priority</p>
+                                        <div className="grid grid-cols-4 m-1">
                                             <div className="inline-flex items-center">
                                                 <label className="relative flex items-center p-3 rounded-full cursor-pointer"
                                                     htmlFor="priority-checkbox-high" data-ripple-dark="true">
@@ -234,10 +264,9 @@ export const CreateTaskDialog = (props) => {
                                         </div>
                                     </div>
 
-
-                                    <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Status</p>
-                                        <div className="grid grid-cols-3 m-2">
+                                    <div className="mt-2">
+                                        <p className="block text-md font-medium text-gray-700 mb-1">Status</p>
+                                        <div className="grid grid-cols-3 m-1">
                                             <div className="inline-flex items-center">
                                                 <label className="relative flex cursor-pointer items-center rounded-full p-3"
                                                     htmlFor="status-radio-todo" data-ripple-dark="true">
@@ -310,7 +339,7 @@ export const CreateTaskDialog = (props) => {
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                setObjectTask(title, description, status, deadline, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
+                                                setObjectTask(title, description, status, startDate, deadline, duration, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
                                             }}
                                         >
@@ -323,7 +352,7 @@ export const CreateTaskDialog = (props) => {
                         </div>
                     </div>
                 </Dialog>
-            </Transition>
+            </Transition >
         </>
     )
 }

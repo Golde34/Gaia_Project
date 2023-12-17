@@ -8,11 +8,13 @@ export interface ITaskEntity extends Document {
     description: string;
     priority: string[];
     status: string;
+    startDate: Date;
+    deadline: Date;
+    duration: number;
+    subTasks: ISubTaskEntity["_id"][];
+    comments: ICommentEntity["_id"][];
     createdAt: Date;
     updatedAt: Date;
-    deadline: Date;
-    subTasks: ISubTaskEntity["_id"][];
-    comments: ICommentEntity ["_id"][];
 }
 
 export const taskSchema = new mongoose.Schema(
@@ -33,16 +35,16 @@ export const taskSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        createdAt: {
+        startDate: {
             type: Date,
-            required: true,
-        },
-        updatedAt: {
-            type: Date,
-            required: true,
+            required: false,
         },
         deadline: {
             type: Date,
+            required: false,
+        },
+        duration: {
+            type: Number,
             required: false,
         },
         subTasks: {
@@ -54,7 +56,15 @@ export const taskSchema = new mongoose.Schema(
             type: [mongoose.Schema.Types.ObjectId],
             ref: 'Comment',
             required: false,
-        }
+        },
+        createdAt: {
+            type: Date,
+            required: true,
+        },
+        updatedAt: {
+            type: Date,
+            required: true,
+        },
     },
     {
         toJSON: { virtuals: true },

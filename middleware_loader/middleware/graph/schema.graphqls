@@ -1,0 +1,144 @@
+type Queries {
+  character(id:ID!): Character
+  pogues: [Character]!
+  kooks: [Character]!
+}
+
+type Mutation {
+  upsertCharacter(input: CharacterInput!): Character!
+}
+
+type Character {
+  id: ID!
+  name: String!
+}
+
+input CharacterInput {
+  name: String!
+  id: String
+}
+
+
+
+
+### Authentication Service
+#
+#type User {
+#  id: ID!
+#  name: String!
+#  username: String!
+#  email: String!
+#  password: String!
+#  enabled: Boolean!
+#  isUsing2FA: Boolean!
+#  secret: String!
+#
+#  roles: [Role!]!
+#  privileges: [Privilege!]!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#}
+#
+#type Role {
+#  id: ID!
+#  name: String!
+#
+#  privilege: [Privilege!]!
+#  user: User!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#}
+#
+#type Privilege {
+#  id: ID!
+#  name: String!
+#
+#  role: [Role!]!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#}
+#
+#type AuthToken {
+#  id: ID!
+#  token: String!
+#  tokenType: String!
+#  expiryDate: String!
+#
+#  user: User!
+#}
+#
+### Task Manager
+#
+#type Project {
+#  id: ID!
+#  name: String!
+#  description: String!
+#  status: String!
+#  color: String!
+#
+#  groupTasks: [GroupTask!]!
+#  owner: User!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#}
+#
+#type GroupTask {
+#  id: ID!
+#  title: String!
+#  description: String!
+#  priority: [String!]!
+#  status: String!
+#  ordinalNumber: Int!
+#
+#  project: Project!
+#  tasks: [Task!]!
+#  totalTasks: Int!
+#  totalTasksCompleted: Int!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#}
+#type Task {
+#  id: ID!
+#  title: String!
+#  description: String!
+#  priority: [String!]!
+#  status: String!
+#  startDate: String!
+#  deadline: String!
+#  duration: Int!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#
+#  groupTask: GroupTask!
+#  subTasks: [SubTask!]!
+#  comments: [Comment!]!
+#}
+#
+#type SubTask {
+#  id: ID!
+#  mission: String!
+#  deadline: String!
+#  priority: [String!]!
+#  status: String!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#
+#  task: Task!
+#}
+#
+#type Comment {
+#  id: ID!
+#  content: String!
+#
+#  createdAt: String!
+#  updatedAt: String!
+#
+#  task: Task!
+#}
