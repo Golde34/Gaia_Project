@@ -22,13 +22,13 @@ class AssistantSkill:
                                            refresh_console=refresh_console)
         
     @classmethod
-    def response(cls, text, refresh_console=False):
-        cls.console_manager.console_output(text=text, info_log="Skill Handling", refresh_console=refresh_console)
+    def response(cls, transcript, refresh_console=False):
+        cls.console_manager.console_output(text=transcript, info_log="Skill Handling", refresh_console=refresh_console)
 
     @classmethod
-    def detect_skill_tag(cls, text):
+    def detect_skill_tag(cls, transcript):
         try:
-            infer = inference.infer(text) 
+            infer = inference.infer(transcript) 
             cls.console_manager.console_output(info_log="Skill tag:" + infer)
             return infer
         except:

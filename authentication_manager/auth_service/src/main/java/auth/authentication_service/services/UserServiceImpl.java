@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
     UserServiceValidation userServiceValidation;
 
     @Override
-    public ResponseEntity createUser(RegisterDto userDto) {
+    public ResponseEntity<?> createUser(RegisterDto userDto) {
         User user = modelMapperConfig._mapperDtoToEntity(userDto);
 
         GenericResponse<?> validation = userServiceValidation._validateUserCreation(userDto, user);
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity updateUser(UserDto userDto) {
+    public ResponseEntity<?> updateUser(UserDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity deleteUser(UserDto userDto) {
+    public ResponseEntity<?> deleteUser(UserDto userDto) {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserDeletion(user);
