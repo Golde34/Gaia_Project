@@ -9,6 +9,8 @@ export interface IProjectEntity extends Document {
     color: string;
     groupTasks: IGroupTaskEntity["_id"][];
     ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export const projectSchema = new mongoose.Schema(
@@ -37,6 +39,14 @@ export const projectSchema = new mongoose.Schema(
         ownerId: {
             type: Number,
             required: true,
+        },
+        createdAt: {
+            type: Date,
+            required: false,
+        },
+        updatedAt: {
+            type: Date,
+            required: false,
         }
     },
     {
