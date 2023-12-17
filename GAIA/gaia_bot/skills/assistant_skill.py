@@ -4,6 +4,7 @@ import threading
 
 import gaia_bot
 from gaia_bot.core.console_manager import ConsoleManager
+from gaia_bot.modules.local.models.task_detect.prompt_to_response import inference
 
 
 class AssistantSkill:
@@ -25,20 +26,22 @@ class AssistantSkill:
         cls.console_manager.console_output(text=text, info_log="Skill Handling", refresh_console=refresh_console)
 
     @classmethod
-    def sentence_detect(cls, text, SKILLS):
-        for skill in SKILLS:
-            for tag in str(skill['tags']).split(', '):
-                if tag == 'default skill' or tag == 'first skill':
-                    cls.execute_skill(skill['func'], text)
-                    break
+    def detect_skill_tag(cls, text):
+        try:
+            infer = inference.infer(text) 
+            cls.console_manager.console_output(info_log="Skill tag:" + infer)
+            return infer
+        except:
+            infer = None
+            cls.console_manager.console_output(error_log="Failed to detect skill tag.")
+            return infer
 
     @classmethod
-    def validate_assistant_response(cls, text, SKILLS):
-        # check in here
+    def validate_assistant_response(cls, detected_skill, SKILLS):
         for skill in SKILLS:
             for tag in str(skill['tags']).split(', '):
-                if text.__contains__(tag):
-                    cls.execute_skill(skill['func'], text)
+                if detected_skill.__contains__(tag):
+                    cls.execute_skill(skill['func'], detected_skill)
                     break
 
     @classmethod
@@ -49,3 +52,11 @@ class AssistantSkill:
                 skill(text)
             except Exception as e:
                 cls.console_manager.console_output(error_log="Failed to execute skill...")
+
+    @classmethod
+    def sentence_detect(cls, text, SKILLS):
+        for skill in SKILLS:
+            for tag in str(skill['tags']).split(', '):
+                if tag == 'default skill' or tag == 'first skill':
+                    cls.execute_skill(skill['func'], text)
+                    break

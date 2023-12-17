@@ -9,8 +9,10 @@ export interface IGroupTaskEntity extends Document{
     status: string;
     tasks: ITaskEntity["_id"][];
     totalTasks: number;
-    totalTasksCompleted: number;
+    completedTasks: number;
     ordinalNumber: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export const groupTaskSchema = new mongoose.Schema(
@@ -40,7 +42,7 @@ export const groupTaskSchema = new mongoose.Schema(
             type: Number,
             required: false,
         },
-        totalTasksCompleted: {
+        completedTasks: {
             type: Number,
             required: false,
         },
@@ -48,6 +50,14 @@ export const groupTaskSchema = new mongoose.Schema(
             type: Number,
             required: false,
         },
+        createdAt: {
+            type: Date,
+            required: false,
+        },
+        updatedAt: {
+            type: Date,
+            required: false,
+        }
     },
     {
         toJSON: { virtuals: true },
