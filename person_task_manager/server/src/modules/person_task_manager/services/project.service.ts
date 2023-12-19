@@ -1,6 +1,5 @@
 import { IResponse } from "../../../common/response";
 import { msg200, msg400 } from "../../../common/response_helpers";
-import { GroupTaskEntity } from "../entities/group-task.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
