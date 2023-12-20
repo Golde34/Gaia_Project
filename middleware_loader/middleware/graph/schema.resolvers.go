@@ -39,6 +39,11 @@ func (r *mutationResolver) UpsertCharacter(ctx context.Context, input model.Char
 	return &character, nil
 }
 
+// UserRegister is the resolver for the userRegister field.
+func (r *mutationResolver) UserRegister(ctx context.Context, input model.UserDto) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UserRegister - userRegister"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
