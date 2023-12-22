@@ -2,10 +2,13 @@ type Queries {
   character(id:ID!): Character
   pogues: [Character]!
   kooks: [Character]!
+
+  user(id:ID!): User
 }
 
 type Mutation {
   upsertCharacter(input: CharacterInput!): Character!
+  userRegister(input: UserDTO!): User!
 }
 
 type Character {
@@ -21,25 +24,36 @@ input CharacterInput {
 
 
 
-### Authentication Service
-#
-#type User {
-#  id: ID!
-#  name: String!
-#  username: String!
-#  email: String!
-#  password: String!
-#  enabled: Boolean!
-#  isUsing2FA: Boolean!
-#  secret: String!
-#
+## Authentication Service
+
+type User {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  enabled: Boolean!
+  isUsing2FA: Boolean!
+  secret: String!
+
 #  roles: [Role!]!
 #  privileges: [Privilege!]!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#
+
+  createdAt: String!
+  updatedAt: String!
+}
+
+input UserDTO {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  enabled: Boolean!
+  isUsing2FA: Boolean!
+  secret: String!
+}
+
 #type Role {
 #  id: ID!
 #  name: String!

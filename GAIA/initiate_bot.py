@@ -1,8 +1,4 @@
-import logging
 import colorama
-from colorama import Fore
-import asyncio
-import argparse
 
 from gaia_bot.configs.__version__ import __version__
 from gaia_bot.core.console_manager import ConsoleManager

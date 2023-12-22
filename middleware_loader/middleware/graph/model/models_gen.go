@@ -16,4 +16,29 @@ type Queries struct {
 	Character *Character   `json:"character,omitempty"`
 	Pogues    []*Character `json:"pogues"`
 	Kooks     []*Character `json:"kooks"`
+	User      *User        `json:"user,omitempty"`
+}
+
+type User struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	Enabled    bool   `json:"enabled"`
+	IsUsing2fa bool   `json:"isUsing2FA"`
+	Secret     string `json:"secret"`
+	CreatedAt  string `json:"createdAt"`
+	UpdatedAt  string `json:"updatedAt"`
+}
+
+type UserDto struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	Enabled    bool   `json:"enabled"`
+	IsUsing2fa bool   `json:"isUsing2FA"`
+	Secret     string `json:"secret"`
 }
