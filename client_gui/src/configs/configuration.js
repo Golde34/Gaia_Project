@@ -1,7 +1,7 @@
 const serverHost = import.meta.env.SERVER_HOST ?? 'localhost';
-const gaiaConnectorPort = parseInt( import.meta.env.GAIA_CONNECTOR_PORT ?? '3000' );
-const authenticationServicePort = parseInt( import.meta.env.AUTHENTICATION_SERVICE_PORT ?? '3001' );
-const taskManagerPort = parseInt( import.meta.env.TASK_MANAGER_PORT ?? '3002' );
+const gaiaConnectorPort = parseInt( import.meta.env.GAIA_CONNECTOR_PORT ?? '5000' );
+const authenticationServicePort = parseInt( import.meta.env.AUTHENTICATION_SERVICE_PORT ?? '4001' );
+const taskManagerPort = parseInt( import.meta.env.TASK_MANAGER_PORT ?? '3000' );
 const serverTimeout = parseInt( import.meta.env.SERVER_TIMEOUT ?? '10000' );
 
 const REQUIRED_ENV_VARS = [
