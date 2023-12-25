@@ -2,21 +2,10 @@
 
 package model
 
-type Character struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-type CharacterInput struct {
-	Name string  `json:"name"`
-	ID   *string `json:"id,omitempty"`
-}
-
 type Queries struct {
-	Character *Character   `json:"character,omitempty"`
-	Pogues    []*Character `json:"pogues"`
-	Kooks     []*Character `json:"kooks"`
-	User      *User        `json:"user,omitempty"`
+	Pogues []*User `json:"pogues"`
+	Kooks  []*User `json:"kooks"`
+	User   *User   `json:"user,omitempty"`
 }
 
 type User struct {

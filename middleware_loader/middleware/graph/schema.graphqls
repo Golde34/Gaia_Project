@@ -1,26 +1,13 @@
 type Queries {
-  character(id:ID!): Character
-  pogues: [Character]!
-  kooks: [Character]!
+  pogues: [User]!
+  kooks: [User]!
 
   user(id:ID!): User
 }
 
 type Mutation {
-  upsertCharacter(input: CharacterInput!): Character!
   userRegister(input: UserDTO!): User!
 }
-
-type Character {
-  id: ID!
-  name: String!
-}
-
-input CharacterInput {
-  name: String!
-  id: String
-}
-
 
 
 
