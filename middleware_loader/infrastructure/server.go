@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"middleware_loader/graph"
+	"middleware_loader/infrastructure/graph"
 	"net/http"
 	"os"
 
