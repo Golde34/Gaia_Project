@@ -1,15 +1,11 @@
-type Queries {
-  pogues: [User]!
-  kooks: [User]!
-
-  user(id:ID!): User
+type Query {
+    user: User
+    users: [User]!
 }
 
 type Mutation {
-  userRegister(input: UserDTO!): User!
+    signin(input: SigninInput!): AuthToken!
 }
-
-
 
 ## Authentication Service
 
@@ -28,17 +24,6 @@ type User {
 
   createdAt: String!
   updatedAt: String!
-}
-
-input UserDTO {
-  id: ID!
-  name: String!
-  username: String!
-  email: String!
-  password: String!
-  enabled: Boolean!
-  isUsing2FA: Boolean!
-  secret: String!
 }
 
 #type Role {
@@ -143,3 +128,17 @@ input UserDTO {
 #
 #  task: Task!
 #}
+
+input SigninInput {
+    username: String!
+    password: String!
+}
+
+type AuthToken {
+    accessToken: String!
+    refreshToken: String!
+    name: String!
+    username: String!
+    email: String!
+    lastLogin: String!
+}

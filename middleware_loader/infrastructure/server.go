@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"middleware_loader/graph"
+	"middleware_loader/infrastructure/graph"
 	"net/http"
 	"os"
 
@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 )
 
-const defaultPort = "4000"
+const defaultPort = "8080"
 
 func main() {
 	port := os.Getenv("PORT")
