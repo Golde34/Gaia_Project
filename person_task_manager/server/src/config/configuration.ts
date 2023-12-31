@@ -41,11 +41,11 @@ export const config: Configuration = {
         password: process.env.DATABASE_PASSWORD ?? 'root',
     },
     server: {
-        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3002,
+        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3000,
     },
     authServer: {
         host: process.env.AUTH_SERVICE_HOST ?? 'localhost',
-        port: Number(String(process.env.AUTH_SERVICE_PORT)) ?? 3001,
+        port: Number(String(process.env.AUTH_SERVICE_PORT)) ?? 4001,
     },
     jwt: {
         accessSecret: String(process.env.ACCESS_SECRET),

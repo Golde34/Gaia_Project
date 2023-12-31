@@ -1,4 +1,4 @@
-import { Grid, Text } from "@tremor/react"
+import { Flex, Grid, Text, Title } from "@tremor/react"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
@@ -35,6 +35,9 @@ const TaskList = (props) => {
 									<p></p>
 								) : (
 									<>
+										<Flex className="mt-10" justifyContent="center">
+											<Title className="text-2xl font-bold text-gray-800">Not Done Task List</Title>
+										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.notDoneTaskList.map((task) => (
 												<TaskCard key={task._id} task={task} 
@@ -48,6 +51,9 @@ const TaskList = (props) => {
 									<p></p>
 								) : (
 									<>
+										<Flex className="mt-5" justifyContent="center">
+											<Title className="text-2xl font-bold text-gray-800">Done Task List</Title>
+										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.doneTaskList.map((task) => (
 												<TaskCard key={task._id} task={task} 
