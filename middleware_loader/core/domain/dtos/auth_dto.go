@@ -1,6 +1,11 @@
 package dtos
 
-import "middleware_loader/infrastructure/graph/model"
+import (
+	"middleware_loader/infrastructure/graph/model"
+
+	"github.com/devfeel/mapper"
+)
+
 
 type AuthDTO struct {
 	Username string `json:"username"`
@@ -13,6 +18,5 @@ func NewAuthDTO() *AuthDTO {
 
 // mapper from graphql model to dto
 func (in *AuthDTO) MapperToModel(input model.SigninInput) {
-	in.Username = input.Username
-	in.Password = input.Password
+	mapper.AutoMapper(&input, in)
 }
