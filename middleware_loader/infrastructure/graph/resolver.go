@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"middleware_loader/infrastructure/service_registry"
+	"middleware_loader/infrastructure/graph/service_registry"
 )
 
 // This file will not be regenerated automatically.

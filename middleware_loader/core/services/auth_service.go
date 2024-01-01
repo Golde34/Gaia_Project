@@ -10,6 +10,7 @@ import (
 
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/configs"
 )
 
 type AuthService struct {
@@ -21,22 +22,34 @@ func NewAuthService() *AuthService {
 }
 
 var authValidator = validator.NewAuthDTOValidator()
+var env, _ = configs.LoadEnv()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
 	ErrorReturnBlock("validation step", err)
 	log.Println("Validation passed!")
 
-	// Connect to authen service port 4001 to get token
-	// Define the URL and port of the authentication service
-	authServiceURL := "http://localhost:4001/auth/sign-in"
+	authServiceURL := env.Url + env.AuthServicePort + "/auth/sign-in"
 
+	body, err := HandleAPIRequest(authServiceURL, input)	
+
+	// Unmarshal the response body into an AuthToken
+	var authToken model.AuthTokenResponse
+	err = json.Unmarshal(body, &authToken)
+	ErrorReturnBlock("unmarshal", err)
+
+	// Return the AuthToken
+	return authToken, nil
+}
+
+func HandleAPIRequest(url string, input interface{}) ([]byte, error){
+	
 	// Marshal the input into JSON
 	jsonData, err := json.Marshal(input)
 	ErrorReturnBlock("marshal", err)
 
 	// Create a new request
-	req, err := http.NewRequest("POST", authServiceURL, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	ErrorReturnBlock("create new request", err)
 
 	// Set the content type to JSON
@@ -52,17 +65,8 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	body, err := ioutil.ReadAll(resp.Body)
 	ErrorReturnBlock("read response body", err)
 
-	// Unmarshal the response body into an AuthToken
-	var authToken model.AuthTokenResponse
-	log.Println("body: ", string(body))
-	log.Printf("authToken: %+v\n", authToken)
-	err = json.Unmarshal(body, &authToken)
-	ErrorReturnBlock("unmarshal", err)
-
-	// Return the AuthToken
-	return authToken, nil
+	return body, nil
 }
-
 
 func ErrorReturnBlock(statusMessage string, err error) (model.AuthTokenResponse, error) {
 	if err != nil {
