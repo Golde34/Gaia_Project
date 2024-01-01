@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"middleware_loader/core/graph_services"
+	"middleware_loader/infrastructure/service_registry"
 )
 
 // This file will not be regenerated automatically.
@@ -9,5 +9,5 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct{
-	AuthService graph_services.AuthService
+	AuthService service_registry.AuthService
 }

@@ -7,12 +7,16 @@ package graph
 import (
 	"context"
 	"fmt"
+	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
 
+var authService = services.NewAuthService()
+
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthToken, error) {
-	panic(fmt.Errorf("not implemented: Signin - signin"))
+	authToken, err := authService.Signin(ctx, input)
+	return &authToken, err
 }
 
 // User is the resolver for the user field.

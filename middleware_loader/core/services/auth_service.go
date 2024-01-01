@@ -3,18 +3,19 @@ package services
 import (
 	"context"
 	"log"
-	"middleware_loader/core/graph_services"
+
+	"middleware_loader/infrastructure/graph/model"
 )
 
 type AuthService struct {
-	SigninInput graph_services.SigninInput
+	SigninInput model.SigninInput
 }
 
 func NewAuthService() *AuthService {
 	return &AuthService{}
 }
 
-func (s *AuthService) Signin(ctx context.Context, input graph_services.SigninInput) (string, error) {
+func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthToken, error) {
 	log.Printf("Signin: %v", input)
-	return "", nil
+	return model.AuthToken{}, nil
 }
