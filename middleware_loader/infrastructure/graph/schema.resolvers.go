@@ -12,11 +12,20 @@ import (
 )
 
 var authService = services.NewAuthService()
-
 // Signin is the resolver for the signin field.
-func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthToken, error) {
+func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
 	return &authToken, err
+}
+
+// CheckToken is the resolver for the checkToken field.
+func (r *mutationResolver) CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error) {
+	panic(fmt.Errorf("not implemented: CheckToken - checkToken"))
+}
+
+// CheckPermission is the resolver for the checkPermission field.
+func (r *mutationResolver) CheckPermission(ctx context.Context, input model.UserPermissionInput) (*model.UserPermissionResponse, error) {
+	panic(fmt.Errorf("not implemented: CheckPermission - checkPermission"))
 }
 
 // User is the resolver for the user field.

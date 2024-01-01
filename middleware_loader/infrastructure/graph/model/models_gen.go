@@ -2,7 +2,7 @@
 
 package model
 
-type AuthToken struct {
+type AuthTokenResponse struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 	Name         string `json:"name"`
@@ -16,6 +16,17 @@ type SigninInput struct {
 	Password string `json:"password"`
 }
 
+type TokenInput struct {
+	Token string `json:"token"`
+}
+
+type TokenResponse struct {
+	ID          string `json:"id"`
+	Username    string `json:"username"`
+	AccessToken string `json:"accessToken"`
+	ExpiryDate  string `json:"expiryDate"`
+}
+
 type User struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
@@ -27,4 +38,14 @@ type User struct {
 	Secret     string `json:"secret"`
 	CreatedAt  string `json:"createdAt"`
 	UpdatedAt  string `json:"updatedAt"`
+}
+
+type UserPermissionInput struct {
+	UserID       string `json:"userId"`
+	PermissionID string `json:"permissionId"`
+}
+
+type UserPermissionResponse struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
