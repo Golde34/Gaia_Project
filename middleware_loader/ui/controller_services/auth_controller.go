@@ -3,10 +3,11 @@ package controller_services
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"middleware_loader/core/services"
+	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 	"net/http"
 )
 
@@ -18,18 +19,7 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 	}
 
 	// Convert the signin input into a GraphQL query
-	query := fmt.Sprintf(`
-		mutation {
-			signin(input: { username: "%s", password: "%s" }) {
-				accessToken,
-				refreshToken,
-				name,
-				username,
-				email,
-				lastLogin
-			}
-		}
-	`, input.Username, input.Password)
+	query := utils.GenerateGraphQLQuery("mutation", "signin", input, model.AuthToken{})	
 
 	// Wrap the query in a JSON object
 	jsonQuery := map[string]string{
