@@ -4,7 +4,9 @@ type Query {
 }
 
 type Mutation {
-    signin(input: SigninInput!): AuthToken!
+    signin(input: SigninInput!): AuthTokenResponse!
+    checkToken(input: TokenInput!): TokenResponse!
+    checkPermission(input: UserPermissionInput!): UserPermissionResponse!
 }
 
 ## Authentication Service
@@ -129,16 +131,38 @@ type User {
 #  task: Task!
 #}
 
+# Auth Objects
 input SigninInput {
     username: String!
     password: String!
 }
 
-type AuthToken {
+type AuthTokenResponse {
     accessToken: String!
     refreshToken: String!
     name: String!
     username: String!
     email: String!
     lastLogin: String!
+}
+
+input TokenInput {
+  token: String!
+}
+
+type TokenResponse {
+  id: ID!
+  username: String!
+  accessToken: String!
+  expiryDate: String!
+}
+
+input UserPermissionInput {
+  userId: ID!
+  permissionId: String!
+}
+
+type UserPermissionResponse {
+  id: ID!
+  name: String!
 }
