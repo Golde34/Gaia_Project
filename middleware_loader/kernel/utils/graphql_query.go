@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"middleware_loader/infrastructure/graph/model"
+	// "middleware_loader/infrastructure/graph/model"
 	"net/http"
 	"reflect"
 	"strings"
@@ -86,15 +86,15 @@ func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
 	io.Copy(w, resp.Body)
 }
 
-func main() {
-	action := "mutation"
-	function := "signin"
-	input := model.SigninInput{
-		Username: "admin",
-		Password: "admin",
-	}
-	output := model.AuthToken{}
+// func main() {
+// 	action := "mutation"
+// 	function := "signin"
+// 	input := model.SigninInput{
+// 		Username: "admin",
+// 		Password: "admin",
+// 	}
+// 	output := model.AuthTokenResponse{}
 
-	query := GenerateGraphQLQueryWithInput(action, function, input, output)
-	fmt.Println(query)
-}
+// 	query := GenerateGraphQLQueryWithInput(action, function, input, output)
+// 	fmt.Println(query)
+// }

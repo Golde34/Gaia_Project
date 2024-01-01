@@ -15,7 +15,7 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 		return
 	}
 
-	query := utils.GenerateGraphQLQueryWithInput("mutation", "signin", input, model.AuthToken{})	
+	query := utils.GenerateGraphQLQueryWithInput("mutation", "signin", input, model.AuthTokenResponse{})	
 	utils.ConnectToGraphQLServer(w, query)
 }
 

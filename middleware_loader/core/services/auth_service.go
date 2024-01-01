@@ -22,7 +22,7 @@ func NewAuthService() *AuthService {
 
 var authValidator = validator.NewAuthDTOValidator()
 
-func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthToken, error) {
+func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
 	ErrorReturnBlock("validation step", err)
 	log.Println("Validation passed!")
@@ -53,7 +53,7 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	ErrorReturnBlock("read response body", err)
 
 	// Unmarshal the response body into an AuthToken
-	var authToken model.AuthToken
+	var authToken model.AuthTokenResponse
 	log.Println("body: ", string(body))
 	log.Printf("authToken: %+v\n", authToken)
 	err = json.Unmarshal(body, &authToken)
@@ -64,10 +64,10 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 }
 
 
-func ErrorReturnBlock(statusMessage string, err error) (model.AuthToken, error) {
+func ErrorReturnBlock(statusMessage string, err error) (model.AuthTokenResponse, error) {
 	if err != nil {
 		log.Println(statusMessage, err)
-		return model.AuthToken{}, err
+		return model.AuthTokenResponse{}, err
 	}
-	return model.AuthToken{}, nil
+	return model.AuthTokenResponse{}, nil
 } 
