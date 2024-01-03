@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
+import auth.authentication_service.modules.dto.response.CheckTokenDtoResponse;
 
 public interface TokenService {
     public String generateAccessToken(UserDetails userDetails);

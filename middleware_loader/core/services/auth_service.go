@@ -25,9 +25,9 @@ var env, _ = configs.LoadEnv()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
-	// if err != nil {	
-	// 	return base.ErrorReturnBlock("validation step", err)
-	// }
+	if err != nil {
+		return model.AuthTokenResponse{}, err
+	}	
 	log.Println("Validation passed!")
 
 	authServiceURL := env.Url + env.AuthServicePort + "/auth/sign-in"

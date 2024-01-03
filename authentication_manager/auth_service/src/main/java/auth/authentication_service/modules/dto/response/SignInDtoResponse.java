@@ -1,4 +1,4 @@
-package auth.authentication_service.modules.dto;
+package auth.authentication_service.modules.dto.response;
 
 
 import java.util.Date;
