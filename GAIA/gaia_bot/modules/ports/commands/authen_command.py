@@ -31,9 +31,9 @@ class AuthenticationConnector:
         
         if response.status_code == 200:
             result = response.json()
-            self._save_resposne_to_file(result['data'])
+            self._save_response_to_file(result['response'])
             if result['authenticated']:
-                token = result['data']['accessToken']
+                token = result['response']['data']['accessToken']
                 return f"Authenticated successfully. Token: {token}"
         else:
             return "Invalid credentials"
@@ -55,7 +55,7 @@ class AuthenticationConnector:
         else:
             return False 
         
-    def _save_resposne_to_file(self, result):
+    def _save_response_to_file(self, result):
         filepath = "../../local/resources/authen_cache/token.json"
         
         script_dir = os.path.dirname(__file__)
