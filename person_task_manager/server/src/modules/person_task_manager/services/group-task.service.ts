@@ -6,7 +6,6 @@ import { TaskEntity } from "../entities/task.entity";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
-import { ITaskEntity } from '../entities/task.entity';
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;

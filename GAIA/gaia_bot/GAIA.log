@@ -1,2 +1,10 @@
-2023-12-12 21:53:56,458 - root - INFO - Bot wakeup...
-2023-12-12 21:53:56,458 - root - INFO - Listen command
+2023-12-25 20:12:55,678 - root - INFO - Bot wakeup...
+2023-12-25 20:12:55,678 - root - INFO - Listen command
+2023-12-25 20:19:49,840 - root - INFO - Handle input
+2023-12-25 20:19:52,249 - root - INFO - Skill tag:Greeting
+2023-12-25 20:19:52,249 - root - INFO - Response transcript with skill: Greeting
+2023-12-25 20:19:52,249 - root - INFO - Listen command
+2023-12-25 20:20:17,689 - root - INFO - Handle input
+2023-12-25 20:20:19,765 - root - INFO - Skill tag:Create Task
+2023-12-25 20:20:19,766 - root - INFO - Response transcript with skill: Create Task
+2023-12-25 20:20:19,766 - root - INFO - Listen command

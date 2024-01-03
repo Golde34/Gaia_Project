@@ -1,8 +1,5 @@
 import os
-import subprocess
-import threading
 
-import gaia_bot
 from gaia_bot.core.console_manager import ConsoleManager
 from gaia_bot.modules.local.models.task_detect.prompt_to_response import inference
 

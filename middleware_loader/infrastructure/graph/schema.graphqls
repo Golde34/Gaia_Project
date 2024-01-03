@@ -1,45 +1,33 @@
-type Queries {
-  character(id:ID!): Character
-  pogues: [Character]!
-  kooks: [Character]!
+type Query {
+    user: User
+    users: [User]!
 }
 
 type Mutation {
-  upsertCharacter(input: CharacterInput!): Character!
+    signin(input: SigninInput!): AuthTokenResponse!
+    checkToken(input: TokenInput!): TokenResponse!
+    checkPermission(input: UserPermissionInput!): UserPermissionResponse!
 }
 
-type Character {
+## Authentication Service
+
+type User {
   id: ID!
   name: String!
-}
+  username: String!
+  email: String!
+  password: String!
+  enabled: Boolean!
+  isUsing2FA: Boolean!
+  secret: String!
 
-input CharacterInput {
-  name: String!
-  id: String
-}
-
-
-
-
-### Authentication Service
-#
-#type User {
-#  id: ID!
-#  name: String!
-#  username: String!
-#  email: String!
-#  password: String!
-#  enabled: Boolean!
-#  isUsing2FA: Boolean!
-#  secret: String!
-#
 #  roles: [Role!]!
 #  privileges: [Privilege!]!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#
+
+  createdAt: String!
+  updatedAt: String!
+}
+
 #type Role {
 #  id: ID!
 #  name: String!
@@ -142,3 +130,39 @@ input CharacterInput {
 #
 #  task: Task!
 #}
+
+# Auth Objects
+input SigninInput {
+    username: String!
+    password: String!
+}
+
+type AuthTokenResponse {
+    accessToken: String!
+    refreshToken: String!
+    name: String!
+    username: String!
+    email: String!
+    lastLogin: String!
+}
+
+input TokenInput {
+  token: String!
+}
+
+type TokenResponse {
+  id: ID!
+  username: String!
+  accessToken: String!
+  expiryDate: String!
+}
+
+input UserPermissionInput {
+  userId: ID!
+  permissionId: String!
+}
+
+type UserPermissionResponse {
+  id: ID!
+  name: String!
+}

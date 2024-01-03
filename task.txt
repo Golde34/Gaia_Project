@@ -8,6 +8,28 @@ add the sentence to dataset
 label for the sentence in the dataset
 if bot do not know the label or word in sentence, add person.
 
+port gate:
++ gaia connector: 5000
++ client gui: 5173
++ mobile: 5002
+
+middleware server: 4000
+auth service: 4001
+
+task manager: 3000
+schedule: 3001
+notification: 3002
+recommend: 3003
+health care: 3004
+finance: 3005
+search: 3006
+
+command: 3014
+optimize: 3013
+github api: 3012
+auto tool: 3011
+AI model: 3010
+
 15-9-23
 if bot doesnt know which task is, then create a "Add new Skill mechanism"
 
