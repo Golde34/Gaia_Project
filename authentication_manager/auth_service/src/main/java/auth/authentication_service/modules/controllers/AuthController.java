@@ -1,8 +1,8 @@
 package auth.authentication_service.modules.controllers;
 
-import auth.authentication_service.modules.dto.SignInDtoRequest;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserPermissionDto;
+import auth.authentication_service.modules.dto.request.SignInDtoRequest;
 import auth.authentication_service.services.interfaces.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
