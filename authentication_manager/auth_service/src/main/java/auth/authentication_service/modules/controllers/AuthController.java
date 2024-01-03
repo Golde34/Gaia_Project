@@ -32,8 +32,8 @@ public class AuthController {
    }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
-    public ResponseEntity<String> status() {
-        return ResponseEntity.ok("OK");
+    public ResponseEntity<?> status() {
+        return authService.checkStatus();
     }
 
     @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
