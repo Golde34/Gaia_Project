@@ -19,7 +19,7 @@ def auth():
     
     if auth_response.status_code == 200:
         print('authenticate successfully')
-        return jsonify({'authenticated': True, 'data': auth_response.json()})
+        return jsonify({'authenticated': True, 'response': auth_response.json()})
     else :
         return jsonify({'authenticated': False, 'message': 'Invalid credentials'}) 
     
