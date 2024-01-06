@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"middleware_loader/core/services/base"
@@ -36,18 +35,16 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	}
+	
+	// Convert the response body to a map
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)	
 
-	body, ok := bodyResult.([]byte)
-	if !ok {
-		return model.AuthTokenResponse{}, fmt.Errorf("baseAPI did not return a byte slice")
-	}
+    // Unmarshal the response body into an AuthToken
+    var authToken model.AuthTokenResponse
+    err = json.Unmarshal(dataBytes, &authToken)
+    if err != nil {
+        return model.AuthTokenResponse{}, err
+    }
 
-	// Unmarshal the response body into an AuthToken
-	var authToken model.AuthTokenResponse
-	err = json.Unmarshal(body, &authToken)
-	if err != nil {
-		return model.AuthTokenResponse{}, err
-	}
-
-	return authToken, nil
+    return authToken, nil
 }

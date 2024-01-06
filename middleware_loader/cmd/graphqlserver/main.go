@@ -27,9 +27,11 @@ func main() {
 
 	// SERVICES
 	authService := services.NewAuthService()	
+	middlewareService := services.NewMiddlewareService()
 
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
+	routers.NewMiddlewareRouter(middlewareService, router)
 
 	// GRAPHQL
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))

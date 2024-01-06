@@ -14,7 +14,7 @@ type AuthRouter struct {
 
 func NewAuthRouter(authService *services.AuthService, r *chi.Mux) *AuthRouter {
 	r.Route("/auth", func(r chi.Router) {
-		r.Post("/signin", func(w http.ResponseWriter, r *http.Request) {
+		r.Post("/sign-in", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.Signin(w, r, authService)
 		})
 	})
