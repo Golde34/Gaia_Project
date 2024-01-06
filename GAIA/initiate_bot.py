@@ -53,14 +53,3 @@ def simple_handle_testing(console_input):
         boolean_loop = True
     
     return boolean_loop
-
-
-
-## TEST BETA FUNCTION
-# async def why_you_always_die_gaia_connector():
-#     bash_script = "gaia_bot/modules/ports/bash_shells/gaia_connector.sh"
-#     return await asyncio.create_subprocess_exec('gnome-terminal', '--', 'bash', '-c', f'bash {bash_script}')
-#
-# if __name__ == "__main__":
-#     asyncio.run(why_you_always_die_gaia_connector())
-#     asyncio.run(main())

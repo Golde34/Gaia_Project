@@ -1,11 +1,11 @@
 from flask import request, jsonify
 import requests
+
 from controllers import app
-from configs.port_configs import PORTS
+from controllers.controller_config.config import ControllerConfig
 
 
-authentication_service_port = PORTS['authentication_service']
-authentication_service_url = f"http://localhost:{authentication_service_port['port']}"
+authentication_service_url = ControllerConfig('authentication_service').url
 
 @app.route('/auth/sign-in', methods=['POST'])
 def auth():
@@ -14,7 +14,7 @@ def auth():
     password = data['password']
     print(data)
     
-    auth_response = requests.post(f"{authentication_service_url}/auth/sign-in", json={'username': username, 'password': password})
+    auth_response = requests.post(f"{authentication_service_url}/sign-in", json={'username': username, 'password': password})
     print(auth_response.status_code)
     
     if auth_response.status_code == 200:
@@ -23,7 +23,7 @@ def auth():
     else :
         return jsonify({'authenticated': False, 'message': 'Invalid credentials'}) 
     
-@app.route('/status', methods=['GET'])
+@app.route('/auth/status', methods=['GET'])
 def status():
     
     auth_response = requests.get(f"{authentication_service_url}/status")
