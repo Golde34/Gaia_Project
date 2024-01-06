@@ -3,10 +3,10 @@ package auth.authentication_service.services;
 import auth.authentication_service.enums.LoggerType;
 import auth.authentication_service.enums.ResponseMessage;
 import auth.authentication_service.enums.TokenType;
-import auth.authentication_service.modules.dto.CheckTokenDtoResponse;
-import auth.authentication_service.modules.dto.SignInDtoResponse;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserPermissionDto;
+import auth.authentication_service.modules.dto.response.CheckTokenDtoResponse;
+import auth.authentication_service.modules.dto.response.SignInDtoResponse;
 import auth.authentication_service.persistence.repositories.TokenRepository;
 import auth.authentication_service.services.interfaces.TokenService;
 import auth.authentication_service.services.interfaces.UserService;
@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         SignInDtoResponse response = _generateSignInToken(user, userDetails);
         _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
         
-        return ResponseEntity.ok(response);
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseMessage.msg200));
     }
     private GenericResponse<String> _validateAuthentication(String username, String password, User user) throws Exception {
         try {
@@ -147,7 +147,7 @@ public class AuthServiceImpl implements AuthService {
 
     public ResponseEntity<?> checkToken(TokenDto token) {
         CheckTokenDtoResponse userResponse = tokenService.checkToken(token.getToken());
-        return ResponseEntity.ok(userResponse);
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(userResponse, ResponseMessage.msg200)); 
     }
 
     public ResponseEntity<?> checkPermission(UserPermissionDto permission) {
@@ -157,12 +157,16 @@ public class AuthServiceImpl implements AuthService {
             Collection<Privilege> rolePrivilege = role.getPrivileges();
             for (Privilege privilege : rolePrivilege) {
                 if (privilege.getName().equals(permission.getPermission())) {
-                    return ResponseEntity.ok(privilege);
+                    return genericResponse.matchingResponseMessage(new GenericResponse<>(privilege, ResponseMessage.msg200));
                 }
             }
         }
-        return ResponseEntity.badRequest().body("Permission denied");
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseMessage.msg401));
 
+    }
+
+    public ResponseEntity<?> checkStatus() {
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("Authentication service is running", ResponseMessage.msg200));
     }
 
     // public GenericResponse<?> getNewAccessTokenResponse(String refreshToken) throws Exception {
