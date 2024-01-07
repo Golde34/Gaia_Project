@@ -26,7 +26,7 @@ async def process_bot():
     # Startup
     console_manager, assistant = _startup()
     # initiate
-    _initiate_gaia_command(console_manager=console_manager, assistant=assistant, settings=settings) 
+    await _initiate_gaia_command(console_manager=console_manager, assistant=assistant, settings=settings) 
 
 def _startup():
     console_manager = ConsoleManager()
@@ -36,13 +36,13 @@ def _startup():
                           refresh_console=True)
     return console_manager, assistant
 
-def _initiate_gaia_command(console_manager, assistant, settings):
+async def _initiate_gaia_command(console_manager, assistant, settings):
     boolean_loop = True
     process = Processor(console_manager=console_manager, assistant=assistant, settings=settings)
     while boolean_loop:
         console_manager.console_output(text="Listen your command",
                                        info_log="Listen command")
-        response_transcript, skill = process.run()
+        response_transcript, skill = await process.run()
         console_manager.console_output(text=response_transcript, info_log="Response transcript with skill: " + skill)
         # _boolean_loop = simple_handle_testing(i)
  

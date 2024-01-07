@@ -23,10 +23,7 @@ def check_microservice_state():
     return microservice_state   
 
 def check_microservice_state_by_name(microservice_name):
-    if check_port_in_use(PORTS[microservice_name]['port']) == False:
-        return False # Default, false is not running
-    else:
-        return True
+    return check_port_in_use(PORTS[microservice_name]['port'])
     
 async def wait_microservice(microservice_name):
     while True:

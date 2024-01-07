@@ -26,3 +26,9 @@ class CallMicroservices:
             subprocess.run(['gnome-terminal', '--', 'bash', '-c', f'bash {bash_script_path}']) 
         except subprocess.CalledProcessError as e:
             print("Error running the bash script: ", e)
+    
+    def call_microservice(self, bash_script_path):
+        try:
+            subprocess.run(['gnome-terminal', '--', 'bash', '-c', f'bash {bash_script_path}']) 
+        except subprocess.CalledProcessError as e:
+            print("Error running the bash script: ", e)

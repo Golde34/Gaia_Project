@@ -2,6 +2,7 @@ from gaia_bot.skills.collections.extract_sentence_object import SentenceExtractS
 from gaia_bot.skills.collections.default_skill import DefaultSkill
 from gaia_bot.skills.collections.response import GPT2GenerateResponse
 from gaia_bot.skills.collections.detect_skill import DetectSkill
+from gaia_bot.skills.collections.open_client_gui import OpenClientGUI
 
 SKILLS = [
     {
@@ -23,5 +24,8 @@ SKILLS = [
         'func': DetectSkill.detect_skill_tag,
         'tags': 'detect skill, create task, create a new task, detect task, check task, delete task, update task',
     },
-    
+    {
+        'func': OpenClientGUI.open_client_gui,
+        'tags': 'open client gui, open gui, open client',
+    }
 ]

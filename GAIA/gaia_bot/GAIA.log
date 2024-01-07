@@ -1,3 +1,14 @@
-2024-01-06 14:36:27,067 - root - INFO - Microservice is running
-2024-01-06 14:36:27,464 - root - INFO - Bot wakeup...
-2024-01-06 14:36:27,464 - root - INFO - Listen command
+2024-01-07 19:47:48,605 - root - INFO - Microservice is running
+2024-01-07 19:47:48,739 - root - INFO - Bot wakeup...
+2024-01-07 19:47:48,739 - root - INFO - Listen command
+2024-01-07 19:47:53,584 - root - INFO - Handle input
+2024-01-07 19:47:55,873 - root - INFO - Skill tag:Greeting
+2024-01-07 19:47:55,873 - root - INFO - Executing skill...
+2024-01-07 19:47:55,947 - root - ERROR - Failed to execute skill...
+2024-01-07 19:47:55,947 - root - INFO - Response transcript with skill: Greeting
+2024-01-07 19:47:55,947 - root - INFO - Listen command
+2024-01-07 19:48:04,449 - root - INFO - Handle input
+2024-01-07 19:48:06,528 - root - INFO - Skill tag:Greeting
+2024-01-07 19:48:06,528 - root - INFO - Executing skill...
+2024-01-07 19:48:06,528 - root - INFO - Response transcript with skill: Greeting
+2024-01-07 19:48:06,528 - root - INFO - Listen command

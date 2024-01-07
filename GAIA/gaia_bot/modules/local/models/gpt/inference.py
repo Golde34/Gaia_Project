@@ -11,7 +11,7 @@ def inference(inp):
     inp = tokenizer(inp, return_tensors="pt")
     X = inp["input_ids"].to(device)
     a = inp["attention_mask"].to(device)
-    output = model.gpt2.generate(X, attention_mask=a)
+    output = model.gpt2.generate(X, attention_mask=a, max_new_tokens=50)
     output = tokenizer.decode(output[0], skip_special_tokens=True)
     return output
 

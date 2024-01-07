@@ -4,7 +4,7 @@ import subprocess
 from gaia_bot.configs.port_configs import PORTS
 
 
-class ClientGUICommand():
+class ClientGUIConnector():
 
     def __init__(self, access_token, refresh_token):
         self.access_token = access_token
