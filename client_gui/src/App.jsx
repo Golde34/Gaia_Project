@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import RenderRouter from './routers'
 import { authenticate } from './api/store/actions/auth_service/userActions'
 import { checkLocalStorage } from './utils/set-interval'
+import Signin from './screens/authScreen/Signin'
 
 function App() {
   let interval = 60 * 60 * 1000;
@@ -19,6 +20,7 @@ function App() {
       }
     }
     checkGaiaConnected();
+    console.log("accessToken", accessToken);
   }, []);
 
   return (
@@ -31,7 +33,9 @@ function App() {
       </main> 
     ) : (
       <main className='flex'>
-        <p> GAIA is not connected.</p>
+        <BrowserRouter basename='/client-gui'>
+          <Signin accessToken={accessToken}/>
+        </BrowserRouter>
       </main>
     )  
     }

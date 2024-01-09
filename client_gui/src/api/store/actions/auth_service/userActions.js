@@ -12,14 +12,17 @@ const portName = {
 // Automatically authenticate function
 export const authenticate = async () => {
     const response = await serverRequest('/client/gaia-connect', HttpMethods.GET, portName.gaia, null);
-    const data = await JSON.stringify(response.data);
+    const data = JSON.stringify(response.data);
     if (data !== null && data !== undefined && data !== '') {
         localStorage.setItem('gaiaToken', data);
         // temporary
         localStorage.setItem('userId', 1);
+        localStorage.setItem('gaiaStateActivated', true)
         console.log('GAIA is activated');
         return data;
     } else {
+        localStorage.setItem('gaiaStateActivated', false)
+        console.log(localStorage.getItem('gaiaStateActivated'));
         console.log('GAIA is not activated');
     }
 };
