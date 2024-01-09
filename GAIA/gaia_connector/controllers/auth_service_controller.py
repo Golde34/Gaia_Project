@@ -7,7 +7,7 @@ from controllers.controller_config.config import ControllerConfig
 
 authentication_service_url = ControllerConfig('authentication_service').url
 
-@app.route('/auth/sign-in', methods=['POST'])
+@app.route('/sign-in', methods=['POST'])
 def auth():
     data = request.get_json()
     username = data['username']
@@ -23,7 +23,7 @@ def auth():
     else :
         return jsonify({'authenticated': False, 'message': 'Invalid credentials'}) 
     
-@app.route('/auth/status', methods=['GET'])
+@app.route('/status', methods=['GET'])
 def status():
     
     auth_response = requests.get(f"{authentication_service_url}/status")

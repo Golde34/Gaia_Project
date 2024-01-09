@@ -7,7 +7,7 @@ from controllers.controller_config.config import ControllerConfig
 
 middleware_loader_url = ControllerConfig('middleware_loader').url
 
-@app.route('/middleware/microservices-status', methods=['GET'])
+@app.route('/microservices-status', methods=['GET'])
 def microservices_status():
     
     middleware_response = requests.get(f"{middleware_loader_url}/status")

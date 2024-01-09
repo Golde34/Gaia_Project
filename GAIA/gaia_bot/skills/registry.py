@@ -27,5 +27,9 @@ SKILLS = [
     {
         'func': OpenClientGUI.open_client_gui,
         'tags': 'open client gui, open gui, open client',
+    },
+    # TASK MANAGER FUNCTION
+    {
+        'func'
     }
 ]
