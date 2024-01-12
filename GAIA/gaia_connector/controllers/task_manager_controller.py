@@ -7,14 +7,14 @@ from utils.get_auth_token import _get_token_parameters
 
 task_manager_url = ControllerConfig('task_manager').url
 
-@app.route('/create-task', methods=['POST'])
+@app.route('/task-manager/create-task', methods=['POST'])
 def create_task():
     data = request.get_json()
     task = data['task']
-    
+    print(task) 
     tokens = get_tokens()
     access_token = tokens['access_token']
-    
+    print(access_token)
     task_response = requests.post(f"{task_manager_url}/create-task", json={'task': task, 'access_token': access_token})
     
     if task_response.status_code == 200:
@@ -22,7 +22,7 @@ def create_task():
     else :
         return jsonify({'response': 'Cannot create task'})
     
-@app.route('/update-task', methods=['PUT'])
+@app.route('/task-manager/update-task', methods=['PUT'])
 def update_task():
     data = request.get_json()
     task = data['task']
@@ -36,7 +36,7 @@ def update_task():
     else :
         return jsonify({'response': 'Cannot update task'})
     
-@app.route('/delete-task', methods=['DELETE'])
+@app.route('/task-manager/delete-task', methods=['DELETE'])
 def delete_task():
     data = request.get_json()
     task = data['task']
@@ -50,7 +50,7 @@ def delete_task():
     else :
         return jsonify({'response': 'Cannot delete task'})  
     
-@app.route('/view-task', methods=['GET'])
+@app.route('/task-manager/view-task', methods=['GET'])
 def view_task():
     data = request.get_json()
     task = data['task']

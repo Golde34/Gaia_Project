@@ -1,31 +1,37 @@
 import asyncio
 import logging
 import requests
+import json
 
 from gaia_bot.skills.assistant_skill import AssistantSkill
 from gaia_bot.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.utils.activate_microservice import check_microservice_state_by_name, check_port_in_use
 from gaia_bot.modules.ports.commands.task_server_command import TaskManagerConnector
+from gaia_bot.modules.data_objects.task import Task
 
 
 class TaskCRUDSkill(AssistantSkill):
     
-    def detect_task(cls, text):
-        return 'new task' + text
+    def detect_task(text):
+        task = Task(text)
+        task.title = 'new task' + text
+        return task
 
-    def detect_task_action(cls, text):
-        return 'create' + text
+    def detect_task_action(text):
+        return 'create'
     
     @classmethod
-    async def execute(cls, text, **kwargs):
+    def execute(cls, text, **kwargs):
         # activate gaia connector
         try:
             task = cls.detect_task(text)
             action = cls.detect_task_action(text)
-            return cls.execute_task_action(action, task)              
-        except:
+            cls.execute_task_action(action, task) 
+        except Exception as e:
             logging.error("Cannot activate Gaia Connector")
-                
+            cls.console_manager.console_output("Cannot activate Gaia Connector") 
+               
+    @classmethod
     def execute_task_action(cls, action, task):
         if action == 'create':
             return cls._send_request(task, 'POST')
@@ -40,7 +46,9 @@ class TaskCRUDSkill(AssistantSkill):
             return False
     
     @classmethod
-    async def _send_request(cls, task, method):
+    def _send_request(cls, task, method):
         task_manager = TaskManagerConnector()
-        return task_manager.execute_task_command(task, method)
+        json_task = json.dumps(task.__dict__)
+        cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {json_task}")
+        return task_manager.execute_task_command(json_task, method)
     

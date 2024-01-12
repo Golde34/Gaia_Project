@@ -3,6 +3,8 @@ from gaia_bot.skills.collections.default_skill import DefaultSkill
 from gaia_bot.skills.collections.response import GPT2GenerateResponse
 from gaia_bot.skills.collections.detect_skill import DetectSkill
 from gaia_bot.skills.collections.open_client_gui import OpenClientGUI
+from gaia_bot.skills.collections.task_crud_skill import TaskCRUDSkill
+
 
 SKILLS = [
     {
@@ -30,6 +32,7 @@ SKILLS = [
     },
     # TASK MANAGER FUNCTION
     {
-        'func'
+        'func': TaskCRUDSkill.execute,
+        'tags': 'Create Task'
     }
 ]

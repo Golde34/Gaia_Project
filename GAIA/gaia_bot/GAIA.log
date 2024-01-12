@@ -1,14 +1,11 @@
-2024-01-07 19:47:48,605 - root - INFO - Microservice is running
-2024-01-07 19:47:48,739 - root - INFO - Bot wakeup...
-2024-01-07 19:47:48,739 - root - INFO - Listen command
-2024-01-07 19:47:53,584 - root - INFO - Handle input
-2024-01-07 19:47:55,873 - root - INFO - Skill tag:Greeting
-2024-01-07 19:47:55,873 - root - INFO - Executing skill...
-2024-01-07 19:47:55,947 - root - ERROR - Failed to execute skill...
-2024-01-07 19:47:55,947 - root - INFO - Response transcript with skill: Greeting
-2024-01-07 19:47:55,947 - root - INFO - Listen command
-2024-01-07 19:48:04,449 - root - INFO - Handle input
-2024-01-07 19:48:06,528 - root - INFO - Skill tag:Greeting
-2024-01-07 19:48:06,528 - root - INFO - Executing skill...
-2024-01-07 19:48:06,528 - root - INFO - Response transcript with skill: Greeting
-2024-01-07 19:48:06,528 - root - INFO - Listen command
+2024-01-12 22:07:25,197 - root - INFO - Microservice is running
+2024-01-12 22:07:25,335 - root - INFO - Bot wakeup...
+2024-01-12 22:07:25,335 - root - INFO - Listen command
+2024-01-12 22:07:33,547 - root - INFO - Handle input
+2024-01-12 22:07:36,901 - root - INFO - Skill tag:Create Task
+2024-01-12 22:07:36,902 - root - INFO - Executing skill...
+2024-01-12 22:07:51,894 - root - INFO - Microservice is not running
+2024-01-12 22:08:50,416 - root - ERROR - Cannot activate Gaia Connector
+2024-01-12 22:08:52,779 - root - ERROR - Failed to execute skill...
+2024-01-12 22:08:52,781 - root - INFO - Response transcript with skill: Create Task
+2024-01-12 22:08:52,782 - root - INFO - Listen command

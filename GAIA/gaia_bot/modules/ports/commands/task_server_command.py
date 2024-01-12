@@ -1,4 +1,5 @@
 import requests
+import json
 
 from gaia_bot.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.modules.ports.commands.microservices_state.call_microservices import CallMicroservices
@@ -33,6 +34,8 @@ class TaskManagerConnector:
         self.microservice_state.activate_service()
         
     def create_task(self, task):
+        task_json = json.dumps(task)
+        
         response = requests.post(f"{self.gaia_url}" + "/create-task", 
                                  json={'task': task})
         

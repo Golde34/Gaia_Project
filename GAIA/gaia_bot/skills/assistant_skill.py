@@ -34,11 +34,11 @@ class AssistantSkill:
             return infer
 
     @classmethod
-    def validate_assistant_response(cls, detected_skill, SKILLS):
+    async def validate_assistant_response(cls, detected_skill, SKILLS):
         for skill in SKILLS:
             for tag in str(skill['tags']).split(', '):
                 if detected_skill.__contains__(tag):
-                    cls.execute_skill(skill['func'], detected_skill)
+                    await cls.execute_skill(skill['func'], detected_skill)
                     break
 
     @classmethod

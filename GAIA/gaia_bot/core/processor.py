@@ -21,10 +21,10 @@ class Processor:
         tag_skill = self.assistant.detect_skill_tag(transcript)
 
         # self.assistant.sentence_detect(transcript, self.skills)
-        # self.assistant.validate_assistant_response(tag_skill, self.skills)
+        await self.assistant.validate_assistant_response(tag_skill, self.skills)
         
         # test skill
-        await self.assistant.test_only_skill(self.skills, 'open client gui')
+        # await self.assistant.test_only_skill(self.skills, 'create a new task')
             
         # return response_transcript
         return response_transcript, tag_skill
