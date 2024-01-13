@@ -5,6 +5,7 @@ from controllers import app
 from controllers.controller_config.config import ControllerConfig
 from utils.get_auth_token import _get_token_parameters
 
+
 task_manager_url = ControllerConfig('task_manager').url
 
 @app.route('/task-manager/create-task', methods=['POST'])
