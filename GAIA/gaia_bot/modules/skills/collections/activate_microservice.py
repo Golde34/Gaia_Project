@@ -1,7 +1,8 @@
-from gaia_bot.skills.assistant_skill import AssistantSkill
-from gaia_bot.configs.port_configs import PORTS
-from gaia_bot.utils.activate_microservice import check_microservice_state, check_port_in_use
 import asyncio
+
+from gaia_bot.modules.skills.assistant_skill import AssistantSkill
+from gaia_bot.kernel.configs.port_configs import PORTS
+from gaia_bot.kernel.utils.activate_microservice import check_microservice_state, check_port_in_use
 
 
 class ActivateMicroservice(AssistantSkill):

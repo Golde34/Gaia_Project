@@ -2,7 +2,7 @@ import torch
 from gaia_bot.modules.local.models.gpt.config import device
 from gaia_bot.modules.local.models.gpt.tokenizer_config import gpt2_tokenizer
 from gaia_bot.modules.local.models.gpt.finetune_gpt2_model import EntityModel
-from gaia_bot.configs.settings import AI_MODEL_LOCATION
+from gaia_bot.kernel.configs.settings import AI_MODEL_LOCATION
 
 def inference(inp):
     tokenizer = gpt2_tokenizer

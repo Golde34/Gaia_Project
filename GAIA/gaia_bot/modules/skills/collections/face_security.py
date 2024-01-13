@@ -1,6 +1,5 @@
 import pickle
 import time
-
 import cv2
 import imutils
 import numpy as np

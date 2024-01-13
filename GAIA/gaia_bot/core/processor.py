@@ -1,7 +1,7 @@
 import gaia_bot
 
 from gaia_bot.core.response_creator import ResponseCreator
-from gaia_bot.skills.registry import SKILLS
+from gaia_bot.modules.skills.registry import SKILLS
 
 class Processor:
 

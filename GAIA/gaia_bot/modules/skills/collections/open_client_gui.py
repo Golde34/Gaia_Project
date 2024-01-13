@@ -1,10 +1,10 @@
 import asyncio
 import webbrowser
 
-from gaia_bot.skills.assistant_skill import AssistantSkill
-from gaia_bot.configs.port_configs import PORTS, DOMAIN
-from gaia_bot.utils.activate_microservice import check_microservice_state_by_name, check_port_in_use
 from gaia_bot.modules.local.resources.cache.cache import cache
+from gaia_bot.modules.skills.assistant_skill import AssistantSkill
+from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
+from gaia_bot.kernel.utils.activate_microservice import check_microservice_state_by_name, check_port_in_use
 
 
 port = PORTS['client_gui']['port']

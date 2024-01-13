@@ -1,9 +1,9 @@
-from gaia_bot.skills.collections.extract_sentence_object import SentenceExtractSkill
-from gaia_bot.skills.collections.default_skill import DefaultSkill
-from gaia_bot.skills.collections.response import GPT2GenerateResponse
-from gaia_bot.skills.collections.detect_skill import DetectSkill
-from gaia_bot.skills.collections.open_client_gui import OpenClientGUI
-from gaia_bot.skills.collections.task_crud_skill import TaskCRUDSkill
+from gaia_bot.modules.skills.collections.extract_sentence_object import SentenceExtractSkill
+from gaia_bot.modules.skills.collections.default_skill import DefaultSkill
+from gaia_bot.modules.skills.collections.response import GPT2GenerateResponse
+from gaia_bot.modules.skills.collections.detect_skill import DetectSkill
+from gaia_bot.modules.skills.collections.open_client_gui import OpenClientGUI
+from gaia_bot.modules.skills.collections.task_crud_skill import TaskCRUDSkill
 
 
 SKILLS = [

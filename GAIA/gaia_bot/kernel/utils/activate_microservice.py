@@ -1,6 +1,6 @@
-from gaia_bot.configs.port_configs import PORTS, PORT_COMPONENTS
 import socket
 import asyncio
+from gaia_bot.kernel.configs.port_configs import PORTS, PORT_COMPONENTS
 
 
 async def activate_microservice():

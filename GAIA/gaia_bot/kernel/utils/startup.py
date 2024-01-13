@@ -2,8 +2,8 @@ import os
 import speech_recognition as sr
 
 from gaia_bot.modules.ports.commands.authen_command import AuthenticationConnector 
-from gaia_bot.utils.activate_microservice import wait_microservice
-from gaia_bot.skills.collections.face_security import master_recognize
+from gaia_bot.kernel.utils.activate_microservice import wait_microservice
+from gaia_bot.modules.skills.collections.face_security import master_recognize
 
 
 async def multi_authenticate(console_manager):

@@ -1,13 +1,13 @@
 import colorama
 
-from gaia_bot.configs.__version__ import __version__
 from gaia_bot.core.console_manager import ConsoleManager
-from gaia_bot.skills.assistant_skill import AssistantSkill
-from gaia_bot.skills.registry import SKILLS
 from gaia_bot.core.processor import Processor
-from gaia_bot.configs import settings
-from gaia_bot.utils.startup import recognize_owner_by_authen_service
-from gaia_bot.utils.activate_microservice import activate_microservice
+from gaia_bot.modules.skills.assistant_skill import AssistantSkill
+from gaia_bot.modules.skills.registry import SKILLS
+from gaia_bot.kernel.configs import settings
+from gaia_bot.kernel.utils.startup import recognize_owner_by_authen_service
+from gaia_bot.kernel.utils.activate_microservice import activate_microservice
+from gaia_bot.kernel.configs.__version__ import __version__
 
 
 async def process_bot():

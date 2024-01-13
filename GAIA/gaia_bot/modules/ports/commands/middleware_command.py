@@ -1,9 +1,6 @@
 import requests
-import subprocess
-import json
-import os
 
-from gaia_bot.configs.port_configs import PORTS, DOMAIN 
+from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN 
 from gaia_bot.modules.ports.commands.microservices_state.call_microservices import CallMicroservices
 
 

@@ -1,11 +1,3 @@
-2024-01-12 22:07:25,197 - root - INFO - Microservice is running
-2024-01-12 22:07:25,335 - root - INFO - Bot wakeup...
-2024-01-12 22:07:25,335 - root - INFO - Listen command
-2024-01-12 22:07:33,547 - root - INFO - Handle input
-2024-01-12 22:07:36,901 - root - INFO - Skill tag:Create Task
-2024-01-12 22:07:36,902 - root - INFO - Executing skill...
-2024-01-12 22:07:51,894 - root - INFO - Microservice is not running
-2024-01-12 22:08:50,416 - root - ERROR - Cannot activate Gaia Connector
-2024-01-12 22:08:52,779 - root - ERROR - Failed to execute skill...
-2024-01-12 22:08:52,781 - root - INFO - Response transcript with skill: Create Task
-2024-01-12 22:08:52,782 - root - INFO - Listen command
+2024-01-13 11:28:23,701 - root - INFO - Microservice is running
+2024-01-13 11:28:24,149 - root - INFO - Bot wakeup...
+2024-01-13 11:28:24,149 - root - INFO - Listen command

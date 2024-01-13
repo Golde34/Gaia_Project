@@ -2,6 +2,7 @@ import requests
 import subprocess
 import logging
 
+
 class CallMicroservices:
     def __init__(self, bash_script, url):
         self.bash_script = bash_script

@@ -1,13 +1,9 @@
-import asyncio
 import logging
-import requests
 import json
 
-from gaia_bot.skills.assistant_skill import AssistantSkill
-from gaia_bot.configs.port_configs import PORTS, DOMAIN
-from gaia_bot.utils.activate_microservice import check_microservice_state_by_name, check_port_in_use
+from gaia_bot.modules.skills.assistant_skill import AssistantSkill
 from gaia_bot.modules.ports.commands.task_server_command import TaskManagerConnector
-from gaia_bot.modules.data_objects.task import Task
+from gaia_bot.infrastructure.data_objects.task import Task
 
 
 class TaskCRUDSkill(AssistantSkill):

@@ -1,4 +1,3 @@
-import argparse
 import asyncio
 
 from initiate_bot import process_bot

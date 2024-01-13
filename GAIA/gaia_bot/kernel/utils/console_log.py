@@ -1,7 +1,7 @@
 import shutil
 from colorama import Fore
 
-from gaia_bot.configs.__version__ import __version__
+from gaia_bot.kernel.configs.__version__ import __version__
 
 
 class OutputStyler:

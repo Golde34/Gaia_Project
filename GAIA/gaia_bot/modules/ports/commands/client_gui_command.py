@@ -1,7 +1,4 @@
-import requests
-import subprocess
-
-from gaia_bot.configs.port_configs import PORTS
+from gaia_bot.kernel.configs.port_configs import PORTS
 
 
 class ClientGUIConnector():
