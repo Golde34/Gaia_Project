@@ -13,7 +13,7 @@ const getDefaultHeaders = () => {
 
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
-
+ 
     return headers;
 };
 

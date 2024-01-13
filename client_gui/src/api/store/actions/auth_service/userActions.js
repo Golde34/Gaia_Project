@@ -7,12 +7,14 @@ import {
 const portName = {
     auth: 'authenticationServicePort',
     gaia: 'gaiaConnectorPort',
+    middleware: 'middlewarePort',
 }
 
 // Automatically authenticate function
 export const authenticate = async () => {
-    const response = await serverRequest('/client/gaia-connect', HttpMethods.GET, portName.gaia, null);
+    const response = await serverRequest('/gaia/gaia-connect', HttpMethods.GET, portName.middleware, null);
     const data = JSON.stringify(response.data);
+    console.log(data)
     if (data !== null && data !== undefined && data !== '') {
         localStorage.setItem('gaiaToken', data);
         // temporary
