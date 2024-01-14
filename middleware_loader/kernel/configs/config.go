@@ -8,12 +8,12 @@ import (
 )
 
 type Config struct {
-	Url string
-	
-	Port string
-	GaiaPort string
-	AuthServicePort string
-	TaskManagerPort string
+	Url                  string
+	Port                 string
+	GaiaPort             string
+	AuthServicePort      string
+	TaskManagerPort      string
+	ClientCORSAllowedUrl string
 }
 
 func LoadEnv() (Config, error) {
@@ -27,13 +27,15 @@ func LoadEnv() (Config, error) {
 	gaiaPort := os.Getenv("GAIA_PORT")
 	authServicePort := os.Getenv("AUTH_SERVICE_PORT")
 	taskManagerPort := os.Getenv("TASK_MANAGER_PORT")
+	clientCORSAllowedUrl := os.Getenv("CLIENT_CORS_ALLOWED_URL")
 
 	config := Config{
-		Url: url,
-		Port: port,
-		GaiaPort: gaiaPort,
-		AuthServicePort: authServicePort,
-		TaskManagerPort: taskManagerPort,
+		Url:                  url,
+		Port:                 port,
+		GaiaPort:             gaiaPort,
+		AuthServicePort:      authServicePort,
+		TaskManagerPort:      taskManagerPort,
+		ClientCORSAllowedUrl: clientCORSAllowedUrl,
 	}
 	return config, nil
 }

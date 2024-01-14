@@ -13,51 +13,61 @@ import (
 
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
+	"middleware_loader/kernel/configs"
 	"middleware_loader/ui/routers"
 )
 
 func main() {
 	port := "4000"
-    router := chi.NewRouter()
+	cfg, _ := configs.LoadEnv()
+	clientUrl := cfg.ClientCORSAllowedUrl
+	router := chi.NewRouter()
 
-    router.Use(middleware.Logger)
-    router.Use(middleware.RequestID)
-    router.Use(middleware.Recoverer)
-    router.Use(middleware.RedirectSlashes)
-    router.Use(middleware.Timeout(time.Second * 60))
+	router.Use(middleware.Logger)
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.RedirectSlashes)
+	router.Use(middleware.Timeout(time.Second * 60))
 
-    cors := cors.New(cors.Options{
-        AllowedOrigins:   []string{"http://localhost:5173"},
-        AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-        AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-        ExposedHeaders:   []string{"Link"},
-        AllowCredentials: true,
-        MaxAge:           300, // Maximum value not ignored by any of major browsers
-    })
-    router.Use(cors.Handler)
+	corsHandler := cors.New(
+		cors.Options{
+			AllowedOrigins: []string{clientUrl},
+			AllowedMethods: []string{
+				http.MethodHead,
+				http.MethodGet,
+				http.MethodPost,
+				http.MethodPut,
+				http.MethodPatch,
+				http.MethodDelete,
+			},
+			AllowedHeaders:   []string{"*"},
+			AllowCredentials: true,
+		})
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", corsHandler)
+	router.Use(corsHandler.Handler)
 
-    // SERVICES
-    authService := services.NewAuthService()
-    middlewareService := services.NewMiddlewareService()
-    gaiaService := services.NewGaiaService()
+	// SERVICES
+	authService := services.NewAuthService()
+	middlewareService := services.NewMiddlewareService()
+	gaiaService := services.NewGaiaService()
 
-    // ROUTERS
-    routers.NewAuthRouter(authService, router)
-    routers.NewGaiaRouter(gaiaService, router)
-    routers.NewMiddlewareRouter(middlewareService, router)
+	// ROUTERS
+	routers.NewAuthRouter(authService, router)
+	routers.NewGaiaRouter(gaiaService, router)
+	routers.NewMiddlewareRouter(middlewareService, router)
 
-    // GRAPHQL
-    router.Handle("/", playground.Handler("GraphQL playground", "/query"))
-    router.Handle("/query", handler.NewDefaultServer(
-        graph.NewExecutableSchema(
-            graph.Config{
-                Resolvers: &graph.Resolver{
-                    AuthService: authService,
-                },
-            },
-        ),
-    ))
+	// GRAPHQL
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/query", handler.NewDefaultServer(
+		graph.NewExecutableSchema(
+			graph.Config{
+				Resolvers: &graph.Resolver{
+					AuthService: authService,
+				},
+			},
+		),
+	))
 
-    log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-    log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
