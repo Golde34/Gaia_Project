@@ -5,7 +5,6 @@ import { useSelector } from "react-redux"
 const Navbar = () => {
     var auth = false;
     let gaiaStateActivated = localStorage.getItem("gaiaStateActivated");
-    console.log("gaiaStateActivated", gaiaStateActivated)
     if (gaiaStateActivated === "true") {
         auth = true;
     } else {
@@ -14,11 +13,9 @@ const Navbar = () => {
         const { userInfo } = userSignin;
         const { bossInfo } = gaiaSignin;
 
-        console.log("userInfo", userInfo);
-        console.log("bossInfo", bossInfo);
         auth = false;
     }
-    console.log("auth", auth)
+
     return (
         <div id="top"
             className="relative w-full sm:flex justify-between item-center p-2"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -6,39 +6,39 @@ import RenderRouter from './routers'
 import { authenticate } from './api/store/actions/auth_service/userActions'
 import { checkLocalStorage } from './utils/set-interval'
 import Signin from './screens/authScreen/Signin'
+import { useSelector } from 'react-redux'
+import GaiaAutoSignin from './screens/authScreen/GaiaAutoSignin'
 
 function App() {
   let interval = 60 * 60 * 1000;
   checkLocalStorage(interval);
-  const [ accessToken, setAccessToken ] = useState(null);
+  // const [ accessToken, setAccessToken ] = useState(null);
 
-  useEffect(() => { 
-    const checkGaiaConnected = async () => {
-      const data = await authenticate();
-      if (data) {
-        setAccessToken(data);
-      }
-    }
-    checkGaiaConnected();
-    console.log("accessToken", accessToken);
-  }, []);
+
+  // const didAuthenticateRef = useRef();
+
+  // useEffect(() => { 
+  //   if (didAuthenticateRef.current) return;
+
+  //   const checkGaiaConnected = async () => {
+  //     const data = await authenticate();
+  //     if (data) {
+  //       setAccessToken(data);
+  //     }
+  //   }
+  //   checkGaiaConnected();
+
+  //   didAuthenticateRef.current = true;
+  // }, []);
 
   return (
     <>
-    {accessToken ? (
       <main className='flex'>
         <BrowserRouter basename='/client-gui'>
+          {/* <GaiaAutoSignin /> */}
           <RenderRouter />
         </BrowserRouter>
-      </main> 
-    ) : (
-      <main className='flex'>
-        <BrowserRouter basename='/client-gui'>
-          <Signin accessToken={accessToken}/>
-        </BrowserRouter>
       </main>
-    )  
-    }
     </>
   )
 }
