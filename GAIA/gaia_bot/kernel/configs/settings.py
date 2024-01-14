@@ -1,5 +1,5 @@
-from gaia_bot.configs.__config__ import __filename__
-from gaia_bot.configs.enums import InputMode
+from gaia_bot.kernel.configs.__config__ import __filename__
+from gaia_bot.kernel.configs.enums import InputMode
 
 
 ROOT_LOG_CONFIG = {

@@ -1,7 +1,7 @@
 import logging
 
-from gaia_bot.engines.ltl import L2L
-from gaia_bot.utils.console_log import USER_INPUT
+from gaia_bot.infrastructure.engines.ltl import L2L
+from gaia_bot.kernel.utils.console_log import USER_INPUT
 
 
 class TTTEngine:

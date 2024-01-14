@@ -1,7 +1,7 @@
 import gaia_bot
 
 from gaia_bot.core.response_creator import ResponseCreator
-from gaia_bot.skills.registry import SKILLS
+from gaia_bot.modules.skills.registry import SKILLS
 
 class Processor:
 
@@ -12,7 +12,7 @@ class Processor:
         self.skills = SKILLS 
         self.response_creator = ResponseCreator()
 
-    def run(self):
+    async def run(self):
         transcript = gaia_bot.input_engine.recognize_input()
         self.console_manager.console_output(text="Handling your command",
                                             info_log="Handle input")
@@ -21,7 +21,10 @@ class Processor:
         tag_skill = self.assistant.detect_skill_tag(transcript)
 
         # self.assistant.sentence_detect(transcript, self.skills)
-        self.assistant.validate_assistant_response(tag_skill, self.skills)
-
+        await self.assistant.validate_assistant_response(tag_skill, self.skills)
+        
+        # test skill
+        # await self.assistant.test_only_skill(self.skills, 'create a new task')
+            
         # return response_transcript
         return response_transcript, tag_skill

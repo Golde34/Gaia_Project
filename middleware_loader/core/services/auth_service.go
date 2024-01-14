@@ -20,7 +20,7 @@ func NewAuthService() *AuthService {
 }
 
 var authValidator = validator.NewAuthDTOValidator()
-var env, _ = configs.LoadEnv()
+var authEnv, _ = configs.LoadEnv()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
@@ -29,7 +29,7 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	}	
 	log.Println("Validation passed!")
 
-	authServiceURL := env.Url + env.AuthServicePort + "/auth/sign-in"
+	authServiceURL := authEnv.Url + authEnv.AuthServicePort + "/auth/sign-in"
 
 	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
 	if err != nil {

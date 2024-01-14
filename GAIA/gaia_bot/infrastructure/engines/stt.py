@@ -1,7 +1,7 @@
 import speech_recognition as sr
 
-from gaia_bot.configs.settings import DEFAULT_GENERAL_SETTINGS
-from gaia_bot.engines.ltl import L2L
+from gaia_bot.kernel.configs.settings import DEFAULT_GENERAL_SETTINGS
+from gaia_bot.infrastructure.engines.ltl import L2L
 
 class STTEngine:
     def __init__(self, input_language, console_manager):

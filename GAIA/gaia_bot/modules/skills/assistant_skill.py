@@ -34,19 +34,19 @@ class AssistantSkill:
             return infer
 
     @classmethod
-    def validate_assistant_response(cls, detected_skill, SKILLS):
+    async def validate_assistant_response(cls, detected_skill, SKILLS):
         for skill in SKILLS:
             for tag in str(skill['tags']).split(', '):
                 if detected_skill.__contains__(tag):
-                    cls.execute_skill(skill['func'], detected_skill)
+                    await cls.execute_skill(skill['func'], detected_skill)
                     break
 
     @classmethod
-    def execute_skill(cls, skill, text, *kwargs):
+    async def execute_skill(cls, skill, text, *kwargs):
         if skill:
             cls.console_manager.console_output(info_log='Executing skill...')
             try:
-                skill(text)
+                await skill(text)
             except Exception as e:
                 cls.console_manager.console_output(error_log="Failed to execute skill...")
 
@@ -57,3 +57,12 @@ class AssistantSkill:
                 if tag == 'default skill' or tag == 'first skill':
                     cls.execute_skill(skill['func'], text)
                     break
+                
+    @classmethod
+    async def test_only_skill(cls, SKILLS, test_skill):
+        for skill in SKILLS:
+            for tag in str(skill['tags']).split(', '):
+                if tag == test_skill:
+                    await cls.execute_skill(skill['func'], None)
+                    break
+                

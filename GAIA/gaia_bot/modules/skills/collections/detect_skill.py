@@ -1,4 +1,4 @@
-from gaia_bot.skills.assistant_skill import AssistantSkill
+from gaia_bot.modules.skills.assistant_skill import AssistantSkill
 from gaia_bot.modules.local.models.task_detect.prompt_to_response import inference
 
 

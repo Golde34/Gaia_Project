@@ -9,14 +9,18 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
+	"middleware_loader/kernel/configs"
 	"middleware_loader/ui/routers"
 )
 
 func main() {
 	port := "4000"
+	cfg, _ := configs.LoadEnv()
+	clientUrl := cfg.ClientCORSAllowedUrl
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
@@ -25,12 +29,31 @@ func main() {
 	router.Use(middleware.RedirectSlashes)
 	router.Use(middleware.Timeout(time.Second * 60))
 
+	corsHandler := cors.New(
+		cors.Options{
+			AllowedOrigins: []string{clientUrl},
+			AllowedMethods: []string{
+				http.MethodHead,
+				http.MethodGet,
+				http.MethodPost,
+				http.MethodPut,
+				http.MethodPatch,
+				http.MethodDelete,
+			},
+			AllowedHeaders:   []string{"*"},
+			AllowCredentials: true,
+		})
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", corsHandler)
+	router.Use(corsHandler.Handler)
+
 	// SERVICES
-	authService := services.NewAuthService()	
+	authService := services.NewAuthService()
 	middlewareService := services.NewMiddlewareService()
+	gaiaService := services.NewGaiaService()
 
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
+	routers.NewGaiaRouter(gaiaService, router)
 	routers.NewMiddlewareRouter(middlewareService, router)
 
 	// GRAPHQL
@@ -44,7 +67,7 @@ func main() {
 			},
 		),
 	))
-		
+
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))	
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }

@@ -1,5 +1,6 @@
 from flask import request, jsonify
 import requests
+import logging
 
 from controllers import app
 from controllers.controller_config.config import ControllerConfig
@@ -12,10 +13,8 @@ def auth():
     data = request.get_json()
     username = data['username']
     password = data['password']
-    print(data)
-    
+
     auth_response = requests.post(f"{authentication_service_url}/sign-in", json={'username': username, 'password': password})
-    print(auth_response.status_code)
     
     if auth_response.status_code == 200:
         print('authenticate successfully')

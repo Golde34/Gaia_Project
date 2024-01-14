@@ -1,20 +1,44 @@
 import { Flex, ProgressBar, Text, Title } from '@tremor/react';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksCompleted } from '../../api/store/actions/task_manager/task.actions';
+
 
 const TaskProgress = (props) => {
     const dispatch = useDispatch();
 
     const groupTaskId = props.groupTaskId;
+    const activeTab = props.activeTab;
     const calculatedGroupTask = useSelector((state) => state.taskCompleted);
     const { loading, error, task } = calculatedGroupTask;
 
-    useEffect(() => {
-        if (groupTaskId) {
+    if (activeTab === groupTaskId) {
+        const getCompletedTasks = useCallback(() => {
             dispatch(getTasksCompleted(groupTaskId));
-        }
-    }, [groupTaskId]);
+        }, [dispatch, groupTaskId]);
+
+        const debounceRef = useRef(null);
+
+        useEffect(() => {
+            clearTimeout(debounceRef.current);
+            debounceRef.current = setTimeout(() => {
+                getCompletedTasks();
+            }, 200);
+        }, [groupTaskId]);
+    } else {
+        const getCompletedTasks = useCallback(() => {
+            dispatch(getTasksCompleted(activeTab));
+        }, [dispatch, activeTab]);
+
+        const debounceRef = useRef(null);
+
+        useEffect(() => {
+            clearTimeout(debounceRef.current);
+            debounceRef.current = setTimeout(() => {
+                getCompletedTasks();
+            }, 200);
+        }, [activeTab]);
+    }
 
     return (
         <div>
