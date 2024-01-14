@@ -1,4 +1,4 @@
-
+@use "sass:math";
 
 $color-bg: #6366f1;
 $color-primary: rgba(#30508F, 0.3);
@@ -133,7 +133,7 @@ $k-tail: (
   7.25: rotate(0),
 );
 $tail-wags: 14;
-$tail-interval: (11 - 7.5) / $tail-wags;
+$tail-interval: math.div((11 - 7.5), $tail-wags);
 @for $i from 1 through $tail-wags {
   $k-tail: map-merge($k-tail, (
     (($i - 1) * $tail-interval + 7.5): rotate(28deg),
@@ -194,7 +194,7 @@ $k-right-ear: (
 @mixin effect($name, $kf) {
   @keyframes #{$name} {
     @each $interval, $transform in $kf {
-      #{percentage($interval/$total-kf)} {
+      #{percentage(math.div($interval, $total-kf))} {
         transform: $transform;
       }
     }

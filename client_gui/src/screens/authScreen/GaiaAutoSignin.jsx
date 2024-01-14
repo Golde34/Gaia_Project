@@ -23,7 +23,7 @@ const GaiaAutoSignin = () => {
             { loading ? (
                     <div>Loading...</div>
                 ) : error ? (
-                    <div>{error}</div>
+                    <div><Signin /></div>
                 ) : (
                     <div>
                         {gaiaInfo ? (

@@ -12,31 +12,12 @@ import GaiaAutoSignin from './screens/authScreen/GaiaAutoSignin'
 function App() {
   let interval = 60 * 60 * 1000;
   checkLocalStorage(interval);
-  // const [ accessToken, setAccessToken ] = useState(null);
-
-
-  // const didAuthenticateRef = useRef();
-
-  // useEffect(() => { 
-  //   if (didAuthenticateRef.current) return;
-
-  //   const checkGaiaConnected = async () => {
-  //     const data = await authenticate();
-  //     if (data) {
-  //       setAccessToken(data);
-  //     }
-  //   }
-  //   checkGaiaConnected();
-
-  //   didAuthenticateRef.current = true;
-  // }, []);
 
   return (
     <>
       <main className='flex'>
         <BrowserRouter basename='/client-gui'>
-          {/* <GaiaAutoSignin /> */}
-          <RenderRouter />
+          <GaiaAutoSignin />
         </BrowserRouter>
       </main>
     </>

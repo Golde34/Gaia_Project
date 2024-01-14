@@ -58,7 +58,7 @@ const Signin = () => {
                 <Col numColSpan={4} className="me-7">
                     <div className="husky">
                         <div className="mane">
-                            <div class="coat"></div>
+                            <div className="coat"></div>
                         </div>
                         <div className="body">
                             <div className="head">
