@@ -5,6 +5,7 @@ type Query {
 
 type Mutation {
     signin(input: SigninInput!): AuthTokenResponse!
+    gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
 }
@@ -144,6 +145,7 @@ type AuthTokenResponse {
     username: String!
     email: String!
     lastLogin: String!
+    bossType: String!
 }
 
 input TokenInput {

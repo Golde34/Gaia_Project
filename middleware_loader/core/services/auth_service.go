@@ -45,6 +45,19 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
     if err != nil {
         return model.AuthTokenResponse{}, err
     }
-
+	
     return authToken, nil
 }
+
+func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
+	// dataBytes = nil
+	// var authToken model.AuthTokenResponse
+	// err = json.Unmarshal(dataBytes, &authToken)
+	// if err != nil {
+	// 	return model.AuthTokenResponse{}, err
+	// }
+	// if authToken.BosstType == "BOSS" {
+	// 	return authToken, nil
+	// }
+	return model.AuthTokenResponse{}, nil
+} 
