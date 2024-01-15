@@ -1,11 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import Template from "../../views/template";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import LeftColumn from "../../components/LeftColumn";
-import RightColumn from "../../components/RightColumn";
-import CardItem from "../../components/subComponents/CardItem";
-import AreaChartComponent from "../../components/subComponents/AreaChartComponent";
 import { Card, Col, Flex, Grid, Metric, Title } from "@tremor/react";
 // import husky scss
 import "../../assets/husky.scss";
