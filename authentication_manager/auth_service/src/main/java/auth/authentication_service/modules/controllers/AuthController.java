@@ -41,6 +41,11 @@ public class AuthController {
         return authService.authenticated(accountDto.getUsername(), accountDto.getPassword());
     }
 
+    @RequestMapping(value = "/gaia-auto-sign-in", method = RequestMethod.POST)
+    public ResponseEntity<?> gaiaAutoSignIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
+        return authService.gaiaAutoSignin(accountDto.getUsername(), accountDto.getPassword());
+    }
+
     @RequestMapping(value = "/check-token", method = RequestMethod.GET)
     public ResponseEntity<?> checkToken(@RequestBody TokenDto token) throws Exception {
         return authService.checkToken(token);

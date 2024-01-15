@@ -38,7 +38,7 @@ class AuthenticationConnector:
             body = result['response']
             self._save_response_to_file(result['response'])
             if result['authenticated']:
-                token = body['data']['signin']['accessToken']
+                token = body['data']['gaiaAutoSignin']['accessToken']
                 return f"Authenticated successfully. Token: {token}"
         else:
             return "Invalid credentials"

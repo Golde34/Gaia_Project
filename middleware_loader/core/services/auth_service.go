@@ -45,6 +45,40 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
     if err != nil {
         return model.AuthTokenResponse{}, err
     }
-
-    return authToken, nil
+	
+	if authToken.BossType == "USER" {
+		return authToken, nil
+	} else {
+		return model.AuthTokenResponse{}, nil
+	}
 }
+
+func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
+	err := authValidator.AuthValidate(input)
+	if err != nil {
+		return model.AuthTokenResponse{}, err
+	}
+	log.Println("Validation passed!")
+
+	authServiceURL := authEnv.Url + authEnv.AuthServicePort + "/auth/gaia-auto-sign-in"
+
+	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
+	if err != nil {
+		return model.AuthTokenResponse{}, err
+	}
+
+	// Convert the response body to a map
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	// Unmarshal the response body into an AuthToken
+	var authToken model.AuthTokenResponse
+	err = json.Unmarshal(dataBytes, &authToken)
+	if err != nil {
+		return model.AuthTokenResponse{}, err
+	}
+	
+	if authToken.BossType == "BOSS" {
+		return authToken, nil
+	} else {
+		return model.AuthTokenResponse{}, nil
+	}
+} 

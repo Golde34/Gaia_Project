@@ -43,7 +43,7 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", corsHandler)
+	
 	router.Use(corsHandler.Handler)
 
 	// SERVICES

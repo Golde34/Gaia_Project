@@ -14,7 +14,7 @@ def auth():
     username = data['username']
     password = data['password']
 
-    auth_response = requests.post(f"{authentication_service_url}/sign-in", json={'username': username, 'password': password})
+    auth_response = requests.post(f"{authentication_service_url}/gaia-auto-sign-in", json={'username': username, 'password': password})
     
     if auth_response.status_code == 200:
         print('authenticate successfully')
