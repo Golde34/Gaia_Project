@@ -10,7 +10,7 @@ def _get_token_parameters():
     with open(token_path, 'r') as f:
         response = json.load(f)
        
-    return response['data']['signin']['accessToken'], response['data']['signin']['refreshToken']
+    return response['data']['gaiaAutoSignin']['accessToken'], response['data']['gaiaAutoSignin']['refreshToken']
 
 def _load_user_info():
     token_path = gaia_resource_path / 'authen_cache' / 'token.json'
@@ -18,8 +18,8 @@ def _load_user_info():
     with open(token_path, 'r') as f:
         response = json.load(f)
         
-    username = response['data']['signin']['username']
-    name = response['data']['signin']['name']
-    email = response['data']['signin']['email']
+    username = response['data']['gaiaAutoSignin']['username']
+    name = response['data']['gaiaAutoSignin']['name']
+    email = response['data']['gaiaAutoSignin']['email']
     
     return username, name, email
