@@ -166,10 +166,13 @@ public class AuthServiceImpl implements AuthService {
             return genericResponse.matchingResponseMessage(validate);
         }
         // Generate sign-in information
-        SignInDtoResponse response = _generateSignInToken(user, userDetails, BossType.BOSS);
-        _logger.log("Boss: " + user.getUsername() + " sign-in success", LoggerType.INFO);
-
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseMessage.msg200)); 
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals(BossType.BOSS.getValue()))) {
+            SignInDtoResponse response = _generateSignInToken(user, userDetails, BossType.BOSS);
+            _logger.log("Boss: " + user.getUsername() + " sign-in success", LoggerType.INFO);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseMessage.msg200));
+        } else {
+            return genericResponse.matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseMessage.msg401));
+        }
     }
 
     public ResponseEntity<?> checkToken(TokenDto token) {
