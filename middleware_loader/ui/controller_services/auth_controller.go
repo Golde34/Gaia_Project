@@ -19,6 +19,17 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 	utils.ConnectToGraphQLServer(w, query)
 }
 
+func GaiaAutoSignin(w http.ResponseWriter, r *http.Request, authService *services.AuthService) {
+	var input = authService.SigninInput
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	query := utils.GenerateGraphQLQueryWithInput("mutation", "gaiaAutoSignin", input, model.AuthTokenResponse{})
+	utils.ConnectToGraphQLServer(w, query)
+}
+
 func Status(w http.ResponseWriter, r *http.Request, authService *services.AuthService) {
 	query := utils.GenerateGraphQLQueryNoInput("query", "status", model.User{})	
 	utils.ConnectToGraphQLServer(w, query)

@@ -18,7 +18,7 @@ func NewAuthRouter(authService *services.AuthService, r *chi.Mux) *AuthRouter {
 			controller_services.Signin(w, r, authService)
 		})
 		r.Post("/gaia-auto-sign-in", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.Signin(w, r, authService)
+			controller_services.GaiaAutoSignin(w, r, authService)
 		})
 	})
 	return &AuthRouter{

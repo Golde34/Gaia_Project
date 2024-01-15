@@ -49,6 +49,7 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	AuthTokenResponse struct {
 		AccessToken  func(childComplexity int) int
+		BossType     func(childComplexity int) int
 		Email        func(childComplexity int) int
 		LastLogin    func(childComplexity int) int
 		Name         func(childComplexity int) int
@@ -59,6 +60,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CheckPermission func(childComplexity int, input model.UserPermissionInput) int
 		CheckToken      func(childComplexity int, input model.TokenInput) int
+		GaiaAutoSignin  func(childComplexity int, input model.SigninInput) int
 		Signin          func(childComplexity int, input model.SigninInput) int
 	}
 
@@ -95,6 +97,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
+	GaiaAutoSignin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
 	CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error)
 	CheckPermission(ctx context.Context, input model.UserPermissionInput) (*model.UserPermissionResponse, error)
 }
@@ -128,6 +131,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AuthTokenResponse.AccessToken(childComplexity), true
+
+	case "AuthTokenResponse.bossType":
+		if e.complexity.AuthTokenResponse.BossType == nil {
+			break
+		}
+
+		return e.complexity.AuthTokenResponse.BossType(childComplexity), true
 
 	case "AuthTokenResponse.email":
 		if e.complexity.AuthTokenResponse.Email == nil {
@@ -187,6 +197,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CheckToken(childComplexity, args["input"].(model.TokenInput)), true
+
+	case "Mutation.gaiaAutoSignin":
+		if e.complexity.Mutation.GaiaAutoSignin == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_gaiaAutoSignin_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.GaiaAutoSignin(childComplexity, args["input"].(model.SigninInput)), true
 
 	case "Mutation.signin":
 		if e.complexity.Mutation.Signin == nil {
@@ -475,6 +497,21 @@ func (ec *executionContext) field_Mutation_checkToken_args(ctx context.Context, 
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNTokenInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTokenInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_gaiaAutoSignin_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.SigninInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNSigninInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐSigninInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -815,6 +852,50 @@ func (ec *executionContext) fieldContext_AuthTokenResponse_lastLogin(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _AuthTokenResponse_bossType(ctx context.Context, field graphql.CollectedField, obj *model.AuthTokenResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuthTokenResponse_bossType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BossType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuthTokenResponse_bossType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokenResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_signin(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_signin(ctx, field)
 	if err != nil {
@@ -866,6 +947,8 @@ func (ec *executionContext) fieldContext_Mutation_signin(ctx context.Context, fi
 				return ec.fieldContext_AuthTokenResponse_email(ctx, field)
 			case "lastLogin":
 				return ec.fieldContext_AuthTokenResponse_lastLogin(ctx, field)
+			case "bossType":
+				return ec.fieldContext_AuthTokenResponse_bossType(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AuthTokenResponse", field.Name)
 		},
@@ -878,6 +961,77 @@ func (ec *executionContext) fieldContext_Mutation_signin(ctx context.Context, fi
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_signin_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_gaiaAutoSignin(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_gaiaAutoSignin(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().GaiaAutoSignin(rctx, fc.Args["input"].(model.SigninInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.AuthTokenResponse)
+	fc.Result = res
+	return ec.marshalNAuthTokenResponse2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthTokenResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_gaiaAutoSignin(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "accessToken":
+				return ec.fieldContext_AuthTokenResponse_accessToken(ctx, field)
+			case "refreshToken":
+				return ec.fieldContext_AuthTokenResponse_refreshToken(ctx, field)
+			case "name":
+				return ec.fieldContext_AuthTokenResponse_name(ctx, field)
+			case "username":
+				return ec.fieldContext_AuthTokenResponse_username(ctx, field)
+			case "email":
+				return ec.fieldContext_AuthTokenResponse_email(ctx, field)
+			case "lastLogin":
+				return ec.fieldContext_AuthTokenResponse_lastLogin(ctx, field)
+			case "bossType":
+				return ec.fieldContext_AuthTokenResponse_bossType(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AuthTokenResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_gaiaAutoSignin_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3889,6 +4043,11 @@ func (ec *executionContext) _AuthTokenResponse(ctx context.Context, sel ast.Sele
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "bossType":
+			out.Values[i] = ec._AuthTokenResponse_bossType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3934,6 +4093,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "signin":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_signin(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "gaiaAutoSignin":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_gaiaAutoSignin(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

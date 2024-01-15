@@ -9,6 +9,7 @@ type AuthTokenResponse struct {
 	Username     string `json:"username"`
 	Email        string `json:"email"`
 	LastLogin    string `json:"lastLogin"`
+	BossType     string `json:"bossType"`
 }
 
 type SigninInput struct {
