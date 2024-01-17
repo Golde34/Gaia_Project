@@ -6,6 +6,7 @@ import Project from '../views/Project';
 import SchedulingTable from '../views/SchedulingTable';
 import TaskDashboard from '../views/TaskDashboard';
 import SignIn from '../screens/authScreen/Signin';
+import GaiaAutoSignin from '../screens/authScreen/GaiaAutoSignin';
 
 // const schedule = [
 //   {
@@ -34,7 +35,7 @@ const routeList = [
     {
         path: '/',
         key: '/',
-        element: <Dashboard />,
+        element: <GaiaAutoSignin />,
     },
     {
         path: '/signin',
