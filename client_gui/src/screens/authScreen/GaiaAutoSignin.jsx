@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux"
 import { gaiaSignin } from "../../api/store/actions/auth_service/userActions";
-import RenderRouter from "../../routers";
 import Signin from "./Signin";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
@@ -18,21 +19,20 @@ const GaiaAutoSignin = () => {
         didGaiaAuthenticateRef.current = true;
     }, [dispatch]);
 
+    const navigateToCorrectPage = (path) => {
+        navigate('/' + path);
+    }
     return (
         <div>
-            { loading ? (
-                    <div>Loading...</div>
-                ) : error ? (
-                    <div><Signin /></div>
-                ) : (
-                    <div>
-                        {gaiaInfo ? (
-                            <RenderRouter />
-                        ) : (
-                            <Signin />
-                        )}
-                    </div>
-                )
+            {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <div><Signin /></div>
+            ) : gaiaInfo ? (
+                <div>{navigateToCorrectPage('dashboard')}</div>
+            ) : (
+                <div>{navigateToCorrectPage('signin')}</div>
+            )
             }
         </div>
     )

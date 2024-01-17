@@ -692,18 +692,13 @@ div:before, div:after {
   }
 }
 
-html, body {
+body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: $color-bg;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 *, *:before, *:after {
