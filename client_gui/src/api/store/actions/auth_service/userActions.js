@@ -15,6 +15,7 @@ export const gaiaSignin = () => async (dispatch) => {
         const response = await serverRequest('/gaia/gaia-connect', HttpMethods.GET, portName.middleware, null);
         const data = JSON.stringify(response.data);
         dispatch({ type: GAIA_SIGNIN_SUCCESS, payload: JSON.parse(data)['accessToken'] });
+        localStorage.setItem('gaiaInfo', JSON.stringify(data))
         localStorage.setItem('gaiaRefreshToken', JSON.parse(data)['refreshToken']);
         localStorage.setItem('gaiaAccessToken', JSON.parse(data)['accessToken']);
     } catch (error) {
