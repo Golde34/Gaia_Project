@@ -1,5 +1,5 @@
 import { HttpMethods, serverRequest } from '../../../baseAPI';
-import { GAIA_SIGNIN_FAIL, GAIA_SIGNIN_REQUEST, GAIA_SIGNIN_SUCCESS } from '../../constants/auth_service/userConstants';
+import { GAIA_SIGNIN_FAIL, GAIA_SIGNIN_REQUEST, GAIA_SIGNIN_SUCCESS, USER_SIGNOUT } from '../../constants/auth_service/userConstants';
 
 const portName = {
     auth: 'authenticationServicePort',
@@ -84,6 +84,7 @@ export const authenticate = async () => {
 // };
 
 export const signout = () => (dispatch) => {
+    localStorage.removeItem('gaiaInfo');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('gaiaAccessToken');
     localStorage.removeItem('bossInfo'); 
