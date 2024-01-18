@@ -22,6 +22,10 @@ const GaiaAutoSignin = () => {
     const navigateToCorrectPage = (path) => {
         navigate('/' + path);
     }
+
+    console.log(gaiaInfo);
+    console.log('accessToken: ' + localStorage.getItem('gaiaAccessToken'));
+    console.log('gaiaInfo: ' + localStorage.getItem('gaiaInfo'));
     return (
         <div>
             {loading ? (

@@ -1,19 +1,31 @@
 import { Flex, TextInput } from "@tremor/react"
 import { SearchIcon } from "@heroicons/react/outline"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { signout } from "../api/store/actions/auth_service/userActions";
 
 const Navbar = () => {
-    var auth = false;
-    let gaiaStateActivated = localStorage.getItem("gaiaStateActivated");
-    if (gaiaStateActivated === "true") {
-        auth = true;
-    } else {
-        const userSignin = useSelector((state) => state.userSignin)
-        const gaiaSignin = useSelector((state) => state.gaiaSignin)
-        const { userInfo } = userSignin;
-        const { bossInfo } = gaiaSignin;
+    const dispatch = useDispatch();
 
+    let auth = false;
+    const gaiaSignin = useSelector((state) => state.gaiaSignin);
+    const { gaiaInfo } = gaiaSignin;
+    console.log(gaiaInfo);
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
+    console.log(userInfo);
+    const bossSignin = useSelector((state) => state.bossSignin);
+    const { bossInfo } = bossSignin;
+    console.log(bossInfo);
+    if (gaiaInfo || userInfo || bossInfo) {
+        auth = true;
+        console.log(auth);
+    } else {
         auth = false;
+        console.log(auth);
+    }
+
+    const signoutHandler = () => {
+        dispatch(signout());
     }
 
     return (
@@ -27,12 +39,12 @@ const Navbar = () => {
                 </div>
                 {!auth ? (
                     <div className="flex">
-                        <a href="/client-gui/auth">
+                        <a href="/client-gui/signin">
                             <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded me-3">
                                 Sign In
                             </button>
                         </a>
-                        <a href="/client-gui/auth">
+                        <a href="/client-gui/signup">
                             <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                                 Sign Up
                             </button>
@@ -40,8 +52,9 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <div className="flex">
-                        <a href="/client-gui/signin">
-                            <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="#">
+                            <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={signoutHandler}>
                                 Sign Out
                             </button>
                         </a>

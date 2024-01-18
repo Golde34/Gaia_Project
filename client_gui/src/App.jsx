@@ -3,7 +3,6 @@ import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 
 import { checkLocalStorage } from './utils/set-interval'
-import GaiaAutoSignin from './screens/authScreen/GaiaAutoSignin'
 import RenderRouter from './routers'
 
 function App() {

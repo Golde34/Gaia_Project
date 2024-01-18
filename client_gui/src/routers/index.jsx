@@ -7,6 +7,7 @@ import SchedulingTable from '../views/SchedulingTable';
 import TaskDashboard from '../views/TaskDashboard';
 import SignIn from '../screens/authScreen/Signin';
 import GaiaAutoSignin from '../screens/authScreen/GaiaAutoSignin';
+import GaiaRoute from '../components/componentUtils/GaiaRoute';
 
 // const schedule = [
 //   {
@@ -30,6 +31,10 @@ import GaiaAutoSignin from '../screens/authScreen/GaiaAutoSignin';
 //   // More sessions...
 // ];
 
+// Guest is public
+// User is protected, only logged in when the Role higher than User
+// Admin is protected, only logged in when the Role higher than Admin
+// Boss is private, only logged in when the Role is Boss
 
 const routeList = [
     {
@@ -55,7 +60,7 @@ const routeList = [
     {
         path: '/project',
         key: 'project',
-        element: <Project />,
+        element: <GaiaRoute><Project /></GaiaRoute>,
     },
     {
         path: '/project/:id',
