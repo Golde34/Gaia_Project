@@ -2,6 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
+	"middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
@@ -9,11 +10,14 @@ import (
 )
 
 func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthService) {
-	var input = authService.SigninInput
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+	var body map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	var input = authService.SigninInput
+	input = request.SigninRequestDTOMapper(body)
 
 	query := utils.GenerateGraphQLQueryWithInput("mutation", "signin", input, model.AuthTokenResponse{})	
 	utils.ConnectToGraphQLServer(w, query)
