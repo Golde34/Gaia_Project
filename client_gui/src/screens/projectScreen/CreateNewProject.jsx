@@ -19,7 +19,7 @@ export const CreateNewProject = () => {
     }
 
     const [project] = useState({});
-    const [newName, setNewName] = useState("");
+    const [newName, setNewName] = useState('');
     const [description, setDescription] = useState('');
     // Radio button
     const [status, setStatus] = useState('');

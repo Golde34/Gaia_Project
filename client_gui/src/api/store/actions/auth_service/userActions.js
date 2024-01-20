@@ -67,21 +67,21 @@ export const authenticate = async () => {
 //     }
 // };
 
-// export const signin = (username, password) => async (dispatch) => {
-//     dispatch({ type: USER_SIGNIN_REQUEST, payload: { username, password } });
-//     try {
-//         const { data } = await serverRequest('/auth/sign-in', HttpMethods.POST, portName.auth, { username, password });
-//         dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-//         localStorage.setItem('userInfo', JSON.stringify(data));
-//     } catch (error) {
-//         dispatch({
-//             type: USER_SIGNIN_FAIL,
-//             payload: error.response && error.response.data.message
-//                 ? error.response.data.message
-//                 : error.message,
-//         });
-//     }
-// };
+export const signin = (username, password) => async (dispatch) => {
+    dispatch({ type: USER_SIGNIN_REQUEST, payload: { username, password } });
+    try {
+        const { data } = await serverRequest('/auth/sign-in', HttpMethods.POST, portName.auth, { username, password });
+        dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+        localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+        dispatch({
+            type: USER_SIGNIN_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+};
 
 export const signout = () => (dispatch) => {
     localStorage.removeItem('gaiaInfo');
