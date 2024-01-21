@@ -10,6 +10,7 @@ type AuthTokenResponse struct {
 	Email        string `json:"email"`
 	LastLogin    string `json:"lastLogin"`
 	BossType     string `json:"bossType"`
+	Role         string `json:"role"`
 }
 
 type SigninInput struct {

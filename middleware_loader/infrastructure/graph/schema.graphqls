@@ -146,6 +146,7 @@ type AuthTokenResponse {
     email: String!
     lastLogin: String!
     bossType: String!
+    role: String!
 }
 
 input TokenInput {

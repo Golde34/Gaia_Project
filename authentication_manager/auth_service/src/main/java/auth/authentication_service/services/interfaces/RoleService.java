@@ -1,5 +1,6 @@
 package auth.authentication_service.services.interfaces;
 
+import java.util.Collection;
 import java.util.List;
 
 import auth.authentication_service.modules.dto.PrivilegeDto;
@@ -13,4 +14,5 @@ public interface RoleService {
     public List<Role> getAllRoles();
     public Role getRoleByName(RoleDto roleDto);
     public Role addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegeNames);
+    public Role getBiggestRole(Collection<Role> roles);
 }

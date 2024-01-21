@@ -30,6 +30,7 @@ import auth.authentication_service.persistence.entities.User;
 import auth.authentication_service.persistence.repositories.UserRepository;
 import auth.authentication_service.securities.UserDetailsServices;
 import auth.authentication_service.services.interfaces.AuthService;
+import auth.authentication_service.services.interfaces.RoleService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -40,6 +41,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenService tokenService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private UserRepository userRepository;
@@ -77,6 +80,7 @@ public class AuthServiceImpl implements AuthService {
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails, BossType bossType) {
         String accessToken = _generateAccessToken(user, userDetails);
         String refreshToken = _generateRefreshToken(user, userDetails);
+        Role role = roleService.getBiggestRole(user.getRoles());
         return SignInDtoResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -85,6 +89,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(user.getEmail())
                 .lastLogin(user.getLastLogin())
                 .bossType(bossType.getValue())
+                .role(role.getName())
                 .build();
     }
 

@@ -3,11 +3,15 @@ package auth.authentication_service.modules.dto.response;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignInDtoResponse {
     private String accessToken;
     private String refreshToken;
@@ -16,14 +20,5 @@ public class SignInDtoResponse {
     private String email;
     private Date lastLogin;
     private String bossType;
-
-    public SignInDtoResponse(String accessToken, String refreshToken, String name, String username, String email, Date lastLogin, String bossType) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.lastLogin = lastLogin;
-        this.bossType = bossType;
-    }
+    private String role;
 }
