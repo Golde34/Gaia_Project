@@ -11,7 +11,6 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-
 var authService = services.NewAuthService()
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {

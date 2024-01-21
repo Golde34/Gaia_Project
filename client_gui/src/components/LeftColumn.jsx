@@ -4,6 +4,7 @@ import TableComponent from "../components/subComponents/TableComponent"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getTopTasks } from "../api/store/actions/task_manager/task.actions";
+import MessageBox from "./componentUtils/MessageBox";
 
 const LeftColumn = () => {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const LeftColumn = () => {
                     loading ? (
                         <div>Loading...</div>
                     ) : error ? (
-                        <div>{error}</div>
+                        <div><MessageBox message={error}/></div>
                     ) : (
                         topTasks.map((topTask) => (
                             <CardItem key={topTask.task._id} task={topTask.task} 

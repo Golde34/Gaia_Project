@@ -1,6 +1,7 @@
 package auth.authentication_service.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ import auth.authentication_service.modules.dto.PrivilegeDto;
 import auth.authentication_service.modules.dto.RoleDto;
 import auth.authentication_service.utils.LoggerUtils;
 import auth.authentication_service.utils.ModelMapperConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,6 +111,17 @@ public class RoleServiceImpl implements RoleService {
             throw new RuntimeException("Add privilege to role failed");
         }
         return null;
+    }
+
+    @Override
+    public Role getBiggestRole(Collection<Role> roles) {
+        try {
+            Role biggestRole = roles.stream().max((role1, role2) -> role1.getId().compareTo(role2.getId())).get();
+            return biggestRole;
+        } catch (Exception e) {
+            _logger.log("Get biggest role failed", LoggerType.ERROR);
+            throw new RuntimeException("Get biggest role failed");
+        }
     }
 
     private boolean _checkExistRole(Role role) {

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
 import { TaskCard } from "./TaskCard";
 import { useCallback } from "react";
+import MessageBox from "../../components/componentUtils/MessageBox";
 
 
 const TaskList = (props) => {
@@ -32,7 +33,7 @@ const TaskList = (props) => {
 			{loading ? (
 				<Text>Loading...</Text>
 			) : error ? (
-				<Text>{error}</Text>
+				<MessageBox message={error} />	
 			) : (
 				<>
 					{

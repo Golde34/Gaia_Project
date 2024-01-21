@@ -51,9 +51,11 @@ type ComplexityRoot struct {
 		AccessToken  func(childComplexity int) int
 		BossType     func(childComplexity int) int
 		Email        func(childComplexity int) int
+		GaiaHealth   func(childComplexity int) int
 		LastLogin    func(childComplexity int) int
 		Name         func(childComplexity int) int
 		RefreshToken func(childComplexity int) int
+		Role         func(childComplexity int) int
 		Username     func(childComplexity int) int
 	}
 
@@ -146,6 +148,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AuthTokenResponse.Email(childComplexity), true
 
+	case "AuthTokenResponse.gaiaHealth":
+		if e.complexity.AuthTokenResponse.GaiaHealth == nil {
+			break
+		}
+
+		return e.complexity.AuthTokenResponse.GaiaHealth(childComplexity), true
+
 	case "AuthTokenResponse.lastLogin":
 		if e.complexity.AuthTokenResponse.LastLogin == nil {
 			break
@@ -166,6 +175,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AuthTokenResponse.RefreshToken(childComplexity), true
+
+	case "AuthTokenResponse.role":
+		if e.complexity.AuthTokenResponse.Role == nil {
+			break
+		}
+
+		return e.complexity.AuthTokenResponse.Role(childComplexity), true
 
 	case "AuthTokenResponse.username":
 		if e.complexity.AuthTokenResponse.Username == nil {
@@ -896,6 +912,94 @@ func (ec *executionContext) fieldContext_AuthTokenResponse_bossType(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _AuthTokenResponse_role(ctx context.Context, field graphql.CollectedField, obj *model.AuthTokenResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuthTokenResponse_role(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Role, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuthTokenResponse_role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokenResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuthTokenResponse_gaiaHealth(ctx context.Context, field graphql.CollectedField, obj *model.AuthTokenResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuthTokenResponse_gaiaHealth(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GaiaHealth, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuthTokenResponse_gaiaHealth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokenResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_signin(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_signin(ctx, field)
 	if err != nil {
@@ -949,6 +1053,10 @@ func (ec *executionContext) fieldContext_Mutation_signin(ctx context.Context, fi
 				return ec.fieldContext_AuthTokenResponse_lastLogin(ctx, field)
 			case "bossType":
 				return ec.fieldContext_AuthTokenResponse_bossType(ctx, field)
+			case "role":
+				return ec.fieldContext_AuthTokenResponse_role(ctx, field)
+			case "gaiaHealth":
+				return ec.fieldContext_AuthTokenResponse_gaiaHealth(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AuthTokenResponse", field.Name)
 		},
@@ -1020,6 +1128,10 @@ func (ec *executionContext) fieldContext_Mutation_gaiaAutoSignin(ctx context.Con
 				return ec.fieldContext_AuthTokenResponse_lastLogin(ctx, field)
 			case "bossType":
 				return ec.fieldContext_AuthTokenResponse_bossType(ctx, field)
+			case "role":
+				return ec.fieldContext_AuthTokenResponse_role(ctx, field)
+			case "gaiaHealth":
+				return ec.fieldContext_AuthTokenResponse_gaiaHealth(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AuthTokenResponse", field.Name)
 		},
@@ -4045,6 +4157,16 @@ func (ec *executionContext) _AuthTokenResponse(ctx context.Context, sel ast.Sele
 			}
 		case "bossType":
 			out.Values[i] = ec._AuthTokenResponse_bossType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "role":
+			out.Values[i] = ec._AuthTokenResponse_role(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "gaiaHealth":
+			out.Values[i] = ec._AuthTokenResponse_gaiaHealth(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

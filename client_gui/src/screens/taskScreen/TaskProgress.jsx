@@ -2,6 +2,7 @@ import { Flex, ProgressBar, Text, Title } from '@tremor/react';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksCompleted } from '../../api/store/actions/task_manager/task.actions';
+import MessageBox from '../../components/componentUtils/MessageBox';
 
 
 const TaskProgress = (props) => {
@@ -45,7 +46,7 @@ const TaskProgress = (props) => {
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
-                <p>{error}</p>
+                <MessageBox message={error} /> 
             ) : (
                 task === undefined ? (
                     <></>
