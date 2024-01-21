@@ -147,6 +147,7 @@ type AuthTokenResponse {
     lastLogin: String!
     bossType: String!
     role: String!
+    gaiaHealth: String!
 }
 
 input TokenInput {

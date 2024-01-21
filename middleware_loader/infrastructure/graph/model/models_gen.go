@@ -11,6 +11,7 @@ type AuthTokenResponse struct {
 	LastLogin    string `json:"lastLogin"`
 	BossType     string `json:"bossType"`
 	Role         string `json:"role"`
+	GaiaHealth   string `json:"gaiaHealth"`
 }
 
 type SigninInput struct {

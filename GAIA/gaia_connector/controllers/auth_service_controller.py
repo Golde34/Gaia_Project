@@ -1,6 +1,5 @@
 from flask import request, jsonify
 import requests
-import logging
 
 from controllers import app
 from controllers.controller_config.config import ControllerConfig

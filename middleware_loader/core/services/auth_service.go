@@ -31,14 +31,18 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	log.Println("Validation passed!")
 
 	authToken, err := s.CallAuthService(input)
-	// trong auth token hien gio dang chua cac thong tin accessToken, refreshToken, name, username, email, connectedType, role can check role co dung la boss role khong
-	
-	// vtrue := true
-	// if (!vtrue) { // tam thoi thay the cho viec check boss role
-	// 	s.CallGaiaService(input) // kich hoat Gaia Connector 
-	// 	// neu gaia khong hoat dong tra ra health check not good
-	// 	// neu gaia hoat dong tra ra health check good
-	// }
+	if (err != nil) {
+		return model.AuthTokenResponse{}, err
+	}
+
+	if authToken.Role == enums.Boss {
+		gaiaHealth, err := s.CallGaiaService(authToken)
+		if err != nil {
+			authToken.GaiaHealth = "Gaia health check not good"
+		} else {
+			authToken.GaiaHealth = gaiaHealth
+		}
+	}
 
 	if authToken.BossType == enums.ClientConnected {
 		return authToken, nil
@@ -64,23 +68,21 @@ func (s *AuthService) CallAuthService(input model.SigninInput) (model.AuthTokenR
 	return authToken, nil
 }
 
-func (s *AuthService) CallGaiaService(input model.SigninInput) (model.AuthTokenResponse, error) {
-	gaiaServiceURL := authEnv.Url + authEnv.GaiaPort + "/gaia/health-check"
+func (s *AuthService) CallGaiaService(model model.AuthTokenResponse) (string, error) {
+	gaiaServiceURL := authEnv.Url + authEnv.GaiaPort + "/middleware/health-check"
 
-	bodyResult, err := base.BaseAPI(gaiaServiceURL, "GET", input)
+	bodyResult, err := base.BaseAPI(gaiaServiceURL, "GET", model)
 	if err != nil {
-		return model.AuthTokenResponse{}, err
+		return "Cannot call the API", err
 	}
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	
+	bodyResultStr, ok := bodyResult.(string)
+	if !ok {
+		return "Cannot convert the response to string", err
+	}
 
-	var authToken model.AuthTokenResponse
-	err = json.Unmarshal(dataBytes, &authToken)
-	if err != nil {
-		return model.AuthTokenResponse{}, err
-	}
-	return authToken, nil
+	return bodyResultStr, nil
 }
-
 
 func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
