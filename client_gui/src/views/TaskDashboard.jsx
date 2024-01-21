@@ -7,6 +7,7 @@ import { Button, Card, Col, Flex, Grid, Metric, Text } from "@tremor/react";
 import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../screens/groupTaskScreen/CreateNewGroupTask";
+import MessageBox from "../components/componentUtils/MessageBox";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -33,7 +34,7 @@ function ContentArea() {
             {loading ? (
                 <Text>Loading...</Text>
             ) : error ? (
-                <Text>{error}</Text>
+                <MessageBox message={error} /> 
             ) : (
                 <>
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
