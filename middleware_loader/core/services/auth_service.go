@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 
+	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/services/base"
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/graph/model"
@@ -76,7 +77,7 @@ func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInpu
 		return model.AuthTokenResponse{}, err
 	}
 	
-	if authToken.BossType == "BOSS" {
+	if authToken.BossType == enums.GaiaConnected {
 		return authToken, nil
 	} else {
 		return model.AuthTokenResponse{}, nil
