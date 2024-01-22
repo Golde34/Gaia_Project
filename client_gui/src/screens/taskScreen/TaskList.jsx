@@ -1,8 +1,11 @@
-import { Grid, Text } from "@tremor/react"
-import { useEffect } from "react";
+import { Flex, Grid, Text, Title } from "@tremor/react"
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
 import { TaskCard } from "./TaskCard";
+import { useCallback } from "react";
+import MessageBox from "../../components/componentUtils/MessageBox";
+
 
 const TaskList = (props) => {
 	const dispatch = useDispatch();
@@ -12,18 +15,25 @@ const TaskList = (props) => {
 	const listTasks = useSelector((state) => state.taskList);
 	const { loading, error, tasks } = listTasks;
 
-	useEffect(() => {
-		if (groupTaskId) {
-			dispatch(getTaskList(groupTaskId));
-		}
-	}, [groupTaskId]);
+	const getTasks = useCallback(() => {
+        dispatch(getTaskList(groupTaskId));
+    }, [dispatch, groupTaskId]);
+
+	const debounceRef = useRef(null);
+
+    useEffect(() => {
+		clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(() => {
+			getTasks();
+		}, 200);
+    }, [groupTaskId]);
 
 	return (
 		<div>
 			{loading ? (
 				<Text>Loading...</Text>
 			) : error ? (
-				<Text>{error}</Text>
+				<MessageBox message={error} />	
 			) : (
 				<>
 					{
@@ -35,6 +45,9 @@ const TaskList = (props) => {
 									<p></p>
 								) : (
 									<>
+										<Flex className="mt-10" justifyContent="center">
+											<Title className="text-2xl font-bold text-gray-800">Not Done Task List</Title>
+										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.notDoneTaskList.map((task) => (
 												<TaskCard key={task._id} task={task} 
@@ -48,6 +61,9 @@ const TaskList = (props) => {
 									<p></p>
 								) : (
 									<>
+										<Flex className="mt-5" justifyContent="center">
+											<Title className="text-2xl font-bold text-gray-800">Done Task List</Title>
+										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.doneTaskList.map((task) => (
 												<TaskCard key={task._id} task={task} 

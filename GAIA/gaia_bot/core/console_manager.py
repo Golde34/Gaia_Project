@@ -1,11 +1,10 @@
 import os
-import subprocess
 import logging
 
 from colorama import Fore
 
-from gaia_bot.utils.console_log import start_text, OutputStyler, headerize
-from gaia_bot.configs import settings
+from gaia_bot.kernel.utils.console_log import start_text, OutputStyler, headerize
+from gaia_bot.kernel.configs import settings
 
 class ConsoleManager:
 
@@ -14,7 +13,7 @@ class ConsoleManager:
 
     def wakeup(self, text='', info_log=None, refresh_console=None):
         if refresh_console is True:
-            self.clear()
+            self._clear()
 
             self._stdout_print(start_text)
             self._stdout_print(" Note: CTRL+C if you weant to quit GAIA console.")
@@ -46,8 +45,10 @@ class ConsoleManager:
         print(OutputStyler.CYAN + text + OutputStyler.ENDC)
 
     @staticmethod
-    def clear():
-        subprocess.call('output reset' if os.name == 'posix' else 'cls', shell=True)
+    def _clear():
+        clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
+        return clear()
+        
 
     @staticmethod
     def _stdout_print(text):

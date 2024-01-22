@@ -1,4 +1,4 @@
-from gaia_bot.skills.collections.response import GPT2GenerateResponse
+from gaia_bot.modules.skills.collections.response import GPT2GenerateResponse
 
 
 class ResponseCreator():

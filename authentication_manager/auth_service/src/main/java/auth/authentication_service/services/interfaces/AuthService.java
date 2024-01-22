@@ -7,6 +7,8 @@ import auth.authentication_service.modules.dto.UserPermissionDto;
 
 public interface AuthService{
     public ResponseEntity<?> authenticated(String username, String password) throws Exception;
+    public ResponseEntity<?> gaiaAutoSignin(String username, String password) throws Exception;
     public ResponseEntity<?> checkToken(TokenDto token) throws Exception;
     public ResponseEntity<?> checkPermission(UserPermissionDto permission) throws Exception;
+    public ResponseEntity<?> checkStatus();
 }

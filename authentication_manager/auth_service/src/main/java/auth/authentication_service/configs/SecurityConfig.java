@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @Configuration
 @EnableWebSecurity
@@ -69,8 +68,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> {
                     authz
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
-                                             new AntPathRequestMatcher("/auth/check-permission")
-                            ).permitAll()
+                                    new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
+                                    new AntPathRequestMatcher("/auth/check-permission"))
+                            .permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")

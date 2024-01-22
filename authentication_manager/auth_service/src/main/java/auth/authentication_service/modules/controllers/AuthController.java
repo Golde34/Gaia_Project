@@ -1,8 +1,8 @@
 package auth.authentication_service.modules.controllers;
 
-import auth.authentication_service.modules.dto.SignInDtoRequest;
 import auth.authentication_service.modules.dto.TokenDto;
 import auth.authentication_service.modules.dto.UserPermissionDto;
+import auth.authentication_service.modules.dto.request.SignInDtoRequest;
 import auth.authentication_service.services.interfaces.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,18 @@ public class AuthController {
    }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
-    public ResponseEntity<String> status() {
-        return ResponseEntity.ok("OK");
+    public ResponseEntity<?> status() {
+        return authService.checkStatus();
     }
 
     @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
     public ResponseEntity<?> signIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
         return authService.authenticated(accountDto.getUsername(), accountDto.getPassword());
+    }
+
+    @RequestMapping(value = "/gaia-auto-sign-in", method = RequestMethod.POST)
+    public ResponseEntity<?> gaiaAutoSignIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
+        return authService.gaiaAutoSignin(accountDto.getUsername(), accountDto.getPassword());
     }
 
     @RequestMapping(value = "/check-token", method = RequestMethod.GET)

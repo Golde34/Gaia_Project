@@ -1,7 +1,6 @@
 import { GroupTaskEntity, IGroupTaskEntity } from "../../entities/group-task.entity";
 import { ProjectEntity } from "../../entities/project.entity";
 import { TaskEntity } from "../../entities/task.entity";
-import { groupTaskService } from "../group-task.service";
 import { groupTaskValidation } from "../../validations/group-task.validation";
 
 const groupTaskValidationImpl = groupTaskValidation;

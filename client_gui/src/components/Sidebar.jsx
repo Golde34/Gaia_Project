@@ -10,7 +10,7 @@ import {
 	MailIcon,
 	ShieldCheckIcon,
 } from "@heroicons/react/solid";
-import { Button } from "@tremor/react";
+import { Button, Col, Grid } from "@tremor/react";
 
 const Sidebar = () => {
 	return (
@@ -21,16 +21,24 @@ const Sidebar = () => {
 				</a>
 			</div>
 			<div className="fixed left-3 sm:left-6 top-[100px]">
-				<ShieldCheckIcon
-					width={40}
-					className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
-				/>
-				<a href="/client-gui/project">
-					<Button variant="primary" color="indigo"
-						className="p-2 rounded-lg mb-4">
-						<ClipboardCheckIcon width={20} />
-					</Button>
-				</a>
+				<Grid numItems={1}>
+					<Col numColSpan={1}>
+						<a href="/client-gui/auth">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<ShieldCheckIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+					<Col numColSpan={1}>
+						<a href="/client-gui/project">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<ClipboardCheckIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+				</Grid>
 				<ChartBarIcon
 					width={40}
 					className="bg-gray-600 p-2 rounded-lg mb-4 text-gray-300"
