@@ -60,7 +60,7 @@ const routeList = [
     {
         path: '/project',
         key: 'project',
-        element: <GaiaRoute><Project /></GaiaRoute>,
+        element: <Project />,
     },
     {
         path: '/project/:id',
