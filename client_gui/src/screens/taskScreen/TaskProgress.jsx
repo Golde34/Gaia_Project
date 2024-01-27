@@ -2,7 +2,7 @@ import { Flex, ProgressBar, Text, Title } from '@tremor/react';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksCompleted } from '../../api/store/actions/task_manager/task.actions';
-import MessageBox from '../../components/componentUtils/MessageBox';
+import MessageBox from '../../components/subComponents/MessageBox';
 
 
 const TaskProgress = (props) => {

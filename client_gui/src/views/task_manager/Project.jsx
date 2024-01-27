@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../api/store/actions/task_manager/project.actions";
-import Template from "./template";
-import CardButton from "../components/subComponents/CardButton";
+import { getProjects } from "../../api/store/actions/task_manager/project.actions";
+import Template from "../../components/template";
+import CardButton from "../../components/subComponents/CardButton";
 import { Metric } from "@tremor/react";
-import { CreateNewProject } from "../screens/projectScreen/CreateNewProject";
+import { CreateNewProject } from "../../screens/projectScreen/CreateNewProject";
 
 function ContentArea() {
     const dispatch = useDispatch();

@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import Template from "./template";
+import Template from "../../components/template";
 import { useCallback, useEffect, useRef } from "react";
-import { getGroupTaskList } from "../api/store/actions/task_manager/group-task.actions";
+import { getGroupTaskList } from "../../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
 import { Button, Card, Col, Flex, Grid, Metric, Text } from "@tremor/react";
-import TabGroupTask from "../screens/groupTaskScreen/TabGroupTask";
-import { CreateTaskDialog } from "../screens/taskScreen/CreateTaskDialog";
-import { CreateNewGroupTask } from "../screens/groupTaskScreen/CreateNewGroupTask";
-import MessageBox from "../components/componentUtils/MessageBox";
+import TabGroupTask from "../../screens/groupTaskScreen/TabGroupTask";
+import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
+import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
+import MessageBox from "../../components/subComponents/MessageBox";
 
 function ContentArea() {
     const projectId = useParams().id;
