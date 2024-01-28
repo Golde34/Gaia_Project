@@ -1,7 +1,7 @@
 import json
 import os
 
-from configs.gaia_resources import gaia_resource_path
+from core.configs.gaia_resources import gaia_resource_path
 
 
 token_path = gaia_resource_path / 'authen_cache' / 'token.json'
@@ -10,9 +10,12 @@ def _get_token_parameters():
     try:
         with open(token_path, 'r') as f:
             response = json.load(f)
-            
+        
+        print(response)
+                
         return response['data']['gaiaAutoSignin']['accessToken'], response['data']['gaiaAutoSignin']['refreshToken']    
-    except FileNotFoundError:
+    except Exception as e:
+        print('Cannot get asccess token and refresh token' + e)
         return None, None
 
 def _load_user_info():
@@ -24,7 +27,7 @@ def _load_user_info():
         name = response['data']['gaiaAutoSignin']['name']
         email = response['data']['gaiaAutoSignin']['email']
         return username, name, email
-    except FileNotFoundError:
+    except Exception as e:
         return None, None, None
 
 def _save_middleware_response(result):

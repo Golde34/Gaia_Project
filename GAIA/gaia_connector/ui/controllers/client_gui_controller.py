@@ -1,9 +1,9 @@
 from flask import request, jsonify
 import requests
 
-from controllers import app
-from configs.port_configs import PORTS
-from utils.get_auth_token import _get_token_parameters
+from ui import app
+from core.configs.port_configs import PORTS
+from kernel.utils.get_auth_token import _get_token_parameters
 
 client_gui_port = PORTS['client_gui']['port']
 client_gui_url = f"http://localhost:{client_gui_port}"

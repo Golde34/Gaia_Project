@@ -1,13 +1,13 @@
 from flask import request, jsonify
 import requests
 
-from controllers import app
-from controllers.controller_config.config import ControllerConfig
-from controllers.controller_config.base_response import status_response
-from utils.get_auth_token import _get_token_parameters, _load_user_info, _save_middleware_response
+from ui import app
+from infrastructure.adapter import Adapter 
+from infrastructure.base_response import status_response
+from kernel.utils.get_auth_token import _get_token_parameters, _load_user_info, _save_middleware_response
 
 
-middleware_loader_url = ControllerConfig('middleware_loader').url
+middleware_loader_url = Adapter('middleware_loader').url
 
 @app.route('/middleware/health-check', methods=['GET'])
 def health_check():

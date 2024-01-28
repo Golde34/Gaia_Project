@@ -1,6 +1,6 @@
-from configs.port_configs import PORTS, DOMAIN
+from core.configs.port_configs import PORTS, DOMAIN
 
-class ControllerConfig:
+class Adapter:
     def __init__(self, microservice):
         self.middleware = 'middleware_loader'
         self.domain = DOMAIN
