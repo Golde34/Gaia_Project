@@ -27,9 +27,18 @@ def microservices_status():
     
 @app.route('/middleware/gaia-connect', methods=['GET'])
 def gaia_connect():
+    data = {}
+    
     access_token, refresh_token = _get_token_parameters()
+    if access_token is None or refresh_token is None:
+        data['accessToken'] = None
+        data['refreshToken'] = None
+     
     username, name, email = _load_user_info()
-    data = {} 
+    if username is None or name is None or email is None:
+        data['username'] = None
+        data['name'] = None
+        data['email'] = None
     
     data['accessToken'] = access_token
     data['refreshToken'] = refresh_token
