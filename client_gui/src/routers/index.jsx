@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 
 import Dashboard from '../views/Dashboard';
 import Project from '../views/task_manager/Project';
@@ -39,7 +39,12 @@ import GaiaRoute from '../components/route/GaiaRoute';
 const routeList = [
     {
         path: '/',
-        key: '/',
+        key: 'root',
+        element: <Navigate to="/gaia" replace />,
+    },
+    {
+        path: '/gaia',
+        key: 'gaia',
         element: <GaiaAutoSignin />,
     },
     {
@@ -74,7 +79,7 @@ const routeList = [
     // }
 ]
 
-const RenderRouter = () => {
+const RenderRouter = (props) => {
     const element = useRoutes(routeList);
     return element;
 };

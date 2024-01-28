@@ -96,9 +96,9 @@ const Signin = () => {
                             <form onSubmit={submitHandler}>
                                 <Metric level={3} className="text-center">Sign In</Metric>
                                 {loading && <div>Loading...</div>}
-                                {error && 
+                                {error &&
                                     <div>
-                                        <MessageBox message={error} />        
+                                        <MessageBox message={error} />
                                     </div>
                                 }
 
@@ -174,7 +174,6 @@ const Signin = () => {
                     </Flex>
                 </Col>
             </Grid>
-
         </>
     )
 }
