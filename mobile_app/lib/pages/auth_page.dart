@@ -10,6 +10,6 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('AUTH'),);
+    return const Center(child: Text('AUTH'),);
   }
 }

@@ -11,6 +11,8 @@ const GaiaAutoSignin = () => {
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
 
+    const userInfo = localStorage.getItem('userInfo');
+
     const didGaiaAuthenticateRef = useRef();
 
     useEffect(() => {
@@ -22,10 +24,7 @@ const GaiaAutoSignin = () => {
     const navigateToCorrectPage = (path) => {
         navigate('/' + path);
     }
-
-    console.log(gaiaInfo);
-    console.log('accessToken: ' + localStorage.getItem('gaiaAccessToken'));
-    console.log('gaiaInfo: ' + localStorage.getItem('gaiaInfo'));
+    
     return (
         <div>
             {loading ? (
@@ -34,11 +33,13 @@ const GaiaAutoSignin = () => {
                 <div><Signin /></div>
             ) : gaiaInfo ? (
                 <div>{navigateToCorrectPage('dashboard')}</div>
+            ) : userInfo != null ? (
+                <div>{navigateToCorrectPage('dashboard')}</div>
             ) : (
                 <div>{navigateToCorrectPage('signin')}</div>
             )
             }
-        </div>
+        </div >
     )
 }
 
