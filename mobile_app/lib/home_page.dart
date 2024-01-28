@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/components/bottom_nav_bar.dart';
 import 'package:mobile_app/configs/const.dart';
-import 'package:mobile_app/pages/auth_page.dart';
+// import 'package:mobile_app/pages/auth_page.dart';
+import 'package:mobile_app/pages/project_page.dart';
 import 'package:mobile_app/pages/setting_page.dart';
+import 'package:mobile_app/pages/note_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,17 +17,19 @@ class _HomePageState extends State<HomePage> {
 
   // navigate bottom bar
   int _selectedIndex = 0;
-  void navigateBottomBar(int index) {
+  void navigateBotBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    print('index: $index');
+    print('selectedIndex: $_selectedIndex');
   }
 
   // pages
-  final List<Widget> _pages =[
-    HomePage(),
-    AuthPage(),
-    SettingPage(),
+  final List<Widget> _pages = <Widget>[
+    const ProjectPage(),
+    const NotePage(),
+    const SettingPage(),
   ];
 
   @override
@@ -33,7 +37,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       bottomNavigationBar: GaiaBottomNavBar(
-        onTabChange: (index) => navigateBottomBar(index!),
+        onTabChange: (value) => navigateBotBar(value!),
+        // console.log('value: $value'),
+        
       ),
       // appBar: AppBar(
       //   title: Text('Home Page'),

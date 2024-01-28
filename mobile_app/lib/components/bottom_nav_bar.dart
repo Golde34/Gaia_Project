@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class GaiaBottomNavBar extends StatelessWidget {
-  void Function(int?) onTabChange;
-  GaiaBottomNavBar({super.key, required this.onTabChange,});
+  final void Function(int?) onTabChange;
+  const GaiaBottomNavBar({super.key, required this.onTabChange,});
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +17,20 @@ class GaiaBottomNavBar extends StatelessWidget {
           tabBackgroundColor: Colors.indigo.shade300,
           tabBorderRadius: 24,
           tabActiveBorder: Border.all(color: Colors.black26),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           tabs: const [
             GButton(
-              icon: Icons.home_sharp,
-              text: 'Home',
+              icon: Icons.task_sharp,
+              text: 'Project',
               
             ),
+            // GButton(
+            //   icon: Icons.shield_sharp,
+            //   text: 'Auth',
+            // ),
             GButton(
-              icon: Icons.shield_sharp,
-              text: 'Auth',
+              icon: Icons.text_snippet_sharp,
+              text: 'Text',
             ),
             GButton(
               icon: Icons.settings_sharp,
