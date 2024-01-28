@@ -1,7 +1,8 @@
 from flask import jsonify
 import requests
 
-class AuthService:
+
+class AuthServiceRequest:
     def __init__(self, url):
         self.url = url
     
