@@ -1,126 +1,107 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { sendResponse } from "../../core/common/response_helpers";
+import { NextFunction, Request, Response } from "express";
 import { projectService } from "../../core/services/project.service";
-import { RequestValidator } from "../../core/common/error-handler";
-import { ProjectRequestDto, UpdateColorDto } from "../../core/domain/dtos/project.dto";
+import { IResponse } from "../../core/common/response";
 import { plainToInstance } from "class-transformer";
-import { updateNameRequestDto } from "../../core/domain/dtos/request_dtos/update-name-request.dto";
+import { ProjectRequestDto } from "../../core/domain/dtos/project.dto";
 
-export const projectRouter = Router();
+class ProjectController {
+    async listAllProjects(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const projectResult = await projectService.getAllProjects();
 
-// list all projects of the user
-projectRouter.get("/all", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const projectResult = await projectService.getAllProjects();
-    
-        sendResponse(projectResult, res, next);
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-    catch (err) {
-        next(err);
-    }    
-});
 
-// get one project
-projectRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const projectId = req.params.id;
-        const projectResult = await projectService.getProject(projectId);
+    async getProjectById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const projectResult = await projectService.getProject(id);
 
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
 
-// create new project
-projectRouter.post("/create", 
-    RequestValidator.validate(ProjectRequestDto),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
+    async createProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const bodyJson = req.body.body;
 
-        const createProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
-        const projectResult = await projectService.createProject(createProjectObjectDto);
-        
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
+            const createProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
+            const projectResult = await projectService.createProject(createProjectObjectDto);
+
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
 
-// update project
-projectRouter.put("/:id",
-    RequestValidator.validate(ProjectRequestDto),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
+    async updateProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const bodyJson = req.body.body;
 
-        const projectId = req.params.id;
-        const updateProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
-        const projectResult = await projectService.updateProject(projectId, updateProjectObjectDto);
+            const updateProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
+            const projectResult = await projectService.updateProject(id, updateProjectObjectDto);
 
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
 
-// delete project
-projectRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const projectId = req.params.id;
-        const projectResult = await projectService.deleteProject(projectId);
+    async deleteProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const projectResult = await projectService.deleteProject(id);
 
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
 
-// get all group tasks of a project
-projectRouter.get("/:id/group-tasks", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const projectId = req.params.id;
-        const projectResult = await projectService.getGroupTasksInProject(projectId);
-        
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
+    async getGroupTasksInProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const projectResult = await projectService.getGroupTasksInProject(id);
+
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
 
-// update Project name
-projectRouter.put("/:id/update-name", 
-    RequestValidator.validate(updateNameRequestDto),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
-        
-        const projectId = req.params.id;
-        const name = bodyJson.newName;
+    async updateProjectName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const bodyJson = req.body.body;
+            const name = bodyJson.newName;
 
-        const projectResult = await projectService.updateProjectName(projectId, name);
+            const projectResult = await projectService.updateProjectName(id, name);
 
-        sendResponse(projectResult, res, next);
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-    catch (err) {
-        next(err);
+
+    async updateProjectColor(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const bodyJson = req.body.body;
+            const color = bodyJson.color;
+
+            const projectResult = await projectService.updateProjectColor(id, color);
+
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
     }
-});
+}
 
-// update Project color
-projectRouter.put("/:id/update-color",
-    RequestValidator.validate(UpdateColorDto),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const bodyJson = req.body.body;
-
-        const projectId = req.params.id;
-        const color = bodyJson.color;
-        const projectResult = await projectService.updateProjectColor(projectId, color);
-
-        sendResponse(projectResult, res, next);
-    } catch (err) {
-        next(err);
-    }
-});
+export const projectController = new ProjectController();

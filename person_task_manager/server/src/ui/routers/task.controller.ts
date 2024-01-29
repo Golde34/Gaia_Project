@@ -1,7 +1,7 @@
 import { type Request, type Response, Router, NextFunction } from "express";
 import { taskService } from "../../core/services/task.service";
 import { sendResponse } from "../../core/common/response_helpers";
-import { checkPermission, checkToken } from "../controllers/user_authentication/auth.middleware";
+import { checkPermission, checkToken } from "../routers/user_authentication/auth.middleware";
 import { Permission } from "../../core/domain/enums/enums";
 import { plainToInstance } from "class-transformer";
 import { RequestValidator } from "../../core/common/error-handler";

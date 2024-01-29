@@ -51,30 +51,34 @@ export function msg200(data: any): IResponse {
 }
 
 export function sendResponse(result: IResponse, response: Response, next: NextFunction): void {
-    switch (result.statusCode) {
-        case 200: {
-            response.status(200).send(result);
-            break;
+    try {
+        switch (result.statusCode) {
+            case 200: {
+                response.status(200).send(result);
+                break;
+            }
+            case 400: {
+                next(new BadRequestError(result.message));
+                break;
+            }
+            case 401: {
+                next(new UnauthorizedError(result.message));
+                break;
+            }
+            case 403: {
+                next(new ForbiddenError(result.message));
+                break;
+            }
+            case 404: {
+                next(new NotFoundError(result.message));
+                break;
+            }
+            case 500: {
+                next(new InternalServerError(result.message));
+                break;
+            }
         }
-        case 400: {
-            next(new BadRequestError(result.message));
-            break;
-        }
-        case 401: {
-            next(new UnauthorizedError(result.message));
-            break;
-        }
-        case 403: {
-            next(new ForbiddenError(result.message));
-            break;
-        }
-        case 404: {
-            next(new NotFoundError(result.message));
-            break;
-        }
-        case 500: {
-            next(new InternalServerError(result.message));
-            break;
-        }
+    } catch (err) {
+        next(err);
     }
 }
