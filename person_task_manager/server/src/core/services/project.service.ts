@@ -1,5 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
+import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ProjectEntity } from "../domain/entities/project.entity";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
@@ -156,12 +157,12 @@ class ProjectService {
         try {
             const project = await ProjectEntity.findOne({ groupTasks: groupTaskId });
             if (project === null) {
-                return 'Project not found';
+                return PROJECT_NOT_FOUND;
             } else {
                 return project._id;
             }
         } catch (err: any) {
-            return err.message.toString();
+            return EXCEPTION_PREFIX+PROJECT_EXCEPTION
         }
     }
 

@@ -1,5 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
+import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND } from "../domain/constants/error.constant";
 import { GroupTaskEntity } from "../domain/entities/group-task.entity";
 import { ProjectEntity } from "../domain/entities/project.entity";
 import { TaskEntity } from "../domain/entities/task.entity";
@@ -105,13 +106,13 @@ class GroupTaskService {
         try {
             const groupTask = await GroupTaskEntity.findOne({ tasks: taskId });
             if (groupTask === null) {
-                return 'Group Task not found';
+                return GROUP_TASK_NOT_FOUND;
             } else {
                 return groupTask._id;
             }
         } catch (err: any) {
             console.log(err.message.toString());
-            return 'error';
+            return EXCEPTION_PREFIX + GROUP_TASK_EXCEPTION;
         }
     }
 

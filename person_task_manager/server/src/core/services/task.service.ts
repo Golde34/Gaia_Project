@@ -1,7 +1,7 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { Priority } from "../domain/enums/enums";
-import { UpdaetTaskInDialogDTO } from "../domain/dtos/task.dto";
+import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
 import { GroupTaskEntity } from "../domain/entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../domain/entities/task.entity";
 import { taskValidation } from "../validations/task.validation";
@@ -121,7 +121,7 @@ class TaskService {
         });
     }
 
-    async updateTaskInDialog(taskId: string, task: UpdaetTaskInDialogDTO): Promise<IResponse> {
+    async updateTaskInDialog(taskId: string, task: UpdateTaskInDialogDTO): Promise<IResponse> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const taskUpdate = await TaskEntity.findOne({ _id: taskId });

@@ -1,13 +1,13 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./infrastructure/config/configuration";
 import { MongoHelper } from "./infrastructure/database/mongodb.db";
-import { taskRouter } from "./ui/routers/task.controller";
-import { groupTaskRouter } from "./ui/routers/group-task.controller";
+import { taskRouter } from "./ui/routers/task.router";
+import { groupTaskRouter } from "./ui/routers/group-task.router";
 import { authRouter } from "./ui/routers/user_authentication/auth.controller";
 import { projectRouter } from "./ui/routers/project.router";
-import { subTaskRouter } from "./ui/routers/sub-task.controller";
-import { commentRouter } from "./ui/routers/comment.controller";
-import { dashboardRouter } from "./ui/routers/dashboard.controller";
+import { subTaskRouter } from "./ui/routers/sub-task.router";
+import { commentRouter } from "./ui/routers/comment.router";
+import { dashboardRouter } from "./ui/routers/dashboard.router";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";

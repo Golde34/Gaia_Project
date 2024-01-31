@@ -52,7 +52,7 @@ export class GenerateTaskFromScratchRequestDTO {
     projectId!: string;
 }
 
-export class UpdaetTaskInDialogDTO {
+export class UpdateTaskInDialogDTO {
     @IsString()
     title!: string;
     @IsString()

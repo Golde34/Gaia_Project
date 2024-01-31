@@ -1,10 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request } from "express";
 import { projectService } from "../../core/services/project.service";
 import { IResponse } from "../../core/common/response";
 import { plainToInstance } from "class-transformer";
 import { ProjectRequestDto } from "../../core/domain/dtos/project.dto";
 
 class ProjectController {
+
+    constructor() { }
+    
     async listAllProjects(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const projectResult = await projectService.getAllProjects();
@@ -18,6 +21,7 @@ class ProjectController {
     async getProjectById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
+            const projectResuljt = projectService
             const projectResult = await projectService.getProject(id);
 
             return projectResult;
