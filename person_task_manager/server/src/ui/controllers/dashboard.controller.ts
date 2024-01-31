@@ -1,20 +1,22 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request } from "express";
+import { IResponse } from "../../core/common/response";
 import { taskService } from "../../core/services/task.service";
-import { sendResponse } from "../../core/common/response_helpers";
 
-export const dashboardRouter = Router();
+class DashboardController {
 
-// get 3 top tasks
-dashboardRouter.get("/top-tasks",
-    // checkToken,
-    // checkPermission(Permission.readTask),
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    constructor() {}
+
+    async getTopTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const taskResult = await taskService.getTopTasks(3);
+            const NUMBER_OF_TOP_TASKS = 3;
+            const taskResult = await taskService.getTopTasks(NUMBER_OF_TOP_TASKS);
 
-            sendResponse(taskResult, res, next);
+            return taskResult;
         }
         catch (err) {
             next(err);
         }
-    });
+    }
+}
+
+export const dashboardController = new DashboardController();

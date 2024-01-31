@@ -29,7 +29,7 @@ export const CreateNewProject = () => {
         project.name = name;
         project.description = description;
         project.status = status;
-        project.ownerId = localStorage.getItem('userId');
+        project.ownerId = "1";
         createNewProject(project);
         window.location.reload();
     }
