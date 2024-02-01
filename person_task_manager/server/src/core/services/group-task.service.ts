@@ -4,6 +4,7 @@ import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND } from "..
 import { GroupTaskEntity } from "../domain/entities/group-task.entity";
 import { ProjectEntity } from "../domain/entities/project.entity";
 import { TaskEntity } from "../domain/entities/task.entity";
+import { ActiveStatus, Status } from "../domain/enums/enums";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
@@ -216,11 +217,44 @@ class GroupTaskService {
         }
     }
 
-    // disable groupTask
-
-    // enable groupTask
-
-    // archive groupTask
+    async archieveGroupTask(groupTaskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId, activeStatus: ActiveStatus.active });
+                if (groupTask === null) {
+                    return msg400(GROUP_TASK_NOT_FOUND);
+                } else {
+                    groupTask.activeStatus = ActiveStatus.inactive;
+                    groupTask.status = Status.archived;
+                    await groupTask.save();
+                    return msg200({
+                        message: 'Group task archieved'
+                    });
+                }
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+    
+    async enableGroupTask(groupTaskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
+                const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId, activeStatus: ActiveStatus.inactive });
+                if (groupTask === null) {
+                    return msg400(GROUP_TASK_NOT_FOUND);
+                } else {
+                    groupTask.activeStatus = ActiveStatus.active;
+                    await groupTask.save();
+                    return msg200({
+                        message: 'Group task enabled'
+                    });
+                }
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 
 }
 

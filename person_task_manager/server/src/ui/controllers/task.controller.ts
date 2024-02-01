@@ -152,6 +152,28 @@ class TaskController {
             next(err);
         }
     }
+
+    async archieveTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const taskId = req.params.id;
+            const taskResult = await taskService.archieveTask(taskId);
+
+            return taskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async enableTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const taskId = req.params.id;
+            const taskResult = await taskService.enableTask(taskId);
+
+            return taskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const taskController = new TaskController();

@@ -56,6 +56,28 @@ class SubTaskController {
             next(err);
         }
     }
+
+    async archieveSubTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const subTaskId = req.params.id;
+            const subTaskResult = await subTaskService.archieveSubTask(subTaskId);
+
+            return subTaskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async enableSubTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const subTaskId = req.params.id;
+            const subTaskResult = await subTaskService.enableSubTask(subTaskId);
+
+            return subTaskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const subTaskController = new SubTaskController();

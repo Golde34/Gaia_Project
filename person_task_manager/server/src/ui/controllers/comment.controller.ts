@@ -56,6 +56,28 @@ class CommentController {
             next(err);
         }
     }
+
+    async archieveComment(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const commentId = req.params.id;
+            const commentResult = await commentService.archieveComment(commentId);
+
+            return commentResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async enableComment(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const commentId = req.params.id;
+            const commentResult = await commentService.enableComment(commentId);
+
+            return commentResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const commentController = new CommentController();

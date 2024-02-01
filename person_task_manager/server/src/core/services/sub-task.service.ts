@@ -1,6 +1,8 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
+import { SUB_TASK_NOT_FOUND } from "../domain/constants/error.constant";
 import { SubTaskEntity } from "../domain/entities/sub-task.entity";
+import { ActiveStatus } from "../domain/enums/enums";
 import { subTaskValidation } from "../validations/sub-task.validation";
 import { taskService } from "./task.service";
 
@@ -14,7 +16,7 @@ class SubTaskService {
         try {
             const createSubTask = await SubTaskEntity.create(subTask);
             const subTaskId = (createSubTask as any)._id;
-            
+
             if (await subTaskValidationImpl.checkExistedSubTaskInTask(subTaskId, taskId) === false) {
                 taskServiceImpl.updateTask(taskId, { $push: { subTasks: subTaskId } });
 
@@ -50,7 +52,7 @@ class SubTaskService {
             if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const deleteSubTask = await SubTaskEntity.deleteOne({ _id: subTaskId });
                 taskServiceImpl.updateManySubTasksInTask(subTaskId);
- 
+
                 return msg200({
                     message: (deleteSubTask as any)
                 });
@@ -67,6 +69,44 @@ class SubTaskService {
         return msg200({
             subTask
         });
+    }
+
+    async archieveSubTask(subTaskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
+                const SubTask = await SubTaskEntity.findOne({ _id: subTaskId, activeStatus: ActiveStatus.active });
+                if (SubTask === null) {
+                    return msg400(SUB_TASK_NOT_FOUND);
+                } else {
+                    SubTask.activeStatus = ActiveStatus.inactive;
+                    await SubTask.save();
+                    return msg200({
+                        message: "Sub task archieved"
+                    });
+                }
+            }
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
+
+    async enableSubTask(subTaskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
+                const SubTask = await SubTaskEntity.findOne({ _id: subTaskId, activeStatus: ActiveStatus.inactive });
+                if (SubTask === null) {
+                    return msg400(SUB_TASK_NOT_FOUND);
+                } else {
+                    SubTask.activeStatus = ActiveStatus.active;
+                    await SubTask.save();
+                    return msg200({
+                        message: "Sub task enabled"
+                    });
+                }
+            }
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
     }
 }
 

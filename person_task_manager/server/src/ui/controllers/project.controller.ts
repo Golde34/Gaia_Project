@@ -106,6 +106,28 @@ class ProjectController {
             next(err);
         }
     }
+
+    async archieveProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const projectResult = await projectService.archieveProject(id);
+
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async unarchieveProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            const projectResult = await projectService.enableProject(id);
+
+            return projectResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const projectController = new ProjectController();

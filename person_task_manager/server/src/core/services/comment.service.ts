@@ -1,6 +1,8 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
+import { COMMENT_NOT_FOUND } from "../domain/constants/error.constant";
 import { CommentEntity } from "../domain/entities/comment.entity";
+import { ActiveStatus } from "../domain/enums/enums";
 import { commentValidation } from "../validations/comment.validation";
 import { taskService } from "./task.service";
 
@@ -50,7 +52,7 @@ class CommentService {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
                 const deleteComment = await CommentEntity.deleteOne({ _id: commentId });
-                taskServiceImpl.updateManyCommentsInTask(commentId); 
+                taskServiceImpl.updateManyCommentsInTask(commentId);
 
                 return msg200({
                     message: (deleteComment as any)
@@ -68,6 +70,44 @@ class CommentService {
         return msg200({
             comment
         });
+    }
+
+    async archieveComment(commentId: string): Promise<IResponse | undefined> {
+        try {
+            if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
+                const comment = await CommentEntity.findOne({ _id: commentId, activeStatus: ActiveStatus.active });
+                if (comment === null) {
+                    return msg400(COMMENT_NOT_FOUND);
+                } else {
+                    comment.activeStatus = ActiveStatus.inactive;
+                    await comment.save();
+                    return msg200({
+                        message: "Comment archieved successfully"
+                    });
+                }
+            }
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
+
+    async enableComment(commentId: string): Promise<IResponse | undefined> {
+        try {
+            if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
+                const comment = await CommentEntity.findOne({ _id: commentId, activeStatus: ActiveStatus.inactive });
+                if (comment === null) {
+                    return msg400(COMMENT_NOT_FOUND);
+                } else {
+                    comment.activeStatus = ActiveStatus.active;
+                    await comment.save();
+                    return msg200({
+                        message: "Comment enabled successfully"
+                    });
+                }
+            }
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
     }
 }
 

@@ -114,6 +114,28 @@ class GroupTaskController {
             next(err);
         }
     }
+
+    async archieveGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const groupTaskId = req.params.id;
+            const groupTaskResult = await groupTaskService.archieveGroupTask(groupTaskId);
+
+            return groupTaskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async enableGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const groupTaskId = req.params.id;
+            const groupTaskResult = await groupTaskService.enableGroupTask(groupTaskId);
+
+            return groupTaskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const groupTaskController = new GroupTaskController();

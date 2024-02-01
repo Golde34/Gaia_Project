@@ -1,6 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
-import { ActiveStatus, Priority } from "../domain/enums/enums";
+import { ActiveStatus, Priority, Status } from "../domain/enums/enums";
 import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
 import { GroupTaskEntity } from "../domain/entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../domain/entities/task.entity";
@@ -9,6 +9,7 @@ import { groupTaskService } from "./group-task.service";
 import { projectService } from "./project.service";
 import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
+import { TASK_NOT_FOUND } from "../domain/constants/error.constant";
 
 const taskValidationImpl = taskValidation;
 
@@ -28,7 +29,7 @@ class TaskService {
             if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
                 await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $push: { tasks: taskId } });
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
- 
+
                 return msg200({
                     message: (createTask as any)
                 });
@@ -61,7 +62,7 @@ class TaskService {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 // delete task id in group task
-                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { tasks: taskId} });
+                await GroupTaskEntity.updateOne({ _id: groupTaskId }, { $pull: { tasks: taskId } });
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
                 const deleteTask = await TaskEntity.deleteOne({ _id: taskId });
@@ -206,12 +207,45 @@ class TaskService {
             return msg400(error.message.toString());
         }
     }
-    
-    // disable task
 
-    // enable task
+    async archieveTask(taskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                const task = await TaskEntity.findOne({ _id: taskId, activeStatus: ActiveStatus.active });
+                if (task === null) {
+                    return msg400(TASK_NOT_FOUND);
+                } else {
+                    task.activeStatus = ActiveStatus.inactive;
+                    task.status = Status.archived;
+                    await task.save();
+                    return msg200({
+                        message: 'Archieve task successfully'
+                    });
+                }
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 
-    // archive task
+    async enableTask(taskId: string): Promise<IResponse | undefined> {
+        try {
+            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                const task = await TaskEntity.findOne({ _id: taskId, activeStatus: ActiveStatus.inactive });
+                if (task === null) {
+                    return msg400(TASK_NOT_FOUND);
+                } else {
+                    task.activeStatus = ActiveStatus.active;
+                    await task.save();
+                    return msg200({
+                        message: 'Enable task successfully'
+                    });
+                }
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 
     // add subTask
 

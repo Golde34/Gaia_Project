@@ -2,7 +2,7 @@ import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ProjectEntity } from "../domain/entities/project.entity";
-import { ActiveStatus } from "../domain/enums/enums";
+import { ActiveStatus, Status } from "../domain/enums/enums";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
 
@@ -150,11 +150,45 @@ class ProjectService {
         }
     }
 
-    // disable project
+    async archieveProject(projectId: string): Promise<IResponse | undefined> {
+        try {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
+                const project = await ProjectEntity.findOne({ _id: projectId, activeStatus: ActiveStatus.active});
+                if (project === null) {
+                    return msg400(PROJECT_NOT_FOUND);
+                } else {
+                    project.activeStatus = ActiveStatus.inactive;
+                    project.status = Status.archived;
+                    await project.save();
+                    return msg200({
+                        message: "Project archived"
+                    });
+                }
+            } 
+        } catch (err: any) {
+                return msg400(err.message.toString());
+        }
+    }
 
-    // enable project
+    async enableProject(projectId: string): Promise<IResponse | undefined> {
+        try {
+            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
+                const project = await ProjectEntity.findOne({ _id: projectId, activeStatus: ActiveStatus.inactive});
+                if (project === null) {
+                    return msg400(PROJECT_NOT_FOUND);
+                } else {
+                    project.activeStatus = ActiveStatus.active;
+                    await project.save();
+                    return msg200({
+                        message: "Project enabled"
+                    });
+                }
+            }
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
 
-    // archive project
     
     // MINI SERVICES
 
