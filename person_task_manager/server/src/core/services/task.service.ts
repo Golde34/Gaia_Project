@@ -1,6 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
-import { Priority } from "../domain/enums/enums";
+import { ActiveStatus, Priority } from "../domain/enums/enums";
 import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
 import { GroupTaskEntity } from "../domain/entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../domain/entities/task.entity";
@@ -77,7 +77,7 @@ class TaskService {
     }
 
     async getTask(taskId: string): Promise<IResponse> {
-        const task = await TaskEntity.findOne({ _id: taskId });
+        const task = await TaskEntity.findOne({ _id: taskId, activeStatus: ActiveStatus.active });
         return msg200({
             task
         });
@@ -151,7 +151,8 @@ class TaskService {
             const topTasks: any[] = [];
             const tasks = await TaskEntity.find({
                 priority: Priority.star,
-                status: { $in: ['TODO', 'IN_PROGRESS', 'CUSTOM'] }
+                status: { $in: ['TODO', 'IN_PROGRESS', 'CUSTOM'] },
+                activeStatus: ActiveStatus.active
             }).limit(limit);
 
             for (let i = 0; i < tasks.length; i++) {

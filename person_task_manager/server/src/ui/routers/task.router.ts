@@ -28,7 +28,7 @@ taskRouter.get("/",
 //get one task
 taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const taskResult = await taskControllerImpl .getTask(req, next);
+        const taskResult = await taskControllerImpl.getTask(req, next);
         return returnResult(taskResult, TASK_NOT_FOUND, res, next);
     }
     catch (err) {

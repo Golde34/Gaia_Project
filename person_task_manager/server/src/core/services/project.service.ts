@@ -2,6 +2,7 @@ import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ProjectEntity } from "../domain/entities/project.entity";
+import { ActiveStatus } from "../domain/enums/enums";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
 
@@ -69,7 +70,7 @@ class ProjectService {
     }
 
     async getAllProjects(): Promise<IResponse> {
-        const projects = await ProjectEntity.find({ ownerId: 1 });
+        const projects = await ProjectEntity.find({ ownerId: 1, activeStatus: ActiveStatus.active });
 
         return msg200({
             projects
@@ -78,7 +79,11 @@ class ProjectService {
 
     async getGroupTasksInProject(projectId: string): Promise<IResponse> {
         try {
-            const groupTasksInProject = await ProjectEntity.findOne({ _id: projectId }).populate('groupTasks');
+            const groupTasksInProject = await ProjectEntity.findOne({ _id: projectId })
+            .populate({
+                path: 'groupTasks',
+                match: { activeStatus: ActiveStatus.active },
+            }).exec();
             const groupTasks = groupTasksInProject?.groupTasks;
 
             return msg200({

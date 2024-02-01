@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
+import { ActiveStatus } from "../enums/enums";
 
 export interface ITaskEntity extends Document {
     _id: string;
@@ -15,6 +16,7 @@ export interface ITaskEntity extends Document {
     comments: ICommentEntity["_id"][];
     createdAt: Date;
     updatedAt: Date;
+    activeStatus: ActiveStatus;
 }
 
 export const taskSchema = new mongoose.Schema(
@@ -64,6 +66,11 @@ export const taskSchema = new mongoose.Schema(
         updatedAt: {
             type: Date,
             required: true,
+        },
+        activeStatus: {
+            type: String,
+            enum: Object.values(ActiveStatus),
+            default: ActiveStatus.active,
         },
     },
     {

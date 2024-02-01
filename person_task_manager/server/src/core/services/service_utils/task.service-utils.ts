@@ -1,6 +1,7 @@
 import { priorityOrder } from "../../../kernel/util/order-enums";
 import { GroupTaskEntity } from "../../domain/entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../../domain/entities/task.entity";
+import { ActiveStatus } from "../../domain/enums/enums";
 
 class TaskServiceUtils {
     constructor() { }
@@ -17,7 +18,11 @@ class TaskServiceUtils {
 
     async getTaskByStatus(groupTaskId: string, status: string): Promise<ITaskEntity[]> {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId, activeStatus: ActiveStatus.active })
+                .populate({
+                    path: 'tasks',
+                    match: { activeStatus: ActiveStatus.active }
+                });
 
             const tasksByStatus: ITaskEntity[] = [];
             tasks?.tasks.forEach((task: any) => {
@@ -35,7 +40,11 @@ class TaskServiceUtils {
 
     async getOtherTasksByEnteredStatus(groupTaskId: string, status: string): Promise<ITaskEntity[]> {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId, activeStatus: ActiveStatus.active })
+                .populate({
+                    path: 'tasks',
+                    match: { activeStatus: ActiveStatus.active }
+                });
 
             const tasksByStatus: ITaskEntity[] = [];
             tasks?.tasks.forEach((task: any) => {
@@ -66,7 +75,7 @@ class TaskServiceUtils {
         let orderedTasks = [] as ITaskEntity[];
 
         const tasksPromises = taskArray.map(async task => {
-            let tasks = await TaskEntity.findOne({ _id: task.taskId })
+            let tasks = await TaskEntity.findOne({ _id: task.taskId, activeStatus: ActiveStatus.active })
             orderedTasks.push(tasks!);
         });
         await Promise.all(tasksPromises);
