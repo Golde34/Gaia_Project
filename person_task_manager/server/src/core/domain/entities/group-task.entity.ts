@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { ITaskEntity } from "./task.entity";
+import { ActiveStatus } from "../enums/enums";
 
 export interface IGroupTaskEntity extends Document{
     _id: string;
@@ -13,6 +14,7 @@ export interface IGroupTaskEntity extends Document{
     ordinalNumber: number;
     createdAt: Date;
     updatedAt: Date;
+    activeStatus: ActiveStatus;
 }
 
 export const groupTaskSchema = new mongoose.Schema(
@@ -57,7 +59,12 @@ export const groupTaskSchema = new mongoose.Schema(
         updatedAt: {
             type: Date,
             required: false,
-        }
+        },
+        activeStatus: {
+            type: String,
+            enum: Object.values(ActiveStatus),
+            default: ActiveStatus.active,
+        },
     },
     {
         toJSON: { virtuals: true },

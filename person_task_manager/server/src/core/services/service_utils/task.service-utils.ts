@@ -1,6 +1,9 @@
 import { priorityOrder } from "../../../kernel/util/order-enums";
 import { GroupTaskEntity } from "../../domain/entities/group-task.entity";
 import { ITaskEntity, TaskEntity } from "../../domain/entities/task.entity";
+import { ActiveStatus } from "../../domain/enums/enums";
+import { groupTaskStore } from "../../store/group-task.store";
+import { taskStore } from "../../store/task.store";
 
 class TaskServiceUtils {
     constructor() { }
@@ -17,8 +20,7 @@ class TaskServiceUtils {
 
     async getTaskByStatus(groupTaskId: string, status: string): Promise<ITaskEntity[]> {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
-
+            const tasks = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
             const tasksByStatus: ITaskEntity[] = [];
             tasks?.tasks.forEach((task: any) => {
                 if (typeof task !== 'string' && task.status === status) {
@@ -35,7 +37,7 @@ class TaskServiceUtils {
 
     async getOtherTasksByEnteredStatus(groupTaskId: string, status: string): Promise<ITaskEntity[]> {
         try {
-            const tasks = await GroupTaskEntity.findOne({ _id: groupTaskId }).populate('tasks');
+            const tasks = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
 
             const tasksByStatus: ITaskEntity[] = [];
             tasks?.tasks.forEach((task: any) => {
@@ -66,7 +68,7 @@ class TaskServiceUtils {
         let orderedTasks = [] as ITaskEntity[];
 
         const tasksPromises = taskArray.map(async task => {
-            let tasks = await TaskEntity.findOne({ _id: task.taskId })
+            let tasks = await taskStore.findActiveTaskById(task.taskId);
             orderedTasks.push(tasks!);
         });
         await Promise.all(tasksPromises);

@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import { ActiveStatus } from "../enums/enums";
 
 export interface ICommentEntity extends Document {
     _id: string;
     content: string;
     createdAt: Date;
     updatedAt: Date;
+    activeStatus: ActiveStatus;
 }
 
 export const commentSchema = new mongoose.Schema(
@@ -20,6 +22,11 @@ export const commentSchema = new mongoose.Schema(
         updatedAt: {
             type: Date,
             required: true,
+        },
+        activeStatus: {
+            type: String,
+            enum: Object.values(ActiveStatus),
+            default: ActiveStatus.active,
         },
     },
     {

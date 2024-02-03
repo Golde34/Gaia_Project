@@ -48,7 +48,7 @@ const TabGroupTask = (props) => {
                                         <div className="col-span-2 mt-1" >{groupTask.title}</div>
                                     </div>
                                 </Tab>
-                                <EllipsisMenu elementName="Group Task" elementld={groupTask._id} projectId={projectId} />
+                                <EllipsisMenu elementName="Group Task" elementId={groupTask._id} projectId={projectId} />
                             </Flex>
                         </div>
                     ))}

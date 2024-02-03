@@ -6,7 +6,7 @@ import { CommentRequestDto } from "../../core/domain/dtos/comment.dto";
 import { plainToInstance } from "class-transformer";
 import { commentController } from "../controllers/comment.controller";
 import { returnResult } from "../../kernel/util/return-result";
-import { COMMENT_NOT_FOUND, CREATE_COMMENT_FAILED, DELETE_COMMENT_FAILED, UPDATE_COMMENT_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIEVE_COMMENT_FAILED, COMMENT_NOT_FOUND, CREATE_COMMENT_FAILED, DELETE_COMMENT_FAILED, ENABLE_COMMENT_FAILED, UPDATE_COMMENT_FAILED } from "../../core/domain/constants/error.constant";
 
 export const commentRouter = Router();
 
@@ -56,3 +56,22 @@ commentRouter.delete("/:id", async (req: Request, res: Response, next: NextFunct
     }
 });
 
+// archieve comment
+commentRouter.put("/:id/archieve", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const commentResult = await commentControllerImpl.archieveComment(req, next);
+        returnResult(commentResult, ARCHIEVE_COMMENT_FAILED, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// enable comment
+commentRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const commentResult = await commentControllerImpl.enableComment(req, next);
+        returnResult(commentResult, ENABLE_COMMENT_FAILED, res, next);
+    } catch (err) {
+        next(err);
+    }
+});

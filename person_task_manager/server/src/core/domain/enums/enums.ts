@@ -23,3 +23,8 @@ export enum Status {
     pending = "PENDING",
     archived = "ARCHIVED",
 }
+
+export enum ActiveStatus {
+    active = "ACTIVE",
+    inactive = "INACTIVE",
+}

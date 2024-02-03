@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ActiveStatus } from "../enums/enums";
 
 export interface ISubTaskEntity extends Document {
     _id: string;
@@ -8,6 +9,7 @@ export interface ISubTaskEntity extends Document {
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    activeStatus: ActiveStatus;
 }
 
 export const subTaskSchema = new mongoose.Schema(
@@ -35,6 +37,11 @@ export const subTaskSchema = new mongoose.Schema(
         updatedAt: {
             type: Date,
             required: true,
+        },
+        activeStatus: {
+            type: String,
+            enum: Object.values(ActiveStatus),
+            default: ActiveStatus.active,
         },
     },
     {

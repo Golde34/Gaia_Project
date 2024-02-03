@@ -4,7 +4,7 @@ import { Permission } from "../../core/domain/enums/enums";
 import { RequestValidator } from "../../core/common/error-handler";
 import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/task.dto";
 import { taskController } from "../controllers/task.controller";
-import { COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIEVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
 import { returnResult } from "../../kernel/util/return-result";
 
 export const taskRouter = Router();
@@ -28,7 +28,7 @@ taskRouter.get("/",
 //get one task
 taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const taskResult = await taskControllerImpl .getTask(req, next);
+        const taskResult = await taskControllerImpl.getTask(req, next);
         return returnResult(taskResult, TASK_NOT_FOUND, res, next);
     }
     catch (err) {
@@ -130,6 +130,26 @@ taskRouter.put("/:id/move-task",
             next(err);
         }
     });
+
+// archieve task
+taskRouter.put("/:id/archieve", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const taskResult = await taskControllerImpl.archieveTask(req, next);
+        return returnResult(taskResult, ARCHIEVE_TASK_FAILED, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// archieve task
+taskRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const taskResult = await taskControllerImpl.enableTask(req, next);
+        return returnResult(taskResult, ENABLE_TASK_FAILED, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
 
 // create subtask
 
