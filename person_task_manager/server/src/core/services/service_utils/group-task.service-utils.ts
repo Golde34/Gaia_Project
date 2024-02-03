@@ -1,6 +1,10 @@
+import { GROUP_TASK_NOT_FOUND } from "../../domain/constants/error.constant";
 import { GroupTaskEntity, IGroupTaskEntity } from "../../domain/entities/group-task.entity";
 import { ProjectEntity } from "../../domain/entities/project.entity";
 import { TaskEntity } from "../../domain/entities/task.entity";
+import { Status } from "../../domain/enums/enums";
+import { groupTaskStore } from "../../store/group-task.store";
+import { projectStore } from "../../store/project.store";
 import { groupTaskValidation } from "../../validations/group-task.validation";
 
 const groupTaskValidationImpl = groupTaskValidation;
@@ -10,7 +14,7 @@ class GroupTaskServiceUtils {
 
     async getGroupTaskByStatus(projectId: string, status: string): Promise<IGroupTaskEntity[]> {
         try {
-            const groupTasks = await ProjectEntity.findOne({ _id: projectId }).populate('groupTasks');
+            const groupTasks = await projectStore.findOneProjectWithGroupTasks(projectId);
 
             const groupTasksByStatus: IGroupTaskEntity[] = [];
             groupTasks?.groupTasks.forEach((groupTask: any) => {
@@ -28,7 +32,7 @@ class GroupTaskServiceUtils {
 
     async getOtherGropuTasksByEnteredStatus(projectId: string, status: string): Promise<IGroupTaskEntity[]> {
         try {
-            const groupTasks = await ProjectEntity.findOne({ _id: projectId }).populate('groupTasks');
+            const groupTasks = await projectStore.findOneProjectWithGroupTasks(projectId);
 
             const groupTasksByStatus: IGroupTaskEntity[] = [];
             groupTasks?.groupTasks.forEach((groupTask: any) => {
@@ -48,9 +52,9 @@ class GroupTaskServiceUtils {
     async calculateTotalTasks(groupTaskId: string): Promise<IGroupTaskEntity> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
+                const groupTask = await groupTaskStore.findGroupTaskById(groupTaskId);
                 if (groupTask === null) {
-                    throw new Error('Group task not found');
+                    throw new Error(GROUP_TASK_NOT_FOUND);
                 } else {
                     const totalTasks = groupTask.tasks.length;
                     let completedTasks = 0;
@@ -58,7 +62,7 @@ class GroupTaskServiceUtils {
                         const taskId = groupTask.tasks[i];
                         const task = await TaskEntity.findOne({ _id: taskId });
                         if (task !== null) {
-                            if (task.status === 'DONE') {
+                            if (task.status === Status.done) {
                                 completedTasks++;
                             }
                         } else {
@@ -67,12 +71,12 @@ class GroupTaskServiceUtils {
                     }
                     groupTask.totalTasks = totalTasks;
                     groupTask.completedTasks = completedTasks;
-                    await groupTask.save();
+                    await groupTaskStore.updateGroupTask(groupTaskId, groupTask);
                    
                     return groupTask;
                 }
             }
-            throw new Error('Group task not found');
+            throw new Error(GROUP_TASK_NOT_FOUND);
         } catch (error: any) {
             console.log(error.message.toString());
             throw new Error(error.message.toString());

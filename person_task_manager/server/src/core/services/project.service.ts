@@ -1,8 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
-import { ProjectEntity } from "../domain/entities/project.entity";
-import { ActiveStatus, Status } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
@@ -99,8 +97,8 @@ class ProjectService {
         });
     }
 
-    async updateOrdinalNumber(projectId: string, groupTasks: string[]): Promise<IResponse> {
-        const updateProject = await projectStore.updateOrdinalNumberOfGroupTasks(projectId, groupTasks);
+    async updateGroupTaskIdListInProject(projectId: string, groupTasks: string[]): Promise<IResponse> {
+        const updateProject = await projectStore.updateGroupTaskIdListInProject(projectId, groupTasks);
 
         return msg200({
             message: (updateProject as any)
@@ -154,9 +152,7 @@ class ProjectService {
                 if (project === null) {
                     return msg400(PROJECT_NOT_FOUND);
                 } else {
-                    project.activeStatus = ActiveStatus.inactive;
-                    project.status = Status.archived;
-                    await projectStore.updateOneProject(projectId, project);
+                    await projectStore.archieveProject(projectId);
                     return msg200({
                         message: "Project archived"
                     });
@@ -174,8 +170,7 @@ class ProjectService {
                 if (project === null) {
                     return msg400(PROJECT_NOT_FOUND);
                 } else {
-                    project.activeStatus = ActiveStatus.active;
-                    await projectStore.updateOneProject(projectId, project);
+                    await projectStore.enableProject(projectId);
                     return msg200({
                         message: "Project enabled"
                     });
@@ -191,7 +186,7 @@ class ProjectService {
 
     async getProjectByGroupTaskId(groupTaskId: string): Promise<string> {
         try {
-            const project = await ProjectEntity.findOne({ groupTasks: groupTaskId });
+            const project = await projectStore.findOneProjectByGroupTaskId(groupTaskId); 
             if (project === null) {
                 return PROJECT_NOT_FOUND;
             } else {

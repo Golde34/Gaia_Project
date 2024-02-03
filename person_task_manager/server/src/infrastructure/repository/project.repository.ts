@@ -1,7 +1,7 @@
 import { DeleteResult } from "mongodb";
 import { IProjectEntity, ProjectEntity } from "../../core/domain/entities/project.entity";
 import { UpdateWriteOpResult } from "mongoose";
-import { ActiveStatus } from "../../core/domain/enums/enums";
+import { ActiveStatus, Status } from "../../core/domain/enums/enums";
 
 class ProjectRepository {
     constructor() { }
@@ -46,8 +46,13 @@ class ProjectRepository {
             .updateMany({ groupTasks: groupTaskId }, { $pull: { groupTasks: groupTaskId } });
     }
 
-    async updateOrdinalNumberOfGroupTasks(projectId: string, groupTasks: string[]): Promise<UpdateWriteOpResult> {
-        return await ProjectEntity.updateMany({ _id: projectId }, { groupTasks: groupTasks });
+    async pullGrouptaskFromProject(projectId: string, groupTaskId: string): Promise<UpdateWriteOpResult> {
+        return await ProjectEntity
+            .updateOne({ _id: projectId }, { $pull: { groupTasks: groupTaskId } });
+    }
+
+    async updateGroupTaskIdListInProject(projectId: string, groupTasks: string[]): Promise<UpdateWriteOpResult> {
+        return await ProjectEntity.updateOne({ _id: projectId }, { groupTasks: groupTasks });
     }
 
     async findOneActiveProjectById(projectId: string): Promise<IProjectEntity | null> {
@@ -61,8 +66,19 @@ class ProjectRepository {
     }
 
     async findOneProjectByGroupTaskId(groupTaskId: string): Promise<IProjectEntity | null> {
+        return await ProjectEntity.findOne({ groupTasks: groupTaskId })
+    }
+
+    async archieveProject(projectId: string): Promise<UpdateWriteOpResult> {
         return await ProjectEntity
-            .findOne({ groupTasks: groupTaskId })
+            .updateOne({ _id: projectId }, 
+                { activeStatus: ActiveStatus.inactive },
+                { status: Status.archived });
+    }
+
+    async enableProject(projectId: string): Promise<UpdateWriteOpResult> {
+        return await ProjectEntity
+            .updateOne({ _id: projectId }, { activeStatus: ActiveStatus.active });
     }
 }
 

@@ -3,6 +3,7 @@ import { msg200, msg400 } from "../common/response_helpers";
 import { COMMENT_NOT_FOUND } from "../domain/constants/error.constant";
 import { CommentEntity } from "../domain/entities/comment.entity";
 import { ActiveStatus } from "../domain/enums/enums";
+import { commentStore } from "../store/comment.store";
 import { commentValidation } from "../validations/comment.validation";
 import { taskService } from "./task.service";
 
@@ -15,7 +16,7 @@ class CommentService {
 
     async createComment(comment: any, taskId: string): Promise<IResponse> {
         try {
-            const createComment = await CommentEntity.create(comment);
+            const createComment = await commentStore.createComment(comment); 
             const commentId = (createComment as any)._id;
 
             if (await commentValidationImpl.checkExistedCommentInTask(commentId, taskId) === false) {
@@ -24,7 +25,7 @@ class CommentService {
                     message: (createComment as any)
                 });
             } else {
-                const deletedInitComment = await CommentEntity.deleteOne({ _id: commentId });
+                await commentStore.deleteComment(commentId);
                 return msg400('Comment is not created successfully');
             }
         } catch (error: any) {
@@ -35,7 +36,7 @@ class CommentService {
     async updateComment(commentId: string, comment: any): Promise<IResponse> {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
-                const updateComment = await CommentEntity.updateOne({ _id: commentId }, comment);
+                const updateComment = await commentStore.updateComment(commentId, comment);
 
                 return msg200({
                     message: (updateComment as any)
@@ -51,7 +52,7 @@ class CommentService {
     async deleteComment(commentId: string): Promise<IResponse> {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
-                const deleteComment = await CommentEntity.deleteOne({ _id: commentId });
+                const deleteComment = await commentStore.deleteComment(commentId);
                 taskServiceImpl.updateManyCommentsInTask(commentId);
 
                 return msg200({
@@ -66,7 +67,7 @@ class CommentService {
     }
 
     async getComment(commentId: string): Promise<IResponse> {
-        const comment = await CommentEntity.findOne({ _id: commentId });
+        const comment = await commentStore.findCommentById(commentId);
         return msg200({
             comment
         });
@@ -75,12 +76,11 @@ class CommentService {
     async archieveComment(commentId: string): Promise<IResponse | undefined> {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
-                const comment = await CommentEntity.findOne({ _id: commentId, activeStatus: ActiveStatus.active });
+                const comment = await commentStore.findActiveCommentById(commentId);
                 if (comment === null) {
                     return msg400(COMMENT_NOT_FOUND);
                 } else {
-                    comment.activeStatus = ActiveStatus.inactive;
-                    await comment.save();
+                    await commentStore.archieveComment(commentId);
                     return msg200({
                         message: "Comment archieved successfully"
                     });
@@ -94,12 +94,11 @@ class CommentService {
     async enableComment(commentId: string): Promise<IResponse | undefined> {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
-                const comment = await CommentEntity.findOne({ _id: commentId, activeStatus: ActiveStatus.inactive });
+                const comment = await commentStore.findInactiveCommentById(commentId);
                 if (comment === null) {
                     return msg400(COMMENT_NOT_FOUND);
                 } else {
-                    comment.activeStatus = ActiveStatus.active;
-                    await comment.save();
+                    await commentStore.enableComment(commentId);
                     return msg200({
                         message: "Comment enabled successfully"
                     });

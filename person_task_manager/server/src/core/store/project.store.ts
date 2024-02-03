@@ -38,8 +38,12 @@ class ProjectStore {
         return projectRepository.pullGroupTaskFromAllProjects(groupTaskId);
     }
 
-    async updateOrdinalNumberOfGroupTasks(projectId: string, groupTasks: string[]): Promise<UpdateWriteOpResult> {
-        return projectRepository.updateOrdinalNumberOfGroupTasks(projectId, groupTasks);
+    async pullGrouptaskFromProject(projectId: string, groupTaskId: string): Promise<UpdateWriteOpResult> {
+        return projectRepository.pullGrouptaskFromProject(projectId, groupTaskId);
+    }
+
+    async updateGroupTaskIdListInProject(projectId: string, groupTasks: string[]): Promise<UpdateWriteOpResult> {
+        return projectRepository.updateGroupTaskIdListInProject(projectId, groupTasks);
     }
 
     async findOneActiveProjectById(projectId: string): Promise<IProjectEntity | null> {
@@ -54,6 +58,13 @@ class ProjectStore {
         return projectRepository.findOneProjectByGroupTaskId(groupTaskId);
     }
 
+    async archieveProject(projectId: string): Promise<UpdateWriteOpResult> {
+        return projectRepository.archieveProject(projectId);
+    }
+
+    async enableProject(projectId: string): Promise<UpdateWriteOpResult> {
+        return projectRepository.enableProject(projectId);
+    }
 }
 
 export const projectStore = new ProjectStore();
