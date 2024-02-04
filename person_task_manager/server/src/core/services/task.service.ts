@@ -154,7 +154,18 @@ class TaskService {
             if (tasks === null) {
                 return msg400(TASK_NOT_FOUND);
             } else {
-                const topTasks = pushTopTask(tasks);
+                const topTasks: any[] = [];
+                for (let i = 0; i < tasks.length; i++) {
+                    const task = tasks[i];
+                    const groupTaskId = await groupTaskService.getGroupTaskByTaskId(task._id);
+                    const projectId = await projectService.getProjectByGroupTaskId(groupTaskId);
+
+                    topTasks.push({
+                        task,
+                        groupTaskId,
+                        projectId
+                    });
+                }
                 return msg200({ topTasks });
             }
         } catch (error: any) {
@@ -233,19 +244,3 @@ class TaskService {
 }
 
 export const taskService = new TaskService();
-
-async function pushTopTask(tasks: any): Promise<any> {
-    const topTasks: any[] = [];
-    for (let i = 0; i < tasks.length; i++) {
-        const task = tasks[i];
-        const groupTaskId = await groupTaskService.getGroupTaskByTaskId(task._id);
-        const projectId = await projectService.getProjectByGroupTaskId(groupTaskId);
-
-        topTasks.push({
-            task,
-            groupTaskId,
-            projectId
-        });
-    }
-    return topTasks;
-}
