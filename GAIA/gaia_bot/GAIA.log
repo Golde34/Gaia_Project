@@ -1,3 +1,7 @@
-2024-02-01 19:55:48,384 - root - INFO - Microservice is running
-2024-02-01 19:55:48,790 - root - INFO - Bot wakeup...
-2024-02-01 19:55:48,790 - root - INFO - Listen command
+2024-02-04 15:59:36,586 - root - INFO - Microservice is running
+2024-02-04 15:59:37,021 - root - INFO - Bot wakeup...
+2024-02-04 15:59:37,021 - root - INFO - Listen command
+2024-02-04 15:59:41,014 - root - INFO - Handle input
+2024-02-04 15:59:43,901 - root - INFO - Skill tag:Greeting
+2024-02-04 15:59:43,901 - root - INFO - Response transcript with skill: Greeting
+2024-02-04 15:59:43,901 - root - INFO - Listen command

@@ -16,6 +16,13 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 		return
 	}
 
+	// var graphQuery = models.GraphQLQuery{
+	// 	Functionname: "signin",
+	// 	QueryInput:   input,
+	// 	QueryOutput:  model.AuthTokenResponse{},
+	// }
+	// multipleQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", []models.GraphQLQuery{graphQuery})
+
 	var input = authService.SigninInput
 	input = request.SigninRequestDTOMapper(body)
 

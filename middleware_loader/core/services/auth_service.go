@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 
+	"middleware_loader/core/domain/dtos"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/services/base"
 	"middleware_loader/core/validator"
@@ -13,7 +14,7 @@ import (
 )
 
 type AuthService struct {
-	SigninInput model.SigninInput
+	SigninInput dtos.AuthDTO
 }
 
 func NewAuthService() *AuthService {

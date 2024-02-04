@@ -8,6 +8,8 @@ type Mutation {
     gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
+    # verfifyToken(input: TokenInput!): TokenResponse!
+    # createTask(input: CreateTaskInput!): Task!
 }
 
 ## Authentication Service
@@ -59,95 +61,102 @@ type User {
 #  user: User!
 #}
 #
-### Task Manager
-#
-#type Project {
-#  id: ID!
-#  name: String!
-#  description: String!
-#  status: String!
-#  color: String!
-#
-#  groupTasks: [GroupTask!]!
-#  owner: User!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#
-#type GroupTask {
-#  id: ID!
-#  title: String!
-#  description: String!
-#  priority: [String!]!
-#  status: String!
-#  ordinalNumber: Int!
-#
-#  project: Project!
-#  tasks: [Task!]!
-#  totalTasks: Int!
-#  totalTasksCompleted: Int!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#type Task {
-#  id: ID!
-#  title: String!
-#  description: String!
-#  priority: [String!]!
-#  status: String!
-#  startDate: String!
-#  deadline: String!
-#  duration: Int!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#
-#  groupTask: GroupTask!
-#  subTasks: [SubTask!]!
-#  comments: [Comment!]!
-#}
-#
-#type SubTask {
-#  id: ID!
-#  mission: String!
-#  deadline: String!
-#  priority: [String!]!
-#  status: String!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#
-#  task: Task!
-#}
-#
-#type Comment {
-#  id: ID!
-#  content: String!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#
-#  task: Task!
-#}
+
+## Task Manager
+
+type Project {
+  id: ID!
+  name: String!
+  description: String!
+  status: String!
+  color: String!
+  activeStatus: String!
+
+  groupTasks: [GroupTask!]!
+  owner: User!
+
+  createdAt: String!
+  updatedAt: String!
+}
+
+type GroupTask {
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  ordinalNumber: Int!
+  activeStatus: String!    
+
+  project: Project!
+  tasks: [Task!]!
+  totalTasks: Int!
+  completedTasks: Int!
+
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Task {
+ id: ID!
+ title: String!
+ description: String!
+ priority: [String!]!
+ status: String!
+ startDate: String!
+ deadline: String!
+ duration: Int!
+ activeStatus: String!
+
+ createdAt: String!
+ updatedAt: String!
+
+ groupTask: GroupTask!
+ subTasks: [SubTask!]!
+ comments: [Comment!]!
+}
+
+type SubTask {
+  id: ID!
+  mission: String!
+  deadline: String!
+  priority: [String!]!
+  status: String!
+  activeStatus: String!
+
+  createdAt: String!
+  updatedAt: String!
+
+  task: Task!
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  activeStatus: String!
+
+  createdAt: String!
+  updatedAt: String!
+
+  task: Task!
+}
 
 # Auth Objects
 input SigninInput {
-    username: String!
-    password: String!
+  username: String!
+  password: String!
 }
 
 type AuthTokenResponse {
-    accessToken: String!
-    refreshToken: String!
-    name: String!
-    username: String!
-    email: String!
-    lastLogin: String!
-    bossType: String!
-    role: String!
-    gaiaHealth: String!
+  accessToken: String!
+  refreshToken: String!
+  name: String!
+  username: String!
+  email: String!
+  lastLogin: String!
+  bossType: String!
+  role: String!
+  gaiaHealth: String!
 }
 
 input TokenInput {
