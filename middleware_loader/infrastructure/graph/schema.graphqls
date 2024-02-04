@@ -8,6 +8,8 @@ type Mutation {
     gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
+    # verfifyToken(input: TokenInput!): TokenResponse!
+    # createTask(input: CreateTaskInput!): Task!
 }
 
 ## Authentication Service

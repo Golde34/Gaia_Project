@@ -18,7 +18,6 @@ import (
 )
 
 func main() {
-	port := "4000"
 	cfg, _ := configs.LoadEnv()
 	clientUrl := cfg.ClientCORSAllowedUrl
 	router := chi.NewRouter()
@@ -68,6 +67,6 @@ func main() {
 		),
 	))
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port)
+	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))
 }
