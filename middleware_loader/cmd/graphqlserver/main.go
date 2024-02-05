@@ -49,11 +49,13 @@ func main() {
 	authService := services.NewAuthService()
 	middlewareService := services.NewMiddlewareService()
 	gaiaService := services.NewGaiaService()
+	taskService := services.NewTaskService()
 
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
 	routers.NewGaiaRouter(gaiaService, router)
 	routers.NewMiddlewareRouter(middlewareService, router)
+	routers.NewTaskRouter(taskService, router)
 
 	// GRAPHQL
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))

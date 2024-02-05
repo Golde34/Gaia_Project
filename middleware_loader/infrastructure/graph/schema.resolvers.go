@@ -8,12 +8,11 @@ import (
 	"context"
 	"fmt"
 	"middleware_loader/core/services"
-	taskservice "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
 )
 
 var authService = services.NewAuthService()
-var taskService = taskservice.NewTaskService()
+var taskService = services.NewTaskService()
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
