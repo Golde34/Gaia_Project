@@ -1,7 +1,5 @@
 import { priorityOrder } from "../../../kernel/util/order-enums";
-import { GroupTaskEntity } from "../../domain/entities/group-task.entity";
-import { ITaskEntity, TaskEntity } from "../../domain/entities/task.entity";
-import { ActiveStatus } from "../../domain/enums/enums";
+import { ITaskEntity } from "../../domain/entities/task.entity";
 import { groupTaskStore } from "../../store/group-task.store";
 import { taskStore } from "../../store/task.store";
 
