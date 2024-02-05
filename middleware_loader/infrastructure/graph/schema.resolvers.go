@@ -8,10 +8,12 @@ import (
 	"context"
 	"fmt"
 	"middleware_loader/core/services"
+	taskservice "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
 )
 
 var authService = services.NewAuthService()
+var taskService = taskservice.NewTaskService()
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
@@ -32,6 +34,16 @@ func (r *mutationResolver) CheckToken(ctx context.Context, input model.TokenInpu
 // CheckPermission is the resolver for the checkPermission field.
 func (r *mutationResolver) CheckPermission(ctx context.Context, input model.UserPermissionInput) (*model.UserPermissionResponse, error) {
 	panic(fmt.Errorf("not implemented: CheckPermission - checkPermission"))
+}
+
+// CreateProject is the resolver for the createProject field.
+func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: CreateProject - createProject"))
+}
+
+// CreateTask is the resolver for the createTask field.
+func (r *mutationResolver) CreateTask(ctx context.Context, input model.CreateTaskInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: CreateTask - createTask"))
 }
 
 // User is the resolver for the user field.

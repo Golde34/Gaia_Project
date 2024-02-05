@@ -14,9 +14,95 @@ type AuthTokenResponse struct {
 	GaiaHealth   string `json:"gaiaHealth"`
 }
 
+type Comment struct {
+	ID           string `json:"id"`
+	Content      string `json:"content"`
+	ActiveStatus string `json:"activeStatus"`
+	CreatedAt    string `json:"createdAt"`
+	UpdatedAt    string `json:"updatedAt"`
+	Task         *Task  `json:"task"`
+}
+
+type CreateProjectInput struct {
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Status       string `json:"status"`
+	Owner        string `json:"owner"`
+	ActiveStatus string `json:"activeStatus"`
+}
+
+type CreateTaskInput struct {
+	Title        string    `json:"title"`
+	Description  *string   `json:"description,omitempty"`
+	Priority     []*string `json:"priority,omitempty"`
+	Status       *string   `json:"status,omitempty"`
+	StartDate    *string   `json:"startDate,omitempty"`
+	Deadline     *string   `json:"deadline,omitempty"`
+	Duration     *int      `json:"duration,omitempty"`
+	ActiveStatus *string   `json:"activeStatus,omitempty"`
+}
+
+type GroupTask struct {
+	ID             string   `json:"id"`
+	Title          string   `json:"title"`
+	Description    string   `json:"description"`
+	Priority       []string `json:"priority"`
+	Status         string   `json:"status"`
+	OrdinalNumber  int      `json:"ordinalNumber"`
+	ActiveStatus   string   `json:"activeStatus"`
+	Project        *Project `json:"project"`
+	Tasks          []*Task  `json:"tasks"`
+	TotalTasks     int      `json:"totalTasks"`
+	CompletedTasks int      `json:"completedTasks"`
+	CreatedAt      string   `json:"createdAt"`
+	UpdatedAt      string   `json:"updatedAt"`
+}
+
+type Project struct {
+	ID           string       `json:"id"`
+	Name         string       `json:"name"`
+	Description  string       `json:"description"`
+	Status       string       `json:"status"`
+	Color        string       `json:"color"`
+	ActiveStatus string       `json:"activeStatus"`
+	GroupTasks   []*GroupTask `json:"groupTasks"`
+	Owner        *User        `json:"owner"`
+	CreatedAt    string       `json:"createdAt"`
+	UpdatedAt    string       `json:"updatedAt"`
+}
+
 type SigninInput struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type SubTask struct {
+	ID           string   `json:"id"`
+	Mission      string   `json:"mission"`
+	Deadline     string   `json:"deadline"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	ActiveStatus string   `json:"activeStatus"`
+	CreatedAt    string   `json:"createdAt"`
+	UpdatedAt    string   `json:"updatedAt"`
+	Task         *Task    `json:"task"`
+}
+
+type Task struct {
+	ID           string     `json:"id"`
+	Title        string     `json:"title"`
+	Description  string     `json:"description"`
+	Priority     []string   `json:"priority"`
+	Status       string     `json:"status"`
+	StartDate    string     `json:"startDate"`
+	Deadline     string     `json:"deadline"`
+	Duration     int        `json:"duration"`
+	ActiveStatus string     `json:"activeStatus"`
+	CreatedAt    string     `json:"createdAt"`
+	UpdatedAt    string     `json:"updatedAt"`
+	GroupTask    *GroupTask `json:"groupTask"`
+	SubTasks     []*SubTask `json:"subTasks"`
+	Comments     []*Comment `json:"comments"`
 }
 
 type TokenInput struct {
