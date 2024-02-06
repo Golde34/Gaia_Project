@@ -4,14 +4,17 @@ type Query {
 }
 
 type Mutation {
+    # Authentication Service
     signin(input: SigninInput!): AuthTokenResponse!
     gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
-    # verfifyToken(input: TokenInput!): TokenResponse!
-    # createTask(input: CreateTaskInput!): Task!
+    # Task Manager
+    createProject(input: CreateProjectInput!): Project!
+    createTask(input: CreateTaskInput!): Task!
 }
 
+### Entity
 ## Authentication Service
 
 type User {
@@ -141,7 +144,9 @@ type Comment {
   task: Task!
 }
 
-# Auth Objects
+
+### Request/Response
+## Auth Objects
 input SigninInput {
   username: String!
   password: String!
@@ -178,4 +183,24 @@ input UserPermissionInput {
 type UserPermissionResponse {
   id: ID!
   name: String!
+}
+
+# Task Manager Objects
+input CreateTaskInput {
+  title: String!
+  description: String
+  priority: [String]
+  status: String
+  startDate: String
+  deadline: String
+  duration: Int
+  activeStatus: String
+}
+
+input CreateProjectInput {
+  name: String!
+  description: String!
+  status: String!
+  owner: String!
+  activeStatus: String!
 }
