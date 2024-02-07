@@ -32,7 +32,7 @@ class TaskController {
 
     async createTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
             const groupTaskId = bodyJson.groupTaskId;

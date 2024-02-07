@@ -10,4 +10,5 @@ import (
 
 type Resolver struct{
 	AuthService service_registry.AuthService
+	TaskService service_registry.TaskService
 }

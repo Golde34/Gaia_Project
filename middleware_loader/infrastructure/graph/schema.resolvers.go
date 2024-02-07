@@ -7,12 +7,11 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
 
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
@@ -42,7 +41,9 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.Create
 
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input model.CreateTaskInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: CreateTask - createTask"))
+	log.Print("CreateTask resolver called")
+	task, err := taskService.CreateTask(ctx, input)
+	return &task, err
 }
 
 // User is the resolver for the user field.
@@ -63,3 +64,43 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) Task(ctx context.Context) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: Task - task"))
+}
+func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
+	panic(fmt.Errorf("not implemented: Tasks - tasks"))
+}
+func (r *queryResolver) Project(ctx context.Context) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: Project - project"))
+}
+func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
+	panic(fmt.Errorf("not implemented: Projects - projects"))
+}
+func (r *queryResolver) GroupTask(ctx context.Context) (*model.GroupTask, error) {
+	panic(fmt.Errorf("not implemented: GroupTask - groupTask"))
+}
+func (r *queryResolver) GroupTasks(ctx context.Context) ([]*model.GroupTask, error) {
+	panic(fmt.Errorf("not implemented: GroupTasks - groupTasks"))
+}
+func (r *queryResolver) SubTask(ctx context.Context) (*model.SubTask, error) {
+	panic(fmt.Errorf("not implemented: SubTask - subTask"))
+}
+func (r *queryResolver) SubTasks(ctx context.Context) ([]*model.SubTask, error) {
+	panic(fmt.Errorf("not implemented: SubTasks - subTasks"))
+}
+func (r *queryResolver) Comment(ctx context.Context) (*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: Comment - comment"))
+}
+func (r *queryResolver) Comments(ctx context.Context) ([]*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: Comments - comments"))
+}
+
+var authService = services.NewAuthService()
+var taskService = services.NewTaskService()

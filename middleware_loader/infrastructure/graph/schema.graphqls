@@ -108,15 +108,15 @@ type Task {
  status: String!
  startDate: String!
  deadline: String!
- duration: Int!
+ duration: String!
  activeStatus: String!
 
  createdAt: String!
  updatedAt: String!
 
- groupTask: GroupTask!
- subTasks: [SubTask!]!
- comments: [Comment!]!
+ groupTask: String!
+ subTasks: [String!]!
+ comments: [String!]!
 }
 
 type SubTask {
@@ -188,13 +188,13 @@ type UserPermissionResponse {
 # Task Manager Objects
 input CreateTaskInput {
   title: String!
-  description: String
-  priority: [String]
-  status: String
-  startDate: String
-  deadline: String
-  duration: Int
-  activeStatus: String
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
 }
 
 input CreateProjectInput {

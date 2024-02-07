@@ -32,14 +32,14 @@ type CreateProjectInput struct {
 }
 
 type CreateTaskInput struct {
-	Title        string    `json:"title"`
-	Description  *string   `json:"description,omitempty"`
-	Priority     []*string `json:"priority,omitempty"`
-	Status       *string   `json:"status,omitempty"`
-	StartDate    *string   `json:"startDate,omitempty"`
-	Deadline     *string   `json:"deadline,omitempty"`
-	Duration     *int      `json:"duration,omitempty"`
-	ActiveStatus *string   `json:"activeStatus,omitempty"`
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
 }
 
 type GroupTask struct {
@@ -89,20 +89,20 @@ type SubTask struct {
 }
 
 type Task struct {
-	ID           string     `json:"id"`
-	Title        string     `json:"title"`
-	Description  string     `json:"description"`
-	Priority     []string   `json:"priority"`
-	Status       string     `json:"status"`
-	StartDate    string     `json:"startDate"`
-	Deadline     string     `json:"deadline"`
-	Duration     int        `json:"duration"`
-	ActiveStatus string     `json:"activeStatus"`
-	CreatedAt    string     `json:"createdAt"`
-	UpdatedAt    string     `json:"updatedAt"`
-	GroupTask    *GroupTask `json:"groupTask"`
-	SubTasks     []*SubTask `json:"subTasks"`
-	Comments     []*Comment `json:"comments"`
+	ID           string   `json:"id"`
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
+	CreatedAt    string   `json:"createdAt"`
+	UpdatedAt    string   `json:"updatedAt"`
+	GroupTask    string   `json:"groupTask"`
+	SubTasks     []string `json:"subTasks"`
+	Comments     []string `json:"comments"`
 }
 
 type TokenInput struct {
