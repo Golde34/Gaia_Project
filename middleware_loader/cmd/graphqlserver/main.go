@@ -64,6 +64,7 @@ func main() {
 			graph.Config{
 				Resolvers: &graph.Resolver{
 					AuthService: authService,
+					TaskService: taskService,
 				},
 			},
 		),

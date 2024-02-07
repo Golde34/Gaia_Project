@@ -26,6 +26,9 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     comments?: string[];
+    @IsString()
+    @IsOptional()
+    activeStatus?: string;
 }
 
 export class GenerateTaskFromScratchRequestDTO {

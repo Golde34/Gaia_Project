@@ -12,6 +12,7 @@ import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL,
 
 const portName = {
     taskManager: 'taskManagerPort',
+    middleware: 'middlewarePort'
 }
 
 export const getTaskList = (groupTaskId) => async (dispatch) => {
@@ -53,7 +54,7 @@ export const createTask = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest('/task/create', HttpMethods.POST, portName.taskManager, task);
+        const { data } = await serverRequest('/task/create', HttpMethods.POST, portName.middleware, task);
         dispatch({ type: TASK_CREATE_SUCCESS, payload: data.message });
     } catch (error) {
         dispatch({

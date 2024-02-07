@@ -15,7 +15,7 @@ type TaskRouter struct {
 
 func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
 	r.Route("/task", func(r chi.Router) {
-		r.Post("/create-task", func(w http.ResponseWriter, r *http.Request) {
+		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CreateTask(w, r, taskService)
 		})
 	})

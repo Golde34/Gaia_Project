@@ -72,7 +72,7 @@ export class ErrorHandler {
 export class RequestValidator {
     static validate = <T extends object>(classInstance: ClassConstructor<T>) => {
         return async (req: Request, res: Response, next: NextFunction) => {
-            const convertObject = plainToInstance(classInstance, req.body.body);
+            const convertObject = plainToInstance(classInstance, req.body);
             await validate(convertObject).then((errors) => {
                 if (errors.length > 0) {
                     let rawErrors: string[] = [];
