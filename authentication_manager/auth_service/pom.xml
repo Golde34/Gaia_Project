@@ -10,7 +10,7 @@
     </parent>
     <groupId>service</groupId>
     <artifactId>auth_service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>auth_service</name>
     <description>auth_service</description>
     <properties>
