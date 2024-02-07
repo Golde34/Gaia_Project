@@ -9,6 +9,7 @@ import (
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/configs"
+	"strings"
 )
 
 type TaskService struct {
@@ -29,6 +30,8 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 		return model.Task{}, err
 	}
 	log.Println("Validation passed!")
+
+	input.Priority = ConvertStringToArray(input.Priority)
 
 	taskManagerServiceURL := taskManagerEnv.Url + taskManagerEnv.TaskManagerPort + "/task/create"
 	log.Printf("TaskManagerServiceURL: %v", taskManagerServiceURL)
@@ -69,4 +72,14 @@ func (s *TaskService) CallTaskManagerService(input model.CreateTaskInput) (model
 	}
 
 	return task, nil
+}
+
+func ConvertStringToArray(input []string) []string {
+    if len(input) == 0 {
+        return nil
+    }
+    stringComponent := input[0]
+    stringComponent = strings.Trim(stringComponent, "[]")
+    listComponent := strings.Fields(stringComponent)
+    return listComponent
 }

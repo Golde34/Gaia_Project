@@ -195,6 +195,7 @@ input CreateTaskInput {
   deadline: String!
   duration: String!
   activeStatus: String!
+  groupTaskId: String!
 }
 
 input CreateProjectInput {

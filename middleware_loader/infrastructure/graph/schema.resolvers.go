@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"fmt"
-	"log"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
@@ -41,7 +40,6 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.Create
 
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input model.CreateTaskInput) (*model.Task, error) {
-	log.Print("CreateTask resolver called")
 	task, err := taskService.CreateTask(ctx, input)
 	return &task, err
 }

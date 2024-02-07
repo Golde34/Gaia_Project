@@ -40,6 +40,7 @@ type CreateTaskInput struct {
 	Deadline     string   `json:"deadline"`
 	Duration     string   `json:"duration"`
 	ActiveStatus string   `json:"activeStatus"`
+	GroupTaskID  string   `json:"groupTaskId"`
 }
 
 type GroupTask struct {

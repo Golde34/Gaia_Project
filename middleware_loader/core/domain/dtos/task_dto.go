@@ -15,6 +15,7 @@ type CreateTaskDTO struct {
 	Deadline     string   `json:"deadline"`
 	Duration     string   `json:"duration"`
 	ActiveStatus string   `json:"activeStatus"`
+	GroupTaskId  string   `json:"groupTaskId"`
 }
 
 func NewCreateTaskDTO() *CreateTaskDTO {

@@ -65,6 +65,7 @@ export const CreateTaskDialog = (props) => {
         if (duration === 0) {
             task.duration = defaultDuration.toString();
         }
+        task.activeStatus = 'ACTIVE';
 
         initiateTaskDispatch(projectId, task);
         

@@ -37,17 +37,18 @@ taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): 
 });
 
 // create task
-// taskRouter.post("/create",
-//     RequestValidator.validate(TaskRequestDto),
-//     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//         try {
-//             const taskResult = await taskControllerImpl.createTask(req, next);
-//             return returnResult(taskResult, CREATE_TASK_FAILED, res, next);
-//         }
-//         catch (err) {
-//             next(err);
-//         }
-//     });
+taskRouter.post("/create",
+    RequestValidator.validate(TaskRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            console.log(req.body)
+            const taskResult = await taskControllerImpl.createTask(req, next);
+            return returnResult(taskResult, CREATE_TASK_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // update task
 taskRouter.put("/:id",

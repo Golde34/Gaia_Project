@@ -7176,7 +7176,7 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "description", "priority", "status", "startDate", "deadline", "duration", "activeStatus"}
+	fieldsInOrder := [...]string{"title", "description", "priority", "status", "startDate", "deadline", "duration", "activeStatus", "groupTaskId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7239,6 +7239,13 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.ActiveStatus = data
+		case "groupTaskId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groupTaskId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GroupTaskID = data
 		}
 	}
 
