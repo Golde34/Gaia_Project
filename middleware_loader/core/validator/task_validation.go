@@ -9,6 +9,7 @@ import (
 
 type TaskValidator struct {
 	CreateTaskRequestDTO request_dtos.CreateTaskRequestDTO
+	UpdateTaskRequestDTO request_dtos.UpdateTaskRequestDTO
 }
 
 func NewCreateTaskDTOValidator() *TaskValidator {
@@ -16,6 +17,14 @@ func NewCreateTaskDTOValidator() *TaskValidator {
 }
 
 func (in *TaskValidator) CreateTaskValidate(input model.CreateTaskInput) error {
+	if input.Title == "" {
+		return fmt.Errorf("%w: title is required", enums.ErrValidation)
+	}
+
+	return nil
+}
+
+func (in *TaskValidator) UpdateTaskValidate(input model.UpdateTaskInput) error {
 	if input.Title == "" {
 		return fmt.Errorf("%w: title is required", enums.ErrValidation)
 	}

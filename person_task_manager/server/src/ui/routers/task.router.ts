@@ -41,7 +41,7 @@ taskRouter.post("/create",
     RequestValidator.validate(TaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-             const taskResult = await taskControllerImpl.createTask(req, next);
+            const taskResult = await taskControllerImpl.createTask(req, next);
             return returnResult(taskResult, CREATE_TASK_FAILED, res, next);
         }
         catch (err) {

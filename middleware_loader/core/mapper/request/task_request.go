@@ -3,8 +3,16 @@ package mapper
 import (
 	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
+	"middleware_loader/infrastructure/graph/model"
 	// "github.com/mitchellh/mapstructure"
 )
+
+func GetToken(body map[string]interface{}) model.TokenInput {
+	var input model.TokenInput
+	bodyMap := body["body"].(map[string]interface{})
+	input.Token = bodyMap["accessToken"].(string)
+	return input
+}
 
 func CreateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.CreateTaskRequestDTO {
 	var input request_dtos.CreateTaskRequestDTO
@@ -19,6 +27,22 @@ func CreateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Create
 	input.GroupTaskId = bodyMap["groupTaskId"].(string)
 	input.Priority = ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
 	
+	return input
+}
+
+func UpdateTaskRequestDTOMapper(body map[string]interface{}, taskId string) request_dtos.UpdateTaskRequestDTO {
+	var input request_dtos.UpdateTaskRequestDTO
+	bodyMap := body["body"].(map[string]interface{})
+	input.Title = bodyMap["title"].(string)
+	input.Description = bodyMap["description"].(string)
+	input.Status = bodyMap["status"].(string)
+	input.StartDate = bodyMap["startDate"].(string)
+	input.Deadline = bodyMap["deadline"].(string)
+	input.Duration = bodyMap["duration"].(string)
+	input.ActiveStatus = bodyMap["activeStatus"].(string)
+	input.Priority = ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.TaskId = taskId
+
 	return input
 }
 

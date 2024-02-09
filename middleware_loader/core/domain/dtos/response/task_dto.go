@@ -6,7 +6,7 @@ import (
 	"github.com/devfeel/mapper"
 )
 
-type CreateTaskResponseDTO struct {
+type TaskResponseDTO struct {
 	ID           string   `json:"id"`
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
@@ -25,14 +25,13 @@ type CreateTaskResponseDTO struct {
 	Comments    []string `json:"comments"`
 }
 
-func NewCreateTaskResponseDTO() *CreateTaskResponseDTO {
-	return &CreateTaskResponseDTO{}
+func NewCreateTaskResponseDTO() *TaskResponseDTO {
+	return &TaskResponseDTO{}
 }
 
 // mapper from dto to graphql model
-func (in *CreateTaskResponseDTO) MapperToGraphQLModel(input CreateTaskResponseDTO) model.Task{
+func (in *TaskResponseDTO) MapperToGraphQLModel(input TaskResponseDTO) model.Task{
 	var out model.Task
 	mapper.AutoMapper(&input, &out)
 	return out
 }
-

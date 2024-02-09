@@ -11,6 +11,7 @@ import (
 
 type TaskAdapter struct {
 	CreateTaskRequestDTO request_dtos.CreateTaskRequestDTO
+	UpdateTaskRequestDTO request_dtos.UpdateTaskRequestDTO
 }
 
 func NewTaskAdapter() *TaskAdapter {
@@ -21,19 +22,37 @@ var taskConfig = configs.Config{}
 var taskManagerEnv, _ = taskConfig.LoadEnv()
 var taskManagerServiceURL = taskManagerEnv.Url + taskManagerEnv.TaskManagerPort
 
-func CreateTask(input model.CreateTaskInput) (response_dtos.CreateTaskResponseDTO, error) {
+func CreateTask(input model.CreateTaskInput) (response_dtos.TaskResponseDTO, error) {
 	createTaskURL := taskManagerServiceURL + "/task/create"
-	var task response_dtos.CreateTaskResponseDTO	
+	var task response_dtos.TaskResponseDTO	
 	
 	bodyResult, err := base.BaseAPI(createTaskURL, "POST", input)
 	if err != nil {
-		return response_dtos.CreateTaskResponseDTO{}, err
+		return response_dtos.TaskResponseDTO{}, err
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
 	err = json.Unmarshal(dataBytes, &task)
 	if err != nil {
-		return response_dtos.CreateTaskResponseDTO{}, err
+		return response_dtos.TaskResponseDTO{}, err
+	}
+
+	return task, nil
+}
+
+func UpdateTask(input model.UpdateTaskInput, id string) (response_dtos.TaskResponseDTO, error) {
+	updateTaskURL := taskManagerServiceURL + "/task/" + id + "/update"
+	var task response_dtos.TaskResponseDTO
+
+	bodyResult, err := base.BaseAPI(updateTaskURL, "PUT", input)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
+	}
+
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	err = json.Unmarshal(dataBytes, &task)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
 	}
 
 	return task, nil

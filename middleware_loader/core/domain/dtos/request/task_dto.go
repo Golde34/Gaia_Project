@@ -26,3 +26,24 @@ func NewCreateTaskRequestDTO() *CreateTaskRequestDTO {
 func (in *CreateTaskRequestDTO) MapperToModel(input model.CreateTaskInput) {
 	mapper.AutoMapper(&input , in)
 }
+
+type UpdateTaskRequestDTO struct {
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
+	TaskId       string   `json:"taskId"`
+}
+
+func NewUpdateTaskRequestDTO() *UpdateTaskRequestDTO {
+	return &UpdateTaskRequestDTO{}
+}
+
+// mapper from graphql model to dto
+func (in *UpdateTaskRequestDTO) MapperToModel(input model.UpdateTaskInput) {
+	mapper.AutoMapper(&input , in)
+}
