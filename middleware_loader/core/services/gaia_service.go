@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"middleware_loader/core/services/base"
+	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/configs"
 )
@@ -15,7 +15,8 @@ func NewGaiaService() *GaiaService {
 	return &GaiaService{}
 }
 
-var gaiaEnv, _ = configs.LoadEnv()
+var config = configs.Config{}
+var gaiaEnv, _ = config.LoadEnv()
 
 func (s *GaiaService) GaiaConnect() (interface{}, error) {
 	log.Println("GaiaConnect")

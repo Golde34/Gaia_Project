@@ -101,22 +101,22 @@ type GroupTask {
 }
 
 type Task {
- id: ID!
- title: String!
- description: String!
- priority: [String!]!
- status: String!
- startDate: String!
- deadline: String!
- duration: String!
- activeStatus: String!
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
 
- createdAt: String!
- updatedAt: String!
+  createdAt: String!
+  updatedAt: String!
 
- groupTask: String!
- subTasks: [String!]!
- comments: [String!]!
+  groupTask: String!
+  subTasks: [String!]!
+  comments: [String!]!
 }
 
 type SubTask {

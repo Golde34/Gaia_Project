@@ -1,25 +1,25 @@
 package controller_services
 
 import (
-	"encoding/json"
-	"log"
-	"middleware_loader/core/domain/dtos/request"
+	mapper "middleware_loader/core/mapper/request"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
+	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
 )
 
 func CreateTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
 	var body map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Println(body)
-	var input = taskService.CreateTaskInput
-	input = request.CreateTaskRequestDTOMapper(body)
-	log.Println(input)
+
+	var input = taskService.CreateTaskRequestDTO
+	input = mapper.CreateTaskRequestDTOMapper(body)
+	
 	query := utils.GenerateGraphQLQueryWithInput("mutation", "createTask", input, model.Task{})
 	utils.ConnectToGraphQLServer(w, query)
 }

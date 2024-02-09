@@ -1,4 +1,4 @@
-package dtos
+package request_dtos
 
 import (
 	"middleware_loader/infrastructure/graph/model"
@@ -6,7 +6,7 @@ import (
 	"github.com/devfeel/mapper"
 )
 
-type CreateTaskDTO struct {
+type CreateTaskRequestDTO struct {
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
 	Priority     []string `json:"priority"`
@@ -18,11 +18,11 @@ type CreateTaskDTO struct {
 	GroupTaskId  string   `json:"groupTaskId"`
 }
 
-func NewCreateTaskDTO() *CreateTaskDTO {
-	return &CreateTaskDTO{}
+func NewCreateTaskRequestDTO() *CreateTaskRequestDTO {
+	return &CreateTaskRequestDTO{}
 }
 
 // mapper from graphql model to dto
-func (in *CreateTaskDTO) MapperToModel(input model.CreateTaskInput) {
+func (in *CreateTaskRequestDTO) MapperToModel(input model.CreateTaskInput) {
 	mapper.AutoMapper(&input , in)
 }

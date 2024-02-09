@@ -18,7 +18,8 @@ import (
 )
 
 func main() {
-	cfg, _ := configs.LoadEnv()
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
 	clientUrl := cfg.ClientCORSAllowedUrl
 	router := chi.NewRouter()
 
@@ -63,8 +64,8 @@ func main() {
 		graph.NewExecutableSchema(
 			graph.Config{
 				Resolvers: &graph.Resolver{
-					AuthService: authService,
-					TaskService: taskService,
+					AuthGraphQLService: authService,
+					TaskGraphQLService: taskService,
 				},
 			},
 		),

@@ -5,16 +5,17 @@ import (
 	"encoding/json"
 	"log"
 
-	"middleware_loader/core/domain/dtos"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/enums"
-	"middleware_loader/core/services/base"
+
 	"middleware_loader/core/validator"
+	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/configs"
 )
 
 type AuthService struct {
-	SigninInput dtos.AuthDTO
+	SigninInput request_dtos.AuthDTO
 }
 
 func NewAuthService() *AuthService {
@@ -22,7 +23,8 @@ func NewAuthService() *AuthService {
 }
 
 var authValidator = validator.NewAuthDTOValidator()
-var authEnv, _ = configs.LoadEnv()
+var authConfig = configs.Config{}
+var authEnv, _ = authConfig.LoadEnv()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)

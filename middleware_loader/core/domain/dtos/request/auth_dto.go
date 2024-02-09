@@ -1,4 +1,4 @@
-package dtos
+package request_dtos
 
 import (
 	"middleware_loader/infrastructure/graph/model"
