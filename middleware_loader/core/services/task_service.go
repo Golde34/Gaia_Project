@@ -35,7 +35,7 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 
 	input.Priority = ConvertStringToArray(input.Priority)
 
-	task, err := adapter.CreateTask(input)
+	task, err := adapter.NewTaskAdapter().CreateTask(input)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -54,7 +54,7 @@ func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInpu
 	input.Priority = ConvertStringToArray(input.Priority)
 	taskId := input.TaskID
 
-	task, err := adapter.UpdateTask(input, taskId)
+	task, err := adapter.NewTaskAdapter().UpdateTask(input, taskId)
 	if err != nil {
 		return model.Task{}, err
 	} else {

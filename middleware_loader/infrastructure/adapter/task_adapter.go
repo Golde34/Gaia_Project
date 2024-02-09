@@ -22,7 +22,7 @@ var taskConfig = configs.Config{}
 var taskManagerEnv, _ = taskConfig.LoadEnv()
 var taskManagerServiceURL = taskManagerEnv.Url + taskManagerEnv.TaskManagerPort
 
-func CreateTask(input model.CreateTaskInput) (response_dtos.TaskResponseDTO, error) {
+func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dtos.TaskResponseDTO, error) {
 	createTaskURL := taskManagerServiceURL + "/task/create"
 	var task response_dtos.TaskResponseDTO	
 	
@@ -40,7 +40,7 @@ func CreateTask(input model.CreateTaskInput) (response_dtos.TaskResponseDTO, err
 	return task, nil
 }
 
-func UpdateTask(input model.UpdateTaskInput, id string) (response_dtos.TaskResponseDTO, error) {
+func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (response_dtos.TaskResponseDTO, error) {
 	updateTaskURL := taskManagerServiceURL + "/task/" + id + "/update"
 	var task response_dtos.TaskResponseDTO
 
