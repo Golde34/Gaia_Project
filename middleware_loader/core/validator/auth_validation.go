@@ -3,13 +3,13 @@ package validator
 import (
 	"fmt"
 
-	"middleware_loader/core/domain/dtos"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/infrastructure/graph/model"
 )
 
 type AuthValidator struct {
-	AuthDTO dtos.AuthDTO
+	AuthDTO request_dtos.AuthDTO
 }
 
 func NewAuthDTOValidator() *AuthValidator {

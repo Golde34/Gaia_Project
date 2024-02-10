@@ -12,6 +12,7 @@ type Mutation {
     # Task Manager
     createProject(input: CreateProjectInput!): Project!
     createTask(input: CreateTaskInput!): Task!
+    updateTask(input: UpdateTaskInput!): Task!
 }
 
 ### Entity
@@ -101,22 +102,22 @@ type GroupTask {
 }
 
 type Task {
- id: ID!
- title: String!
- description: String!
- priority: [String!]!
- status: String!
- startDate: String!
- deadline: String!
- duration: String!
- activeStatus: String!
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
 
- createdAt: String!
- updatedAt: String!
+  createdAt: String!
+  updatedAt: String!
 
- groupTask: String!
- subTasks: [String!]!
- comments: [String!]!
+  groupTask: String!
+  subTasks: [String!]!
+  comments: [String!]!
 }
 
 type SubTask {
@@ -196,6 +197,19 @@ input CreateTaskInput {
   duration: String!
   activeStatus: String!
   groupTaskId: String!
+}
+
+input UpdateTaskInput {
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
+  taskId: String!
 }
 
 input CreateProjectInput {

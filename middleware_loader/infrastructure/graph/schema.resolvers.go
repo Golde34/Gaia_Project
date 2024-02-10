@@ -44,6 +44,12 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input model.CreateTas
 	return &task, err
 }
 
+// UpdateTask is the resolver for the updateTask field.
+func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTaskInput) (*model.Task, error) {
+	task, err := taskService.UpdateTask(ctx, input)
+	return &task, err
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: User - user"))
@@ -69,36 +75,5 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) Task(ctx context.Context) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: Task - task"))
-}
-func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
-	panic(fmt.Errorf("not implemented: Tasks - tasks"))
-}
-func (r *queryResolver) Project(ctx context.Context) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: Project - project"))
-}
-func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
-	panic(fmt.Errorf("not implemented: Projects - projects"))
-}
-func (r *queryResolver) GroupTask(ctx context.Context) (*model.GroupTask, error) {
-	panic(fmt.Errorf("not implemented: GroupTask - groupTask"))
-}
-func (r *queryResolver) GroupTasks(ctx context.Context) ([]*model.GroupTask, error) {
-	panic(fmt.Errorf("not implemented: GroupTasks - groupTasks"))
-}
-func (r *queryResolver) SubTask(ctx context.Context) (*model.SubTask, error) {
-	panic(fmt.Errorf("not implemented: SubTask - subTask"))
-}
-func (r *queryResolver) SubTasks(ctx context.Context) ([]*model.SubTask, error) {
-	panic(fmt.Errorf("not implemented: SubTasks - subTasks"))
-}
-func (r *queryResolver) Comment(ctx context.Context) (*model.Comment, error) {
-	panic(fmt.Errorf("not implemented: Comment - comment"))
-}
-func (r *queryResolver) Comments(ctx context.Context) ([]*model.Comment, error) {
-	panic(fmt.Errorf("not implemented: Comments - comments"))
-}
-
 var authService = services.NewAuthService()
 var taskService = services.NewTaskService()

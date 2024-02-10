@@ -2,18 +2,20 @@ package services
 
 import (
 	"context"
-	"encoding/json"
 	"log"
-	"middleware_loader/core/domain/dtos"
-	"middleware_loader/core/services/base"
+
+	request_dtos "middleware_loader/core/domain/dtos/request"
+	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/validator"
+	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/configs"
 	"strings"
 )
 
 type TaskService struct {
-	CreateTaskInput dtos.CreateTaskDTO
+	CreateTaskRequestDTO request_dtos.CreateTaskRequestDTO
+	UpdateTaskRequestDTO request_dtos.UpdateTaskRequestDTO
 }
 
 func NewTaskService() *TaskService {
@@ -21,10 +23,10 @@ func NewTaskService() *TaskService {
 }
 
 var taskValidator = validator.NewCreateTaskDTOValidator()
-var taskManagerEnv, _ = configs.LoadEnv()
+var taskConfig = configs.Config{}
+var taskManagerEnv, _ = taskConfig.LoadEnv()
 
 func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInput) (model.Task, error) {
-	log.Print("CreateTask service called")
 	err := taskValidator.CreateTaskValidate(input)
 	if err != nil {
 		return model.Task{}, err
@@ -33,53 +35,40 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 
 	input.Priority = ConvertStringToArray(input.Priority)
 
-	taskManagerServiceURL := taskManagerEnv.Url + taskManagerEnv.TaskManagerPort + "/task/create"
-	log.Printf("TaskManagerServiceURL: %v", taskManagerServiceURL)
-	bodyResult, err := base.BaseAPI(taskManagerServiceURL, "POST", input)
+	task, err := adapter.NewTaskAdapter().CreateTask(input)
 	if err != nil {
 		return model.Task{}, err
+	} else {
+		taskModel := response_dtos.NewCreateTaskResponseDTO().MapperToGraphQLModel(task)
+		return taskModel, nil
 	}
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	log.Printf("DataBytes: %v", dataBytes)
-	var task model.Task
-	err = json.Unmarshal(dataBytes, &task)
-	if err != nil {
-		return model.Task{}, err
-	}
-
-	log.Printf("Task created: %v", task)
-	log.Printf("Error: %v", err)
-	if err != nil {
-		return model.Task{}, err
-	}
-
-	return task, nil
 }
 
-func (s *TaskService) CallTaskManagerService(input model.CreateTaskInput) (model.Task, error) {
-	taskManagerServiceURL := taskManagerEnv.Url + taskManagerEnv.TaskManagerPort + "/task/create"
-
-	bodyResult, err := base.BaseAPI(taskManagerServiceURL, "POST", input)
+func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInput) (model.Task, error) {
+	err := taskValidator.UpdateTaskValidate(input)
 	if err != nil {
 		return model.Task{}, err
 	}
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	log.Println("Validation passed!")
 
-	var task model.Task
-	err = json.Unmarshal(dataBytes, &task)
+	input.Priority = ConvertStringToArray(input.Priority)
+	taskId := input.TaskID
+
+	task, err := adapter.NewTaskAdapter().UpdateTask(input, taskId)
 	if err != nil {
 		return model.Task{}, err
+	} else {
+		taskModel := response_dtos.NewCreateTaskResponseDTO().MapperToGraphQLModel(task)
+		return taskModel, nil
 	}
-
-	return task, nil
 }
 
 func ConvertStringToArray(input []string) []string {
-    if len(input) == 0 {
-        return nil
-    }
-    stringComponent := input[0]
-    stringComponent = strings.Trim(stringComponent, "[]")
-    listComponent := strings.Fields(stringComponent)
-    return listComponent
+	if len(input) == 0 {
+		return nil
+	}
+	stringComponent := input[0]
+	stringComponent = strings.Trim(stringComponent, "[]")
+	listComponent := strings.Fields(stringComponent)
+	return listComponent
 }

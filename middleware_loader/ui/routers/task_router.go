@@ -18,6 +18,9 @@ func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
 		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CreateTask(w, r, taskService)
 		})
+		r.Put("/{id}/update", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateTask(w, r, taskService)
+		})
 	})
 	return &TaskRouter{
 		TaskService: taskService,

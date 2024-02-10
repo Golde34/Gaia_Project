@@ -117,6 +117,19 @@ type TokenResponse struct {
 	ExpiryDate  string `json:"expiryDate"`
 }
 
+type UpdateTaskInput struct {
+	ID           string   `json:"id"`
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
+	TaskID       string   `json:"taskId"`
+}
+
 type User struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
