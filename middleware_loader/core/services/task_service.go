@@ -9,7 +9,6 @@ import (
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
-	"middleware_loader/kernel/configs"
 	"strings"
 )
 
@@ -22,9 +21,9 @@ func NewTaskService() *TaskService {
 	return &TaskService{}
 }
 
-var taskValidator = validator.NewCreateTaskDTOValidator()
-var taskConfig = configs.Config{}
-var taskManagerEnv, _ = taskConfig.LoadEnv()
+var taskValidator = validator.NewTaskDTOValidator()
+var taskAdapter = adapter.NewTaskAdapter()
+var taskResponse = response_dtos.NewCreateTaskResponseDTO()
 
 func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInput) (model.Task, error) {
 	err := taskValidator.CreateTaskValidate(input)
@@ -35,11 +34,11 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 
 	input.Priority = ConvertStringToArray(input.Priority)
 
-	task, err := adapter.NewTaskAdapter().CreateTask(input)
+	task, err := taskAdapter.CreateTask(input)
 	if err != nil {
 		return model.Task{}, err
 	} else {
-		taskModel := response_dtos.NewCreateTaskResponseDTO().MapperToGraphQLModel(task)
+		taskModel := taskResponse.MapperToGraphQLModel(task)
 		return taskModel, nil
 	}
 }
@@ -54,11 +53,11 @@ func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInpu
 	input.Priority = ConvertStringToArray(input.Priority)
 	taskId := input.TaskID
 
-	task, err := adapter.NewTaskAdapter().UpdateTask(input, taskId)
+	task, err := taskAdapter.UpdateTask(input, taskId)
 	if err != nil {
 		return model.Task{}, err
 	} else {
-		taskModel := response_dtos.NewCreateTaskResponseDTO().MapperToGraphQLModel(task)
+		taskModel := taskResponse.MapperToGraphQLModel(task)
 		return taskModel, nil
 	}
 }

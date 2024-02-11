@@ -9,7 +9,6 @@ import (
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
-	"middleware_loader/kernel/configs"
 )
 
 type AuthService struct {
@@ -21,8 +20,7 @@ func NewAuthService() *AuthService {
 }
 
 var authValidator = validator.NewAuthDTOValidator()
-var authConfig = configs.Config{}
-var authEnv, _ = authConfig.LoadEnv()
+var authAdapter = adapter.NewAuthAdapter()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
@@ -31,7 +29,7 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	}	
 	log.Println("Validation passed!")
 
-	authTokenResponse, err := adapter.NewAuthAdapter().Signin(input)
+	authTokenResponse, err := authAdapter.Signin(input)
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	} else {
@@ -47,7 +45,7 @@ func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInpu
 	}
 	log.Println("Validation passed!")
 
-	authTokenResponse, err := adapter.NewAuthAdapter().GaiaAutoSignin(input) 
+	authTokenResponse, err := authAdapter.GaiaAutoSignin(input) 
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	} else {

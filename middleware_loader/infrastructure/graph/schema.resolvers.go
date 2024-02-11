@@ -35,7 +35,8 @@ func (r *mutationResolver) CheckPermission(ctx context.Context, input model.User
 
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: CreateProject - createProject"))
+	project, err := projectService.CreateProject(ctx, input)
+	return &project, err
 }
 
 // CreateTask is the resolver for the createTask field.
@@ -77,3 +78,4 @@ type queryResolver struct{ *Resolver }
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
 var authService = services.NewAuthService()
 var taskService = services.NewTaskService()
+var projectService = services.NewProjectService()

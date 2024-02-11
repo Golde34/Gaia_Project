@@ -76,8 +76,8 @@ type Project {
   color: String!
   activeStatus: String!
 
-  groupTasks: [GroupTask!]!
-  owner: User!
+  groupTasks: [String!]!
+  owner: String!
 
   createdAt: String!
   updatedAt: String!
@@ -89,11 +89,11 @@ type GroupTask {
   description: String!
   priority: [String!]!
   status: String!
-  ordinalNumber: Int!
+  ordinalNumber: String!
   activeStatus: String!    
 
-  project: Project!
-  tasks: [Task!]!
+  project: String!
+  tasks: [String!]!
   totalTasks: Int!
   completedTasks: Int!
 
@@ -131,7 +131,7 @@ type SubTask {
   createdAt: String!
   updatedAt: String!
 
-  task: Task!
+  task: String!
 }
 
 type Comment {
@@ -142,7 +142,7 @@ type Comment {
   createdAt: String!
   updatedAt: String!
 
-  task: Task!
+  task: String!
 }
 
 
@@ -216,6 +216,7 @@ input CreateProjectInput {
   name: String!
   description: String!
   status: String!
+  color: String!
   owner: String!
   activeStatus: String!
 }

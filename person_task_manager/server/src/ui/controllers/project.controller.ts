@@ -21,7 +21,6 @@ class ProjectController {
     async getProjectById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const projectResuljt = projectService
             const projectResult = await projectService.getProject(id);
 
             return projectResult;
@@ -32,7 +31,7 @@ class ProjectController {
 
     async createProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;        
 
             const createProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
             const projectResult = await projectService.createProject(createProjectObjectDto);

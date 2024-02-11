@@ -12,7 +12,7 @@ type TaskValidator struct {
 	UpdateTaskRequestDTO request_dtos.UpdateTaskRequestDTO
 }
 
-func NewCreateTaskDTOValidator() *TaskValidator {
+func NewTaskDTOValidator() *TaskValidator {
 	return &TaskValidator{}
 }
 
