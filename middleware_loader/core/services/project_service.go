@@ -19,6 +19,8 @@ func NewProjectService() *ProjectService {
 }
 
 var projectValidation = validator.NewProjectDTOValidator()
+var projectAdapter = adapter.NewProjectAdapter()
+var projectResponse = response_dtos.NewCreateProjectResponseDTO()
 
 func (s *ProjectService) CreateProject(ctx context.Context, input model.CreateProjectInput) (model.Project, error) {
 	err := projectValidation.CreateProjectValidate(input)
@@ -27,11 +29,11 @@ func (s *ProjectService) CreateProject(ctx context.Context, input model.CreatePr
 	}
 	log.Println("Validation passed!")
 
-	project, err := adapter.NewProjectAdapter().CreateProject(input)
+	project, err := projectAdapter.CreateProject(input)
 	if err != nil {
 		return model.Project{}, err
 	} else {
-		projectModel := response_dtos.NewCreateProjectResponseDTO().MapperToGraphQLModel(project)
+		projectModel := projectResponse.MapperToGraphQLModel(project)
 		return projectModel, nil
 	}
 }
