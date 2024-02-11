@@ -9,7 +9,6 @@ import (
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
-	"middleware_loader/kernel/configs"
 	"strings"
 )
 
@@ -22,9 +21,7 @@ func NewTaskService() *TaskService {
 	return &TaskService{}
 }
 
-var taskValidator = validator.NewCreateTaskDTOValidator()
-var taskConfig = configs.Config{}
-var taskManagerEnv, _ = taskConfig.LoadEnv()
+var taskValidator = validator.NewTaskDTOValidator()
 
 func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInput) (model.Task, error) {
 	err := taskValidator.CreateTaskValidate(input)

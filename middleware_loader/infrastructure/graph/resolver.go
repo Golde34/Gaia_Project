@@ -11,4 +11,5 @@ import (
 type Resolver struct{
 	AuthGraphQLService service_registry.AuthService
 	TaskGraphQLService service_registry.TaskService
+	ProjectGraphQLService service_registry.ProjectService
 }

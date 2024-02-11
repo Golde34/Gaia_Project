@@ -7,7 +7,6 @@ import (
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
-	"middleware_loader/kernel/configs"
 )
 
 type AuthAdapter struct {
@@ -17,11 +16,6 @@ type AuthAdapter struct {
 func NewAuthAdapter() *AuthAdapter {
 	return &AuthAdapter{}
 }
-
-var authConfig = configs.Config{}
-var authEnv, _ = authConfig.LoadEnv()
-var authServiceURL = authEnv.Url + authEnv.AuthServicePort
-var gaiaServiceURL = authEnv.Url + authEnv.GaiaPort
 
 func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
 	authToken, err := adapter.CallAuthService(input)
@@ -46,7 +40,7 @@ func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthT
 }
 
 func (adapter *AuthAdapter) CallAuthService(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
-	authServiceURL := authServiceURL + "/auth/sign-in"
+	authServiceURL := base.AuthServiceURL + "/auth/sign-in"
 
 	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
 	if err != nil {
@@ -63,7 +57,7 @@ func (adapter *AuthAdapter) CallAuthService(input model.SigninInput) (response_d
 }
 
 func (adapter *AuthAdapter) CallGaiaService(model response_dtos.AuthTokenResponseDTO) (string, error) {
-	gaiaServiceURL := gaiaServiceURL + "/middleware/health-check"
+	gaiaServiceURL := base.GaiaServiceURL + "/middleware/health-check"
 
 	bodyResult, err := base.BaseAPI(gaiaServiceURL, "GET", model)
 	if err != nil {
@@ -79,7 +73,7 @@ func (adapter *AuthAdapter) CallGaiaService(model response_dtos.AuthTokenRespons
 }
 
 func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
-	authServiceURL := authServiceURL + "/auth/gaia-auto-sign-in"
+	authServiceURL := base.AuthServiceURL + "/auth/gaia-auto-sign-in"
 
 	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
 	if err != nil {
