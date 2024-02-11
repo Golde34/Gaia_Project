@@ -5,6 +5,7 @@ import (
 	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
+	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/validator"
 	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
@@ -19,7 +20,6 @@ func NewProjectService() *ProjectService {
 }
 
 var projectValidation = validator.NewProjectDTOValidator()
-var projectAdapter = adapter.NewProjectAdapter()
 var projectResponse = response_dtos.NewCreateProjectResponseDTO()
 
 func (s *ProjectService) CreateProject(ctx context.Context, input model.CreateProjectInput) (model.Project, error) {
@@ -29,7 +29,7 @@ func (s *ProjectService) CreateProject(ctx context.Context, input model.CreatePr
 	}
 	log.Println("Validation passed!")
 
-	project, err := projectAdapter.CreateProject(input)
+	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).CreateProject(input)
 	if err != nil {
 		return model.Project{}, err
 	} else {

@@ -2,7 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
-	mapper "middleware_loader/core/mapper/request"
+	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"

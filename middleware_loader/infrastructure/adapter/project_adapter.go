@@ -2,18 +2,18 @@ package adapter
 
 import (
 	"encoding/json"
-	request_dtos "middleware_loader/core/domain/dtos/request"
+
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
 )
 
 type ProjectAdapter struct {
-	CreateProjectRequestDTO request_dtos.CreateProjectRequestDTO
+	adapter *ProjectAdapter
 }
 
-func NewProjectAdapter() *ProjectAdapter {
-	return &ProjectAdapter{}
+func NewProjectAdapter(adapter *ProjectAdapter) *ProjectAdapter {
+	return &ProjectAdapter{adapter: adapter}
 }
 
 func (adapter *ProjectAdapter) CreateProject(input model.CreateProjectInput) (response_dtos.ProjectResponseDTO, error) {
