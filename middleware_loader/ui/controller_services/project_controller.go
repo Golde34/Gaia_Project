@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"context"
 	"middleware_loader/core/domain/models"
 	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
@@ -8,7 +9,34 @@ import (
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
+
+func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	ctx := context.Background()
+	projectService.ListAll(ctx)
+}
+
+func GetById(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.GetProjectId(projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "getProjectById", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
 
 func CreateProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	var body map[string]interface{}
@@ -28,4 +56,143 @@ func CreateProject(w http.ResponseWriter, r *http.Request, projectService *servi
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 
+}
+
+func UpdateProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.UpdateProjectRequestDTOMapper(body, projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func DeleteProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.GetProjectId(projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "deleteProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+// func GetAllGroupTasks(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+// 	var body map[string]interface{}
+// 	body, err := controller_utils.MappingBody(w, r)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	input := mapper.GetProjectId(body)
+// 	token := mapper.GetToken(body)
+
+// 	graphqlQueryModel := []models.GraphQLQuery{}
+// 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "getAllGroupTasks", QueryInput: input, QueryOutput: model.GroupTask{}})
+// 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+// 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+// 	utils.ConnectToGraphQLServer(w, graphqlQuery)
+// }
+
+func UpdateProjectName(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.UpdateProjectNameRequestDTOMapper(body, projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateProjectName", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func UpdateProjectColor(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.UpdateProjectColorRequestDTOMapper(body, projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateProjectColor", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func ArchieveProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.GetProjectId(projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "archieveProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func EnableProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	projectId := chi.URLParam(r, "id")
+
+	input := mapper.GetProjectId(projectId)
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "enableProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }

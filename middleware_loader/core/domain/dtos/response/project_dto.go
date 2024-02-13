@@ -29,3 +29,9 @@ func (in *ProjectResponseDTO) MapperToGraphQLModel(input ProjectResponseDTO) mod
 	mapper.AutoMapper(&input, &out)
 	return out
 }
+
+func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDTO) []model.Project{
+	var out []model.Project
+	mapper.AutoMapper(&input, &out)
+	return out
+}

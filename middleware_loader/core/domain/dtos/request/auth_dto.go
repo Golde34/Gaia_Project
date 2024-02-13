@@ -20,3 +20,7 @@ func NewAuthDTO() *AuthDTO {
 func (in *AuthDTO) MapperToModel(input model.SigninInput) {
 	mapper.AutoMapper(&input, in)
 }
+
+type TokenInputDTO struct {
+	Token string `json:"token"`
+}

@@ -60,6 +60,10 @@ type GroupTask struct {
 	UpdatedAt      string   `json:"updatedAt"`
 }
 
+type IDInput struct {
+	ID string `json:"id"`
+}
+
 type Project struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
@@ -118,8 +122,27 @@ type TokenResponse struct {
 	ExpiryDate  string `json:"expiryDate"`
 }
 
+type UpdateColorInput struct {
+	ID    string `json:"id"`
+	Color string `json:"color"`
+}
+
+type UpdateObjectNameInput struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type UpdateProjectInput struct {
+	ProjectID    string `json:"projectId"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Status       string `json:"status"`
+	Color        string `json:"color"`
+	Owner        string `json:"owner"`
+	ActiveStatus string `json:"activeStatus"`
+}
+
 type UpdateTaskInput struct {
-	ID           string   `json:"id"`
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
 	Priority     []string `json:"priority"`

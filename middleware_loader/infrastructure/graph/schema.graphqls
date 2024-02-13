@@ -10,7 +10,16 @@ type Mutation {
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
     # Task Manager
+    listAllProjects: [Project]!
+    getProjectById(input: IdInput!): Project!
     createProject(input: CreateProjectInput!): Project!
+    updateProject(input: UpdateProjectInput!): Project!
+    deleteProject(input: IdInput!): Project!
+    updateProjectName(input: UpdateObjectNameInput!): Project!
+    updateProjectColor(input: UpdateColorInput!): Project!
+    archieveProject(input: IdInput!): Project!
+    enableProject(input: IdInput!): Project!
+
     createTask(input: CreateTaskInput!): Task!
     updateTask(input: UpdateTaskInput!): Task!
 }
@@ -187,6 +196,10 @@ type UserPermissionResponse {
 }
 
 # Task Manager Objects
+input IdInput {
+  id: String!
+}
+
 input CreateTaskInput {
   title: String!
   description: String!
@@ -200,7 +213,6 @@ input CreateTaskInput {
 }
 
 input UpdateTaskInput {
-  id: ID!
   title: String!
   description: String!
   priority: [String!]!
@@ -219,4 +231,24 @@ input CreateProjectInput {
   color: String!
   owner: String!
   activeStatus: String!
+}
+
+input UpdateProjectInput {
+  projectId: String!
+  name: String!
+  description: String!
+  status: String!
+  color: String!
+  owner: String!
+  activeStatus: String!
+}
+
+input UpdateObjectNameInput {
+  id: String!
+  name: String!
+}
+
+input UpdateColorInput {
+  id: String!
+  color: String!
 }
