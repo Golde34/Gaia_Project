@@ -11,6 +11,10 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
+var authService = services.NewAuthService()
+var taskService = services.NewTaskService()
+var projectService = services.NewProjectService()
+
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
@@ -33,10 +37,52 @@ func (r *mutationResolver) CheckPermission(ctx context.Context, input model.User
 	panic(fmt.Errorf("not implemented: CheckPermission - checkPermission"))
 }
 
+// ListAllProjects is the resolver for the listAllProjects field.
+func (r *mutationResolver) ListAllProjects(ctx context.Context) ([]*model.Project, error) {
+	panic(fmt.Errorf("not implemented: ListAllProjects - listAllProjects"))
+}
+
+// GetProjectByID is the resolver for the getProjectById field.
+func (r *mutationResolver) GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	project, err := projectService.GetById(ctx, input.ID)
+	return &project , err
+}
+
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
 	project, err := projectService.CreateProject(ctx, input)
 	return &project, err
+}
+
+// UpdateProject is the resolver for the updateProject field.
+func (r *mutationResolver) UpdateProject(ctx context.Context, input model.UpdateProjectInput) (*model.Project, error) {
+	project, err := projectService.UpdateProject(ctx, input)
+	return &project, err
+}
+
+// DeleteProject is the resolver for the deleteProject field.
+func (r *mutationResolver) DeleteProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: DeleteProject - deleteProject"))
+}
+
+// UpdateProjectName is the resolver for the updateProjectName field.
+func (r *mutationResolver) UpdateProjectName(ctx context.Context, input model.UpdateObjectNameInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: UpdateProjectName - updateProjectName"))
+}
+
+// UpdateProjectColor is the resolver for the updateProjectColor field.
+func (r *mutationResolver) UpdateProjectColor(ctx context.Context, input model.UpdateColorInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: UpdateProjectColor - updateProjectColor"))
+}
+
+// ArchieveProject is the resolver for the archieveProject field.
+func (r *mutationResolver) ArchieveProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: ArchieveProject - archieveProject"))
+}
+
+// EnableProject is the resolver for the enableProject field.
+func (r *mutationResolver) EnableProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: EnableProject - enableProject"))
 }
 
 // CreateTask is the resolver for the createTask field.
@@ -69,13 +115,3 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
-var projectService = services.NewProjectService()
