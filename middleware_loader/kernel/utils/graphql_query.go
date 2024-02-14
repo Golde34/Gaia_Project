@@ -71,6 +71,10 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []mode
 }
 
 func ConvertInput(input interface{}) (string) {
+	if input == nil {
+		return ""
+	}
+
 	inputMap := make(map[string]interface{})
 	inrec, _ := json.Marshal(input)
 	json.Unmarshal(inrec, &inputMap)
@@ -84,6 +88,10 @@ func ConvertInput(input interface{}) (string) {
 }
 
 func ConvertOutput(output interface{}) (string) {
+	if output == nil {
+		return ""
+	}
+	
 	outputValue := reflect.ValueOf(output)
 	outputKeys := make([]string, outputValue.NumField())
 	for i := 0; i < outputValue.NumField(); i++ {

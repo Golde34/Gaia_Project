@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"log"
-	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/validator"
@@ -11,8 +10,7 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-type ProjectService struct {
-	CreateProjectRequestDTO request_dtos.CreateProjectRequestDTO
+type ProjectService struct {	
 }
 
 func NewProjectService() *ProjectService {

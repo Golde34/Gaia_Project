@@ -1,6 +1,13 @@
 type Query {
     user: User
     users: [User]!
+    userById(id: ID!): User
+
+    # Task Manager
+    listAllProjects: [Project]!
+    getProjectById(input: IdInput!): Project!
+    listAllTasks: [Task]!
+    getTaskById(input: IdInput!): Task!
 }
 
 type Mutation {
@@ -10,8 +17,6 @@ type Mutation {
     checkToken(input: TokenInput!): TokenResponse!
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
     # Task Manager
-    listAllProjects: [Project]!
-    getProjectById(input: IdInput!): Project!
     createProject(input: CreateProjectInput!): Project!
     updateProject(input: UpdateProjectInput!): Project!
     deleteProject(input: IdInput!): Project!

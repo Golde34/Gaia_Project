@@ -18,13 +18,13 @@ func NewAuthAdapter() *AuthAdapter {
 }
 
 func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
-	authToken, err := adapter.CallAuthService(input)
+	authToken, err := adapter.callSigninAuthService(input)
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
 
 	if authToken.Role == enums.Boss {
-		gaiaHealth, err := adapter.CallGaiaService(authToken)
+		gaiaHealth, err := adapter.callHealthCheckGaiaService(authToken)
 		if err != nil {
 			authToken.GaiaHealth = "Gaia health check not good"
 		} else {
@@ -39,7 +39,7 @@ func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthT
 	}
 }
 
-func (adapter *AuthAdapter) CallAuthService(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
+func (adapter *AuthAdapter) callSigninAuthService(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
 	authServiceURL := base.AuthServiceURL + "/auth/sign-in"
 
 	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
@@ -56,7 +56,7 @@ func (adapter *AuthAdapter) CallAuthService(input model.SigninInput) (response_d
 	return authToken, nil
 }
 
-func (adapter *AuthAdapter) CallGaiaService(model response_dtos.AuthTokenResponseDTO) (string, error) {
+func (adapter *AuthAdapter) callHealthCheckGaiaService(model response_dtos.AuthTokenResponseDTO) (string, error) {
 	gaiaServiceURL := base.GaiaServiceURL + "/middleware/health-check"
 
 	bodyResult, err := base.BaseAPI(gaiaServiceURL, "GET", model)
