@@ -17,7 +17,7 @@ func CreateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Create
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
 	input.GroupTaskId = bodyMap["groupTaskId"].(string)
-	input.Priority = ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Priority = convertStringToStringArray(bodyMap["priority"].([]interface{}))
 	
 	return input
 }
@@ -32,13 +32,13 @@ func UpdateTaskRequestDTOMapper(body map[string]interface{}, taskId string) requ
 	input.Deadline = bodyMap["deadline"].(string)
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
-	input.Priority = ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Priority = convertStringToStringArray(bodyMap["priority"].([]interface{}))
 	input.TaskId = taskId
 
 	return input
 }
 
-func ConvertStringToStringArray(aInterface []interface{}) []string {
+func convertStringToStringArray(aInterface []interface{}) []string {
 	aString := []string{}
 	for _, v := range aInterface {
 		log.Println(v)

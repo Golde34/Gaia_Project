@@ -1,7 +1,6 @@
 package controller_services
 
 import (
-	"context"
 	"middleware_loader/core/domain/models"
 	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
@@ -14,8 +13,22 @@ import (
 )
 
 func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
-	ctx := context.Background()
-	projectService.ListAll(ctx)
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	token := mapper.GetToken(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+	
 }
 
 func GetById(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {

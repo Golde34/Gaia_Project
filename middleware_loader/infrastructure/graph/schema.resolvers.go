@@ -37,17 +37,6 @@ func (r *mutationResolver) CheckPermission(ctx context.Context, input model.User
 	panic(fmt.Errorf("not implemented: CheckPermission - checkPermission"))
 }
 
-// ListAllProjects is the resolver for the listAllProjects field.
-func (r *mutationResolver) ListAllProjects(ctx context.Context) ([]*model.Project, error) {
-	panic(fmt.Errorf("not implemented: ListAllProjects - listAllProjects"))
-}
-
-// GetProjectByID is the resolver for the getProjectById field.
-func (r *mutationResolver) GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error) {
-	project, err := projectService.GetById(ctx, input.ID)
-	return &project , err
-}
-
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
 	project, err := projectService.CreateProject(ctx, input)
@@ -62,27 +51,32 @@ func (r *mutationResolver) UpdateProject(ctx context.Context, input model.Update
 
 // DeleteProject is the resolver for the deleteProject field.
 func (r *mutationResolver) DeleteProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: DeleteProject - deleteProject"))
+	project, err := projectService.DeleteProject(ctx, input)
+	return &project, err
 }
 
 // UpdateProjectName is the resolver for the updateProjectName field.
 func (r *mutationResolver) UpdateProjectName(ctx context.Context, input model.UpdateObjectNameInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: UpdateProjectName - updateProjectName"))
+	project, err := projectService.UpdateProjectName(ctx, input)
+	return &project, err
 }
 
 // UpdateProjectColor is the resolver for the updateProjectColor field.
 func (r *mutationResolver) UpdateProjectColor(ctx context.Context, input model.UpdateColorInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: UpdateProjectColor - updateProjectColor"))
+	project, err := projectService.UpdateProjectColor(ctx, input)
+	return &project, err
 }
 
 // ArchieveProject is the resolver for the archieveProject field.
 func (r *mutationResolver) ArchieveProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: ArchieveProject - archieveProject"))
+	project, err := projectService.ArchieveProject(ctx, input)
+	return &project, err
 }
 
 // EnableProject is the resolver for the enableProject field.
 func (r *mutationResolver) EnableProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
-	panic(fmt.Errorf("not implemented: EnableProject - enableProject"))
+	project, err := projectService.EnableProject(ctx, input)
+	return &project, err
 }
 
 // CreateTask is the resolver for the createTask field.
@@ -105,6 +99,37 @@ func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented: Users - users"))
+}
+
+// UserByID is the resolver for the userById field.
+func (r *queryResolver) UserByID(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UserByID - userById"))
+}
+
+// ListAllProjects is the resolver for the listAllProjects field.
+func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, error) {
+	projects, err := projectService.ListAll(ctx)
+	modelProject := []*model.Project{}
+	for _, project := range projects {
+		modelProject = append(modelProject, &project)
+	}
+	return modelProject, err
+}
+
+// GetProjectByID is the resolver for the getProjectById field.
+func (r *queryResolver) GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	project, err := projectService.GetById(ctx, input.ID)
+	return &project, err
+}
+
+// ListAllTasks is the resolver for the listAllTasks field.
+func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {
+	panic(fmt.Errorf("not implemented: ListAllTasks - listAllTasks"))
+}
+
+// GetTaskByID is the resolver for the getTaskById field.
+func (r *queryResolver) GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: GetTaskByID - getTaskById"))
 }
 
 // Mutation returns MutationResolver implementation.
