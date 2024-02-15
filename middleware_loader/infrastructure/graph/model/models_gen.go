@@ -72,7 +72,7 @@ type Project struct {
 	Color        string   `json:"color"`
 	ActiveStatus string   `json:"activeStatus"`
 	GroupTasks   []string `json:"groupTasks"`
-	Owner        string   `json:"owner"`
+	Owner        float64  `json:"owner"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
 }

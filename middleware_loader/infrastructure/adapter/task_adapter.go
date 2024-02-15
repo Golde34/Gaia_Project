@@ -28,6 +28,9 @@ func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dt
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
@@ -46,6 +49,9 @@ func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err

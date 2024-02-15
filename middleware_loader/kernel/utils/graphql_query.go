@@ -47,9 +47,9 @@ func GenerateGraphQLQueryNoInput(action string, function string, output interfac
 
 func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []models.GraphQLQuery) string {
 	var functionScripts []string
-	
-	for i:=0; i<len(graphQLQuery); i++ {
-		if (i == 0) {
+
+	for i := 0; i < len(graphQLQuery); i++ {
+		if i == 0 {
 			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
 			functionScripts = append(functionScripts, fmt.Sprintf(`
@@ -70,7 +70,31 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []mode
 	return strings.Join(functionScripts, "\n")
 }
 
-func ConvertInput(input interface{}) (string) {
+func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models.GraphQLQuery) string {
+	var functionScripts []string
+
+	for i := 0; i < len(graphQLQuery); i++ {
+		if i == 0 {
+			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
+			functionScripts = append(functionScripts, fmt.Sprintf(`
+				%s {
+					%s {
+						%s
+					}
+				}
+			`, action, graphQLQuery[i].Functionname, outputStr))
+		} else {
+			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
+			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
+			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
+				%s
+			}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
+		}
+	}
+	return strings.Join(functionScripts, "\n")
+}
+
+func ConvertInput(input interface{}) string {
 	if input == nil {
 		return ""
 	}
@@ -87,11 +111,11 @@ func ConvertInput(input interface{}) (string) {
 	return strings.Join(inputPairs, ", ")
 }
 
-func ConvertOutput(output interface{}) (string) {
+func ConvertOutput(output interface{}) string {
 	if output == nil {
 		return ""
 	}
-	
+
 	outputValue := reflect.ValueOf(output)
 	outputKeys := make([]string, outputValue.NumField())
 	for i := 0; i < outputValue.NumField(); i++ {

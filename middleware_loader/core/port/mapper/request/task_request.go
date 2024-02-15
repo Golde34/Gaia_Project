@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	// "github.com/mitchellh/mapstructure"
 )
@@ -40,8 +39,7 @@ func UpdateTaskRequestDTOMapper(body map[string]interface{}, taskId string) requ
 
 func convertStringToStringArray(aInterface []interface{}) []string {
 	aString := []string{}
-	for _, v := range aInterface {
-		log.Println(v)
+	for _, v := range aInterface {	
 		aString = append(aString, v.(string))
 	}
 	return aString

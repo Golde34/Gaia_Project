@@ -21,11 +21,11 @@ func CreateTask(w http.ResponseWriter, r *http.Request, taskService *services.Ta
 	}
 
 	input := mapper.CreateTaskRequestDTOMapper(body)
-	token := mapper.GetToken(body)
+	// token := mapper.GetToken(body)
 	
 	graphqlQueryModel := []models.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "createTask", QueryInput: input, QueryOutput: model.Task{}})
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	// graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	// query := utils.GenerateGraphQLQueryWithInput("mutation", "createTask", input, model.Task{})
@@ -42,11 +42,11 @@ func UpdateTask(w http.ResponseWriter, r *http.Request, taskService *services.Ta
 	taskId := chi.URLParam(r, "id")
 
 	input := mapper.UpdateTaskRequestDTOMapper(body, taskId)
-	token := mapper.GetToken(body)
+	// token := mapper.GetToken(body)
 	
 	graphqlQueryModel := []models.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateTask", QueryInput: input, QueryOutput: model.Task{}})
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	// graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)

@@ -2,8 +2,10 @@ package adapter
 
 import (
 	"encoding/json"
+	"fmt"
 
 	response_dtos "middleware_loader/core/domain/dtos/response"
+	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
 )
@@ -25,10 +27,14 @@ func (adapter *ProjectAdapter) ListAll() ([]response_dtos.ProjectResponseDTO, er
 		return nil, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	err = json.Unmarshal(dataBytes, &projects)
-	if err != nil {
-		return nil, err
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+
+	if !ok {
+		return nil, fmt.Errorf("unexpected response format")
+	}
+	for _, v := range bodyResultMap["projects"].([]interface{}) {
+		project := mapper_response.ReturnProjectObjectMapper(v.(map[string]interface{}))
+		projects = append(projects, *project)
 	}
 
 	return projects, nil
@@ -44,6 +50,9 @@ func (adapter *ProjectAdapter) GetById(id string) (response_dtos.ProjectResponse
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -62,6 +71,9 @@ func (adapter *ProjectAdapter) CreateProject(input model.CreateProjectInput) (re
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -80,6 +92,9 @@ func (adapter *ProjectAdapter) UpdateProject(input model.UpdateProjectInput, id 
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -98,6 +113,9 @@ func (adapter *ProjectAdapter) DeleteProject(id string) (response_dtos.ProjectRe
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -134,6 +152,9 @@ func (adapter *ProjectAdapter) UpdateProjectName(input model.UpdateObjectNameInp
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -152,6 +173,9 @@ func (adapter *ProjectAdapter) UpdateProjectColor(input model.UpdateColorInput, 
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -170,6 +194,9 @@ func (adapter *ProjectAdapter) ArchieveProject(id string) (response_dtos.Project
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
@@ -188,6 +215,9 @@ func (adapter *ProjectAdapter) EnableProject(id string) (response_dtos.ProjectRe
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.ProjectResponseDTO{}, err
+	}
 	err = json.Unmarshal(dataBytes, &project)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err

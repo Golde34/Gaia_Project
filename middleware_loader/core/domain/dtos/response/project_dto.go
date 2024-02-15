@@ -7,16 +7,16 @@ import (
 )
 
 type ProjectResponseDTO struct {
-	ID           string       `json:"id"`
-	Name         string       `json:"name"`
-	Description  string       `json:"description"`
-	Status       string       `json:"status"`
-	Color        string       `json:"color"`
-	ActiveStatus string       `json:"activeStatus"`
-	GroupTasks   []*string `json:"groupTasks"`
-	Owner        *string        `json:"owner"`
-	CreatedAt    string       `json:"createdAt"`
-	UpdatedAt    string       `json:"updatedAt"`
+	ID           string   `json:"id"`
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	Status       string   `json:"status"`
+	Color        string   `json:"color"`
+	ActiveStatus string   `json:"activeStatus"`
+	GroupTasks   []string `json:"groupTasks"`
+	Owner        float64      `json:"owner"`
+	CreatedAt    string   `json:"createdAt"`
+	UpdatedAt    string   `json:"updatedAt"`
 }
 
 func NewCreateProjectResponseDTO() *ProjectResponseDTO {
@@ -32,6 +32,8 @@ func (in *ProjectResponseDTO) MapperToGraphQLModel(input ProjectResponseDTO) mod
 
 func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDTO) []model.Project{
 	var out []model.Project
-	mapper.AutoMapper(&input, &out)
+	for _, item := range input {
+		out = append(out, in.MapperToGraphQLModel(item))
+	}
 	return out
 }

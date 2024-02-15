@@ -13,19 +13,19 @@ import (
 )
 
 func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
-	var body map[string]interface{}
-	body, err := controller_utils.MappingBody(w, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	// var body map[string]interface{}
+	// body, err := controller_utils.MappingBody(w, r)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	return
+	// }
 
-	token := mapper.GetToken(body)
+	// token := mapper.GetToken(body)
 
 	graphqlQueryModel := []models.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
-	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+	// graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
+	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 	

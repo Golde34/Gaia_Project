@@ -25,6 +25,9 @@ func (s *GaiaService) GaiaConnect() (interface{}, error) {
 	}
 
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return "", err
+	}
 	var authToken model.AuthTokenResponse
 	err = json.Unmarshal(dataBytes, &authToken)
 	if err != nil {

@@ -91,7 +91,7 @@ type Project {
   activeStatus: String!
 
   groupTasks: [String!]!
-  owner: String!
+  owner: Float!
 
   createdAt: String!
   updatedAt: String!

@@ -111,7 +111,8 @@ func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, 
 	projects, err := projectService.ListAll(ctx)
 	modelProject := []*model.Project{}
 	for _, project := range projects {
-		modelProject = append(modelProject, &project)
+		projectCopy:= project
+		modelProject = append(modelProject, &projectCopy)
 	}
 	return modelProject, err
 }

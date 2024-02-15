@@ -47,6 +47,9 @@ func (adapter *AuthAdapter) callSigninAuthService(input model.SigninInput) (resp
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.AuthTokenResponseDTO{}, err
+	}
 
 	var authToken response_dtos.AuthTokenResponseDTO
 	err = json.Unmarshal(dataBytes, &authToken)
@@ -80,6 +83,9 @@ func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dt
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.AuthTokenResponseDTO{}, err
+	}
 
 	var authToken response_dtos.AuthTokenResponseDTO
 	err = json.Unmarshal(dataBytes, &authToken)

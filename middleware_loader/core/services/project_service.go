@@ -10,7 +10,7 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-type ProjectService struct {	
+type ProjectService struct {
 }
 
 func NewProjectService() *ProjectService {
@@ -26,6 +26,7 @@ func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
 		return nil, err
 	}
 	projectsModel := projectResponse.MapperListToGraphQLModel(projects)
+	
 	return projectsModel, nil
 }
 
@@ -69,7 +70,7 @@ func (s *ProjectService) UpdateProject(ctx context.Context, input model.UpdatePr
 	} else {
 		projectModel := projectResponse.MapperToGraphQLModel(project)
 		return projectModel, nil
-	}	
+	}
 }
 
 func (s *ProjectService) DeleteProject(ctx context.Context, input model.IDInput) (model.Project, error) {
