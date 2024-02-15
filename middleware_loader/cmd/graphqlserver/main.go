@@ -28,6 +28,15 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.RedirectSlashes)
 	router.Use(middleware.Timeout(time.Second * 60))
+	// router.Use(func(next http.Handler) http.Handler {
+	// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 		if r.RequestURI == "/graphql" {
+	// 			w.WriteHeader(http.StatusForbidden)
+	// 			return
+	// 		}
+	// 		next.ServeHTTP(w, r)
+	// 	})
+	// })
 
 	corsHandler := cors.New(
 		cors.Options{
@@ -61,7 +70,7 @@ func main() {
 	routers.NewProjectRouter(projectService, router)
 
 	// GRAPHQL
-	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
 	router.Handle("/query", handler.NewDefaultServer(
 		graph.NewExecutableSchema(
 			graph.Config{
