@@ -14,7 +14,7 @@ export const projectListReducer = (
         case PROJECT_LIST_REQUEST:
             return { loading: true };
         case PROJECT_LIST_SUCCESS:
-            return { loading: false, projects: action.payload.projects };
+            return { loading: false, projects: action.payload.listAllProjects };
         case PROJECT_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:

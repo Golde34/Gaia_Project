@@ -19,7 +19,7 @@ export const getTaskList = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TASK_LIST_REQUEST, payload: groupTaskId });
     try {
         const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: TASK_LIST_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_LIST_FAIL,
@@ -34,7 +34,7 @@ export const getDetailTask = (taskId) => async (dispatch) => {
     dispatch({ type: TASK_DETAIL_REQUEST, payload: taskId });
     try {
         const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: TASK_DETAIL_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_DETAIL_FAIL,
@@ -55,7 +55,7 @@ export const createTask = (task) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest('/task/create', HttpMethods.POST, portName.middleware, task);
-        dispatch({ type: TASK_CREATE_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_CREATE_FAIL,
@@ -76,7 +76,7 @@ export const updateTask = (task) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/task/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
-        dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_UPDATE_FAIL,
@@ -97,7 +97,7 @@ export const deleteTask = (taskId) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.DELETE, portName.taskManager);
-        dispatch({ type: TASK_DELETE_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_DELETE_FAIL,
@@ -118,7 +118,7 @@ export const generateTaskFromScratch = (task) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // } 
         const { data } = await serverRequest('/task/generate', HttpMethods.POST, portName.taskManager, task);
-        dispatch({ type: TASK_GENERATE_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_GENERATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_GENERATE_FAIL,
@@ -139,7 +139,7 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/task/update-task-in-dialog/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
-        dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_UPDATE_FAIL,
@@ -154,7 +154,7 @@ export const getTasksCompleted = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TASK_COMPLETED_REQUEST, payload: groupTaskId });
     try {
         const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks-complete`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: TASK_COMPLETED_SUCCESS, payload: data.message });
+        dispatch({ type: TASK_COMPLETED_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TASK_COMPLETED_FAIL,
@@ -169,7 +169,7 @@ export const getTopTasks = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TOP_TASK_REQUEST, payload: groupTaskId });
     try {
         const { data } = await serverRequest(`/dashboard/top-tasks`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: TOP_TASK_SUCCESS, payload: data.message });
+        dispatch({ type: TOP_TASK_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: TOP_TASK_FAIL,
@@ -184,7 +184,7 @@ export const moveTask = (taskId, oldGroupTaskId, newGroupTaskId) => async (dispa
     dispatch({ type: MOVE_TASK_REQUEST });
     try {
         const { data } = await serverRequest(`/task/${taskId}/move-task`, HttpMethods.PUT, portName.taskManager, { oldGroupTaskId, newGroupTaskId });
-        dispatch({ type: MOVE_TASK_SUCCESS, payload: data.message });
+        dispatch({ type: MOVE_TASK_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({ 
             type: MOVE_TASK_FAIL,
