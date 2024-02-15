@@ -18,7 +18,8 @@ import (
 )
 
 func main() {
-	cfg, _ := configs.LoadEnv()
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
 	clientUrl := cfg.ClientCORSAllowedUrl
 	router := chi.NewRouter()
 
@@ -50,12 +51,14 @@ func main() {
 	middlewareService := services.NewMiddlewareService()
 	gaiaService := services.NewGaiaService()
 	taskService := services.NewTaskService()
+	projectService := services.NewProjectService()
 
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
 	routers.NewGaiaRouter(gaiaService, router)
 	routers.NewMiddlewareRouter(middlewareService, router)
 	routers.NewTaskRouter(taskService, router)
+	routers.NewProjectRouter(projectService, router)
 
 	// GRAPHQL
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
@@ -63,8 +66,9 @@ func main() {
 		graph.NewExecutableSchema(
 			graph.Config{
 				Resolvers: &graph.Resolver{
-					AuthService: authService,
-					TaskService: taskService,
+					AuthGraphQLService: authService,
+					TaskGraphQLService: taskService,
+					ProjectGraphQLService: projectService,
 				},
 			},
 		),

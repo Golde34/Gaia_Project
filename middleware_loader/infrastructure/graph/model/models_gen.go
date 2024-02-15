@@ -20,13 +20,14 @@ type Comment struct {
 	ActiveStatus string `json:"activeStatus"`
 	CreatedAt    string `json:"createdAt"`
 	UpdatedAt    string `json:"updatedAt"`
-	Task         *Task  `json:"task"`
+	Task         string `json:"task"`
 }
 
 type CreateProjectInput struct {
 	Name         string `json:"name"`
 	Description  string `json:"description"`
 	Status       string `json:"status"`
+	Color        string `json:"color"`
 	Owner        string `json:"owner"`
 	ActiveStatus string `json:"activeStatus"`
 }
@@ -49,27 +50,31 @@ type GroupTask struct {
 	Description    string   `json:"description"`
 	Priority       []string `json:"priority"`
 	Status         string   `json:"status"`
-	OrdinalNumber  int      `json:"ordinalNumber"`
+	OrdinalNumber  string   `json:"ordinalNumber"`
 	ActiveStatus   string   `json:"activeStatus"`
-	Project        *Project `json:"project"`
-	Tasks          []*Task  `json:"tasks"`
+	Project        string   `json:"project"`
+	Tasks          []string `json:"tasks"`
 	TotalTasks     int      `json:"totalTasks"`
 	CompletedTasks int      `json:"completedTasks"`
 	CreatedAt      string   `json:"createdAt"`
 	UpdatedAt      string   `json:"updatedAt"`
 }
 
+type IDInput struct {
+	ID string `json:"id"`
+}
+
 type Project struct {
-	ID           string       `json:"id"`
-	Name         string       `json:"name"`
-	Description  string       `json:"description"`
-	Status       string       `json:"status"`
-	Color        string       `json:"color"`
-	ActiveStatus string       `json:"activeStatus"`
-	GroupTasks   []*GroupTask `json:"groupTasks"`
-	Owner        *User        `json:"owner"`
-	CreatedAt    string       `json:"createdAt"`
-	UpdatedAt    string       `json:"updatedAt"`
+	ID           string   `json:"id"`
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	Status       string   `json:"status"`
+	Color        string   `json:"color"`
+	ActiveStatus string   `json:"activeStatus"`
+	GroupTasks   []string `json:"groupTasks"`
+	Owner        float64  `json:"owner"`
+	CreatedAt    string   `json:"createdAt"`
+	UpdatedAt    string   `json:"updatedAt"`
 }
 
 type SigninInput struct {
@@ -86,7 +91,7 @@ type SubTask struct {
 	ActiveStatus string   `json:"activeStatus"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
-	Task         *Task    `json:"task"`
+	Task         string   `json:"task"`
 }
 
 type Task struct {
@@ -115,6 +120,38 @@ type TokenResponse struct {
 	Username    string `json:"username"`
 	AccessToken string `json:"accessToken"`
 	ExpiryDate  string `json:"expiryDate"`
+}
+
+type UpdateColorInput struct {
+	ID    string `json:"id"`
+	Color string `json:"color"`
+}
+
+type UpdateObjectNameInput struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type UpdateProjectInput struct {
+	ProjectID    string `json:"projectId"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Status       string `json:"status"`
+	Color        string `json:"color"`
+	Owner        string `json:"owner"`
+	ActiveStatus string `json:"activeStatus"`
+}
+
+type UpdateTaskInput struct {
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
+	TaskID       string   `json:"taskId"`
 }
 
 type User struct {

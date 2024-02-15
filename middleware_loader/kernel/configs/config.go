@@ -16,7 +16,7 @@ type Config struct {
 	ClientCORSAllowedUrl string
 }
 
-func LoadEnv() (Config, error) {
+func (in *Config) LoadEnv() (Config, error) {
 	err := godotenv.Load(".env")
 	if err != nil {
 		fmt.Println("Error loading .env file: ", err)

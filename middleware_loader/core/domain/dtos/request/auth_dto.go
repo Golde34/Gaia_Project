@@ -1,4 +1,4 @@
-package dtos
+package request_dtos
 
 import (
 	"middleware_loader/infrastructure/graph/model"
@@ -19,4 +19,8 @@ func NewAuthDTO() *AuthDTO {
 // mapper from graphql model to dto
 func (in *AuthDTO) MapperToModel(input model.SigninInput) {
 	mapper.AutoMapper(&input, in)
+}
+
+type TokenInputDTO struct {
+	Token string `json:"token"`
 }

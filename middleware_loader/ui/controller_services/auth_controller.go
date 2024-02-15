@@ -2,7 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
-	"middleware_loader/core/domain/dtos/request"
+	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
@@ -24,7 +24,7 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 	// multipleQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", []models.GraphQLQuery{graphQuery})
 
 	var input = authService.SigninInput
-	input = request.SigninRequestDTOMapper(body)
+	input = mapper.SigninRequestDTOMapper(body)
 
 	query := utils.GenerateGraphQLQueryWithInput("mutation", "signin", input, model.AuthTokenResponse{})	
 	utils.ConnectToGraphQLServer(w, query)

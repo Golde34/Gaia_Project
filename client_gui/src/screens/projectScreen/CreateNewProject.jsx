@@ -30,6 +30,7 @@ export const CreateNewProject = () => {
         project.description = description;
         project.status = status;
         project.ownerId = "1";
+        project.color = "indigo";
         createNewProject(project);
         window.location.reload();
     }

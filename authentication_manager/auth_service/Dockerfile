@@ -8,4 +8,4 @@ RUN mvn clean install -f /backend/authentication_manager/auth_service/pom.xml
 
 EXPOSE 4001
 
-CMD ["java", "-jar", "/backend/authentication_manager/auth_service/target/0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/backend/authentication_manager/auth_service/target/0.0.1.jar"]

@@ -1,6 +1,6 @@
 import { ClassConstructor, plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import {  Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
 
@@ -50,10 +50,10 @@ export class InternalServerError extends APIError {
 
 type ExpressAsyncFunction = (req: Request, res: Response, next: NextFunction) => Promise<any>;
 
-export const expressAsyncHandler = 
+export const expressAsyncHandler =
     (handler: ExpressAsyncFunction) => (req: Request, res: Response, next: NextFunction) => {
         Promise.resolve(handler(req, res, next)).catch((error) => next(error));
-};
+    };
 
 export class ErrorHandler {
     static handlerError = () => {
@@ -72,6 +72,24 @@ export class ErrorHandler {
 export class RequestValidator {
     static validate = <T extends object>(classInstance: ClassConstructor<T>) => {
         return async (req: Request, res: Response, next: NextFunction) => {
+            const convertObject = plainToInstance(classInstance, req.body.body);
+            await validate(convertObject).then((errors) => {
+                if (errors.length > 0) {
+                    let rawErrors: string[] = [];
+                    for (const errorItem of errors) {
+                        rawErrors = rawErrors.concat(...rawErrors, Object.values(errorItem.constraints ?? []));
+                    }
+                    console.log(rawErrors);
+                    const validateionErrorText = 'Request validation failed.';
+                    next(new BadRequestError(validateionErrorText, rawErrors));
+                }
+            });
+            next();
+        }
+    }
+
+    static validateV2 = <T extends object>(classInstance: ClassConstructor<T>) => {
+        return async (req: Request, res: Response, next: NextFunction) => {
             const convertObject = plainToInstance(classInstance, req.body);
             await validate(convertObject).then((errors) => {
                 if (errors.length > 0) {
@@ -84,7 +102,7 @@ export class RequestValidator {
                     next(new BadRequestError(validateionErrorText, rawErrors));
                 }
             });
-			next();
-        }        
+            next();
+        }
     }
 }

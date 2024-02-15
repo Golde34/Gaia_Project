@@ -14,28 +14,6 @@ import (
 	"middleware_loader/core/domain/models"
 )
 
-func ConvertInput(input interface{}) (string) {
-	inputMap := make(map[string]interface{})
-	inrec, _ := json.Marshal(input)
-	json.Unmarshal(inrec, &inputMap)
-
-	inputPairs := make([]string, 0, len(inputMap))
-	for key, value := range inputMap {
-		inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, value))
-	}
-
-	return strings.Join(inputPairs, ", ")
-}
-
-func ConvertOutput(output interface{}) (string) {
-	outputValue := reflect.ValueOf(output)
-	outputKeys := make([]string, outputValue.NumField())
-	for i := 0; i < outputValue.NumField(); i++ {
-		outputKeys[i] = outputValue.Type().Field(i).Tag.Get("json")
-	}
-	return strings.Join(outputKeys, ", ")
-}
-
 func GenerateGraphQLQueryWithInput(action string, function string, input interface{}, output interface{}) string {
 	// Convert input
 	inputPairs := ConvertInput(input)
@@ -69,9 +47,9 @@ func GenerateGraphQLQueryNoInput(action string, function string, output interfac
 
 func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []models.GraphQLQuery) string {
 	var functionScripts []string
-	
-	for i:=0; i<len(graphQLQuery); i++ {
-		if (i == 0) {
+
+	for i := 0; i < len(graphQLQuery); i++ {
+		if i == 0 {
 			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
 			functionScripts = append(functionScripts, fmt.Sprintf(`
@@ -90,6 +68,60 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []mode
 		}
 	}
 	return strings.Join(functionScripts, "\n")
+}
+
+func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models.GraphQLQuery) string {
+	var functionScripts []string
+
+	for i := 0; i < len(graphQLQuery); i++ {
+		if i == 0 {
+			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
+			functionScripts = append(functionScripts, fmt.Sprintf(`
+				%s {
+					%s {
+						%s
+					}
+				}
+			`, action, graphQLQuery[i].Functionname, outputStr))
+		} else {
+			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
+			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
+			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
+				%s
+			}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
+		}
+	}
+	return strings.Join(functionScripts, "\n")
+}
+
+func ConvertInput(input interface{}) string {
+	if input == nil {
+		return ""
+	}
+
+	inputMap := make(map[string]interface{})
+	inrec, _ := json.Marshal(input)
+	json.Unmarshal(inrec, &inputMap)
+
+	inputPairs := make([]string, 0, len(inputMap))
+	for key, value := range inputMap {
+		inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, value))
+	}
+
+	return strings.Join(inputPairs, ", ")
+}
+
+func ConvertOutput(output interface{}) string {
+	if output == nil {
+		return ""
+	}
+
+	outputValue := reflect.ValueOf(output)
+	outputKeys := make([]string, outputValue.NumField())
+	for i := 0; i < outputValue.NumField(); i++ {
+		outputKeys[i] = outputValue.Type().Field(i).Tag.Get("json")
+	}
+	return strings.Join(outputKeys, ", ")
 }
 
 func ConnectToGraphQLServer(w http.ResponseWriter, query string) {

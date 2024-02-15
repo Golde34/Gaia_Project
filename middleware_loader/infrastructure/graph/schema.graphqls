@@ -1,6 +1,13 @@
 type Query {
     user: User
     users: [User]!
+    userById(id: ID!): User
+
+    # Task Manager
+    listAllProjects: [Project]!
+    getProjectById(input: IdInput!): Project!
+    listAllTasks: [Task]!
+    getTaskById(input: IdInput!): Task!
 }
 
 type Mutation {
@@ -11,7 +18,15 @@ type Mutation {
     checkPermission(input: UserPermissionInput!): UserPermissionResponse!
     # Task Manager
     createProject(input: CreateProjectInput!): Project!
+    updateProject(input: UpdateProjectInput!): Project!
+    deleteProject(input: IdInput!): Project!
+    updateProjectName(input: UpdateObjectNameInput!): Project!
+    updateProjectColor(input: UpdateColorInput!): Project!
+    archieveProject(input: IdInput!): Project!
+    enableProject(input: IdInput!): Project!
+
     createTask(input: CreateTaskInput!): Task!
+    updateTask(input: UpdateTaskInput!): Task!
 }
 
 ### Entity
@@ -75,8 +90,8 @@ type Project {
   color: String!
   activeStatus: String!
 
-  groupTasks: [GroupTask!]!
-  owner: User!
+  groupTasks: [String!]!
+  owner: Float!
 
   createdAt: String!
   updatedAt: String!
@@ -88,11 +103,11 @@ type GroupTask {
   description: String!
   priority: [String!]!
   status: String!
-  ordinalNumber: Int!
+  ordinalNumber: String!
   activeStatus: String!    
 
-  project: Project!
-  tasks: [Task!]!
+  project: String!
+  tasks: [String!]!
   totalTasks: Int!
   completedTasks: Int!
 
@@ -101,22 +116,22 @@ type GroupTask {
 }
 
 type Task {
- id: ID!
- title: String!
- description: String!
- priority: [String!]!
- status: String!
- startDate: String!
- deadline: String!
- duration: String!
- activeStatus: String!
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
 
- createdAt: String!
- updatedAt: String!
+  createdAt: String!
+  updatedAt: String!
 
- groupTask: String!
- subTasks: [String!]!
- comments: [String!]!
+  groupTask: String!
+  subTasks: [String!]!
+  comments: [String!]!
 }
 
 type SubTask {
@@ -130,7 +145,7 @@ type SubTask {
   createdAt: String!
   updatedAt: String!
 
-  task: Task!
+  task: String!
 }
 
 type Comment {
@@ -141,7 +156,7 @@ type Comment {
   createdAt: String!
   updatedAt: String!
 
-  task: Task!
+  task: String!
 }
 
 
@@ -186,6 +201,10 @@ type UserPermissionResponse {
 }
 
 # Task Manager Objects
+input IdInput {
+  id: String!
+}
+
 input CreateTaskInput {
   title: String!
   description: String!
@@ -198,10 +217,43 @@ input CreateTaskInput {
   groupTaskId: String!
 }
 
+input UpdateTaskInput {
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
+  taskId: String!
+}
+
 input CreateProjectInput {
   name: String!
   description: String!
   status: String!
+  color: String!
   owner: String!
   activeStatus: String!
+}
+
+input UpdateProjectInput {
+  projectId: String!
+  name: String!
+  description: String!
+  status: String!
+  color: String!
+  owner: String!
+  activeStatus: String!
+}
+
+input UpdateObjectNameInput {
+  id: String!
+  name: String!
+}
+
+input UpdateColorInput {
+  id: String!
+  color: String!
 }

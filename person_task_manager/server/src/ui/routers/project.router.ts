@@ -33,7 +33,7 @@ projectRouter.get("/:id", async (req: Request, res: Response, next: NextFunction
 
 // create new project
 projectRouter.post("/create", 
-    RequestValidator.validate(ProjectRequestDto),
+    RequestValidator.validateV2(ProjectRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projectResult = await projectControllerImpl.createProject(req, next);
@@ -111,7 +111,7 @@ projectRouter.put("/:id/archive", async (req: Request, res: Response, next: Next
 });
 
 // unarchieve project
-projectRouter.put("/:id/unarchive", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+projectRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projectResult = await projectControllerImpl.unarchieveProject(req, next);
         return returnResult(projectResult, ENABLE_PROJECT_FAILED, res, next);

@@ -30,9 +30,9 @@ function ContentArea() {
                     </Metric>
                     <div className="grid md:grid-cols-3 w-full h-full items-center">
                         {projects.map((project) => (
-                            <div key={project._id} className="m-3">
+                            <div key={project.id} className="m-3">
                                 <CardButton name={project.name} description={project.description} color={project.color}
-                                    url={`/project/${project._id}`} buttonText="View Project" elementId={project._id}
+                                    url={`/project/${project.id}`} buttonText="View Project" elementId={project.id}
                                 />
                             </div>
                         ))}
