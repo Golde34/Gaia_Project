@@ -4,77 +4,89 @@ import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError, Un
 
 export function msg400(message: string): IResponse {
     return {
-        status: false,
-        statusCode: 400,
-        message: message,
+        status: "error",
+        statusMessage: "Bad Request",
+        errorCode: 400,
+        errorMessage: message,
+        data: null,
     };
 }
 
 export function msg401(message: string): IResponse {
     return {
-        status: false,
-        statusCode: 401,
-        message: message,
+        status: "error",
+        statusMessage: "Unauthorized",
+        errorCode: 401,
+        errorMessage: message,
+        data: null,
     };
 }
 
 export function msg403(message: string): IResponse {
     return {
-        status: false,
-        statusCode: 403,
-        message: message,
+        status: "error",
+        statusMessage: "Forbidden",
+        errorCode: 403,
+        errorMessage: message,
+        data: null,
     };
 }
 
 export function msg404(message: string): IResponse {
     return {
-        status: false,
-        statusCode: 404,
-        message: message,
+        status: "error",
+        statusMessage: "Not Found",
+        errorCode: 404,
+        errorMessage: message,
+        data: null,
     };
 }
 
 export function msg500(message: string): IResponse {
     return {
-        status: false,
-        statusCode: 500,
-        message: message,
+        status: "error",
+        statusMessage: "Internal Server Error",
+        errorCode: 500,
+        errorMessage: message,
+        data: null,
     };
 }
 
 export function msg200(data: any): IResponse {
     return {
-        status: true,
-        statusCode: 200,
-        message: data,
+        status: "success",
+        statusMessage: "OK",
+        errorCode: 200,
+        errorMessage: "",
+        data: data,
     };
 }
 
 export function sendResponse(result: IResponse, response: Response, next: NextFunction): void {
     try {
-        switch (result.statusCode) {
+        switch (result.errorCode) {
             case 200: {
                 response.status(200).send(result);
                 break;
             }
             case 400: {
-                next(new BadRequestError(result.message));
+                next(new BadRequestError(result.errorMessage));
                 break;
             }
             case 401: {
-                next(new UnauthorizedError(result.message));
+                next(new UnauthorizedError(result.errorMessage));
                 break;
             }
             case 403: {
-                next(new ForbiddenError(result.message));
+                next(new ForbiddenError(result.errorMessage));
                 break;
             }
             case 404: {
-                next(new NotFoundError(result.message));
+                next(new NotFoundError(result.errorMessage));
                 break;
             }
             case 500: {
-                next(new InternalServerError(result.message));
+                next(new InternalServerError(result.errorMessage));
                 break;
             }
         }

@@ -12,6 +12,9 @@ class ProjectService {
 
     // Add Authen mechanism and try catch
     async createProject(project: any): Promise<IResponse> {
+        if (project.color == null) {
+            project.color = "indigo";
+        }
         const createProject = await projectStore.createProject(project);
 
         return msg200({

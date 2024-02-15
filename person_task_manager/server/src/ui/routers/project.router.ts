@@ -33,7 +33,7 @@ projectRouter.get("/:id", async (req: Request, res: Response, next: NextFunction
 
 // create new project
 projectRouter.post("/create", 
-    RequestValidator.validate(ProjectRequestDto),
+    RequestValidator.validateV2(ProjectRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projectResult = await projectControllerImpl.createProject(req, next);
