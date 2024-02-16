@@ -4,7 +4,7 @@ import 'package:mobile_app/configs/const.dart';
 // import 'package:mobile_app/pages/auth_page.dart';
 import 'package:mobile_app/pages/project_page.dart';
 import 'package:mobile_app/pages/setting_page.dart';
-import 'package:mobile_app/pages/note_page.dart';
+import 'package:mobile_app/pages/note_page/note_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
