@@ -26,6 +26,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
     }
 
+    @SuppressWarnings("all")
     @Override
     public boolean isValid(final String password, final ConstraintValidatorContext context) {
         // @formatter:off

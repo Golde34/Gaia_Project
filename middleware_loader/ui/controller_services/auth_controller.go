@@ -14,14 +14,7 @@ func Signin(w http.ResponseWriter, r *http.Request, authService *services.AuthSe
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
-	}
-
-	// var graphQuery = models.GraphQLQuery{
-	// 	Functionname: "signin",
-	// 	QueryInput:   input,
-	// 	QueryOutput:  model.AuthTokenResponse{},
-	// }
-	// multipleQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", []models.GraphQLQuery{graphQuery})
+	}	
 
 	var input = authService.SigninInput
 	input = mapper.SigninRequestDTOMapper(body)

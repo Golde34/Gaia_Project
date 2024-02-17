@@ -28,6 +28,7 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.RedirectSlashes)
 	router.Use(middleware.Timeout(time.Second * 60))
+
 	// router.Use(func(next http.Handler) http.Handler {
 	// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	// 		if r.RequestURI == "/graphql" {
