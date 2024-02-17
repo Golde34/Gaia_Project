@@ -1,4 +1,4 @@
-package auth.authentication_service;
+package auth.qr_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

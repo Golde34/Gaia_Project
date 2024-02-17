@@ -10,6 +10,7 @@ import (
 
 type AuthValidator struct {
 	AuthDTO request_dtos.AuthDTO
+	TokenInputDTO request_dtos.TokenInputDTO
 }
 
 func NewAuthDTOValidator() *AuthValidator {
@@ -24,6 +25,15 @@ func (in *AuthValidator) AuthValidate(input model.SigninInput) error {
 
 	if in.AuthDTO.Username == "" {
 		return fmt.Errorf("%w: username is required", enums.ErrValidation)
+	}
+
+	return nil
+}
+
+func (in *AuthValidator) TokenValidate(input model.TokenInput) error {
+	in.TokenInputDTO.MapperToModel(input)
+	if in.TokenInputDTO.Token == "" {
+		return fmt.Errorf("%w: token is required", enums.ErrValidation)
 	}
 
 	return nil

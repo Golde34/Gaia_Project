@@ -2,7 +2,7 @@ package adapter
 
 import (
 	"encoding/json"
-	request_dtos "middleware_loader/core/domain/dtos/request"
+
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/infrastructure/adapter/base"
@@ -10,11 +10,11 @@ import (
 )
 
 type AuthAdapter struct {
-	SigninInput request_dtos.AuthDTO
+	adapter *AuthAdapter
 }
 
-func NewAuthAdapter() *AuthAdapter {
-	return &AuthAdapter{}
+func NewAuthAdapter(adapter *AuthAdapter) *AuthAdapter {
+	return &AuthAdapter{adapter: adapter}
 }
 
 func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
@@ -82,11 +82,11 @@ func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dt
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
+	
 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
-
 	var authToken response_dtos.AuthTokenResponseDTO
 	err = json.Unmarshal(dataBytes, &authToken)
 	if err != nil {
@@ -98,5 +98,25 @@ func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dt
 	} else {
 		return response_dtos.AuthTokenResponseDTO{}, nil
 	}
+}
 
+func (adapter *AuthAdapter) CheckToken(input model.TokenInput) (model.TokenResponse, error) {
+	authServiceURL := base.AuthServiceURL + "/auth/check-token"
+
+	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
+	if err != nil {
+		return model.TokenResponse{}, err
+	}
+
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return model.TokenResponse{}, err
+	}
+	var tokenResponse model.TokenResponse
+	err = json.Unmarshal(dataBytes, &tokenResponse)
+	if err != nil {
+		return model.TokenResponse{}, err
+	}
+
+	return tokenResponse, nil
 }
