@@ -3,6 +3,7 @@ import { gaiaSignin } from "../../api/store/actions/auth_service/userActions";
 import Signin from "./Signin";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSessionStorage } from 'react-use';
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const GaiaAutoSignin = () => {
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
 
+    const [sessionUserInfo, setSessionUserInfo] = useSessionStorage('userInfo', null);
     const userInfo = localStorage.getItem('userInfo');
 
     const didGaiaAuthenticateRef = useRef();
