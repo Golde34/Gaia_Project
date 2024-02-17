@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mobile_app/home_page.dart';
-import 'package:mobile_app/models/note_library.dart';
+import 'package:mobile_app/core/models/note_library.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

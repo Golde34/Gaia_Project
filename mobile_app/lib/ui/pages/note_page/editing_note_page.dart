@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/models/note.dart';
+import 'package:mobile_app/core/models/note.dart';
 
 class EditingNotePage extends StatefulWidget {
   Note note;

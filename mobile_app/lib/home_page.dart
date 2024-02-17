@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/components/bottom_nav_bar.dart';
-import 'package:mobile_app/configs/const.dart';
+import 'package:mobile_app/ui/components/bottom_nav_bar.dart';
+import 'package:mobile_app/core/configs/const.dart';
 // import 'package:mobile_app/pages/auth_page.dart';
-import 'package:mobile_app/pages/project_page.dart';
-import 'package:mobile_app/pages/setting_page.dart';
-import 'package:mobile_app/pages/note_page/note_page.dart';
+import 'package:mobile_app/ui/pages/project_page.dart';
+import 'package:mobile_app/ui/pages/setting_page.dart';
+import 'package:mobile_app/ui/pages/note_page/note_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
