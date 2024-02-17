@@ -11,7 +11,7 @@ import auth.authentication_service.infrastructure.repositories.RoleRepository;
 
 @Component
 public class RoleStoreAdapter implements RoleStore {
-    
+
     @Autowired
     private RoleRepository roleRepository;
 
@@ -33,5 +33,5 @@ public class RoleStoreAdapter implements RoleStore {
 
     public void save(Role role) {
         roleRepository.save(role);
-}   
+    }
 }

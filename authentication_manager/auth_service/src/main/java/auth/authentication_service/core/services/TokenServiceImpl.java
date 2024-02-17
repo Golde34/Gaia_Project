@@ -54,7 +54,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public CheckTokenDtoResponse checkToken(String token) {
-        // find user by token
         String username = jwtUtil.exactUsername(token);
         UserDetails userDetails = userDetailsServices.loadUserByUsername(username);
         if (jwtUtil.validateToken(token, userDetails)) {

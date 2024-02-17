@@ -1,12 +1,12 @@
-package auth.authentication_service;
+package auth.qr_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthServiceApplication {
+public class QRServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServiceApplication.class, args);
+        SpringApplication.run(QRServiceApplication.class, args);
     }
 }
