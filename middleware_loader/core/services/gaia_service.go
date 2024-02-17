@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
+	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/infrastructure/adapter/base"
 	"middleware_loader/infrastructure/graph/model"
 )
@@ -34,12 +35,8 @@ func (s *GaiaService) GaiaConnect() (interface{}, error) {
 		return "", err
 	}
 	
-	return TokenResponse{
+	return response_dtos.GaiaTokenResponse{
 		AccessToken: authToken.AccessToken,
 		RefreshToken: authToken.RefreshToken,
 	}, nil
-}
-type TokenResponse struct {
-	AccessToken string `json:"accessToken"` 
-	RefreshToken string `json:"refreshToken"`
 }

@@ -16,11 +16,18 @@ func NewAuthDTO() *AuthDTO {
 	return &AuthDTO{}
 }
 
-// mapper from graphql model to dto
 func (in *AuthDTO) MapperToModel(input model.SigninInput) {
 	mapper.AutoMapper(&input, in)
 }
 
 type TokenInputDTO struct {
 	Token string `json:"token"`
+}
+
+func NewTokenInputDTO() *TokenInputDTO {
+	return &TokenInputDTO{}
+}
+
+func (in *TokenInputDTO) MapperToModel(input model.TokenInput) {
+	mapper.AutoMapper(&input, in)
 }

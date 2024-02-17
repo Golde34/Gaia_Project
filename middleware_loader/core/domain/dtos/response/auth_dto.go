@@ -28,3 +28,8 @@ func (in *AuthTokenResponseDTO) MapperToGraphQLModel(input AuthTokenResponseDTO)
 	mapper.AutoMapper(&input, &out)
 	return out
 }
+
+type GaiaTokenResponse struct {
+	AccessToken string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+}
