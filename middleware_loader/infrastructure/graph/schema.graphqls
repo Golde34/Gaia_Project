@@ -27,6 +27,12 @@ type Mutation {
 
     createTask(input: CreateTaskInput!): Task!
     updateTask(input: UpdateTaskInput!): Task!
+    deleteTask(input: IdInput!): Task!
+    generateTaskWithoutGroupTask(input: GenerateTaskWithoutGroupTaskInput!): Task!
+    updateTaskInDialog(input: UpdateTaskInDialogInput!): Task!
+    moveTask(input: MoveTaskInput!): Task!
+    archiveTask(input: IdInput!): Task!
+    enable(input: IdInput!): Task!
 }
 
 ### Entity
@@ -205,30 +211,6 @@ input IdInput {
   id: String!
 }
 
-input CreateTaskInput {
-  title: String!
-  description: String!
-  priority: [String!]!
-  status: String!
-  startDate: String!
-  deadline: String!
-  duration: String!
-  activeStatus: String!
-  groupTaskId: String!
-}
-
-input UpdateTaskInput {
-  title: String!
-  description: String!
-  priority: [String!]!
-  status: String!
-  startDate: String!
-  deadline: String!
-  duration: String!
-  activeStatus: String!
-  taskId: String!
-}
-
 input CreateProjectInput {
   name: String!
   description: String!
@@ -256,4 +238,51 @@ input UpdateObjectNameInput {
 input UpdateColorInput {
   id: String!
   color: String!
+}
+
+input CreateTaskInput {
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
+  groupTaskId: String!
+}
+
+input UpdateTaskInput {
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
+  taskId: String!
+}
+
+input GenerateTaskWithoutGroupTaskInput {
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  startDate: String!
+  deadline: String!
+  duration: String!
+  activeStatus: String!
+  projectId: String!
+}
+
+input UpdateTaskInDialogInput {
+  title: String!
+  description: String!
+  status: String!
+}
+
+input MoveTaskInput {
+  oldGroupTaskId: String!
+  newGroupTaskId: String!
 }

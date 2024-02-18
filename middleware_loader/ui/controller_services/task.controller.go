@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"log"
 	"middleware_loader/core/domain/models"
 	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
@@ -11,6 +12,14 @@ import (
 
 	"github.com/go-chi/chi"
 )
+
+func GetAllTasks(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("GetAllTasks")
+}
+
+func GetTaskById(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("GetTaskById")
+}
 
 func CreateTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
 	var body map[string]interface{}
@@ -46,4 +55,36 @@ func UpdateTask(w http.ResponseWriter, r *http.Request, taskService *services.Ta
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
+}
+
+func DeleteTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("DeleteTask")
+}
+
+func GetSubTasksByTaskId(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("GetSubTasksByTaskId")
+}
+
+func GetCommentsByTaskId(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("GetCommentsByTaskId")
+}
+
+func GenerateTaskWithoutGroupTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("GenerateTaskWithoutGroupTask")
+}
+
+func UpdateTaskInDialog(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("UpdateTaskInDialog")
+}
+
+func MoveTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("MoveTask")
+}
+
+func ArchiveTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("ArchiveTask")
+}
+
+func Enable(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	log.Println("Enable")
 }

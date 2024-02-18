@@ -11,10 +11,6 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
-var projectService = services.NewProjectService()
-
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
@@ -30,7 +26,7 @@ func (r *mutationResolver) GaiaAutoSignin(ctx context.Context, input model.Signi
 // CheckToken is the resolver for the checkToken field.
 func (r *mutationResolver) CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error) {
 	authToken, err := authService.CheckToken(ctx, input)
-	return &authToken, err	
+	return &authToken, err
 }
 
 // CheckPermission is the resolver for the checkPermission field.
@@ -92,6 +88,36 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTas
 	return &task, err
 }
 
+// DeleteTask is the resolver for the deleteTask field.
+func (r *mutationResolver) DeleteTask(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: DeleteTask - deleteTask"))
+}
+
+// GenerateTaskWithoutGroupTask is the resolver for the generateTaskWithoutGroupTask field.
+func (r *mutationResolver) GenerateTaskWithoutGroupTask(ctx context.Context, input model.GenerateTaskWithoutGroupTaskInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: GenerateTaskWithoutGroupTask - generateTaskWithoutGroupTask"))
+}
+
+// UpdateTaskInDialog is the resolver for the updateTaskInDialog field.
+func (r *mutationResolver) UpdateTaskInDialog(ctx context.Context, input model.UpdateTaskInDialogInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: UpdateTaskInDialog - updateTaskInDialog"))
+}
+
+// MoveTask is the resolver for the moveTask field.
+func (r *mutationResolver) MoveTask(ctx context.Context, input model.MoveTaskInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: MoveTask - moveTask"))
+}
+
+// ArchiveTask is the resolver for the archiveTask field.
+func (r *mutationResolver) ArchiveTask(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: ArchiveTask - archiveTask"))
+}
+
+// Enable is the resolver for the enable field.
+func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: Enable - enable"))
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: User - user"))
@@ -112,7 +138,7 @@ func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, 
 	projects, err := projectService.ListAll(ctx)
 	modelProject := []*model.Project{}
 	for _, project := range projects {
-		projectCopy:= project
+		projectCopy := project
 		modelProject = append(modelProject, &projectCopy)
 	}
 	return modelProject, err
@@ -142,3 +168,13 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+var authService = services.NewAuthService()
+var taskService = services.NewTaskService()
+var projectService = services.NewProjectService()

@@ -53,6 +53,9 @@ export class GenerateTaskFromScratchRequestDTO {
     duration?: number;
     @IsString()
     projectId!: string;
+    @IsString()
+    @IsOptional()
+    activeStatus?: string;
 }
 
 export class UpdateTaskInDialogDTO {

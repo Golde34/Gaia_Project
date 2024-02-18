@@ -24,16 +24,15 @@ func (adapter *ProjectAdapter) ListAll() ([]response_dtos.ProjectResponseDTO, er
 
 	bodyResult, err := base.BaseAPI(listAllProjectURL, "GET", nil)
 	if err != nil {
-		return nil, err
+		return []response_dtos.ProjectResponseDTO{}, err
 	}
 
 	bodyResultMap, ok := bodyResult.(map[string]interface{})
-
 	if !ok {
-		return nil, fmt.Errorf("unexpected response format")
+		return []response_dtos.ProjectResponseDTO{}, fmt.Errorf("unexpected response format")
 	}
-	for _, v := range bodyResultMap["projects"].([]interface{}) {
-		project := mapper_response.ReturnProjectObjectMapper(v.(map[string]interface{}))
+	for _, projectElement := range bodyResultMap["projects"].([]interface{}) {
+		project := mapper_response.ReturnProjectObjectMapper(projectElement.(map[string]interface{}))
 		projects = append(projects, *project)
 	}
 

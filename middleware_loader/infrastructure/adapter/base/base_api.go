@@ -24,6 +24,9 @@ func baseAPIWithInput(url string, method string, input interface{}) (interface{}
 
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonData))
 	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		return errorReturnBlock("send request ", err)
+	}
 
 	return returnResponseData(req)
 }
