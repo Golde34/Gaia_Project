@@ -1,3 +1,35 @@
-2024-02-17 16:25:03,042 - root - INFO - Microservice is running
-2024-02-17 16:25:03,428 - root - INFO - Bot wakeup...
-2024-02-17 16:25:03,428 - root - INFO - Listen command
+2024-02-18 12:11:08,539 - root - INFO - Microservice is running
+2024-02-18 12:11:08,991 - root - INFO - Bot wakeup...
+2024-02-18 12:11:08,991 - root - INFO - Listen command
+2024-02-18 12:11:23,514 - root - INFO - Handle input
+2024-02-18 12:11:26,471 - root - INFO - Skill tag:Greeting
+2024-02-18 12:11:26,471 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:11:26,471 - root - INFO - Listen command
+2024-02-18 12:11:39,517 - root - INFO - Handle input
+2024-02-18 12:11:41,794 - root - INFO - Skill tag:Greeting
+2024-02-18 12:11:41,794 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:11:41,794 - root - INFO - Listen command
+2024-02-18 12:11:45,972 - root - INFO - Handle input
+2024-02-18 12:11:48,214 - root - INFO - Skill tag:Greeting
+2024-02-18 12:11:48,214 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:11:48,214 - root - INFO - Listen command
+2024-02-18 12:11:51,731 - root - INFO - Handle input
+2024-02-18 12:11:53,943 - root - INFO - Skill tag:Greeting
+2024-02-18 12:11:53,943 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:11:53,943 - root - INFO - Listen command
+2024-02-18 12:11:58,915 - root - INFO - Handle input
+2024-02-18 12:12:00,894 - root - INFO - Skill tag:Greeting
+2024-02-18 12:12:00,894 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:12:00,894 - root - INFO - Listen command
+2024-02-18 12:12:07,073 - root - INFO - Handle input
+2024-02-18 12:12:09,110 - root - INFO - Skill tag:Greeting
+2024-02-18 12:12:09,110 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:12:09,110 - root - INFO - Listen command
+2024-02-18 12:12:12,990 - root - INFO - Handle input
+2024-02-18 12:12:15,194 - root - INFO - Skill tag:Greeting
+2024-02-18 12:12:15,195 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:12:15,195 - root - INFO - Listen command
+2024-02-18 12:12:19,396 - root - INFO - Handle input
+2024-02-18 12:12:21,412 - root - INFO - Skill tag:Greeting
+2024-02-18 12:12:21,412 - root - INFO - Response transcript with skill: Greeting
+2024-02-18 12:12:21,412 - root - INFO - Listen command
