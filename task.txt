@@ -30,6 +30,8 @@ github api: 3012
 auto tool: 3011
 AI model: 3010
 
+kafka-conduktor: 8080
+
 15-9-23
 if bot doesnt know which task is, then create a "Add new Skill mechanism"
 
