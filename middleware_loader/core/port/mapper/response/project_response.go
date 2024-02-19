@@ -2,7 +2,7 @@ package mapper
 
 import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	"middleware_loader/core/port/mapper/response/base"
+	"middleware_loader/core/port/mapper/base"
 )
 
 func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.ProjectResponseDTO {

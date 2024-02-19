@@ -13,12 +13,23 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func GetAllTasks(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("GetAllTasks")
+func ListAllTasks(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllTasks", QueryInput: nil, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func GetTaskById(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("GetTaskById")
+	taskId := chi.URLParam(r, "id")
+	input := mapper.GetTaskId(taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "getTaskById", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func CreateTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
@@ -58,7 +69,14 @@ func UpdateTask(w http.ResponseWriter, r *http.Request, taskService *services.Ta
 }
 
 func DeleteTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("DeleteTask")
+	taskId := chi.URLParam(r, "id")
+	input := mapper.GetTaskId(taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "deleteTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func GetSubTasksByTaskId(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
@@ -70,21 +88,76 @@ func GetCommentsByTaskId(w http.ResponseWriter, r *http.Request, taskService *se
 }
 
 func GenerateTaskWithoutGroupTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("GenerateTaskWithoutGroupTask")
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	input := mapper.GenerateTaskRequestDTOMapper(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "generateTaskWithoutGroupTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func UpdateTaskInDialog(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("UpdateTaskInDialog")
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	taskId := chi.URLParam(r, "id")
+
+	input := mapper.UpdateTaskInDialogRequestDTOMapper(body, taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateTaskInDialog", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func MoveTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("MoveTask")
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	taskId := chi.URLParam(r, "id")
+
+	input := mapper.MoveTaskRequestDTOMapper(body, taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "moveTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func ArchiveTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("ArchiveTask")
+	taskId := chi.URLParam(r, "id")
+	input := mapper.GetTaskId(taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "archiveTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
 func Enable(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
-	log.Println("Enable")
+	taskId := chi.URLParam(r, "id")
+	input := mapper.GetTaskId(taskId)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "enableTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }

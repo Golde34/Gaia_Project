@@ -15,10 +15,10 @@ type TaskRouter struct {
 func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
 	r.Route("/task", func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.GetAllTasks(w, r, taskService)
+			controller_services.ListAllTasks(w, r, taskService)
 		})
 		r.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.GetTaskById(w, r, taskService)
+			controller_services.GetTaskById(w, r, taskService)
 		})
 		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CreateTask(w, r, taskService)
@@ -27,28 +27,28 @@ func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
 			controller_services.UpdateTask(w, r, taskService)
 		})
 		r.Delete("/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.DeleteTask(w, r, taskService)
+			controller_services.DeleteTask(w, r, taskService)
 		})
 		r.Get("/{id}/sub-tasks", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.GetSubTasksByTaskId(w, r, taskService)
+			controller_services.GetSubTasksByTaskId(w, r, taskService)
 		})
 		r.Get("/{id}/comments", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.GetCommentsByTaskId(w, r, taskService)
+			controller_services.GetCommentsByTaskId(w, r, taskService)
 		})
 		r.Post("/generate", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.GenerateTaskWithoutGroupTask(w, r, taskService)
+			controller_services.GenerateTaskWithoutGroupTask(w, r, taskService)
 		})
 		r.Put("/update-task-in-dialog/{id}", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.UpdateTaskInDialog(w, r, taskService)
+			controller_services.UpdateTaskInDialog(w, r, taskService)
 		})
 		r.Put("/{id}/move-task", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.MoveTask(w, r, taskService)
+			controller_services.MoveTask(w, r, taskService)
 		})
 		r.Put("/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.ArchiveTask(w, r, taskService)
+			controller_services.ArchiveTask(w, r, taskService)
 		})
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
-			// controller_services.Enable(w, r, taskService)
+			controller_services.Enable(w, r, taskService)
 		})
 	})
 	return &TaskRouter{
