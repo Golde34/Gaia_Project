@@ -69,7 +69,7 @@ class ProjectRepository {
         return await ProjectEntity.findOne({ groupTasks: groupTaskId })
     }
 
-    async archieveProject(projectId: string): Promise<UpdateWriteOpResult> {
+    async archiveProject(projectId: string): Promise<UpdateWriteOpResult> {
         return await ProjectEntity
             .updateOne({ _id: projectId }, 
                 { activeStatus: ActiveStatus.inactive },

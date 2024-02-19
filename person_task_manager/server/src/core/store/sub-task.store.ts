@@ -30,8 +30,8 @@ class SubTaskStore {
         return await subTaskRepository.findInactiveSubTaskById(subTaskId);
     }
 
-    async archieveSubTask(subTaskId: string): Promise<UpdateWriteOpResult> {
-        return await subTaskRepository.archieveSubTask(subTaskId);
+    async archiveSubTask(subTaskId: string): Promise<UpdateWriteOpResult> {
+        return await subTaskRepository.archiveSubTask(subTaskId);
     }
 
     async enableSubTask(subTaskId: string): Promise<UpdateWriteOpResult> {

@@ -4,7 +4,7 @@ import { GroupTaskRequestDto } from "../../core/domain/dtos/group-task.dto";
 import { updateNameRequestDto } from "../../core/domain/dtos/request_dtos/update-name-request.dto";
 import { groupTaskController } from "../controllers/group-task.controller";
 import { returnResult } from "../../kernel/util/return-result";
-import { ARCHIEVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, DELETE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, GROUP_TASK_NOT_FOUND, TASK_NO_RECORDS, UPDATE_GROUP_TASK_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, DELETE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, GROUP_TASK_NOT_FOUND, TASK_NO_RECORDS, UPDATE_GROUP_TASK_FAILED } from "../../core/domain/constants/error.constant";
 
 export const groupTaskRouter = Router();
 
@@ -104,11 +104,11 @@ groupTaskRouter.put("/:id/update-ordinal", async (req: Request, res: Response, n
     }
 });
 
-// archieve group task
-groupTaskRouter.put("/:id/archieve", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+// archive group task
+groupTaskRouter.put("/:id/archive", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const groupTaskResult = await groupTaskControllerImpl.archieveGroupTask(req, next);
-        returnResult(groupTaskResult, ARCHIEVE_GROUP_TASK_FAILED, res, next);
+        const groupTaskResult = await groupTaskControllerImpl.archiveGroupTask(req, next);
+        returnResult(groupTaskResult, ARCHIVE_GROUP_TASK_FAILED, res, next);
     }
     catch (err) {
         next(err);

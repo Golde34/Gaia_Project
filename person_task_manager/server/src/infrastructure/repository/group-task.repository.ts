@@ -62,7 +62,7 @@ class GroupTaskRepository {
             .findOne({ _id: groupTaskId, activeStatus: ActiveStatus.inactive });
     }
 
-    async archieveGroupTask(groupTaskId: string): Promise<UpdateWriteOpResult> {
+    async archiveGroupTask(groupTaskId: string): Promise<UpdateWriteOpResult> {
         return await GroupTaskEntity
             .updateOne({ _id: groupTaskId },
                 { activeStatus: ActiveStatus.inactive },

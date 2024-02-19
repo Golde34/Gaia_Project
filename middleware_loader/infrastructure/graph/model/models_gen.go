@@ -44,6 +44,18 @@ type CreateTaskInput struct {
 	GroupTaskID  string   `json:"groupTaskId"`
 }
 
+type GenerateTaskWithoutGroupTaskInput struct {
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	Priority     []string `json:"priority"`
+	Status       string   `json:"status"`
+	StartDate    string   `json:"startDate"`
+	Deadline     string   `json:"deadline"`
+	Duration     string   `json:"duration"`
+	ActiveStatus string   `json:"activeStatus"`
+	ProjectID    string   `json:"projectId"`
+}
+
 type GroupTask struct {
 	ID             string   `json:"id"`
 	Title          string   `json:"title"`
@@ -62,6 +74,12 @@ type GroupTask struct {
 
 type IDInput struct {
 	ID string `json:"id"`
+}
+
+type MoveTaskInput struct {
+	OldGroupTaskID string `json:"oldGroupTaskId"`
+	NewGroupTaskID string `json:"newGroupTaskId"`
+	TaskID         string `json:"taskId"`
 }
 
 type Project struct {
@@ -140,6 +158,13 @@ type UpdateProjectInput struct {
 	Color        string `json:"color"`
 	Owner        string `json:"owner"`
 	ActiveStatus string `json:"activeStatus"`
+}
+
+type UpdateTaskInDialogInput struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	TaskID      string `json:"taskId"`
 }
 
 type UpdateTaskInput struct {

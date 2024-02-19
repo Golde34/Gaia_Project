@@ -57,10 +57,10 @@ class SubTaskController {
         }
     }
 
-    async archieveSubTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async archiveSubTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const subTaskId = req.params.id;
-            const subTaskResult = await subTaskService.archieveSubTask(subTaskId);
+            const subTaskResult = await subTaskService.archiveSubTask(subTaskId);
 
             return subTaskResult;
         } catch (err) {

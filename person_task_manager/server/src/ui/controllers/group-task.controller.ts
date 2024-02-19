@@ -115,10 +115,10 @@ class GroupTaskController {
         }
     }
 
-    async archieveGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async archiveGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupTaskId = req.params.id;
-            const groupTaskResult = await groupTaskService.archieveGroupTask(groupTaskId);
+            const groupTaskResult = await groupTaskService.archiveGroupTask(groupTaskId);
 
             return groupTaskResult;
         } catch (err) {

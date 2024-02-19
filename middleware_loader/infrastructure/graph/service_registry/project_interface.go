@@ -13,6 +13,6 @@ type ProjectService interface {
 	DeleteProject(ctx context.Context, input model.IDInput) (model.Project, error)
 	UpdateProjectName(ctx context.Context, input model.UpdateObjectNameInput) (model.Project, error)
 	UpdateProjectColor(ctx context.Context, input model.UpdateColorInput) (model.Project, error)
-	ArchieveProject(ctx context.Context, input model.IDInput) (model.Project, error)
+	ArchiveProject(ctx context.Context, input model.IDInput) (model.Project, error)
 	EnableProject(ctx context.Context, input model.IDInput) (model.Project, error)
 }

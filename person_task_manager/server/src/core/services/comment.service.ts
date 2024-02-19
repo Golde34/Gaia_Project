@@ -73,16 +73,16 @@ class CommentService {
         });
     }
 
-    async archieveComment(commentId: string): Promise<IResponse | undefined> {
+    async archiveComment(commentId: string): Promise<IResponse | undefined> {
         try {
             if (await commentValidationImpl.checkExistedCommentById(commentId) === true) {
                 const comment = await commentStore.findActiveCommentById(commentId);
                 if (comment === null) {
                     return msg400(COMMENT_NOT_FOUND);
                 } else {
-                    await commentStore.archieveComment(commentId);
+                    await commentStore.archiveComment(commentId);
                     return msg200({
-                        message: "Comment archieved successfully"
+                        message: "Comment archived successfully"
                     });
                 }
             }

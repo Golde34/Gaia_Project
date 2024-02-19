@@ -72,16 +72,16 @@ class SubTaskService {
         });
     }
 
-    async archieveSubTask(subTaskId: string): Promise<IResponse | undefined> {
+    async archiveSubTask(subTaskId: string): Promise<IResponse | undefined> {
         try {
             if (await subTaskValidationImpl.checkExistedSubTaskBySubTaskId(subTaskId) === true) {
                 const subTask = await subTaskStore.findActiveSubTaskById(subTaskId);
                 if (subTask === null) {
                     return msg400(SUB_TASK_NOT_FOUND);
                 } else {
-                    await subTaskStore.archieveSubTask(subTaskId);
+                    await subTaskStore.archiveSubTask(subTaskId);
                     return msg200({
-                        message: "Sub task archieved"
+                        message: "Sub task archived"
                     });
                 }
             }

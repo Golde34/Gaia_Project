@@ -58,8 +58,8 @@ class ProjectStore {
         return projectRepository.findOneProjectByGroupTaskId(groupTaskId);
     }
 
-    async archieveProject(projectId: string): Promise<UpdateWriteOpResult> {
-        return projectRepository.archieveProject(projectId);
+    async archiveProject(projectId: string): Promise<UpdateWriteOpResult> {
+        return projectRepository.archiveProject(projectId);
     }
 
     async enableProject(projectId: string): Promise<UpdateWriteOpResult> {

@@ -30,7 +30,7 @@ class CommentRepository {
         return await CommentEntity.findOne({ _id: commentId, activeStatus: ActiveStatus.inactive });
     }
 
-    async archieveComment(commentId: string): Promise<UpdateWriteOpResult> {
+    async archiveComment(commentId: string): Promise<UpdateWriteOpResult> {
         return await CommentEntity.updateOne({ _id: commentId }, { activeStatus: ActiveStatus.inactive });
     }
 

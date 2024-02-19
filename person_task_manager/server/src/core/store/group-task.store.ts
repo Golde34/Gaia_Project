@@ -46,8 +46,8 @@ class GroupTaskStore {
         return await groupTaskRepository.findOneInactiveGroupTaskById(groupTaskId);
     }
 
-    async archieveGroupTask(groupTaskId: string): Promise<UpdateWriteOpResult> {
-        return await groupTaskRepository.archieveGroupTask(groupTaskId);
+    async archiveGroupTask(groupTaskId: string): Promise<UpdateWriteOpResult> {
+        return await groupTaskRepository.archiveGroupTask(groupTaskId);
     }
 
     async enableGroupTask(groupTaskId: string): Promise<UpdateWriteOpResult> {

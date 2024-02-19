@@ -14,6 +14,6 @@ type IProjectAdapter interface {
 	// GetGroupTasks(id string) ([]response_dtos.TaskResponseDTO, error)
 	UpdateProjectName(input model.UpdateObjectNameInput, id string) (response_dtos.ProjectResponseDTO, error)
 	UpdateProjectColor(input model.UpdateColorInput, id string) (response_dtos.ProjectResponseDTO, error)
-	ArchieveProject(id string) (response_dtos.ProjectResponseDTO, error)
+	ArchiveProject(id string) (response_dtos.ProjectResponseDTO, error)
 	EnableProject(id string) (response_dtos.ProjectResponseDTO, error)
 }

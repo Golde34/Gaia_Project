@@ -11,10 +11,6 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
-var projectService = services.NewProjectService()
-
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
 	authToken, err := authService.Signin(ctx, input)
@@ -30,7 +26,7 @@ func (r *mutationResolver) GaiaAutoSignin(ctx context.Context, input model.Signi
 // CheckToken is the resolver for the checkToken field.
 func (r *mutationResolver) CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error) {
 	authToken, err := authService.CheckToken(ctx, input)
-	return &authToken, err	
+	return &authToken, err
 }
 
 // CheckPermission is the resolver for the checkPermission field.
@@ -68,10 +64,9 @@ func (r *mutationResolver) UpdateProjectColor(ctx context.Context, input model.U
 	return &project, err
 }
 
-// ArchieveProject is the resolver for the archieveProject field.
-func (r *mutationResolver) ArchieveProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
-	project, err := projectService.ArchieveProject(ctx, input)
-	return &project, err
+// ArchiveProject is the resolver for the archiveProject field.
+func (r *mutationResolver) ArchiveProject(ctx context.Context, input model.IDInput) (*model.Project, error) {
+	panic(fmt.Errorf("not implemented: ArchiveProject - archiveProject"))
 }
 
 // EnableProject is the resolver for the enableProject field.
@@ -90,6 +85,36 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input model.CreateTas
 func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTaskInput) (*model.Task, error) {
 	task, err := taskService.UpdateTask(ctx, input)
 	return &task, err
+}
+
+// DeleteTask is the resolver for the deleteTask field.
+func (r *mutationResolver) DeleteTask(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: DeleteTask - deleteTask"))
+}
+
+// GenerateTaskWithoutGroupTask is the resolver for the generateTaskWithoutGroupTask field.
+func (r *mutationResolver) GenerateTaskWithoutGroupTask(ctx context.Context, input model.GenerateTaskWithoutGroupTaskInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: GenerateTaskWithoutGroupTask - generateTaskWithoutGroupTask"))
+}
+
+// UpdateTaskInDialog is the resolver for the updateTaskInDialog field.
+func (r *mutationResolver) UpdateTaskInDialog(ctx context.Context, input model.UpdateTaskInDialogInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: UpdateTaskInDialog - updateTaskInDialog"))
+}
+
+// MoveTask is the resolver for the moveTask field.
+func (r *mutationResolver) MoveTask(ctx context.Context, input model.MoveTaskInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: MoveTask - moveTask"))
+}
+
+// ArchiveTask is the resolver for the archiveTask field.
+func (r *mutationResolver) ArchiveTask(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: ArchiveTask - archiveTask"))
+}
+
+// Enable is the resolver for the enable field.
+func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: Enable - enable"))
 }
 
 // User is the resolver for the user field.
@@ -112,7 +137,7 @@ func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, 
 	projects, err := projectService.ListAll(ctx)
 	modelProject := []*model.Project{}
 	for _, project := range projects {
-		projectCopy:= project
+		projectCopy := project
 		modelProject = append(modelProject, &projectCopy)
 	}
 	return modelProject, err
@@ -142,3 +167,7 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+var authService = services.NewAuthService()
+var taskService = services.NewTaskService()
+var projectService = services.NewProjectService()

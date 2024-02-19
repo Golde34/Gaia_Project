@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { sendResponse } from "../../core/common/response_helpers";
-import { commentService } from "../../core/services/comment.service";
 import { RequestValidator } from "../../core/common/error-handler";
 import { CommentRequestDto } from "../../core/domain/dtos/comment.dto";
-import { plainToInstance } from "class-transformer";
 import { commentController } from "../controllers/comment.controller";
 import { returnResult } from "../../kernel/util/return-result";
-import { ARCHIEVE_COMMENT_FAILED, COMMENT_NOT_FOUND, CREATE_COMMENT_FAILED, DELETE_COMMENT_FAILED, ENABLE_COMMENT_FAILED, UPDATE_COMMENT_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIVE_COMMENT_FAILED, COMMENT_NOT_FOUND, CREATE_COMMENT_FAILED, DELETE_COMMENT_FAILED, ENABLE_COMMENT_FAILED, UPDATE_COMMENT_FAILED } from "../../core/domain/constants/error.constant";
 
 export const commentRouter = Router();
 
@@ -56,11 +53,11 @@ commentRouter.delete("/:id", async (req: Request, res: Response, next: NextFunct
     }
 });
 
-// archieve comment
-commentRouter.put("/:id/archieve", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+// archive comment
+commentRouter.put("/:id/archive", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const commentResult = await commentControllerImpl.archieveComment(req, next);
-        returnResult(commentResult, ARCHIEVE_COMMENT_FAILED, res, next);
+        const commentResult = await commentControllerImpl.archiveComment(req, next);
+        returnResult(commentResult, ARCHIVE_COMMENT_FAILED, res, next);
     } catch (err) {
         next(err);
     }
