@@ -203,16 +203,16 @@ class TaskService {
         }
     }
 
-    async archieveTask(taskId: string): Promise<IResponse | undefined> {
+    async archiveTask(taskId: string): Promise<IResponse | undefined> {
         try {
             if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const task = await taskStore.findActiveTaskById(taskId);
                 if (task === null) {
                     return msg400(TASK_NOT_FOUND);
                 } else {
-                    await taskStore.archieveTask(taskId);
+                    await taskStore.archiveTask(taskId);
                     return msg200({
-                        message: 'Archieve task successfully'
+                        message: 'Archive task successfully'
                     });
                 }
             }

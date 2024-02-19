@@ -54,7 +54,7 @@ class TaskRepository {
         return await TaskEntity.findOne({ _id: taskId, activeStatus: ActiveStatus.inactive });
     }
 
-    async archieveTask(taskId: string): Promise<UpdateWriteOpResult> {
+    async archiveTask(taskId: string): Promise<UpdateWriteOpResult> {
         return await TaskEntity
             .updateOne({ _id: taskId }, 
                 { activeStatus: ActiveStatus.inactive },

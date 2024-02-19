@@ -3,7 +3,7 @@ import { RequestValidator } from "../../core/common/error-handler";
 import { ProjectRequestDto, UpdateColorDto } from "../../core/domain/dtos/project.dto";
 import { updateNameRequestDto } from "../../core/domain/dtos/request_dtos/update-name-request.dto";
 import { projectController } from "../controllers/project.controller";
-import { ARCHIEVE_PROJECT_FAILED, CREATE_PROJECT_FAILED, DELETE_PROJECT_FAILED, ENABLE_PROJECT_FAILED, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND, PROJECT_NO_RECORDS, UPDATE_PROJECT_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIVE_PROJECT_FAILED, CREATE_PROJECT_FAILED, DELETE_PROJECT_FAILED, ENABLE_PROJECT_FAILED, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND, PROJECT_NO_RECORDS, UPDATE_PROJECT_FAILED } from "../../core/domain/constants/error.constant";
 import { returnResult } from "../../kernel/util/return-result";
 
 export const projectRouter = Router();
@@ -100,20 +100,20 @@ projectRouter.put("/:id/update-color",
     }
 });
 
-// archieve project 
+// archive project 
 projectRouter.put("/:id/archive", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const projectResult = await projectControllerImpl.archieveProject(req, next);
-        return returnResult(projectResult, ARCHIEVE_PROJECT_FAILED, res, next);
+        const projectResult = await projectControllerImpl.archiveProject(req, next);
+        return returnResult(projectResult, ARCHIVE_PROJECT_FAILED, res, next);
     } catch (err) {
         next(err);
     }
 });
 
-// unarchieve project
+// enable project
 projectRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const projectResult = await projectControllerImpl.unarchieveProject(req, next);
+        const projectResult = await projectControllerImpl.enableProject(req, next);
         return returnResult(projectResult, ENABLE_PROJECT_FAILED, res, next);
     } catch (err) {
         next(err);

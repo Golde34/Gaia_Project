@@ -148,14 +148,14 @@ class ProjectService {
         }
     }
 
-    async archieveProject(projectId: string): Promise<IResponse | undefined> {
+    async archiveProject(projectId: string): Promise<IResponse | undefined> {
         try {
             if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
                 const project = await projectStore.findOneActiveProjectById(projectId);
                 if (project === null) {
                     return msg400(PROJECT_NOT_FOUND);
                 } else {
-                    await projectStore.archieveProject(projectId);
+                    await projectStore.archiveProject(projectId);
                     return msg200({
                         message: "Project archived"
                     });

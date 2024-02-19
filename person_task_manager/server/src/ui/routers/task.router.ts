@@ -4,7 +4,7 @@ import { Permission } from "../../core/domain/enums/enums";
 import { RequestValidator } from "../../core/common/error-handler";
 import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/task.dto";
 import { taskController } from "../controllers/task.controller";
-import { ARCHIEVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
 import { returnResult } from "../../kernel/util/return-result";
 
 export const taskRouter = Router();
@@ -131,17 +131,17 @@ taskRouter.put("/:id/move-task",
         }
     });
 
-// archieve task
-taskRouter.put("/:id/archieve", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+// archive task
+taskRouter.put("/:id/archive", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const taskResult = await taskControllerImpl.archieveTask(req, next);
-        return returnResult(taskResult, ARCHIEVE_TASK_FAILED, res, next);
+        const taskResult = await taskControllerImpl.archiveTask(req, next);
+        return returnResult(taskResult, ARCHIVE_TASK_FAILED, res, next);
     } catch (err) {
         next(err);
     }
 });
 
-// archieve task
+// enable task
 taskRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const taskResult = await taskControllerImpl.enableTask(req, next);

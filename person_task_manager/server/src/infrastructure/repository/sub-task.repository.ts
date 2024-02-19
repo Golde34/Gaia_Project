@@ -30,7 +30,7 @@ class SubTaskRepository {
         return await SubTaskEntity.findOne({ _id: subTaskId, activeStatus: ActiveStatus.inactive });
     }
 
-    async archieveSubTask(subTaskId: string): Promise<UpdateWriteOpResult> {
+    async archiveSubTask(subTaskId: string): Promise<UpdateWriteOpResult> {
         return await SubTaskEntity.updateOne({ _id: subTaskId }, { activeStatus: ActiveStatus.inactive });
     }
 

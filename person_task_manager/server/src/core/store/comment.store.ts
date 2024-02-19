@@ -30,8 +30,8 @@ class CommentStore {
         return await commentRepository.findInactiveCommentById(commentId);
     }
 
-    async archieveComment(commentId: string): Promise<UpdateWriteOpResult> {
-        return await commentRepository.archieveComment(commentId);
+    async archiveComment(commentId: string): Promise<UpdateWriteOpResult> {
+        return await commentRepository.archiveComment(commentId);
     }
 
     async enableComment(commentId: string): Promise<UpdateWriteOpResult> {

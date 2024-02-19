@@ -153,10 +153,10 @@ class TaskController {
         }
     }
 
-    async archieveTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async archiveTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const taskId = req.params.id;
-            const taskResult = await taskService.archieveTask(taskId);
+            const taskResult = await taskService.archiveTask(taskId);
 
             return taskResult;
         } catch (err) {

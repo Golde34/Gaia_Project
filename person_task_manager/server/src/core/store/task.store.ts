@@ -50,8 +50,8 @@ class TaskStore {
         return await taskRepository.findOneInactiveTask(taskId);
     }
 
-    async archieveTask(taskId: string): Promise<UpdateWriteOpResult> {
-        return await taskRepository.archieveTask(taskId);
+    async archiveTask(taskId: string): Promise<UpdateWriteOpResult> {
+        return await taskRepository.archiveTask(taskId);
     }
 
     async enableTask(taskId: string): Promise<UpdateWriteOpResult> {

@@ -106,10 +106,10 @@ class ProjectController {
         }
     }
 
-    async archieveProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async archiveProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const projectResult = await projectService.archieveProject(id);
+            const projectResult = await projectService.archiveProject(id);
 
             return projectResult;
         } catch (err) {
@@ -117,7 +117,7 @@ class ProjectController {
         }
     }
 
-    async unarchieveProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async enableProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
             const projectResult = await projectService.enableProject(id);

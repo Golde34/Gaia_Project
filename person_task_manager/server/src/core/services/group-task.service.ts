@@ -1,6 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
-import { ARCHIEVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
+import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { TaskEntity } from "../domain/entities/task.entity";
 import { groupTaskStore } from "../store/group-task.store";
 import { projectStore } from "../store/project.store";
@@ -219,16 +219,16 @@ class GroupTaskService {
         }
     }
 
-    async archieveGroupTask(groupTaskId: string): Promise<IResponse | undefined> {
+    async archiveGroupTask(groupTaskId: string): Promise<IResponse | undefined> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const groupTask = await groupTaskStore.findOneActiveGroupTaskById(groupTaskId);
                 if (groupTask === null) {
-                    return msg400(ARCHIEVE_GROUP_TASK_FAILED);
+                    return msg400(ARCHIVE_GROUP_TASK_FAILED);
                 } else {
-                    await groupTaskStore.archieveGroupTask(groupTaskId);
+                    await groupTaskStore.archiveGroupTask(groupTaskId);
                     return msg200({
-                        message: 'Group task archieve'
+                        message: 'Group task archive'
                     });
                 }
             }

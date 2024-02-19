@@ -21,29 +21,29 @@ export const COMMENT_NO_RECORDS = "No comments found";
 export const CREATE_PROJECT_FAILED = "Create project failed";
 export const UPDATE_PROJECT_FAILED = "Update project failed";
 export const DELETE_PROJECT_FAILED = "Delete project failed";
-export const ARCHIEVE_PROJECT_FAILED = "Archieve project failed";
+export const ARCHIVE_PROJECT_FAILED = "Archive project failed";
 export const ENABLE_PROJECT_FAILED = "Enable project failed";
 
 export const CREATE_GROUP_TASK_FAILED = "Create group task failed";
 export const UPDATE_GROUP_TASK_FAILED = "Update group task failed";
 export const DELETE_GROUP_TASK_FAILED = "Delete group task failed";
-export const ARCHIEVE_GROUP_TASK_FAILED = "Archieve group task failed";
+export const ARCHIVE_GROUP_TASK_FAILED = "Archive group task failed";
 export const ENABLE_GROUP_TASK_FAILED = "Enable group task failed";
 
 export const CREATE_TASK_FAILED = "Create task failed";
 export const UPDATE_TASK_FAILED = "Update task failed";
 export const DELETE_TASK_FAILED = "Delete task failed";
-export const ARCHIEVE_TASK_FAILED = "Archieve task failed";
+export const ARCHIVE_TASK_FAILED = "Archive task failed";
 export const ENABLE_TASK_FAILED = "Enable task failed";
 
 export const CREATE_SUB_TASK_FAILED = "Create sub task failed";
 export const UPDATE_SUB_TASK_FAILED = "Update sub task failed";
 export const DELETE_SUB_TASK_FAILED = "Delete sub task failed";
-export const ARCHIEVE_SUB_TASK_FAILED = "Archieve sub task failed";
+export const ARCHIVE_SUB_TASK_FAILED = "Archive sub task failed";
 export const ENABLE_SUB_TASK_FAILED = "Enable sub task failed";
 
 export const CREATE_COMMENT_FAILED = "Create comment failed";
 export const UPDATE_COMMENT_FAILED = "Update comment failed";
 export const DELETE_COMMENT_FAILED = "Delete comment failed";
-export const ARCHIEVE_COMMENT_FAILED = "Archieve comment failed";
+export const ARCHIVE_COMMENT_FAILED = "Archive comment failed";
 export const ENABLE_COMMENT_FAILED = "Enable comment failed";

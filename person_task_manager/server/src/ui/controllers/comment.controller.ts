@@ -57,10 +57,10 @@ class CommentController {
         }
     }
 
-    async archieveComment(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async archiveComment(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const commentId = req.params.id;
-            const commentResult = await commentService.archieveComment(commentId);
+            const commentResult = await commentService.archiveComment(commentId);
 
             return commentResult;
         } catch (err) {
