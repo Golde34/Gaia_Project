@@ -133,12 +133,12 @@ func UpdateProjectColor(w http.ResponseWriter, r *http.Request, projectService *
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
-func ArchieveProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+func ArchiveProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
 	input := mapper.GetProjectId(projectId)
 
 	graphqlQueryModel := []models.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "archieveProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "archiveProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)

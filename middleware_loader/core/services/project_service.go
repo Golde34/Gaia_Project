@@ -117,8 +117,8 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 	}
 }
 
-func (s *ProjectService) ArchieveProject(ctx context.Context, input model.IDInput) (model.Project, error) {
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).ArchieveProject(input.ID)
+func (s *ProjectService) ArchiveProject(ctx context.Context, input model.IDInput) (model.Project, error) {
+	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).ArchiveProject(input.ID)
 	if err != nil {
 		return model.Project{}, err
 	} else {

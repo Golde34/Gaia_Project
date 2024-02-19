@@ -35,3 +35,11 @@ func (in *TaskResponseDTO) MapperToGraphQLModel(input TaskResponseDTO) model.Tas
 	mapper.AutoMapper(&input, &out)
 	return out
 }
+
+func (in *TaskResponseDTO) MapperListToGraphQLModel(input []TaskResponseDTO) []model.Task{
+	var out []model.Task
+	for _, item := range input {
+		out = append(out, in.MapperToGraphQLModel(item))
+	}
+	return out
+}

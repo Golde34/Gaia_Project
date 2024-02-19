@@ -10,6 +10,9 @@ import (
 type TaskValidator struct {
 	CreateTaskRequestDTO request_dtos.CreateTaskRequestDTO
 	UpdateTaskRequestDTO request_dtos.UpdateTaskRequestDTO
+	GenerateTaskRequestDTO request_dtos.GenerateTaskRequestDTO
+	MoveTaskRequestDTO request_dtos.MoveTaskRequestDTO
+	UpdateTaskInDialogRequestDTO request_dtos.UpdateTaskInDialogRequestDTO
 }
 
 func NewTaskDTOValidator() *TaskValidator {
@@ -25,6 +28,33 @@ func (in *TaskValidator) CreateTaskValidate(input model.CreateTaskInput) error {
 }
 
 func (in *TaskValidator) UpdateTaskValidate(input model.UpdateTaskInput) error {
+	if input.Title == "" {
+		return fmt.Errorf("%w: title is required", enums.ErrValidation)
+	}
+
+	return nil
+}
+
+func (in *TaskValidator) GenerateTaskValidate(input model.GenerateTaskWithoutGroupTaskInput) error {
+	if input.Title == "" {
+		return fmt.Errorf("%w: title is required", enums.ErrValidation)
+	}
+
+	return nil
+}
+
+func (in *TaskValidator) MoveTaskValidate(input model.MoveTaskInput) error {
+	if input.OldGroupTaskID == "" {
+		return fmt.Errorf("%w: task id is required", enums.ErrValidation)
+	}
+	if input.NewGroupTaskID == "" {
+		return fmt.Errorf("%w: group task id is required", enums.ErrValidation)
+	}
+
+	return nil
+}
+
+func (in *TaskValidator) UpdateTaskInDialogValidate(input model.UpdateTaskInDialogInput) error {
 	if input.Title == "" {
 		return fmt.Errorf("%w: title is required", enums.ErrValidation)
 	}

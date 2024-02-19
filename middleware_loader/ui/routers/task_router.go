@@ -44,7 +44,7 @@ func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
 		r.Put("/{id}/move-task", func(w http.ResponseWriter, r *http.Request) {
 			// controller_services.MoveTask(w, r, taskService)
 		})
-		r.Put("/{id}/archieve", func(w http.ResponseWriter, r *http.Request) {
+		r.Put("/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
 			// controller_services.ArchiveTask(w, r, taskService)
 		})
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {

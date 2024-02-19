@@ -85,7 +85,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		ArchieveProject              func(childComplexity int, input model.IDInput) int
+		ArchiveProject               func(childComplexity int, input model.IDInput) int
 		ArchiveTask                  func(childComplexity int, input model.IDInput) int
 		CheckPermission              func(childComplexity int, input model.UserPermissionInput) int
 		CheckToken                   func(childComplexity int, input model.TokenInput) int
@@ -194,7 +194,7 @@ type MutationResolver interface {
 	DeleteProject(ctx context.Context, input model.IDInput) (*model.Project, error)
 	UpdateProjectName(ctx context.Context, input model.UpdateObjectNameInput) (*model.Project, error)
 	UpdateProjectColor(ctx context.Context, input model.UpdateColorInput) (*model.Project, error)
-	ArchieveProject(ctx context.Context, input model.IDInput) (*model.Project, error)
+	ArchiveProject(ctx context.Context, input model.IDInput) (*model.Project, error)
 	EnableProject(ctx context.Context, input model.IDInput) (*model.Project, error)
 	CreateTask(ctx context.Context, input model.CreateTaskInput) (*model.Task, error)
 	UpdateTask(ctx context.Context, input model.UpdateTaskInput) (*model.Task, error)
@@ -430,17 +430,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupTask.UpdatedAt(childComplexity), true
 
-	case "Mutation.archieveProject":
-		if e.complexity.Mutation.ArchieveProject == nil {
+	case "Mutation.archiveProject":
+		if e.complexity.Mutation.ArchiveProject == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_archieveProject_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_archiveProject_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ArchieveProject(childComplexity, args["input"].(model.IDInput)), true
+		return e.complexity.Mutation.ArchiveProject(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Mutation.archiveTask":
 		if e.complexity.Mutation.ArchiveTask == nil {
@@ -1202,7 +1202,7 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_archieveProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_archiveProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.IDInput
@@ -3478,8 +3478,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProjectColor(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_archieveProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_archieveProject(ctx, field)
+func (ec *executionContext) _Mutation_archiveProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_archiveProject(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3492,7 +3492,7 @@ func (ec *executionContext) _Mutation_archieveProject(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ArchieveProject(rctx, fc.Args["input"].(model.IDInput))
+		return ec.resolvers.Mutation().ArchiveProject(rctx, fc.Args["input"].(model.IDInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3509,7 +3509,7 @@ func (ec *executionContext) _Mutation_archieveProject(ctx context.Context, field
 	return ec.marshalNProject2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProject(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_archieveProject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_archiveProject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -3548,7 +3548,7 @@ func (ec *executionContext) fieldContext_Mutation_archieveProject(ctx context.Co
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_archieveProject_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_archiveProject_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -9137,7 +9137,7 @@ func (ec *executionContext) unmarshalInputMoveTaskInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"oldGroupTaskId", "newGroupTaskId"}
+	fieldsInOrder := [...]string{"oldGroupTaskId", "newGroupTaskId", "taskId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9158,6 +9158,13 @@ func (ec *executionContext) unmarshalInputMoveTaskInput(ctx context.Context, obj
 				return it, err
 			}
 			it.NewGroupTaskID = data
+		case "taskId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taskId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TaskID = data
 		}
 	}
 
@@ -9369,7 +9376,7 @@ func (ec *executionContext) unmarshalInputUpdateTaskInDialogInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "description", "status"}
+	fieldsInOrder := [...]string{"title", "description", "status", "taskId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9397,6 +9404,13 @@ func (ec *executionContext) unmarshalInputUpdateTaskInDialogInput(ctx context.Co
 				return it, err
 			}
 			it.Status = data
+		case "taskId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taskId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TaskID = data
 		}
 	}
 
@@ -9852,9 +9866,9 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "archieveProject":
+		case "archiveProject":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_archieveProject(ctx, field)
+				return ec._Mutation_archiveProject(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

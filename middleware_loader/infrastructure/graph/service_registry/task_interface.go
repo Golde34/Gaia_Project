@@ -7,7 +7,7 @@ import (
 )
 
 type TaskService interface {
-	GetAllTasks(ctx context.Context) ([]model.Task, error)
+	ListAllTasks(ctx context.Context) ([]model.Task, error)
 	GetTaskById(ctx context.Context, id string) (model.Task, error)
 	CreateTask(ctx context.Context, input model.CreateTaskInput) (model.Task, error)
 	UpdateTask(ctx context.Context, input model.UpdateTaskInput) (model.Task, error)
@@ -18,5 +18,5 @@ type TaskService interface {
 	UpdateTaskInDialog(ctx context.Context, input model.UpdateTaskInDialogInput) (model.Task, error)
 	MoveTask(ctx context.Context, input model.MoveTaskInput) (model.Task, error)
 	ArchiveTask(ctx context.Context, input model.IDInput) (model.Task, error)
-	Enable(ctx context.Context, input model.IDInput) (model.Task, error)
+	EnableTask(ctx context.Context, input model.IDInput) (model.Task, error)
 }

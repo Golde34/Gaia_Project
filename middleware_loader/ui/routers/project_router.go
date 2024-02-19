@@ -38,8 +38,8 @@ func NewProjectRouter(projectService *services.ProjectService, r *chi.Mux) *Proj
 		r.Put("/{id}/update-color", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateProjectColor(w, r, projectService)
 		})
-		r.Put("/{id}/archieve", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.ArchieveProject(w, r, projectService)
+		r.Put("/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.ArchiveProject(w, r, projectService)
 		})
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.EnableProject(w, r, projectService)

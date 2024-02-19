@@ -22,7 +22,7 @@ type Mutation {
     deleteProject(input: IdInput!): Project!
     updateProjectName(input: UpdateObjectNameInput!): Project!
     updateProjectColor(input: UpdateColorInput!): Project!
-    archieveProject(input: IdInput!): Project!
+    archiveProject(input: IdInput!): Project!
     enableProject(input: IdInput!): Project!
 
     createTask(input: CreateTaskInput!): Task!
@@ -280,9 +280,11 @@ input UpdateTaskInDialogInput {
   title: String!
   description: String!
   status: String!
+  taskId: String!
 }
 
 input MoveTaskInput {
   oldGroupTaskId: String!
   newGroupTaskId: String!
+  taskId: String!
 }

@@ -1,6 +1,9 @@
 package mapper
 
-import response_dtos "middleware_loader/core/domain/dtos/response"
+import (
+	response_dtos "middleware_loader/core/domain/dtos/response"
+	"middleware_loader/core/port/mapper/response/base"
+)
 
 func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.ProjectResponseDTO {
 	var input response_dtos.ProjectResponseDTO
@@ -11,16 +14,8 @@ func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.Proje
 	input.Color = body["color"].(string)
 	input.Owner = body["ownerId"].(float64)
 	input.ActiveStatus = body["activeStatus"].(string)
-	input.GroupTasks = convertStringToStringArray(body["groupTasks"].([]interface{}))
+	input.GroupTasks = base.ConvertStringToStringArray(body["groupTasks"].([]interface{}))
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)
 	return &input
-}
-
-func convertStringToStringArray(aInterface []interface{}) []string {
-	aString := []string{}
-	for _, v := range aInterface {
-		aString = append(aString, v.(string))
-	}
-	return aString
 }

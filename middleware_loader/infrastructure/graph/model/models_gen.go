@@ -79,6 +79,7 @@ type IDInput struct {
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
+	TaskID         string `json:"taskId"`
 }
 
 type Project struct {
@@ -163,6 +164,7 @@ type UpdateTaskInDialogInput struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      string `json:"status"`
+	TaskID      string `json:"taskId"`
 }
 
 type UpdateTaskInput struct {
