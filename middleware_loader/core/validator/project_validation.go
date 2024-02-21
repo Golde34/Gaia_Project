@@ -21,11 +21,11 @@ func (in *ProjectValidator) CreateProjectValidate(input model.CreateProjectInput
 		return fmt.Errorf("%w: name is required", enums.ErrValidation)
 	}
 
-	if input.Owner == "" {
+	if input.OwnerID == "" {
 		return fmt.Errorf("%w: owner is required", enums.ErrValidation)
 	}
 
-	if _, err := strconv.Atoi(input.Owner); err != nil {
+	if _, err := strconv.Atoi(input.OwnerID); err != nil {
 		return fmt.Errorf("%w: owner must be digit", enums.ErrValidation)
 	}
 
@@ -37,7 +37,7 @@ func (in *ProjectValidator) UpdateProjectValidate(input model.UpdateProjectInput
 		return fmt.Errorf("%w: name is required", enums.ErrValidation)
 	}
 
-	if input.Owner == "" {
+	if input.OwnerID == "" {
 		return fmt.Errorf("%w: owner is required", enums.ErrValidation)
 	}
 
@@ -45,7 +45,7 @@ func (in *ProjectValidator) UpdateProjectValidate(input model.UpdateProjectInput
 		return fmt.Errorf("%w: project id is required", enums.ErrValidation)
 	}
 
-	if _, err := strconv.Atoi(input.Owner); err != nil {
+	if _, err := strconv.Atoi(input.OwnerID); err != nil {
 		return fmt.Errorf("%w: owner must be digit", enums.ErrValidation)
 	}
 

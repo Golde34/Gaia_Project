@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"log"
+	model_dtos "middleware_loader/core/domain/dtos/request_model"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/validator"
@@ -108,7 +109,10 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 	log.Println("Validation passed!")
 
 	projectId := input.ID
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectColor(input, projectId)
+	projectRequestModel := model_dtos.UpdateColorInputModel{
+		Color: input.Color,
+	}
+	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectColor(projectRequestModel, projectId)
 	if err != nil {
 		return model.Project{}, err
 	} else {

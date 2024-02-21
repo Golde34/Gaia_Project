@@ -28,7 +28,7 @@ type CreateProjectInput struct {
 	Description  string `json:"description"`
 	Status       string `json:"status"`
 	Color        string `json:"color"`
-	Owner        string `json:"owner"`
+	OwnerID      string `json:"ownerId"`
 	ActiveStatus string `json:"activeStatus"`
 }
 
@@ -90,7 +90,7 @@ type Project struct {
 	Color        string   `json:"color"`
 	ActiveStatus string   `json:"activeStatus"`
 	GroupTasks   []string `json:"groupTasks"`
-	Owner        float64  `json:"owner"`
+	OwnerID      float64  `json:"ownerId"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
 }
@@ -156,7 +156,7 @@ type UpdateProjectInput struct {
 	Description  string `json:"description"`
 	Status       string `json:"status"`
 	Color        string `json:"color"`
-	Owner        string `json:"owner"`
+	OwnerID      string `json:"ownerId"`
 	ActiveStatus string `json:"activeStatus"`
 }
 

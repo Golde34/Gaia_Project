@@ -97,7 +97,7 @@ type Project {
   activeStatus: String!
 
   groupTasks: [String!]!
-  owner: Float!
+  ownerId: Float!
 
   createdAt: String!
   updatedAt: String!
@@ -216,7 +216,7 @@ input CreateProjectInput {
   description: String!
   status: String!
   color: String!
-  owner: String!
+  ownerId: String!
   activeStatus: String!
 }
 
@@ -226,7 +226,7 @@ input UpdateProjectInput {
   description: String!
   status: String!
   color: String!
-  owner: String!
+  ownerId: String!
   activeStatus: String!
 }
 
