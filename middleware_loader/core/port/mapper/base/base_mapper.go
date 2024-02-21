@@ -7,3 +7,10 @@ func ConvertStringToStringArray(aInterface []interface{}) []string {
 	}
 	return aString
 }
+
+func GetStringValue(bodyMap map[string]interface{}, key string, defaultValue string) string {
+    if value, ok := bodyMap[key].(string); ok {
+        return value
+    }
+    return defaultValue
+}

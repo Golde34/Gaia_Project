@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	model_dtos "middleware_loader/core/domain/dtos/request_model"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/adapter/base"
@@ -142,7 +143,7 @@ func (adapter *ProjectAdapter) DeleteProject(id string) (response_dtos.ProjectRe
 // }
 
 func (adapter *ProjectAdapter) UpdateProjectName(input model.UpdateObjectNameInput, id string) (response_dtos.ProjectResponseDTO, error) {
-	updateNameURL := base.TaskManagerServiceURL + "/project/" + id + "/name"
+	updateNameURL := base.TaskManagerServiceURL + "/project/" + id + "/update-name"
 	var project response_dtos.ProjectResponseDTO
 
 	bodyResult, err := base.BaseAPI(updateNameURL, "PUT", input)
@@ -162,8 +163,8 @@ func (adapter *ProjectAdapter) UpdateProjectName(input model.UpdateObjectNameInp
 	return project, nil
 }
 
-func (adapter *ProjectAdapter) UpdateProjectColor(input model.UpdateColorInput, id string) (response_dtos.ProjectResponseDTO, error) {
-	updateColorURL := base.TaskManagerServiceURL + "/project/" + id + "/color"
+func (adapter *ProjectAdapter) UpdateProjectColor(input model_dtos.UpdateColorInputModel, id string) (response_dtos.ProjectResponseDTO, error) {
+	updateColorURL := base.TaskManagerServiceURL + "/project/" + id + "/update-color"
 	var project response_dtos.ProjectResponseDTO
 
 	bodyResult, err := base.BaseAPI(updateColorURL, "PUT", input)

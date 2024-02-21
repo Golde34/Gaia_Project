@@ -15,8 +15,10 @@ export class ProjectRequestDto {
     @IsString()
     @IsOptional()
     groupTasks?: string[];
+    ownerId!: number;
     @IsString()
-    ownerId!: string;
+    @IsOptional()
+    activeStatus?: string;
 }
 
 export class UpdateColorDto {

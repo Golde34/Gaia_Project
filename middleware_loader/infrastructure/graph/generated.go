@@ -114,7 +114,7 @@ type ComplexityRoot struct {
 		GroupTasks   func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Name         func(childComplexity int) int
-		Owner        func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
 		Status       func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 	}
@@ -707,12 +707,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.Name(childComplexity), true
 
-	case "Project.owner":
-		if e.complexity.Project.Owner == nil {
+	case "Project.ownerId":
+		if e.complexity.Project.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.Project.Owner(childComplexity), true
+		return e.complexity.Project.OwnerID(childComplexity), true
 
 	case "Project.status":
 		if e.complexity.Project.Status == nil {
@@ -3146,8 +3146,8 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3223,8 +3223,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Cont
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3300,8 +3300,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteProject(ctx context.Cont
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3377,8 +3377,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProjectName(ctx context.
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3454,8 +3454,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProjectColor(ctx context
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3531,8 +3531,8 @@ func (ec *executionContext) fieldContext_Mutation_archiveProject(ctx context.Con
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -3608,8 +3608,8 @@ func (ec *executionContext) fieldContext_Mutation_enableProject(ctx context.Cont
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -4620,8 +4620,8 @@ func (ec *executionContext) fieldContext_Project_groupTasks(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Project_owner(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Project_owner(ctx, field)
+func (ec *executionContext) _Project_ownerId(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project_ownerId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4634,7 +4634,7 @@ func (ec *executionContext) _Project_owner(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Owner, nil
+		return obj.OwnerID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4651,7 +4651,7 @@ func (ec *executionContext) _Project_owner(ctx context.Context, field graphql.Co
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Project_owner(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Project_ownerId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Project",
 		Field:      field,
@@ -5008,8 +5008,8 @@ func (ec *executionContext) fieldContext_Query_listAllProjects(ctx context.Conte
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -5074,8 +5074,8 @@ func (ec *executionContext) fieldContext_Query_getProjectById(ctx context.Contex
 				return ec.fieldContext_Project_activeStatus(ctx, field)
 			case "groupTasks":
 				return ec.fieldContext_Project_groupTasks(ctx, field)
-			case "owner":
-				return ec.fieldContext_Project_owner(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Project_createdAt(ctx, field)
 			case "updatedAt":
@@ -8882,7 +8882,7 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "description", "status", "color", "owner", "activeStatus"}
+	fieldsInOrder := [...]string{"name", "description", "status", "color", "ownerId", "activeStatus"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -8917,13 +8917,13 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.Color = data
-		case "owner":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner"))
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Owner = data
+			it.OwnerID = data
 		case "activeStatus":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("activeStatus"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -9307,7 +9307,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"projectId", "name", "description", "status", "color", "owner", "activeStatus"}
+	fieldsInOrder := [...]string{"projectId", "name", "description", "status", "color", "ownerId", "activeStatus"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9349,13 +9349,13 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.Color = data
-		case "owner":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner"))
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Owner = data
+			it.OwnerID = data
 		case "activeStatus":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("activeStatus"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -10005,8 +10005,8 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "owner":
-			out.Values[i] = ec._Project_owner(ctx, field, obj)
+		case "ownerId":
+			out.Values[i] = ec._Project_ownerId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
