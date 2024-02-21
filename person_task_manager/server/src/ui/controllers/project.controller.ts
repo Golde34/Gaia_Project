@@ -95,7 +95,7 @@ class ProjectController {
     async updateProjectColor(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
             const color = bodyJson.color;
 
             const projectResult = await projectService.updateProjectColor(id, color);

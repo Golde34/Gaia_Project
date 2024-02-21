@@ -1,6 +1,7 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
+import { ActiveStatus } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
@@ -14,6 +15,9 @@ class ProjectService {
     async createProject(project: any): Promise<IResponse> {
         if (project.color == null) {
             project.color = "indigo";
+        }
+        if (project.activeStatus == null || project.activeStatus === "") {
+            project.activeStatus = ActiveStatus.active;
         }
         const createProject = await projectStore.createProject(project);
 

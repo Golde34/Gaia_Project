@@ -90,7 +90,7 @@ projectRouter.put("/:id/update-name",
 
 // update Project color
 projectRouter.put("/:id/update-color",
-    RequestValidator.validate(UpdateColorDto),
+    RequestValidator.validateV2(UpdateColorDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projecResult = await projectControllerImpl.updateProjectColor(req, next);
