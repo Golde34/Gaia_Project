@@ -1,17 +1,17 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { config, validateEnvironmentVars } from "./config/configuration";
-import { MongoHelper } from "./database/mongodb.db";
-import { taskRouter } from "./modules/person_task_manager/controllers/task.controller";
-import { groupTaskRouter } from "./modules/person_task_manager/controllers/group-task.controller";
-import { authRouter } from "./modules/user_authentication/auth.controller";
-import { projectRouter } from "./modules/person_task_manager/controllers/project.controller";
-import { subTaskRouter } from "./modules/person_task_manager/controllers/sub-task.controller";
-import { commentRouter } from "./modules/person_task_manager/controllers/comment.controller";
+import { config, validateEnvironmentVars } from "./infrastructure/config/configuration";
+import { MongoHelper } from "./infrastructure/database/mongodb.db";
+import { taskRouter } from "./ui/routers/task.router";
+import { groupTaskRouter } from "./ui/routers/group-task.router";
+import { authRouter } from "./ui/routers/user_authentication/auth.controller";
+import { projectRouter } from "./ui/routers/project.router";
+import { subTaskRouter } from "./ui/routers/sub-task.router";
+import { commentRouter } from "./ui/routers/comment.router";
+import { dashboardRouter } from "./ui/routers/dashboard.router";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { dashboardRouter } from "./modules/person_task_manager/controllers/dashboard.controller";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()

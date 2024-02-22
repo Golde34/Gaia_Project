@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import {
     userSigninReducer,
     gaiaSigninReducer,
+    bossSigninReducer,
 } from './auth_service/userReducers'
 
 import { projectCreateReducer, projectDeleteReducer, projectDetailReducer,
@@ -17,8 +18,9 @@ import { commentCreateReducer, commentDeleteReducer, commentDetailReducer,
 
 export const reducer = combineReducers({
     // auth service
-    userSignin: userSigninReducer,
     gaiaSignin: gaiaSigninReducer,
+    bossSignin: bossSigninReducer,
+    userSignin: userSigninReducer,
     // task manager
     projectList: projectListReducer,
     projectDetail: projectDetailReducer,

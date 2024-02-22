@@ -2,18 +2,18 @@ package services
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 
-	"middleware_loader/core/services/base"
+	request_dtos "middleware_loader/core/domain/dtos/request"
+	response_dtos "middleware_loader/core/domain/dtos/response"
+	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/validator"
+	"middleware_loader/infrastructure/adapter"
 	"middleware_loader/infrastructure/graph/model"
-	"middleware_loader/kernel/configs"
 )
 
 type AuthService struct {
-	SigninInput model.SigninInput
+	SigninInput request_dtos.AuthDTO
 }
 
 func NewAuthService() *AuthService {
@@ -21,7 +21,7 @@ func NewAuthService() *AuthService {
 }
 
 var authValidator = validator.NewAuthDTOValidator()
-var env, _ = configs.LoadEnv()
+var signinResponesDTO = response_dtos.NewSigninResponseDTO()
 
 func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
 	err := authValidator.AuthValidate(input)
@@ -30,24 +30,42 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	}	
 	log.Println("Validation passed!")
 
-	authServiceURL := env.Url + env.AuthServicePort + "/auth/sign-in"
+	authTokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).Signin(input)
+	if err != nil {
+		return model.AuthTokenResponse{}, err
+	} else {
+		authTokenResponse := signinResponesDTO.MapperToGraphQLModel(authTokenResponse)
+		return authTokenResponse, nil
+	}	
+}
 
-	bodyResult, err := base.BaseAPI(authServiceURL, "POST", input)
+func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInput) (model.AuthTokenResponse, error) {
+	err := authValidator.AuthValidate(input)
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	}
+	log.Println("Validation passed!")
 
-	body, ok := bodyResult.([]byte)
-	if !ok {
-		return model.AuthTokenResponse{}, fmt.Errorf("baseAPI did not return a byte slice")
-	}
-
-	// Unmarshal the response body into an AuthToken
-	var authToken model.AuthTokenResponse
-	err = json.Unmarshal(body, &authToken)
+	authTokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).GaiaAutoSignin(input)
 	if err != nil {
 		return model.AuthTokenResponse{}, err
-	}
+	} else {
+		authTokenResponse := signinResponesDTO.MapperToGraphQLModel(authTokenResponse)
+		return authTokenResponse, nil
+	}	
+}
 
-	return authToken, nil
+func (s *AuthService) CheckToken(ctx context.Context, input model.TokenInput) (model.TokenResponse, error) {
+	err := authValidator.TokenValidate(input)
+	if err != nil {
+		return model.TokenResponse{}, err
+	}
+	log.Println("Validation passed!")
+
+	tokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).CheckToken(input)
+	if err != nil {
+		return model.TokenResponse{}, err
+	} else {
+		return tokenResponse, nil
+	}
 }

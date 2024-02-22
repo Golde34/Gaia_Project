@@ -1,11 +1,10 @@
 import os
-import subprocess
 import logging
 
 from colorama import Fore
 
-from gaia_bot.utils.console_log import start_text, OutputStyler, headerize
-from gaia_bot.configs import settings
+from gaia_bot.kernel.utils.console_log import start_text, OutputStyler, headerize
+from gaia_bot.kernel.configs import settings
 
 class ConsoleManager:
 

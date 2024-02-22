@@ -1,0 +1,707 @@
+@use "sass:math";
+
+$color-bg: #6366f1;
+$color-primary: rgba(#30508F, 0.3);
+$color-primary: #30508F;
+$color-white: rgba(white, 0.3);
+$color-white: white;
+
+$color-light: #9EB6D7;
+$color-lighter: #C8DAF2;
+$color-dark: #343C60;
+
+$color-ear: #DE6465;
+$color-tongue: $color-ear;
+
+$duration: 12s;
+$total-kf: 15;
+
+$k-head: (
+  0: rotate(0),
+  1: rotate(0),
+  3: rotate(-14deg),
+  6: rotate(-7deg),
+  7: rotate(-14deg),
+  9: rotate(-7deg),
+  11: rotate(0),
+  12: rotate(0)
+);
+
+$k-mouth: (
+  0: translateX(0),
+  1: translateX(0),
+  2: translateX(35%),
+  3: translateX(35%),
+  4: translateX(35%),
+  5: translateX(0) translateY(-5%)
+);
+
+$k-nose: (
+  0: translate(0),
+  1: translate(0),
+  2: translateX(100%),
+  4: translateX(100%),
+  5: translateX(0) translateY(-15%)
+);
+
+$k-body: (
+  0: translate(0),
+  1: translateY(3%),
+  2: translate(0),
+  3: translate(0),
+  4: translateY(2%),
+  5: translateY(0),
+);
+
+$k-mane: map-merge($k-body, (
+  1: translateY(5%),
+  4: translateY(3%)
+));
+
+$k-face: (
+  0: translate(0),
+  1: translate(0),
+  2: translateX(15%),
+  3: translateX(15%) translateY(0),
+  4: translateX(15%) translateY(0),
+  5: translateX(0) translateY(-15%),
+  6: translateX(0) translateY(-15%),
+  7: translateX(0) translateY(0),
+);
+
+$k-left-eye: (
+  0.4: scaleY(1),
+  0.5: scaleY(0.3),
+  0.6: scaleY(1),
+  1: translateX(0),
+  1.4: scaleY(1) translateX(75%),
+  1.5: scaleY(0.3) translateX(75%),
+  1.6: scaleY(1) translateX(75%),
+  2: translateX(150%),
+  3.3: scaleY(1) translateX(150%),
+  3.4: scaleY(0.3) translateX(150%),
+  3.5: scaleY(1) translateX(150%),
+  3.8: scaleY(1) translateX(150%),
+  3.9: scaleY(0.3) translateX(150%),
+  4.0: scaleY(1) translateX(150%),
+  5: translateX(0) translateY(-170%),
+  5.4: scaleY(1) translateY(-170%),
+  5.5: scaleY(0.3) translateY(-170%),
+  5.6: scaleY(1) translateY(-170%),
+  5.7: scaleY(1) translateY(-170%),
+  5.8: scaleY(0.3) translateY(-170%),
+  5.9: scaleY(1) translateY(-170%),
+  8: translateY(0),
+  9.8: scaleY(1) translateY(0),
+  9.9: scaleY(0.3) translateY(0),
+  10.0: scaleY(1) translateY(0),
+  10.5: scaleY(1) translateY(0),
+  10.6: scaleY(0.3) translateY(0),
+  10.7: scaleY(1) translateY(0),
+);
+
+$k-right-eye: $k-left-eye;
+
+$k-tongue: (
+  7: translateY(0),
+  8: translateY(100%) rotate(10deg),
+  11: translateY(100%) rotate(10deg),
+  12: translateY(0)
+);
+
+$k-mouth-cover-left: (
+  6: rotate(0),
+  9: rotate(90deg),
+  11: rotate(90deg),
+  13: rotate(0)
+);
+
+$k-mouth-cover-right: (
+  6: rotate(0),
+  9: rotate(-90deg),
+  11: rotate(-90deg),
+  13: rotate(0)
+);
+
+$k-tail: (
+  1: rotate(0),
+  1.5: rotate(30deg),
+  2: rotate(0),
+  3: rotate(0),
+  4: rotate(30deg),
+  7: rotate(30deg),
+  7.25: rotate(0),
+);
+$tail-wags: 14;
+$tail-interval: math.div((11 - 7.5), $tail-wags);
+@for $i from 1 through $tail-wags {
+  $k-tail: map-merge($k-tail, (
+    (($i - 1) * $tail-interval + 7.5): rotate(28deg),
+    (($i - 0.5) * $tail-interval + 7.5): rotate(0)
+  )) !global;
+}
+
+$k-left-ear: (
+  0: rotate(6deg),
+  1: rotate(6deg),
+  2: rotate(15deg),
+  4: rotate(15deg),
+  5: rotate(30deg),
+  6: rotate(30deg),
+  7: rotate(0deg),
+  8: rotate(0deg),
+  9: rotate(15deg),
+  12: rotate(15deg),
+  14: rotate(6deg),
+  $total-kf: rotateZ(6deg)
+);
+
+$k-right-ear: (
+  0: rotateZ(-16deg),
+  1: rotateZ(-16deg),
+  2: rotateZ(-19deg),
+  4: rotateZ(-19deg),
+  5: rotateZ(-30deg),
+  
+  5.5: rotateZ(-19deg),
+  5.6: rotateZ(-30deg),
+  5.7: rotateZ(-19deg),
+  6: rotateZ(-19deg),
+  6.1: rotateZ(-30deg),
+  6.2: rotateZ(-19deg),
+
+  7: rotateZ(-9deg),
+  8: rotateZ(-9deg),
+  
+  9: rotateZ(-19deg),
+  9.1: rotateZ(-30deg),
+  9.2: rotateZ(-19deg),
+  9.4: rotateZ(-19deg),
+  9.5: rotateZ(-30deg),
+  9.6: rotateZ(-19deg),
+  
+  12: rotateZ(-19deg),
+  14: rotateZ(-16deg),
+  $total-kf: rotateZ(-16deg)
+);
+
+@each $i, $prop in $k-right-ear {
+  $k-right-ear: map-merge($k-right-ear, (
+    $i: $prop + ' ' + rotateY(180deg)
+  ));
+}
+
+@mixin effect($name, $kf) {
+  @keyframes #{$name} {
+    @each $interval, $transform in $kf {
+      #{percentage(math.div($interval, $total-kf))} {
+        transform: $transform;
+      }
+    }
+  }
+}
+
+@include effect('head', $k-head);
+@include effect('mouth', $k-mouth);
+@include effect('nose', $k-nose);
+@include effect('body', $k-body);
+@include effect('mane', $k-mane);
+@include effect('face', $k-face);
+@include effect('left-eye', $k-left-eye);
+@include effect('right-eye', $k-right-eye);
+@include effect('tongue', $k-tongue);
+@include effect('mouth-cover-left', $k-mouth-cover-left);
+@include effect('mouth-cover-right', $k-mouth-cover-right);
+@include effect('tail', $k-tail);
+@include effect('left-ear', $k-left-ear);
+@include effect('right-ear', $k-right-ear);
+
+*, *:before, *:after {
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+}
+
+
+
+
+.husky {
+  animation: squiggly-anim 0.3s infinite;
+  height: 42vmin;
+  width: 49vmin;
+  
+  @media screen and (max-width: 400px) {
+    // Chrome for Android chokes
+    animation: none;
+  }
+  
+  &:before {
+    width: 90%;
+    height: 0.5vmin;
+    background: $color-primary;
+    border-radius: 0.5vmin;
+    top: 100%;
+    left: 5%;
+    z-index: 2;
+  }
+  
+  &:after {
+    width: 100%;
+    height: 10%;
+    top: calc(100% + 0.5vmin);
+    z-index: 3;
+    background: $color-bg;
+  }
+}
+
+div:before, div:after {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+.head {
+  animation: head $duration none infinite;
+  position: absolute;
+  height: 45%;
+  width: 58%;
+  left: 34%;
+  top: 5%;
+  transform-origin: bottom center;
+  
+  &:before {
+    background: $color-primary;
+    border-top-left-radius: 50% 40%;
+    border-top-right-radius: 50% 40%;
+    border-bottom-right-radius: 10% 60%;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.face {
+  animation: face $duration none infinite;
+  position: absolute;
+  width: 98%;
+  height: 62%;
+  top: 15%;
+  left: 2%;
+  
+  &:before {
+    z-index: 1;
+    width: 94%;
+    height: 70%;
+    left: 3%;
+    background-color: $color-white;
+    bottom: 5%;
+    border-top-left-radius: 40% 50%;
+    border-top-right-radius: 40% 50%;
+    border-bottom-left-radius: 30% 50%;
+    border-bottom-right-radius: 30% 40%;
+  }
+}
+
+.eye {
+  animation: eyes $duration none infinite;
+  position: absolute;
+  width: 30%;
+  height: 40%;
+  background-color: $color-white;
+  right: 45%;
+  border-top-left-radius: 55% 50%;
+  border-top-right-radius: 45% 50%;
+  z-index: 2;
+  
+  &:before {
+    animation: left-eye $duration none infinite;
+    height: 15%;
+    width: 15%;
+    border-radius: 100%;
+    background: $color-dark;
+    top: 45%;
+    left: 45%;
+    transform-origin: center center;
+  }
+  
+  + .eye {
+    z-index: 1;
+    right: initial;
+    left: 48%;
+    border-top-right-radius: 55% 50%;
+    border-top-left-radius: 45% 50%;
+  }
+}
+
+.nose {
+  animation: nose $duration none infinite;
+  z-index: 2;
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  top: 29%;
+  left: 42%;
+  
+  &:after {
+    background: $color-primary;
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 20% 20%;
+    border-top-right-radius: 30% 20%;
+    border-bottom-right-radius: 55% 80%;
+    border-bottom-left-radius: 50% 80%;
+  }
+  
+  &:before {
+    height: 100%;
+    width: 200%;
+    background: $color-white;
+    top: 50%;
+    left: -50%;
+    z-index: -1;
+    border-radius: 50%;
+  }
+}
+
+.ear {
+  animation: left-ear $duration both infinite;
+  position: absolute;
+  top: 3%;
+  left: -10%;
+  width: 48%;
+  height: 30%;
+  border-bottom-left-radius: 100% 90%;
+  border-top-left-radius: 10%;
+  transform-origin: 80% center;
+  overflow: hidden;
+  background: $color-primary;
+  
+  &:before {
+    width: 70%;
+    height: 55%;
+    border: 2px solid $color-primary;
+    background: $color-ear;
+    top: 20%;
+    left: 15%;
+    transform-origin: top left;
+    transform:
+      skewX(30deg)
+      rotate(-5deg);
+  }
+  
+  &:after {
+    width: 70%;
+    height: 100%;
+    border-top-left-radius: 100%;
+    background: $color-primary;
+    left: 32%;
+    transform-origin: top left;
+    transform: rotate(-5deg);
+  }
+  
+  + .ear {
+    animation: right-ear $duration both infinite;
+    background-color: $color-dark;
+    left: 15%;
+    top: 5%;
+    z-index: -1;
+    transform-origin: right center;
+    
+    &:before {
+      border-color: $color-dark;
+    }
+    
+    &:after {
+      background: $color-dark;
+    }
+  }
+}
+
+.mouth {
+  z-index: 1;
+  animation: mouth $duration none infinite;
+  position: absolute;
+  width: 48%;
+  height: 55%;
+  bottom: -5%;
+  left: 28%;
+  overflow: hidden;
+  
+  &:before, &:after {
+    animation: mouth-cover-left $duration none infinite;
+    width: 28%;
+    height: 100%;
+    background: $color-white;
+    top: -50%;
+    left: 0;
+    z-index: 3;
+    transform-origin: right top;
+  }
+  
+  &:after {
+    animation: mouth-cover-right $duration none infinite;
+    left: initial;
+    right: 0;
+    transform-origin: left top;
+  }
+}
+
+.lips {
+  z-index: 2;
+  height: 35%;
+  width: 100%;
+  
+  &:before, &:after {
+    background: $color-white;
+    width: calc(50% + 1.5px);
+    border-color: $color-light;
+    border-width: 3px;
+    border-style: solid;
+    height: 100%;
+    border-bottom-left-radius: 65% 100%;
+    border-bottom-right-radius: 35% 50%;
+    border-top-right-radius: 50%;
+    // border-right-width: 0;
+    border-right-color: transparent;
+    border-top-color: transparent;
+  }
+  
+  &:after {
+    transform: rotateY(180deg);
+    left: initial;    
+    right: 0;
+  }
+}
+
+.tongue {
+  animation: tongue $duration none infinite;
+  position: absolute;
+  height: 100%;
+  width: 44%;
+  background: $color-tongue;
+  left: 25%;
+  bottom: 100%;
+  z-index: 1;
+  border-bottom-left-radius: 50% 20%;
+  border-bottom-right-radius: 50% 20%;
+}
+
+.body {
+  animation: body $duration none infinite;
+  width: 45%;
+  height: 100%;
+  position: absolute;
+  left: 25%;
+}
+
+.torso {
+  position: absolute;
+  height: 55%;
+  width: 100%;
+  bottom: 0;
+  
+  &:before {
+    background: $color-primary;
+    height: 100%;
+    width: 50%;
+    transform:
+      translateX(-20%)
+      skewX(-30deg);
+    transform-origin: left bottom;
+    border-radius: 0 30% 0 60%;
+  }
+  
+  &:after {
+    background: $color-primary;
+    height: 100%;
+    width: 60%;
+    top: 0;
+    right: 0;
+    border-radius: 10% 40% 60% 0;
+  }
+}
+
+.mane {
+  animation: mane $duration none infinite;
+  z-index: 2;
+  position: absolute;
+  width: 31.5%;
+  height: 30%;
+  top: 44%;
+  left: 37%;
+  
+  &:before {    
+    background: $color-white;
+    height: 40%;
+    width: 100%;
+    border-top-left-radius: 10% 50%;
+    border-top-right-radius: 20% 100%;
+    border-bottom-left-radius: 10% 50%;
+  }
+  
+  &:after {
+    background: $color-white;
+    top: 25%;
+    height: 76%;
+    width: 30%;
+    right: 23%;
+    border-top-right-radius: 100% 80%;
+    transform: rotate(47deg);
+    transform-origin: bottom right;
+  }
+}
+
+.coat {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: $color-white;
+  transform-origin: bottom right;
+  left: 10%;
+  top: 21%;
+  transform: rotate(25deg) skewX(-30deg) ;
+}
+
+.legs {
+  background-color: $color-primary;
+  position: absolute;
+  height: 30%;
+  width: 42%;
+  left: 23%;
+  bottom: 0;
+  border-top-left-radius: 20% 37%;
+  border-bottom-left-radius: 10% 37%;
+  border-top-right-radius: 50%;
+  z-index: 1;
+}
+
+.front-legs {
+  position: absolute;
+  width: 55%;
+  height: 117%;
+  bottom: 0;
+  right: -12%;
+  
+  &:before {
+    width: 4%;
+    height: 6%;
+    background: transparent;
+    bottom: 0;
+    left: 47%;
+    box-shadow:
+      -1.3vmin 0 0 $color-light,
+      -2.8vmin 0 0 $color-light,
+      1.3vmin 0 0 $color-bg,
+      2.8vmin 0 0 $color-bg
+      ;
+    z-index: 2;
+  }
+  
+  > .leg {
+    width: 51%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    overflow: hidden;
+    
+    &:before {
+      background: $color-lighter;
+      height: 100%;
+      width: 100%;
+      transform: skewY(-30deg) skewX(10deg);
+      transform-origin: top right;
+    }
+    
+    + .leg {
+      right: 0;
+      transform: rotateY(180deg);
+      
+      &:before {
+        background: $color-light;
+      }
+    }
+  }
+}
+
+.hind-leg {
+  position: absolute;
+  background: $color-light;
+  width: 35%;
+  height: 25%;
+  border-top-left-radius: 35% 100%;
+  border-top-right-radius: 40% 100%;
+  bottom: 0%;
+  right: 45%;
+  
+  &:before {
+    width: 6%;
+    height: 20%;
+    background: transparent;
+    bottom: 0;
+    left: 70%;
+    box-shadow:
+      -0.8vmin 0 0 $color-bg,
+      0.8vmin 0 0 $color-bg;
+  }
+}
+
+.tail {
+  position: absolute;
+  width: 15%;
+  height: 6%;
+  bottom: 0;
+  right: 72%;
+  background: $color-dark;
+  z-index: 0;
+  
+  > .tail {
+    animation: tail $duration none infinite;
+    height: 100%;
+    width: 4vmin;
+    right: 26%;
+    transform-origin: center right;
+    border-top-left-radius: 50% 50%;
+    border-bottom-left-radius: 50% 50%;
+    transform: rotate(26deg);
+    transform: rotate(0deg);
+  }
+  
+  .husky > & {
+    border-top-left-radius: 10% 50%;
+    border-bottom-left-radius: 10% 50%;
+  }
+  
+  .husky > & > & {
+    right: 88%;
+  }
+}
+
+@keyframes squiggly-anim {
+  0% {
+    filter: url('#squiggly-0');
+  }
+  25% {
+    filter: url('#squiggly-1');
+  }
+  50% {
+    filter: url('#squiggly-2');
+  }
+  75% {
+    filter: url('#squiggly-3');
+  }
+  100% {
+    filter: url('#squiggly-4');
+  }
+}
+
+body {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  justify-content: center;
+  align-items: center;
+  background-color: $color-bg;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  position: relative;
+}

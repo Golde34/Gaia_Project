@@ -1,8 +1,11 @@
 import { Flex, Grid, Text, Title } from "@tremor/react"
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
 import { TaskCard } from "./TaskCard";
+import { useCallback } from "react";
+import MessageBox from "../../components/subComponents/MessageBox";
+
 
 const TaskList = (props) => {
 	const dispatch = useDispatch();
@@ -12,18 +15,25 @@ const TaskList = (props) => {
 	const listTasks = useSelector((state) => state.taskList);
 	const { loading, error, tasks } = listTasks;
 
-	useEffect(() => {
-		if (groupTaskId) {
-			dispatch(getTaskList(groupTaskId));
-		}
-	}, [groupTaskId]);
+	const getTasks = useCallback(() => {
+        dispatch(getTaskList(groupTaskId));
+    }, [dispatch, groupTaskId]);
+
+	const debounceRef = useRef(null);
+
+    useEffect(() => {
+		clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(() => {
+			getTasks();
+		}, 200);
+    }, [groupTaskId]);
 
 	return (
 		<div>
 			{loading ? (
 				<Text>Loading...</Text>
 			) : error ? (
-				<Text>{error}</Text>
+				<MessageBox message={error} />	
 			) : (
 				<>
 					{
