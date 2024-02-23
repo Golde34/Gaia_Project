@@ -4,8 +4,8 @@ import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
-import { convertTimestampToDate } from "../../utils/date-picker";
-import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { convertTimestampToDate } from "../../kernels/utils/date-picker";
+import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../kernels/utils/dialog-api-requests";
 import { MoveTask } from "./MoveTask";
 
 export const TaskCard = (props) => {

@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Button, Flex } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useMoveTaskDispatch } from "../../utils/dialog-api-requests";
+import { useMoveTaskDispatch } from "../../kernels/utils/dialog-api-requests";
 
 export const MoveTask = (props) => {
     const projectId = props.projectId;

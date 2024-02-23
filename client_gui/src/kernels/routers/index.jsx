@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import Dashboard from '../views/Dashboard';
-import Project from '../views/task_manager/Project';
-import SchedulingTable from '../views/task_manager/SchedulingTable';
-import TaskDashboard from '../views/task_manager/TaskDashboard';
-import SignIn from '../screens/authScreen/Signin';
-import GaiaAutoSignin from '../screens/authScreen/GaiaAutoSignin';
-import GaiaRoute from '../components/route/GaiaRoute';
+import Dashboard from '../../views/Dashboard';
+import Project from '../../views/task_manager/Project';
+import SchedulingTable from '../../views/task_manager/SchedulingTable';
+import TaskDashboard from '../../views/task_manager/TaskDashboard';
+import SignIn from '../../screens/authScreen/Signin';
+import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
+import GaiaRoute from '../../components/route/GaiaRoute';
 
 // const schedule = [
 //   {

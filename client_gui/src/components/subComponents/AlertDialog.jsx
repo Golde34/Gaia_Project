@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { useDeleteComponentDispatch, useUpdateOrdinalNumberDispatch } from "../../utils/dialog-api-requests";
+import { useDeleteComponentDispatch, useUpdateOrdinalNumberDispatch } from "../../kernels/utils/dialog-api-requests";
 
 export const AlertDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
