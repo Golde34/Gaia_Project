@@ -77,7 +77,7 @@ projectRouter.get("/:id/group-tasks", async (req: Request, res: Response, next: 
 
 // update Project name
 projectRouter.put("/:id/update-name", 
-    RequestValidator.validate(updateNameRequestDto),
+    RequestValidator.validateV2(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projecResult = await projectControllerImpl.updateProjectName(req, next);

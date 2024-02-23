@@ -81,8 +81,8 @@ class ProjectController {
     async updateProjectName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const bodyJson = req.body.body;
-            const name = bodyJson.newName;
+            const bodyJson = req.body;
+            const name = bodyJson.name;
 
             const projectResult = await projectService.updateProjectName(id, name);
 

@@ -41,7 +41,8 @@ func UpdateProjectRequestDTOMapper(body map[string]interface{}, projectId string
 func UpdateProjectNameRequestDTOMapper(body map[string]interface{}, projectId string) *request_dtos.UpdateProjectNameInputDTO {
 	var input request_dtos.UpdateProjectNameInputDTO
 	bodyMap := body["body"].(map[string]interface{})
-	input.Name = bodyMap["name"].(string)
+	input.Name = bodyMap["newN
+	ame"].(string)
 	input.ID = projectId
 
 	return &input
