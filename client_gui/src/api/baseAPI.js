@@ -1,4 +1,4 @@
-import { config } from '../configs/configuration';
+import { config } from '../kernels/configs/configuration';
 import Axios from 'axios';
 
 const HttpMethods = {

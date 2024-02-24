@@ -1,7 +1,7 @@
 package controller_services
 
 import (
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/graphql_service"
 	"net/http"
 )
 

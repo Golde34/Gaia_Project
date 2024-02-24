@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"log"
-	model_dtos "middleware_loader/core/domain/dtos/request_model"
+	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/validator"
@@ -27,7 +27,7 @@ func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
 		return nil, err
 	}
 	projectsModel := projectResponse.MapperListToGraphQLModel(projects)
-	
+
 	return projectsModel, nil
 }
 
@@ -92,7 +92,10 @@ func (s *ProjectService) UpdateProjectName(ctx context.Context, input model.Upda
 	log.Println("Validation passed!")
 
 	projectId := input.ID
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectName(input, projectId)
+	projectRequestModel := converter_dtos.UpdateNameConverterDTO{
+		Name: input.Name,
+	}
+	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectName(projectRequestModel, projectId)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -109,7 +112,7 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 	log.Println("Validation passed!")
 
 	projectId := input.ID
-	projectRequestModel := model_dtos.UpdateColorInputModel{
+	projectRequestModel := converter_dtos.UpdateColorConverterDTO{
 		Color: input.Color,
 	}
 	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectColor(projectRequestModel, projectId)

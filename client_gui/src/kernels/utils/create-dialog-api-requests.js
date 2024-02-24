@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { createGroupTask } from '../api/store/actions/task_manager/group-task.actions';
-import { createProject } from '../api/store/actions/task_manager/project.actions';
-import { createTask, generateTaskFromScratch } from '../api/store/actions/task_manager/task.actions';
+import { createGroupTask } from '../../api/store/actions/task_manager/group-task.actions';
+import { createProject } from '../../api/store/actions/task_manager/project.actions';
+import { createTask, generateTaskFromScratch } from '../../api/store/actions/task_manager/task.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"middleware_loader/core/services"
+	services "middleware_loader/core/services/graphql_service"
 	"middleware_loader/ui/controller_services"
 	"net/http"
 
