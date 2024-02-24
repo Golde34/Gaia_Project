@@ -11,8 +11,11 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 
-	"middleware_loader/core/services"
+	g_services "middleware_loader/core/services/graphql_service"
+	// r_services "middleware_loader/core/services/repo_service"
 	"middleware_loader/infrastructure/graph"
+	// "middleware_loader/infrastructure/repository"
+	// "middleware_loader/kernel/bootstrap"
 	"middleware_loader/kernel/configs"
 	"middleware_loader/ui/routers"
 )
@@ -56,12 +59,24 @@ func main() {
 	
 	router.Use(corsHandler.Handler)
 
+	// DATABASE
+	// app := bootstrap.App()
+	// databaseEnv := app.Env
+	// db := app.Mongo.Database(databaseEnv.DBName)
+	// defer app.CloseDBConnection()
+
+	// microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db)
+	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
+
+	// // REPOSITORIES
+	// microserviceStatusService := services.NewMicroserviceStatusService(microserviceStatusRepository)
+
 	// SERVICES
-	authService := services.NewAuthService()
-	middlewareService := services.NewMiddlewareService()
-	gaiaService := services.NewGaiaService()
-	taskService := services.NewTaskService()
-	projectService := services.NewProjectService()
+	authService := g_services.NewAuthService()
+	middlewareService := g_services.NewMiddlewareService()
+	gaiaService := g_services.NewGaiaService()
+	taskService := g_services.NewTaskService()
+	projectService := g_services.NewProjectService()
 
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
