@@ -45,7 +45,7 @@ projectRouter.post("/create",
 
 // update project
 projectRouter.put("/:id",
-    RequestValidator.validate(ProjectRequestDto),
+    RequestValidator.validateV2(ProjectRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projectResult = await projectControllerImpl.updateProject(req, next);
