@@ -8,7 +8,7 @@ type URLPermissionService struct {
 	Repository repository.URLPermissionConfigurationRepository
 }
 
-func NewURLPermission(repo repository.URLPermissionConfigurationRepository) *URLPermissionService {
+func NewURLPermissionService(repo repository.URLPermissionConfigurationRepository) *URLPermissionService {
 	return &URLPermissionService{repo}
 }
 

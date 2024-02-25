@@ -23,16 +23,11 @@ func NewMongoDatabase(env *Env) database_mongo.Client {
 		mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
 	}
 
-	client, err := database_mongo.NewClient(mongodbURI)
+	client, err := database_mongo.NewClient(ctx, mongodbURI)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	
 	err = client.Ping(ctx)
 	if err != nil {
 		log.Fatal(err)

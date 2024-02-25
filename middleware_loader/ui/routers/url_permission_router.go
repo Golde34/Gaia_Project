@@ -8,13 +8,12 @@ import (
 	"github.com/go-chi/chi"
 )
 
-
 type URLPermissionRouter struct {
 	URLPermissionService *services.URLPermissionService
 }
 
 func NewURLPermissionRouter(urlPermssion *services.URLPermissionService, r *chi.Mux) *URLPermissionRouter {
-	r.Route("/middleware", func(r chi.Router) {
+	r.Route("/auth-filter", func(r chi.Router) {
 		r.Get("/get-url-permission", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetURLPermission(w, r, urlPermssion)
 		})

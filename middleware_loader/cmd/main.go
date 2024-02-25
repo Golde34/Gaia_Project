@@ -56,22 +56,27 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-	
+
 	router.Use(corsHandler.Handler)
 
 	// DATABASE
 	app := bootstrap.App()
 	databaseEnv := app.Env
 	db := app.Mongo.Database(databaseEnv.DBName)
-	defer app.CloseDBConnection()
-
+	log.Println("Connected to MongoDB")
+	defer func() {
+		log.Println("Closing MongoDB connection")
+		app.CloseDBConnection()
+		log.Println("MongoDB connection closed")
+	}()
+	
 	microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db)
 	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
 
 	// // REPOSITORIES
 	microserviceStatusService := r_services.NewMicroserviceStatusService(microserviceStatusRepository)
-	urlPermissionConfigurationService := r_services.NewURLPermission(urlPermissionConfigurationRepository)
-	
+	urlPermissionConfigurationService := r_services.NewURLPermissionService(urlPermissionConfigurationRepository)
+
 	// SERVICES
 	authService := g_services.NewAuthService()
 	gaiaService := g_services.NewGaiaService()
@@ -92,8 +97,8 @@ func main() {
 		graph.NewExecutableSchema(
 			graph.Config{
 				Resolvers: &graph.Resolver{
-					AuthGraphQLService: authService,
-					TaskGraphQLService: taskService,
+					AuthGraphQLService:    authService,
+					TaskGraphQLService:    taskService,
 					ProjectGraphQLService: projectService,
 				},
 			},
