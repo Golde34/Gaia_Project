@@ -12,10 +12,10 @@ import (
 	"github.com/go-chi/cors"
 
 	g_services "middleware_loader/core/services/graphql_service"
-	// r_services "middleware_loader/core/services/repo_service"
+	r_services "middleware_loader/core/services/repo_service"
 	"middleware_loader/infrastructure/graph"
-	// "middleware_loader/infrastructure/repository"
-	// "middleware_loader/kernel/bootstrap"
+	"middleware_loader/infrastructure/repository"
+	"middleware_loader/kernel/bootstrap"
 	"middleware_loader/kernel/configs"
 	"middleware_loader/ui/routers"
 )
@@ -56,24 +56,30 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-	
+
 	router.Use(corsHandler.Handler)
 
 	// DATABASE
-	// app := bootstrap.App()
-	// databaseEnv := app.Env
-	// db := app.Mongo.Database(databaseEnv.DBName)
-	// defer app.CloseDBConnection()
-
-	// microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db)
-	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
+	app := bootstrap.App()
+	databaseEnv := app.Env
+	db := app.Mongo.Database(databaseEnv.DBName)
+	log.Println("Connected to MongoDB")
+	defer func() {
+		log.Println("Closing MongoDB connection")
+		app.CloseDBConnection()
+		log.Println("MongoDB connection closed")
+	}()
+	
+	microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db, "microservice_status")
+	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db, "url_permission_configuration")
+	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
 
 	// // REPOSITORIES
-	// microserviceStatusService := services.NewMicroserviceStatusService(microserviceStatusRepository)
+	microserviceStatusService := r_services.NewMicroserviceStatusService(microserviceStatusRepository)
+	urlPermissionConfigurationService := r_services.NewURLPermissionService(urlPermissionConfigurationRepository)
 
 	// SERVICES
 	authService := g_services.NewAuthService()
-	middlewareService := g_services.NewMiddlewareService()
 	gaiaService := g_services.NewGaiaService()
 	taskService := g_services.NewTaskService()
 	projectService := g_services.NewProjectService()
@@ -81,7 +87,8 @@ func main() {
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
 	routers.NewGaiaRouter(gaiaService, router)
-	routers.NewMiddlewareRouter(middlewareService, router)
+	routers.NewMiddlewareRouter(microserviceStatusService, router)
+	routers.NewURLPermissionRouter(urlPermissionConfigurationService, router)
 	routers.NewTaskRouter(taskService, router)
 	routers.NewProjectRouter(projectService, router)
 
@@ -91,8 +98,8 @@ func main() {
 		graph.NewExecutableSchema(
 			graph.Config{
 				Resolvers: &graph.Resolver{
-					AuthGraphQLService: authService,
-					TaskGraphQLService: taskService,
+					AuthGraphQLService:    authService,
+					TaskGraphQLService:    taskService,
 					ProjectGraphQLService: projectService,
 				},
 			},

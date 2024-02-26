@@ -8,7 +8,7 @@ class GaiaBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(25),
+      margin: const EdgeInsets.all(10),
       child: GNav(
           onTabChange: (value) => onTabChange(value),
           color: Colors.grey[400],

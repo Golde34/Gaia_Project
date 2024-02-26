@@ -1,7 +1,7 @@
 package routers
 
 import (
-	services "middleware_loader/core/services/graphql_service"
+	services "middleware_loader/core/services/repo_service"
 	"middleware_loader/ui/controller_services"
 	"net/http"
 
@@ -10,10 +10,10 @@ import (
 
 
 type MiddlewareRouter struct {
-	MiddlewareService *services.MiddlewareService
+	MiddlewareService *services.MicroserviceStatusService
 }
 
-func NewMiddlewareRouter(middlewareService *services.MiddlewareService, r *chi.Mux) *MiddlewareRouter {
+func NewMiddlewareRouter(middlewareService *services.MicroserviceStatusService, r *chi.Mux) *MiddlewareRouter {
 	r.Route("/middleware", func(r chi.Router) {
 		r.Get("/microservice-status", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.MicroservicesStatus(w, r, middlewareService)

@@ -15,7 +15,7 @@ type Env struct {
 	DBHost         string `mapstructure:"DB_HOST"`
 	DBPort         string `mapstructure:"DB_PORT"`
 	DBUser         string `mapstructure:"DB_USER"`
-	DBPass         string `mapstructure:"DB_PASS"`
+	DBPass         string `mapstructure:"DB_PASSWORD"`
 	DBName         string `mapstructure:"DB_NAME"`
 }
 
@@ -32,7 +32,7 @@ func NewEnv() *Env {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv("DB_PASS")
+	dbPass := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 
 	return &Env{
@@ -41,9 +41,8 @@ func NewEnv() *Env {
 		ContextTimeout: contextTimeout,
 		DBHost:         dbHost,
 		DBPort:         dbPort,
-		DBUser: dbUser,
-		DBPass: dbPass,
-		DBName: dbName,
+		DBUser:         dbUser,
+		DBPass:         dbPass,
+		DBName:         dbName,
 	}
 }
-

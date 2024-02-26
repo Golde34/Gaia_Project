@@ -15,6 +15,17 @@ class EditingNotePage extends StatefulWidget {
 }
 
 class _EditingNotePageState extends State<EditingNotePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    // loadExistingNote();
+  }
+
+  void loadExistingNote() {
+    final doc = Docum
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
