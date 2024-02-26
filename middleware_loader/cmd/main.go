@@ -70,7 +70,8 @@ func main() {
 		log.Println("MongoDB connection closed")
 	}()
 	
-	microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db)
+	microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db, "microservice_status")
+	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db, "url_permission_configuration")
 	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
 
 	// // REPOSITORIES
