@@ -18,6 +18,9 @@ func NewMiddlewareRouter(middlewareService *services.MicroserviceStatusService, 
 		r.Get("/microservice-status", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.MicroservicesStatus(w, r, middlewareService)
 		})
+		r.Post("/insert-microservice-configuration", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.InsertMicroserviceConfiguration(w, r, middlewareService)
+		})
 	})
 	return &MiddlewareRouter{
 		MiddlewareService: middlewareService,
