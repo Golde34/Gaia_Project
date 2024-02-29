@@ -34,5 +34,15 @@ func (store *MicroserviceStatusStore) GetMicroservice(context context.Context,
 
 func (store *MicroserviceStatusStore) InsertMicroservice(context context.Context,
 	microserviceStatus entity.MicroserviceStatus) (interface{}, error) {
-	return nil, nil
+	collection := store.Database.Collection(store.Collection)
+	result, err := port.IMicroserviceStatusRepository(
+		&repository.MicroserviceStatusRepository{
+			Database: store.Database,
+			Collection: collection,
+		},
+	).InsertMicroservice(context, microserviceStatus)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
