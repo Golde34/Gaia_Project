@@ -21,3 +21,25 @@ func MicroservicesStatus(w http.ResponseWriter, r *http.Request, middlewareServi
 		return
 	}
 }
+
+func InsertMicroserviceConfiguration(w http.ResponseWriter, r *http.Request, middlewareService *services.MicroserviceStatusService) {
+	var body map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var input = mapper.MicroserviceStatusRequestDTOMapper(body)
+	result, err := middlewareService.InsertMicroservice(input)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	dataBytes, err := json.Marshal(result)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Write(dataBytes)
+}

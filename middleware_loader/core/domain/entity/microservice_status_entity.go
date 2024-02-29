@@ -1,8 +1,6 @@
 package entity
 
-import (
-	"time"
-)
+import "time"
 
 type MicroserviceStatus struct {
 	ID               string    `json:"id" bson:"_id"`
