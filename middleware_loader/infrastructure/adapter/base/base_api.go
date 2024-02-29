@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"middleware_loader/core/domain/enums"
+	"middleware_loader/core/domain/models"
 	"net/http"
 )
 
@@ -54,7 +54,7 @@ func returnResponseData(req *http.Request) (interface{}, error) {
 	}
 
 	// map body to Error Response
-	var response enums.ErrorResponse
+	var response models.ErrorResponse
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -69,14 +69,14 @@ func returnResponseData(req *http.Request) (interface{}, error) {
 
 func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
 	if err != nil {	
-		return enums.ErrorResponse{
+		return models.ErrorResponse{
 			Status:        "Error",
 			StatusMessage: "Internal Server Error",
 			ErrorCode:     500,
 			ErrorMessage:  statusMessage,
 		}, err
 	}
-	return enums.ErrorResponse{
+	return models.ErrorResponse{
 		Status:        "Success",
 		StatusMessage: "Success",
 		ErrorCode:     200,
