@@ -8,13 +8,11 @@ import (
 	database_mongo "middleware_loader/kernel/database/mongo"
 )
 
-// MicroserviceStatusRepository ...
 type MicroserviceStatusRepository struct {
 	Database           database_mongo.Database
 	Collection         string
 }
 
-// NewMicroserviceStatusRepository ...
 func NewMicroserviceStatusRepository(db database_mongo.Database, collection string) MicroserviceStatusRepository {
 	return MicroserviceStatusRepository{db, collection}
 }
