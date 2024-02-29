@@ -9,26 +9,24 @@ import (
 )
 
 type MicroserviceStatusRepository struct {
-	Database           database_mongo.Database
-	Collection         string
+	Database   database_mongo.Database
+	Collection database_mongo.Collection
 }
 
-func NewMicroserviceStatusRepository(db database_mongo.Database, collection string) MicroserviceStatusRepository {
+func NewMicroserviceStatusRepository(db database_mongo.Database, collection database_mongo.Collection) MicroserviceStatusRepository {
 	return MicroserviceStatusRepository{db, collection}
 }
 
-func (repo *MicroserviceStatusRepository) GetMicroservice(context context.Context,
-	microserviceStatus request_dtos.MicroserviceStatusDTO) error {
+func (repo *MicroserviceStatusRepository) GetMicroserviceStatus(context context.Context,
+	microserviceStatus request_dtos.MicroserviceStatusDTO) (interface{}, error) {
 	log.Printf("Connect to database")
-	collection := repo.Database.Collection(repo.Collection)
-	_, err := collection.InsertOne(context, microserviceStatus)
-	return err
+	result, err := repo.Collection.InsertOne(context, microserviceStatus)
+	return result, err
 }
 
 func (repo *MicroserviceStatusRepository) InsertMicroservice(context context.Context,
 	microserviceStatus entity.MicroserviceStatus) (interface{}, error) {
 	log.Printf("Connect to database - Create microservice function")
-	collection := repo.Database.Collection(repo.Collection)
-	result, err := collection.InsertOne(context, microserviceStatus)
+	result, err := repo.Collection.InsertOne(context, microserviceStatus)
 	return result, err
 }

@@ -1,7 +1,12 @@
 package repository_interface
 
-import request_dtos "middleware_loader/core/domain/dtos/request"
+import (
+	"context"
+	request_dtos "middleware_loader/core/domain/dtos/request"
+	"middleware_loader/core/domain/entity"
+)
 
 type IMicroserviceStatusRepository interface {
-	InsertMicroserviceStatus(microserviceStatus request_dtos.MicroserviceStatusDTO) error
+	GetMicroserviceStatus(context context.Context, microserviceStatus request_dtos.MicroserviceStatusDTO) (interface{}, error)
+	InsertMicroservice(context context.Context, microserviceStatus entity.MicroserviceStatus) (interface{}, error)
 }
