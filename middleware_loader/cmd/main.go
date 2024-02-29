@@ -70,12 +70,10 @@ func main() {
 		log.Println("MongoDB connection closed")
 	}()
 	
-	microserviceStatusRepository := repository.NewMicroserviceStatusRepository(db, "microservice_status")
 	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db, "url_permission_configuration")
 	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
 
 	// // REPOSITORIES
-	microserviceStatusService := r_services.NewMicroserviceStatusService(microserviceStatusRepository)
 	urlPermissionConfigurationService := r_services.NewURLPermissionService(urlPermissionConfigurationRepository)
 
 	// SERVICES
@@ -87,7 +85,7 @@ func main() {
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
 	routers.NewGaiaRouter(gaiaService, router)
-	routers.NewMiddlewareRouter(microserviceStatusService, router)
+	routers.NewMiddlewareRouter(db, router)
 	routers.NewURLPermissionRouter(urlPermissionConfigurationService, router)
 	routers.NewTaskRouter(taskService, router)
 	routers.NewProjectRouter(projectService, router)

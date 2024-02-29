@@ -1,4 +1,4 @@
-package enums
+package models 
 
 type ErrorResponse struct {
 	Status string

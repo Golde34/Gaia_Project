@@ -1,6 +1,13 @@
 package entity
 
-import "time"
+import (
+	"middleware_loader/core/domain/enums"
+	"time"
+)
+
+const (
+	CollectionMicroserviceStatus = enums.MicroserviceStatus
+)
 
 type MicroserviceStatus struct {
 	ID               string    `json:"id" bson:"_id"`

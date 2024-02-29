@@ -10,8 +10,8 @@ import (
 
 // MicroserviceStatusRepository ...
 type MicroserviceStatusRepository struct {
-	Database   database_mongo.Database
-	Collection string
+	Database           database_mongo.Database
+	Collection         string
 }
 
 // NewMicroserviceStatusRepository ...
