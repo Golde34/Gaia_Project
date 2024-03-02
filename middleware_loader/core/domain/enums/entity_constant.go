@@ -1,6 +1,6 @@
 package enums
 
 const (
-	MicroserviceStatus = "microservice_status"
+	MicroserviceConfiguration = "microservice_configuration"
 	UrlPermissionConfiguration = "url_permission_configuration"
 )

@@ -2,6 +2,8 @@ package routers
 
 import (
 	services "middleware_loader/core/services/repo_service"
+	"middleware_loader/core/store"
+	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"
 
@@ -9,16 +11,18 @@ import (
 )
 
 type URLPermissionRouter struct {
-	URLPermissionService *services.URLPermissionService
+	UrlPermissionConfiguration database_mongo.Database	
 }
 
-func NewURLPermissionRouter(urlPermssion *services.URLPermissionService, r *chi.Mux) *URLPermissionRouter {
+func NewURLPermissionRouter(db database_mongo.Database, r *chi.Mux) *URLPermissionRouter {
+	urlPermissionConfigurationStore := store.NewUrlPermissionConfiguration(db)
+	urlPermissionConfigurationService := services.NewUrlPermissionConfiguration(urlPermissionConfigurationStore)
 	r.Route("/auth-filter", func(r chi.Router) {
 		r.Get("/get-url-permission", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.GetURLPermission(w, r, urlPermssion)
+			controller_services.GetURLPermission(w, r, urlPermissionConfigurationService)
 		})
 	})
 	return &URLPermissionRouter{
-		URLPermissionService: urlPermssion,
+		UrlPermissionConfiguration: db,
 	}
 }

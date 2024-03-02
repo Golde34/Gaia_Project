@@ -69,12 +69,6 @@ func main() {
 		app.CloseDBConnection()
 		log.Println("MongoDB connection closed")
 	}()
-	
-	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db, "url_permission_configuration")
-	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
-
-	// // REPOSITORIES
-	urlPermissionConfigurationService := r_services.NewURLPermissionService(urlPermissionConfigurationRepository)
 
 	// SERVICES
 	authService := g_services.NewAuthService()
@@ -85,8 +79,8 @@ func main() {
 	// ROUTERS
 	routers.NewAuthRouter(authService, router)
 	routers.NewGaiaRouter(gaiaService, router)
-	routers.NewMiddlewareRouter(db, router)
-	routers.NewURLPermissionRouter(urlPermissionConfigurationService, router)
+	routers.NewMicroserviceRouter(db, router)
+	routers.NewURLPermissionRouter(db, router)
 	routers.NewTaskRouter(taskService, router)
 	routers.NewProjectRouter(projectService, router)
 

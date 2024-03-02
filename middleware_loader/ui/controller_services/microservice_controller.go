@@ -7,35 +7,30 @@ import (
 	"net/http"
 )
 
-func MicroservicesStatus(w http.ResponseWriter, r *http.Request, middlewareService *services.MicroserviceStatusService) {
+func GetMicroservice(w http.ResponseWriter, r *http.Request, miccroserviceConfigService *services.MicroserviceConfigurationService) {
 	var body map[string]interface{}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	
-	var input = mapper.MicroserviceStatusRequestDTOMapper(body)
-	err := middlewareService.GetMicroserviceStatus(input)
+	var input = mapper.MicroserviceConfigurationRequestDTOMapper(body)
+	err := miccroserviceConfigService.GetMicroservice(input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
-func InsertMicroserviceConfiguration(w http.ResponseWriter, r *http.Request, middlewareService *services.MicroserviceStatusService) {
+func InsertMicroserviceConfiguration(w http.ResponseWriter, r *http.Request, miccroserviceConfigService *services.MicroserviceConfigurationService) {
 	var body map[string]interface{}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	var input = mapper.MicroserviceStatusRequestDTOMapper(body)
-	result, err := middlewareService.InsertMicroservice(input)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
+	var input = mapper.MicroserviceConfigurationRequestDTOMapper(body)
+	result := miccroserviceConfigService.InsertMicroservice(input)
 	dataBytes, err := json.Marshal(result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
