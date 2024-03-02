@@ -14,10 +14,12 @@ func GetURLPermission(w http.ResponseWriter, r *http.Request, urlPermissionServi
 		return
 	}
 
-	var input = mapper.UrlPermissionConfigurationDTOMapper(body)
-	err := urlPermissionService.GetURLPermission(input)
+	var input = mapper.UrlPermissionRequestDTOMapper(body)
+	result := urlPermissionService.GetURLPermission(input)
+	dataBytes, err := json.Marshal(result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.Write(dataBytes)
 }

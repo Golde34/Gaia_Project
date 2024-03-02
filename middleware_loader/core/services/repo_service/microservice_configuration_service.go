@@ -11,7 +11,7 @@ import (
 )
 
 type MicroserviceConfigurationService struct {
-	Store      store.MicroserviceConfigurationStore
+	Store store.MicroserviceConfigurationStore
 }
 
 func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationStore) *MicroserviceConfigurationService {
@@ -24,9 +24,9 @@ func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.Mi
 	return s.Store.GetMicroservice(ctx, input)
 }
 
-func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.MicroserviceConfigurationDTO) (models.ErrorResponse) {
+func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.MicroserviceConfigurationDTO) models.ErrorResponse {
 	ctx := base.DeferTimeout()
-	
+
 	var microserviceEntity entity.MicroserviceConfiguration
 	microserviceEntity.CreatedAt = time.Now()
 	microserviceEntity.MicroserviceName = input.MicroserviceName
@@ -34,8 +34,8 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 
 	microservice, err := s.Store.InsertMicroservice(ctx, microserviceEntity)
 	if err != nil {
-		return base.ReturnErrorResponse(400, "Cannot insert miccroservice configuration");	
+		return base.ReturnErrorResponse(400, "Cannot insert miccroservice configuration")
 	}
-	
+
 	return base.ReturnSuccessResponse("Insert successfully", microservice)
 }

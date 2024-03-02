@@ -2,8 +2,9 @@ package store
 
 import (
 	"context"
-	"middleware_loader/core/domain/entity"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/enums"
+	port "middleware_loader/core/port/repository_interface"
 	"middleware_loader/infrastructure/repository"
 	database_mongo "middleware_loader/kernel/database/mongo"
 )
@@ -13,18 +14,17 @@ type UrlPermissionConfigurationStore struct {
 	Collection string
 }
 
-func NewUrlPermissionConfigurationRepository(db database_mongo.Database) UrlPermissionConfigurationStore {
+func NewUrlPermissionConfigurationStore(db database_mongo.Database) UrlPermissionConfigurationStore {
 	return UrlPermissionConfigurationStore{db, enums.UrlPermissionConfiguration}
 }
 
-func (store *UrlPermissionConfigurationStore) GetUrlPermission(context context.Context,
-	urlPermission entity.UrlPermission) interface{} {
+func (store *UrlPermissionConfigurationStore) GetUrlPermission(context context.Context, url request_dtos.UrlPermissionDTO) database_mongo.SingleResult {
 	collection := store.Database.Collection(store.Collection)
 	result := port.IUrlPermissionConfigurationRepository(
 		&repository.UrlPermissionConfigurationRepository{
 			Database:   store.Database,
 			Collection: collection,
 		},
-	).GetUrlPermission(context, urlPermission)
+	).GetUrlPermission(context, url)
 	return result
 }

@@ -11,10 +11,8 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 
-	g_services "middleware_loader/core/services/graphql_service"
-	r_services "middleware_loader/core/services/repo_service"
+	"middleware_loader/core/services/graphql_service"
 	"middleware_loader/infrastructure/graph"
-	"middleware_loader/infrastructure/repository"
 	"middleware_loader/kernel/bootstrap"
 	"middleware_loader/kernel/configs"
 	"middleware_loader/ui/routers"
@@ -71,16 +69,17 @@ func main() {
 	}()
 
 	// SERVICES
-	authService := g_services.NewAuthService()
-	gaiaService := g_services.NewGaiaService()
-	taskService := g_services.NewTaskService()
-	projectService := g_services.NewProjectService()
+	authService := services.NewAuthService()
+	gaiaService := services.NewGaiaService()
+	taskService := services.NewTaskService()
+	projectService := services.NewProjectService()
 
 	// ROUTERS
-	routers.NewAuthRouter(authService, router)
-	routers.NewGaiaRouter(gaiaService, router)
 	routers.NewMicroserviceRouter(db, router)
 	routers.NewURLPermissionRouter(db, router)
+	
+	routers.NewAuthRouter(authService, router)
+	routers.NewGaiaRouter(gaiaService, router)
 	routers.NewTaskRouter(taskService, router)
 	routers.NewProjectRouter(projectService, router)
 

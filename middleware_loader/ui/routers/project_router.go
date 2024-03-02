@@ -13,6 +13,7 @@ type ProjectRouter struct {
 }
 
 func NewProjectRouter(projectService *services.ProjectService, r *chi.Mux) *ProjectRouter {
+	
 	r.Route("/project", func(r chi.Router) {
 		r.Get("/all", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.ListAll(w, r, projectService)

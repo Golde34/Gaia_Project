@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"middleware_loader/core/domain/entity"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	database_mongo "middleware_loader/kernel/database/mongo"
 )
 
@@ -12,11 +12,11 @@ type UrlPermissionConfigurationRepository struct {
 }
 
 func NewUrlPermissionConfigurationRepository(db database_mongo.Database, collection database_mongo.Collection) UrlPermissionConfigurationRepository {
-	return MicroserviceConfigurationRepository{db, collection}
+	return UrlPermissionConfigurationRepository{db, collection}
 }
 
 func (repo *UrlPermissionConfigurationRepository) GetUrlPermission(
-	context context.Context, urlPermission entity.UrlPermission) (database_mongo.SingleResult) {
+	context context.Context, urlPermission request_dtos.UrlPermissionDTO) (database_mongo.SingleResult) {
 	result := repo.Collection.FindOne(context, urlPermission)
 	return result
 }
