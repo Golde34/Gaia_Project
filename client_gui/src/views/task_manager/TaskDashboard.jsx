@@ -8,6 +8,7 @@ import TabGroupTask from "../../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
 import MessageBox from "../../components/subComponents/MessageBox";
+import { getAccessToken } from "../../kernels/utils/cookie-token";
 
 function ContentArea() {
     const projectId = useParams().id;
@@ -39,6 +40,7 @@ function ContentArea() {
                 <>
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Task Dashboard
+                        {getAccessToken}
                     </Metric>
                     {
                         groupTasks.length === 0 ? (

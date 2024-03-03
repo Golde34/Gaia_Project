@@ -5,19 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 
-	g_services "middleware_loader/core/services/graphql_service"
-	r_services "middleware_loader/core/services/repo_service"
-	"middleware_loader/infrastructure/graph"
-	"middleware_loader/infrastructure/repository"
-	"middleware_loader/kernel/bootstrap"
+	"middleware_loader/cmd/bootstrap"
 	"middleware_loader/kernel/configs"
-	"middleware_loader/ui/routers"
 )
 
 func main() {
@@ -56,7 +49,6 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-
 	router.Use(corsHandler.Handler)
 
 	// DATABASE
@@ -68,41 +60,10 @@ func main() {
 		log.Println("Closing MongoDB connection")
 		app.CloseDBConnection()
 		log.Println("MongoDB connection closed")
-	}()
-	
-	// urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db, "url_permission_configuration")
-	urlPermissionConfigurationRepository := repository.NewURLPermissionConfigurationRepository(db)
+	}()		
 
-	// // REPOSITORIES
-	urlPermissionConfigurationService := r_services.NewURLPermissionService(urlPermissionConfigurationRepository)
-
-	// SERVICES
-	authService := g_services.NewAuthService()
-	gaiaService := g_services.NewGaiaService()
-	taskService := g_services.NewTaskService()
-	projectService := g_services.NewProjectService()
-
-	// ROUTERS
-	routers.NewAuthRouter(authService, router)
-	routers.NewGaiaRouter(gaiaService, router)
-	routers.NewMiddlewareRouter(db, router)
-	routers.NewURLPermissionRouter(urlPermissionConfigurationService, router)
-	routers.NewTaskRouter(taskService, router)
-	routers.NewProjectRouter(projectService, router)
-
-	// GRAPHQL
-	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
-	router.Handle("/query", handler.NewDefaultServer(
-		graph.NewExecutableSchema(
-			graph.Config{
-				Resolvers: &graph.Resolver{
-					AuthGraphQLService:    authService,
-					TaskGraphQLService:    taskService,
-					ProjectGraphQLService: projectService,
-				},
-			},
-		),
-	))
+	// Defines system routers and middlewares
+	bootstrap.Setup(router, db)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))

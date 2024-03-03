@@ -1,10 +1,10 @@
 package request_dtos
 
-type MicroserviceStatusDTO struct {
+type MicroserviceConfigurationDTO struct {
 	MicroserviceName string `json:"microserviceName"`
 	Status           string `json:"status"`
 }
 
-func NewMicroserviceStatusDTO() *MicroserviceStatusDTO {
-	return &MicroserviceStatusDTO{}
+func NewMicroserviceConfigurationDTO() *MicroserviceConfigurationDTO {
+	return &MicroserviceConfigurationDTO{}
 }

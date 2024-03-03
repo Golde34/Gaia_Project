@@ -2,6 +2,6 @@ package models
 
 type GraphQLQuery struct {
 	Functionname string
-	QueryInput interface{}
-	QueryOutput interface{}
+	QueryInput   interface{}
+	QueryOutput  interface{}
 }

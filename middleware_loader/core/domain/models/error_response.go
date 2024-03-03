@@ -1,9 +1,9 @@
-package models 
+package models
 
 type ErrorResponse struct {
-	Status string
-	StatusMessage    string
-	ErrorCode int
-	ErrorMessage string
-	Data interface{}
+	Status        string
+	StatusMessage string
+	ErrorCode     int
+	ErrorMessage  string
+	Data          interface{}
 }

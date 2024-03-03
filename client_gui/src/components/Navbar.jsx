@@ -1,7 +1,7 @@
 import { Flex, TextInput } from "@tremor/react"
 import { SearchIcon } from "@heroicons/react/outline"
 import { useDispatch, useSelector } from "react-redux"
-import { signout } from "../api/store/actions/auth_service/userActions";
+import { signout } from "../api/store/actions/auth_service/auth.actions";
 
 const Navbar = () => {
     const dispatch = useDispatch();
