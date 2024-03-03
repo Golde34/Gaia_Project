@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, Flex, Grid, Metric, Title } from "@tremor/react";
 import "../../assets/husky.scss";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
-import { signin } from "../../api/store/actions/auth_service/userActions";
+import { signin } from "../../api/store/actions/auth_service/auth.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
 
 const Signin = () => {

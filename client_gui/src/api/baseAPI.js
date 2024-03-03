@@ -6,6 +6,7 @@ const HttpMethods = {
     POST: 'POST',
     PUT: 'PUT',
     DELETE: 'DELETE',
+    CREDENTIAL_POST: 'CREDENTIAL_POST'
 };
 
 const getDefaultHeaders = () => {
@@ -105,6 +106,23 @@ const _fetchData = async (url, method, body, headers) => {
                     body: body,
                 })
                 return deleteResponse;
+            } catch (error) {
+                return error;
+            }
+        case "CREDENTIAL_POST":
+            try {
+                const credentialResponse = Axios.create({
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                return credentialResponse.post(
+                    url, {
+                        headers: headers,
+                        body: body
+                    }
+                )
             } catch (error) {
                 return error;
             }

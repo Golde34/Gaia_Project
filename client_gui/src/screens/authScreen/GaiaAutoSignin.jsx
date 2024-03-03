@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from "react-redux"
-import { gaiaSignin } from "../../api/store/actions/auth_service/userActions";
+import { gaiaSignin } from "../../api/store/actions/auth_service/auth.actions";
 import Signin from "./Signin";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from 'react-use';
+import { useCookies } from "react-cookie";
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [accessTokenCookie, setAccessTokenCookie, removeAccessTokenCookie] = useCookies(['accessToken'])
+    const [refreshTokenCookie, setRefreshTokenCookie, removeRefreshTokenCookie] = useCookies(['refreshToken'])
 
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
 
-    const [sessionUserInfo, setSessionUserInfo] = useSessionStorage('userInfo', null);
     const userInfo = localStorage.getItem('userInfo');
 
     const didGaiaAuthenticateRef = useRef();
@@ -26,7 +27,7 @@ const GaiaAutoSignin = () => {
     const navigateToCorrectPage = (path) => {
         navigate('/' + path);
     }
-    
+
     return (
         <div>
             {loading ? (
