@@ -16,7 +16,7 @@ const Sidebar = () => {
 	return (
 		<>
 			<div className="h-20 flex">
-				<a href="/">
+				<a href="/client-gui/dashboard">
 					<HomeIcon width={40} className="text-gray-300 left-3 sm:left-6 fixed" />
 				</a>
 			</div>

@@ -9,19 +9,14 @@ const Navbar = () => {
     let auth = false;
     const gaiaSignin = useSelector((state) => state.gaiaSignin);
     const { gaiaInfo } = gaiaSignin;
-    console.log(gaiaInfo);
     const userSignin = useSelector((state) => state.userSignin);
     const { userInfo } = userSignin;
-    console.log(userInfo);
     const bossSignin = useSelector((state) => state.bossSignin);
     const { bossInfo } = bossSignin;
-    console.log(bossInfo);
     if (gaiaInfo || userInfo || bossInfo) {
         auth = true;
-        console.log(auth);
     } else {
         auth = false;
-        console.log(auth);
     }
 
     const signoutHandler = () => {

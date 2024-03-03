@@ -8,11 +8,13 @@ import TabGroupTask from "../../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
 import MessageBox from "../../components/subComponents/MessageBox";
-import { getAccessToken } from "../../kernels/utils/cookie-token";
+import { useCookies } from "react-cookie";
 
 function ContentArea() {
     const projectId = useParams().id;
     const dispatch = useDispatch();
+    const [cookies] = useCookies(['accessToken'])
+    console.log("my cookie: " + cookies.accessToken)
 
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;
@@ -40,7 +42,6 @@ function ContentArea() {
                 <>
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Task Dashboard
-                        {getAccessToken}
                     </Metric>
                     {
                         groupTasks.length === 0 ? (
