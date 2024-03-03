@@ -5,17 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 
-	"middleware_loader/core/services/graphql_service"
-	"middleware_loader/infrastructure/graph"
-	"middleware_loader/kernel/bootstrap"
+	"middleware_loader/cmd/bootstrap"
 	"middleware_loader/kernel/configs"
-	"middleware_loader/ui/routers"
 )
 
 func main() {
@@ -54,7 +49,6 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-
 	router.Use(corsHandler.Handler)
 
 	// DATABASE
@@ -66,36 +60,10 @@ func main() {
 		log.Println("Closing MongoDB connection")
 		app.CloseDBConnection()
 		log.Println("MongoDB connection closed")
-	}()
+	}()		
 
-	// SERVICES
-	authService := services.NewAuthService()
-	gaiaService := services.NewGaiaService()
-	taskService := services.NewTaskService()
-	projectService := services.NewProjectService()
-
-	// ROUTERS
-	routers.NewMicroserviceRouter(db, router)
-	routers.NewURLPermissionRouter(db, router)
-	
-	routers.NewAuthRouter(authService, router)
-	routers.NewGaiaRouter(gaiaService, router)
-	routers.NewTaskRouter(taskService, router)
-	routers.NewProjectRouter(projectService, router)
-
-	// GRAPHQL
-	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
-	router.Handle("/query", handler.NewDefaultServer(
-		graph.NewExecutableSchema(
-			graph.Config{
-				Resolvers: &graph.Resolver{
-					AuthGraphQLService:    authService,
-					TaskGraphQLService:    taskService,
-					ProjectGraphQLService: projectService,
-				},
-			},
-		),
-	))
+	// Defines system routers and middlewares
+	bootstrap.Setup(router, db)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))
