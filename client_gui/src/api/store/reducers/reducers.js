@@ -3,7 +3,7 @@ import {
     userSigninReducer,
     gaiaSigninReducer,
     bossSigninReducer,
-} from './auth_service/userReducers'
+} from './auth_service/auth.reducer'
 
 import { projectCreateReducer, projectDeleteReducer, projectDetailReducer,
     projectListReducer, projectUpdateReducer } from './task_manager/project.reducers'

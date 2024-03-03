@@ -1,4 +1,4 @@
-import { setTokens } from '../../../../kernels/utils/cookie-token';
+import { useCookies } from 'react-cookie';
 import { HttpMethods, serverRequest } from '../../../baseAPI';
 import {
     GAIA_SIGNIN_FAIL, GAIA_SIGNIN_REQUEST, GAIA_SIGNIN_SUCCESS,
@@ -14,12 +14,12 @@ const portName = {
 
 // GAIA signin autimatically
 // Call to middleware to Gaia
-export const gaiaSignin = () => async (dispatch) => {
+export const gaiaSignin = () => async (dispatch) => { 
     dispatch({ type: GAIA_SIGNIN_REQUEST });
     try {
         const response = await serverRequest('/gaia/gaia-connect', HttpMethods.GET, portName.middleware, null);
         const data = JSON.stringify(response.data);
-        dispatch({ type: GAIA_SIGNIN_SUCCESS, payload: JSON.parse(data)['accessToken'] });
+        dispatch({ type: GAIA_SIGNIN_SUCCESS, payload: response.data.accessToken });
 
         localStorage.setItem('gaiaInfo', JSON.stringify(data))
         localStorage.setItem('gaiaRefreshToken', JSON.parse(data)['refreshToken']);
