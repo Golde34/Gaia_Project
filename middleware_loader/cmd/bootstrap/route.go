@@ -1,10 +1,14 @@
 package bootstrap
 
 import (
+	"middleware_loader/core/middleware"
 	services "middleware_loader/core/services/graphql_service"
+	repo_services "middleware_loader/core/services/repo_service"
+	"middleware_loader/core/store"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/routers"
+	"net/http"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -36,10 +40,27 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	// ROUTERS
 	routers.NewMicroserviceRouter(db, router)
 	routers.NewURLPermissionRouter(db, router)
-	
-	routers.NewAuthRouter(authService, router)
-	routers.NewGaiaRouter(gaiaService, router)
 
+	// Auth Routers
+	router.Group(func(r chi.Router) {
+		middleware.CheckMicroserviceStatusMiddleware(router, db, "AUTH_SERVICE")	
+		routers.NewAuthRouter(authService, router)
+	})
+
+	// Gaia Routers
+	router.Group(func(r chi.Router) {
+		router.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				repo_services.NewMicroserviceConfigurationService(
+					store.NewMicroserviceConfigurationStore(db),
+				)
+				next.ServeHTTP(w, r)
+			})
+		})
+		routers.NewGaiaRouter(gaiaService, router)
+	})
+
+	// Task Manager Routers
 	router.Group(func(r chi.Router) {
 		routers.NewTaskRouter(taskService, router)
 		routers.NewProjectRouter(projectService, router)

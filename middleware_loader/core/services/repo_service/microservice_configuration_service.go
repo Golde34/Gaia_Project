@@ -18,6 +18,17 @@ func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationSt
 	return &MicroserviceConfigurationService{store}
 }
 
+func (s *MicroserviceConfigurationService) GetMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) models.ErrorResponse {
+	ctx := base.DeferTimeout()
+
+	microservice, err := s.Store.GetMicroserviceByName(ctx, input)
+	if err != nil {
+		return base.ReturnErrorResponse(400, "Cannot get microservice configuration")
+	}
+
+	return base.ReturnSuccessResponse("Get successfully", microservice)
+}
+
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
