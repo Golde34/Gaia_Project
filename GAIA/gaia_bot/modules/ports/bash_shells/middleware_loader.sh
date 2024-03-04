@@ -5,8 +5,8 @@ touch /tmp/middleware_loader_lock
 
 cd ../middleware_loader
 
-go run cmd/graphqlserver/main.go
+go run cmd/main.go
 
 # remove the lock file when done
-rm -f /tmp/task_manager_lock
+rm -f /tmp/middleware_loader_lock
 ```
