@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom"
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
-    const [setCookies] = useCookies(['accessToken'])
+    const [cookies, setCookies] = useCookies(['accessToken'])
 
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
