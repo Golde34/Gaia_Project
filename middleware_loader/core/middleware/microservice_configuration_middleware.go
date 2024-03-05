@@ -19,6 +19,17 @@ func NewMicroserviceConfigurationMiddleware(store store.MicroserviceConfiguratio
 	return &MicroserviceConfigurationMiddleware{store}
 }
 
+func CheckAuthMicroserviceStatus(handler http.Handler, db database_mongo.Database) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		result := getMicroserviceByName(db, "AUTH_SERVICE")
+		if result.ErrorCode != 200 {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Database, microserviceName string) {
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -37,5 +48,5 @@ func getMicroserviceByName(db database_mongo.Database, microserviceName string) 
 	microservice.MicroserviceName = microserviceName
 	microserviceConfigurationStore := store.NewMicroserviceConfigurationStore(db)
 	microserviceConfigurationService := services.NewMicroserviceConfigurationService(microserviceConfigurationStore)
-	return microserviceConfigurationService.GetMicroserviceByName(microservice) 
+	return microserviceConfigurationService.GetMicroserviceByName(microservice)
 }

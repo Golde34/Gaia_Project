@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/cors"
 
 	"middleware_loader/cmd/bootstrap"
+	"middleware_loader/cmd/route"
 	"middleware_loader/kernel/configs"
 )
 
@@ -17,13 +18,13 @@ func main() {
 	config := configs.Config{}
 	cfg, _ := config.LoadEnv()
 	clientUrl := cfg.ClientCORSAllowedUrl
-	router := chi.NewRouter()
+	r := chi.NewRouter()
 
-	router.Use(middleware.Logger)
-	router.Use(middleware.RequestID)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.RedirectSlashes)
-	router.Use(middleware.Timeout(time.Second * 60))
+	r.Use(middleware.Logger)
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.RedirectSlashes)
+	r.Use(middleware.Timeout(time.Second * 60))
 
 	// router.Use(func(next http.Handler) http.Handler {
 	// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +50,7 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		})
-	router.Use(corsHandler.Handler)
+	r.Use(corsHandler.Handler)
 
 	// DATABASE
 	app := bootstrap.App()
@@ -63,8 +64,8 @@ func main() {
 	}()		
 
 	// Defines system routers and middlewares
-	bootstrap.Setup(router, db)
+	route.Setup(r, db)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port)
-	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))
+	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
 }
