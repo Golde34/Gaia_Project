@@ -3,7 +3,7 @@ import {
     BOSS_SIGNIN_REQUEST, BOSS_SIGNIN_SUCCESS, BOSS_SIGNIN_FAIL, 
     GAIA_SIGNIN_REQUEST, GAIA_SIGNIN_SUCCESS, GAIA_SIGNIN_FAIL, 
     USER_SIGNOUT, 
-} from '../../constants/auth_service/userConstants';
+} from '../../constants/auth_service/auth.constants';
 
 export const gaiaSigninReducer = (state = {}, action) => {
     switch (action.type) {

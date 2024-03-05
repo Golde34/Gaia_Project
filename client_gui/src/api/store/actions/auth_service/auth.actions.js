@@ -1,10 +1,9 @@
-import { useCookies } from 'react-cookie';
 import { HttpMethods, serverRequest } from '../../../baseAPI';
 import {
     GAIA_SIGNIN_FAIL, GAIA_SIGNIN_REQUEST, GAIA_SIGNIN_SUCCESS,
     USER_SIGNIN_FAIL, USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS,
     USER_SIGNOUT
-} from '../../constants/auth_service/userConstants';
+} from '../../constants/auth_service/auth.constants';
 
 const portName = {
     auth: 'authenticationServicePort',

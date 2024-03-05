@@ -17,6 +17,13 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 	return MicroserviceConfigurationRepository{db, collection}
 }
 
+func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+	log.Printf("Connect to database")
+	result, err := repo.Collection.Find(context, microserviceRequest)
+	return result, err
+}
+
 func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context.Context,
 	microserviceRequest request_dtos.MicroserviceConfigurationDTO) (interface{}, error) {
 	log.Printf("Connect to database")

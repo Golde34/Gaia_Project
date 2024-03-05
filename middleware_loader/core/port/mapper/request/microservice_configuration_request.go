@@ -8,3 +8,9 @@ func MicroserviceConfigurationRequestDTOMapper(body map[string]interface{}) requ
 	input.Status = body["status"].(string)
 	return input 
 }
+
+func GetMicroserviceRequestDTOMapper(body map[string]interface{}) request_dtos.GetMicroserviceConfigurationDTO {
+	var input request_dtos.GetMicroserviceConfigurationDTO
+	input.MicroserviceName = body["microserviceName"].(string)
+	return input
+}

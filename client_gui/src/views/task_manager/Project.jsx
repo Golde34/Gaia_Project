@@ -8,6 +8,7 @@ import { CreateNewProject } from "../../screens/projectScreen/CreateNewProject";
 
 function ContentArea() {
     const dispatch = useDispatch();
+
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
 

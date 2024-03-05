@@ -8,3 +8,11 @@ type MicroserviceConfigurationDTO struct {
 func NewMicroserviceConfigurationDTO() *MicroserviceConfigurationDTO {
 	return &MicroserviceConfigurationDTO{}
 }
+
+type GetMicroserviceConfigurationDTO struct {
+	MicroserviceName string `json:"microserviceName"`
+}
+
+func NewGetMicroserviceConfigurationDTO() *GetMicroserviceConfigurationDTO {
+	return &GetMicroserviceConfigurationDTO{}
+}

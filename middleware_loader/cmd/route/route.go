@@ -1,4 +1,4 @@
-package bootstrap
+package route 
 
 import (
 	services "middleware_loader/core/services/graphql_service"
@@ -36,11 +36,22 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	// ROUTERS
 	routers.NewMicroserviceRouter(db, router)
 	routers.NewURLPermissionRouter(db, router)
-	
-	routers.NewAuthRouter(authService, router)
-	routers.NewGaiaRouter(gaiaService, router)
 
+	// Auth Routers
 	router.Group(func(r chi.Router) {
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, "AUTH_SERVICE"))
+		routers.NewAuthRouter(authService, router)
+	})
+
+	// Gaia Routers
+	router.Group(func(r chi.Router) {
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, "GAIA_SERVICE"))
+		routers.NewGaiaRouter(gaiaService, router)
+	})
+
+	// Task Manager Routers
+	router.Group(func(r chi.Router) {
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, "TASK_MANAGER_SERVICE"))
 		routers.NewTaskRouter(taskService, router)
 		routers.NewProjectRouter(projectService, router)
 	})

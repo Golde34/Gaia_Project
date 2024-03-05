@@ -19,6 +19,19 @@ func NewMicroserviceConfigurationStore(db database_mongo.Database) MicroserviceC
 	return MicroserviceConfigurationStore{db, enums.MicroserviceConfiguration}
 }
 
+func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context context.Context,
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+	result, err := port.IMicroserviceConfigurationRepository(
+		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
+	).GetMicroserviceByName(context, microserviceRequest)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Context,
 	microserviceRequest request_dtos.MicroserviceConfigurationDTO) error {
 	collection := store.Database.Collection(store.Collection)
