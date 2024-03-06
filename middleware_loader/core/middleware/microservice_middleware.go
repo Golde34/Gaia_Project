@@ -4,7 +4,6 @@ import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/models"
 	"middleware_loader/core/services"
-	"middleware_loader/core/services/base"
 	"middleware_loader/core/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"net/http"
@@ -23,7 +22,7 @@ func NewMicroserviceConfigurationMiddleware(store store.MicroserviceConfiguratio
 func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Database, microserviceName string) {
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			result, err := getMicroserviceByName(db, microserviceName)
+			result, err := isServiceActive(db, microserviceName)
 			if result.ErrorCode != 200 || err == nil {
 				w.WriteHeader(http.StatusForbidden)
 				return
@@ -33,17 +32,12 @@ func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Databa
 	})
 }
 
-func getMicroserviceByName(db database_mongo.Database, microserviceName string) (models.ErrorResponse, error) {
+func isServiceActive(db database_mongo.Database, microserviceName string) (models.ErrorResponse, error) {
 	var microservice request_dtos.GetMicroserviceConfigurationDTO
 	microservice.MicroserviceName = microserviceName
 	microserviceConfigService := services.NewMicroserviceConfigurationService(
 		store.NewMicroserviceConfigurationStore(db),
 	)
-	microserviceFromDB, err := microserviceConfigService.GetMicroserviceByName(microservice)
-	if err == nil {
-		return base.ReturnSuccessResponse("Microservice is active", microserviceFromDB), nil
-	} else {
-		return microserviceConfigService.CallMicroservice(microservice)
-	}
 
+	return microserviceConfigService.CheckMicroserviceStatus(microservice)
 }

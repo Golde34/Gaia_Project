@@ -2,14 +2,13 @@ package services
 
 import (
 	"context"
-	"encoding/json"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/entity"
-	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
+	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/services/base"
 	"middleware_loader/core/store"
-	adapter_base "middleware_loader/infrastructure/adapter/base"
+	"middleware_loader/infrastructure/adapter"
 	"time"
 )
 
@@ -21,7 +20,34 @@ func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationSt
 	return &MicroserviceConfigurationService{store}
 }
 
-func (s *MicroserviceConfigurationService) GetMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
+	microservice, err := s.getMicroserviceByName(input)
+	if err != nil {
+		return models.ErrorResponse{}, err
+	}
+
+	if microservice == nil {
+		result, err := s.callMicroservice(input)
+		if err != nil {
+			return models.ErrorResponse{}, err
+		}
+		if result != (models.ErrorResponse{}) {
+			s.InsertMicroservice(request_dtos.MicroserviceConfigurationDTO{
+				MicroserviceName: input.MicroserviceName,
+				Status: "ACTIVE",
+			})
+		}
+		return result, nil
+	}
+
+	s.UpdateMicroservice(request_dtos.MicroserviceConfigurationDTO{
+		MicroserviceName: input.MicroserviceName,
+		Status: "ACTIVE",
+	})
+	return base.ReturnSuccessResponse("Microservice is active", microservice), nil
+}
+
+func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
 	ctx := base.DeferTimeout()
 
 	microservice, err := s.Store.GetMicroserviceByName(ctx, input)
@@ -32,46 +58,16 @@ func (s *MicroserviceConfigurationService) GetMicroserviceByName(input request_d
 	return microservice, nil
 }
 
-func (s *MicroserviceConfigurationService) CallMicroservice(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
-	microserviceUrl := getMicroserviceUrlByName(input.MicroserviceName)
-	microserviceUrl = microserviceUrl + "/status"
-
-	bodyResult, err := adapter_base.BaseAPI(microserviceUrl, "GET", nil)
+func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
+	microservice, err := port.IMicroserviceAdapter(&adapter.MicroserviceAdapter{}).GetMicroserviceByName(input.MicroserviceName)
 	if err != nil {
 		return models.ErrorResponse{}, err
 	}
-
-	dataBytes, err := adapter_base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return models.ErrorResponse{}, err
-	}
-
-	var microserviceStatus models.ErrorResponse
-	err = json.Unmarshal(dataBytes, &microserviceStatus)
-	if err != nil {
-		return models.ErrorResponse{}, err
-	}
-
-	s.InsertMicroservice(request_dtos.MicroserviceConfigurationDTO{
-		MicroserviceName: input.MicroserviceName,
-		Status: "ACTIVE",
-	})
-	return microserviceStatus, nil
-
+	return microservice.(models.ErrorResponse), nil
+	
 }
 
-func getMicroserviceUrlByName(microserviceName string) string {
-	switch microserviceName {
-	case enums.AUTH_SERVICE:
-		return adapter_base.AuthServiceURL
-	case enums.GAIA_SERVICE:
-		return adapter_base.GaiaServiceURL
-	case enums.TASK_MANAGER:
-		return adapter_base.TaskManagerServiceURL
-	default:
-		return ""
-	}
-}
+
 
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
