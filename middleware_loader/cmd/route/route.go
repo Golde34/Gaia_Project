@@ -2,7 +2,7 @@ package route
 
 import (
 	"middleware_loader/core/domain/enums"
-	services "middleware_loader/core/services/graphql_service"
+	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/routers"

@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
-	"middleware_loader/core/services/graphql_service"
+	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
 

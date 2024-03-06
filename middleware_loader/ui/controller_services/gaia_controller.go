@@ -2,7 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
-	"middleware_loader/core/services/graphql_service"
+	"middleware_loader/core/services"
 	"net/http"
 )
 
