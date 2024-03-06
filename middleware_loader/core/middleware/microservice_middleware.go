@@ -3,6 +3,7 @@ package middleware
 import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/models"
+	"middleware_loader/core/services/base"
 	services "middleware_loader/core/services/repo_service"
 	"middleware_loader/core/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
@@ -19,22 +20,11 @@ func NewMicroserviceConfigurationMiddleware(store store.MicroserviceConfiguratio
 	return &MicroserviceConfigurationMiddleware{store}
 }
 
-func CheckAuthMicroserviceStatus(handler http.Handler, db database_mongo.Database) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		result := getMicroserviceByName(db, "AUTH_SERVICE")
-		if result.ErrorCode != 200 {
-			w.WriteHeader(http.StatusForbidden)
-			return
-		}
-		handler.ServeHTTP(w, r)
-	})
-}
-
 func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Database, microserviceName string) {
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			result := getMicroserviceByName(db, "AUTH_SERVICE")
-			if result.ErrorCode != 200 {
+			result, err := getMicroserviceByName(db, microserviceName)
+			if result.ErrorCode != 200 || err == nil {
 				w.WriteHeader(http.StatusForbidden)
 				return
 			}
@@ -43,10 +33,17 @@ func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Databa
 	})
 }
 
-func getMicroserviceByName(db database_mongo.Database, microserviceName string) models.ErrorResponse {
+func getMicroserviceByName(db database_mongo.Database, microserviceName string) (models.ErrorResponse, error) {
 	var microservice request_dtos.GetMicroserviceConfigurationDTO
 	microservice.MicroserviceName = microserviceName
-	microserviceConfigurationStore := store.NewMicroserviceConfigurationStore(db)
-	microserviceConfigurationService := services.NewMicroserviceConfigurationService(microserviceConfigurationStore)
-	return microserviceConfigurationService.GetMicroserviceByName(microservice)
+	microserviceConfigService := services.NewMicroserviceConfigurationService(
+		store.NewMicroserviceConfigurationStore(db),
+	)
+	microserviceFromDB, err := microserviceConfigService.GetMicroserviceByName(microservice)
+	if err == nil {
+		return base.ReturnSuccessResponse("Microservice is active", microserviceFromDB), nil
+	} else {
+		return microserviceConfigService.CallMicroservice(microservice)
+	}
+
 }

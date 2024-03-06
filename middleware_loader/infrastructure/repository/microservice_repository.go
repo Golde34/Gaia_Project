@@ -37,3 +37,15 @@ func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context cont
 	result, err := repo.Collection.InsertOne(context, microserviceRequest)
 	return result, err
 }
+
+func (repo *MicroserviceConfigurationRepository) UpdateMicroservice(context context.Context,
+	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	log.Printf("Connect to database - Update microservice function")
+
+	microservice := repo.Collection.FindOne(context, microserviceRequest.MicroserviceName)
+	if microservice == nil {
+		return nil, nil
+	}
+	result, err := repo.Collection.UpdateOne(context, microserviceRequest, microservice)
+	return result, err
+}

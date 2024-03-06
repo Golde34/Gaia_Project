@@ -59,3 +59,16 @@ func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.
 	}
 	return result, nil
 }
+
+func (store *MicroserviceConfigurationStore) UpdateMicroservice(context context.Context,
+	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+	result, err := port.IMicroserviceConfigurationRepository(
+		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
+	).UpdateMicroservice(context, microserviceRequest)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
