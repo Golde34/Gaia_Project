@@ -41,9 +41,9 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 func getMicroserviceUrlByName(microserviceName string) string {
 	switch microserviceName {
 	case enums.AUTH_SERVICE:
-		return base.AuthServiceURL
+		return base.AuthServiceURL + "/auth"
 	case enums.GAIA_SERVICE:
-		return base.GaiaServiceURL
+		return base.GaiaServiceURL + "/gaia"
 	case enums.TASK_MANAGER:
 		return base.TaskManagerServiceURL
 	default:
