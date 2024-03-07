@@ -41,6 +41,9 @@ async function main(): Promise<void> {
 	app.use(helmet());
     app.use(morgan("dev"));
 
+    app.get("/status", (req: Request, res: Response) => {
+        res.status(200).send("OK");
+    });
     app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
     app.use("/project", projectRouter);

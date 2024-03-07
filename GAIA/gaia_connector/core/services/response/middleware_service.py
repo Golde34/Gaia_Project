@@ -31,3 +31,6 @@ class MiddlewareServiceReponse:
         data['email'] = email
         
         return status_response(200, data)
+    
+    def status(self):
+        return status_response(200, 'Middleware is up and running')

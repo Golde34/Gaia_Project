@@ -3,7 +3,9 @@ package auth.authentication_service.ui.controllers;
 import auth.authentication_service.core.domain.dto.TokenDto;
 import auth.authentication_service.core.domain.dto.UserPermissionDto;
 import auth.authentication_service.core.domain.dto.request.SignInDtoRequest;
+import auth.authentication_service.core.domain.enums.ResponseMessage;
 import auth.authentication_service.core.services.interfaces.AuthService;
+import auth.authentication_service.kernel.utils.GenericResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,21 +17,23 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    @Autowired
+    private GenericResponse<String> genericResponse;
 
-   @GetMapping("/")
-   public ResponseEntity<?> home() {
-       return ResponseEntity.ok("<h1>This authentication service was created by master Dong Viet </h1>");
-   }
+    @GetMapping("/status")
+    public ResponseEntity<?> home() {
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("Status OK", ResponseMessage.msg200));
+    }
 
-   @GetMapping("/user")
-   public ResponseEntity<?> user() {
-       return ResponseEntity.ok("<h1>Test user role.</h1>");
-   }
+    @GetMapping("/user")
+    public ResponseEntity<?> user() {
+        return ResponseEntity.ok("<h1>Test user role.</h1>");
+    }
 
-   @GetMapping("/admin")
-   public ResponseEntity<?> admin() {
-       return ResponseEntity.ok("<h1>Test admin role.</h1>");
-   }
+    @GetMapping("/admin")
+    public ResponseEntity<?> admin() {
+        return ResponseEntity.ok("<h1>Test admin role.</h1>");
+    }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public ResponseEntity<?> status() {
@@ -52,13 +56,15 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/check-permission", method = RequestMethod.GET)
-    public ResponseEntity<?> checkPermission(@RequestBody UserPermissionDto permission) throws Exception{
+    public ResponseEntity<?> checkPermission(@RequestBody UserPermissionDto permission) throws Exception {
         return authService.checkPermission(permission);
     }
 
-//    @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)
-//    public ResponseEntity<?> regenerateAccessToken(@RequestBody TokenDto tokenDto) throws Exception {
-//        String jwtReponse = tokenService.regenerateToken(tokenDto.getToken(), TokenType.ACCESS_TOKEN);
-//        return ResponseEntity.ok(new TokenDto(jwtReponse));
-//    }
+    // @RequestMapping("/regenerateAccessToken", method = RequestMethod.GET)
+    // public ResponseEntity<?> regenerateAccessToken(@RequestBody TokenDto
+    // tokenDto) throws Exception {
+    // String jwtReponse = tokenService.regenerateToken(tokenDto.getToken(),
+    // TokenType.ACCESS_TOKEN);
+    // return ResponseEntity.ok(new TokenDto(jwtReponse));
+    // }
 }

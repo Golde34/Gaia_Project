@@ -4,7 +4,7 @@ import (
 	"log"
 	"middleware_loader/core/domain/models"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services/graphql_service"
+	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"

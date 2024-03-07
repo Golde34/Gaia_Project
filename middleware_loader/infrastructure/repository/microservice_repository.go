@@ -18,10 +18,15 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
-	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (*entity.MicroserviceConfiguration, error) {
 	log.Printf("Connect to database")
-	result, err := repo.Collection.Find(context, microserviceRequest)
-	return result, err
+	result := repo.Collection.FindOne(context, microserviceRequest)
+	microservice := &entity.MicroserviceConfiguration{}
+	err := result.Decode(microservice)
+	if err != nil {
+		return nil, err
+	}
+	return microservice, nil
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context.Context,
@@ -35,5 +40,17 @@ func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context cont
 	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
 	log.Printf("Connect to database - Create microservice function")
 	result, err := repo.Collection.InsertOne(context, microserviceRequest)
+	return result, err
+}
+
+func (repo *MicroserviceConfigurationRepository) UpdateMicroservice(context context.Context,
+	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	log.Printf("Connect to database - Update microservice function")
+
+	microservice := repo.Collection.FindOne(context, microserviceRequest.MicroserviceName)
+	if microservice == nil {
+		return nil, nil
+	}
+	result, err := repo.Collection.UpdateOne(context, microserviceRequest, microservice)
 	return result, err
 }

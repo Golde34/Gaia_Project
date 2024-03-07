@@ -1,7 +1,7 @@
 package routers
 
 import (
-	services "middleware_loader/core/services/repo_service"
+	"middleware_loader/core/services"
 	"middleware_loader/core/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"

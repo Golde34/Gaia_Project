@@ -22,3 +22,7 @@ def microservices_status():
 @app.route('/middleware/gaia-connect', methods=['GET'])
 def gaia_connect():
     return middleware_service_response.gaia_connect()
+
+@app.route('/middleware/status', methods=['GET'])
+def status():
+    return middleware_service_response.status()

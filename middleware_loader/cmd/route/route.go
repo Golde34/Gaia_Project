@@ -1,7 +1,8 @@
-package route 
+package route
 
 import (
-	services "middleware_loader/core/services/graphql_service"
+	"middleware_loader/core/domain/enums"
+	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/routers"
@@ -39,19 +40,19 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 
 	// Auth Routers
 	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, "AUTH_SERVICE"))
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.AUTH_SERVICE))
 		routers.NewAuthRouter(authService, router)
 	})
 
 	// Gaia Routers
 	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, "GAIA_SERVICE"))
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.GAIA_SERVICE))
 		routers.NewGaiaRouter(gaiaService, router)
 	})
 
 	// Task Manager Routers
 	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, "TASK_MANAGER_SERVICE"))
+		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.TASK_MANAGER))
 		routers.NewTaskRouter(taskService, router)
 		routers.NewProjectRouter(projectService, router)
 	})
