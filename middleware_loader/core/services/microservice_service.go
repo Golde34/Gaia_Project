@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	request_dtos "middleware_loader/core/domain/dtos/request"
+	result_dto "middleware_loader/core/domain/dtos/result"
 	"middleware_loader/core/domain/entity"
 	"middleware_loader/core/domain/models"
 	port "middleware_loader/core/port/adapter_interface"
@@ -23,51 +24,56 @@ func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationSt
 func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
 	microservice, err := s.getMicroserviceByName(input)
 	if err != nil {
-		return models.ErrorResponse{}, err
-	}
-
-	if microservice == nil {
 		result, err := s.callMicroservice(input)
 		if err != nil {
 			return models.ErrorResponse{}, err
-		}
-		if result != (models.ErrorResponse{}) {
+		} else {
 			s.InsertMicroservice(request_dtos.MicroserviceConfigurationDTO{
 				MicroserviceName: input.MicroserviceName,
-				Status: "ACTIVE",
+				Status:           "ACTIVE",
 			})
+			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
-		return result, nil
 	}
-
-	s.UpdateMicroservice(request_dtos.MicroserviceConfigurationDTO{
-		MicroserviceName: input.MicroserviceName,
-		Status: "ACTIVE",
-	})
+	if microservice.Status == "INACTIVE" {
+		result, err := s.callMicroservice(input)
+		if err != nil {
+			return models.ErrorResponse{}, err
+		} else {
+			s.UpdateMicroservice(request_dtos.MicroserviceConfigurationDTO{
+				MicroserviceName: input.MicroserviceName,
+				Status:           "ACTIVE",
+			})
+			return base.ReturnSuccessResponse("Microservice is active", result), nil
+		}
+	}
 	return base.ReturnSuccessResponse("Microservice is active", microservice), nil
 }
 
-func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
 	ctx := base.DeferTimeout()
-
 	microservice, err := s.Store.GetMicroserviceByName(ctx, input)
 	if err != nil {
-		return entity.MicroserviceConfiguration{}, err
+		return result_dto.MicroserviceResultDTO{}, err
 	}
-
+	
 	return microservice, nil
 }
 
-func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
+func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
 	microservice, err := port.IMicroserviceAdapter(&adapter.MicroserviceAdapter{}).GetMicroserviceByName(input.MicroserviceName)
 	if err != nil {
-		return models.ErrorResponse{}, err
+		return result_dto.MicroserviceResultDTO{}, err
 	}
-	return microservice.(models.ErrorResponse), nil
-	
+
+	data := microservice.Data
+	var result result_dto.MicroserviceResultDTO
+	dataResult := data.(map[string]interface{})
+	result.MicroserviceName = dataResult["microserviceName"].(string)
+	result.Status = dataResult["status"].(string)	
+
+	return result, nil
 }
-
-
 
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

@@ -18,10 +18,15 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
-	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (*entity.MicroserviceConfiguration, error) {
 	log.Printf("Connect to database")
-	result, err := repo.Collection.Find(context, microserviceRequest)
-	return result, err
+	result := repo.Collection.FindOne(context, microserviceRequest)
+	microservice := &entity.MicroserviceConfiguration{}
+	err := result.Decode(microservice)
+	if err != nil {
+		return nil, err
+	}
+	return microservice, nil
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context.Context,

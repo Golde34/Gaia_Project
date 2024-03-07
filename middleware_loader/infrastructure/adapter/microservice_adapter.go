@@ -15,7 +15,7 @@ func NewMicroserviceAdapter(adapter *MicroserviceAdapter) *MicroserviceAdapter {
 	return &MicroserviceAdapter{adapter: adapter}
 }
 
-func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName string) (interface{}, error) {
+func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName string) (models.ErrorResponse, error) {
 	microserviceUrl := getMicroserviceUrlByName(microserviceName)
 	microserviceUrl = microserviceUrl + "/status"
 

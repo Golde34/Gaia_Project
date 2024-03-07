@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	request_dtos "middleware_loader/core/domain/dtos/request"
+	result_dto "middleware_loader/core/domain/dtos/result"
 	"middleware_loader/core/domain/entity"
 	"middleware_loader/core/domain/enums"
 	port "middleware_loader/core/port/repository_interface"
@@ -20,15 +21,21 @@ func NewMicroserviceConfigurationStore(db database_mongo.Database) MicroserviceC
 }
 
 func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context context.Context,
-	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (interface{}, error) {
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
+
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	result, err := port.IMicroserviceConfigurationRepository(
+	
+	microservice, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetMicroserviceByName(context, microserviceRequest)
 	if err != nil {
-		return nil, err
+		return result_dto.MicroserviceResultDTO{}, err
 	}
+
+	var result result_dto.MicroserviceResultDTO
+	result.MicroserviceName = microservice.MicroserviceName
+	result.Status = microservice.Status
 	return result, nil
 }
 
@@ -50,7 +57,7 @@ func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.
 	collection := store.Database.Collection(store.Collection)
 	result, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{
-			Database: store.Database,
+			Database:   store.Database,
 			Collection: collection,
 		},
 	).InsertMicroservice(context, microservice)
