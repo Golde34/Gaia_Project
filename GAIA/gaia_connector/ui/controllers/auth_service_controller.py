@@ -13,5 +13,5 @@ def auth():
     return auth_service.signin(data)
     
 @app.route('/auth/status', methods=['GET'])
-def status():
+def auth_status():
     return auth_service.status() 

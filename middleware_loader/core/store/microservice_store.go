@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
 	"middleware_loader/core/domain/entity"
@@ -17,6 +18,8 @@ type MicroserviceConfigurationStore struct {
 }
 
 func NewMicroserviceConfigurationStore(db database_mongo.Database) MicroserviceConfigurationStore {
+	log.Println("NewMicroserviceConfigurationStore")
+	log.Printf("Collection: %v", enums.MicroserviceConfiguration)
 	return MicroserviceConfigurationStore{db, enums.MicroserviceConfiguration}
 }
 
@@ -25,7 +28,7 @@ func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context conte
 
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	
+
 	microservice, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetMicroserviceByName(context, microserviceRequest)
@@ -55,6 +58,8 @@ func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Con
 func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.Context,
 	microservice entity.MicroserviceConfiguration) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
+	log.Printf("Collection: %v", store.Collection)
+	log.Printf("Database: %v", store.Database)
 	result, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{
 			Database:   store.Database,

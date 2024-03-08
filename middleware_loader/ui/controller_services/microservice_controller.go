@@ -38,3 +38,25 @@ func InsertMicroserviceConfiguration(w http.ResponseWriter, r *http.Request, mic
 	}
 	w.Write(dataBytes)
 }
+
+func CheckMicroservice(w http.ResponseWriter, r *http.Request, miccroserviceConfigService *services.MicroserviceConfigurationService) {
+	var body map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	
+	var input = mapper.GetMicroserviceRequestDTOMapper(body)
+	result, err := miccroserviceConfigService.CheckMicroserviceStatus(input)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	dataBytes, err := json.Marshal(result)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(dataBytes)
+}

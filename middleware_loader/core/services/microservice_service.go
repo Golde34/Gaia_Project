@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
 	"middleware_loader/core/domain/entity"
@@ -22,6 +23,7 @@ func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationSt
 }
 
 func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
+	log.Println("CheckMicroserviceStatus")
 	microservice, err := s.getMicroserviceByName(input)
 	if err != nil {
 		result, err := s.callMicroservice(input)
@@ -65,14 +67,18 @@ func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.G
 	if err != nil {
 		return result_dto.MicroserviceResultDTO{}, err
 	}
+	log.Println("Microservice: ", microservice)
+	
+	var microserviceResult result_dto.MicroserviceResultDTO
+	if microservice.ErrorCode != 200 {
+		microserviceResult.Status = "INACTIVE"
+		microserviceResult.MicroserviceName = input.MicroserviceName
+	} else {
+		microserviceResult.Status = "ACTIVE"
+		microserviceResult.MicroserviceName = input.MicroserviceName
+	}
 
-	data := microservice.Data
-	var result result_dto.MicroserviceResultDTO
-	dataResult := data.(map[string]interface{})
-	result.MicroserviceName = dataResult["microserviceName"].(string)
-	result.Status = dataResult["status"].(string)	
-
-	return result, nil
+	return microserviceResult, nil
 }
 
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {

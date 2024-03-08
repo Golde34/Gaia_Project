@@ -1,7 +1,7 @@
 package adapter
 
 import (
-	"encoding/json"
+	"log"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
 	"middleware_loader/infrastructure/adapter/base"
@@ -19,22 +19,19 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 	microserviceUrl := getMicroserviceUrlByName(microserviceName)
 	microserviceUrl = microserviceUrl + "/status"
 
-	bodyResult, err := base.BaseAPI(microserviceUrl, "GET", nil)
+	bodyResult, err := base.FullResponseBaseAPI(microserviceUrl, "GET", nil)
 	if err != nil {
 		return models.ErrorResponse{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return models.ErrorResponse{}, err
-	}
-
+	log.Printf("Microservice status: %v", bodyResult)
+	
 	var microserviceStatus models.ErrorResponse
-	err = json.Unmarshal(dataBytes, &microserviceStatus)
-	if err != nil {
+	if errResp, ok := bodyResult.(models.ErrorResponse); ok {
+		microserviceStatus = errResp
+	} else {
 		return models.ErrorResponse{}, err
 	}
-
+	log.Printf("Microservice status: %v", microserviceStatus)
 	return microserviceStatus, nil
 }
 
@@ -43,7 +40,7 @@ func getMicroserviceUrlByName(microserviceName string) string {
 	case enums.AUTH_SERVICE:
 		return base.AuthServiceURL + "/auth"
 	case enums.GAIA_SERVICE:
-		return base.GaiaServiceURL + "/gaia"
+		return base.GaiaServiceURL + "/middleware"
 	case enums.TASK_MANAGER:
 		return base.TaskManagerServiceURL
 	default:
