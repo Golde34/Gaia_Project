@@ -12,12 +12,12 @@ const (
 type MicroserviceConfiguration struct {
 	ID               string    `json:"id" bson:"_id"`
 	MicroserviceName string    `json:"microservice_name" bson:"microservice_name"`
-	Status           string    `json:"status" bson:"status"`
+	Status           bool      `json:"status" bson:"status"`
 	CreatedAt        time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at" bson:"updated_at"`
 }
 
-func NewMicroserviceConfiguration(id, microserviceName, status string, createdAt, updatedAt time.Time) *MicroserviceConfiguration {
+func NewMicroserviceConfiguration(id, microserviceName string, status bool, createdAt, updatedAt time.Time) *MicroserviceConfiguration {
 	return &MicroserviceConfiguration{
 		ID:               id,
 		MicroserviceName: microserviceName,
@@ -35,7 +35,7 @@ func (m *MicroserviceConfiguration) GetMicroserviceName() string {
 	return m.MicroserviceName
 }
 
-func (m *MicroserviceConfiguration) GetStatus() string {
+func (m *MicroserviceConfiguration) GetStatus() bool {
 	return m.Status
 }
 
@@ -55,7 +55,7 @@ func (m *MicroserviceConfiguration) SetMicroserviceName(microserviceName string)
 	m.MicroserviceName = microserviceName
 }
 
-func (m *MicroserviceConfiguration) SetStatus(status string) {
+func (m *MicroserviceConfiguration) SetStatus(status bool) {
 	m.Status = status
 }
 

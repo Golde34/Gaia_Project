@@ -37,7 +37,6 @@ func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context
 
 func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context context.Context,
 	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
-	log.Println("Connect to database - Create microservice function: {}", microserviceRequest)
 	result, err := repo.Collection.InsertOne(context, microserviceRequest)
 	return result, err
 }

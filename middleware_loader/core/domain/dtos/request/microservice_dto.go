@@ -2,7 +2,7 @@ package request_dtos
 
 type MicroserviceConfigurationDTO struct {
 	MicroserviceName string `json:"microserviceName"`
-	Status           string `json:"status"`
+	Status           bool   `json:"status"`
 }
 
 func NewMicroserviceConfigurationDTO() *MicroserviceConfigurationDTO {

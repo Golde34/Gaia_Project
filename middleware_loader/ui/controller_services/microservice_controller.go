@@ -13,7 +13,7 @@ func GetMicroservice(w http.ResponseWriter, r *http.Request, miccroserviceConfig
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	var input = mapper.MicroserviceConfigurationRequestDTOMapper(body)
 	err := miccroserviceConfigService.GetMicroservice(input)
 	if err != nil {

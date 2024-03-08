@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
 	"net/http"
@@ -62,8 +61,6 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unmarshal response: %v", err)
 	}
-	log.Printf("Response: %v", response)
-	log.Printf("err: %v", err)
 	if response.ErrorCode != 200 {
 		return response, fmt.Errorf(response.Data.(string))
 	}
@@ -108,9 +105,6 @@ func FullResponseBaseAPI(url string, method string, input interface{}) (interfac
 
 func ConvertResponseToMap(bodyResult interface{}) ([]byte, error) {
 	bodyMap, ok := bodyResult.(map[string]interface{})
-	log.Printf("BodyMap: %v", bodyMap)
-	log.Printf("Body result: %v", bodyResult)
-	log.Printf("Ok: %v", ok)
 	if !ok {
 		return nil, fmt.Errorf("convert response to map: %v", ok)
 	}

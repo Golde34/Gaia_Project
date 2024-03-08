@@ -1,7 +1,6 @@
 package adapter
 
 import (
-	"log"
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
 	"middleware_loader/infrastructure/adapter/base"
@@ -23,7 +22,6 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 	if err != nil {
 		return models.ErrorResponse{}, err
 	}
-	log.Printf("Microservice status: %v", bodyResult)
 	
 	var microserviceStatus models.ErrorResponse
 	if errResp, ok := bodyResult.(models.ErrorResponse); ok {
@@ -31,7 +29,6 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 	} else {
 		return models.ErrorResponse{}, err
 	}
-	log.Printf("Microservice status: %v", microserviceStatus)
 	return microserviceStatus, nil
 }
 

@@ -5,7 +5,7 @@ import request_dtos "middleware_loader/core/domain/dtos/request"
 func MicroserviceConfigurationRequestDTOMapper(body map[string]interface{}) request_dtos.MicroserviceConfigurationDTO {
 	var input request_dtos.MicroserviceConfigurationDTO
 	input.MicroserviceName = body["microserviceName"].(string)
-	input.Status = body["status"].(string)
+	input.Status = body["status"].(bool)
 	return input 
 }
 

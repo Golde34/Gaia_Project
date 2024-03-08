@@ -1,10 +1,6 @@
 package base
 
-import (
-	"context"
-	"strings"
-	"time"
-)
+import "strings"
 
 func ConvertStringToArray(input []string) []string {
 	if len(input) == 0 {
@@ -14,10 +10,4 @@ func ConvertStringToArray(input []string) []string {
 	stringComponent = strings.Trim(stringComponent, "[]")
 	listComponent := strings.Fields(stringComponent)
 	return listComponent
-}
-
-func DeferTimeout() (context.Context) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return ctx
 }
