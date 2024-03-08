@@ -1,7 +1,7 @@
 package route
 
 import (
-	"middleware_loader/core/domain/enums"
+	// "middleware_loader/core/domain/enums"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
@@ -16,7 +16,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 
 	// SERVICES
 	authService := services.NewAuthService()
-	gaiaService := services.NewGaiaService()
+	// gaiaService := services.NewGaiaService()
 	taskService := services.NewTaskService()
 	projectService := services.NewProjectService()
 
@@ -39,21 +39,21 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	routers.NewURLPermissionRouter(db, router)
 
 	// Auth Routers
-	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.AUTH_SERVICE))
-		routers.NewAuthRouter(authService, router)
-	})
+	// router.Group(func(r chi.Router) {
+	// 	r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.AUTH_SERVICE))
+	// 	routers.NewAuthRouter(authService, router)
+	// })
 
-	// Gaia Routers
-	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.GAIA_SERVICE))
-		routers.NewGaiaRouter(gaiaService, router)
-	})
+	// // Gaia Routers
+	// router.Group(func(r chi.Router) {
+	// 	r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.GAIA_SERVICE))
+	// 	routers.NewGaiaRouter(gaiaService, router)
+	// })
 
-	// Task Manager Routers
-	router.Group(func(r chi.Router) {
-		r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.TASK_MANAGER))
-		routers.NewTaskRouter(taskService, router)
-		routers.NewProjectRouter(projectService, router)
-	})
+	// // Task Manager Routers
+	// router.Group(func(r chi.Router) {
+	// 	r.Use(CheckMicroserviceStatusMiddleware(router, db, enums.TASK_MANAGER))
+	// 	routers.NewTaskRouter(taskService, router)
+	// 	routers.NewProjectRouter(projectService, router)
+	// })
 }

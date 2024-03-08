@@ -30,19 +30,19 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 		} else {
 			s.InsertMicroservice(request_dtos.MicroserviceConfigurationDTO{
 				MicroserviceName: input.MicroserviceName,
-				Status:           "ACTIVE",
+				Status:           true,
 			})
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
 	}
-	if microservice.Status == "INACTIVE" {
+	if microservice.Status == false {
 		result, err := s.callMicroservice(input)
 		if err != nil {
 			return models.ErrorResponse{}, err
 		} else {
 			s.UpdateMicroservice(request_dtos.MicroserviceConfigurationDTO{
 				MicroserviceName: input.MicroserviceName,
-				Status:           "ACTIVE",
+				Status:           true,
 			})
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
@@ -51,12 +51,14 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 }
 
 func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
-	ctx := base.DeferTimeout()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	
 	microservice, err := s.Store.GetMicroserviceByName(ctx, input)
 	if err != nil {
 		return result_dto.MicroserviceResultDTO{}, err
 	}
-	
+
 	return microservice, nil
 }
 
@@ -66,13 +68,16 @@ func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.G
 		return result_dto.MicroserviceResultDTO{}, err
 	}
 
-	data := microservice.Data
-	var result result_dto.MicroserviceResultDTO
-	dataResult := data.(map[string]interface{})
-	result.MicroserviceName = dataResult["microserviceName"].(string)
-	result.Status = dataResult["status"].(string)	
+	var microserviceResult result_dto.MicroserviceResultDTO
+	if microservice.ErrorCode != 200 {
+		microserviceResult.Status = true
+		microserviceResult.MicroserviceName = input.MicroserviceName
+	} else {
+		microserviceResult.Status = false
+		microserviceResult.MicroserviceName = input.MicroserviceName
+	}
 
-	return result, nil
+	return microserviceResult, nil
 }
 
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {
@@ -82,7 +87,8 @@ func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.Mi
 }
 
 func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.MicroserviceConfigurationDTO) models.ErrorResponse {
-	ctx := base.DeferTimeout()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
 	var microserviceEntity entity.MicroserviceConfiguration
 	microserviceEntity.CreatedAt = time.Now()
@@ -98,7 +104,8 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 }
 
 func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.MicroserviceConfigurationDTO) models.ErrorResponse {
-	ctx := base.DeferTimeout()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
 	var microserviceEntity entity.MicroserviceConfiguration
 	microserviceEntity.UpdatedAt = time.Now()

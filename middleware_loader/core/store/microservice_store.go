@@ -25,7 +25,7 @@ func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context conte
 
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	
+
 	microservice, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetMicroserviceByName(context, microserviceRequest)

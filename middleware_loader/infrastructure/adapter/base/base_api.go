@@ -5,18 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
 	"net/http"
 )
 
 func BaseAPI(url string, method string, input interface{}) (interface{}, error) {
 	if input == nil {
-		return baseAPINoInput(url, method)
+		return baseAPINoInput(url, method, enums.OnlyData)
 	}
-	return baseAPIWithInput(url, method, input)
+	return baseAPIWithInput(url, method, input, enums.OnlyData)
 }
 
-func baseAPIWithInput(url string, method string, input interface{}) (interface{}, error) {
+func baseAPIWithInput(url string, method string, input interface{}, bodyType string) (interface{}, error) {
 	jsonData, err := json.Marshal(input)
 	if err != nil {
 		return errorReturnBlock("marshal input", err)
@@ -27,20 +28,20 @@ func baseAPIWithInput(url string, method string, input interface{}) (interface{}
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
-
-	return returnResponseData(req)
+	
+	return returnResponse(req, bodyType)
 }
 
-func baseAPINoInput(url string, method string) (interface{}, error) {
+func baseAPINoInput(url string, method string, bodyType string) (interface{}, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
 
-	return returnResponseData(req)
+	return returnResponse(req, bodyType)
 }
 
-func returnResponseData(req *http.Request) (interface{}, error) {
+func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -60,15 +61,26 @@ func returnResponseData(req *http.Request) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unmarshal response: %v", err)
 	}
-
 	if response.ErrorCode != 200 {
 		return response, fmt.Errorf(response.Data.(string))
 	}
-	return response.Data, nil
+
+	return returnResponseType(response, bodyType)
+}
+
+func returnResponseType(response models.ErrorResponse, bodyMessageType string) (interface{}, error) {
+	switch bodyMessageType {
+	case enums.OnlyData:
+		return response.Data, nil
+	case enums.FullBody:
+		return response, nil
+	default:
+		return response.Data, nil
+	}
 }
 
 func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
-	if err != nil {	
+	if err != nil {
 		return models.ErrorResponse{
 			Status:        "Error",
 			StatusMessage: "Internal Server Error",
@@ -84,22 +96,15 @@ func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
 	}, nil
 }
 
-func ConvertResponseToMap(bodyResult interface{}) ([]byte, error) {
-	bodyMap, ok := bodyResult.(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("convert response to map: %v", ok)
+func FullResponseBaseAPI(url string, method string, input interface{}) (interface{}, error) {
+	if input == nil {
+		return baseAPINoInput(url, method, enums.FullBody)
 	}
-
-	dataBytes, err := json.Marshal(bodyMap)
-	if err != nil {
-		return nil, fmt.Errorf("marshal response body: %v", err)
-	}
-
-	return dataBytes, nil
+	return baseAPIWithInput(url, method, input, enums.FullBody)
 }
 
-func ConvertResponseToMapArray(bodyResult interface{}, listObject []interface{}) ([]byte, error) {
-	bodyMap, ok := bodyResult.([]interface{})
+func ConvertResponseToMap(bodyResult interface{}) ([]byte, error) {
+	bodyMap, ok := bodyResult.(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("convert response to map: %v", ok)
 	}
