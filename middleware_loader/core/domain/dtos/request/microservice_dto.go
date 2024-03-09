@@ -1,5 +1,7 @@
 package request_dtos
 
+import "time"
+
 type MicroserviceConfigurationDTO struct {
 	MicroserviceName string `json:"microserviceName"`
 	Status           bool   `json:"status"`
@@ -15,4 +17,24 @@ type GetMicroserviceConfigurationDTO struct {
 
 func NewGetMicroserviceConfigurationDTO() *GetMicroserviceConfigurationDTO {
 	return &GetMicroserviceConfigurationDTO{}
+}
+
+type InsertMicroserviceConfigurationDTO struct {
+	MicroserviceName string    `json:"microserviceName"`
+	Status           bool      `json:"status"`
+	CreatedAt        time.Time `json:"createdAt"`
+}
+
+func NewInsertMicroserviceConfigurationDTO() *InsertMicroserviceConfigurationDTO {
+	return &InsertMicroserviceConfigurationDTO{}
+}
+
+type UpdateMicroserviceConfigurationDTO struct {
+	MicroserviceName string    `json:"microserviceName"`
+	Status           bool      `json:"status"`
+	UpdatedAt        time.Time `json:"updatedAt"`
+}
+
+func NewUpdateMicroserviceConfigurationDTO() *UpdateMicroserviceConfigurationDTO {
+	return &UpdateMicroserviceConfigurationDTO{}
 }

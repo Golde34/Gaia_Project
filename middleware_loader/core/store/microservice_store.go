@@ -53,7 +53,7 @@ func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Con
 }
 
 func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.Context,
-	microservice entity.MicroserviceConfiguration) (interface{}, error) {
+	microservice request_dtos.InsertMicroserviceConfigurationDTO) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
 	result, err := port.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{

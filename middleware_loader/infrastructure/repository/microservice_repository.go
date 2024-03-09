@@ -36,7 +36,7 @@ func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context
 }
 
 func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context context.Context,
-	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	microserviceRequest request_dtos.InsertMicroserviceConfigurationDTO) (interface{}, error) {
 	result, err := repo.Collection.InsertOne(context, microserviceRequest)
 	return result, err
 }
