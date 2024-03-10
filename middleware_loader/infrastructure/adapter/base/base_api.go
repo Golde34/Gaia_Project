@@ -8,6 +8,7 @@ import (
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/models"
 	"net/http"
+	"time"
 )
 
 func BaseAPI(url string, method string, input interface{}) (interface{}, error) {
@@ -28,7 +29,7 @@ func baseAPIWithInput(url string, method string, input interface{}, bodyType str
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
-	
+
 	return returnResponse(req, bodyType)
 }
 
@@ -42,7 +43,9 @@ func baseAPINoInput(url string, method string, bodyType string) (interface{}, er
 }
 
 func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return errorReturnBlock("send request ", err)
