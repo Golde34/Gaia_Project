@@ -18,12 +18,12 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
-	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (*entity.MicroserviceConfiguration, error) {
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (entity.MicroserviceConfiguration, error) {
 	result := repo.Collection.FindOne(context, microserviceRequest)
-	microservice := &entity.MicroserviceConfiguration{}
+	microservice := entity.MicroserviceConfiguration{}
 	err := result.Decode(microservice)
 	if err != nil {
-		return nil, err
+		return entity.MicroserviceConfiguration{}, err
 	}
 	return microservice, nil
 }
