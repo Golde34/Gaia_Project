@@ -43,8 +43,8 @@ async function main(): Promise<void> {
     app.use(morgan("dev"));
 
     app.get("/status", (req: Request, res: Response) => {
-        return msg200("Task-manager Server is running");
-        // res.status(200).send(msg200("Task-manager Server is running"));
+        // return msg200("Task-manager Server is running");
+        res.status(200).send(msg200("Task-manager Server is running"));
     });
     app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
