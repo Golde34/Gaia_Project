@@ -4,7 +4,6 @@ import (
 	"context"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
-	"middleware_loader/core/domain/entity"
 	"middleware_loader/core/domain/enums"
 	port "middleware_loader/core/port/repository_interface"
 	"middleware_loader/infrastructure/repository"
@@ -68,7 +67,7 @@ func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.
 }
 
 func (store *MicroserviceConfigurationStore) UpdateMicroservice(context context.Context,
-	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	microserviceRequest request_dtos.UpdateMicroserviceConfigurationDTO) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
 	result, err := port.IMicroserviceConfigurationRepository(

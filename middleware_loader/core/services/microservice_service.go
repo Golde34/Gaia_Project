@@ -4,7 +4,6 @@ import (
 	"context"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
-	"middleware_loader/core/domain/entity"
 	"middleware_loader/core/domain/models"
 	port "middleware_loader/core/port/adapter_interface"
 	"middleware_loader/core/services/base"
@@ -28,9 +27,10 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 		if err != nil {
 			return models.ErrorResponse{}, err
 		} else {
-			s.InsertMicroservice(request_dtos.MicroserviceConfigurationDTO{
-				MicroserviceName: input.MicroserviceName,
-				Status:           true,
+			s.InsertMicroservice(request_dtos.InsertMicroserviceConfigurationDTO{
+				MicroserviceName: result.MicroserviceName,
+				Status:           result.Status,
+				CreatedAt:        time.Now(),
 			})
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
@@ -40,9 +40,10 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 		if err != nil {
 			return models.ErrorResponse{}, err
 		} else {
-			s.UpdateMicroservice(request_dtos.MicroserviceConfigurationDTO{
-				MicroserviceName: input.MicroserviceName,
-				Status:           true,
+			s.UpdateMicroservice(request_dtos.UpdateMicroserviceConfigurationDTO{
+				MicroserviceName: result.MicroserviceName,
+				Status:           result.Status,
+				UpdatedAt:        time.Now(),
 			})
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
@@ -69,7 +70,7 @@ func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.G
 	}
 
 	var microserviceResult result_dto.MicroserviceResultDTO
-	if microservice.ErrorCode != 200 {
+	if microservice.ErrorCode == 200 {
 		microserviceResult.Status = true
 		microserviceResult.MicroserviceName = input.MicroserviceName
 	} else {
@@ -86,16 +87,11 @@ func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.Mi
 	return s.Store.GetMicroservice(ctx, input)
 }
 
-func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.MicroserviceConfigurationDTO) models.ErrorResponse {
+func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.InsertMicroserviceConfigurationDTO) models.ErrorResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	var microserviceEntity request_dtos.InsertMicroserviceConfigurationDTO
-	microserviceEntity.CreatedAt = time.Now()
-	microserviceEntity.MicroserviceName = input.MicroserviceName
-	microserviceEntity.Status = input.Status
-
-	microservice, err := s.Store.InsertMicroservice(ctx, microserviceEntity)
+	microservice, err := s.Store.InsertMicroservice(ctx, input)
 	if err != nil {
 		return base.ReturnErrorResponse(400, "Cannot insert miccroservice configuration")
 	}
@@ -103,16 +99,11 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 	return base.ReturnSuccessResponse("Insert successfully", microservice)
 }
 
-func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.MicroserviceConfigurationDTO) models.ErrorResponse {
+func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.UpdateMicroserviceConfigurationDTO) models.ErrorResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	var microserviceEntity entity.MicroserviceConfiguration
-	microserviceEntity.UpdatedAt = time.Now()
-	microserviceEntity.MicroserviceName = input.MicroserviceName
-	microserviceEntity.Status = input.Status
-
-	microservice, err := s.Store.UpdateMicroservice(ctx, microserviceEntity)
+	microservice, err := s.Store.UpdateMicroservice(ctx, input)
 	if err != nil {
 		return base.ReturnErrorResponse(400, "Cannot update miccroservice configuration")
 	}

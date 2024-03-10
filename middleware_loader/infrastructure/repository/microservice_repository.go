@@ -42,7 +42,7 @@ func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context cont
 }
 
 func (repo *MicroserviceConfigurationRepository) UpdateMicroservice(context context.Context,
-	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	microserviceRequest request_dtos.UpdateMicroserviceConfigurationDTO) (interface{}, error) {
 	log.Printf("Connect to database - Update microservice function")
 
 	microservice := repo.Collection.FindOne(context, microserviceRequest.MicroserviceName)

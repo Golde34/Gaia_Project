@@ -29,7 +29,7 @@ func InsertMicroserviceConfiguration(w http.ResponseWriter, r *http.Request, mic
 		return
 	}
 
-	var input = mapper.MicroserviceConfigurationRequestDTOMapper(body)
+	var input = mapper.InsertMicroserviceConfigurationRequestDTOMapper(body)
 	result := miccroserviceConfigService.InsertMicroservice(input)
 	dataBytes, err := json.Marshal(result)
 	if err != nil {
