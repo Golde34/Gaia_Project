@@ -18,12 +18,12 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 }
 
 func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
-	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (*entity.MicroserviceConfiguration, error) {
+	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (entity.MicroserviceConfiguration, error) {
 	result := repo.Collection.FindOne(context, microserviceRequest)
-	microservice := &entity.MicroserviceConfiguration{}
+	microservice := entity.MicroserviceConfiguration{}
 	err := result.Decode(microservice)
 	if err != nil {
-		return nil, err
+		return entity.MicroserviceConfiguration{}, err
 	}
 	return microservice, nil
 }
@@ -36,7 +36,7 @@ func (repo *MicroserviceConfigurationRepository) GetMicroservice(context context
 }
 
 func (repo *MicroserviceConfigurationRepository) InsertMicroservice(context context.Context,
-	microserviceRequest entity.MicroserviceConfiguration) (interface{}, error) {
+	microserviceRequest request_dtos.InsertMicroserviceConfigurationDTO) (interface{}, error) {
 	result, err := repo.Collection.InsertOne(context, microserviceRequest)
 	return result, err
 }

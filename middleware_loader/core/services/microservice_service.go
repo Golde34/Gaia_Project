@@ -35,7 +35,7 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
 		}
 	}
-	if microservice.Status == false {
+	if !microservice.Status {
 		result, err := s.callMicroservice(input)
 		if err != nil {
 			return models.ErrorResponse{}, err
@@ -53,7 +53,7 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	microservice, err := s.Store.GetMicroserviceByName(ctx, input)
 	if err != nil {
 		return result_dto.MicroserviceResultDTO{}, err
@@ -90,7 +90,7 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	var microserviceEntity entity.MicroserviceConfiguration
+	var microserviceEntity request_dtos.InsertMicroserviceConfigurationDTO
 	microserviceEntity.CreatedAt = time.Now()
 	microserviceEntity.MicroserviceName = input.MicroserviceName
 	microserviceEntity.Status = input.Status
