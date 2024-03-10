@@ -7,8 +7,6 @@ import (
 	"middleware_loader/core/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"net/http"
-
-	"github.com/go-chi/chi"
 )
 
 type MicroserviceConfigurationMiddleware struct {
@@ -19,17 +17,17 @@ func NewMicroserviceConfigurationMiddleware(store store.MicroserviceConfiguratio
 	return &MicroserviceConfigurationMiddleware{store}
 }
 
-func CheckMicroserviceStatusMiddleware(router *chi.Mux, db database_mongo.Database, microserviceName string) {
-	router.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			result, err := isServiceActive(db, microserviceName)
-			if result.ErrorCode != 200 || err == nil {
-				w.WriteHeader(http.StatusForbidden)
+func CheckMicroserviceStatus(db database_mongo.Database, microserviceName string) func(next http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            result, err := isServiceActive(db, microserviceName)
+			if err != nil || result.ErrorCode != 200 {
+				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
-			next.ServeHTTP(w, r)
-		})
-	})
+            next.ServeHTTP(w, r)
+        })
+    }
 }
 
 func isServiceActive(db database_mongo.Database, microserviceName string) (models.ErrorResponse, error) {

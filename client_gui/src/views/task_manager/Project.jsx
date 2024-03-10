@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../../api/store/actions/task_manager/project.actions";
 import Template from "../../components/template";
@@ -12,9 +12,18 @@ function ContentArea() {
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
 
-    useEffect(() => {
+    const getListProjects = useCallback(() => {
         dispatch(getProjects());
     }, [dispatch]);
+
+	const debounceRef = useRef(null);
+
+    useEffect(() => {
+		clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(() => {
+			getListProjects();
+		}, 200);
+    }, []);
 
     localStorage.setItem("activeTab", 'none');  
 

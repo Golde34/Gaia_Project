@@ -1,7 +1,10 @@
 package routers
 
 import (
+	"middleware_loader/core/domain/enums"
+	"middleware_loader/core/middleware"
 	"middleware_loader/core/services"
+	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"
 
@@ -12,8 +15,9 @@ type TaskRouter struct {
 	TaskService *services.TaskService
 }
 
-func NewTaskRouter(taskService *services.TaskService, r *chi.Mux) *TaskRouter {
+func NewTaskRouter(taskService *services.TaskService, db database_mongo.Database, r *chi.Mux) *TaskRouter {
 	r.Route("/task", func(r chi.Router) {
+		r.Use(middleware.CheckMicroserviceStatus(db, enums.TASK_MANAGER))
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.ListAllTasks(w, r, taskService)
 		})

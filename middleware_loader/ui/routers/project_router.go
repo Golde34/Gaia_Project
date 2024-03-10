@@ -1,7 +1,10 @@
 package routers
 
 import (
+	"middleware_loader/core/domain/enums"
+	"middleware_loader/core/middleware"
 	"middleware_loader/core/services"
+	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"
 
@@ -12,8 +15,9 @@ type ProjectRouter struct {
 	ProjectService *services.ProjectService
 }
 
-func NewProjectRouter(projectService *services.ProjectService, r *chi.Mux) *ProjectRouter {
+func NewProjectRouter(projectService *services.ProjectService, db database_mongo.Database, r *chi.Mux) *ProjectRouter {
 	r.Route("/project", func(r chi.Router) {
+		r.Use(middleware.CheckMicroserviceStatus(db, enums.TASK_MANAGER))
 		r.Get("/all", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.ListAll(w, r, projectService)
 		})

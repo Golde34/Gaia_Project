@@ -12,6 +12,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { msg200 } from "./core/common/response_helpers";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -38,11 +39,12 @@ async function main(): Promise<void> {
     );
     app.use(bodyParser.json({ limit: "50mb" }));
     app.use(cors());
-	app.use(helmet());
+    app.use(helmet());
     app.use(morgan("dev"));
 
     app.get("/status", (req: Request, res: Response) => {
-        res.status(200).send("OK");
+        // return msg200("Task-manager Server is running");
+        res.status(200).send(msg200("Task-manager Server is running"));
     });
     app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
