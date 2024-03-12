@@ -1,5 +1,8 @@
 package wo.work_optimization.infrastructure.repository;
 
-public class TaskRepository {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TaskRepository {
     
 }
