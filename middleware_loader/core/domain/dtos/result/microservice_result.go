@@ -2,13 +2,17 @@ package result_dto
 
 import (
 	"middleware_loader/core/domain/entity"
+	"time"
 
 	"github.com/devfeel/mapper"
 )
 
 type MicroserviceResultDTO struct {
-	MicroserviceName string `json:"microserviceName"`
-	Status           bool   `json:"status"`
+	ID               string    `json:"id"`
+	MicroserviceName string    `json:"microserviceName"`
+	Status           bool      `json:"status"`
+	Port             string    `json:"port"`
+	CreatedAt        time.Time `json:"createdAt"`
 }
 
 func NewMicroserviceResultDTO() *MicroserviceResultDTO {

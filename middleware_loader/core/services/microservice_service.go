@@ -30,6 +30,7 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 			s.InsertMicroservice(request_dtos.InsertMicroserviceConfigurationDTO{
 				MicroserviceName: result.MicroserviceName,
 				Status:           result.Status,
+				Port:             result.Port,
 				CreatedAt:        time.Now(),
 			})
 			return base.ReturnSuccessResponse("Microservice is active", result), nil
@@ -73,12 +74,25 @@ func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.G
 	if microservice.ErrorCode == 200 {
 		microserviceResult.Status = true
 		microserviceResult.MicroserviceName = input.MicroserviceName
+		microserviceResult.Port = microservice.Data.(string)
 	} else {
 		microserviceResult.Status = false
 		microserviceResult.MicroserviceName = input.MicroserviceName
 	}
 
 	return microserviceResult, nil
+}
+
+func (s *MicroserviceConfigurationService) GetAllMicroservices() ([]result_dto.MicroserviceResultDTO, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	microservices, err := s.Store.GetAllMicroservices(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return microservices, nil
 }
 
 func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.MicroserviceConfigurationDTO) error {
@@ -91,12 +105,24 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	microservice, err := s.Store.InsertMicroservice(ctx, input)
-	if err != nil {
-		return base.ReturnErrorResponse(400, "Cannot insert miccroservice configuration")
-	}
+	getMicroservicce, err := s.Store.GetMicroserviceByName(ctx, request_dtos.GetMicroserviceConfigurationDTO{
+		MicroserviceName: input.MicroserviceName,
+	})
 
-	return base.ReturnSuccessResponse("Insert successfully", microservice)
+	// If exist microservice
+	if err == nil {
+		if getMicroservicce.MicroserviceName != "" {
+			return base.ReturnErrorResponse(400, "Microservice already exist")
+		}
+	} else {
+		// If not exist microservice
+		microservice, err := s.Store.InsertMicroservice(ctx, input)
+		if err != nil {
+			return base.ReturnErrorResponse(400, "Cannot insert miccroservice configuration")
+		}
+		return base.ReturnSuccessResponse("Insert successfully", microservice)
+	}
+	return base.ReturnErrorResponse(400, "Microservice already exist")
 }
 
 func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.UpdateMicroserviceConfigurationDTO) models.ErrorResponse {

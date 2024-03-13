@@ -8,7 +8,9 @@ import {
 	ExternalLinkIcon,
 	HomeIcon,
 	MailIcon,
+	ServerIcon,
 	ShieldCheckIcon,
+	UserIcon,
 } from "@heroicons/react/solid";
 import { Button, Col, Grid } from "@tremor/react";
 
@@ -23,7 +25,15 @@ const Sidebar = () => {
 			<div className="fixed left-3 sm:left-6 top-[100px]">
 				<Grid numItems={1}>
 					<Col numColSpan={1}>
-						<a href="/client-gui/auth">
+						<a href="/client-gui/profile">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<UserIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+					<Col numColSpan={1}>
+						<a href="/client-gui/auth-manager">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
 								<ShieldCheckIcon width={20} />
@@ -35,6 +45,15 @@ const Sidebar = () => {
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
 								<ClipboardCheckIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+					<Col numColSpan={1}>
+						<a href="/client-gui/microservices">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								{/* Instance(IP) Port  */}
+								<ServerIcon width={20} />
 							</Button>
 						</a>
 					</Col>

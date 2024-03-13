@@ -38,6 +38,29 @@ func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context conte
 	return result, nil
 }
 
+func (store *MicroserviceConfigurationStore) GetAllMicroservices(context context.Context) ([]result_dto.MicroserviceResultDTO, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+	microservices, err := port.IMicroserviceConfigurationRepository(
+		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
+	).GetAllMicroservices(context)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []result_dto.MicroserviceResultDTO
+	for _, microservice := range microservices {
+		var result result_dto.MicroserviceResultDTO
+		result.ID = microservice.ID
+		result.MicroserviceName = microservice.MicroserviceName
+		result.Status = microservice.Status
+		result.Port = microservice.Port
+		result.CreatedAt = microservice.CreatedAt
+		results = append(results, result)
+	}
+	return results, nil
+}
+
 func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Context,
 	microserviceRequest request_dtos.MicroserviceConfigurationDTO) error {
 	collection := store.Database.Collection(store.Collection)

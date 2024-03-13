@@ -11,17 +11,19 @@ const (
 
 type MicroserviceConfiguration struct {
 	ID               string    `json:"id" bson:"_id"`
-	MicroserviceName string    `json:"microservice_name" bson:"microservice_name"`
+	MicroserviceName string    `json:"microserviceName" bson:"microservicename"`
 	Status           bool      `json:"status" bson:"status"`
-	CreatedAt        time.Time `json:"created_at" bson:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at" bson:"updated_at"`
+	Port             string    `json:"port" bson:"port"`
+	CreatedAt        time.Time `json:"createdAt" bson:"createdat"`
+	UpdatedAt        time.Time `json:"updatedAt" bson:"updatedat"`
 }
 
-func NewMicroserviceConfiguration(id, microserviceName string, status bool, createdAt, updatedAt time.Time) *MicroserviceConfiguration {
+func NewMicroserviceConfiguration(id, microserviceName string, status bool, port string, createdAt, updatedAt time.Time) *MicroserviceConfiguration {
 	return &MicroserviceConfiguration{
 		ID:               id,
 		MicroserviceName: microserviceName,
 		Status:           status,
+		Port:             port,
 		CreatedAt:        createdAt,
 		UpdatedAt:        updatedAt,
 	}
@@ -65,4 +67,12 @@ func (m *MicroserviceConfiguration) SetCreatedAt(createdAt time.Time) {
 
 func (m *MicroserviceConfiguration) SetUpdatedAt(updatedAt time.Time) {
 	m.UpdatedAt = updatedAt
+}
+
+func (m *MicroserviceConfiguration) SetPort(port string) {
+	m.Port = port
+}
+
+func (m *MicroserviceConfiguration) GetPort() string {
+	return m.Port
 }

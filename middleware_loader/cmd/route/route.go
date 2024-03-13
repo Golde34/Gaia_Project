@@ -39,6 +39,8 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 
 	routers.NewAuthRouter(authService, db, router)
 	routers.NewGaiaRouter(gaiaService, db, router)
-	routers.NewTaskRouter(taskService, db, router)
-	routers.NewProjectRouter(projectService, db, router)
+	router.Group(func(r chi.Router) {
+		routers.NewProjectRouter(projectService, db, router)
+		routers.NewTaskRouter(taskService, db, router)
+	})
 }

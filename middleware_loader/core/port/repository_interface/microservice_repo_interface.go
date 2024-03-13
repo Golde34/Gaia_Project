@@ -7,6 +7,7 @@ import (
 )
 
 type IMicroserviceConfigurationRepository interface {
+	GetAllMicroservices(context context.Context) ([]entity.MicroserviceConfiguration, error)
 	GetMicroserviceByName(context context.Context, microserviceConfiguration request_dtos.GetMicroserviceConfigurationDTO) (entity.MicroserviceConfiguration, error)
 	GetMicroservice(context context.Context, microserviceConfiguration request_dtos.MicroserviceConfigurationDTO) (interface{}, error)
 	InsertMicroservice(context context.Context, microserviceConfiguration request_dtos.InsertMicroserviceConfigurationDTO) (interface{}, error)

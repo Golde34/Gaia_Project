@@ -6,6 +6,8 @@ import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/entity"
 	database_mongo "middleware_loader/kernel/database/mongo"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type MicroserviceConfigurationRepository struct {
@@ -17,14 +19,30 @@ func NewMicroserviceConfigurationRepository(db database_mongo.Database, collecti
 	return MicroserviceConfigurationRepository{db, collection}
 }
 
+func (repo *MicroserviceConfigurationRepository) GetAllMicroservices(context context.Context) ([]entity.MicroserviceConfiguration, error) {
+	log.Printf("Connect to database")
+	cursor, err := repo.Collection.Find(context, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	var microservices []entity.MicroserviceConfiguration
+	if err = cursor.All(context, &microservices); err != nil {
+		return nil, err
+	}
+
+	return microservices, nil
+}
+
 func (repo *MicroserviceConfigurationRepository) GetMicroserviceByName(context context.Context,
 	microserviceRequest request_dtos.GetMicroserviceConfigurationDTO) (entity.MicroserviceConfiguration, error) {
-	result := repo.Collection.FindOne(context, microserviceRequest)
+	filter := bson.M{"microservicename": microserviceRequest.MicroserviceName}
+	result := repo.Collection.FindOne(context, filter)
 	microservice := entity.MicroserviceConfiguration{}
-	err := result.Decode(microservice)
+	err := result.Decode(&microservice)
 	if err != nil {
 		return entity.MicroserviceConfiguration{}, err
 	}
+	
 	return microservice, nil
 }
 

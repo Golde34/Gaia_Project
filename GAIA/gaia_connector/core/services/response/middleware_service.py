@@ -33,4 +33,4 @@ class MiddlewareServiceReponse:
         return status_response(200, data)
     
     def status(self):
-        return status_response(200, 'Middleware is up and running')
+        return status_response(200, '5000')

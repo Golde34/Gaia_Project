@@ -7,7 +7,9 @@ import SchedulingTable from '../../views/task_manager/SchedulingTable';
 import TaskDashboard from '../../views/task_manager/TaskDashboard';
 import SignIn from '../../screens/authScreen/Signin';
 import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
-import GaiaRoute from '../../components/route/GaiaRoute';
+import Microservices from '../../views/microservices_gui/Microservices';
+import UserProfile from '../../views/user_gui/UserProfile';
+import UserListScreen from '../../views/auth_service/UserListScreen';
 
 // const schedule = [
 //   {
@@ -71,7 +73,22 @@ const routeList = [
         path: '/project/:id',
         key: 'project-id',
         element: <TaskDashboard />,
-    }
+    },
+    {
+        path: '/microservices',
+        key: 'microservices',
+        element: <Microservices />,
+    },
+    {
+        path: '/profile',
+        key: 'profile',
+        element: <UserProfile />,
+    },
+    {
+        path: '/auth-manager',
+        key: 'auth-manager',
+        element: <UserListScreen />,
+    },
     // {
     //     path: '/scheduling-table',
     //     key: 'scheduling-table',
