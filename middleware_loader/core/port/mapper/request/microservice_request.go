@@ -9,7 +9,7 @@ func MicroserviceConfigurationRequestDTOMapper(body map[string]interface{}) requ
 	var input request_dtos.MicroserviceConfigurationDTO
 	input.MicroserviceName = body["microserviceName"].(string)
 	input.Status = body["status"].(bool)
-	return input 
+	return input
 }
 
 func GetMicroserviceRequestDTOMapper(body map[string]interface{}) request_dtos.GetMicroserviceConfigurationDTO {
@@ -22,6 +22,7 @@ func InsertMicroserviceConfigurationRequestDTOMapper(body map[string]interface{}
 	var input request_dtos.InsertMicroserviceConfigurationDTO
 	input.MicroserviceName = body["microserviceName"].(string)
 	input.Status = body["status"].(bool)
+	input.Port = body["port"].(string)
 	input.CreatedAt = time.Now()
 	return input
 }

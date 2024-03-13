@@ -21,12 +21,16 @@ func NewMicroserviceRouter(db database_mongo.Database, r *chi.Mux) *Microservice
 			r.Get("/status", func(w http.ResponseWriter, r *http.Request) {
 				controller_services.CheckMicroservice(w, r, microserviceConfigurationService)
 			})
+			r.Get("/all", func(w http.ResponseWriter, r *http.Request) {
+				controller_services.GetAllMicroservices(w, r, microserviceConfigurationService)
+			})
 			r.Get("/get-service", func(w http.ResponseWriter, r *http.Request) {
 				controller_services.GetMicroservice(w, r, microserviceConfigurationService)
 			})
 			r.Post("/insert-microservice-configuration", func(w http.ResponseWriter, r *http.Request) {
 				controller_services.InsertMicroserviceConfiguration(w, r, microserviceConfigurationService)
 			})
+
 		})
 	return &MicroserviceRouter{
 		MicroserviceConfigurationDB: db,

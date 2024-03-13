@@ -7,8 +7,10 @@ import (
 )
 
 type MicroserviceResultDTO struct {
+	ID               string `json:"id"`
 	MicroserviceName string `json:"microserviceName"`
 	Status           bool   `json:"status"`
+	Port             string `json:"port"`
 }
 
 func NewMicroserviceResultDTO() *MicroserviceResultDTO {

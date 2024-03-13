@@ -22,6 +22,7 @@ func NewGetMicroserviceConfigurationDTO() *GetMicroserviceConfigurationDTO {
 type InsertMicroserviceConfigurationDTO struct {
 	MicroserviceName string    `json:"microserviceName"`
 	Status           bool      `json:"status"`
+	Port             string    `json:"port"`
 	CreatedAt        time.Time `json:"createdAt"`
 }
 
