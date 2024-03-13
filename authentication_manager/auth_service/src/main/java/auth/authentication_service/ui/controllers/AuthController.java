@@ -37,7 +37,7 @@ public class AuthController {
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public ResponseEntity<?> status() {
-        return genericResponse.matchingResponseMessage(new GenericResponse<>("Status OK", ResponseMessage.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseMessage.msg200));
     }
 
     @RequestMapping(value = "/sign-in", method = RequestMethod.POST)

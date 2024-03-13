@@ -44,7 +44,7 @@ async function main(): Promise<void> {
 
     app.get("/status", (req: Request, res: Response) => {
         // return msg200("Task-manager Server is running");
-        res.status(200).send(msg200("Task-manager Server is running"));
+        res.status(200).send(msg200("3000"));
     });
     app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
