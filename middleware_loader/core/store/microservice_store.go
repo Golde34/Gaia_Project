@@ -54,6 +54,8 @@ func (store *MicroserviceConfigurationStore) GetAllMicroservices(context context
 		result.ID = microservice.ID
 		result.MicroserviceName = microservice.MicroserviceName
 		result.Status = microservice.Status
+		result.Port = microservice.Port
+		result.CreatedAt = microservice.CreatedAt
 		results = append(results, result)
 	}
 	return results, nil

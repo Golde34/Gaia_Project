@@ -46,8 +46,8 @@ function ContentArea() {
                                             <Col numColSpan={1}><Title>{microservice.microserviceName}</Title></Col>
                                             <Col numColSpan={1}>Status: {microservice.status ? "ACTIVE" : "INACTIVE"}</Col>
                                             <Col numColSpan={1}>Instance: 1</Col>
-                                            <Col numColSpan={1}>Port: 3000</Col>
-                                            <Col numColSpan={1}>Last edited: {microservice.lastEdited}</Col>
+                                            <Col numColSpan={1}>Port: {microservice.port}</Col>
+                                            <Col numColSpan={1}>Last edited: {microservice.createdAt}</Col>
                                         </Grid>
                                     </Flex>
                                 </Card>
