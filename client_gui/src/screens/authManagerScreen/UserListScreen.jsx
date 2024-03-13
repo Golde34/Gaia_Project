@@ -20,7 +20,6 @@ const UserListScreen = () => {
         debounceRef.current = setTimeout(() => {
             getListUsers();
         }, 200);
-
     }, []);
 
     return (

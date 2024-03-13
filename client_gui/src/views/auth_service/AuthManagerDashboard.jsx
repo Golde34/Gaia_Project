@@ -1,5 +1,6 @@
 import RightColumn from "../../components/RightColumn";
 import Template from "../../components/template";
+import PrivilegeScreen from "../../screens/authManagerScreen/PrivilegeListScreen";
 import RoleListScreen from "../../screens/authManagerScreen/RoleListScreen";
 import UserListScreen from "../../screens/authManagerScreen/UserListScreen";
 
@@ -12,6 +13,7 @@ function ContentArea() {
                         <div className="flex-auto w-full">
                             <UserListScreen />
                             <RoleListScreen />
+                            <PrivilegeScreen />
                         </div>
                     </div>
                 </div>

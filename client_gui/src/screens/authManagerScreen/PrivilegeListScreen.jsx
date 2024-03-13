@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux"
+import { getPrivileges } from "../../api/store/actions/auth_service/privilege.actions";
 import { Card, Table, TableBody, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 
-const RoleListScreen = () => {
+const PrivilegeScreen = () => {
     const dispatch = useDispatch();
 
-    const listRoles = useSelector((state) => state.roleList);
-    const { loading, error, roles } = listRoles;
+    const listPrivileges = useSelector((state) => state.privilegeList);
+    const { loading, error, privileges } = listPrivileges;
 
-    const getRoleList = useCallback(() => {
-        dispatch(getRoles());
+    const getPrivilegeList = useCallback(() => {
+        dispatch(getPrivileges());
     }, [dispatch]);
 
     const debounceRef = useRef(null);
@@ -18,7 +18,7 @@ const RoleListScreen = () => {
     useEffect(() => {
         clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(() => {
-            getRoleList();
+            getPrivilegeList();
         }, 200);
     }, []);
 
@@ -30,7 +30,7 @@ const RoleListScreen = () => {
                 <p>{error}</p>
             ) : (
                 <Card>
-                    <Title>List of Roles</Title>
+                    <Title>List of Privileges</Title>
                     <Table className="mt-5">
                         <TableHead>
                             <TableRow>
@@ -40,11 +40,11 @@ const RoleListScreen = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {roles.map((role) => (
-                                <TableRow key={role.id}>
-                                    <TableHeaderCell>{role.id}</TableHeaderCell>
-                                    <TableHeaderCell>{role.name}</TableHeaderCell>
-                                    <TableHeaderCell>{role.description}</TableHeaderCell>
+                            {privileges.map((privilege) => (
+                                <TableRow key={privilege.id}>
+                                    <TableHeaderCell>{privilege.id}</TableHeaderCell>
+                                    <TableHeaderCell>{privilege.name}</TableHeaderCell>
+                                    <TableHeaderCell>{privilege.description}</TableHeaderCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -56,4 +56,4 @@ const RoleListScreen = () => {
     )
 }
 
-export default RoleListScreen;
+export default PrivilegeScreen;
