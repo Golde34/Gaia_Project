@@ -15,6 +15,7 @@ import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer,
     subTaskListReducer, subTaskUpdateReducer } from './task_manager/sub-task.reducers'
 import { commentCreateReducer, commentDeleteReducer, commentDetailReducer, 
     commentListReducer, commentUpdateReducer } from './task_manager/comment.reducers'
+import { microserviceListReducer } from "./middleware_loader/microservices.reducer";
 
 export const reducer = combineReducers({
     // auth service
@@ -51,4 +52,6 @@ export const reducer = combineReducers({
     commentCreate: commentCreateReducer,
     commentUpdate: commentUpdateReducer,
     commentDelete: commentDeleteReducer,
+    // middleware loader
+    microserviceList: microserviceListReducer,
 })

@@ -8,6 +8,7 @@ import {
 	ExternalLinkIcon,
 	HomeIcon,
 	MailIcon,
+	ServerIcon,
 	ShieldCheckIcon,
 } from "@heroicons/react/solid";
 import { Button, Col, Grid } from "@tremor/react";
@@ -35,6 +36,15 @@ const Sidebar = () => {
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
 								<ClipboardCheckIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+					<Col numColSpan={1}>
+						<a href="/client-gui/microservices">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								{/* Instance(IP) Port  */}
+								<ServerIcon width={20} />
 							</Button>
 						</a>
 					</Col>
