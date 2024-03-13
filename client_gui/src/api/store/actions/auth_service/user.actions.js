@@ -8,7 +8,7 @@ const portName = {
 export const getUsers = () => async (dispatch) => {
     dispatch({ type: USER_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/user/getAllUsers', HttpMethods.GET, portName.authPort, null);
+        const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.authPort, null);
         dispatch({ type: USER_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({

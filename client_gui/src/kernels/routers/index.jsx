@@ -9,7 +9,7 @@ import SignIn from '../../screens/authScreen/Signin';
 import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
 import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
-import UserListScreen from '../../views/auth_service/UserListScreen';
+import AuthManagerDashboard from '../../views/auth_service/AuthManagerDashboard';
 
 // const schedule = [
 //   {
@@ -87,7 +87,7 @@ const routeList = [
     {
         path: '/auth-manager',
         key: 'auth-manager',
-        element: <UserListScreen />,
+        element: <AuthManagerDashboard />,
     },
     // {
     //     path: '/scheduling-table',

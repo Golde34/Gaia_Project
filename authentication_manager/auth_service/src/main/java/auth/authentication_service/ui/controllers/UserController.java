@@ -18,31 +18,31 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/create-user", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody RegisterDto userDto) {
         ResponseEntity<?> user = userService.createUser(userDto);
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update-role", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
         ResponseEntity<?> user = userService.updateUser(userDto);
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete-user", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@RequestBody UserDto userDto){
         ResponseEntity<?> user = userService.deleteUser(userDto);
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/getAllUsers")
+    @RequestMapping(value = "/get-all-users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(value = "/getUser")
+    @RequestMapping(value = "/get-user")
     public ResponseEntity<User> getUser(@RequestBody UserDto userDto) {
         User user = userService.getUserByUsername(userDto.getUsername());
         return ResponseEntity.ok(user);
