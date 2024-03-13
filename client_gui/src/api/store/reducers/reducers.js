@@ -16,12 +16,14 @@ import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer,
 import { commentCreateReducer, commentDeleteReducer, commentDetailReducer, 
     commentListReducer, commentUpdateReducer } from './task_manager/comment.reducers'
 import { microserviceListReducer } from "./middleware_loader/microservices.reducer";
+import { userListReducer } from "./auth_service/user.reducer";
 
 export const reducer = combineReducers({
     // auth service
     gaiaSignin: gaiaSigninReducer,
     bossSignin: bossSigninReducer,
     userSignin: userSigninReducer,
+    userList: userListReducer,
     // task manager
     projectList: projectListReducer,
     projectDetail: projectDetailReducer,
