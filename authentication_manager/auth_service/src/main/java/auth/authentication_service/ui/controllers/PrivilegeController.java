@@ -20,31 +20,31 @@ public class PrivilegeController {
     @Autowired
     private PrivilegeService privilegeService;
 
-    @RequestMapping(value = "/createPrivilege", method = RequestMethod.POST)
+    @RequestMapping(value = "/create-privilege", method = RequestMethod.POST)
     public ResponseEntity<Privilege> createPrivilege(@RequestBody PrivilegeDto privilegeDto) {
         Privilege privilege = privilegeService.createPrivilege(privilegeDto.getName());
         return ResponseEntity.ok(privilege);
     }
 
-    @RequestMapping(value = "/updatePrivilege", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-privilege", method = RequestMethod.POST)
     public ResponseEntity<Privilege> updatePrivilege(@RequestBody PrivilegeDto privilegeDto) {
         Privilege privilege = privilegeService.updatePrivilege(privilegeDto);
         return ResponseEntity.ok(privilege);
     }
 
-    @RequestMapping(value = "/deletePrivilege", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete-privielge", method = RequestMethod.POST)
     public ResponseEntity<String> deletePrivilege(@RequestBody PrivilegeDto privilegeDto) {
         privilegeService.deletePrivilege(privilegeDto);
         return ResponseEntity.ok("Delete privilege successfully");
     }
 
-    @RequestMapping(value = "/getAllPrivileges")
+    @RequestMapping(value = "/get-all-privileges")
     public ResponseEntity<List<Privilege>> getAllPrivileges() {
         List<Privilege> privileges = privilegeService.getAllPrivileges();
         return ResponseEntity.ok(privileges);
     }
 
-    @RequestMapping(value = "/getPrivilege")
+    @RequestMapping(value = "/get-privilege")
     public ResponseEntity<Privilege> getPrivilege(@RequestBody PrivilegeDto privilegeDto) {
         Privilege privilege = privilegeService.getPrivilegeByName(privilegeDto);
         return ResponseEntity.ok(privilege);
