@@ -10,7 +10,6 @@ import lombok.Data;
 @Entity
 @Table(name = "task")
 public class TaskEntity {
-
     @Id
     @GeneratedValue(generator = "uuid")
     private String id;
