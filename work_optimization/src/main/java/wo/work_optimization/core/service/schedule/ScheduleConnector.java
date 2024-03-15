@@ -1,11 +1,11 @@
 package wo.work_optimization.core.service.schedule;
 
-public abstract class ScheduleConnector {
+import org.springframework.http.ResponseEntity;
+import wo.work_optimization.core.domain.response.base.GeneralResponse;
+import wo.work_optimization.core.domain.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.response.TaskResponseDTO;
 
-    public <T> T doSchedule() {
-        System.out.println(optimize());
-        return null;
-    }
-
-    public abstract String optimize();
+public interface ScheduleConnector {
+    String method();
+    ResponseEntity<GeneralResponse<TaskResponseDTO>> schedule(TaskRequestDTO request);
 }

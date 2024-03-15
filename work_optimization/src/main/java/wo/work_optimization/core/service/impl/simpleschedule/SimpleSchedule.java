@@ -1,19 +1,41 @@
 package wo.work_optimization.core.service.impl.simpleschedule;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import wo.work_optimization.core.service.schedule.ScheduleConnector;
-import wo.work_optimization.core.service.schedule.ScheduleFactory;
+import wo.work_optimization.core.domain.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.response.TaskResponseDTO;
+import wo.work_optimization.core.domain.response.base.GeneralResponse;
+import wo.work_optimization.core.service.schedule.ScheduleService;
 
 @Service
-public class SimpleSchedule extends ScheduleConnector implements ScheduleFactory {
+public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
 
     @Override
-    public String optimize() {
-        return "Simple Schedule";
+    public String method() {
+        return "simple";
     }
 
     @Override
-    public ScheduleConnector getMethodSchedule(String method) {
+    public void validateRequest(TaskRequestDTO request) {
+        if (request.getOriginalTaskId() == null) {
+            throw new IllegalArgumentException("Original task id is required");
+        }
+    }
+
+    @Override
+    public TaskResponseDTO doSchedule(TaskRequestDTO request) {
         return null;
+    }
+
+    @Override
+    public TaskRequestDTO createRequest(TaskRequestDTO request) {
+        return request;
+    }
+
+    @Override
+    public TaskResponseDTO mapResponse(TaskRequestDTO request, TaskResponseDTO response) {
+        return TaskResponseDTO.builder()
+                .schedule("TABU")
+                .build();
     }
 }
