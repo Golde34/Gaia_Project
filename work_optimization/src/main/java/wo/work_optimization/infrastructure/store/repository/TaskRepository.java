@@ -1,4 +1,4 @@
-package wo.work_optimization.infrastructure.repository;
+package wo.work_optimization.infrastructure.store.repository;
 
 import java.util.Optional;
 

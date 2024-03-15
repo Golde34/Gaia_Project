@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+work_optimization.log
+.gz
 
 ### STS ###
 .apt_generated
