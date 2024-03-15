@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.domain.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.response.base.ResponseFactory;
 import wo.work_optimization.core.exception.BusinessException;
+import wo.work_optimization.kernel.utils.GenericResponse;
 import wo.work_optimization.kernel.utils.JsonUtils;
 
 @Slf4j
@@ -19,6 +21,8 @@ import wo.work_optimization.kernel.utils.JsonUtils;
 public abstract class ScheduleService<R, P> implements ScheduleConnector {
     @Autowired
     private ResponseFactory responseFactory;
+    @Autowired
+    private GenericResponse genericResponse;
 
     @Override
     public ResponseEntity<GeneralResponse<TaskResponseDTO>> schedule(TaskRequestDTO request) {
@@ -27,13 +31,13 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
             validateRequest(request);
             R req = createRequest(request);
             P resp = doSchedule(req);
-            return responseFactory.success(readResponse(mapResponse(request, resp)));
+            return responseFactory.success(readResponse(mapResponse(request, resp), ResponseMessage.msg200));
         } catch (BusinessException e) {
             log.error("Error while scheduling", e);
-            return responseFactory.badRequest(readResponse(mapResponse(request, (P) e)));
+            return responseFactory.badRequest(readResponse(mapResponse(request, (P) e), ResponseMessage.msg400));
         } catch (Exception e) {
             log.error("Error while scheduling", e);
-            return responseFactory.internalServerError(readResponse(mapResponse(request, (P) e)));
+            return responseFactory.internalServerError(readResponse(mapResponse(request, (P) e), ResponseMessage.msg500));
         }
     }
 
@@ -43,10 +47,8 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
         }
     }
 
-    private GeneralResponse<TaskResponseDTO> readResponse(TaskResponseDTO response) {
-        return GeneralResponse.<TaskResponseDTO>builder()
-                .data(response)
-                .build();
+    private GeneralResponse<TaskResponseDTO> readResponse(TaskResponseDTO response, ResponseMessage responseMessage) {
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, responseMessage));
     }
 
     public abstract void validateRequest(TaskRequestDTO request);
@@ -54,9 +56,12 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
     public abstract R createRequest(TaskRequestDTO request);
     public abstract TaskResponseDTO mapResponse(TaskRequestDTO request, P response);
 
-//    public String requestToString(R request) {
-//        return JsonUtils.toJson(request);
-//    }
+    public String requestToString(R request) {
+        return JsonUtils.toJson(request);
+    }
 
+    public String responseToString(P response) {
+        return JsonUtils.toJson(response);
+    }
 }
 
