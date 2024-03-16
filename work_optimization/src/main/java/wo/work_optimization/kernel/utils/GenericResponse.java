@@ -1,7 +1,6 @@
 package wo.work_optimization.kernel.utils;
 
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.domain.response.base.GeneralResponse;
@@ -20,6 +19,7 @@ public class GenericResponse<T> {
     public GenericResponse() {
     }
 
+    @SuppressWarnings("rawtypes")
     public GeneralResponse matchingResponseMessage(GenericResponse<?> validation) {
         switch (validation.getResponseMessage()) {
             case msg200 -> { 

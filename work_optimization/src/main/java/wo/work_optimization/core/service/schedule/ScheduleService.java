@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
 import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.domain.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.response.TaskResponseDTO;
@@ -18,11 +19,12 @@ import wo.work_optimization.kernel.utils.JsonUtils;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@SuppressWarnings("unchecked")
 public abstract class ScheduleService<R, P> implements ScheduleConnector {
     @Autowired
     private ResponseFactory responseFactory;
     @Autowired
-    private GenericResponse genericResponse;
+    private GenericResponse<TaskResponseDTO> genericResponse;
 
     @Override
     public ResponseEntity<GeneralResponse<TaskResponseDTO>> schedule(TaskRequestDTO request) {
@@ -42,7 +44,7 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
     }
 
     private void checkOriginalId(TaskRequestDTO request) {
-        if (StringUtils.isEmpty(request.getOriginalTaskId())) {
+        if (!StringUtils.hasText(request.getOriginalTaskId())) {
             throw new BusinessException("OriginalId is required");
         }
     }
