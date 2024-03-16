@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "task")
-public class TaskEntity {
+public class Task {
     @Id
     @GeneratedValue(generator = "uuid")
     private String id;

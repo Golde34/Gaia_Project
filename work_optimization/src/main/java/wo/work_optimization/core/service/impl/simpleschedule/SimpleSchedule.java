@@ -1,10 +1,8 @@
 package wo.work_optimization.core.service.impl.simpleschedule;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.response.TaskResponseDTO;
-import wo.work_optimization.core.domain.response.base.GeneralResponse;
 import wo.work_optimization.core.service.schedule.ScheduleService;
 
 @Service
