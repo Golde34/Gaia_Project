@@ -1626,3 +1626,10 @@ java.lang.IllegalStateException: No cache could be resolved for 'Builder[public 
 2024-03-17T15:58:48.987+07:00  INFO 42490 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Get all users
 2024-03-17T16:14:37.236+07:00  INFO 42490 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : Get all users
 2024-03-17T16:17:27.193+07:00  INFO 42490 --- [http-nio-4001-exec-8] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-03-17T16:41:56.036+07:00  INFO 42490 --- [http-nio-4001-exec-10] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-17T16:57:53.907+07:00  INFO 42490 --- [http-nio-4001-exec-4] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-03-17T16:57:53.918+07:00  INFO 42490 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-17T17:13:12.564+07:00  INFO 42490 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-17T17:13:14.987+07:00  INFO 42490 --- [http-nio-4001-exec-6] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-03-17T17:28:58.110+07:00  INFO 42490 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-17T17:30:23.400+07:00  INFO 42490 --- [http-nio-4001-exec-4] a.a.core.services.RoleServiceImpl        : Get all roles
