@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.store;
+package auth.authentication_service.infrastructure.store.adapter;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.store.RoleStore;
-import auth.authentication_service.infrastructure.repositories.RoleRepository;
+import auth.authentication_service.infrastructure.store.repositories.RoleRepository;
 
 @Component
 public class RoleStoreAdapter implements RoleStore {

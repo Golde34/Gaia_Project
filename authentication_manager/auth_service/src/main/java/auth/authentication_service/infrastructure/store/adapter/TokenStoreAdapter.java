@@ -1,11 +1,11 @@
-package auth.authentication_service.infrastructure.store;
+package auth.authentication_service.infrastructure.store.adapter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.AuthToken;
 import auth.authentication_service.core.store.TokenStore;
-import auth.authentication_service.infrastructure.repositories.TokenRepository;
+import auth.authentication_service.infrastructure.store.repositories.TokenRepository;
 
 @Component
 public class TokenStoreAdapter implements TokenStore{ 

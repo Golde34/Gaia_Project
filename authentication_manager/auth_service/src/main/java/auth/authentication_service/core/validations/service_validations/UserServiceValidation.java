@@ -5,7 +5,7 @@ import auth.authentication_service.core.domain.dto.UserDto;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseMessage;
-import auth.authentication_service.infrastructure.repositories.UserRepository;
+import auth.authentication_service.infrastructure.store.repositories.UserRepository;
 import auth.authentication_service.kernel.utils.BCryptPasswordEncoder;
 import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;

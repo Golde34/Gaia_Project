@@ -19,7 +19,7 @@ import auth.authentication_service.core.services.interfaces.UserService;
 import auth.authentication_service.core.store.TokenStore;
 import auth.authentication_service.core.store.UserCRUDStore;
 import auth.authentication_service.core.validations.service_validations.UserServiceValidation;
-import auth.authentication_service.infrastructure.repositories.TokenRepository;
+import auth.authentication_service.infrastructure.store.repositories.TokenRepository;
 import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 
