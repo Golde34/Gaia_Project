@@ -29,7 +29,7 @@ const PrivilegeScreen = () => {
             ) : error ? (
                 <p>{error}</p>
             ) : (
-                <Card>
+                <Card className="mt-4">
                     <Title>List of Privileges</Title>
                     <Table className="mt-5">
                         <TableHead>

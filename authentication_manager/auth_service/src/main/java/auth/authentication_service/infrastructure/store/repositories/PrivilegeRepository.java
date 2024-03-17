@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.repositories;
+package auth.authentication_service.infrastructure.store.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

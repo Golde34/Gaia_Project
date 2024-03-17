@@ -3,6 +3,7 @@ package auth.authentication_service.ui.controllers;
 import java.util.List;
 
 import auth.authentication_service.core.domain.dto.RoleDto;
+import auth.authentication_service.core.domain.dto.response.ListRole;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.services.interfaces.RoleService;
 
@@ -39,8 +40,8 @@ public class RoleController {
     }
 
     @RequestMapping(value = "/get-all-roles", method = RequestMethod.GET)
-    public ResponseEntity<List<Role>> getAllRoles() {
-        List<Role> roles = roleService.getAllRoles();
+    public ResponseEntity<List<ListRole>> getAllRoles() {
+        List<ListRole> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
     

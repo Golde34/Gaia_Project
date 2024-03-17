@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.store;
+package auth.authentication_service.infrastructure.store.adapter;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.store.UserCRUDStore;
-import auth.authentication_service.infrastructure.repositories.UserRepository;
+import auth.authentication_service.infrastructure.store.repositories.UserRepository;
 
 @Component
 public class UserCRUDStoreAdapter implements UserCRUDStore {

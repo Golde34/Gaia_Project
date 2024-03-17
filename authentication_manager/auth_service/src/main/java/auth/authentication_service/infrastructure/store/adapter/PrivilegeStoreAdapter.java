@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.store;
+package auth.authentication_service.infrastructure.store.adapter;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.store.PrivilegeStore;
-import auth.authentication_service.infrastructure.repositories.PrivilegeRepository;
+import auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository;
 
 @Component
 public class PrivilegeStoreAdapter implements PrivilegeStore {

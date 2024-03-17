@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import auth.authentication_service.core.domain.dto.PrivilegeDto;
 import auth.authentication_service.core.domain.dto.RoleDto;
+import auth.authentication_service.core.domain.dto.response.ListRole;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.enums.LoggerType;
@@ -17,10 +19,12 @@ import auth.authentication_service.core.services.interfaces.RoleService;
 import auth.authentication_service.core.store.RoleStore;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class RoleServiceImpl implements RoleService {
-    
+
     @Autowired
     private LoggerUtils _logger;
 
@@ -33,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
         this.roleStore = roleStore;
     }
 
-    @Override 
+    @Override
     public Role createRole(String roleName) {
         if (_checkExistRoleName(roleName)) {
             _logger.log("Create role failed", LoggerType.ERROR);
@@ -46,9 +50,9 @@ public class RoleServiceImpl implements RoleService {
             return newRole;
         }
     }
-    
-    @Override 
-    public Role updateRole(RoleDto roleDto){
+
+    @Override
+    public Role updateRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
             if (_checkExistRole(role)) {
@@ -64,13 +68,13 @@ public class RoleServiceImpl implements RoleService {
                 _logger.log("Role not found", LoggerType.INFO);
                 throw new RuntimeException("Role not found");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             _logger.log("Update role failed", LoggerType.ERROR);
             throw new RuntimeException("Update role failed");
         }
     }
 
-    @Override 
+    @Override
     public void deleteRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
@@ -86,20 +90,35 @@ public class RoleServiceImpl implements RoleService {
             throw new RuntimeException("Delete role failed");
         }
     }
-    
-    @Override 
-    public List<Role> getAllRoles() {
-        return roleStore.findAll();
+
+    @Override
+    @Cacheable(value = "roles")
+    public List<ListRole> getAllRoles() {
+        log.info("Get all roles");
+        List<ListRole> listRoles = new ArrayList<>();
+        List<Role> roles = roleStore.findAll();
+        final int[] totalUser = {0};
+        roles.forEach(role -> {
+            ListRole listRole = new ListRole();
+            listRole.setId(role.getId());
+            listRole.setName(role.getName());
+            listRole.setNumberOfUsers(role.getUsers().size());
+            totalUser[0] += role.getUsers().size();
+            listRole.setTotalNumberOfUsers(totalUser[0]);
+            listRoles.add(listRole);
+        });
+
+        return listRoles;
     }
 
-    @Override 
+    @Override
     public Role getRoleByName(RoleDto roleDto) {
         return roleStore.findByName(roleDto.getName());
     }
 
     @Override
     public Role addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegesDto) {
-        try { 
+        try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
             List<Privilege> privileges = _mapperListPrivilegesDto(privilegesDto);
             if (_checkExistRole(role)) {
@@ -128,11 +147,11 @@ public class RoleServiceImpl implements RoleService {
 
     private boolean _checkExistRole(Role role) {
         try {
-            for (Role item: roleStore.findAll()) {
+            for (Role item : roleStore.findAll()) {
                 if (Objects.equals(item.getId(), role.getId())) {
                     return true;
                 }
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
             _logger.log("Check exist role failed", LoggerType.ERROR);
@@ -142,7 +161,7 @@ public class RoleServiceImpl implements RoleService {
 
     private boolean _checkExistRoleName(String roleName) {
         try {
-            for (Role item: roleStore.findAll()) {
+            for (Role item : roleStore.findAll()) {
                 if (Objects.equals(item.getName(), roleName)) {
                     return true;
                 }
@@ -155,8 +174,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private List<Privilege> _mapperListPrivilegesDto(List<PrivilegeDto> privilegeDtos) {
-        List<Privilege> privileges= new ArrayList<>();
-        for (PrivilegeDto privilegeDto: privilegeDtos) {
+        List<Privilege> privileges = new ArrayList<>();
+        for (PrivilegeDto privilegeDto : privilegeDtos) {
             Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
             privileges.add(privilege);
         }
