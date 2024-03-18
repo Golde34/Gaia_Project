@@ -1,10 +1,29 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input } from "@material-tailwind/react";
 import { Col, Grid } from "@tremor/react";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 
 const UpdateUserModal = (props) => {
+    const dispatch = useDispatch();
+
+    const listRoles = useSelector((state) => state.roleList);
+    const { loading, error, roles } = listRoles;
+
+    const getRoleList = useCallback(() => {
+        dispatch(getRoles());
+    }, [dispatch]);
+
+    const debounceRef = useRef(null);
+
+    useEffect(() => {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            getRoleList();
+        }, 200);
+    }, []);
 
     const currentUser = props.currentUser;
     const isOpen = props.isOpen;
@@ -41,7 +60,25 @@ const UpdateUserModal = (props) => {
         return str === null || str === "" || str === undefined;
     }
 
-    
+    const [roleList, setRoleList] = useState([]);
+
+    // Cập nhật roleList khi currentUser thay đổi
+    useEffect(() => {
+        console.log(roleList);
+        if (currentUser && currentUser.roles) {
+            setRoleList(currentUser.roles);
+        }
+    }, [currentUser]);
+
+    const handleRoleChange = (role) => {
+        const roleExists = roleList.some((r) => r.id === role.id);
+
+        if (roleExists) {
+            setRoleList(roleList.filter((r) => r.id !== role.id));
+        } else {
+            setRoleList([...roleList, role]);
+        }
+    }
 
     return (
         <>
@@ -76,14 +113,14 @@ const UpdateUserModal = (props) => {
                                     >
                                         <Dialog.Panel className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                             <Dialog.Title
-                                                as="h3"
+                                                as="h1"
                                                 className="text-lg font-medium leading-6 text-gray-900" >
-                                                <h1 className="text-lg cursor-pointer" >User</h1>
+                                                <span className="text-lg cursor-pointer" >User</span>
                                             </Dialog.Title>
                                             <div className="mt-4">
                                                 <Grid numItems={4}>
                                                     <Col numColSpan={1}>
-                                                        <label htmlFor="name" className="block text-md font-medium text-gray-700 mb-2">name</label>
+                                                        <label htmlFor="name" className="block text-md font-medium text-gray-700 mb-2">Name</label>
                                                     </Col>
                                                     <Col numColSpan={3}>
                                                         {isEditingName ? (
@@ -161,6 +198,41 @@ const UpdateUserModal = (props) => {
                                                     </Col>
                                                 </Grid>
                                             </div>
+                                            {loading ? (
+                                                <p>Loading </p>
+                                            ) : (
+                                                <>
+                                                    <div className="mt-4">
+                                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
+                                                        <div className="grid grid-cols-4 m-2">
+                                                            <div className="inline-flex items-center">
+                                                                {roles.map((role) => (
+                                                                    <div key={role.id}>
+                                                                        <label className="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                                            htmlFor={`role-checkbox-${role.id}`} data-ripple-dark="true">
+                                                                            <input
+                                                                                id={`role-checkbox-${role.id}`}
+                                                                                type="checkbox"
+                                                                                checked={roleList.some((r) => r.id === role.id)}
+                                                                                onChange={() => handleRoleChange(role)}
+                                                                                className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-red-500 checked:bg-red-500 checked:before:bg-red-500 hover:before:opacity-10"
+                                                                            />
+                                                                            <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                                <CheckBoxIcon />
+                                                                            </div>
+                                                                        </label>
+                                                                        <label className="text-sm text-gray-700">{role.name}</label>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </>
+                                            )
+
+                                            }
                                         </Dialog.Panel>
                                     </Transition.Child>
                                 </div>

@@ -44,3 +44,7 @@
 2024-03-18T22:42:04.445+07:00  INFO 7283 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Get all users
 2024-03-18T22:46:21.555+07:00  INFO 7283 --- [http-nio-4001-exec-1] a.a.core.services.RoleServiceImpl        : Get all roles
 2024-03-18T22:57:04.989+07:00  INFO 7283 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-18T23:13:46.837+07:00  INFO 7283 --- [http-nio-4001-exec-2] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-03-18T23:13:46.844+07:00  INFO 7283 --- [http-nio-4001-exec-10] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-18T23:29:03.474+07:00  INFO 7283 --- [http-nio-4001-exec-6] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-03-18T23:29:05.730+07:00  INFO 7283 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : Get all users
