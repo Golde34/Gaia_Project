@@ -3,6 +3,9 @@ type Query {
     users: [User]!
     userById(id: ID!): User
 
+    # Authentication Service
+
+
     # Task Manager
     listAllProjects: [Project]!
     getProjectById(input: IdInput!): Project!
@@ -48,43 +51,34 @@ type User {
   isUsing2FA: Boolean!
   secret: String!
 
-#  roles: [Role!]!
-#  privileges: [Privilege!]!
-
-  createdAt: String!
-  updatedAt: String!
+  roles: [Role!]!
+  authTokens: [AuthToken!]!
 }
 
-#type Role {
-#  id: ID!
-#  name: String!
-#
-#  privilege: [Privilege!]!
-#  user: User!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#
-#type Privilege {
-#  id: ID!
-#  name: String!
-#
-#  role: [Role!]!
-#
-#  createdAt: String!
-#  updatedAt: String!
-#}
-#
-#type AuthToken {
-#  id: ID!
-#  token: String!
-#  tokenType: String!
-#  expiryDate: String!
-#
-#  user: User!
-#}
-#
+type Role {
+ id: ID!
+ name: String!
+
+ privilege: [Privilege!]!
+ user: [User!]!
+}
+
+type Privilege {
+ id: ID!
+ name: String!
+
+ role: [Role!]!
+}
+
+type AuthToken {
+ id: ID!
+ token: String!
+ tokenType: String!
+ expiryDate: String!
+
+ user: User!
+}
+
 
 ## Task Manager
 
