@@ -266,7 +266,6 @@ export const CreateNewGroupTask = (props) => {
                                             onClick={() => {
                                                 setObjectGroupTask(newName, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
-                                                // window.location.reload();
                                             }}
                                         >
                                             Create

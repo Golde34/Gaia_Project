@@ -42,3 +42,13 @@ export const useGenerateTaskFromScratchDispatch = () => {
 
     return generateTaskFromScratchDispatch;
 }
+
+// export const useUpdateUserDispatch = () => {
+//     const dispatch = useDispatch();
+
+//     const updateUserDispatch = (user) => {
+//         dispatch(updateUser(user));
+//     }
+
+//     return updateUserDispatch;
+// }

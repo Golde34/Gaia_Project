@@ -25,6 +25,8 @@ const UpdateUserModal = (props) => {
         }, 200);
     }, []);
 
+    const [updatedUser, setUpdatedUser] = useState({});
+
     const currentUser = props.currentUser;
     const isOpen = props.isOpen;
     const closeModal = props.closeModal;
@@ -62,7 +64,6 @@ const UpdateUserModal = (props) => {
 
     const [roleList, setRoleList] = useState([]);
 
-    // Cập nhật roleList khi currentUser thay đổi
     useEffect(() => {
         console.log(roleList);
         if (currentUser && currentUser.roles) {
@@ -78,6 +79,17 @@ const UpdateUserModal = (props) => {
         } else {
             setRoleList([...roleList, role]);
         }
+    }
+
+    // const updateUser = useUpdateUserDispatch();
+    const setObjectUser = (name, username, email, roleList) => {
+        updatedUser.name = name === "" ? currentUser.name : name;
+        updatedUser.username = username === "" ? currentUser.username : username;
+        updatedUser.email = email === "" ? currentUser.email : email;
+        updatedUser.roles = roleList;
+        // updateUser(updatedUser);
+        console.log(updatedUser);
+        // window.location.reload();
     }
 
     return (
@@ -226,13 +238,22 @@ const UpdateUserModal = (props) => {
                                                                 ))}
                                                             </div>
                                                         </div>
-
                                                     </div>
-
                                                 </>
                                             )
-
                                             }
+
+                                            <div className="mt-4 flex justify-end">
+                                                <button
+                                                    type="button"
+                                                    className="mr-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                    onClick={() => {
+                                                        setObjectUser(name, username, email, roleList);
+                                                        closeModal();
+                                                    }}
+                                                >Edit</button>
+                                            </div>
+
                                         </Dialog.Panel>
                                     </Transition.Child>
                                 </div>
