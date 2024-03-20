@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Bold, Card, Col, Divider, DonutChart, Flex, Grid, Legend, Metric, Tab, TabGroup, TabList, Table, TableBody, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
+import { Bold, Button, Card, Col, Divider, DonutChart, Flex, Grid, Legend, Metric, Tab, TabGroup, TabList, Table, TableBody, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 import { ChartPieIcon, ViewListIcon } from "@heroicons/react/solid";
 
@@ -77,7 +77,7 @@ const UserRolesScreen = () => {
                             </>
                         ) : (
                             <>
-                                <Flex className="mt-8" justifyContent="between">
+                                <Flex className="mt-6" justifyContent="between">
                                     <Text className="truncate">
                                         <Bold>Roles</Bold>
                                     </Text>
@@ -100,6 +100,11 @@ const UserRolesScreen = () => {
                                 </Table>
                             </>
                         )}
+                        <Divider />
+                        <Flex className="mt-6 justify-center" >
+                            <Button>List Roles</Button>
+                            <Button className="ms-2">List Privileges</Button>
+                        </Flex>
                     </Card>
                 </>
             )

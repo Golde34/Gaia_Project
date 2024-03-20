@@ -18,7 +18,7 @@ const UserSearchScreen = ({ onSearch }) => {
                     <Col numColSpan={1} className="mt-2">
                         <Flex>
                             <TextInput icon={SearchCircleIcon} placeholder="Search"
-                                value={text} onChange={(e) => {setText(e.target.value)}} />
+                                value={text} onChange={(e) => { setText(e.target.value) }} />
                             <Button className="ms-2" onClick={searchInput}>Search</Button>
                             {/* <Button className="ms-2" onClick={searchInputV2(text)}>Search V2</Button> */}
                         </Flex>

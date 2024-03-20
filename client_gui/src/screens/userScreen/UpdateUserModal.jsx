@@ -5,6 +5,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoles } from "../../api/store/actions/auth_service/role.actions";
+import { useUpdateUserDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 const UpdateUserModal = (props) => {
     const dispatch = useDispatch();
@@ -60,13 +61,13 @@ const UpdateUserModal = (props) => {
     }
 
     const [updatedUser, setUpdatedUser] = useState({});
-    // const updateUser = useUpdateUserDispatch();
+    const updateUser = useUpdateUserDispatch();
     const setObjectUser = (name, username, email, roleList) => {
         updatedUser.name = name === "" ? currentUser.name : name;
         updatedUser.username = username === "" ? currentUser.username : username;
         updatedUser.email = email === "" ? currentUser.email : email;
         updatedUser.roles = roleList;
-        // updateUser(updatedUser);
+        updateUser(updatedUser);
         console.log(updatedUser);
         // window.location.reload();
     }
