@@ -4,7 +4,7 @@ import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom"
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
-import { useCreateProjectDispatch } from "../../kernels/utils/create-dialog-api-requests";
+import { useCreateProjectDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 export const CreateNewProject = () => {
     const useParam = useParams();

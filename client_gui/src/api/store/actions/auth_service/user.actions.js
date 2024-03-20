@@ -25,7 +25,7 @@ export const getUsers = () => async (dispatch) => {
 export const updateUser = (user) => async (dispatch) => {
     dispatch({ type: USER_UPDATE_REQUEST });
     try {
-        const { data } = await serverRequest('/user/update-user', HttpMethods.POST, portName.authPort, user);
+        const { data } = await serverRequest('/user/update-user', HttpMethods.PUT, portName.authPort, user);
         dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
