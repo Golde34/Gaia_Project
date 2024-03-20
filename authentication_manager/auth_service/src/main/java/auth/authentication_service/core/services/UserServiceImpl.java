@@ -15,6 +15,7 @@ import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,6 +29,7 @@ import java.util.List;
 @Service
 @Transactional
 @Primary
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -76,6 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> updateUser(UserDto userDto) {
         try {
+            log.info("Update user: " + userDto);
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
             if (validation.getResponseMessage() != ResponseMessage.msg200) {
