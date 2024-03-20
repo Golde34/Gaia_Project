@@ -4,7 +4,7 @@ import { Bold, Card, Col, Divider, DonutChart, Flex, Grid, Legend, Metric, Tab, 
 import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 import { ChartPieIcon, ViewListIcon } from "@heroicons/react/solid";
 
-const RoleListScreen = () => {
+const UserRolesScreen = () => {
     const dispatch = useDispatch();
 
     const listRoles = useSelector((state) => state.roleList);
@@ -36,7 +36,7 @@ const RoleListScreen = () => {
                 <p>{error}</p>
             ) : (
                 <>
-                    <Card className="max-w-full mx-auto">
+                    <Card className="max-w-full mx-auto mt-4">
                         <Grid numItems={3}>
                             <Col numColSpan={1}><Title>Role List</Title></Col>
                             <Col numColSpan={2}>
@@ -108,4 +108,4 @@ const RoleListScreen = () => {
     )
 }
 
-export default RoleListScreen;
+export default UserRolesScreen;

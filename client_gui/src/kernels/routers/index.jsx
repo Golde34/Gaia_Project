@@ -9,7 +9,7 @@ import SignIn from '../../screens/authScreen/Signin';
 import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
 import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
-import AuthManagerDashboard from '../../views/auth_service/AuthManagerDashboard';
+import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
 
 // const schedule = [
 //   {

@@ -25,52 +25,30 @@ const UpdateUserModal = (props) => {
         }, 200);
     }, []);
 
-    const [updatedUser, setUpdatedUser] = useState({});
-
     const currentUser = props.currentUser;
     const isOpen = props.isOpen;
     const closeModal = props.closeModal;
 
     const [name, setName] = useState("");
     const [isEditingName, setIsEditingName] = useState(false);
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    }
-    const toggleEditingName = () => {
-        setIsEditingName(!isEditingName);
-    }
 
     const [username, setUsername] = useState("");
     const [isEditingUsername, setIsEditingUsername] = useState(false);
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    }
-    const toggleEditingUsername = () => {
-        setIsEditingUsername(!isEditingUsername);
-    }
 
     const [email, setEmail] = useState("");
     const [isEditingEmail, setIsEditingEmail] = useState(false);
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    }
-    const toggleEditingEmail = () => {
-        setIsEditingEmail(!isEditingEmail);
-    }
 
     const isStringEmpty = (str) => {
         return str === null || str === "" || str === undefined;
     }
 
     const [roleList, setRoleList] = useState([]);
-
     useEffect(() => {
         console.log(roleList);
         if (currentUser && currentUser.roles) {
             setRoleList(currentUser.roles);
         }
     }, [currentUser]);
-
     const handleRoleChange = (role) => {
         const roleExists = roleList.some((r) => r.id === role.id);
 
@@ -81,6 +59,7 @@ const UpdateUserModal = (props) => {
         }
     }
 
+    const [updatedUser, setUpdatedUser] = useState({});
     // const updateUser = useUpdateUserDispatch();
     const setObjectUser = (name, username, email, roleList) => {
         updatedUser.name = name === "" ? currentUser.name : name;
@@ -140,14 +119,14 @@ const UpdateUserModal = (props) => {
                                                                 type="text"
                                                                 className="border-2 border-gray-200 p-2 rounded-md w-full"
                                                                 value={name}
-                                                                onChange={handleNameChange}
-                                                                onBlur={toggleEditingName}
+                                                                onChange={(e) => {setName(e.target.value)}}
+                                                                onBlur={() => {setIsEditingName(!isEditingName)}}
                                                                 autoFocus
                                                             />
                                                         ) : (
                                                             <h1
                                                                 className="text-sm cursor-pointer"
-                                                                onClick={toggleEditingName}
+                                                                onClick={() => {setIsEditingName(!isEditingName)}}
                                                             >
                                                                 {isStringEmpty(name) ? currentUser.name : name}
                                                             </h1>
@@ -166,14 +145,14 @@ const UpdateUserModal = (props) => {
                                                                 type="text"
                                                                 className="border-2 border-gray-200 p-2 rounded-md w-full"
                                                                 value={username}
-                                                                onChange={handleUsernameChange}
-                                                                onBlur={toggleEditingUsername}
+                                                                onChange={(e) => {setUsername(e.target.value)}}
+                                                                onBlur={() => {setIsEditingUsername(!isEditingUsername)}}
                                                                 autoFocus
                                                             />
                                                         ) : (
                                                             <h1
                                                                 className="text-sm cursor-pointer"
-                                                                onClick={toggleEditingUsername}
+                                                                onClick={() => {setIsEditingUsername(!isEditingUsername)}}
                                                             >
                                                                 {isStringEmpty(username) ? currentUser.username : username}
                                                             </h1>
@@ -193,16 +172,15 @@ const UpdateUserModal = (props) => {
                                                                 type="text"
                                                                 className="border-2 border-gray-200 p-2 rounded-md w-full"
                                                                 value={email}
-                                                                onChange={handleEmailChange}
-                                                                onBlur={toggleEditingEmail}
+                                                                onChange={(e) => {setEmail(e.target.value)}}
+                                                                onBlur={() => {setIsEditingEmail(!isEditingEmail)}}
                                                                 autoFocus
                                                             />
                                                         ) : (
                                                             <h1
                                                                 className="text-sm cursor-pointer"
-                                                                onClick={toggleEditingEmail}
+                                                                onClick={() => {setIsEditingEmail(!isEditingEmail)}}
                                                             >
-                                                                {/* {isStringEmpty(email) ? currentUser.roles[0].name : email} */}
                                                                 {isStringEmpty(email) ? currentUser.email : email}
                                                             </h1>
 
