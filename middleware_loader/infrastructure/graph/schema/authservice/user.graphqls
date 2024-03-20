@@ -1,0 +1,13 @@
+type User {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  enabled: Boolean!
+  isUsing2FA: Boolean!
+  secret: String!
+
+  roles: [Role!]!
+  authTokens: [AuthToken!]!
+}

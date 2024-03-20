@@ -1,0 +1,10 @@
+type Comment {
+  id: ID!
+  content: String!
+  activeStatus: String!
+
+  createdAt: String!
+  updatedAt: String!
+
+  task: String!
+}
