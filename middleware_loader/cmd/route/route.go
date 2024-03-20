@@ -4,7 +4,10 @@ import (
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/routers"
+	auth_router "middleware_loader/ui/routers/auth_service"
+	gaia_router "middleware_loader/ui/routers/gaia_connector"
+	task_router "middleware_loader/ui/routers/task_manager"
+	middleware_router "middleware_loader/ui/routers/middleware_service"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -34,13 +37,15 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	))
 
 	// ROUTERS
-	routers.NewMicroserviceRouter(db, router)
-	routers.NewURLPermissionRouter(db, router)
-
-	routers.NewAuthRouter(authService, db, router)
-	routers.NewGaiaRouter(gaiaService, db, router)
 	router.Group(func(r chi.Router) {
-		routers.NewProjectRouter(projectService, db, router)
-		routers.NewTaskRouter(taskService, db, router)
+		middleware_router.NewMicroserviceRouter(db, router)
+		middleware_router.NewURLPermissionRouter(db, router)
+	})
+
+	auth_router.NewAuthRouter(authService, db, router)
+	gaia_router.NewGaiaRouter(gaiaService, db, router)
+	router.Group(func(r chi.Router) {
+		task_router.NewProjectRouter(projectService, db, router)
+		task_router.NewTaskRouter(taskService, db, router)
 	})
 }

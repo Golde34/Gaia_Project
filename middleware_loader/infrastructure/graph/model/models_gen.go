@@ -2,6 +2,14 @@
 
 package model
 
+type AuthToken struct {
+	ID         string `json:"id"`
+	Token      string `json:"token"`
+	TokenType  string `json:"tokenType"`
+	ExpiryDate string `json:"expiryDate"`
+	User       *User  `json:"user"`
+}
+
 type AuthTokenResponse struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
@@ -82,6 +90,12 @@ type MoveTaskInput struct {
 	TaskID         string `json:"taskId"`
 }
 
+type Privilege struct {
+	ID   string  `json:"id"`
+	Name string  `json:"name"`
+	Role []*Role `json:"role"`
+}
+
 type Project struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
@@ -93,6 +107,13 @@ type Project struct {
 	OwnerID      float64  `json:"ownerId"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
+}
+
+type Role struct {
+	ID        string       `json:"id"`
+	Name      string       `json:"name"`
+	Privilege []*Privilege `json:"privilege"`
+	User      []*User      `json:"user"`
 }
 
 type SigninInput struct {
@@ -180,16 +201,16 @@ type UpdateTaskInput struct {
 }
 
 type User struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Username   string `json:"username"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	Enabled    bool   `json:"enabled"`
-	IsUsing2fa bool   `json:"isUsing2FA"`
-	Secret     string `json:"secret"`
-	CreatedAt  string `json:"createdAt"`
-	UpdatedAt  string `json:"updatedAt"`
+	ID         string       `json:"id"`
+	Name       string       `json:"name"`
+	Username   string       `json:"username"`
+	Email      string       `json:"email"`
+	Password   string       `json:"password"`
+	Enabled    bool         `json:"enabled"`
+	IsUsing2fa bool         `json:"isUsing2FA"`
+	Secret     string       `json:"secret"`
+	Roles      []*Role      `json:"roles"`
+	AuthTokens []*AuthToken `json:"authTokens"`
 }
 
 type UserPermissionInput struct {

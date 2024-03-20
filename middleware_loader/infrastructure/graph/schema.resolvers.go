@@ -117,21 +117,6 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 	panic(fmt.Errorf("not implemented: Enable - enable"))
 }
 
-// User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
-}
-
-// Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
-}
-
-// UserByID is the resolver for the userById field.
-func (r *queryResolver) UserByID(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: UserByID - userById"))
-}
-
 // ListAllProjects is the resolver for the listAllProjects field.
 func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, error) {
 	projects, err := projectService.ListAll(ctx)
@@ -174,6 +159,16 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
+}
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: Users - users"))
+}
+func (r *queryResolver) UserByID(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UserByID - userById"))
+}
+
 var authService = services.NewAuthService()
 var taskService = services.NewTaskService()
 var projectService = services.NewProjectService()

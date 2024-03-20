@@ -1,0 +1,17 @@
+type GroupTask {
+  id: ID!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+  ordinalNumber: String!
+  activeStatus: String!    
+
+  project: String!
+  tasks: [String!]!
+  totalTasks: Int!
+  completedTasks: Int!
+
+  createdAt: String!
+  updatedAt: String!
+}

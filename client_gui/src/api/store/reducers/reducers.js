@@ -16,7 +16,7 @@ import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer,
 import { commentCreateReducer, commentDeleteReducer, commentDetailReducer, 
     commentListReducer, commentUpdateReducer } from './task_manager/comment.reducers'
 import { microserviceListReducer } from "./middleware_loader/microservices.reducer";
-import { userListReducer } from "./auth_service/user.reducer";
+import { userListReducer, userUpdateReducer } from "./auth_service/user.reducer";
 import { roleListReducer } from "./auth_service/role.reducer";
 import { privilegeListReducer } from "./auth_service/privilege.reducer";
 
@@ -26,6 +26,7 @@ export const reducer = combineReducers({
     bossSignin: bossSigninReducer,
     userSignin: userSigninReducer,
     userList: userListReducer,
+    userUpdate: userUpdateReducer,
     roleList: roleListReducer,
     privilegeList: privilegeListReducer,
     // task manager

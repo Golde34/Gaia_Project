@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { createGroupTask } from '../../api/store/actions/task_manager/group-task.actions';
 import { createProject } from '../../api/store/actions/task_manager/project.actions';
 import { createTask, generateTaskFromScratch } from '../../api/store/actions/task_manager/task.actions';
+import { updateUser } from '../../api/store/actions/auth_service/user.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -41,4 +42,14 @@ export const useGenerateTaskFromScratchDispatch = () => {
     }
 
     return generateTaskFromScratchDispatch;
+}
+
+export const useUpdateUserDispatch = () => {
+    const dispatch = useDispatch();
+
+    const updateUserDispatch = (user) => {
+        dispatch(updateUser(user));
+    }
+
+    return updateUserDispatch;
 }

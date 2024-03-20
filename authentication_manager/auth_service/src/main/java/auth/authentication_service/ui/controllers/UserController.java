@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/update-role", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update-user", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
         ResponseEntity<?> user = userService.updateUser(userDto);
         return ResponseEntity.ok(user);
