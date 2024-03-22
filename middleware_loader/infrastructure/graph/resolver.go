@@ -9,5 +9,7 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct{
-	AuthService service_registry.AuthService
+	AuthGraphQLService service_registry.AuthService
+	TaskGraphQLService service_registry.TaskService
+	ProjectGraphQLService service_registry.ProjectService
 }

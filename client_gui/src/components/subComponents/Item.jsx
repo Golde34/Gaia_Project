@@ -65,7 +65,7 @@ const SalesItem = () => {
   return (
     <Card className="max-w-full mx-auto">
       <Flex className="space-x-8 flex-col lg:flex-row">
-        <Title>Overview</Title>
+        <Title className="">Overview</Title>
         <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
           <TabList variant="solid">
             <Tab icon={ChartPieIcon}>Chart</Tab>

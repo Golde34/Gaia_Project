@@ -14,7 +14,7 @@ export const getSubTaskList = (taskId) => async (dispatch) => {
     dispatch({ type: SUB_TASK_LIST_REQUEST, payload: taskId });
     try {
         const { data } = await serverRequest(`/task/${taskId}/sub-tasks`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: SUB_TASK_LIST_SUCCESS, payload: data.message });
+        dispatch({ type: SUB_TASK_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: SUB_TASK_LIST_FAIL,
@@ -29,7 +29,7 @@ export const getDetailSubTask = (subTaskId) => async (dispatch) => {
     dispatch({ type: SUB_TASK_DETAIL_REQUEST, payload: subTaskId });
     try {
         const { data } = await serverRequest(`/sub-task/${subTaskId}`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: SUB_TASK_DETAIL_SUCCESS, payload: data.message });
+        dispatch({ type: SUB_TASK_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: SUB_TASK_DETAIL_FAIL,
@@ -50,7 +50,7 @@ export const createSubTask = (subTask) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest('/sub-task/create', HttpMethods.POST, portName.taskManager, subTask);
-        dispatch({ type: SUB_TASK_CREATE_SUCCESS, payload: data.message });
+        dispatch({ type: SUB_TASK_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: SUB_TASK_CREATE_FAIL,
@@ -71,7 +71,7 @@ export const updateSubTask = (subTask) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/sub-task/${subTask._id}`, HttpMethods.PUT, portName.taskManager, subTask);
-        dispatch({ type: SUB_TASK_UPDATE_SUCCESS, payload: data.message });
+        dispatch({ type: SUB_TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: SUB_TASK_UPDATE_FAIL,
@@ -92,7 +92,7 @@ export const deleteSubTask = (subTaskId) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/sub-task/${subTaskId}`, HttpMethods.DELETE, portName.taskManager);
-        dispatch({ type: SUB_TASK_DELETE_SUCCESS, payload: data.message });
+        dispatch({ type: SUB_TASK_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: SUB_TASK_DELETE_FAIL,

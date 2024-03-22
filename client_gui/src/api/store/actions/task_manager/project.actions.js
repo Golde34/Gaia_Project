@@ -1,3 +1,4 @@
+import addAuthHeaders from "../../../../kernels/utils/add-headers";
 import { HttpMethods, serverRequest } from "../../../baseAPI";
 import { PROJECT_COLOR_UPDATE_FAIL, PROJECT_COLOR_UPDATE_REQUEST, PROJECT_COLOR_UPDATE_SUCCESS, 
     PROJECT_CREATE_FAIL, PROJECT_CREATE_REQUEST, PROJECT_CREATE_SUCCESS, 
@@ -9,14 +10,16 @@ import { PROJECT_COLOR_UPDATE_FAIL, PROJECT_COLOR_UPDATE_REQUEST, PROJECT_COLOR_
 } from "../../constants/task_manager/project.constants";
 
 const portName = {
-    taskManager: 'taskManagerPort',
+    middlewarePort: 'middlewarePort'
 }
 
 export const getProjects = () => async (dispatch) => {
     dispatch({ type: PROJECT_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.taskManager, null);      
-        dispatch({ type: PROJECT_LIST_SUCCESS, payload: data.message });
+        // const headers = addAuthHeaders();
+        // const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.middlewarePort, null, headers);  
+        const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.middlewarePort, null);    
+        dispatch({ type: PROJECT_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_LIST_FAIL,
@@ -30,8 +33,8 @@ export const getProjects = () => async (dispatch) => {
 export const getDetailProject = (projectId) => async (dispatch) => {
     dispatch({ type: PROJECT_DETAIL_REQUEST, payload: projectId });
     try {
-        const { data } = await serverRequest(`/project/${projectId}`, HttpMethods.GET, portName.taskManager, null);
-        dispatch({ type: PROJECT_DETAIL_SUCCESS, payload: data.message});
+        const { data } = await serverRequest(`/project/${projectId}`, HttpMethods.GET, portName.middlewarePort, null);
+        dispatch({ type: PROJECT_DETAIL_SUCCESS, payload: data.data});
     } catch (error) {
         dispatch({
             type: PROJECT_DETAIL_FAIL,
@@ -51,8 +54,8 @@ export const createProject = (project) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // } 
-        const { data } = await serverRequest('/project/create', HttpMethods.POST, portName.taskManager, project);
-        dispatch({ type: PROJECT_CREATE_SUCCESS, payload: data.message });
+        const { data } = await serverRequest('/project/create', HttpMethods.POST, portName.middlewarePort, project);
+        dispatch({ type: PROJECT_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_CREATE_FAIL,
@@ -72,8 +75,8 @@ export const updateProject = (project) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/project/${project._id}`, HttpMethods.PUT, portName.taskManager, project);
-        dispatch({ type: PROJECT_UPDATE_SUCCESS, payload: data.message });
+        const { data } = await serverRequest(`/project/${project.id}`, HttpMethods.PUT, portName.middlewarePort, project);
+        dispatch({ type: PROJECT_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_UPDATE_FAIL,
@@ -93,8 +96,8 @@ export const deleteProject = (projectId) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/project/${projectId}`, HttpMethods.DELETE, portName.taskManager, null);
-        dispatch({ type: PROJECT_DELETE_SUCCESS, payload: data.message });
+        const { data } = await serverRequest(`/project/${projectId}`, HttpMethods.DELETE, portName.middlewarePort, null);
+        dispatch({ type: PROJECT_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_DELETE_FAIL,
@@ -108,8 +111,8 @@ export const deleteProject = (projectId) => async (dispatch) => {
 export const updateProjectName = (projectId, newName) => async (dispatch) => {
     dispatch({ type: PROJECT_NAME_UPDATE_REQUEST, payload: projectId });
     try {
-        const { data } = await serverRequest(`/project/${projectId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
-        dispatch({ type: PROJECT_NAME_UPDATE_SUCCESS, payload: data.message });
+        const { data } = await serverRequest(`/project/${projectId}/update-name`, HttpMethods.PUT, portName.middlewarePort, { newName });
+        dispatch({ type: PROJECT_NAME_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_NAME_UPDATE_FAIL,
@@ -123,8 +126,8 @@ export const updateProjectName = (projectId, newName) => async (dispatch) => {
 export const updateProjectColor = (projectId, color) => async (dispatch) => {
     dispatch({ type: PROJECT_COLOR_UPDATE_REQUEST, payload: projectId });
     try {
-        const { data } = await serverRequest(`/project/${projectId}/update-color`, HttpMethods.PUT, portName.taskManager, { color });
-        dispatch({ type: PROJECT_COLOR_UPDATE_SUCCESS, payload: data.message });
+        const { data } = await serverRequest(`/project/${projectId}/update-color`, HttpMethods.PUT, portName.middlewarePort, { color });
+        dispatch({ type: PROJECT_COLOR_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: PROJECT_COLOR_UPDATE_FAIL,

@@ -3,5 +3,5 @@ export const initialState = {
         gaiaInfo: localStorage.getItem('gaiaInfo')
             ? JSON.parse(localStorage.getItem('gaiaInfo'))
             : null,
-    }
+    } 
 };

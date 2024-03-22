@@ -4,8 +4,8 @@ import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
-import { convertTimestampToDate } from "../../utils/date-picker";
-import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../utils/dialog-api-requests";
+import { convertTimestampToDate } from "../../kernels/utils/date-picker";
+import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../kernels/utils/dialog-api-requests";
 import { MoveTask } from "./MoveTask";
 
 export const TaskCard = (props) => {
@@ -53,25 +53,11 @@ export const TaskCard = (props) => {
         }
     }
 
-    // Set title frontend
     const [title, setTitle] = useState(task.title);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    }
-    const toggleEditingTitle = () => {
-        setIsEditingTitle(!isEditingTitle);
-    }
 
-    // Set description frontend
     const [description, setDescription] = useState(task.description);
     const [isEditingDescription, setIsEditingDescription] = useState(false);
-    const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-    }
-    const toggleEditingDescription = () => {
-        setIsEditingDescription(!isEditingDescription);
-    }
 
     // Set status frontend
     const [status, setStatus] = useState(task.status);
@@ -173,14 +159,14 @@ export const TaskCard = (props) => {
                                                     type="text"
                                                     className="border-2 border-gray-200 p-2 rounded-md w-full"
                                                     value={title}
-                                                    onChange={handleTitleChange}
-                                                    onBlur={toggleEditingTitle}
+                                                    onChange={(e) => {setTitle(e.target.value)}}
+                                                    onBlur={() => {setIsEditingTitle(!isEditingTitle)}}
                                                     autoFocus
                                                 />
                                             ) : (
                                                 <h1
                                                     className="text-lg cursor-pointer"
-                                                    onClick={toggleEditingTitle}
+                                                    onClick={() => {setIsEditingTitle(!isEditingTitle)}}
                                                 >
                                                     {title}
                                                 </h1>
@@ -198,14 +184,14 @@ export const TaskCard = (props) => {
                                                 type="text"
                                                 className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                 value={description}
-                                                onChange={handleDescriptionChange}
-                                                onBlur={toggleEditingDescription}
+                                                onChange={(e) => {setDescription(e.target.value)}}
+                                                onBlur={() => {setIsEditingDescription(!isEditingDescription)}}
                                                 autoFocus
                                             />
                                         ) : (
                                             <h1
                                                 className="text-sm cursor-pointer"
-                                                onClick={toggleEditingDescription}
+                                                onClick={() => {setIsEditingDescription(!isEditingDescription)}}
                                             >
                                                 {description}
                                             </h1>

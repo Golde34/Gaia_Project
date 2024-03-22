@@ -10,7 +10,7 @@
     </parent>
     <groupId>service</groupId>
     <artifactId>auth_service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>auth_service</name>
     <description>auth_service</description>
     <properties>
@@ -119,6 +119,15 @@
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-core</artifactId>
             <version>0.46</version>
+        </dependency>
+        <!-- Caffeine cache-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
         </dependency>
     </dependencies>
 

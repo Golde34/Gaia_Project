@@ -15,7 +15,7 @@ export const getCommentList = (taskId) => async (dispatch) => {
     dispatch({ type: COMMENT_LIST_REQUEST, payload: taskId });
     try {
         const { data } = await serverRequest(`/task/${taskId}/comments`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: COMMENT_LIST_SUCCESS, payload: data.message });
+        dispatch({ type: COMMENT_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: COMMENT_LIST_FAIL,
@@ -30,7 +30,7 @@ export const getDetailComment = (commentId) => async (dispatch) => {
     dispatch({ type: COMMENT_DETAIL_REQUEST, payload: commentId });
     try {
         const { data } = await serverRequest(`/comment/${commentId}`, HttpMethods.GET, portName.taskManager);
-        dispatch({ type: COMMENT_DETAIL_SUCCESS, payload: data.message });
+        dispatch({ type: COMMENT_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: COMMENT_DETAIL_FAIL,
@@ -51,7 +51,7 @@ export const createComment = (comment) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest('/comment/create', HttpMethods.POST, portName.taskManager, comment);
-        dispatch({ type: COMMENT_CREATE_SUCCESS, payload: data.message });
+        dispatch({ type: COMMENT_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: COMMENT_CREATE_FAIL,
@@ -72,7 +72,7 @@ export const updateComment = (comment) => async (dispatch) => {
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/comment/${comment._id}`, HttpMethods.PUT, portName.taskManager, comment);
-        dispatch({ type: COMMENT_UPDATE_SUCCESS, payload: data.message });
+        dispatch({ type: COMMENT_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: COMMENT_UPDATE_FAIL,
@@ -93,7 +93,7 @@ export const deleteComment = (commentId) => async (dispatch) => {
         //    'Authorization': `Bearer ${userInfo.token}`
         // }
         const { data } = await serverRequest(`/comment/${commentId}`, HttpMethods.DELETE, portName.taskManager);
-        dispatch({ type: COMMENT_DELETE_SUCCESS, payload: data.message });
+        dispatch({ type: COMMENT_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: COMMENT_DELETE_FAIL,

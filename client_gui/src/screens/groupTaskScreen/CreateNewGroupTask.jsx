@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useParams } from "react-router-dom";
-import { useCreateGroupTaskDispatch } from '../../utils/create-dialog-api-requests';
+import { useCreateGroupTaskDispatch } from '../../kernels/utils/write-dialog-api-requests';
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { Button } from "@tremor/react";
@@ -247,26 +247,7 @@ export const CreateNewGroupTask = (props) => {
                                                 <label className="text-sm text-gray-700" htmlFor="status-radio-doing">
                                                     IN PROGRESS
                                                 </label>
-                                            </div>
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="status-radio-done" data-ripple-dark="true">
-                                                    <input
-                                                        id="status-radio-done"
-                                                        type="radio"
-                                                        value="DONE"
-                                                        checked={status === 'DONE'}
-                                                        onChange={(e) => setStatus(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-700" htmlFor="status-radio-done">
-                                                    DONE
-                                                </label>
-                                            </div>
+                                            </div> 
                                         </div>
                                     </div>
 
@@ -285,7 +266,6 @@ export const CreateNewGroupTask = (props) => {
                                             onClick={() => {
                                                 setObjectGroupTask(newName, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
-                                                // window.location.reload();
                                             }}
                                         >
                                             Create

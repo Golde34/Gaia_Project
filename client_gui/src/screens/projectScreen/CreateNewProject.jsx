@@ -4,7 +4,7 @@ import { Card, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom"
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
-import { useCreateProjectDispatch } from "../../utils/create-dialog-api-requests";
+import { useCreateProjectDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 export const CreateNewProject = () => {
     const useParam = useParams();
@@ -29,7 +29,7 @@ export const CreateNewProject = () => {
         project.name = name;
         project.description = description;
         project.status = status;
-        project.ownerId = localStorage.getItem('userId');
+        project.ownerId = "1";
         createNewProject(project);
         window.location.reload();
     }
@@ -138,25 +138,6 @@ export const CreateNewProject = () => {
                                                 </label>
                                                 <label className="text-sm text-gray-700" htmlFor="status-radio-doing">
                                                     IN PROGRESS
-                                                </label>
-                                            </div>
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="status-radio-done" data-ripple-dark="true">
-                                                    <input
-                                                        id="status-radio-done"
-                                                        type="radio"
-                                                        value="DONE"
-                                                        checked={status === 'DONE'}
-                                                        onChange={(e) => setStatus(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-blue-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-700" htmlFor="status-radio-done">
-                                                    DONE
                                                 </label>
                                             </div>
                                         </div>
