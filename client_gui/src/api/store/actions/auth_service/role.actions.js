@@ -9,7 +9,7 @@ export const getRoles = () => async (dispatch) => {
     dispatch({ type: ROLE_LIST_REQUEST });
     try {
         const { data } = await serverRequest('/role/get-all-roles', HttpMethods.GET, portName.authPort, null);
-        dispatch({ type: ROLE_LIST_SUCCESS, payload: data });
+        dispatch({ type: ROLE_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: ROLE_LIST_FAIL,
