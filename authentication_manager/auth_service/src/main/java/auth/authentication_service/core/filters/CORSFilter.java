@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.filters;
+package auth.authentication_service.core.filters;
 
 import java.io.IOException;
 

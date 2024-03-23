@@ -1,14 +1,13 @@
 package auth.authentication_service.core.services.interfaces;
 
-import auth.authentication_service.core.domain.dto.PrivilegeDto;
-import auth.authentication_service.core.domain.entities.Privilege;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import auth.authentication_service.core.domain.dto.PrivilegeDto;
 
 public interface PrivilegeService {
-    public Privilege createPrivilege(String privilegeName);
-    public Privilege updatePrivilege(PrivilegeDto privilegeDto);
-    public void deletePrivilege(PrivilegeDto privilegeDto);
-    public List<Privilege> getAllPrivileges();
-    public Privilege getPrivilegeByName(PrivilegeDto privilegeDto);
+    public ResponseEntity<?> createPrivilege(String privilegeName);
+    public ResponseEntity<?> updatePrivilege(PrivilegeDto privilegeDto);
+    public ResponseEntity<?> deletePrivilege(PrivilegeDto privilegeDto);
+    public ResponseEntity<?> getAllPrivileges();
+    public ResponseEntity<?> getPrivilegeByName(PrivilegeDto privilegeDto);
 }

@@ -3,22 +3,28 @@ package auth.authentication_service.core.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.PrivilegeDto;
 import auth.authentication_service.core.domain.dto.RoleDto;
 import auth.authentication_service.core.domain.dto.response.ListRole;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.enums.LoggerType;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.services.interfaces.RoleService;
 import auth.authentication_service.core.store.RoleStore;
+import auth.authentication_service.core.validations.service_validations.RoleServiceValidation;
+import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
+import auth.authentication_service.kernel.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -27,77 +33,78 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private LoggerUtils _logger;
-
-    private final RoleStore roleStore;
-
     @Autowired
     private ModelMapperConfig modelMapperConfig;
+    @Autowired
+    private GenericResponse<?> genericResponse;
+    @Autowired
+    private ResponseUtils responseUtils;
 
-    public RoleServiceImpl(RoleStore roleStore) {
+    private final RoleStore roleStore;
+    private final RoleServiceValidation roleServiceValidation;
+
+    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation) {
         this.roleStore = roleStore;
+        this.roleServiceValidation = roleServiceValidation;
     }
 
     @Override
-    public Role createRole(String roleName) {
-        if (_checkExistRoleName(roleName)) {
+    public ResponseEntity<?> createRole(String roleName) {
+        if (roleServiceValidation.checkExistRoleName(roleName)) {
             _logger.log("Create role failed", LoggerType.ERROR);
-            throw new RuntimeException("Role existed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.ROLE_EXISTED, ResponseEnum.msg400));
         } else {
             Role newRole = new Role();
             newRole.setName(roleName);
             roleStore.save(newRole);
             _logger.log("Create role: " + roleName, LoggerType.INFO);
-            return newRole;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(newRole, ResponseEnum.msg201));
         }
     }
 
     @Override
-    public Role updateRole(RoleDto roleDto) {
+    public ResponseEntity<?> updateRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
-            if (_checkExistRole(role)) {
-                if (!_checkExistRoleName(role.getName())) {
-                    roleStore.save(role);
-                    _logger.log("Update role: " + role.getName(), LoggerType.INFO);
-                    return role;
-                } else {
-                    _logger.log("Role name existed!", LoggerType.ERROR);
-                    throw new RuntimeException("Role name existed");
-                }
-            } else {
-                _logger.log("Role not found", LoggerType.INFO);
-                throw new RuntimeException("Role not found");
+            Pair<String, Boolean> canUpdateRole = roleServiceValidation.canUpdateRole(role, role.getName());
+            if (!canUpdateRole.getSecond()) {
+                return genericResponse
+                        .matchingResponseMessage(new GenericResponse<>(canUpdateRole.getFirst(), ResponseEnum.msg400));
             }
+            roleStore.save(role);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(role, ResponseEnum.msg200));
         } catch (Exception e) {
-            _logger.log("Update role failed", LoggerType.ERROR);
-            throw new RuntimeException("Update role failed");
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    String.format("Update Role failed: %s ", e.getMessage()), Constants.ResponseMessage.UPDATE_ROLE,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
     @Override
-    public void deleteRole(RoleDto roleDto) {
+    public ResponseEntity<?> deleteRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
-            if (_checkExistRole(role)) {
+            if (roleServiceValidation.checkExistRole(role)) {
                 roleStore.delete(role);
-                _logger.log("Delete role: " + role.getName(), LoggerType.INFO);
-            } else {
-                _logger.log("Role not found", LoggerType.INFO);
-                throw new RuntimeException("Role not found");
             }
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>("Role " + role.getName() + " deleted!", ResponseEnum.msg200));
         } catch (Exception e) {
             _logger.log("Delete role failed", LoggerType.ERROR);
-            throw new RuntimeException("Delete role failed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.DELETE_ROLE, ResponseEnum.msg400));
         }
     }
 
     @Override
     @Cacheable(value = "roles")
-    public List<ListRole> getAllRoles() {
+    public ResponseEntity<?> getAllRoles() {
         log.info("Get all roles");
         List<ListRole> listRoles = new ArrayList<>();
         List<Role> roles = roleStore.findAll();
-        final int[] totalUser = {0};
+        final int[] totalUser = { 0 };
         roles.forEach(role -> {
             ListRole listRole = new ListRole();
             listRole.setId(role.getId());
@@ -108,28 +115,30 @@ public class RoleServiceImpl implements RoleService {
             listRoles.add(listRole);
         });
 
-        return listRoles;
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(listRoles, ResponseEnum.msg200));
     }
 
     @Override
-    public Role getRoleByName(RoleDto roleDto) {
-        return roleStore.findByName(roleDto.getName());
+    public ResponseEntity<?> getRoleByName(RoleDto roleDto) {
+        Role role = roleStore.findByName(roleDto.getName());
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(role, ResponseEnum.msg200));
     }
 
     @Override
-    public Role addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegesDto) {
+    public ResponseEntity<?> addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegesDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
             List<Privilege> privileges = _mapperListPrivilegesDto(privilegesDto);
-            if (_checkExistRole(role)) {
+            if (roleServiceValidation.checkExistRole(role)) {
                 role.setPrivileges(privileges);
                 roleStore.save(role);
                 _logger.log("Add privilege to role: " + role.getName(), LoggerType.INFO);
-                return role;
+                return genericResponse.matchingResponseMessage(new GenericResponse<>(role, ResponseEnum.msg200));
             }
         } catch (Exception e) {
             _logger.log("Add privilege to role failed", LoggerType.ERROR);
-            throw new RuntimeException("Add privilege to role failed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.ADD_PRIVILEGE_TO_ROLE, ResponseEnum.msg400));
         }
         return null;
     }
@@ -143,34 +152,6 @@ public class RoleServiceImpl implements RoleService {
             _logger.log("Get biggest role failed", LoggerType.ERROR);
             throw new RuntimeException("Get biggest role failed");
         }
-    }
-
-    private boolean _checkExistRole(Role role) {
-        try {
-            for (Role item : roleStore.findAll()) {
-                if (Objects.equals(item.getId(), role.getId())) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            _logger.log("Check exist role failed", LoggerType.ERROR);
-        }
-        return false;
-    }
-
-    private boolean _checkExistRoleName(String roleName) {
-        try {
-            for (Role item : roleStore.findAll()) {
-                if (Objects.equals(item.getName(), roleName)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            _logger.log("Check exist role name failed", LoggerType.ERROR);
-        }
-        return false;
     }
 
     private List<Privilege> _mapperListPrivilegesDto(List<PrivilegeDto> privilegeDtos) {
