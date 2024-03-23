@@ -10,7 +10,7 @@ import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
-import auth.authentication_service.core.domain.enums.ResponseMessage;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.domain.enums.TokenType;
 import auth.authentication_service.core.services.interfaces.AuthService;
 import auth.authentication_service.core.services.interfaces.RoleService;
@@ -65,14 +65,14 @@ public class AuthServiceImpl implements AuthService {
         // Validate User
         GenericResponse<String> validate = userServiceValidation._validateUserSignin(userDetails, username, password,
                 user);
-        if (!validate.getResponseMessage().equals(ResponseMessage.msg200)) {
+        if (!validate.getResponseMessage().equals(ResponseEnum.msg200)) {
             return genericResponse.matchingResponseMessage(validate);
         }
         // Generate sign-in information
         SignInDtoResponse response = _generateSignInToken(user, userDetails, BossType.USER);
         _logger.log("User: " + user.getUsername() + " sign-in success", LoggerType.INFO);
 
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseMessage.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseEnum.msg200));
     }
 
     private SignInDtoResponse _generateSignInToken(User user, UserDetails userDetails, BossType bossType) {
@@ -121,23 +121,23 @@ public class AuthServiceImpl implements AuthService {
         // Validate User
         GenericResponse<String> validate = userServiceValidation._validateUserSignin(userDetails, username, password,
                 user);
-        if (!validate.getResponseMessage().equals(ResponseMessage.msg200)) {
+        if (!validate.getResponseMessage().equals(ResponseEnum.msg200)) {
             return genericResponse.matchingResponseMessage(validate);
         }
         // Generate sign-in information
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(BossType.BOSS.getRole()))) {
             SignInDtoResponse response = _generateSignInToken(user, userDetails, BossType.BOSS);
             _logger.log("Boss: " + user.getUsername() + " sign-in success", LoggerType.INFO);
-            return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseMessage.msg200));
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(response, ResponseEnum.msg200));
         } else {
             return genericResponse
-                    .matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseMessage.msg401));
+                    .matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseEnum.msg401));
         }
     }
 
     public ResponseEntity<?> checkToken(TokenDto token) {
         CheckTokenDtoResponse userResponse = tokenService.checkToken(token.getToken());
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(userResponse, ResponseMessage.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(userResponse, ResponseEnum.msg200));
     }
 
     public ResponseEntity<?> checkPermission(UserPermissionDto permission) {
@@ -148,17 +148,17 @@ public class AuthServiceImpl implements AuthService {
             for (Privilege privilege : rolePrivilege) {
                 if (privilege.getName().equals(permission.getPermission())) {
                     return genericResponse
-                            .matchingResponseMessage(new GenericResponse<>(privilege, ResponseMessage.msg200));
+                            .matchingResponseMessage(new GenericResponse<>(privilege, ResponseEnum.msg200));
                 }
             }
         }
         return genericResponse
-                .matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseMessage.msg401));
+                .matchingResponseMessage(new GenericResponse<>("Permission denied", ResponseEnum.msg401));
     }
 
     public ResponseEntity<?> checkStatus() {
         return genericResponse.matchingResponseMessage(
-                new GenericResponse<>("Authentication service is running", ResponseMessage.msg200));
+                new GenericResponse<>("Authentication service is running", ResponseEnum.msg200));
     }
 
     // public GenericResponse<?> getNewAccessTokenResponse(String refreshToken)

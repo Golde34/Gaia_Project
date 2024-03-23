@@ -1,6 +1,6 @@
 package auth.authentication_service.core.domain.enums;
 
-public enum ResponseMessage {
+public enum ResponseEnum {
     msg200,
     msg201,
     msg400,

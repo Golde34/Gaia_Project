@@ -1,11 +1,13 @@
 package auth.authentication_service.core.services;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.UserDto;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
+import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
-import auth.authentication_service.core.domain.enums.ResponseMessage;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.services.interfaces.UserService;
 import auth.authentication_service.core.store.RoleStore;
 import auth.authentication_service.core.store.UserCRUDStore;
@@ -14,8 +16,8 @@ import auth.authentication_service.kernel.utils.BCryptPasswordEncoder;
 import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
+import auth.authentication_service.kernel.utils.ResponseUtils;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,7 +31,6 @@ import java.util.List;
 @Service
 @Transactional
 @Primary
-@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -41,7 +42,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
     @Autowired
-    private GenericResponse<String> genericResponse;
+    private GenericResponse<?> genericResponse;
+    @Autowired
+    private ResponseUtils responseUtils;
 
     @Autowired
     UserServiceValidation userServiceValidation;
@@ -56,8 +59,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapperConfig._mapperDtoToEntity(userDto);
 
         GenericResponse<?> validation = userServiceValidation._validateUserCreation(userDto, user);
-        if (validation.getResponseMessage() != ResponseMessage.msg200) {
-            // return http status code base on validate response message
+        if (validation.getResponseMessage() != ResponseEnum.msg200) {
             return genericResponse.matchingResponseMessage(validation);
         }
 
@@ -65,23 +67,24 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
         userStore.save(user);
         _logger.log("Create user: " + user.getUsername(), LoggerType.INFO);
-        return ResponseEntity.ok(user);
+
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
     }
+
     private Role _isBoss(final boolean isBoss) {
         if (isBoss) {
-            return roleStore.findByName("ROLE_BOSS");
+            return roleStore.findByName(BossType.BOSS.getRole());
         } else {
-            return roleStore.findByName("ROLE_USER");
+            return roleStore.findByName(BossType.USER.getRole());
         }
     }
 
     @Override
     public ResponseEntity<?> updateUser(UserDto userDto) {
         try {
-            log.info("Update user: " + userDto);
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
-            if (validation.getResponseMessage() != ResponseMessage.msg200) {
+            if (validation.getResponseMessage() != ResponseEnum.msg200) {
                 // return http status code base on validate response message
                 return genericResponse.matchingResponseMessage(validation);
             }
@@ -92,11 +95,13 @@ public class UserServiceImpl implements UserService {
             updatedUser.setName(userDto.getName());
             userStore.save(updatedUser);
             _logger.log("Update user: " + userDto.getUsername() + " to: " + updatedUser.getUsername(), LoggerType.INFO);
-            return ResponseEntity.ok(user);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(updatedUser, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Update user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
-            return ResponseEntity.badRequest().body("Update user failed");
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    String.format("Update User failed: %s ", e.getMessage()), Constants.ResponseMessage.UPDATE_USER,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
@@ -105,7 +110,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserDeletion(user);
-            if (validation.getResponseMessage() != ResponseMessage.msg200) {
+            if (validation.getResponseMessage() != ResponseEnum.msg200) {
                 // return http status code base on validate response message
                 return genericResponse.matchingResponseMessage(validation);
             }
@@ -113,25 +118,29 @@ public class UserServiceImpl implements UserService {
             User deleteUser = userStore.getUserById(user.getId());
             userStore.delete(deleteUser);
             _logger.log("Delete user: " + userDto.getUsername(), LoggerType.INFO);
-            return ResponseEntity.ok(user);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(deleteUser, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Delete user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
-            return ResponseEntity.badRequest().body("Delete user failed");
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    String.format("Delete User failed: %s ", e.getMessage()), Constants.ResponseMessage.DELETE_USER,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
     @Override
     @Cacheable(value = "users")
-    public List<User> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         try {
             List<User> users = userStore.findAll();
             _logger.log("Get all users", LoggerType.INFO);
-            return users;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Get all users failed", LoggerType.ERROR);
-            return null;
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    String.format("Get all users failed: %s ", e.getMessage()), Constants.ResponseMessage.GET_ALL_USERS,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
@@ -149,15 +158,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public ResponseEntity<?> getUserByUsername(UserDto userDto) {
         try {
+            String username = userDto.getUsername();
             User user = userStore.findByUsername(username);
             _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
-            return user;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Get user: " + username + " failed", LoggerType.ERROR);
-            return null;
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    String.format("Get user failed: %s ", e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 

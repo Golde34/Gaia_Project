@@ -70,7 +70,7 @@ const UserListScreen = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {users.map((user) => (
+                                {users.length > 0 ? users.map((user) => (
                                     <TableRow key={user.id}>
                                         <TableCell>{user.id}</TableCell>
                                         <TableCell>{user.name}</TableCell>
@@ -94,7 +94,11 @@ const UserListScreen = (props) => {
                                             >Delete</button>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={6}>No users found</TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </Card>

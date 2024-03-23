@@ -11,7 +11,7 @@ export const getUsers = () => async (dispatch) => {
     dispatch({ type: USER_LIST_REQUEST });
     try {
         const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.authPort, null);
-        dispatch({ type: USER_LIST_SUCCESS, payload: data });
+        dispatch({ type: USER_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: USER_LIST_FAIL,

@@ -3,7 +3,7 @@ package auth.authentication_service.ui.controllers;
 import auth.authentication_service.core.domain.dto.TokenDto;
 import auth.authentication_service.core.domain.dto.UserPermissionDto;
 import auth.authentication_service.core.domain.dto.request.SignInDtoRequest;
-import auth.authentication_service.core.domain.enums.ResponseMessage;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.services.interfaces.AuthService;
 import auth.authentication_service.kernel.utils.GenericResponse;
 
@@ -37,7 +37,7 @@ public class AuthController {
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public ResponseEntity<?> status() {
-        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseMessage.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseEnum.msg200));
     }
 
     @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
