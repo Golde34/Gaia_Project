@@ -7,13 +7,10 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
-
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
-var projectService = services.NewProjectService()
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
@@ -168,7 +165,14 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 
 // ListAllUsers is the resolver for the listAllUsers field.
 func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: ListAllUsers - listAllUsers"))
+	log.Println("ListAllUsers resolver called!")
+	users, err := userService.ListAllUsers(ctx)
+	modelUser := []*model.User{}
+	for _, user := range users {
+		userCopy := user
+		modelUser = append(modelUser, &userCopy)
+	}
+	return modelUser, err
 }
 
 // GetUserByUsername is the resolver for the getUserByUsername field.
@@ -231,3 +235,14 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+var authService = services.NewAuthService()
+var taskService = services.NewTaskService()
+var projectService = services.NewProjectService()
+var userService = services.NewUserService()

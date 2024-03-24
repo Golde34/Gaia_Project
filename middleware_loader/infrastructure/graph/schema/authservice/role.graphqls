@@ -3,7 +3,6 @@ type Role {
     name: String!
 
     privilege: [Privilege!]!
-    user: [User!]!
 }
 
 input RoleInput {

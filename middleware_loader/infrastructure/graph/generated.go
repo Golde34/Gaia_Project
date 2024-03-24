@@ -126,7 +126,6 @@ type ComplexityRoot struct {
 	Privilege struct {
 		ID   func(childComplexity int) int
 		Name func(childComplexity int) int
-		Role func(childComplexity int) int
 	}
 
 	Project struct {
@@ -159,7 +158,6 @@ type ComplexityRoot struct {
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
 		Privilege func(childComplexity int) int
-		User      func(childComplexity int) int
 	}
 
 	SubTask struct {
@@ -199,7 +197,6 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		AuthTokens func(childComplexity int) int
 		Email      func(childComplexity int) int
 		Enabled    func(childComplexity int) int
 		ID         func(childComplexity int) int
@@ -860,13 +857,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Privilege.Name(childComplexity), true
 
-	case "Privilege.role":
-		if e.complexity.Privilege.Role == nil {
-			break
-		}
-
-		return e.complexity.Privilege.Role(childComplexity), true
-
 	case "Project.activeStatus":
 		if e.complexity.Project.ActiveStatus == nil {
 			break
@@ -1052,13 +1042,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Role.Privilege(childComplexity), true
-
-	case "Role.user":
-		if e.complexity.Role.User == nil {
-			break
-		}
-
-		return e.complexity.Role.User(childComplexity), true
 
 	case "SubTask.activeStatus":
 		if e.complexity.SubTask.ActiveStatus == nil {
@@ -1248,13 +1231,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TokenResponse.Username(childComplexity), true
-
-	case "User.authTokens":
-		if e.complexity.User.AuthTokens == nil {
-			break
-		}
-
-		return e.complexity.User.AuthTokens(childComplexity), true
 
 	case "User.email":
 		if e.complexity.User.Email == nil {
@@ -2264,8 +2240,6 @@ func (ec *executionContext) fieldContext_AuthToken_user(ctx context.Context, fie
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -3838,8 +3812,6 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -3915,8 +3887,6 @@ func (ec *executionContext) fieldContext_Mutation_updateUser(ctx context.Context
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -3992,8 +3962,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteUser(ctx context.Context
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -4057,8 +4025,6 @@ func (ec *executionContext) fieldContext_Mutation_createRole(ctx context.Context
 				return ec.fieldContext_Role_name(ctx, field)
 			case "privilege":
 				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4122,8 +4088,6 @@ func (ec *executionContext) fieldContext_Mutation_updateRole(ctx context.Context
 				return ec.fieldContext_Role_name(ctx, field)
 			case "privilege":
 				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4187,8 +4151,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteRole(ctx context.Context
 				return ec.fieldContext_Role_name(ctx, field)
 			case "privilege":
 				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4250,8 +4212,6 @@ func (ec *executionContext) fieldContext_Mutation_createPrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -4313,8 +4273,6 @@ func (ec *executionContext) fieldContext_Mutation_updatePrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -4376,8 +4334,6 @@ func (ec *executionContext) fieldContext_Mutation_deletePrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -5703,60 +5659,6 @@ func (ec *executionContext) fieldContext_Privilege_name(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Privilege_role(ctx context.Context, field graphql.CollectedField, obj *model.Privilege) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Privilege_role(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Role, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Role)
-	fc.Result = res
-	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRoleᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Privilege_role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Privilege",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Role_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Project_id(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Project_id(ctx, field)
 	if err != nil {
@@ -6225,7 +6127,7 @@ func (ec *executionContext) _Query_listAllUsers(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_listAllUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6254,8 +6156,6 @@ func (ec *executionContext) fieldContext_Query_listAllUsers(ctx context.Context,
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -6320,8 +6220,6 @@ func (ec *executionContext) fieldContext_Query_getUserByUsername(ctx context.Con
 				return ec.fieldContext_User_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -6368,7 +6266,7 @@ func (ec *executionContext) _Query_listAllRoles(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Role)
 	fc.Result = res
-	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRoleᚄ(ctx, field.Selections, res)
+	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_listAllRoles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6385,8 +6283,6 @@ func (ec *executionContext) fieldContext_Query_listAllRoles(ctx context.Context,
 				return ec.fieldContext_Role_name(ctx, field)
 			case "privilege":
 				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -6439,8 +6335,6 @@ func (ec *executionContext) fieldContext_Query_getRoleByName(ctx context.Context
 				return ec.fieldContext_Role_name(ctx, field)
 			case "privilege":
 				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -6487,7 +6381,7 @@ func (ec *executionContext) _Query_listAllPrivileges(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.Privilege)
 	fc.Result = res
-	return ec.marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilegeᚄ(ctx, field.Selections, res)
+	return ec.marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_listAllPrivileges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6502,8 +6396,6 @@ func (ec *executionContext) fieldContext_Query_listAllPrivileges(ctx context.Con
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -6554,8 +6446,6 @@ func (ec *executionContext) fieldContext_Query_getPrivilegeByName(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -7136,76 +7026,8 @@ func (ec *executionContext) fieldContext_Role_privilege(ctx context.Context, fie
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
-			case "role":
-				return ec.fieldContext_Privilege_role(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Role_user(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Role_user(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.User, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.User)
-	fc.Result = res
-	return ec.marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Role_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Role",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "name":
-				return ec.fieldContext_User_name(ctx, field)
-			case "username":
-				return ec.fieldContext_User_username(ctx, field)
-			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "password":
-				return ec.fieldContext_User_password(ctx, field)
-			case "enabled":
-				return ec.fieldContext_User_enabled(ctx, field)
-			case "isUsing2FA":
-				return ec.fieldContext_User_isUsing2FA(ctx, field)
-			case "secret":
-				return ec.fieldContext_User_secret(ctx, field)
-			case "roles":
-				return ec.fieldContext_User_roles(ctx, field)
-			case "authTokens":
-				return ec.fieldContext_User_authTokens(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
 	}
 	return fc, nil
@@ -8777,9 +8599,9 @@ func (ec *executionContext) _User_roles(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Role)
+	res := resTmp.([]string)
 	fc.Result = res
-	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRoleᚄ(ctx, field.Selections, res)
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_roles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8789,73 +8611,7 @@ func (ec *executionContext) fieldContext_User_roles(ctx context.Context, field g
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Role_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
-			case "user":
-				return ec.fieldContext_Role_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _User_authTokens(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_authTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.AuthTokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.AuthToken)
-	fc.Result = res
-	return ec.marshalNAuthToken2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthTokenᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_User_authTokens(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "User",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_AuthToken_id(ctx, field)
-			case "token":
-				return ec.fieldContext_AuthToken_token(ctx, field)
-			case "tokenType":
-				return ec.fieldContext_AuthToken_tokenType(ctx, field)
-			case "expiryDate":
-				return ec.fieldContext_AuthToken_expiryDate(ctx, field)
-			case "user":
-				return ec.fieldContext_AuthToken_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AuthToken", field.Name)
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12120,11 +11876,6 @@ func (ec *executionContext) _Privilege(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "role":
-			out.Values[i] = ec._Privilege_role(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -12528,11 +12279,6 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "user":
-			out.Values[i] = ec._Role_user(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -12846,11 +12592,6 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "roles":
 			out.Values[i] = ec._User_roles(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "authTokens":
-			out.Values[i] = ec._User_authTokens(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -13247,60 +12988,6 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAuthToken2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthTokenᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.AuthToken) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNAuthToken2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthToken(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
-func (ec *executionContext) marshalNAuthToken2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthToken(ctx context.Context, sel ast.SelectionSet, v *model.AuthToken) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._AuthToken(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNAuthTokenResponse2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐAuthTokenResponse(ctx context.Context, sel ast.SelectionSet, v model.AuthTokenResponse) graphql.Marshaler {
 	return ec._AuthTokenResponse(ctx, sel, &v)
 }
@@ -13407,6 +13094,44 @@ func (ec *executionContext) unmarshalNMoveTaskInput2middleware_loaderᚋinfrastr
 
 func (ec *executionContext) marshalNPrivilege2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v model.Privilege) graphql.Marshaler {
 	return ec._Privilege(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v []*model.Privilege) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPrivilege2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilegeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Privilege) graphql.Marshaler {
@@ -13524,7 +13249,7 @@ func (ec *executionContext) marshalNRole2middleware_loaderᚋinfrastructureᚋgr
 	return ec._Role(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx context.Context, sel ast.SelectionSet, v []*model.Role) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -13548,7 +13273,7 @@ func (ec *executionContext) marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructur
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRole2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalORole2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -13558,12 +13283,6 @@ func (ec *executionContext) marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructur
 
 	}
 	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
 
 	return ret
 }
@@ -13735,7 +13454,7 @@ func (ec *executionContext) marshalNUser2middleware_loaderᚋinfrastructureᚋgr
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -13759,7 +13478,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructur
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -13769,12 +13488,6 @@ func (ec *executionContext) marshalNUser2ᚕᚖmiddleware_loaderᚋinfrastructur
 
 	}
 	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
 
 	return ret
 }
@@ -14092,11 +13805,25 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalOPrivilege2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v *model.Privilege) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Privilege(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOProject2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProject(ctx context.Context, sel ast.SelectionSet, v *model.Project) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Project(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalORole2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx context.Context, sel ast.SelectionSet, v *model.Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Role(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
@@ -14120,6 +13847,13 @@ func (ec *executionContext) marshalOTask2ᚖmiddleware_loaderᚋinfrastructure�
 		return graphql.Null
 	}
 	return ec._Task(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOUser2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

@@ -1,10 +1,10 @@
 type Query {
   # Authentication Service
-  listAllUsers: [User!]!
+  listAllUsers: [User]!
   getUserByUsername(input: UserInput!): User!
-  listAllRoles: [Role!]!
+  listAllRoles: [Role]!
   getRoleByName(input: RoleInput!): Role!
-  listAllPrivileges: [Privilege!]!
+  listAllPrivileges: [Privilege]!
   getPrivilegeByName(input: PrivilegeInput!): Privilege!
 
   # Task Manager

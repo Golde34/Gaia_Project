@@ -99,9 +99,8 @@ type MoveTaskInput struct {
 }
 
 type Privilege struct {
-	ID   string  `json:"id"`
-	Name string  `json:"name"`
-	Role []*Role `json:"role"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type PrivilegeInput struct {
@@ -126,7 +125,6 @@ type Role struct {
 	ID        string       `json:"id"`
 	Name      string       `json:"name"`
 	Privilege []*Privilege `json:"privilege"`
-	User      []*User      `json:"user"`
 }
 
 type RoleInput struct {
@@ -219,16 +217,15 @@ type UpdateTaskInput struct {
 }
 
 type User struct {
-	ID         string       `json:"id"`
-	Name       string       `json:"name"`
-	Username   string       `json:"username"`
-	Email      string       `json:"email"`
-	Password   string       `json:"password"`
-	Enabled    bool         `json:"enabled"`
-	IsUsing2fa bool         `json:"isUsing2FA"`
-	Secret     string       `json:"secret"`
-	Roles      []*Role      `json:"roles"`
-	AuthTokens []*AuthToken `json:"authTokens"`
+	ID         string   `json:"id"`
+	Name       string   `json:"name"`
+	Username   string   `json:"username"`
+	Email      string   `json:"email"`
+	Password   string   `json:"password"`
+	Enabled    bool     `json:"enabled"`
+	IsUsing2fa bool     `json:"isUsing2FA"`
+	Secret     string   `json:"secret"`
+	Roles      []string `json:"roles"`
 }
 
 type UserInput struct {

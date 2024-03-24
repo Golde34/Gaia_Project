@@ -8,8 +8,7 @@ type User {
   isUsing2FA: Boolean!
   secret: String!
 
-  roles: [Role!]!
-  authTokens: [AuthToken!]!
+  roles: [String!]!
 }
 
 input CreateUserInput {
