@@ -126,29 +126,33 @@ func ConvertOutput(output interface{}) string {
 }
 
 func ConvertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
-    outputKey := ""
-    switch fieldValue.Kind() {
-    case reflect.Struct, reflect.Interface:
-        subFields := ConvertOutput(fieldValue.Interface())
-        outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), subFields)
-    case reflect.Slice:
-        sliceOutput := make([]string, 0)
-        sliceElementType := fieldValue.Type().Elem()
-        if sliceElementType.Kind() == reflect.Ptr {
-            sliceElementType = sliceElementType.Elem()
-        }
-        newElement := reflect.New(sliceElementType).Elem()
-
-        // Convert the struct fields to a string
-        sliceOutput = append(sliceOutput, ConvertOutput(newElement.Interface()))
-        outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), strings.Join(sliceOutput, ", "))
-    default:
-        outputKey = field.Tag.Get("json")
-    }
-    return outputKey
+	outputKey := ""
+	switch fieldValue.Kind() {
+	case reflect.Struct, reflect.Interface:
+		subFields := ConvertOutput(fieldValue.Interface())
+		outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), subFields)
+	case reflect.Slice:
+		sliceOutput := make([]string, 0)
+		sliceElementType := fieldValue.Type().Elem()
+		if sliceElementType.Kind() == reflect.Ptr {
+			sliceElementType = sliceElementType.Elem()
+		}
+		newElement := reflect.New(sliceElementType).Elem()
+		if newElement.Kind() == reflect.Struct || newElement.Kind() == reflect.Interface {
+			// Convert the struct fields to a string
+			sliceOutput = append(sliceOutput, ConvertOutput(newElement.Interface()))
+			outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), strings.Join(sliceOutput, ", "))
+		} else {
+			outputKey = field.Tag.Get("json")
+		}
+	default:
+		outputKey = field.Tag.Get("json")
+	}
+	return outputKey
 }
 
 func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
+	log.Println(query)
 	// Wrap the query in a JSON object
 	jsonQuery := map[string]string{
 		"query": query,

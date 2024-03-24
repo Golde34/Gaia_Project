@@ -1,6 +1,6 @@
 type Query {
   # Authentication Service
-  listAllUsers: [User]!
+  listAllUsers: [ListAllUsers]!
   getUserByUsername(input: UserInput!): User!
   listAllRoles: [Role]!
   getRoleByName(input: RoleInput!): Role!

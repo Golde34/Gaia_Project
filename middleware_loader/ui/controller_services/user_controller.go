@@ -1,7 +1,6 @@
 package controller_services
 
 import (
-	"log"
 	"middleware_loader/core/domain/models"
 	// mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
@@ -15,10 +14,9 @@ import (
 func GetAllUsers(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
 	
 	graphqlQueryModel := []models.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllUsers", QueryInput: nil, QueryOutput: model.User{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllUsers", QueryInput: nil, QueryOutput: model.ListAllUsers{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
-	log.Println(graphqlQuery)
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 

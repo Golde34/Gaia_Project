@@ -92,6 +92,14 @@ type IDInput struct {
 	ID string `json:"id"`
 }
 
+type ListAllUsers struct {
+	ID        float64  `json:"id"`
+	Name      string   `json:"name"`
+	Username  string   `json:"username"`
+	LastLogin string   `json:"lastLogin"`
+	Roles     []string `json:"roles"`
+}
+
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
