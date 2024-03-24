@@ -51,12 +51,12 @@ const UpdateUserModal = (props) => {
         }
     }, [currentUser]);
     const handleRoleChange = (role) => {
-        const roleExists = roleList.some((r) => r.id === role.id);
+        const roleExists = roleList.some((r) => r === role.name);
 
         if (roleExists) {
-            setRoleList(roleList.filter((r) => r.id !== role.id));
+            setRoleList(roleList.filter((r) => r !== role.name));
         } else {
-            setRoleList([...roleList, role]);
+            setRoleList([...roleList, role.name]);
         }
     }
 
@@ -195,7 +195,7 @@ const UpdateUserModal = (props) => {
                                             ) : (
                                                 <>
                                                     <div className="mt-4">
-                                                        <p className="block text-md font-medium text-gray-700 mb-3">Priority</p>
+                                                        <p className="block text-md font-medium text-gray-700 mb-3">Role</p>
                                                         <div className="grid grid-cols-4 m-2">
                                                             <div className="inline-flex items-center">
                                                                 {roles.map((role) => (
@@ -205,7 +205,7 @@ const UpdateUserModal = (props) => {
                                                                             <input
                                                                                 id={`role-checkbox-${role.id}`}
                                                                                 type="checkbox"
-                                                                                checked={roleList.some((r) => r.id === role.id)}
+                                                                                checked={roleList.some((r) => r === role.name)}
                                                                                 onChange={() => handleRoleChange(role)}
                                                                                 className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-red-500 checked:bg-red-500 checked:before:bg-red-500 hover:before:opacity-10"
                                                                             />

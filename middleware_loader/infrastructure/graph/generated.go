@@ -93,6 +93,7 @@ type ComplexityRoot struct {
 	}
 
 	ListAllUsers struct {
+		Email     func(childComplexity int) int
 		ID        func(childComplexity int) int
 		LastLogin func(childComplexity int) int
 		Name      func(childComplexity int) int
@@ -515,6 +516,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupTask.UpdatedAt(childComplexity), true
+
+	case "ListAllUsers.email":
+		if e.complexity.ListAllUsers.Email == nil {
+			break
+		}
+
+		return e.complexity.ListAllUsers.Email(childComplexity), true
 
 	case "ListAllUsers.id":
 		if e.complexity.ListAllUsers.ID == nil {
@@ -3664,6 +3672,50 @@ func (ec *executionContext) fieldContext_ListAllUsers_username(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _ListAllUsers_email(ctx context.Context, field graphql.CollectedField, obj *model.ListAllUsers) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ListAllUsers_email(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ListAllUsers_email(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ListAllUsers",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ListAllUsers_lastLogin(ctx context.Context, field graphql.CollectedField, obj *model.ListAllUsers) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ListAllUsers_lastLogin(ctx, field)
 	if err != nil {
@@ -6423,6 +6475,8 @@ func (ec *executionContext) fieldContext_Query_listAllUsers(ctx context.Context,
 				return ec.fieldContext_ListAllUsers_name(ctx, field)
 			case "username":
 				return ec.fieldContext_ListAllUsers_username(ctx, field)
+			case "email":
+				return ec.fieldContext_ListAllUsers_email(ctx, field)
 			case "lastLogin":
 				return ec.fieldContext_ListAllUsers_lastLogin(ctx, field)
 			case "roles":
@@ -11965,6 +12019,11 @@ func (ec *executionContext) _ListAllUsers(ctx context.Context, sel ast.Selection
 			}
 		case "username":
 			out.Values[i] = ec._ListAllUsers_username(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "email":
+			out.Values[i] = ec._ListAllUsers_email(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

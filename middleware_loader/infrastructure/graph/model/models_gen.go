@@ -96,6 +96,7 @@ type ListAllUsers struct {
 	ID        float64  `json:"id"`
 	Name      string   `json:"name"`
 	Username  string   `json:"username"`
+	Email     string   `json:"email"`
 	LastLogin string   `json:"lastLogin"`
 	Roles     []string `json:"roles"`
 }

@@ -24,6 +24,7 @@ func (in *UserDTO) MapperToGraphQLModel(input UserDTO) model.ListAllUsers {
 	out.ID = input.ID
 	out.Name = input.Name
 	out.Username = input.Username
+	out.Email = input.Email
 	out.LastLogin = input.LastLogin
 	out.Roles = convertRoles(input.Roles) // Convert []interface{} to []string
 	return out
