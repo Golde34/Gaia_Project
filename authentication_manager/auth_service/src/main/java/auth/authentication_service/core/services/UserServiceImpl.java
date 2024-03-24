@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> getAllUsers() {
         try {
             List<User> users = userStore.findAll();
+            // List<UserResponse> userResponses = modelMapperConfig._mapperEntityToDto(users);
             _logger.log("Get all users", LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {

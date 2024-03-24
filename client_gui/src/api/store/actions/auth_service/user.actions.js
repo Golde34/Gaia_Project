@@ -5,12 +5,14 @@ import { USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS,
 
 const portName = {
     authPort: 'authenticationServicePort',
+    middlewarePort: 'middlewarePort'
 }
 
 export const getUsers = () => async (dispatch) => {
     dispatch({ type: USER_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.authPort, null);
+        const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.middlewarePort, null);
+        console.log(data.data)
         dispatch({ type: USER_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

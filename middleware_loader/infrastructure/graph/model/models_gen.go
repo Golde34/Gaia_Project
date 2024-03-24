@@ -52,6 +52,14 @@ type CreateTaskInput struct {
 	GroupTaskID  string   `json:"groupTaskId"`
 }
 
+type CreateUserInput struct {
+	Name             string `json:"name"`
+	Username         string `json:"username"`
+	Email            string `json:"email"`
+	Password         string `json:"password"`
+	MatchingPassword string `json:"matchingPassword"`
+}
+
 type GenerateTaskWithoutGroupTaskInput struct {
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
@@ -91,9 +99,13 @@ type MoveTaskInput struct {
 }
 
 type Privilege struct {
-	ID   string  `json:"id"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type PrivilegeInput struct {
+	ID   *string `json:"id,omitempty"`
 	Name string  `json:"name"`
-	Role []*Role `json:"role"`
 }
 
 type Project struct {
@@ -113,7 +125,11 @@ type Role struct {
 	ID        string       `json:"id"`
 	Name      string       `json:"name"`
 	Privilege []*Privilege `json:"privilege"`
-	User      []*User      `json:"user"`
+}
+
+type RoleInput struct {
+	ID   *string `json:"id,omitempty"`
+	Name string  `json:"name"`
 }
 
 type SigninInput struct {
@@ -201,16 +217,23 @@ type UpdateTaskInput struct {
 }
 
 type User struct {
-	ID         string       `json:"id"`
-	Name       string       `json:"name"`
-	Username   string       `json:"username"`
-	Email      string       `json:"email"`
-	Password   string       `json:"password"`
-	Enabled    bool         `json:"enabled"`
-	IsUsing2fa bool         `json:"isUsing2FA"`
-	Secret     string       `json:"secret"`
-	Roles      []*Role      `json:"roles"`
-	AuthTokens []*AuthToken `json:"authTokens"`
+	ID         float64 `json:"id"`
+	Name       string  `json:"name"`
+	Username   string  `json:"username"`
+	Email      string  `json:"email"`
+	Password   string  `json:"password"`
+	LastLogin  string  `json:"lastLogin"`
+	Enabled    bool    `json:"enabled"`
+	IsUsing2fa bool    `json:"isUsing2FA"`
+	Secret     string  `json:"secret"`
+	Roles      []*Role `json:"roles"`
+}
+
+type UserInput struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
 type UserPermissionInput struct {

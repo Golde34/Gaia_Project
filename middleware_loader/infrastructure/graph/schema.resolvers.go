@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
@@ -32,6 +33,51 @@ func (r *mutationResolver) CheckToken(ctx context.Context, input model.TokenInpu
 // CheckPermission is the resolver for the checkPermission field.
 func (r *mutationResolver) CheckPermission(ctx context.Context, input model.UserPermissionInput) (*model.UserPermissionResponse, error) {
 	panic(fmt.Errorf("not implemented: CheckPermission - checkPermission"))
+}
+
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+}
+
+// UpdateUser is the resolver for the updateUser field.
+func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
+}
+
+// DeleteUser is the resolver for the deleteUser field.
+func (r *mutationResolver) DeleteUser(ctx context.Context, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
+}
+
+// CreateRole is the resolver for the createRole field.
+func (r *mutationResolver) CreateRole(ctx context.Context, input model.RoleInput) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented: CreateRole - createRole"))
+}
+
+// UpdateRole is the resolver for the updateRole field.
+func (r *mutationResolver) UpdateRole(ctx context.Context, input model.RoleInput) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented: UpdateRole - updateRole"))
+}
+
+// DeleteRole is the resolver for the deleteRole field.
+func (r *mutationResolver) DeleteRole(ctx context.Context, input model.RoleInput) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented: DeleteRole - deleteRole"))
+}
+
+// CreatePrivilege is the resolver for the createPrivilege field.
+func (r *mutationResolver) CreatePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: CreatePrivilege - createPrivilege"))
+}
+
+// UpdatePrivilege is the resolver for the updatePrivilege field.
+func (r *mutationResolver) UpdatePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: UpdatePrivilege - updatePrivilege"))
+}
+
+// DeletePrivilege is the resolver for the deletePrivilege field.
+func (r *mutationResolver) DeletePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: DeletePrivilege - deletePrivilege"))
 }
 
 // CreateProject is the resolver for the createProject field.
@@ -117,6 +163,43 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 	panic(fmt.Errorf("not implemented: Enable - enable"))
 }
 
+// ListAllUsers is the resolver for the listAllUsers field.
+func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.User, error) {
+	log.Println("ListAllUsers resolver called!")
+	users, err := userService.ListAllUsers(ctx)
+	modelUser := []*model.User{}
+	for _, user := range users {
+		userCopy := user
+		modelUser = append(modelUser, &userCopy)
+	}
+	return modelUser, err
+}
+
+// GetUserByUsername is the resolver for the getUserByUsername field.
+func (r *queryResolver) GetUserByUsername(ctx context.Context, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: GetUserByUsername - getUserByUsername"))
+}
+
+// ListAllRoles is the resolver for the listAllRoles field.
+func (r *queryResolver) ListAllRoles(ctx context.Context) ([]*model.Role, error) {
+	panic(fmt.Errorf("not implemented: ListAllRoles - listAllRoles"))
+}
+
+// GetRoleByName is the resolver for the getRoleByName field.
+func (r *queryResolver) GetRoleByName(ctx context.Context, input model.RoleInput) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented: GetRoleByName - getRoleByName"))
+}
+
+// ListAllPrivileges is the resolver for the listAllPrivileges field.
+func (r *queryResolver) ListAllPrivileges(ctx context.Context) ([]*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: ListAllPrivileges - listAllPrivileges"))
+}
+
+// GetPrivilegeByName is the resolver for the getPrivilegeByName field.
+func (r *queryResolver) GetPrivilegeByName(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: GetPrivilegeByName - getPrivilegeByName"))
+}
+
 // ListAllProjects is the resolver for the listAllProjects field.
 func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, error) {
 	projects, err := projectService.ListAll(ctx)
@@ -159,16 +242,7 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
-}
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
-}
-func (r *queryResolver) UserByID(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: UserByID - userById"))
-}
-
 var authService = services.NewAuthService()
 var taskService = services.NewTaskService()
 var projectService = services.NewProjectService()
+var userService = services.NewUserService()

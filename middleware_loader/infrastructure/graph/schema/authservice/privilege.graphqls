@@ -1,6 +1,9 @@
 type Privilege {
  id: ID!
  name: String!
+}
 
- role: [Role!]!
+input PrivilegeInput {
+ id: String
+ name: String!
 }

@@ -29,7 +29,7 @@ public class GenericResponse<T> {
                         .statusMessage(Constants.HttpStatus.SUCCESS)
                         .errorCode(200)
                         .errorMessage(Constants.ErrorMessage.OK)
-                        .data(validation.message)
+                        .data(validation)
                         .build());
             }
             case msg400 -> {

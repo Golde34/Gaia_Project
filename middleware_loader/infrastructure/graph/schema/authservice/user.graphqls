@@ -1,13 +1,29 @@
 type User {
-  id: ID!
+  id: Float!
   name: String!
   username: String!
   email: String!
   password: String!
+  lastLogin: String!
   enabled: Boolean!
   isUsing2FA: Boolean!
   secret: String!
 
-  roles: [Role!]!
-  authTokens: [AuthToken!]!
+  roles: [Role]!
 }
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  matchingPassword: String!
+}
+
+input UserInput {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+}
+

@@ -84,11 +84,10 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models
 				}
 			`, action, graphQLQuery[i].Functionname, outputStr))
 		} else {
-			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
-			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
+			functionScripts = append(functionScripts, fmt.Sprintf(`%s {
 				%s
-			}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
+			}`, graphQLQuery[i].Functionname, outputStr))
 		}
 	}
 	return strings.Join(functionScripts, "\n")
@@ -119,9 +118,34 @@ func ConvertOutput(output interface{}) string {
 	outputValue := reflect.ValueOf(output)
 	outputKeys := make([]string, outputValue.NumField())
 	for i := 0; i < outputValue.NumField(); i++ {
-		outputKeys[i] = outputValue.Type().Field(i).Tag.Get("json")
+		field := outputValue.Type().Field(i)
+		fieldValue := outputValue.Field(i)
+		outputKeys[i] = ConvertSubFieldsOutput(field, fieldValue)
 	}
 	return strings.Join(outputKeys, ", ")
+}
+
+func ConvertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
+    outputKey := ""
+    switch fieldValue.Kind() {
+    case reflect.Struct, reflect.Interface:
+        subFields := ConvertOutput(fieldValue.Interface())
+        outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), subFields)
+    case reflect.Slice:
+        sliceOutput := make([]string, 0)
+        sliceElementType := fieldValue.Type().Elem()
+        if sliceElementType.Kind() == reflect.Ptr {
+            sliceElementType = sliceElementType.Elem()
+        }
+        newElement := reflect.New(sliceElementType).Elem()
+
+        // Convert the struct fields to a string
+        sliceOutput = append(sliceOutput, ConvertOutput(newElement.Interface()))
+        outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), strings.Join(sliceOutput, ", "))
+    default:
+        outputKey = field.Tag.Get("json")
+    }
+    return outputKey
 }
 
 func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
