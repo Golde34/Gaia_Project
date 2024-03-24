@@ -1,7 +1,12 @@
 type Role {
- id: ID!
- name: String!
+    id: ID!
+    name: String!
 
- privilege: [Privilege!]!
- user: [User!]!
+    privilege: [Privilege!]!
+    user: [User!]!
+}
+
+input RoleInput {
+    id: String
+    name: String!
 }

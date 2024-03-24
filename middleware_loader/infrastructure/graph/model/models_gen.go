@@ -52,6 +52,14 @@ type CreateTaskInput struct {
 	GroupTaskID  string   `json:"groupTaskId"`
 }
 
+type CreateUserInput struct {
+	Name             string `json:"name"`
+	Username         string `json:"username"`
+	Email            string `json:"email"`
+	Password         string `json:"password"`
+	MatchingPassword string `json:"matchingPassword"`
+}
+
 type GenerateTaskWithoutGroupTaskInput struct {
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
@@ -96,6 +104,11 @@ type Privilege struct {
 	Role []*Role `json:"role"`
 }
 
+type PrivilegeInput struct {
+	ID   *string `json:"id,omitempty"`
+	Name string  `json:"name"`
+}
+
 type Project struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
@@ -114,6 +127,11 @@ type Role struct {
 	Name      string       `json:"name"`
 	Privilege []*Privilege `json:"privilege"`
 	User      []*User      `json:"user"`
+}
+
+type RoleInput struct {
+	ID   *string `json:"id,omitempty"`
+	Name string  `json:"name"`
 }
 
 type SigninInput struct {
@@ -211,6 +229,13 @@ type User struct {
 	Secret     string       `json:"secret"`
 	Roles      []*Role      `json:"roles"`
 	AuthTokens []*AuthToken `json:"authTokens"`
+}
+
+type UserInput struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
 type UserPermissionInput struct {

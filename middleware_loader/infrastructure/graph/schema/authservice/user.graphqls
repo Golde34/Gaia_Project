@@ -11,3 +11,19 @@ type User {
   roles: [Role!]!
   authTokens: [AuthToken!]!
 }
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  matchingPassword: String!
+}
+
+input UserInput {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+}
+

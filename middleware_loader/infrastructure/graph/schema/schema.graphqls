@@ -1,6 +1,11 @@
 type Query {
   # Authentication Service
-  
+  listAllUsers: [User!]!
+  getUserByUsername(input: UserInput!): User!
+  listAllRoles: [Role!]!
+  getRoleByName(input: RoleInput!): Role!
+  listAllPrivileges: [Privilege!]!
+  getPrivilegeByName(input: PrivilegeInput!): Privilege!
 
   # Task Manager
   listAllProjects: [Project]!
@@ -15,6 +20,19 @@ type Mutation {
   gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
   checkToken(input: TokenInput!): TokenResponse!
   checkPermission(input: UserPermissionInput!): UserPermissionResponse!
+ 
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UserInput!): User!
+  deleteUser(input: UserInput!): User!
+  
+  createRole(input: RoleInput!): Role!
+  updateRole(input: RoleInput!): Role!
+  deleteRole(input: RoleInput!): Role!
+  
+  createPrivilege(input: PrivilegeInput!): Privilege!
+  updatePrivilege(input: PrivilegeInput!): Privilege!
+  deletePrivilege(input: PrivilegeInput!): Privilege!
+  
   # Task Manager
   createProject(input: CreateProjectInput!): Project!
   updateProject(input: UpdateProjectInput!): Project!
