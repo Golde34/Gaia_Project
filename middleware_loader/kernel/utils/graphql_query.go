@@ -152,6 +152,7 @@ func ConvertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value)
 }
 
 func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
+	log.Println(query)
 	// Wrap the query in a JSON object
 	jsonQuery := map[string]string{
 		"query": query,

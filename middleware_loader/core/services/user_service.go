@@ -26,7 +26,6 @@ func (s *UserService) ListAllUsers(ctx context.Context) ([]model.ListAllUsers, e
 		return nil, err
 	}
 	usersModel := userResponse.MapperListToGraphQLModel(users)
-	log.Println("usersModel: ", usersModel)
 	return usersModel, nil 
 }
 

@@ -1,9 +1,6 @@
 package response_dtos
 
-import (
-	"log"
-	"middleware_loader/infrastructure/graph/model"
-)
+import "middleware_loader/infrastructure/graph/model"
 
 type UserDTO struct {
 	ID         float64       `json:"id"`
@@ -36,12 +33,9 @@ func convertRoles(roles []interface{}) []string {
 	var out []string
 	for _, role := range roles {
 		roleMap := role.(map[string]interface{})
-		log.Println("roleMap: ", roleMap)
 		roleName := roleMap["name"].(string)
-		log.Println("roleName: ", roleName)
 		out = append(out, roleName)
 	}
-	log.Println("out: ", out)
 	return out
 }
 
