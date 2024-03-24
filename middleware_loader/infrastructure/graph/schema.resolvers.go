@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"fmt"
-	"log"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 )
