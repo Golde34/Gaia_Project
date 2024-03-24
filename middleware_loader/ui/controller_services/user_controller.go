@@ -15,7 +15,7 @@ import (
 func GetAllUsers(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
 	
 	graphqlQueryModel := []models.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllUsers", QueryInput: nil, QueryOutput: model.User{}})
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllUsers", QueryInput: nil, QueryOutput: model.ListAllUsers{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	log.Println(graphqlQuery)

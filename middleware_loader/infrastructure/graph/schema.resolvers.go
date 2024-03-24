@@ -164,10 +164,10 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 }
 
 // ListAllUsers is the resolver for the listAllUsers field.
-func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.User, error) {
+func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error) {
 	log.Println("ListAllUsers resolver called!")
 	users, err := userService.ListAllUsers(ctx)
-	modelUser := []*model.User{}
+	modelUser := []*model.ListAllUsers{}
 	for _, user := range users {
 		userCopy := user
 		modelUser = append(modelUser, &userCopy)

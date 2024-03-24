@@ -6,5 +6,5 @@ import (
 )
 
 type UserService interface {
-	ListAllUsers(ctx context.Context) ([]model.User, error)
+	ListAllUsers(ctx context.Context) ([]model.ListAllUsers, error)
 }

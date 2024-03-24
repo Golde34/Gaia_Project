@@ -27,3 +27,10 @@ input UserInput {
   email: String!
 }
 
+type ListAllUsers {
+  id: Float!
+  name: String!
+  username: String!
+  lastLogin: String!
+  roles: [String!]!
+}

@@ -1,7 +1,7 @@
 package adapter_interface
 
-import "middleware_loader/infrastructure/graph/model"
+import response_dtos "middleware_loader/core/domain/dtos/response"
 
 type IUserAdapter interface {
-	ListAllUsers() ([]model.User, error)
+	ListAllUsers() ([]response_dtos.UserDTO, error)
 }
