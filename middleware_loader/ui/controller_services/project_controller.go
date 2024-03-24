@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"log"
 	"middleware_loader/core/domain/models"
 	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
@@ -18,6 +19,7 @@ func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.Pr
 	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
+	log.Println(graphqlQuery)
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 	
 }

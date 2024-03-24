@@ -1,14 +1,15 @@
 type User {
-  id: ID!
+  id: Float!
   name: String!
   username: String!
   email: String!
   password: String!
+  lastLogin: String!
   enabled: Boolean!
   isUsing2FA: Boolean!
   secret: String!
 
-  roles: [String!]!
+  roles: [Role]!
 }
 
 input CreateUserInput {

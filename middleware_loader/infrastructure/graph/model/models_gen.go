@@ -217,15 +217,16 @@ type UpdateTaskInput struct {
 }
 
 type User struct {
-	ID         string   `json:"id"`
-	Name       string   `json:"name"`
-	Username   string   `json:"username"`
-	Email      string   `json:"email"`
-	Password   string   `json:"password"`
-	Enabled    bool     `json:"enabled"`
-	IsUsing2fa bool     `json:"isUsing2FA"`
-	Secret     string   `json:"secret"`
-	Roles      []string `json:"roles"`
+	ID         float64 `json:"id"`
+	Name       string  `json:"name"`
+	Username   string  `json:"username"`
+	Email      string  `json:"email"`
+	Password   string  `json:"password"`
+	LastLogin  string  `json:"lastLogin"`
+	Enabled    bool    `json:"enabled"`
+	IsUsing2fa bool    `json:"isUsing2FA"`
+	Secret     string  `json:"secret"`
+	Roles      []*Role `json:"roles"`
 }
 
 type UserInput struct {
