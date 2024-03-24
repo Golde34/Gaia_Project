@@ -75,7 +75,7 @@ const UserListScreen = (props) => {
                                         <TableCell>{user.id}</TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.username}</TableCell>
-                                        <TableCell>{user.roles.map((role) => role.name + " ")}</TableCell>
+                                        <TableCell>{user.roles.map((role) => role + " ")}</TableCell>
                                         <TableCell>{user.lastLogin}</TableCell>
                                         <TableCell>
                                             <button
