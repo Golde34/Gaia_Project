@@ -12,16 +12,8 @@ type User {
   roles: [Role]!
 }
 
-input CreateUserInput {
-  name: String!
-  username: String!
-  email: String!
-  password: String!
-  matchingPassword: String!
-}
-
 input UserInput {
-  id: ID!
+  id: Float!
   name: String!
   username: String!
   email: String!
@@ -33,5 +25,21 @@ type ListAllUsers {
   username: String!
   email: String!
   lastLogin: String!
+  roles: [String!]!
+}
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  matchingPassword: String!
+}
+
+input UpdateUserInput {
+  userId: Float!
+  name: String!
+  username: String!
+  email: String!
   roles: [String!]!
 }

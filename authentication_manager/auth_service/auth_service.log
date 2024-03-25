@@ -42,3 +42,6 @@
 2024-03-25T00:15:57.900+07:00  INFO 9475 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Get all users
 2024-03-25T00:31:04.505+07:00  INFO 9475 --- [http-nio-4001-exec-6] a.a.core.services.RoleServiceImpl        : Get all roles
 2024-03-25T00:31:43.841+07:00  INFO 9475 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-25T00:45:21.787+07:00  INFO 9475 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-25T00:45:21.792+07:00  INFO 9475 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-03-25T00:45:21.799+07:00  INFO 9475 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

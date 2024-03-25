@@ -225,6 +225,14 @@ type UpdateTaskInput struct {
 	TaskID       string   `json:"taskId"`
 }
 
+type UpdateUserInput struct {
+	UserID   float64  `json:"userId"`
+	Name     string   `json:"name"`
+	Username string   `json:"username"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles"`
+}
+
 type User struct {
 	ID         float64 `json:"id"`
 	Name       string  `json:"name"`
@@ -239,10 +247,10 @@ type User struct {
 }
 
 type UserInput struct {
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	ID       float64 `json:"id"`
+	Name     string  `json:"name"`
+	Username string  `json:"username"`
+	Email    string  `json:"email"`
 }
 
 type UserPermissionInput struct {

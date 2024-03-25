@@ -2,12 +2,11 @@ package controller_services
 
 import (
 	"middleware_loader/core/domain/models"
-	// mapper "middleware_loader/core/port/mapper/request"
+	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
-
-	// "middleware_loader/ui/controller_services/controller_utils"
+	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
 )
 
@@ -32,3 +31,20 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request, userService *services.U
 // 	graphQuery := utils.GenerateGraphQLQueryWithInput("query", "getUserByUsername", model.UserInput{Username: username}, model.User{})
 // 	utils.ConnectToGraphQLServer(w, graphQuery)
 // }
+
+func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	input := mapper.UpdateUserRequestDTOMapper(body)
+
+	graphqlQueryModel := []models.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, models.GraphQLQuery{Functionname: "updateUser", QueryInput: input, QueryOutput: model.User{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
