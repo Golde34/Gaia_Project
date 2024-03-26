@@ -5,8 +5,8 @@ import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
 	"middleware_loader/core/domain/enums"
-	port "middleware_loader/core/port/repository_interface"
-	"middleware_loader/infrastructure/repository"
+	store_adapter "middleware_loader/infrastructure/store/adapter"
+	"middleware_loader/infrastructure/store/repository"
 	database_mongo "middleware_loader/kernel/database/mongo"
 )
 
@@ -25,7 +25,7 @@ func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context conte
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
 
-	microservice, err := port.IMicroserviceConfigurationRepository(
+	microservice, err := store_adapter.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetMicroserviceByName(context, microserviceRequest)
 	if err != nil {
@@ -41,7 +41,7 @@ func (store *MicroserviceConfigurationStore) GetMicroserviceByName(context conte
 func (store *MicroserviceConfigurationStore) GetAllMicroservices(context context.Context) ([]result_dto.MicroserviceResultDTO, error) {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	microservices, err := port.IMicroserviceConfigurationRepository(
+	microservices, err := store_adapter.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetAllMicroservices(context)
 	if err != nil {
@@ -65,7 +65,7 @@ func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Con
 	microserviceRequest request_dtos.MicroserviceConfigurationDTO) error {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	_, err := port.IMicroserviceConfigurationRepository(
+	_, err := store_adapter.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).GetMicroservice(context, microserviceRequest)
 	if err != nil {
@@ -77,7 +77,7 @@ func (store *MicroserviceConfigurationStore) GetMicroservice(context context.Con
 func (store *MicroserviceConfigurationStore) InsertMicroservice(context context.Context,
 	microservice request_dtos.InsertMicroserviceConfigurationDTO) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
-	result, err := port.IMicroserviceConfigurationRepository(
+	result, err := store_adapter.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{
 			Database:   store.Database,
 			Collection: collection,
@@ -93,7 +93,7 @@ func (store *MicroserviceConfigurationStore) UpdateMicroservice(context context.
 	microserviceRequest request_dtos.UpdateMicroserviceConfigurationDTO) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
-	result, err := port.IMicroserviceConfigurationRepository(
+	result, err := store_adapter.IMicroserviceConfigurationRepository(
 		&repository.MicroserviceConfigurationRepository{Database: db, Collection: collection},
 	).UpdateMicroservice(context, microserviceRequest)
 	if err != nil {

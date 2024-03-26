@@ -1,4 +1,4 @@
-package models
+package base_dtos 
 
 type ErrorResponse struct {
 	Status        string      `json:"status"`

@@ -2,10 +2,10 @@ package services
 
 import (
 	"context"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	request_dtos "middleware_loader/core/domain/dtos/request"
-	"middleware_loader/core/domain/models"
+	"middleware_loader/core/port/store"
 	"middleware_loader/core/services/base"
-	"middleware_loader/core/store"
 	"time"
 )
 
@@ -17,7 +17,7 @@ func NewUrlPermissionService(store store.UrlPermissionConfigurationStore) *URLPe
 	return &URLPermissionService{store}
 }
 
-func (s *URLPermissionService) GetURLPermission(input request_dtos.UrlPermissionDTO) models.ErrorResponse {
+func (s *URLPermissionService) GetURLPermission(input request_dtos.UrlPermissionDTO) base_dtos.ErrorResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	result := s.Store.GetUrlPermission(ctx, input)

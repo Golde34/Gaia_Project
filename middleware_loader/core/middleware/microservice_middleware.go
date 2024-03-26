@@ -2,9 +2,9 @@ package middleware
 
 import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
-	"middleware_loader/core/domain/models"
+	"middleware_loader/core/domain/dtos/base"
 	"middleware_loader/core/services"
-	"middleware_loader/core/store"
+	"middleware_loader/core/port/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"net/http"
 )
@@ -30,7 +30,7 @@ func CheckMicroserviceStatus(db database_mongo.Database, microserviceName string
     }
 }
 
-func isServiceActive(db database_mongo.Database, microserviceName string) (models.ErrorResponse, error) {
+func isServiceActive(db database_mongo.Database, microserviceName string) (base_dtos.ErrorResponse, error) {
 	var microservice request_dtos.GetMicroserviceConfigurationDTO
 	microservice.MicroserviceName = microserviceName
 	microserviceConfigService := services.NewMicroserviceConfigurationService(

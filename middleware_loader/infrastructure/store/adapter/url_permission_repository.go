@@ -1,4 +1,4 @@
-package repository_interface
+package store_adapter 
 
 import (
 	"context"

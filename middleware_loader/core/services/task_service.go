@@ -5,10 +5,10 @@ import (
 	"log"
 
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	port "middleware_loader/core/port/adapter_interface"
+	"middleware_loader/core/port/client"
 	"middleware_loader/core/services/base"
 	"middleware_loader/core/validator"
-	"middleware_loader/infrastructure/adapter"
+	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
 )
 
@@ -24,7 +24,7 @@ var taskValidator = validator.NewTaskDTOValidator()
 var taskResponse = response_dtos.NewCreateTaskResponseDTO()
 
 func (s *TaskService) ListAllTasks(ctx context.Context) ([]model.Task, error) {
-	tasks, err := port.ITaskAdapter(&adapter.TaskAdapter{}).GetAllTasks()
+	tasks, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetAllTasks()
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (s *TaskService) ListAllTasks(ctx context.Context) ([]model.Task, error) {
 }
 
 func (s *TaskService) GetTaskById(ctx context.Context, id string) (model.Task, error) {
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).GetTaskById(id)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetTaskById(id)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -52,7 +52,7 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 
 	input.Priority = base.ConvertStringToArray(input.Priority)
 
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).CreateTask(input)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).CreateTask(input)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -71,7 +71,7 @@ func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInpu
 	input.Priority = base.ConvertStringToArray(input.Priority)
 	taskId := input.TaskID
 
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).UpdateTask(input, taskId)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).UpdateTask(input, taskId)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -81,7 +81,7 @@ func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInpu
 }
 
 func (s *TaskService) DeleteTask(ctx context.Context, input model.IDInput) (model.Task, error) {
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).DeleteTask(input.ID)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).DeleteTask(input.ID)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -97,7 +97,7 @@ func (s *TaskService) GenerateTaskWithoutGroupTask(ctx context.Context, input mo
 	}
 	log.Println("Validation passed!")
 
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).GenerateTaskWithoutGroupTask(input)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GenerateTaskWithoutGroupTask(input)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -113,7 +113,7 @@ func (s *TaskService) UpdateTaskInDialog(ctx context.Context, input model.Update
 	}
 	log.Println("Validation passed!")
 
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).UpdateTaskInDialog(input, input.TaskID)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).UpdateTaskInDialog(input, input.TaskID)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -129,7 +129,7 @@ func (s *TaskService) MoveTask(ctx context.Context, input model.MoveTaskInput) (
 	}
 	log.Println("Validation passed!")
 
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).MoveTask(input, input.TaskID)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).MoveTask(input, input.TaskID)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -139,7 +139,7 @@ func (s *TaskService) MoveTask(ctx context.Context, input model.MoveTaskInput) (
 }
 
 func (s *TaskService) ArchiveTask(ctx context.Context, input model.IDInput) (model.Task, error) {
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).ArchiveTask(input.ID)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).ArchiveTask(input.ID)
 	if err != nil {
 		return model.Task{}, err
 	} else {
@@ -149,7 +149,7 @@ func (s *TaskService) ArchiveTask(ctx context.Context, input model.IDInput) (mod
 }
 
 func (s *TaskService) EnableTask(ctx context.Context, input model.IDInput) (model.Task, error) {
-	task, err := port.ITaskAdapter(&adapter.TaskAdapter{}).EnableTask(input.ID)
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).EnableTask(input.ID)
 	if err != nil {
 		return model.Task{}, err
 	} else {

@@ -4,11 +4,11 @@ import (
 	"context"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	result_dto "middleware_loader/core/domain/dtos/result"
-	"middleware_loader/core/domain/models"
-	port "middleware_loader/core/port/adapter_interface"
+	"middleware_loader/core/domain/dtos/base"
+	"middleware_loader/core/port/client"
 	"middleware_loader/core/services/base"
-	"middleware_loader/core/store"
-	"middleware_loader/infrastructure/adapter"
+	"middleware_loader/core/port/store"
+	adapter "middleware_loader/infrastructure/client"
 	"time"
 )
 
@@ -20,12 +20,12 @@ func NewMicroserviceConfigurationService(store store.MicroserviceConfigurationSt
 	return &MicroserviceConfigurationService{store}
 }
 
-func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request_dtos.GetMicroserviceConfigurationDTO) (models.ErrorResponse, error) {
+func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request_dtos.GetMicroserviceConfigurationDTO) (base_dtos.ErrorResponse, error) {
 	microservice, err := s.getMicroserviceByName(input)
 	if err != nil {
 		result, err := s.callMicroservice(input)
 		if err != nil {
-			return models.ErrorResponse{}, err
+			return base_dtos.ErrorResponse{}, err
 		} else {
 			s.InsertMicroservice(request_dtos.InsertMicroserviceConfigurationDTO{
 				MicroserviceName: result.MicroserviceName,
@@ -39,7 +39,7 @@ func (s *MicroserviceConfigurationService) CheckMicroserviceStatus(input request
 	if !microservice.Status {
 		result, err := s.callMicroservice(input)
 		if err != nil {
-			return models.ErrorResponse{}, err
+			return base_dtos.ErrorResponse{}, err
 		} else {
 			s.UpdateMicroservice(request_dtos.UpdateMicroserviceConfigurationDTO{
 				MicroserviceName: result.MicroserviceName,
@@ -65,7 +65,7 @@ func (s *MicroserviceConfigurationService) getMicroserviceByName(input request_d
 }
 
 func (s *MicroserviceConfigurationService) callMicroservice(input request_dtos.GetMicroserviceConfigurationDTO) (result_dto.MicroserviceResultDTO, error) {
-	microservice, err := port.IMicroserviceAdapter(&adapter.MicroserviceAdapter{}).GetMicroserviceByName(input.MicroserviceName)
+	microservice, err := client.IMicroserviceAdapter(&adapter.MicroserviceAdapter{}).GetMicroserviceByName(input.MicroserviceName)
 	if err != nil {
 		return result_dto.MicroserviceResultDTO{}, err
 	}
@@ -101,7 +101,7 @@ func (s *MicroserviceConfigurationService) GetMicroservice(input request_dtos.Mi
 	return s.Store.GetMicroservice(ctx, input)
 }
 
-func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.InsertMicroserviceConfigurationDTO) models.ErrorResponse {
+func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos.InsertMicroserviceConfigurationDTO) base_dtos.ErrorResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -125,7 +125,7 @@ func (s *MicroserviceConfigurationService) InsertMicroservice(input request_dtos
 	return base.ReturnErrorResponse(400, "Microservice already exist")
 }
 
-func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.UpdateMicroserviceConfigurationDTO) models.ErrorResponse {
+func (s *MicroserviceConfigurationService) UpdateMicroservice(input request_dtos.UpdateMicroserviceConfigurationDTO) base_dtos.ErrorResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

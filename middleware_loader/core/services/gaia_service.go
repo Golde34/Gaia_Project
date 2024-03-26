@@ -5,7 +5,7 @@ import (
 	"log"
 
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	"middleware_loader/infrastructure/adapter/base"
+	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
 )
 

@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	port "middleware_loader/core/port/adapter_interface"
+	"middleware_loader/core/port/client"
 	"middleware_loader/core/validator"
-	"middleware_loader/infrastructure/adapter"
+	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
 )
 
@@ -21,7 +21,7 @@ var userValidation = validator.NewUserDTOValidator()
 var userResponse = response_dtos.NewUserDTO()
 
 func (s *UserService) ListAllUsers(ctx context.Context) ([]model.ListAllUsers, error) {
-	users, err := port.IUserAdapter(&adapter.UserAdapter{}).ListAllUsers()
+	users, err := client.IUserAdapter(&adapter.UserAdapter{}).ListAllUsers()
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +35,18 @@ func (s *UserService) CreateUser(ctx context.Context, input model.CreateUserInpu
 		return model.User{}, err
 	}
 	log.Println("Validation passed!")
+
+	return model.User{}, nil
+}
+
+func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInput) (model.User, error) {
+	err := userValidation.UpdateUserValidate(input)
+	if err != nil {
+		return model.User{}, err
+	}
+	log.Println("Validation passed!")
+
+
 
 	return model.User{}, nil
 }

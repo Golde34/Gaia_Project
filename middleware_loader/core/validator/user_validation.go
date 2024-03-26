@@ -32,3 +32,19 @@ func (in *UserValidator) CreateUserValidate(input model.CreateUserInput) error {
 
 	return nil
 }
+
+func (in *UserValidator) UpdateUserValidate(input model.UpdateUserInput) error {
+	if input.Name == "" {
+		return fmt.Errorf("%w: name is required", enums.ErrValidation)
+	}
+
+	if input.Username == "" {
+		return fmt.Errorf("%w: username is required", enums.ErrValidation)
+	}
+
+	if input.Email == "" {
+		return fmt.Errorf("%w: email is required", enums.ErrValidation)
+	}
+
+	return nil
+}

@@ -1,11 +1,11 @@
-package adapter
+package client_adapter
 
 import (
 	"encoding/json"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
-	"middleware_loader/infrastructure/adapter/base"
+	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
 )
 

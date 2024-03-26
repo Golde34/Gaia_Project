@@ -5,9 +5,9 @@ import (
 	"log"
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	port "middleware_loader/core/port/adapter_interface"
+	"middleware_loader/core/port/client"
 	"middleware_loader/core/validator"
-	"middleware_loader/infrastructure/adapter"
+	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
 )
 
@@ -22,7 +22,7 @@ var projectValidation = validator.NewProjectDTOValidator()
 var projectResponse = response_dtos.NewCreateProjectResponseDTO()
 
 func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
-	projects, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).ListAll()
+	projects, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).ListAll()
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
 }
 
 func (s *ProjectService) GetById(ctx context.Context, id string) (model.Project, error) {
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).GetById(id)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).GetById(id)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -48,7 +48,7 @@ func (s *ProjectService) CreateProject(ctx context.Context, input model.CreatePr
 	}
 	log.Println("Validation passed!")
 
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).CreateProject(input)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).CreateProject(input)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -65,7 +65,7 @@ func (s *ProjectService) UpdateProject(ctx context.Context, input model.UpdatePr
 	log.Println("Validation passed!")
 
 	projectId := input.ProjectID
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProject(input, projectId)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProject(input, projectId)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -75,7 +75,7 @@ func (s *ProjectService) UpdateProject(ctx context.Context, input model.UpdatePr
 }
 
 func (s *ProjectService) DeleteProject(ctx context.Context, input model.IDInput) (model.Project, error) {
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).DeleteProject(input.ID)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).DeleteProject(input.ID)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -95,7 +95,7 @@ func (s *ProjectService) UpdateProjectName(ctx context.Context, input model.Upda
 	projectRequestModel := converter_dtos.UpdateNameConverterDTO{
 		Name: input.Name,
 	}
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectName(projectRequestModel, projectId)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectName(projectRequestModel, projectId)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -115,7 +115,7 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 	projectRequestModel := converter_dtos.UpdateColorConverterDTO{
 		Color: input.Color,
 	}
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectColor(projectRequestModel, projectId)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).UpdateProjectColor(projectRequestModel, projectId)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -125,7 +125,7 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 }
 
 func (s *ProjectService) ArchiveProject(ctx context.Context, input model.IDInput) (model.Project, error) {
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).ArchiveProject(input.ID)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).ArchiveProject(input.ID)
 	if err != nil {
 		return model.Project{}, err
 	} else {
@@ -135,7 +135,7 @@ func (s *ProjectService) ArchiveProject(ctx context.Context, input model.IDInput
 }
 
 func (s *ProjectService) EnableProject(ctx context.Context, input model.IDInput) (model.Project, error) {
-	project, err := port.IProjectAdapter(&adapter.ProjectAdapter{}).EnableProject(input.ID)
+	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).EnableProject(input.ID)
 	if err != nil {
 		return model.Project{}, err
 	} else {

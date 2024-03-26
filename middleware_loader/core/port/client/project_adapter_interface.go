@@ -1,4 +1,4 @@
-package adapter_interface
+package client 
 
 import (
 	converter_dtos "middleware_loader/core/domain/dtos/converter"

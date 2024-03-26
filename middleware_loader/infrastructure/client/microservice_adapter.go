@@ -1,9 +1,9 @@
-package adapter
+package client_adapter
 
 import (
 	"middleware_loader/core/domain/enums"
-	"middleware_loader/core/domain/models"
-	"middleware_loader/infrastructure/adapter/base"
+	"middleware_loader/core/domain/dtos/base"
+	"middleware_loader/infrastructure/client/base"
 )
 
 type MicroserviceAdapter struct {
@@ -14,20 +14,20 @@ func NewMicroserviceAdapter(adapter *MicroserviceAdapter) *MicroserviceAdapter {
 	return &MicroserviceAdapter{adapter: adapter}
 }
 
-func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName string) (models.ErrorResponse, error) {
+func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName string) (base_dtos.ErrorResponse, error) {
 	microserviceUrl := getMicroserviceUrlByName(microserviceName)
 	microserviceUrl = microserviceUrl + "/status"
 
 	bodyResult, err := base.FullResponseBaseAPI(microserviceUrl, "GET", nil)
 	if err != nil {
-		return models.ErrorResponse{}, err
+		return base_dtos.ErrorResponse{}, err
 	}
 	
-	var microserviceStatus models.ErrorResponse
-	if errResp, ok := bodyResult.(models.ErrorResponse); ok {
+	var microserviceStatus base_dtos.ErrorResponse
+	if errResp, ok := bodyResult.(base_dtos.ErrorResponse); ok {
 		microserviceStatus = errResp
 	} else {
-		return models.ErrorResponse{}, err
+		return base_dtos.ErrorResponse{}, err
 	}
 	return microserviceStatus, nil
 }

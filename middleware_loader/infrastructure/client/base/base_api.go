@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"middleware_loader/core/domain/enums"
-	"middleware_loader/core/domain/models"
+	"middleware_loader/core/domain/dtos/base"
 	"net/http"
 	"time"
 )
@@ -58,7 +58,7 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	}
 
 	// map body to Error Response
-	var response models.ErrorResponse
+	var response base_dtos.ErrorResponse
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -71,7 +71,7 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	return returnResponseType(response, bodyType)
 }
 
-func returnResponseType(response models.ErrorResponse, bodyMessageType string) (interface{}, error) {
+func returnResponseType(response base_dtos.ErrorResponse, bodyMessageType string) (interface{}, error) {
 	switch bodyMessageType {
 	case enums.OnlyData:
 		return response.Data, nil
@@ -84,14 +84,14 @@ func returnResponseType(response models.ErrorResponse, bodyMessageType string) (
 
 func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
 	if err != nil {
-		return models.ErrorResponse{
+		return base_dtos.ErrorResponse{
 			Status:        "Error",
 			StatusMessage: "Internal Server Error",
 			ErrorCode:     500,
 			ErrorMessage:  statusMessage,
 		}, err
 	}
-	return models.ErrorResponse{
+	return base_dtos.ErrorResponse{
 		Status:        "Success",
 		StatusMessage: "Success",
 		ErrorCode:     200,

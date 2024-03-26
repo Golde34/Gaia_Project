@@ -24,9 +24,9 @@ func NewUserRouter(userService *services.UserService, db database_mongo.Database
 		// r.Post("/create-user", func(w http.ResponseWriter, r *http.Request) {
 		// 	controller_services.CreateUser(w, r, userService)
 		// })
-		// r.Put("/update-user", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.UpdateUser(w, r, userService)
-		// })
+		r.Put("/update-user", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateUser(w, r, userService)
+		})
 		// r.Delete("/delete-user", func(w http.ResponseWriter, r *http.Request) {
 		// 	controller_services.DeleteUser(w, r, userService)
 		// })

@@ -6,9 +6,9 @@ import (
 
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	port "middleware_loader/core/port/adapter_interface"
+	"middleware_loader/core/port/client"
 	"middleware_loader/core/validator"
-	"middleware_loader/infrastructure/adapter"
+	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
 )
 
@@ -30,7 +30,7 @@ func (s *AuthService) Signin(ctx context.Context, input model.SigninInput) (mode
 	}	
 	log.Println("Validation passed!")
 
-	authTokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).Signin(input)
+	authTokenResponse , err := client.IAuthAdapter(&adapter.AuthAdapter{}).Signin(input)
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	} else {
@@ -46,7 +46,7 @@ func (s *AuthService) GaiaAutoSignin(ctx context.Context, input model.SigninInpu
 	}
 	log.Println("Validation passed!")
 
-	authTokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).GaiaAutoSignin(input)
+	authTokenResponse , err := client.IAuthAdapter(&adapter.AuthAdapter{}).GaiaAutoSignin(input)
 	if err != nil {
 		return model.AuthTokenResponse{}, err
 	} else {
@@ -62,7 +62,7 @@ func (s *AuthService) CheckToken(ctx context.Context, input model.TokenInput) (m
 	}
 	log.Println("Validation passed!")
 
-	tokenResponse , err := port.IAuthAdapter(&adapter.AuthAdapter{}).CheckToken(input)
+	tokenResponse , err := client.IAuthAdapter(&adapter.AuthAdapter{}).CheckToken(input)
 	if err != nil {
 		return model.TokenResponse{}, err
 	} else {

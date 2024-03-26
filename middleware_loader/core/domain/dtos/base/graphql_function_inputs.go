@@ -1,4 +1,4 @@
-package models
+package base_dtos 
 
 type GraphQLQuery struct {
 	Functionname string

@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"strings"
 
-	"middleware_loader/core/domain/models"
+	"middleware_loader/core/domain/dtos/base"
 )
 
 func GenerateGraphQLQueryWithInput(action string, function string, input interface{}, output interface{}) string {
@@ -45,7 +45,7 @@ func GenerateGraphQLQueryNoInput(action string, function string, output interfac
 	return query
 }
 
-func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []models.GraphQLQuery) string {
+func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
 
 	for i := 0; i < len(graphQLQuery); i++ {
@@ -70,7 +70,7 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []mode
 	return strings.Join(functionScripts, "\n")
 }
 
-func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models.GraphQLQuery) string {
+func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
 
 	for i := 0; i < len(graphQLQuery); i++ {
