@@ -3,7 +3,7 @@ package middleware
 import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/domain/dtos/base"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/middleware_loader"
 	"middleware_loader/core/port/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"net/http"

@@ -3,7 +3,7 @@ package controller_services
 import (
 	"middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/auth_services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"

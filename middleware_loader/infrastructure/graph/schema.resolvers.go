@@ -7,14 +7,15 @@ package graph
 import (
 	"context"
 	"fmt"
-	"middleware_loader/core/services"
+	auth_services "middleware_loader/core/services/auth_services"
+	task_manager "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
 )
 
-var authService = services.NewAuthService()
-var taskService = services.NewTaskService()
-var projectService = services.NewProjectService()
-var userService = services.NewUserService()
+var authService = auth_services.NewAuthService()
+var taskService = task_manager.NewTaskService()
+var projectService = task_manager.NewProjectService()
+var userService = auth_services.NewUserService()
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {

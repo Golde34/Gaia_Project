@@ -3,7 +3,7 @@ package routers
 import (
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/middleware"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/task_manager"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"
