@@ -19,6 +19,14 @@ func NewUserDTO() *UserDTO {
 	return &UserDTO{}
 }
 
+func (in *UserDTO) UserMapperToGraphQLModel(input UserDTO) model.User {
+	var out model.User
+	out.ID = input.ID
+	out.Name = input.Name
+	out.Username = input.Username
+	return out
+}
+
 func (in *UserDTO) MapperToGraphQLModel(input UserDTO) model.ListAllUsers {
 	var out model.ListAllUsers
 	out.ID = input.ID

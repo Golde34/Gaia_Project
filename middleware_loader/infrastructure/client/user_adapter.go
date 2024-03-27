@@ -1,10 +1,12 @@
 package client_adapter
 
 import (
+	"encoding/json"
 	"fmt"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
+	"middleware_loader/infrastructure/graph/model"
 )
 
 type UserAdapter struct {
@@ -34,4 +36,25 @@ func (adapter *UserAdapter) ListAllUsers() ([]response_dtos.UserDTO, error) {
 	}
 
 	return users, nil
+}
+
+func (adapter *UserAdapter) UpdateUser(input model.UpdateUserInput) (response_dtos.UserDTO, error) {
+	updateUserURL := base.AuthServiceURL + "/user/update-user"
+	var user response_dtos.UserDTO
+
+	bodyResult, err := base.BaseAPI(updateUserURL, "PUT", input)
+	if err != nil {
+		return response_dtos.UserDTO{}, err
+	}
+
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.UserDTO{}, err
+	}
+	err = json.Unmarshal(dataBytes, &user)
+	if err != nil {
+		return response_dtos.UserDTO{}, err
+	}
+
+	return user, nil
 }

@@ -1,2 +1,5 @@
 2024-03-27T00:10:23.281+07:00  INFO 8177 --- [http-nio-4001-exec-9] a.a.core.services.RoleServiceImpl        : Get all roles
 2024-03-27T00:10:23.301+07:00  INFO 8177 --- [http-nio-4001-exec-10] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-03-27T00:41:34.747+07:00  INFO 8177 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-27T00:41:34.754+07:00  INFO 8177 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-03-27T00:41:34.768+07:00  INFO 8177 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

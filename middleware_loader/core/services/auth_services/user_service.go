@@ -26,7 +26,7 @@ func (s *UserService) ListAllUsers(ctx context.Context) ([]model.ListAllUsers, e
 		return nil, err
 	}
 	usersModel := userResponse.MapperListToGraphQLModel(users)
-	return usersModel, nil 
+	return usersModel, nil
 }
 
 func (s *UserService) CreateUser(ctx context.Context, input model.CreateUserInput) (model.User, error) {
@@ -46,7 +46,11 @@ func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInpu
 	}
 	log.Println("Validation passed!")
 
-
-
-	return model.User{}, nil
+	user, err := client.IUserAdapter(&adapter.UserAdapter{}).UpdateUser(input)
+	if err != nil {
+		return model.User{}, err
+	} else {
+		userModel := userResponse.UserMapperToGraphQLModel(user)
+		return userModel, nil
+	}
 }
