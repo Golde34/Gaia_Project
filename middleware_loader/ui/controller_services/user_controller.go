@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"log"
 	"middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
 	"middleware_loader/core/services/auth_services"
@@ -41,7 +42,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.Us
 	}
 
 	input := mapper.UpdateUserRequestDTOMapper(body)
-
+	log.Println(input)
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateUser", QueryInput: input, QueryOutput: model.User{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
