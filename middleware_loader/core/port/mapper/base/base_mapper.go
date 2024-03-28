@@ -16,8 +16,14 @@ func GetStringValue(bodyMap map[string]interface{}, key string, defaultValue str
 }
 
 func GetArrayStringValue(bodyMap map[string]interface{}, key string, defaultValue []string) []string {
-	if value, ok := bodyMap[key].([]string); ok {
-		return value
+	if values, ok := bodyMap[key].([]interface{}); ok {
+		stringValues := make([]string, len(values))
+		for i, val := range values {
+			if strVal, ok := val.(string); ok {
+				stringValues[i] = strVal
+			}
+		}
+		return stringValues
 	}
 	return defaultValue
 }
