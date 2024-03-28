@@ -4,9 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import lombok.NonNull;
+
 @Service
 public class ResponseFactory {
-    public <T> ResponseEntity<T> generateResponse(T data, HttpStatus status) {
+    public <T> ResponseEntity<T> generateResponse(T data, @NonNull HttpStatus status) {
         return new ResponseEntity<>(data, status);
     }
 

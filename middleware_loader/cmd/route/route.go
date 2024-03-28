@@ -1,7 +1,9 @@
 package route
 
 import (
-	"middleware_loader/core/services"
+	gaia_connector "middleware_loader/core/services/gaia_connector"
+	auth_services "middleware_loader/core/services/auth_services"
+	task_manager "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	auth_router "middleware_loader/ui/routers/auth_service"
@@ -17,11 +19,11 @@ import (
 func Setup(router *chi.Mux, db database_mongo.Database) {
 
 	// SERVICES
-	authService := services.NewAuthService()
-	userService := services.NewUserService()
-	gaiaService := services.NewGaiaService()
-	taskService := services.NewTaskService()
-	projectService := services.NewProjectService()
+	authService := auth_services.NewAuthService()
+	userService := auth_services.NewUserService()
+	gaiaService := gaia_connector.NewGaiaService()
+	taskService := task_manager.NewTaskService()
+	projectService := task_manager.NewProjectService()
 
 	// GRAPHQL FEDERATION
 	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))

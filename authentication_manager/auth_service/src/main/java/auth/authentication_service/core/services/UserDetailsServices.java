@@ -4,7 +4,7 @@ import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.LoggerType;
-import auth.authentication_service.core.store.UserCRUDStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ObjectUtils;
 import jakarta.transaction.Transactional;

@@ -1,12 +1,19 @@
 package mapper
 
-// import request_dtos "middleware_loader/core/domain/dtos/request"
+import (
+	request_dtos "middleware_loader/core/domain/dtos/request"
+	"middleware_loader/core/port/mapper/base"
+)
 
-// func UserDTOMapper(body map[string]interface{}) *request_dtos.UserDTO {
-// 	name := body["name"].(string)
-// 	username := body["username"].(string)
+func UpdateUserRequestDTOMapper(body map[string]interface{}) *request_dtos.UpdateUserRequestDTO {
+	var input request_dtos.UpdateUserRequestDTO
+	bodyMap := body["body"].(map[string]interface{})
 
-// 	return &request_dtos.UserDTO{
-// 		Username: username,
-// 	}
-// }
+	input.UserId = base.GetFloatValue(bodyMap, "userId", 0)
+	input.Name = base.GetStringValue(bodyMap, "name", "")
+	input.Username = base.GetStringValue(bodyMap, "username", "")
+	input.Email = base.GetStringValue(bodyMap, "email", "")
+	input.Roles = base.GetArrayStringValue(bodyMap, "roles", []string{})
+
+	return &input
+}

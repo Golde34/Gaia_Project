@@ -3,7 +3,7 @@ package controller_services
 import (
 	"encoding/json"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/middleware_loader"
 	"middleware_loader/core/services/base"
 	"net/http"
 )

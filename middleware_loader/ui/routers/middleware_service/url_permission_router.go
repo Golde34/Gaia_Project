@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"middleware_loader/core/services"
-	"middleware_loader/core/store"
+	"middleware_loader/core/services/middleware_loader"
+	"middleware_loader/core/port/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"

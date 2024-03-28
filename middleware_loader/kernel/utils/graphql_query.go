@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"strings"
 
-	"middleware_loader/core/domain/models"
+	"middleware_loader/core/domain/dtos/base"
 )
 
 func GenerateGraphQLQueryWithInput(action string, function string, input interface{}, output interface{}) string {
@@ -45,7 +45,7 @@ func GenerateGraphQLQueryNoInput(action string, function string, output interfac
 	return query
 }
 
-func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []models.GraphQLQuery) string {
+func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
 
 	for i := 0; i < len(graphQLQuery); i++ {
@@ -70,7 +70,7 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []mode
 	return strings.Join(functionScripts, "\n")
 }
 
-func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models.GraphQLQuery) string {
+func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
 
 	for i := 0; i < len(graphQLQuery); i++ {
@@ -94,20 +94,30 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []models
 }
 
 func ConvertInput(input interface{}) string {
-	if input == nil {
-		return ""
-	}
+    if input == nil {
+        return ""
+    }
 
-	inputMap := make(map[string]interface{})
-	inrec, _ := json.Marshal(input)
-	json.Unmarshal(inrec, &inputMap)
+    inputMap := make(map[string]interface{})
+    inrec, _ := json.Marshal(input)
+    json.Unmarshal(inrec, &inputMap)
 
-	inputPairs := make([]string, 0, len(inputMap))
-	for key, value := range inputMap {
-		inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, value))
-	}
-
-	return strings.Join(inputPairs, ", ")
+    inputPairs := make([]string, 0, len(inputMap))
+    for key, value := range inputMap {
+        switch v := value.(type) {
+        case string:
+            inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, v))
+        case float64:
+            inputPairs = append(inputPairs, fmt.Sprintf("%s: %f", key, v))
+        case int:
+            inputPairs = append(inputPairs, fmt.Sprintf("%s: %d", key, v))
+        case bool:
+            inputPairs = append(inputPairs, fmt.Sprintf("%s: %t", key, v))
+        default:
+            inputPairs = append(inputPairs, fmt.Sprintf("%s: %v", key, v))
+        }
+    }
+    return strings.Join(inputPairs, ", ")
 }
 
 func ConvertOutput(output interface{}) string {

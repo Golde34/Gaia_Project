@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.Role;
-import auth.authentication_service.core.store.RoleStore;
+import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.infrastructure.store.repositories.RoleRepository;
 
 @Component

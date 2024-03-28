@@ -93,6 +93,7 @@ type ComplexityRoot struct {
 	}
 
 	ListAllUsers struct {
+		Email     func(childComplexity int) int
 		ID        func(childComplexity int) int
 		LastLogin func(childComplexity int) int
 		Name      func(childComplexity int) int
@@ -128,7 +129,7 @@ type ComplexityRoot struct {
 		UpdateRole                   func(childComplexity int, input model.RoleInput) int
 		UpdateTask                   func(childComplexity int, input model.UpdateTaskInput) int
 		UpdateTaskInDialog           func(childComplexity int, input model.UpdateTaskInDialogInput) int
-		UpdateUser                   func(childComplexity int, input model.UserInput) int
+		UpdateUser                   func(childComplexity int, input model.UpdateUserInput) int
 	}
 
 	Privilege struct {
@@ -229,7 +230,7 @@ type MutationResolver interface {
 	CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error)
 	CheckPermission(ctx context.Context, input model.UserPermissionInput) (*model.UserPermissionResponse, error)
 	CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User, error)
-	UpdateUser(ctx context.Context, input model.UserInput) (*model.User, error)
+	UpdateUser(ctx context.Context, input model.UpdateUserInput) (*model.User, error)
 	DeleteUser(ctx context.Context, input model.UserInput) (*model.User, error)
 	CreateRole(ctx context.Context, input model.RoleInput) (*model.Role, error)
 	UpdateRole(ctx context.Context, input model.RoleInput) (*model.Role, error)
@@ -515,6 +516,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupTask.UpdatedAt(childComplexity), true
+
+	case "ListAllUsers.email":
+		if e.complexity.ListAllUsers.Email == nil {
+			break
+		}
+
+		return e.complexity.ListAllUsers.Email(childComplexity), true
 
 	case "ListAllUsers.id":
 		if e.complexity.ListAllUsers.ID == nil {
@@ -885,7 +893,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(model.UserInput)), true
+		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(model.UpdateUserInput)), true
 
 	case "Privilege.id":
 		if e.complexity.Privilege.ID == nil {
@@ -1383,6 +1391,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateProjectInput,
 		ec.unmarshalInputUpdateTaskInDialogInput,
 		ec.unmarshalInputUpdateTaskInput,
+		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUserInput,
 		ec.unmarshalInputUserPermissionInput,
 	)
@@ -1918,10 +1927,10 @@ func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.UserInput
+	var arg0 model.UpdateUserInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUserInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUpdateUserInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateUserInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3664,6 +3673,50 @@ func (ec *executionContext) fieldContext_ListAllUsers_username(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _ListAllUsers_email(ctx context.Context, field graphql.CollectedField, obj *model.ListAllUsers) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ListAllUsers_email(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ListAllUsers_email(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ListAllUsers",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ListAllUsers_lastLogin(ctx context.Context, field graphql.CollectedField, obj *model.ListAllUsers) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ListAllUsers_lastLogin(ctx, field)
 	if err != nil {
@@ -4119,7 +4172,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["input"].(model.UserInput))
+		return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["input"].(model.UpdateUserInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6423,6 +6476,8 @@ func (ec *executionContext) fieldContext_Query_listAllUsers(ctx context.Context,
 				return ec.fieldContext_ListAllUsers_name(ctx, field)
 			case "username":
 				return ec.fieldContext_ListAllUsers_username(ctx, field)
+			case "email":
+				return ec.fieldContext_ListAllUsers_email(ctx, field)
 			case "lastLogin":
 				return ec.fieldContext_ListAllUsers_lastLogin(ctx, field)
 			case "roles":
@@ -11551,6 +11606,61 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, obj interface{}) (model.UpdateUserInput, error) {
+	var it model.UpdateUserInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"userId", "name", "username", "email", "roles"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "username":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Username = data
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "roles":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Roles = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (model.UserInput, error) {
 	var it model.UserInput
 	asMap := map[string]interface{}{}
@@ -11567,7 +11677,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 		switch k {
 		case "id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11965,6 +12075,11 @@ func (ec *executionContext) _ListAllUsers(ctx context.Context, sel ast.Selection
 			}
 		case "username":
 			out.Values[i] = ec._ListAllUsers_username(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "email":
+			out.Values[i] = ec._ListAllUsers_email(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -13874,6 +13989,11 @@ func (ec *executionContext) unmarshalNUpdateTaskInDialogInput2middleware_loader�
 
 func (ec *executionContext) unmarshalNUpdateTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateTaskInput(ctx context.Context, v interface{}) (model.UpdateTaskInput, error) {
 	res, err := ec.unmarshalInputUpdateTaskInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateUserInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateUserInput(ctx context.Context, v interface{}) (model.UpdateUserInput, error) {
+	res, err := ec.unmarshalInputUpdateUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

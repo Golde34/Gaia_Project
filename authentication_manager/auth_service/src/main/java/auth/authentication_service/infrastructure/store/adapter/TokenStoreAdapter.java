@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.AuthToken;
-import auth.authentication_service.core.store.TokenStore;
+import auth.authentication_service.core.port.store.TokenStore;
 import auth.authentication_service.infrastructure.store.repositories.TokenRepository;
 
 @Component

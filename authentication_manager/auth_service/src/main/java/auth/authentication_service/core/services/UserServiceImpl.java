@@ -3,14 +3,16 @@ package auth.authentication_service.core.services;
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.UserDto;
+import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.UserMapper;
+import auth.authentication_service.core.port.store.RoleStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.UserService;
-import auth.authentication_service.core.store.RoleStore;
-import auth.authentication_service.core.store.UserCRUDStore;
 import auth.authentication_service.core.validations.service_validations.UserServiceValidation;
 import auth.authentication_service.kernel.utils.BCryptPasswordEncoder;
 import auth.authentication_service.kernel.utils.GenericResponse;
@@ -18,6 +20,7 @@ import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 import auth.authentication_service.kernel.utils.ResponseUtils;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,6 +34,7 @@ import java.util.List;
 @Service
 @Transactional
 @Primary
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -45,6 +49,8 @@ public class UserServiceImpl implements UserService {
     private GenericResponse<?> genericResponse;
     @Autowired
     private ResponseUtils responseUtils;
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     UserServiceValidation userServiceValidation;
@@ -80,22 +86,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(UserDto userDto) {
+    public ResponseEntity<?> updateUser(UpdateUserRequest userDto) {
         try {
-            User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
             if (validation.getResponseMessage() != ResponseEnum.msg200) {
-                // return http status code base on validate response message
                 return genericResponse.matchingResponseMessage(validation);
             }
 
-            User updatedUser = userStore.getUserById(user.getId());
-            updatedUser.setUsername(userDto.getUsername());
-            updatedUser.setEmail(userDto.getEmail());
-            updatedUser.setName(userDto.getName());
-            userStore.save(updatedUser);
-            _logger.log("Update user: " + userDto.getUsername() + " to: " + updatedUser.getUsername(), LoggerType.INFO);
-            return genericResponse.matchingResponseMessage(new GenericResponse<>(updatedUser, ResponseEnum.msg200));
+            User user = userMapper.updateUserMapper(userDto);
+            userDto.getRoles().stream().forEach(roleName -> {
+                Role role = roleStore.findByName(roleName);
+                user.getRoles().add(role);
+            });
+            log.info("User: {}", user);
+            userStore.save(user);
+            _logger.log("Update user: " + userDto.getUsername() + " to: " + user.getUsername(), LoggerType.INFO);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
@@ -133,7 +139,8 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> getAllUsers() {
         try {
             List<User> users = userStore.findAll();
-            // List<UserResponse> userResponses = modelMapperConfig._mapperEntityToDto(users);
+            // List<UserResponse> userResponses =
+            // modelMapperConfig._mapperEntityToDto(users);
             _logger.log("Get all users", LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {

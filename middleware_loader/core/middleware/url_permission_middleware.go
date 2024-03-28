@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"middleware_loader/core/domain/models"
-	"middleware_loader/core/store"
+	"middleware_loader/core/domain/dtos/base"
+	"middleware_loader/core/port/store"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"net/http"
 )
@@ -28,6 +28,6 @@ func CheckUrlPermissionConfig(db database_mongo.Database) func(next http.Handler
 	}
 }
 
-func isUrlPermissionConfigActive(db database_mongo.Database) (models.ErrorResponse, error) {
-	return models.ErrorResponse{}, nil
+func isUrlPermissionConfigActive(db database_mongo.Database) (base_dtos.ErrorResponse, error) {
+	return base_dtos.ErrorResponse{}, nil
 }

@@ -7,4 +7,5 @@ import (
 
 type UserService interface {
 	ListAllUsers(ctx context.Context) ([]model.ListAllUsers, error)
+	UpdateUser(ctx context.Context, input model.UpdateUserInput) (model.User, error)
 }
