@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.Privilege;
-import auth.authentication_service.core.store.PrivilegeStore;
+import auth.authentication_service.core.port.store.PrivilegeStore;
 import auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository;
 
 @Component

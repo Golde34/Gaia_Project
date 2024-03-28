@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import auth.authentication_service.core.domain.entities.User;
-import auth.authentication_service.core.store.UserCRUDStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.infrastructure.store.repositories.UserRepository;
 
 @Component

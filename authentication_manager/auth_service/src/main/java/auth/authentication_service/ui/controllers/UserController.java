@@ -2,6 +2,7 @@ package auth.authentication_service.ui.controllers;
 
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.UserDto;
+import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.services.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/update-user", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest userDto) {
         return userService.updateUser(userDto);
     }
 

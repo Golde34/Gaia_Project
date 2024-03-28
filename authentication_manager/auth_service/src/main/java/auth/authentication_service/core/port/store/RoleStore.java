@@ -1,4 +1,4 @@
-package auth.authentication_service.core.store;
+package auth.authentication_service.core.port.store;
 
 import java.util.List;
 

@@ -4,6 +4,7 @@ import auth.authentication_service.core.domain.dto.PrivilegeDto;
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.RoleDto;
 import auth.authentication_service.core.domain.dto.UserDto;
+import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.domain.dto.response.UserResponse;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
@@ -34,6 +35,10 @@ public class ModelMapperConfig {
     }
 
     public User _mapperDtoToEntity(UserDto userDto) {
+        return modelMapper().map(userDto, User.class);
+    }
+
+    public User _mapperDtoToEntity(UpdateUserRequest userDto) {
         return modelMapper().map(userDto, User.class);
     }
 

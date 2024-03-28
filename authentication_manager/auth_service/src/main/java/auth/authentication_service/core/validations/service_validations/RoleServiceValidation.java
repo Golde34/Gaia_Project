@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.entities.Role;
-import auth.authentication_service.core.store.RoleStore;
+import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.kernel.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 

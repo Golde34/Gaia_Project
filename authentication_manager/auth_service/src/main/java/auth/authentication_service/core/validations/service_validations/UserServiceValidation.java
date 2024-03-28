@@ -2,11 +2,11 @@ package auth.authentication_service.core.validations.service_validations;
 
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.RegisterDto;
-import auth.authentication_service.core.domain.dto.UserDto;
+import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
-import auth.authentication_service.core.store.UserCRUDStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.ObjectUtils;
 import auth.authentication_service.kernel.utils.ResponseUtils;
@@ -113,7 +113,8 @@ public class UserServiceValidation {
         return new GenericResponse<>(Constants.ResponseMessage.VALIDATE_SUCCESS, ResponseEnum.msg200);
     }
 
-    public GenericResponse<String> _validateUserUpdates(UserDto userDto) {
+    public GenericResponse<String> _validateUserUpdates(UpdateUserRequest userDto) {
+        log.info("Validate user updates function: {}", userDto);
         if (_emailExist(userDto.getEmail())) {
             return responseUtils.returnMessage("Validate user updates function: ",
                     "This account email: " + userDto.getEmail() + " is not changed.", ResponseEnum.msg400); 
@@ -123,6 +124,13 @@ public class UserServiceValidation {
             return responseUtils.returnMessage("Validate user updates function: ",
                     "This account username: " + userDto.getUsername() + " is not changed.", ResponseEnum.msg400);
         }
+
+        User user = userCRUDStore.getUserById(userDto.getUserId());
+        if (objectUtils.isNullOrEmpty(user)) {
+            return responseUtils.returnMessage("Validate user updates function: ",
+                    Constants.ResponseMessage.USER_NOT_FOUND, ResponseEnum.msg400);
+        }
+
         return new GenericResponse<>(Constants.ResponseMessage.VALIDATE_SUCCESS, ResponseEnum.msg200);
     }
 
