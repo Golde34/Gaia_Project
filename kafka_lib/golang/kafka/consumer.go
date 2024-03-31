@@ -3,7 +3,6 @@ package kafka
 import (
 	"context"
 	"errors"
-	"flag"
 	"github.com/Shopify/sarama"
 	kafka_config "golang_kafka/config"
 	"log"
@@ -16,30 +15,6 @@ import (
 
 var config = kafka_config.Config{}
 var env, _ = config.LoadEnv()
-
-func init() {
-	log.Printf("Kafka consumer initialized: ", env.BootstrapServers)
-	flag.StringVar(&env.BootstrapServers, "brokers", "", "Kafka bootstrap brokers to connect to, as a comma separated list")
-	flag.StringVar(&env.GroupID, "group", "", "Kafka consumer group definition")
-	flag.StringVar(&env.Version, "version", sarama.DefaultVersion.String(), "Kafka cluster version")
-	flag.StringVar(&env.Topics, "topics", "", "Kafka topics to be consumed, as a comma separated list")
-	flag.StringVar(&env.Assignor, "assignor", "range", "Consumer group partition assignment strategy (range, roundrobin, sticky)")
-	flag.BoolVar(&env.Oldest, "oldest", true, "Kafka consumer consume initial offset from oldest")
-	flag.BoolVar(&env.Verbose, "verbose", false, "Sarama logging")
-	flag.Parse()
-
-	if len(env.BootstrapServers) == 0 {
-		panic("no Kafka bootstrap brokers defined, please set the -brokers flag")
-	}
-
-	if len(env.Topics) == 0 {
-		panic("no topics given to be consumed, please set the -topics flag")
-	}
-
-	if len(env.GroupID) == 0 {
-		panic("no Kafka consumer group defined, please set the -group flag")
-	}
-}
 
 func ConsumerHandleMessage() {
 	keepRunning := true
