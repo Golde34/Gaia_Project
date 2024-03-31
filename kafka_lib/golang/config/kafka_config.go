@@ -2,6 +2,7 @@ package kafka_config
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -9,6 +10,12 @@ import (
 
 type Config struct {
 	BootstrapServers string
+	GroupID          string
+	Version          string
+	Topics           string
+	Assignor         string
+	Oldest           bool
+	Verbose          bool
 }
 
 func (in *Config) LoadEnv() (Config, error) {
@@ -18,9 +25,23 @@ func (in *Config) LoadEnv() (Config, error) {
 	}
 
 	bootstrapServer := os.Getenv("BOOTSTRAP_SERVERS")
-	config := Config {
+	groupId := os.Getenv("GROUP_ID")
+	version := os.Getenv("VERSION")
+	topics := os.Getenv("TOPICS")
+	assignor := os.Getenv("ASSIGNOR")
+	oldest := os.Getenv("OLDEST")
+	verbose := os.Getenv("VERBOSE")
+	log.Printf("Kafka consumer initialized: ", bootstrapServer)
+
+	config := Config{
 		BootstrapServers: bootstrapServer,
+		GroupID:          groupId,
+		Version:          version,
+		Topics:           topics,
+		Assignor:         assignor,
+		Oldest:           oldest == "true",
+		Verbose:          verbose == "true",
 	}
-	
+
 	return config, nil
 }
