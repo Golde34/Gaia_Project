@@ -43,3 +43,12 @@ input UpdateUserInput {
   email: String!
   roles: [String!]!
 }
+
+type UpdateUser {
+  id: Float!
+  name: String!
+  username: String!
+  email: String!
+  lastLogin: String!
+  roles: [String!]!
+}

@@ -39,16 +39,16 @@ func (s *UserService) CreateUser(ctx context.Context, input model.CreateUserInpu
 	return model.User{}, nil
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInput) (model.User, error) {
+func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInput) (model.UpdateUser, error) {
 	err := userValidation.UpdateUserValidate(input)
 	if err != nil {
-		return model.User{}, err
+		return model.UpdateUser{}, err
 	}
 	log.Println("Validation passed!")
 
 	user, err := client.IUserAdapter(&adapter.UserAdapter{}).UpdateUser(input)
 	if err != nil {
-		return model.User{}, err
+		return model.UpdateUser{}, err
 	} else {
 		userModel := userResponse.UserMapperToGraphQLModel(user)
 		return userModel, nil

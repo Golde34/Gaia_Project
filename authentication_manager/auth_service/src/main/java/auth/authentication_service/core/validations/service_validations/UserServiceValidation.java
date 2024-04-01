@@ -115,14 +115,14 @@ public class UserServiceValidation {
 
     public GenericResponse<String> _validateUserUpdates(UpdateUserRequest userDto) {
         log.info("Validate user updates function: {}", userDto);
-        if (_emailExist(userDto.getEmail())) {
+        if (objectUtils.isNullOrEmpty(userDto.getEmail())) {
             return responseUtils.returnMessage("Validate user updates function: ",
-                    "This account email: " + userDto.getEmail() + " is not changed.", ResponseEnum.msg400); 
+                    "This account email: " + userDto.getEmail() + " must be not null.", ResponseEnum.msg400); 
         }
 
-        if (_checkExistUsername(userDto.getUsername())) {
+        if (objectUtils.isNullOrEmpty(userDto.getUsername())) {
             return responseUtils.returnMessage("Validate user updates function: ",
-                    "This account username: " + userDto.getUsername() + " is not changed.", ResponseEnum.msg400);
+                    "This account username: " + userDto.getUsername() + " must be.", ResponseEnum.msg400);
         }
 
         User user = userCRUDStore.getUserById(userDto.getUserId());

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -52,4 +53,20 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<AuthToken> tokens;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", lastLogin=" + lastLogin +
+                ", enabled=" + enabled +
+                ", isUsing2FA=" + isUsing2FA +
+                ", secret='" + secret + '\'' +
+                ", roles=" + roles.stream().map(Role::getId).collect(Collectors.toList()) +
+                '}';
+    }
 }
