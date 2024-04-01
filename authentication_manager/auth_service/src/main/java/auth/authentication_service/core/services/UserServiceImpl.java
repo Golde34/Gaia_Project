@@ -9,7 +9,6 @@ import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
-import auth.authentication_service.core.port.mapper.UserMapper;
 import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.UserService;
@@ -49,8 +48,6 @@ public class UserServiceImpl implements UserService {
     private GenericResponse<?> genericResponse;
     @Autowired
     private ResponseUtils responseUtils;
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     UserServiceValidation userServiceValidation;
@@ -89,16 +86,13 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> updateUser(UpdateUserRequest userDto) {
         try {
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
+            log.info("UserDTO: {}", userDto);
             if (validation.getResponseMessage() != ResponseEnum.msg200) {
                 return genericResponse.matchingResponseMessage(validation);
             }
 
-            User user = userMapper.updateUserMapper(userDto);
-            userDto.getRoles().stream().forEach(roleName -> {
-                Role role = roleStore.findByName(roleName);
-                user.getRoles().add(role);
-            });
-            log.info("User: {}", user);
+            User user = userStore.getUserById(userDto.getUserId());
+            updateUserRoles(userDto, user);
             userStore.save(user);
             _logger.log("Update user: " + userDto.getUsername() + " to: " + user.getUsername(), LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
@@ -109,6 +103,15 @@ public class UserServiceImpl implements UserService {
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }
+    }
+
+    private User updateUserRoles(UpdateUserRequest userDto, User user) {
+        user.getRoles().clear();
+        userDto.getRoles().stream().forEach(roleName -> {
+            Role role = roleStore.findByName(roleName);
+            user.getRoles().add(role);
+        });
+        return user;
     }
 
     @Override
