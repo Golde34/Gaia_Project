@@ -44,7 +44,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.Us
 	input := mapper.UpdateUserRequestDTOMapper(body)
 	log.Println(input)
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateUser", QueryInput: input, QueryOutput: model.User{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateUser", QueryInput: input, QueryOutput: model.UpdateUser{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)

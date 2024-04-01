@@ -22,7 +22,7 @@ type Mutation {
   checkPermission(input: UserPermissionInput!): UserPermissionResponse!
  
   createUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!): User!
+  updateUser(input: UpdateUserInput!): UpdateUser!
   deleteUser(input: UserInput!): User!
   
   createRole(input: RoleInput!): Role!

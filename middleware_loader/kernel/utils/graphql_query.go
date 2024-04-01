@@ -94,30 +94,44 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_d
 }
 
 func ConvertInput(input interface{}) string {
-    if input == nil {
-        return ""
-    }
+	if input == nil {
+		return ""
+	}
 
-    inputMap := make(map[string]interface{})
-    inrec, _ := json.Marshal(input)
-    json.Unmarshal(inrec, &inputMap)
+	inputMap := make(map[string]interface{})
+	inrec, _ := json.Marshal(input)
+	json.Unmarshal(inrec, &inputMap)
 
-    inputPairs := make([]string, 0, len(inputMap))
-    for key, value := range inputMap {
-        switch v := value.(type) {
-        case string:
-            inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, v))
-        case float64:
-            inputPairs = append(inputPairs, fmt.Sprintf("%s: %f", key, v))
-        case int:
-            inputPairs = append(inputPairs, fmt.Sprintf("%s: %d", key, v))
-        case bool:
-            inputPairs = append(inputPairs, fmt.Sprintf("%s: %t", key, v))
-        default:
-            inputPairs = append(inputPairs, fmt.Sprintf("%s: %v", key, v))
-        }
-    }
-    return strings.Join(inputPairs, ", ")
+	return writeInputPairs(inputMap)
+}
+
+func writeInputPairs(inputMap map[string]interface{}) string {
+	inputPairs := make([]string, 0, len(inputMap))
+	for key, value := range inputMap {
+		switch v := value.(type) {
+		case string:
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: String", key))
+		case float64:
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: Float", key))
+		case int:
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: Int", key))
+		case bool:
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: Boolean", key))
+		case []interface{}: // Only support array of strings
+			strSlice := make([]string, len(v))
+			for i, elem := range v {
+				if str, ok := elem.(string); ok {
+					strSlice[i] = fmt.Sprintf("\"%s\"", str)
+				} else {
+					strSlice[i] = fmt.Sprintf("%v", elem)
+				}
+			}
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: [%s]", key, strings.Join(strSlice, ", ")))
+		default:
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: %v", key, v))
+		}
+	}
+	return strings.Join(inputPairs, ", ")
 }
 
 func ConvertOutput(output interface{}) string {
@@ -130,12 +144,12 @@ func ConvertOutput(output interface{}) string {
 	for i := 0; i < outputValue.NumField(); i++ {
 		field := outputValue.Type().Field(i)
 		fieldValue := outputValue.Field(i)
-		outputKeys[i] = ConvertSubFieldsOutput(field, fieldValue)
+		outputKeys[i] = convertSubFieldsOutput(field, fieldValue)
 	}
 	return strings.Join(outputKeys, ", ")
 }
 
-func ConvertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
+func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
 	outputKey := ""
 	switch fieldValue.Kind() {
 	case reflect.Struct, reflect.Interface:
