@@ -110,13 +110,13 @@ func writeInputPairs(inputMap map[string]interface{}) string {
 	for key, value := range inputMap {
 		switch v := value.(type) {
 		case string:
-			inputPairs = append(inputPairs, fmt.Sprintf("%s: String", key))
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: \"%s\"", key, v))
 		case float64:
-			inputPairs = append(inputPairs, fmt.Sprintf("%s: Float", key))
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: %f", key, v))
 		case int:
-			inputPairs = append(inputPairs, fmt.Sprintf("%s: Int", key))
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: %d", key, v))
 		case bool:
-			inputPairs = append(inputPairs, fmt.Sprintf("%s: Boolean", key))
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: %t", key, v))	
 		case []interface{}: // Only support array of strings
 			strSlice := make([]string, len(v))
 			for i, elem := range v {
