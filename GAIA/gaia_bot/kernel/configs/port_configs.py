@@ -74,6 +74,18 @@ PORTS = {
         "database_name": None,
         "shell_path": "gaia_bot/modules/ports/bash_shells/github_api.sh"
     },
+    
+    ## THIRD PARTY
+    "kafka_server": {
+        "name": "Kafka Server",
+        "port": 9094,
+        "programming_language": "Java, Golang, TypeScript, Python, Rust, C#",
+        "description": "Kafka Server",
+        "router": None,
+        "database": None,
+        "database_name": None,
+        "shell_path": "gaia_bot/modules/ports/bash_shells/kafka_server.sh"
+    },
 }
 
 
@@ -84,6 +96,7 @@ PORT_COMPONENTS = [
     "task_manager",
     "client_gui",
     "middleware_loader",
+    "kafka_server"
 ]
 
 DOMAIN = "localhost"
