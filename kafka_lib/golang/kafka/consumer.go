@@ -3,7 +3,7 @@ package kafka
 import (
 	"context"
 	"errors"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	kafka_config "golang_kafka/config"
 	"log"
 	"os"
@@ -36,6 +36,17 @@ func ConsumerHandleMessage() {
 	config := sarama.NewConfig()
 	config.Version = version
 
+	switch env.Assignor {
+	case "sticky":
+		config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategySticky()}
+	case "roundrobin":
+		config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategyRoundRobin()}
+	case "range":
+		config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategyRange()}
+	default:
+		log.Panicf("Unrecognized consumer group partition assignor: %s", env.Assignor)
+	}
+
 	if env.Oldest {
 		config.Consumer.Offsets.Initial = sarama.OffsetOldest
 	}
@@ -53,6 +64,7 @@ func ConsumerHandleMessage() {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}
 
+	consumptionIsPaused := false
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
@@ -78,6 +90,9 @@ func ConsumerHandleMessage() {
 	<-consumer.ready // Await till the consumer has been set up
 	log.Println("Sarama consumer up and running!...")
 
+	sigusr1 := make(chan os.Signal, 1)
+	signal.Notify(sigusr1, syscall.SIGUSR1)
+
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 
@@ -89,6 +104,8 @@ func ConsumerHandleMessage() {
 		case <-sigterm:
 			log.Println("terminating: via signal")
 			keepRunning = false
+		case <-sigusr1:
+			toggleConsumptionFlow(client, &consumptionIsPaused)
 		}
 	}
 	cancel()
@@ -96,6 +113,18 @@ func ConsumerHandleMessage() {
 	if err = client.Close(); err != nil {
 		log.Panicf("Error closing client: %v", err)
 	}
+}
+
+func toggleConsumptionFlow(client sarama.ConsumerGroup, isPaused *bool) {
+	if *isPaused {
+		client.ResumeAll()
+		log.Println("Resuming consumption")
+	} else {
+		client.PauseAll()
+		log.Println("Pausing consumption")
+	}
+
+	*isPaused = !*isPaused
 }
 
 // Consumer represents a Sarama consumer group consumer
