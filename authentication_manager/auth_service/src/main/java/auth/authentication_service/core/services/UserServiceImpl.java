@@ -9,6 +9,7 @@ import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.UserMapper;
 import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.UserService;
@@ -22,7 +23,6 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,6 +51,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserServiceValidation userServiceValidation;
+    @Autowired
+    UserMapper userMapper;
 
     public UserServiceImpl(UserCRUDStore userStore, RoleStore roleStore) {
         this.userStore = userStore;
@@ -92,9 +94,10 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = userStore.getUserById(userDto.getUserId());
-            updateUserRoles(userDto, user);
+            _logger.log("Update user: " + user.getUsername() + " to: " + userDto.getUsername(), LoggerType.INFO);
+            user = updateUserRoles(userDto, user);
+            user = userMapper.updateUserMapper(userDto, user);
             userStore.save(user);
-            _logger.log("Update user: " + userDto.getUsername() + " to: " + user.getUsername(), LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,7 +141,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "users")
     public ResponseEntity<?> getAllUsers() {
         try {
             List<User> users = userStore.findAll();
