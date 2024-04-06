@@ -16,17 +16,17 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @RequestMapping(value = "/create-user", method = RequestMethod.POST)
+    @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody RegisterDto userDto) {
         return userService.createUser(userDto);
     }
 
-    @RequestMapping(value = "/update-user", method = RequestMethod.PUT)
+    @PutMapping("/update-user")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest userDto) {
         return userService.updateUser(userDto);
     }
 
-    @RequestMapping(value = "/delete-user", method = RequestMethod.DELETE)
+    @DeleteMapping("/delete-user")
     public ResponseEntity<?> deleteUser(@RequestBody UserDto userDto){
         return userService.deleteUser(userDto);
     }

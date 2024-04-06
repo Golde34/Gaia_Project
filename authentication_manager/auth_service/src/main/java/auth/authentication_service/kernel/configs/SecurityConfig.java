@@ -65,7 +65,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.disable())
                 .csrf(AbstractHttpConfigurer::disable)
-                .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .authorizeHttpRequests(authz -> {
                     authz
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),

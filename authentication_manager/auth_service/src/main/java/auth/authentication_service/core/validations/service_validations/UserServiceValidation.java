@@ -78,11 +78,11 @@ public class UserServiceValidation {
             authenticationManager.getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException e) {
-            return responseUtils.returnMessage(String.format("Exception validation: %s ", e.getMessage()),
+            return responseUtils.returnMessage("Exception validation: %s ".formatted(e.getMessage()),
                     Constants.ResponseMessage.INCORRECT_USERNAME_PASSWORD, ResponseEnum.msg401);
         } catch (Exception e) {
             e.printStackTrace();
-            return responseUtils.returnMessage(String.format("Exception validation: %s ", e.getMessage()), 
+            return responseUtils.returnMessage("Exception validation: %s ".formatted(e.getMessage()), 
             Constants.ResponseMessage.VALIDATE_FAILED, ResponseEnum.msg400);
         } finally {
             log.info("Validate authentication function: {}", Constants.ResponseMessage.VALIDATE_SUCCESS);

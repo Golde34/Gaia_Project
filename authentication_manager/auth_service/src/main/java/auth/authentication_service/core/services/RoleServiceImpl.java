@@ -76,7 +76,7 @@ public class RoleServiceImpl implements RoleService {
             return genericResponse.matchingResponseMessage(new GenericResponse<>(role, ResponseEnum.msg200));
         } catch (Exception e) {
             GenericResponse<String> response = responseUtils.returnMessage(
-                    String.format("Update Role failed: %s ", e.getMessage()), Constants.ResponseMessage.UPDATE_ROLE,
+                    "Update Role failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.UPDATE_ROLE,
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }

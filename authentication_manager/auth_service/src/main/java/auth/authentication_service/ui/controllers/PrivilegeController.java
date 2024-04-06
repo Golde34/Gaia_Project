@@ -5,9 +5,9 @@ import auth.authentication_service.core.services.interfaces.PrivilegeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,17 +17,17 @@ public class PrivilegeController {
     @Autowired
     private PrivilegeService privilegeService;
 
-    @RequestMapping(value = "/create-privilege", method = RequestMethod.POST)
+    @PostMapping("/create-privilege")
     public ResponseEntity<?> createPrivilege(@RequestBody PrivilegeDto privilegeDto) {
         return privilegeService.createPrivilege(privilegeDto.getName());
     }
 
-    @RequestMapping(value = "/update-privilege", method = RequestMethod.POST)
+    @PostMapping("/update-privilege")
     public ResponseEntity<?> updatePrivilege(@RequestBody PrivilegeDto privilegeDto) {
         return privilegeService.updatePrivilege(privilegeDto);
     }
 
-    @RequestMapping(value = "/delete-privielge", method = RequestMethod.POST)
+    @PostMapping("/delete-privielge")
     public ResponseEntity<?> deletePrivilege(@RequestBody PrivilegeDto privilegeDto) {
         return privilegeService.deletePrivilege(privilegeDto);
     }
