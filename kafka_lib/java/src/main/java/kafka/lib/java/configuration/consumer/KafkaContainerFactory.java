@@ -45,6 +45,7 @@ public class KafkaContainerFactory {
         log.info("Entity: " + entity.getGroupId());
         String [] topicArray = topics.toArray(new String[0]);
 
+        @SuppressWarnings("null")
         AcknowledgingMessageListener<String, String> messageListener = (records, acknowledgment) -> {
             String message = records.value();
             int partition = records.partition();

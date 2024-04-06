@@ -80,7 +80,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
                 privilegeStore.delete(privilege);
                 _logger.log("Delete privilege: " + privilege.getName(), LoggerType.INFO);
                 return genericResponse.matchingResponseMessage(new GenericResponse<>(
-                        String.format("Privilege: %s delete!", privilege), ResponseEnum.msg200));
+                        "Privilege: %s delete!".formatted(privilege), ResponseEnum.msg200));
             }
             return genericResponse.matchingResponseMessage(
                     new GenericResponse<>(Constants.ResponseMessage.DELETE_PRIVILEGE, ResponseEnum.msg400));

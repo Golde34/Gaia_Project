@@ -25,14 +25,14 @@ public class RoleServiceValidation {
     public Pair<String, Boolean> canUpdateRole(Role role, String newName) {
         try {
             if (objectUtils.isNullOrEmpty(role)) {
-                return Pair.of(String.format(Constants.ResponseMessage.OBJECT_NULL, "Role"), false);
+                return Pair.of(Constants.ResponseMessage.OBJECT_NULL.formatted("Role"), false);
             }
 
             Optional<Role> existingRole = roleStore.findAll().stream()
                     .filter(r -> r.getId().equals(role.getId()))
                     .findFirst();
 
-            if (!existingRole.isPresent()) {
+            if (existingRole.isEmpty()) {
                 return Pair.of(Constants.ResponseMessage.ROLE_NOT_FOUND, false);
             }
 

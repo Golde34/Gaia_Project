@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("deprecation")
 @Slf4j
 @ConditionalOnProperty(value = { "spring.kafka.producer.enabled" }, havingValue = "true")
 public class KafkaPublisher {
@@ -98,16 +99,17 @@ public class KafkaPublisher {
             log.error("Exception when parse data to json {}", exception.getMessage());
             return;
         }
+        @SuppressWarnings("unchecked")
         ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) this.kafkaTemplate.getKafkaTemplate(kafkaServer).send(topic, message);
         if (callback != null) {
             future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-                public void onSuccess(SendResult<String, String> result) {
+                public void onSuccess(@SuppressWarnings("null") SendResult<String, String> result) {
                     log.info("===> Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset()
                             + "] to topic: " + topic + " SUCCESS !!!");
                     callback.onSuccess(message);
                 }
 
-                public void onFailure(Throwable ex) {
+                public void onFailure(@SuppressWarnings("null") Throwable ex) {
                     log.info("xxxx> Unable to send message=[" + message + "] to topic: " + topic
                             + " FAIL !!! \n Due to : "
                             + ex.getMessage(), ex);
@@ -200,14 +202,15 @@ public class KafkaPublisher {
                 producerRecord.headers().add(new RecordHeader(entry.getKey(), entry.getValue()));
             }
         }
+        @SuppressWarnings("unchecked")
         ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) this.kafkaTemplate.getKafkaTemplate(kafkaServer).send(producerRecord);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-            public void onSuccess(SendResult<String, String> result) {
+            public void onSuccess(@SuppressWarnings("null") SendResult<String, String> result) {
                 log.info("===> Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset()
                         + "] to topic: " + topic + " SUCCESS !!!");
             }
 
-            public void onFailure(Throwable ex) {
+            public void onFailure(@SuppressWarnings("null") Throwable ex) {
                 log.info("xxxx> Unable to send message=[" + message + "] to topic: " + topic
                         + " FAIL !!! \n Due to : "
                         + ex.getMessage(), ex);

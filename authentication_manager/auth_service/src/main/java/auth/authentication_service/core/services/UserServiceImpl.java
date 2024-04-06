@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
-                    String.format("Update User failed: %s ", e.getMessage()), Constants.ResponseMessage.UPDATE_USER,
+                    "Update User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.UPDATE_USER,
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
-                    String.format("Delete User failed: %s ", e.getMessage()), Constants.ResponseMessage.DELETE_USER,
+                    "Delete User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.DELETE_USER,
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
-                    String.format("Get all users failed: %s ", e.getMessage()), Constants.ResponseMessage.GET_ALL_USERS,
+                    "Get all users failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.GET_ALL_USERS,
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
-                    String.format("Get user failed: %s ", e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
+                    "Get user failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
                     ResponseEnum.msg400);
             return genericResponse.matchingResponseMessage(response);
         }
