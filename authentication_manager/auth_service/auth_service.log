@@ -296,3 +296,6 @@ Identify and stop the process that's listening on port 4001 or configure this ap
 2024-04-05T21:09:10.355+07:00  INFO 14536 --- [http-nio-4001-exec-7] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
 2024-04-05T21:09:10.355+07:00  INFO 14536 --- [http-nio-4001-exec-7] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
 2024-04-05T21:09:10.471+07:00  INFO 14536 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-04-05T21:43:28.152+07:00  INFO 14536 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-05T21:43:28.155+07:00  INFO 14536 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-05T21:43:28.221+07:00  INFO 14536 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
