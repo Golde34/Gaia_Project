@@ -3,28 +3,24 @@ package kafka
 import (
 	"context"
 	"errors"
-	"github.com/IBM/sarama"
 	kafka_config "golang_kafka/config"
+	kafka_message "golang_kafka/kafka/message"
 	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/IBM/sarama"
 )
 
-var config = kafka_config.Config{}
-var env, _ = config.LoadEnv()
-
-func ConsumerHandleMessage() {
-	keepRunning := true
-	log.Println("Starting a new Sarama consumer")
-
-	if env.Verbose {
+func NewConsumer(serverConfig kafka_config.Config) (Consumer, *sarama.Config) {
+	if serverConfig.Verbose {
 		sarama.Logger = log.New(os.Stdout, "[sarama] ", log.LstdFlags)
 	}
 
-	version, err := sarama.ParseKafkaVersion(env.Version)
+	version, err := sarama.ParseKafkaVersion(serverConfig.Version)
 	if err != nil {
 		log.Panicf("Error parsing Kafka version: %v", err)
 	}
@@ -36,7 +32,7 @@ func ConsumerHandleMessage() {
 	config := sarama.NewConfig()
 	config.Version = version
 
-	switch env.Assignor {
+	switch serverConfig.Assignor {
 	case "sticky":
 		config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategySticky()}
 	case "roundrobin":
@@ -44,10 +40,10 @@ func ConsumerHandleMessage() {
 	case "range":
 		config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategyRange()}
 	default:
-		log.Panicf("Unrecognized consumer group partition assignor: %s", env.Assignor)
+		log.Panicf("Unrecognized consumer group partition assignor: %s", serverConfig.Assignor)
 	}
 
-	if env.Oldest {
+	if serverConfig.Oldest {
 		config.Consumer.Offsets.Initial = sarama.OffsetOldest
 	}
 
@@ -58,8 +54,17 @@ func ConsumerHandleMessage() {
 		ready: make(chan bool),
 	}
 
+	return consumer, config
+}
+
+func ConsumerHandleMessage(serverConfig kafka_config.Config) {
+	keepRunning := true
+	log.Println("Starting a new Sarama consumer")
+
+	consumer, config := NewConsumer(serverConfig)
+
 	ctx, cancel := context.WithCancel(context.Background())
-	client, err := sarama.NewConsumerGroup(strings.Split(env.BootstrapServers, ","), env.GroupID, config)
+	client, err := sarama.NewConsumerGroup(strings.Split(serverConfig.BootstrapServers, ","), serverConfig.GroupID, config)
 	if err != nil {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}
@@ -70,10 +75,8 @@ func ConsumerHandleMessage() {
 	go func() {
 		defer wg.Done()
 		for {
-			// `Consume` should be called inside an infinite loop, when a
-			// server-side rebalance happens, the consumer session will need to be
-			// recreated to get the new claims
-			if err := client.Consume(ctx, strings.Split(env.Topics, ","), &consumer); err != nil {
+
+			if err := client.Consume(ctx, strings.Split(serverConfig.Topics, ","), &consumer); err != nil {
 				if errors.Is(err, sarama.ErrClosedConsumerGroup) {
 					return
 				}
@@ -127,31 +130,20 @@ func toggleConsumptionFlow(client sarama.ConsumerGroup, isPaused *bool) {
 	*isPaused = !*isPaused
 }
 
-// Consumer represents a Sarama consumer group consumer
 type Consumer struct {
 	ready chan bool
 }
 
-// Setup is run at the beginning of a new session, before ConsumeClaim
 func (consumer *Consumer) Setup(sarama.ConsumerGroupSession) error {
-	// Mark the consumer as ready
 	close(consumer.ready)
 	return nil
 }
 
-// Cleanup is run at the end of a session, once all ConsumeClaim goroutines have exited
 func (consumer *Consumer) Cleanup(sarama.ConsumerGroupSession) error {
 	return nil
 }
 
-// ConsumeClaim must start a consumer loop of ConsumerGroupClaim's Messages().
-// Once the Messages() channel is closed, the Handler must finish its processing
-// loop and exit.
 func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
-	// NOTE:
-	// Do not move the code below to a goroutine.
-	// The `ConsumeClaim` itself is called within a goroutine, see:
-	// https://github.com/IBM/sarama/blob/main/consumer_group.go#L27-L29
 	for {
 		select {
 		case message, ok := <-claim.Messages():
@@ -160,10 +152,14 @@ func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, clai
 				return nil
 			}
 			log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s", string(message.Value), message.Timestamp, message.Topic)
+
+			messageHandler, err := kafka_message.ConsumeMessage(string(message.Value), message.Topic)
+			if err != nil {
+				log.Printf("Error consuming message: %v", err)
+			}
+			log.Printf("Message consumed: %s", messageHandler)
+
 			session.MarkMessage(message, "")
-		// Should return when `session.Context()` is done.
-		// If not, will raise `ErrRebalanceInProgress` or `read tcp <ip>:<port>: i/o timeout` when kafka rebalance. see:
-		// https://github.com/IBM/sarama/issues/1192
 		case <-session.Context().Done():
 			return nil
 		}
