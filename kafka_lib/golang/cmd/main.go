@@ -8,10 +8,11 @@ import (
 
 func main() {
 	println("Hello, World!")
-	// go kafka.StartKafka()
+	fmt.Print("Starting kafka consumer")
 	go kafka.InitDynamicConsumers()
-	// go kafka.ConsumerHandleMessage()
-	go kafka.ProducerHandleMessage("test")
+	message := "test"
+	kafka.ProducerHandleMessage(message, "test")
+	// go kafka.ProducerHandleMessage("test")
 	fmt.Println("Kafka started")
 	time.Sleep(10 * time.Hour)
 }

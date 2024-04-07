@@ -23,7 +23,7 @@ var(
 	recordsRate = metrics.GetOrRegisterMeter("records.rate", nil)
 )
 
-func ProducerHandleMessage(topic string) {
+func ProducerHandleMessage(message, topic string) {
 	keepRunning := true
 	log.Println("Starting a new Sarama producer")
 
@@ -64,7 +64,7 @@ func ProducerHandleMessage(topic string) {
 				case <-ctx.Done():
 					return
 				default:
-					produceTestRecord(producerProvider, topic)
+					produceTestRecord(producerProvider, topic, message)
 				}
 			}
 		}()
@@ -84,7 +84,7 @@ func ProducerHandleMessage(topic string) {
 	producerProvider.clear()
 }
 
-func produceTestRecord(producerProvider *producerProvider, topic string) {
+func produceTestRecord(producerProvider *producerProvider, topic, message string) {
 	producer := producerProvider.borrow()
 	defer producerProvider.release(producer)
 
@@ -98,7 +98,7 @@ func produceTestRecord(producerProvider *producerProvider, topic string) {
 	// Produce some records in transaction
 	var i int64
 	for i = 0; i < recordsNumber; i++ {
-		producer.Input() <- &sarama.ProducerMessage{Topic: topic , Key: nil, Value: sarama.StringEncoder("test")}
+		producer.Input() <- &sarama.ProducerMessage{Topic: topic , Key: nil, Value: sarama.StringEncoder(message)}
 	}
 
 	// commit transaction
