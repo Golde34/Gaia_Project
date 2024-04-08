@@ -104,8 +104,9 @@
             <version>0.9.1</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
         <!-- Modelmapper -->
         <dependency>
@@ -118,12 +119,6 @@
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-core</artifactId>
             <version>0.46</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>jaxws-rt</artifactId>
-            <version>4.0.2</version>
-            <scope>provided</scope>
         </dependency>
         <!-- Caffeine cache-->
         <dependency>
