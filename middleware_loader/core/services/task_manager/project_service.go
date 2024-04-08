@@ -20,6 +20,7 @@ func NewProjectService() *ProjectService {
 
 var projectValidation = validator.NewProjectDTOValidator()
 var projectResponse = response_dtos.NewCreateProjectResponseDTO()
+var groupTaskResponse = response_dtos.NewGroupTaskResponseDTO()
 
 func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
 	projects, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).ListAll()
@@ -122,6 +123,16 @@ func (s *ProjectService) UpdateProjectColor(ctx context.Context, input model.Upd
 		projectModel := projectResponse.MapperToGraphQLModel(project)
 		return projectModel, nil
 	}
+}
+
+func (s *ProjectService) GetGroupTasksInProject(ctx context.Context, id string) ([]model.GroupTask, error) {
+	groupTasks, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).GetGroupTasksInProject(id)
+	if err != nil {
+		return nil, err
+	}
+	groupTasksModel := groupTaskResponse.MapperListToGraphQLModel(groupTasks)
+
+	return groupTasksModel, nil
 }
 
 func (s *ProjectService) ArchiveProject(ctx context.Context, input model.IDInput) (model.Project, error) {

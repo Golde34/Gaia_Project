@@ -12,7 +12,7 @@ type IProjectAdapter interface {
 	CreateProject(input model.CreateProjectInput) (response_dtos.ProjectResponseDTO, error)
 	UpdateProject(input model.UpdateProjectInput, id string) (response_dtos.ProjectResponseDTO, error)
 	DeleteProject(id string) (response_dtos.ProjectResponseDTO, error)
-	// GetGroupTasks(id string) ([]response_dtos.TaskResponseDTO, error)
+	GetGroupTasksInProject(id string) ([]response_dtos.GroupTaskResponseDTO, error)
 	UpdateProjectName(input converter_dtos.UpdateNameConverterDTO, id string) (response_dtos.ProjectResponseDTO, error)
 	UpdateProjectColor(input converter_dtos.UpdateColorConverterDTO, id string) (response_dtos.ProjectResponseDTO, error)
 	ArchiveProject(id string) (response_dtos.ProjectResponseDTO, error)

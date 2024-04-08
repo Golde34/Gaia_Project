@@ -78,12 +78,12 @@ type GroupTask struct {
 	Description    string   `json:"description"`
 	Priority       []string `json:"priority"`
 	Status         string   `json:"status"`
-	OrdinalNumber  string   `json:"ordinalNumber"`
+	OrdinalNumber  *int     `json:"ordinalNumber,omitempty"`
 	ActiveStatus   string   `json:"activeStatus"`
 	Project        string   `json:"project"`
 	Tasks          []string `json:"tasks"`
-	TotalTasks     int      `json:"totalTasks"`
-	CompletedTasks int      `json:"completedTasks"`
+	TotalTasks     *int     `json:"totalTasks,omitempty"`
+	CompletedTasks *int     `json:"completedTasks,omitempty"`
 	CreatedAt      string   `json:"createdAt"`
 	UpdatedAt      string   `json:"updatedAt"`
 }
@@ -107,6 +107,9 @@ type MoveTaskInput struct {
 	TaskID         string `json:"taskId"`
 }
 
+type Mutation struct {
+}
+
 type Privilege struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
@@ -128,6 +131,9 @@ type Project struct {
 	OwnerID      float64  `json:"ownerId"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
+}
+
+type Query struct {
 }
 
 type Role struct {

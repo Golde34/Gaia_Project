@@ -151,16 +151,17 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetPrivilegeByName func(childComplexity int, input model.PrivilegeInput) int
-		GetProjectByID     func(childComplexity int, input model.IDInput) int
-		GetRoleByName      func(childComplexity int, input model.RoleInput) int
-		GetTaskByID        func(childComplexity int, input model.IDInput) int
-		GetUserByUsername  func(childComplexity int, input model.UserInput) int
-		ListAllPrivileges  func(childComplexity int) int
-		ListAllProjects    func(childComplexity int) int
-		ListAllRoles       func(childComplexity int) int
-		ListAllTasks       func(childComplexity int) int
-		ListAllUsers       func(childComplexity int) int
+		GetGroupTasksInProject func(childComplexity int, input model.IDInput) int
+		GetPrivilegeByName     func(childComplexity int, input model.PrivilegeInput) int
+		GetProjectByID         func(childComplexity int, input model.IDInput) int
+		GetRoleByName          func(childComplexity int, input model.RoleInput) int
+		GetTaskByID            func(childComplexity int, input model.IDInput) int
+		GetUserByUsername      func(childComplexity int, input model.UserInput) int
+		ListAllPrivileges      func(childComplexity int) int
+		ListAllProjects        func(childComplexity int) int
+		ListAllRoles           func(childComplexity int) int
+		ListAllTasks           func(childComplexity int) int
+		ListAllUsers           func(childComplexity int) int
 	}
 
 	Role struct {
@@ -274,6 +275,7 @@ type QueryResolver interface {
 	GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error)
 	ListAllTasks(ctx context.Context) ([]*model.Task, error)
 	GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error)
+	GetGroupTasksInProject(ctx context.Context, input model.IDInput) ([]*model.GroupTask, error)
 }
 
 type executableSchema struct {
@@ -987,6 +989,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Project.UpdatedAt(childComplexity), true
+
+	case "Query.getGroupTasksInProject":
+		if e.complexity.Query.GetGroupTasksInProject == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getGroupTasksInProject_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetGroupTasksInProject(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Query.getPrivilegeByName":
 		if e.complexity.Query.GetPrivilegeByName == nil {
@@ -2002,6 +2016,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getGroupTasksInProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -3261,14 +3290,11 @@ func (ec *executionContext) _GroupTask_ordinalNumber(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_GroupTask_ordinalNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3278,7 +3304,7 @@ func (ec *executionContext) fieldContext_GroupTask_ordinalNumber(ctx context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3437,14 +3463,11 @@ func (ec *executionContext) _GroupTask_totalTasks(ctx context.Context, field gra
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(*int)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_GroupTask_totalTasks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3481,14 +3504,11 @@ func (ec *executionContext) _GroupTask_completedTasks(ctx context.Context, field
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(*int)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_GroupTask_completedTasks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7131,6 +7151,89 @@ func (ec *executionContext) fieldContext_Query_getTaskById(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getTaskById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getGroupTasksInProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getGroupTasksInProject(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetGroupTasksInProject(rctx, fc.Args["input"].(model.IDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.GroupTask)
+	fc.Result = res
+	return ec.marshalNGroupTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getGroupTasksInProject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_GroupTask_id(ctx, field)
+			case "title":
+				return ec.fieldContext_GroupTask_title(ctx, field)
+			case "description":
+				return ec.fieldContext_GroupTask_description(ctx, field)
+			case "priority":
+				return ec.fieldContext_GroupTask_priority(ctx, field)
+			case "status":
+				return ec.fieldContext_GroupTask_status(ctx, field)
+			case "ordinalNumber":
+				return ec.fieldContext_GroupTask_ordinalNumber(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_GroupTask_activeStatus(ctx, field)
+			case "project":
+				return ec.fieldContext_GroupTask_project(ctx, field)
+			case "tasks":
+				return ec.fieldContext_GroupTask_tasks(ctx, field)
+			case "totalTasks":
+				return ec.fieldContext_GroupTask_totalTasks(ctx, field)
+			case "completedTasks":
+				return ec.fieldContext_GroupTask_completedTasks(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_GroupTask_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_GroupTask_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupTask", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getGroupTasksInProject_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -12298,9 +12401,6 @@ func (ec *executionContext) _GroupTask(ctx context.Context, sel ast.SelectionSet
 			}
 		case "ordinalNumber":
 			out.Values[i] = ec._GroupTask_ordinalNumber(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "activeStatus":
 			out.Values[i] = ec._GroupTask_activeStatus(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -12318,14 +12418,8 @@ func (ec *executionContext) _GroupTask(ctx context.Context, sel ast.SelectionSet
 			}
 		case "totalTasks":
 			out.Values[i] = ec._GroupTask_totalTasks(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "completedTasks":
 			out.Values[i] = ec._GroupTask_completedTasks(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "createdAt":
 			out.Values[i] = ec._GroupTask_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -13016,6 +13110,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getTaskById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getGroupTasksInProject":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getGroupTasksInProject(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -13927,6 +14043,44 @@ func (ec *executionContext) unmarshalNGenerateTaskWithoutGroupTaskInput2middlewa
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNGroupTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v []*model.GroupTask) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -13945,21 +14099,6 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 func (ec *executionContext) unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx context.Context, v interface{}) (model.IDInput, error) {
 	res, err := ec.unmarshalInputIdInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
-	res, err := graphql.UnmarshalInt(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	res := graphql.MarshalInt(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
 }
 
 func (ec *executionContext) marshalNListAllUsers2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐListAllUsers(ctx context.Context, sel ast.SelectionSet, v []*model.ListAllUsers) graphql.Marshaler {
@@ -14696,6 +14835,29 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) marshalOGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v *model.GroupTask) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._GroupTask(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
 	return res
 }
 

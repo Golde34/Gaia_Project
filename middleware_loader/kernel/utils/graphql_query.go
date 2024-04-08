@@ -116,7 +116,7 @@ func writeInputPairs(inputMap map[string]interface{}) string {
 		case int:
 			inputPairs = append(inputPairs, fmt.Sprintf("%s: %d", key, v))
 		case bool:
-			inputPairs = append(inputPairs, fmt.Sprintf("%s: %t", key, v))	
+			inputPairs = append(inputPairs, fmt.Sprintf("%s: %t", key, v))
 		case []interface{}: // Only support array of strings
 			strSlice := make([]string, len(v))
 			for i, elem := range v {
@@ -154,7 +154,8 @@ func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value)
 	switch fieldValue.Kind() {
 	case reflect.Struct, reflect.Interface:
 		subFields := ConvertOutput(fieldValue.Interface())
-		outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), subFields)
+		fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
+		outputKey = fmt.Sprintf("%s { %s }", fieldName, subFields)
 	case reflect.Slice:
 		sliceOutput := make([]string, 0)
 		sliceElementType := fieldValue.Type().Elem()
@@ -165,12 +166,13 @@ func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value)
 		if newElement.Kind() == reflect.Struct || newElement.Kind() == reflect.Interface {
 			// Convert the struct fields to a string
 			sliceOutput = append(sliceOutput, ConvertOutput(newElement.Interface()))
-			outputKey = fmt.Sprintf("%s { %s }", field.Tag.Get("json"), strings.Join(sliceOutput, ", "))
+			fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
+			outputKey = fmt.Sprintf("%s { %s }", fieldName, strings.Join(sliceOutput, ", "))
 		} else {
-			outputKey = field.Tag.Get("json")
+			outputKey = strings.Split(field.Tag.Get("json"), ",")[0]
 		}
 	default:
-		outputKey = field.Tag.Get("json")
+		outputKey = strings.Split(field.Tag.Get("json"), ",")[0]
 	}
 	return outputKey
 }
