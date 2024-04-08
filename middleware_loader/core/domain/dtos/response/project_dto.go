@@ -14,7 +14,7 @@ type ProjectResponseDTO struct {
 	Color        string   `json:"color"`
 	ActiveStatus string   `json:"activeStatus"`
 	GroupTasks   []string `json:"groupTasks"`
-	Owner        float64      `json:"owner"`
+	Owner        float64  `json:"owner"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
 }
@@ -24,13 +24,13 @@ func NewCreateProjectResponseDTO() *ProjectResponseDTO {
 }
 
 // mapper from dto to graphql model
-func (in *ProjectResponseDTO) MapperToGraphQLModel(input ProjectResponseDTO) model.Project{
+func (in *ProjectResponseDTO) MapperToGraphQLModel(input ProjectResponseDTO) model.Project {
 	var out model.Project
 	mapper.AutoMapper(&input, &out)
 	return out
 }
 
-func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDTO) []model.Project{
+func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDTO) []model.Project {
 	var out []model.Project
 	for _, item := range input {
 		out = append(out, in.MapperToGraphQLModel(item))

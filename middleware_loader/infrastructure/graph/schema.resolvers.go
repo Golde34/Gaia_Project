@@ -240,7 +240,7 @@ func (r *queryResolver) GetGroupTasksInProject(ctx context.Context, input model.
 		groupTaskCopy := groupTask
 		modelGroupTask = append(modelGroupTask, &groupTaskCopy)
 	}
-	return modelGroupTask, err	
+	return modelGroupTask, err
 }
 
 // Mutation returns MutationResolver implementation.

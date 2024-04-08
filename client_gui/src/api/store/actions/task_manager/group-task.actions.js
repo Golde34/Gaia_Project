@@ -20,6 +20,7 @@ export const getGroupTaskList = (projectId) => async (dispatch) => {
     try {
         const { data } = await serverRequest(`/project/${projectId}/group-tasks`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_LIST_SUCCESS, payload: data.data });
+        console.log(data.data);
     } catch (error) {
         dispatch({
             type: GROUP_TASK_LIST_FAIL,
