@@ -4,7 +4,7 @@ type GroupTask {
   description: String!
   priority: [String!]!
   status: String!
-  ordinalNumber: String!
+  ordinalNumber: Int!
   activeStatus: String!    
 
   project: String!

@@ -33,9 +33,9 @@ func NewProjectRouter(projectService *services.ProjectService, db database_mongo
 		r.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.DeleteProject(w, r, projectService)
 		})
-		// r.Get("/{id}/group-tasks", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.GetGroupTasks(w, r, projectService)
-		// })
+		r.Get("/{id}/group-tasks", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetGroupTasksInProject(w, r, projectService)
+		})
 		r.Put("/{id}/update-name", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateProjectName(w, r, projectService)
 		})

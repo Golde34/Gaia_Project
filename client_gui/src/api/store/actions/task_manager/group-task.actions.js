@@ -11,13 +11,14 @@ import { GROUP_TASK_CREATE_FAIL, GROUP_TASK_CREATE_REQUEST, GROUP_TASK_CREATE_SU
 } from "../../constants/task_manager/group-task.constants";
 
 const portName = {
-    taskManager: 'taskManagerPort'
+    taskManager: 'taskManagerPort',
+    middlewarePort: 'middlewarePort'
 }
 
 export const getGroupTaskList = (projectId) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_LIST_REQUEST, payload: projectId });
     try {
-        const { data } = await serverRequest(`/project/${projectId}/group-tasks`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/project/${projectId}/group-tasks`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

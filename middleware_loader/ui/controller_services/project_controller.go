@@ -19,7 +19,7 @@ func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.Pr
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
-	
+
 }
 
 func GetById(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
@@ -80,24 +80,17 @@ func DeleteProject(w http.ResponseWriter, r *http.Request, projectService *servi
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
 
-// func GetAllGroupTasks(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
-// 	var body map[string]interface{}
-// 	body, err := controller_utils.MappingBody(w, r)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusBadRequest)
-// 		return
-// 	}
+func GetGroupTasksInProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	projectId := chi.URLParam(r, "id")
 
-// 	input := mapper.GetProjectId(body)
-// 	token := mapper.GetToken(body)
+	input := mapper.GetProjectId(projectId)
 
-// 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-// 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getAllGroupTasks", QueryInput: input, QueryOutput: model.GroupTask{}})
-// 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "checkToken", QueryInput: token, QueryOutput: model.TokenResponse{}})
-// 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getGroupTasksInProject", QueryInput: input, QueryOutput: model.GroupTask{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
-// 	utils.ConnectToGraphQLServer(w, graphqlQuery)
-// }
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
 
 func UpdateProjectName(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	var body map[string]interface{}

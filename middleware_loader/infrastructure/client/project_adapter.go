@@ -124,23 +124,23 @@ func (adapter *ProjectAdapter) DeleteProject(id string) (response_dtos.ProjectRe
 	return project, nil
 }
 
-// func (adapter *ProjectAdapter) GetGroupTasks(id string) ([]response_dtos.TaskResponseDTO, error) {
-// 	getGroupTasksURL := base.TaskManagerServiceURL + "/project/" + id + "/tasks"
-// 	var tasks []response_dtos.TaskResponseDTO
+func (adapter *ProjectAdapter) GetGroupTasksInProject(id string) ([]response_dtos.GroupTaskResponseDTO, error) {
+	getGroupTasksURL := base.TaskManagerServiceURL + "/project/" + id + "/group-tasks"
+	var tasks []response_dtos.GroupTaskResponseDTO
 
-// 	bodyResult, err := base.BaseAPI(getGroupTasksURL, "GET", nil)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	bodyResult, err := base.BaseAPI(getGroupTasksURL, "GET", nil)
+	if err != nil {
+		return nil, err
+	}
 
-// 	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-// 	err = json.Unmarshal(dataBytes, &tasks)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	err = json.Unmarshal(dataBytes, &tasks)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return tasks, nil
-// }
+	return tasks, nil
+}
 
 func (adapter *ProjectAdapter) UpdateProjectName(input converter_dtos.UpdateNameConverterDTO, id string) (response_dtos.ProjectResponseDTO, error) {
 	updateNameURL := base.TaskManagerServiceURL + "/project/" + id + "/update-name"

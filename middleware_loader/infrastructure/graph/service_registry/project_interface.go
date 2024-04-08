@@ -15,4 +15,5 @@ type ProjectService interface {
 	UpdateProjectColor(ctx context.Context, input model.UpdateColorInput) (model.Project, error)
 	ArchiveProject(ctx context.Context, input model.IDInput) (model.Project, error)
 	EnableProject(ctx context.Context, input model.IDInput) (model.Project, error)
+	GetGroupTasksInProject(ctx context.Context, id string) ([]model.GroupTask, error)
 }

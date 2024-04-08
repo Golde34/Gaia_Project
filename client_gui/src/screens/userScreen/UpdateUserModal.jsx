@@ -70,7 +70,7 @@ const UpdateUserModal = (props) => {
         updatedUser.userId = currentUser.id;
         updateUser(updatedUser);
         console.log(updatedUser);
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (

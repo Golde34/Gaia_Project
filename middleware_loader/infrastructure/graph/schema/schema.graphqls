@@ -12,6 +12,8 @@ type Query {
   getProjectById(input: IdInput!): Project!
   listAllTasks: [Task]!
   getTaskById(input: IdInput!): Task!
+
+  getGroupTasksInProject(input: IdInput!): [GroupTask]!
 }
 
 type Mutation {
