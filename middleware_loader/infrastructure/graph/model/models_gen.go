@@ -31,6 +31,15 @@ type Comment struct {
 	Task         string `json:"task"`
 }
 
+type CreateGroupTaskInput struct {
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Priority    []string `json:"priority"`
+	Status      string   `json:"status"`
+	ProjectID   string   `json:"projectId"`
+	Tasks       []string `json:"tasks,omitempty"`
+}
+
 type CreateProjectInput struct {
 	Name         string `json:"name"`
 	Description  string `json:"description"`

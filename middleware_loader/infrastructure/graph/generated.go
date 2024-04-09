@@ -106,6 +106,7 @@ type ComplexityRoot struct {
 		ArchiveTask                  func(childComplexity int, input model.IDInput) int
 		CheckPermission              func(childComplexity int, input model.UserPermissionInput) int
 		CheckToken                   func(childComplexity int, input model.TokenInput) int
+		CreateGroupTask              func(childComplexity int, input model.CreateGroupTaskInput) int
 		CreatePrivilege              func(childComplexity int, input model.PrivilegeInput) int
 		CreateProject                func(childComplexity int, input model.CreateProjectInput) int
 		CreateRole                   func(childComplexity int, input model.RoleInput) int
@@ -263,6 +264,7 @@ type MutationResolver interface {
 	MoveTask(ctx context.Context, input model.MoveTaskInput) (*model.Task, error)
 	ArchiveTask(ctx context.Context, input model.IDInput) (*model.Task, error)
 	Enable(ctx context.Context, input model.IDInput) (*model.Task, error)
+	CreateGroupTask(ctx context.Context, input model.CreateGroupTaskInput) (*model.GroupTask, error)
 }
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
@@ -617,6 +619,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CheckToken(childComplexity, args["input"].(model.TokenInput)), true
+
+	case "Mutation.createGroupTask":
+		if e.complexity.Mutation.CreateGroupTask == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createGroupTask_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateGroupTask(childComplexity, args["input"].(model.CreateGroupTaskInput)), true
 
 	case "Mutation.createPrivilege":
 		if e.complexity.Mutation.CreatePrivilege == nil {
@@ -1441,6 +1455,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputCreateGroupTaskInput,
 		ec.unmarshalInputCreateProjectInput,
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateUserInput,
@@ -1636,6 +1651,21 @@ func (ec *executionContext) field_Mutation_checkToken_args(ctx context.Context, 
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNTokenInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTokenInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createGroupTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.CreateGroupTaskInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateGroupTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐCreateGroupTaskInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5960,6 +5990,89 @@ func (ec *executionContext) fieldContext_Mutation_enable(ctx context.Context, fi
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_enable_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createGroupTask(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createGroupTask(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateGroupTask(rctx, fc.Args["input"].(model.CreateGroupTaskInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.GroupTask)
+	fc.Result = res
+	return ec.marshalNGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createGroupTask(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_GroupTask_id(ctx, field)
+			case "title":
+				return ec.fieldContext_GroupTask_title(ctx, field)
+			case "description":
+				return ec.fieldContext_GroupTask_description(ctx, field)
+			case "priority":
+				return ec.fieldContext_GroupTask_priority(ctx, field)
+			case "status":
+				return ec.fieldContext_GroupTask_status(ctx, field)
+			case "ordinalNumber":
+				return ec.fieldContext_GroupTask_ordinalNumber(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_GroupTask_activeStatus(ctx, field)
+			case "project":
+				return ec.fieldContext_GroupTask_project(ctx, field)
+			case "tasks":
+				return ec.fieldContext_GroupTask_tasks(ctx, field)
+			case "totalTasks":
+				return ec.fieldContext_GroupTask_totalTasks(ctx, field)
+			case "completedTasks":
+				return ec.fieldContext_GroupTask_completedTasks(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_GroupTask_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_GroupTask_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupTask", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createGroupTask_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -11268,6 +11381,68 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCreateGroupTaskInput(ctx context.Context, obj interface{}) (model.CreateGroupTaskInput, error) {
+	var it model.CreateGroupTaskInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "description", "priority", "status", "projectId", "tasks"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "priority":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priority"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Priority = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		case "projectId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("projectId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProjectID = data
+		case "tasks":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tasks"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Tasks = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context, obj interface{}) (model.CreateProjectInput, error) {
 	var it model.CreateProjectInput
 	asMap := map[string]interface{}{}
@@ -12732,6 +12907,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createGroupTask":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createGroupTask(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -14008,6 +14190,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNCreateGroupTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐCreateGroupTaskInput(ctx context.Context, v interface{}) (model.CreateGroupTaskInput, error) {
+	res, err := ec.unmarshalInputCreateGroupTaskInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreateProjectInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐCreateProjectInput(ctx context.Context, v interface{}) (model.CreateProjectInput, error) {
 	res, err := ec.unmarshalInputCreateProjectInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -14041,6 +14228,10 @@ func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.S
 func (ec *executionContext) unmarshalNGenerateTaskWithoutGroupTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGenerateTaskWithoutGroupTaskInput(ctx context.Context, v interface{}) (model.GenerateTaskWithoutGroupTaskInput, error) {
 	res, err := ec.unmarshalInputGenerateTaskWithoutGroupTaskInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNGroupTask2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v model.GroupTask) graphql.Marshaler {
+	return ec._GroupTask(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v []*model.GroupTask) graphql.Marshaler {
@@ -14079,6 +14270,16 @@ func (ec *executionContext) marshalNGroupTask2ᚕᚖmiddleware_loaderᚋinfrastr
 	wg.Wait()
 
 	return ret
+}
+
+func (ec *executionContext) marshalNGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v *model.GroupTask) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._GroupTask(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -14887,6 +15088,44 @@ func (ec *executionContext) marshalORole2ᚖmiddleware_loaderᚋinfrastructure�
 		return graphql.Null
 	}
 	return ec._Role(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
