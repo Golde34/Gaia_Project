@@ -7,11 +7,13 @@ class MiddlewareServiceRequest:
         self.url = url  
     
     def microservices_status(self):
-        middleware_response = requests.get(f"{self.url}/status")
-        
-        if middleware_response.status_code == 200:
-            return jsonify({'status': 'OK'})
-        else :
+        try:
+            middleware_response = requests.get(f"{self.url}/status")
+            
+            if middleware_response.status_code == 200:
+                return jsonify({'status': 'OK'})
+            else :
+                return jsonify({'status': 'ERROR'})
+        except:
             return jsonify({'status': 'ERROR'})
-        
     
