@@ -15,3 +15,13 @@ type GroupTask {
   createdAt: String!
   updatedAt: String!
 }
+
+input CreateGroupTaskInput {
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+
+  projectId: String!
+  tasks: [String!]
+}

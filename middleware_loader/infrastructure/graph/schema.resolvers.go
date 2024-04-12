@@ -169,6 +169,11 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 	panic(fmt.Errorf("not implemented: Enable - enable"))
 }
 
+// CreateGroupTask is the resolver for the createGroupTask field.
+func (r *mutationResolver) CreateGroupTask(ctx context.Context, input model.CreateGroupTaskInput) (*model.GroupTask, error) {
+	panic(fmt.Errorf("not implemented: CreateGroupTask - createGroupTask"))
+}
+
 // ListAllUsers is the resolver for the listAllUsers field.
 func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error) {
 	users, err := userService.ListAllUsers(ctx)

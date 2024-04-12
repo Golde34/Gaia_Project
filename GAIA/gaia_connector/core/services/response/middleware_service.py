@@ -31,6 +31,3 @@ class MiddlewareServiceReponse:
         data['email'] = email
         
         return status_response(200, data)
-    
-    def status(self):
-        return status_response(200, '5000')

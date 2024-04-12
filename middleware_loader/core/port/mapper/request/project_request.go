@@ -5,7 +5,7 @@ import (
 	"middleware_loader/core/port/mapper/base"
 )
 
-func GetProjectId(id string) *request_dtos.IdInputDTO {
+func GetId(id string) *request_dtos.IdInputDTO {
 	var input request_dtos.IdInputDTO
 	input.Id = id
 	return &input

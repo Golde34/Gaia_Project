@@ -4,10 +4,8 @@ import { TaskEntity } from "../domain/entities/task.entity";
 export const subTaskValidation = {
     async checkExistedSubTaskBySubTaskId(subTaskId: string): Promise<boolean> {
         try {
-            if (await SubTaskEntity.findOne({ _id: subTaskId }) != null) {
-                return true; // existed
-            }
-            return false;
+            const existedSubTask = await SubTaskEntity.findOne({ _id: subTaskId }) != null
+            return existedSubTask;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -16,11 +14,8 @@ export const subTaskValidation = {
 
     async checkExistedSubTaskByTitle(mission: string): Promise<boolean> {
         try {
-            if (await SubTaskEntity.findOne({ mission: mission }) != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            const existedSubTask = await SubTaskEntity.findOne({ mission: mission }) != null
+            return existedSubTask;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -30,11 +25,7 @@ export const subTaskValidation = {
     async checkExistedSubTaskInTask(subTaskId: string, taskId: string): Promise<boolean> {
         try {
             const task = TaskEntity.findOne({ _id: taskId, subTasks: subTaskId });
-            if (await task != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            return task != null;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;

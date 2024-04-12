@@ -24,7 +24,7 @@ func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.Pr
 
 func GetById(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
-	input := mapper.GetProjectId(projectId)
+	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getProjectById", QueryInput: input, QueryOutput: model.Project{}})
@@ -71,7 +71,7 @@ func UpdateProject(w http.ResponseWriter, r *http.Request, projectService *servi
 
 func DeleteProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
-	input := mapper.GetProjectId(projectId)
+	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "deleteProject", QueryInput: input, QueryOutput: model.Project{}})
@@ -83,7 +83,7 @@ func DeleteProject(w http.ResponseWriter, r *http.Request, projectService *servi
 func GetGroupTasksInProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
 
-	input := mapper.GetProjectId(projectId)
+	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getGroupTasksInProject", QueryInput: input, QueryOutput: model.GroupTask{}})
@@ -128,7 +128,7 @@ func UpdateProjectColor(w http.ResponseWriter, r *http.Request, projectService *
 
 func ArchiveProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
-	input := mapper.GetProjectId(projectId)
+	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "archiveProject", QueryInput: input, QueryOutput: model.Project{}})
@@ -139,7 +139,7 @@ func ArchiveProject(w http.ResponseWriter, r *http.Request, projectService *serv
 
 func EnableProject(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 	projectId := chi.URLParam(r, "id")
-	input := mapper.GetProjectId(projectId)
+	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "enableProject", QueryInput: input, QueryOutput: model.Project{}})

@@ -52,6 +52,8 @@ type Mutation {
   moveTask(input: MoveTaskInput!): Task!
   archiveTask(input: IdInput!): Task!
   enable(input: IdInput!): Task!
+
+  createGroupTask(input: CreateGroupTaskInput!): GroupTask!
 }
 
 input IdInput {
