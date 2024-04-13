@@ -16,6 +16,7 @@ var authService = auth_services.NewAuthService()
 var taskService = task_manager.NewTaskService()
 var projectService = task_manager.NewProjectService()
 var userService = auth_services.NewUserService()
+var groupTaskService = task_manager.NewGroupTaskService()
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
@@ -171,7 +172,50 @@ func (r *mutationResolver) Enable(ctx context.Context, input model.IDInput) (*mo
 
 // CreateGroupTask is the resolver for the createGroupTask field.
 func (r *mutationResolver) CreateGroupTask(ctx context.Context, input model.CreateGroupTaskInput) (*model.GroupTask, error) {
-	panic(fmt.Errorf("not implemented: CreateGroupTask - createGroupTask"))
+	groupTask, err := groupTaskService.CreateGroupTask(ctx, input)
+	return &groupTask, err
+}
+
+// UpdateGroupTask is the resolver for the updateGroupTask field.
+func (r *mutationResolver) UpdateGroupTask(ctx context.Context, input model.UpdateGroupTaskInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.UpdateGroupTask(ctx, input)
+	return &groupTask, err
+}
+
+// DeleteGroupTask is the resolver for the deleteGroupTask field.
+func (r *mutationResolver) DeleteGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.DeleteGroupTask(ctx, input)
+	return &groupTask, err
+}
+
+// UpdateGroupTaskName is the resolver for the updateGroupTaskName field.
+func (r *mutationResolver) UpdateGroupTaskName(ctx context.Context, input model.UpdateObjectNameInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.UpdateGroupTaskName(ctx, input)
+	return &groupTask, err
+}
+
+// CalculateCompletedTasks is the resolver for the calculateCompletedTasks field.
+func (r *mutationResolver) CalculateCompletedTasks(ctx context.Context, input model.IDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.CalculateCompletedTasks(ctx, input)
+	return &groupTask, err
+}
+
+// UpdateOrdinalNumber is the resolver for the updateOrdinalNumber field.
+func (r *mutationResolver) UpdateOrdinalNumber(ctx context.Context, input model.ProjectGroupTaskIDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.UpdateGroupTaskOrdinal(ctx, input)
+	return &groupTask, err
+}
+
+// ArchieveGroupTask is the resolver for the archieveGroupTask field.
+func (r *mutationResolver) ArchieveGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.ArchiveGroupTask(ctx, input)
+	return &groupTask, err
+}
+
+// EnableGroupTask is the resolver for the enableGroupTask field.
+func (r *mutationResolver) EnableGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.EnableGroupTask(ctx, input)
+	return &groupTask, err
 }
 
 // ListAllUsers is the resolver for the listAllUsers field.
@@ -227,16 +271,6 @@ func (r *queryResolver) GetProjectByID(ctx context.Context, input model.IDInput)
 	return &project, err
 }
 
-// ListAllTasks is the resolver for the listAllTasks field.
-func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {
-	panic(fmt.Errorf("not implemented: ListAllTasks - listAllTasks"))
-}
-
-// GetTaskByID is the resolver for the getTaskById field.
-func (r *queryResolver) GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: GetTaskByID - getTaskById"))
-}
-
 // GetGroupTaskInProject is the resolver for the getGroupTaskInProject field.
 func (r *queryResolver) GetGroupTasksInProject(ctx context.Context, input model.IDInput) ([]*model.GroupTask, error) {
 	groupTasks, err := projectService.GetGroupTasksInProject(ctx, input.ID)
@@ -246,6 +280,33 @@ func (r *queryResolver) GetGroupTasksInProject(ctx context.Context, input model.
 		modelGroupTask = append(modelGroupTask, &groupTaskCopy)
 	}
 	return modelGroupTask, err
+}
+
+// GetGroupTaskByID is the resolver for the getGroupTaskById field.
+func (r *queryResolver) GetGroupTaskByID(ctx context.Context, input model.IDInput) (*model.GroupTask, error) {
+	groupTask, err := groupTaskService.GetGroupTaskById(ctx, input)
+	return &groupTask, err
+}
+
+// GetTasksByGroupTaskID is the resolver for the getTasksByGroupTaskId field.
+func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) ([]*model.Task, error) {
+	tasks, err := groupTaskService.GetTasksInGroupTask(ctx, input)
+	modelTask := []*model.Task{}
+	for _, task := range tasks {
+		taskCopy := task
+		modelTask = append(modelTask, &taskCopy)
+	}
+	return modelTask, err
+}
+
+// ListAllTasks is the resolver for the listAllTasks field.
+func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {
+	panic(fmt.Errorf("not implemented: ListAllTasks - listAllTasks"))
+}
+
+// GetTaskByID is the resolver for the getTaskById field.
+func (r *queryResolver) GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented: GetTaskByID - getTaskById"))
 }
 
 // Mutation returns MutationResolver implementation.

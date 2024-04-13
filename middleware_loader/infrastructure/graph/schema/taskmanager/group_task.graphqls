@@ -25,3 +25,19 @@ input CreateGroupTaskInput {
   projectId: String!
   tasks: [String!]
 }
+
+input UpdateGroupTaskInput {
+  groupTaskId: String!
+  title: String!
+  description: String!
+  priority: [String!]!
+  status: String!
+
+  projectId: String!
+  tasks: [String!]
+}
+
+input ProjectGroupTaskIdInput {
+  projectId: String!
+  groupTaskId: String!
+}

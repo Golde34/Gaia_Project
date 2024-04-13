@@ -9,11 +9,14 @@ type Query {
 
   # Task Manager
   listAllProjects: [Project]!
-  getProjectById(input: IdInput!): Project!
+  getProjectById(input: IdInput!): Project! 
+  
+  getGroupTasksInProject(input: IdInput!): [GroupTask]!
+  getGroupTaskById(input: IdInput!): GroupTask!
+
+  getTasksByGroupTaskId(input: IdInput!): [Task]!
   listAllTasks: [Task]!
   getTaskById(input: IdInput!): Task!
-
-  getGroupTasksInProject(input: IdInput!): [GroupTask]!
 }
 
 type Mutation {
@@ -54,6 +57,13 @@ type Mutation {
   enable(input: IdInput!): Task!
 
   createGroupTask(input: CreateGroupTaskInput!): GroupTask!
+  updateGroupTask(input: UpdateGroupTaskInput!): GroupTask!
+  deleteGroupTask(input: IdInput!): GroupTask!
+  updateGroupTaskName(input: UpdateObjectNameInput!): GroupTask!
+  calculateCompletedTasks(input: IdInput!): GroupTask!
+  updateOrdinalNumber(input: ProjectGroupTaskIdInput!): GroupTask!
+  archieveGroupTask(input: IdInput!): GroupTask!
+  enableGroupTask(input: IdInput!): GroupTask!
 }
 
 input IdInput {

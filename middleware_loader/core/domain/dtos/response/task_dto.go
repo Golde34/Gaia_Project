@@ -25,7 +25,7 @@ type TaskResponseDTO struct {
 	Comments    []string `json:"comments"`
 }
 
-func NewCreateTaskResponseDTO() *TaskResponseDTO {
+func NewTaskResponseDTO() *TaskResponseDTO {
 	return &TaskResponseDTO{}
 }
 

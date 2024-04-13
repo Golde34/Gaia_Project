@@ -142,6 +142,11 @@ type Project struct {
 	UpdatedAt    string   `json:"updatedAt"`
 }
 
+type ProjectGroupTaskIDInput struct {
+	ProjectID   string `json:"projectId"`
+	GroupTaskID string `json:"groupTaskId"`
+}
+
 type Query struct {
 }
 
@@ -204,6 +209,16 @@ type TokenResponse struct {
 type UpdateColorInput struct {
 	ID    string `json:"id"`
 	Color string `json:"color"`
+}
+
+type UpdateGroupTaskInput struct {
+	GroupTaskID string   `json:"groupTaskId"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Priority    []string `json:"priority"`
+	Status      string   `json:"status"`
+	ProjectID   string   `json:"projectId"`
+	Tasks       []string `json:"tasks,omitempty"`
 }
 
 type UpdateObjectNameInput struct {
