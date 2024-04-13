@@ -63,18 +63,7 @@ class GroupTaskController {
         } catch (err) {
             next(err);
         }
-    }
-
-    async getTasksByGroupTaskId(req: Request, next: NextFunction): Promise<IResponse | undefined> {
-        try {
-            const groupTaskId = req.params.id;
-            const tasksResult = await taskService.getTaskDashboard(groupTaskId);
-
-            return tasksResult;
-        } catch (err) {
-            next(err);
-        }
-    }
+    } 
 
     async updateGroupTaskName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
@@ -90,10 +79,10 @@ class GroupTaskController {
         }
     }
 
-    async calculateTotalTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async calculateCompletedTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupTaskId = req.params.id;
-            const totalTasksResult = await groupTaskService.calculateTotalTasks(groupTaskId);
+            const totalTasksResult = await groupTaskService.calculateCompletedTasks(groupTaskId);
 
             return totalTasksResult;
         } catch (err) {

@@ -156,7 +156,7 @@ class GroupTaskService {
     }
 
     // calculate totalTasks, completedTasks
-    async calculateTotalTasks(groupTaskId: string): Promise<IResponse> {
+    async calculateCompletedTasks(groupTaskId: string): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const groupTask = await groupTaskStore.findGroupTaskById(groupTaskId);
