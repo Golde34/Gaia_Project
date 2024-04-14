@@ -12,6 +12,24 @@ import (
 	"time"
 )
 
+func BaseAPIV2(url string, method string, input interface{}, output interface{}) (interface{}, error) {
+	bodyResult, err := BaseAPI(url, method, input)
+	if err != nil {
+		return nil, err
+	}
+
+	dataBytes, err := ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(dataBytes, &output)
+	if err != nil {
+		return nil, err
+	}
+
+	return output, nil
+}
+
 func BaseAPI(url string, method string, input interface{}) (interface{}, error) {
 	if input == nil {
 		return baseAPINoInput(url, method, enums.OnlyData)
