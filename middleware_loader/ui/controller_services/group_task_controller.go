@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/task_manager"
@@ -30,7 +31,7 @@ func CreateGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *s
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
+	log.Println(body)
 	input := mapper.CreateGroupTaskRequestDTOMapper(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
@@ -48,7 +49,8 @@ func UpdateGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *s
 		return
 	}
 
-	input := mapper.UpdateGroupTaskRequestDTOMapper(body)
+	groupTaskId := chi.URLParam(r, "id")
+	input := mapper.UpdateGroupTaskRequestDTOMapper(body, groupTaskId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateGroupTask", QueryInput: input, QueryOutput: model.GroupTask{}})

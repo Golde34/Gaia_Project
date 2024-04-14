@@ -25,7 +25,7 @@ groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 
 // create group task
 groupTaskRouter.post("/create",
-    RequestValidator.validate(GroupTaskRequestDto),
+    RequestValidator.validateV2(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskResult = await groupTaskControllerImpl.createGroupTask(req, next);

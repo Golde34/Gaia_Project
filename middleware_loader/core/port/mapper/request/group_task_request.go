@@ -7,22 +7,29 @@ import (
 
 func CreateGroupTaskRequestDTOMapper(body map[string]interface{}) *request_dtos.CreateGroupTaskRequestDTO {
 	var input request_dtos.CreateGroupTaskRequestDTO
-	input.Title = body["title"].(string)
-	input.Description = body["description"].(string)
-	input.Priority = base.ConvertStringToStringArray(body["priority"].([]interface{}))
-	input.Status = body["status"].(string)
-	input.ProjectId = body["projectId"].(string)
+	bodyMap := body["body"].(map[string]interface{})
+	input.Title = base.GetStringValue(bodyMap, "title", "")
+	input.Description = base.GetStringValue(bodyMap, "description", "")
+	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Status = base.GetStringValue(bodyMap, "status", "")
+	input.ProjectId = base.GetStringValue(bodyMap, "projectId", "")
+	if bodyMap["tasks"] != nil {
+		input.Tasks = base.ConvertStringToStringArrayPointer(bodyMap["tasks"].([]interface{}))
+	} else {
+		input.Tasks = &[]string{}
+	}
 	return &input
 }
 
-func UpdateGroupTaskRequestDTOMapper(body map[string]interface{}) *request_dtos.UpdateGroupTaskRequestDTO {
+func UpdateGroupTaskRequestDTOMapper(body map[string]interface{}, id string) *request_dtos.UpdateGroupTaskRequestDTO {
 	var input request_dtos.UpdateGroupTaskRequestDTO
-	input.Title = body["title"].(string)
-	input.Description = body["description"].(string)
-	input.Priority = base.ConvertStringToStringArray(body["priority"].([]interface{}))
-	input.Status = body["status"].(string)
-	input.GroupTaskId = body["groupTaskId"].(string)
-	input.ProjectId = body["projectId"].(string)
+	bodyMap := body["body"].(map[string]interface{})
+	input.GroupTaskId = id
+	input.Title = base.GetStringValue(bodyMap, "title", "")
+	input.Description = base.GetStringValue(bodyMap, "description", "")
+	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Status = base.GetStringValue(bodyMap, "status", "")
+	input.ProjectId = base.GetStringValue(bodyMap, "projectId", "")
 	return &input
 }
 
@@ -30,8 +37,7 @@ func UpdateGroupTaskNameRequestDTOMapper(body map[string]interface{}, groupTaskI
 	var input request_dtos.UpdateGroupTaskNameInputDTO
 	bodyMap := body["body"].(map[string]interface{})
 	input.Name = bodyMap["newName"].(string)
-	input.ID = groupTaskId 
-
+	input.ID = groupTaskId
 	return &input
 }
 

@@ -24,7 +24,7 @@ class GroupTaskController {
 
     async createGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const createGroupTaskObjectDto = plainToInstance(GroupTaskRequestDto, bodyJson);
             const projectId = bodyJson.projectId;

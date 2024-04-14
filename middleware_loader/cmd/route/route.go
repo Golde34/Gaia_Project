@@ -58,5 +58,6 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	router.Group(func(r chi.Router) {
 		task_router.NewProjectRouter(projectService, db, router)
 		task_router.NewTaskRouter(taskService, db, router)
+		task_router.NewGroupTaskRouter(groupTaskService, db, router)
 	})
 }

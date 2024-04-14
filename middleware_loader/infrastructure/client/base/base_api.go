@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"middleware_loader/core/domain/enums"
+	"log"
 	"middleware_loader/core/domain/dtos/base"
+	"middleware_loader/core/domain/enums"
 	"net/http"
 	"time"
 )
@@ -29,6 +30,7 @@ func baseAPIWithInput(url string, method string, input interface{}, bodyType str
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
+	log.Println("Request: ", req)
 
 	return returnResponse(req, bodyType)
 }

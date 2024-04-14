@@ -34,7 +34,7 @@ export const getGroupTaskList = (projectId) => async (dispatch) => {
 export const getDetailGroupTask = (groupTaskId) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_DETAIL_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -55,7 +55,7 @@ export const createGroupTask = (groupTask) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest('/group-task/create', HttpMethods.POST, portName.taskManager, groupTask);
+        const { data } = await serverRequest('/group-task/create', HttpMethods.POST, portName.middlewarePort, groupTask);
         dispatch({ type: GROUP_TASK_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
