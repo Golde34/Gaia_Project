@@ -59,7 +59,7 @@ func UpdateGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *s
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
 
-func DeleteGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *services.GroupTaskService) {	
+func DeleteGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *services.GroupTaskService) {
 	groupTaskId := chi.URLParam(r, "id")
 	input := mapper.GetId(groupTaskId)
 
@@ -70,12 +70,12 @@ func DeleteGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *s
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
 
-func GetTasksInGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *services.GroupTaskService) {
+func GetTasksByGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *services.GroupTaskService) {
 	groupTaskId := chi.URLParam(r, "id")
 	input := mapper.GetId(groupTaskId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getTasksInGroupTask", QueryInput: input, QueryOutput: model.Task{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getTasksByGroupTaskId", QueryInput: input, QueryOutput: model.TaskDashboard{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
@@ -118,7 +118,7 @@ func UpdateGroupTaskOrdinal(w http.ResponseWriter, r *http.Request, groupTaskSer
 		return
 	}
 
-	groupTaskId := chi.URLParam(r, "id")	
+	groupTaskId := chi.URLParam(r, "id")
 	input := mapper.GetProjectGroupTaskId(body, groupTaskId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}

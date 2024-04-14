@@ -14,7 +14,7 @@ type TaskResponseDTO struct {
 	Status       string   `json:"status"`
 	StartDate    string   `json:"startDate"`
 	Deadline     string   `json:"deadline"`
-	Duration     string   `json:"duration"`
+	Duration     float64   `json:"duration"`
 	ActiveStatus string   `json:"activeStatus"`
 	
 	CreatedAt string `json:"createdAt"`
@@ -41,5 +41,20 @@ func (in *TaskResponseDTO) MapperListToGraphQLModel(input []TaskResponseDTO) []m
 	for _, item := range input {
 		out = append(out, in.MapperToGraphQLModel(item))
 	}
+	return out
+}
+
+type TaskDashboardResponseDTO struct {
+	DoneTaskList []*model.Task `json:"doneTaskList"`
+	NotDoneTaskList []*model.Task `json:"notDoneTaskList"`
+}
+
+func NewTaskDashboardResponseDTO() *TaskDashboardResponseDTO {
+	return &TaskDashboardResponseDTO{}
+}
+
+func (in *TaskDashboardResponseDTO) MapTaskDashboard(input TaskDashboardResponseDTO) model.TaskDashboard{
+	var out model.TaskDashboard
+	mapper.AutoMapper(&input, &out)
 	return out
 }

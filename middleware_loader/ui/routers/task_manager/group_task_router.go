@@ -31,7 +31,7 @@ func NewGroupTaskRouter(groupTaskService *services.GroupTaskService, db database
 			controller_services.DeleteGroupTask(w, r, groupTaskService)
 		})
 		r.Get("/{id}/tasks", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.GetTasksInGroupTask(w, r, groupTaskService)
+			controller_services.GetTasksByGroupTask(w, r, groupTaskService)
 		})
 		r.Put("/{id}/update-name", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateGroupTaskName(w, r, groupTaskService)

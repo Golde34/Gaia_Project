@@ -209,6 +209,11 @@ type ComplexityRoot struct {
 		UpdatedAt    func(childComplexity int) int
 	}
 
+	TaskDashboard struct {
+		DoneTaskList    func(childComplexity int) int
+		NotDoneTaskList func(childComplexity int) int
+	}
+
 	TokenResponse struct {
 		AccessToken func(childComplexity int) int
 		ExpiryDate  func(childComplexity int) int
@@ -293,7 +298,7 @@ type QueryResolver interface {
 	GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error)
 	GetGroupTasksInProject(ctx context.Context, input model.IDInput) ([]*model.GroupTask, error)
 	GetGroupTaskByID(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
-	GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) ([]*model.Task, error)
+	GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskDashboard, error)
 	ListAllTasks(ctx context.Context) ([]*model.Task, error)
 	GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error)
 }
@@ -1418,6 +1423,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Task.UpdatedAt(childComplexity), true
+
+	case "TaskDashboard.doneTaskList":
+		if e.complexity.TaskDashboard.DoneTaskList == nil {
+			break
+		}
+
+		return e.complexity.TaskDashboard.DoneTaskList(childComplexity), true
+
+	case "TaskDashboard.notDoneTaskList":
+		if e.complexity.TaskDashboard.NotDoneTaskList == nil {
+			break
+		}
+
+		return e.complexity.TaskDashboard.NotDoneTaskList(childComplexity), true
 
 	case "TokenResponse.accessToken":
 		if e.complexity.TokenResponse.AccessToken == nil {
@@ -8147,9 +8166,9 @@ func (ec *executionContext) _Query_getTasksByGroupTaskId(ctx context.Context, fi
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Task)
+	res := resTmp.(*model.TaskDashboard)
 	fc.Result = res
-	return ec.marshalNTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTask(ctx, field.Selections, res)
+	return ec.marshalNTaskDashboard2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskDashboard(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTasksByGroupTaskId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8160,36 +8179,12 @@ func (ec *executionContext) fieldContext_Query_getTasksByGroupTaskId(ctx context
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
-			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Task_description(ctx, field)
-			case "priority":
-				return ec.fieldContext_Task_priority(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "startDate":
-				return ec.fieldContext_Task_startDate(ctx, field)
-			case "deadline":
-				return ec.fieldContext_Task_deadline(ctx, field)
-			case "duration":
-				return ec.fieldContext_Task_duration(ctx, field)
-			case "activeStatus":
-				return ec.fieldContext_Task_activeStatus(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "groupTask":
-				return ec.fieldContext_Task_groupTask(ctx, field)
-			case "subTasks":
-				return ec.fieldContext_Task_subTasks(ctx, field)
-			case "comments":
-				return ec.fieldContext_Task_comments(ctx, field)
+			case "doneTaskList":
+				return ec.fieldContext_TaskDashboard_doneTaskList(ctx, field)
+			case "notDoneTaskList":
+				return ec.fieldContext_TaskDashboard_notDoneTaskList(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TaskDashboard", field.Name)
 		},
 	}
 	defer func() {
@@ -9362,9 +9357,9 @@ func (ec *executionContext) _Task_duration(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Task_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9374,7 +9369,7 @@ func (ec *executionContext) fieldContext_Task_duration(ctx context.Context, fiel
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9639,6 +9634,154 @@ func (ec *executionContext) fieldContext_Task_comments(ctx context.Context, fiel
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TaskDashboard_doneTaskList(ctx context.Context, field graphql.CollectedField, obj *model.TaskDashboard) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TaskDashboard_doneTaskList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DoneTaskList, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Task)
+	fc.Result = res
+	return ec.marshalNTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TaskDashboard_doneTaskList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TaskDashboard",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Task_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Task_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Task_description(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
+			case "status":
+				return ec.fieldContext_Task_status(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Task_startDate(ctx, field)
+			case "deadline":
+				return ec.fieldContext_Task_deadline(ctx, field)
+			case "duration":
+				return ec.fieldContext_Task_duration(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Task_activeStatus(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Task_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Task_updatedAt(ctx, field)
+			case "groupTask":
+				return ec.fieldContext_Task_groupTask(ctx, field)
+			case "subTasks":
+				return ec.fieldContext_Task_subTasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TaskDashboard_notDoneTaskList(ctx context.Context, field graphql.CollectedField, obj *model.TaskDashboard) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TaskDashboard_notDoneTaskList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NotDoneTaskList, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Task)
+	fc.Result = res
+	return ec.marshalNTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TaskDashboard_notDoneTaskList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TaskDashboard",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Task_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Task_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Task_description(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
+			case "status":
+				return ec.fieldContext_Task_status(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Task_startDate(ctx, field)
+			case "deadline":
+				return ec.fieldContext_Task_deadline(ctx, field)
+			case "duration":
+				return ec.fieldContext_Task_duration(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Task_activeStatus(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Task_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Task_updatedAt(ctx, field)
+			case "groupTask":
+				return ec.fieldContext_Task_groupTask(ctx, field)
+			case "subTasks":
+				return ec.fieldContext_Task_subTasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
 	}
 	return fc, nil
@@ -14797,6 +14940,50 @@ func (ec *executionContext) _Task(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
+var taskDashboardImplementors = []string{"TaskDashboard"}
+
+func (ec *executionContext) _TaskDashboard(ctx context.Context, sel ast.SelectionSet, obj *model.TaskDashboard) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, taskDashboardImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TaskDashboard")
+		case "doneTaskList":
+			out.Values[i] = ec._TaskDashboard_doneTaskList(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "notDoneTaskList":
+			out.Values[i] = ec._TaskDashboard_notDoneTaskList(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var tokenResponseImplementors = []string{"TokenResponse"}
 
 func (ec *executionContext) _TokenResponse(ctx context.Context, sel ast.SelectionSet, obj *model.TokenResponse) graphql.Marshaler {
@@ -15862,6 +16049,50 @@ func (ec *executionContext) marshalNTask2ᚕᚖmiddleware_loaderᚋinfrastructur
 	return ret
 }
 
+func (ec *executionContext) marshalNTask2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Task) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTask(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalNTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTask(ctx context.Context, sel ast.SelectionSet, v *model.Task) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -15870,6 +16101,20 @@ func (ec *executionContext) marshalNTask2ᚖmiddleware_loaderᚋinfrastructure�
 		return graphql.Null
 	}
 	return ec._Task(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTaskDashboard2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskDashboard(ctx context.Context, sel ast.SelectionSet, v model.TaskDashboard) graphql.Marshaler {
+	return ec._TaskDashboard(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTaskDashboard2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTaskDashboard(ctx context.Context, sel ast.SelectionSet, v *model.TaskDashboard) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TaskDashboard(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNTokenInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐTokenInput(ctx context.Context, v interface{}) (model.TokenInput, error) {

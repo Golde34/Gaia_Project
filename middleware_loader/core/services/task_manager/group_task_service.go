@@ -3,25 +3,27 @@ package services
 import (
 	"context"
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
+	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
 	"middleware_loader/core/services/base"
 	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
 )
 
-type GroupTaskService struct {}
+type GroupTaskService struct{}
 
 func NewGroupTaskService() *GroupTaskService {
 	return &GroupTaskService{}
 }
 
 // var groupTaskValidation = validator.NewGroputaskDTOValidator()
+var taskDashboardResponse = response_dtos.NewTaskDashboardResponseDTO()
 
 func (s *GroupTaskService) GetGroupTaskById(ctx context.Context, input model.IDInput) (model.GroupTask, error) {
 	groupTasks, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).GetGroupTaskById(input.ID)
 	if err != nil {
 		return model.GroupTask{}, err
-	} 
+	}
 	groupTaskModel := groupTaskResponse.MapperToGraphQLModel(groupTasks)
 
 	return groupTaskModel, nil
@@ -59,14 +61,14 @@ func (s *GroupTaskService) DeleteGroupTask(ctx context.Context, input model.IDIn
 	return groupTaskModel, nil
 }
 
-func (s *GroupTaskService) GetTasksInGroupTask(ctx context.Context, input model.IDInput) ([]model.Task, error) {
-	tasks, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).GetTasksInGroupTask(input.ID)
+func (s *GroupTaskService) GetTasksByGroupTask(ctx context.Context, input model.IDInput) (model.TaskDashboard, error) {
+	taskDashboard, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).GetTasksByGroupTask(input.ID)
 	if err != nil {
-		return nil, err
+		return model.TaskDashboard{}, err
 	}
-	tasksModel := taskResponse.MapperListToGraphQLModel(tasks)
 
-	return tasksModel, nil
+	taskDashboardModel := taskDashboardResponse.MapTaskDashboard(taskDashboard)
+	return taskDashboardModel, nil
 }
 
 func (s *GroupTaskService) UpdateGroupTaskName(ctx context.Context, input model.UpdateObjectNameInput) (model.GroupTask, error) {

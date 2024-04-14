@@ -289,14 +289,9 @@ func (r *queryResolver) GetGroupTaskByID(ctx context.Context, input model.IDInpu
 }
 
 // GetTasksByGroupTaskID is the resolver for the getTasksByGroupTaskId field.
-func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) ([]*model.Task, error) {
-	tasks, err := groupTaskService.GetTasksInGroupTask(ctx, input)
-	modelTask := []*model.Task{}
-	for _, task := range tasks {
-		taskCopy := task
-		modelTask = append(modelTask, &taskCopy)
-	}
-	return modelTask, err
+func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskDashboard, error) {
+	taskDashboard, err := groupTaskService.GetTasksByGroupTask(ctx, input)
+	return &taskDashboard, err
 }
 
 // ListAllTasks is the resolver for the listAllTasks field.

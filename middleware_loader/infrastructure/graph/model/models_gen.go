@@ -186,13 +186,18 @@ type Task struct {
 	Status       string   `json:"status"`
 	StartDate    string   `json:"startDate"`
 	Deadline     string   `json:"deadline"`
-	Duration     string   `json:"duration"`
+	Duration     float64  `json:"duration"`
 	ActiveStatus string   `json:"activeStatus"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
 	GroupTask    string   `json:"groupTask"`
 	SubTasks     []string `json:"subTasks"`
 	Comments     []string `json:"comments"`
+}
+
+type TaskDashboard struct {
+	DoneTaskList    []*Task `json:"doneTaskList"`
+	NotDoneTaskList []*Task `json:"notDoneTaskList"`
 }
 
 type TokenInput struct {

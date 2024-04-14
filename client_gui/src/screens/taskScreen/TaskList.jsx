@@ -50,7 +50,7 @@ const TaskList = (props) => {
 										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.notDoneTaskList.map((task) => (
-												<TaskCard key={task._id} task={task} 
+												<TaskCard key={task.id} task={task} 
 													projectId={projectId} groupTaskId={groupTaskId} />
 											))}
 										</Grid>
@@ -66,7 +66,7 @@ const TaskList = (props) => {
 										</Flex>
 										<Grid numItems={3} className="gap-4 mt-9">
 											{tasks.doneTaskList.map((task) => (
-												<TaskCard key={task._id} task={task} 
+												<TaskCard key={task.id} task={task} 
 													projectId={projectId} groupTaskId={groupTaskId} />
 											))}
 										</Grid>

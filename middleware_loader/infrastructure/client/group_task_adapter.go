@@ -101,25 +101,37 @@ func (adapter *GroupTaskAdapter) DeleteGroupTask(id string) (response_dtos.Group
 	return groupTask, nil
 }
 
-func (adapter *GroupTaskAdapter) GetTasksInGroupTask(id string) ([]response_dtos.TaskResponseDTO, error) {
+func (adapter *GroupTaskAdapter) GetTasksByGroupTask(id string) (response_dtos.TaskDashboardResponseDTO, error) {
 	getTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "/tasks"
-	var tasks []response_dtos.TaskResponseDTO
-
+	var doneTaskList []response_dtos.TaskResponseDTO
+	var notDoneTaskList []response_dtos.TaskResponseDTO
+	var taskDashboard response_dtos.TaskDashboardResponseDTO
 	bodyResult, err := base.BaseAPI(getTasksURL, "GET", nil)
 	if err != nil {
-		return []response_dtos.TaskResponseDTO{}, err
+		return response_dtos.TaskDashboardResponseDTO{}, err
 	}
 
 	bodyResultMap, ok := bodyResult.(map[string]interface{})
 	if !ok {
-		return []response_dtos.TaskResponseDTO{}, err
-	}
-	for _, taskElement := range bodyResultMap["message"].([]interface{}) {
-		task := mapper_response.ReturnTaskObjectMapper(taskElement.(map[string]interface{}))
-		tasks = append(tasks, *task)
+		return response_dtos.TaskDashboardResponseDTO{}, err
 	}
 
-	return tasks, nil
+	for _, taskElement := range bodyResultMap["message"].(map[string]interface{})["doneTaskList"].([]interface{}) {
+		task := mapper_response.ReturnTaskObjectMapper(taskElement.(map[string]interface{}))
+		doneTaskList = append(doneTaskList, *task)
+	}
+
+	for _, taskElement := range bodyResultMap["message"].(map[string]interface{})["notDoneTaskList"].([]interface{}) {
+		task := mapper_response.ReturnTaskObjectMapper(taskElement.(map[string]interface{}))
+		notDoneTaskList = append(notDoneTaskList, *task)
+	}
+
+	taskDashboard.DoneTaskList = base.ConvertTaskPointer(doneTaskList)
+	taskDashboard.NotDoneTaskList = base.ConvertTaskPointer(notDoneTaskList)
+	// taskDashboard.DoneTaskList = doneTaskList
+	// taskDashboard.NotDoneTaskList = notDoneTaskList
+
+	return taskDashboard, nil
 }
 
 func (adapter *GroupTaskAdapter) UpdateGroupTaskName(input converter_dtos.UpdateNameConverterDTO, id string) (response_dtos.GroupTaskResponseDTO, error) {

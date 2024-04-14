@@ -10,7 +10,7 @@ type GroupTaskService interface {
 	CreateGroupTask(ctx context.Context, input model.CreateGroupTaskInput) (model.GroupTask, error)
 	UpdateGroupTask(ctx context.Context, input model.UpdateGroupTaskInput) (model.GroupTask, error)
 	DeleteGroupTask(ctx context.Context, input model.IDInput) (model.GroupTask, error)
-	GetTasksInGroupTask(ctx context.Context, input model.IDInput) ([]model.Task, error)
+	GetTasksByGroupTask(ctx context.Context, input model.IDInput) (model.TaskDashboard, error)
 	UpdateGroupTaskName(ctx context.Context, input model.UpdateObjectNameInput) (model.GroupTask, error)
 	CalculateCompletedTasks(ctx context.Context, input model.IDInput) (model.GroupTask, error)
 	UpdateGroupTaskOrdinal(ctx context.Context, input model.ProjectGroupTaskIDInput) (model.GroupTask, error)
