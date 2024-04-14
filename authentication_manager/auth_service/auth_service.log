@@ -40,3 +40,6 @@
 2024-04-14T14:19:25.502+07:00  INFO 5727 --- [http-nio-4001-exec-5] a.a.core.services.RoleServiceImpl        : Get all roles
 2024-04-14T15:41:44.155+07:00  INFO 5727 --- [http-nio-4001-exec-1] a.a.core.services.RoleServiceImpl        : Get all roles
 2024-04-14T15:41:44.175+07:00  INFO 5727 --- [http-nio-4001-exec-10] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-04-14T15:46:57.102+07:00  INFO 5727 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-14T15:46:57.107+07:00  INFO 5727 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-14T15:46:57.114+07:00  INFO 5727 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -1,7 +1,6 @@
 package client_adapter
 
 import (
-	"encoding/json"
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -11,94 +10,53 @@ import (
 
 type GroupTaskAdapter struct {
 	adapter *GroupTaskAdapter
+	domain  string
 }
 
-func NewGroupTaskAdapter(adapter *GroupTaskAdapter) *GroupTaskAdapter {
-	return &GroupTaskAdapter{adapter: adapter}
+func NewGroupTaskAdapter(adapter *GroupTaskAdapter, domain string) *GroupTaskAdapter {
+	return &GroupTaskAdapter{adapter: adapter, domain: "/group-task"}
 }
 
 func (adapter *GroupTaskAdapter) GetGroupTaskById(id string) (response_dtos.GroupTaskResponseDTO, error) {
-	getGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id
+	getGroupTaskURL := base.TaskManagerServiceURL + adapter.domain + id
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	bodyResult, err := base.BaseAPI(getGroupTaskURL, "GET", nil)
+	result, err := base.BaseAPIV2(getGroupTaskURL, "GET", nil, groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) CreateGroupTask(input model.CreateGroupTaskInput) (response_dtos.GroupTaskResponseDTO, error) {
 	createGroupTaskURL := base.TaskManagerServiceURL + "/group-task/create"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	bodyResult, err := base.BaseAPI(createGroupTaskURL, "POST", input)
+	result, err := base.BaseAPIV2(createGroupTaskURL, "POST", input, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) UpdateGroupTask(input model.UpdateGroupTaskInput, id string) (response_dtos.GroupTaskResponseDTO, error) {
 	updateGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(updateGroupTaskURL, "PUT", input)
+	result, err := base.BaseAPIV2(updateGroupTaskURL, "PUT", input, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) DeleteGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	deleteGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(deleteGroupTaskURL, "DELETE", nil)
+	result, err := base.BaseAPIV2(deleteGroupTaskURL, "DELETE", nil, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) GetTasksByGroupTask(id string) (response_dtos.TaskDashboardResponseDTO, error) {
@@ -128,8 +86,6 @@ func (adapter *GroupTaskAdapter) GetTasksByGroupTask(id string) (response_dtos.T
 
 	taskDashboard.DoneTaskList = base.ConvertTaskPointer(doneTaskList)
 	taskDashboard.NotDoneTaskList = base.ConvertTaskPointer(notDoneTaskList)
-	// taskDashboard.DoneTaskList = doneTaskList
-	// taskDashboard.NotDoneTaskList = notDoneTaskList
 
 	return taskDashboard, nil
 }
@@ -138,103 +94,53 @@ func (adapter *GroupTaskAdapter) UpdateGroupTaskName(input converter_dtos.Update
 	updateGroupTaskNameURL := base.TaskManagerServiceURL + "/group-task/" + id + "/update-name"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(updateGroupTaskNameURL, "PUT", input)
+	result, err := base.BaseAPIV2(updateGroupTaskNameURL, "PUT", input, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) CalculateCompletedTasks(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	calculateCompletedTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "tasks-complete"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(calculateCompletedTasksURL, "GET", nil)
+	result, err := base.BaseAPIV2(calculateCompletedTasksURL, "GET", nil, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) UpdateGroupTaskOrdinal(input model.ProjectGroupTaskIDInput, id string) (response_dtos.GroupTaskResponseDTO, error) {
 	updateGroupTaskOrdinalURL := base.TaskManagerServiceURL + "/group-task/" + id + "/update-ordinal"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(updateGroupTaskOrdinalURL, "PUT", input)
+	result, err := base.BaseAPIV2(updateGroupTaskOrdinalURL, "PUT", input, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) ArchiveGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	archiveGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id + "/archive"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(archiveGroupTaskURL, "PUT", nil)
+	result, err := base.BaseAPIV2(archiveGroupTaskURL, "PUT", nil, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
 
 func (adapter *GroupTaskAdapter) EnableGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	enableGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id + "/enable"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(enableGroupTaskURL, "PUT", nil)
+	result, err := base.BaseAPIV2(enableGroupTaskURL, "PUT", nil, &groupTask)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &groupTask)
-	if err != nil {
-		return response_dtos.GroupTaskResponseDTO{}, err
-	}
-
-	return groupTask, nil
+	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
