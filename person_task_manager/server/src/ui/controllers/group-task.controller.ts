@@ -89,7 +89,7 @@ class GroupTaskController {
 
     async updateOrdinalNumber(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const groupTaskId = req.params.id;
             const projectId = bodyJson.projectId;

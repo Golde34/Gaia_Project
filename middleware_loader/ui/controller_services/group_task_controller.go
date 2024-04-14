@@ -122,7 +122,7 @@ func UpdateGroupTaskOrdinal(w http.ResponseWriter, r *http.Request, groupTaskSer
 	input := mapper.GetProjectGroupTaskId(body, groupTaskId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateGroupTaskOrdinal", QueryInput: input, QueryOutput: model.GroupTask{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateOrdinalNumber", QueryInput: input, QueryOutput: model.GroupTask{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)

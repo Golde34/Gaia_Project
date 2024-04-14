@@ -16,7 +16,9 @@ func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResp
 		input.StartDate = body["startDate"].(string)
 	}
 	input.Deadline = body["deadline"].(string)
-	input.Duration = body["duration"].(float64)
+	if body["duration"] != nil {
+		input.Duration = body["duration"].(float64)
+	}
 	input.ActiveStatus = body["activeStatus"].(string)
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)

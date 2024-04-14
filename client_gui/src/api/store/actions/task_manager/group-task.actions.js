@@ -127,7 +127,7 @@ export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) =>
 export const updateOrdinalNumber = (groupTaskId, projectId) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_ORDINAL_REQUEST, payload: groupTaskId});
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-ordinal`, HttpMethods.PUT, portName.taskManager, { groupTaskId, projectId});
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-ordinal`, HttpMethods.PUT, portName.middlewarePort, { groupTaskId, projectId});
         dispatch({ type: GROUP_TASK_ORDINAL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
