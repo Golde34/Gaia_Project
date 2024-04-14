@@ -24,30 +24,30 @@ func NewGroupTaskRouter(groupTaskService *services.GroupTaskService, db database
 		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CreateGroupTask(w, r, groupTaskService)
 		})
-		// r.Put("/{id}", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.UpdateGroupTask(w, r, groupTaskService)
-		// })
-		// r.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.DeleteGroupTask(w, r, groupTaskService)
-		// })
-		// r.Get("/{id}/tasks", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.GetTasksInGroupTask(w, r, groupTaskService)
-		// })
-		// r.Put("/{id}/update-name", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.UpdateGroupTaskName(w, r, groupTaskService)
-		// })
-		// r.Put("/{id}/tasks-complete", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.CalculateCompletedTasks(w, r, groupTaskService)
-		// })
-		// r.Put("/{id}/update-ordinal", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.UpdateGroupTaskOrdinal(w, r, groupTaskService)
-		// })
-		// r.Put("/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.ArchiveGroupTask(w, r, groupTaskService)
-		// })
-		// r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.EnableGroupTask(w, r, groupTaskService)
-		// })
+		r.Put("/{id}", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateGroupTask(w, r, groupTaskService)
+		})
+		r.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.DeleteGroupTask(w, r, groupTaskService)
+		})
+		r.Get("/{id}/tasks", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetTasksByGroupTask(w, r, groupTaskService)
+		})
+		r.Put("/{id}/update-name", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateGroupTaskName(w, r, groupTaskService)
+		})
+		r.Put("/{id}/tasks-complete", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.CalculateCompletedTasks(w, r, groupTaskService)
+		})
+		r.Put("/{id}/update-ordinal", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateGroupTaskOrdinal(w, r, groupTaskService)
+		})
+		r.Put("/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.ArchiveGroupTask(w, r, groupTaskService)
+		})
+		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.EnableGroupTask(w, r, groupTaskService)
+		})
 	})
 	return &GroupTaskRouter{
 		GroupTaskService: groupTaskService,

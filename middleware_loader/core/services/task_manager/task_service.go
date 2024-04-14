@@ -21,7 +21,7 @@ func NewTaskService() *TaskService {
 }
 
 var taskValidator = validator.NewTaskDTOValidator()
-var taskResponse = response_dtos.NewCreateTaskResponseDTO()
+var taskResponse = response_dtos.NewTaskResponseDTO()
 
 func (s *TaskService) ListAllTasks(ctx context.Context) ([]model.Task, error) {
 	tasks, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetAllTasks()

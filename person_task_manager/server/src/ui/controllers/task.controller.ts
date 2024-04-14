@@ -30,6 +30,17 @@ class TaskController {
         }
     }
 
+    async getTasksByGroupTaskId(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const groupTaskId = req.params.id;
+            const tasksResult = await taskService.getTaskDashboard(groupTaskId);
+
+            return tasksResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
     async createTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const bodyJson = req.body;

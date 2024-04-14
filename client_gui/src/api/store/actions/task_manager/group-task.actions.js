@@ -34,7 +34,7 @@ export const getGroupTaskList = (projectId) => async (dispatch) => {
 export const getDetailGroupTask = (groupTaskId) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_DETAIL_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -55,7 +55,7 @@ export const createGroupTask = (groupTask) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest('/group-task/create', HttpMethods.POST, portName.taskManager, groupTask);
+        const { data } = await serverRequest('/group-task/create', HttpMethods.POST, portName.middlewarePort, groupTask);
         dispatch({ type: GROUP_TASK_CREATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -76,7 +76,7 @@ export const updateGroupTask = (groupTask) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/group-task/${groupTask._id}`, HttpMethods.PUT, portName.taskManager, groupTask);
+        const { data } = await serverRequest(`/group-task/${groupTask._id}`, HttpMethods.PUT, portName.middlewarePort, groupTask);
         dispatch({ type: GROUP_TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -97,7 +97,7 @@ export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.DELETE, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.DELETE, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -112,7 +112,7 @@ export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
 export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_NAME_UPDATE_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.middlewarePort, { newName });
         dispatch({ type: GROUP_TASK_NAME_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -127,7 +127,7 @@ export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) =>
 export const updateOrdinalNumber = (groupTaskId, projectId) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_ORDINAL_REQUEST, payload: groupTaskId});
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-ordinal`, HttpMethods.PUT, portName.taskManager, { groupTaskId, projectId});
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-ordinal`, HttpMethods.PUT, portName.middlewarePort, { groupTaskId, projectId});
         dispatch({ type: GROUP_TASK_ORDINAL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

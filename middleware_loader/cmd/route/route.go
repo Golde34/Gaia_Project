@@ -24,6 +24,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	gaiaService := gaia_connector.NewGaiaService()
 	taskService := task_manager.NewTaskService()
 	projectService := task_manager.NewProjectService()
+	groupTaskService := task_manager.NewGroupTaskService()
 
 	// GRAPHQL FEDERATION
 	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
@@ -35,6 +36,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 					UserGraphQLService:    userService,
 					TaskGraphQLService:    taskService,
 					ProjectGraphQLService: projectService,
+					GroupTaskGraphQLService: groupTaskService,
 				},
 			},
 		),
@@ -56,5 +58,6 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	router.Group(func(r chi.Router) {
 		task_router.NewProjectRouter(projectService, db, router)
 		task_router.NewTaskRouter(taskService, db, router)
+		task_router.NewGroupTaskRouter(groupTaskService, db, router)
 	})
 }

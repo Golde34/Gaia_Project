@@ -18,7 +18,7 @@ const portName = {
 export const getTaskList = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TASK_LIST_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks`, HttpMethods.GET, portName.middleware);
         dispatch({ type: TASK_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

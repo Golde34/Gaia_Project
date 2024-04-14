@@ -13,4 +13,5 @@ type Resolver struct{
 	TaskGraphQLService service_registry.TaskService
 	ProjectGraphQLService service_registry.ProjectService
 	UserGraphQLService service_registry.UserService
+	GroupTaskGraphQLService service_registry.GroupTaskService
 }

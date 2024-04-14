@@ -12,13 +12,19 @@ func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResp
 	input.Description = body["description"].(string)
 	input.Priority = base.ConvertStringToStringArray(body["priority"].([]interface{}))
 	input.Status = body["status"].(string)
-	input.StartDate = body["startDate"].(string)
+	if body["startDate"] != nil {
+		input.StartDate = body["startDate"].(string)
+	}
 	input.Deadline = body["deadline"].(string)
-	input.Duration = body["duration"].(string)
+	if body["duration"] != nil {
+		input.Duration = body["duration"].(float64)
+	}
 	input.ActiveStatus = body["activeStatus"].(string)
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)
-	input.GroupTaskId = body["groupTaskId"].(string)
+	if body["groupTaskId"] != nil {
+		input.GroupTaskId = body["groupTaskId"].(string)
+	}
 	input.SubTasks = base.ConvertStringToStringArray(body["subTasks"].([]interface{}))
 	input.Comments = base.ConvertStringToStringArray(body["comments"].([]interface{}))
 	return &input	

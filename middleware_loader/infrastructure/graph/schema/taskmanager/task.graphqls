@@ -6,7 +6,7 @@ type Task {
   status: String!
   startDate: String!
   deadline: String!
-  duration: String!
+  duration: Float!
   activeStatus: String!
 
   createdAt: String!
@@ -64,4 +64,9 @@ input MoveTaskInput {
   oldGroupTaskId: String!
   newGroupTaskId: String!
   taskId: String!
+}
+
+type TaskDashboard {
+  doneTaskList: [Task!]!
+  notDoneTaskList: [Task!]!
 }
