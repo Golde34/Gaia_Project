@@ -67,11 +67,8 @@ class GroupTaskController {
 
     async updateGroupTaskName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
-
             const groupTaskId = req.params.id;
-            const groupTaskName = bodyJson.newName;
-            const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, groupTaskName);
+            const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, req.body.name);
 
             return groupTaskResult;
         } catch (err) {

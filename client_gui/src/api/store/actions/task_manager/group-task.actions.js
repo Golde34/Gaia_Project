@@ -97,7 +97,7 @@ export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.DELETE, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}`, HttpMethods.DELETE, portName.middlewarePort);
         dispatch({ type: GROUP_TASK_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -112,7 +112,7 @@ export const deleteGroupTask = (groupTaskId) => async (dispatch) => {
 export const updateGroupTaskName = (groupTaskId, newName) => async (dispatch) => {
     dispatch({ type: GROUP_TASK_NAME_UPDATE_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.taskManager, { newName });
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/update-name`, HttpMethods.PUT, portName.middlewarePort, { newName });
         dispatch({ type: GROUP_TASK_NAME_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

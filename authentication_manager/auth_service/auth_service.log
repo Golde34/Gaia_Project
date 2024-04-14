@@ -36,3 +36,5 @@
 2024-04-14T13:39:13.063+07:00  INFO 5727 --- [http-nio-4001-exec-1] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
 2024-04-14T13:39:13.063+07:00  INFO 5727 --- [http-nio-4001-exec-1] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
 2024-04-14T13:39:13.309+07:00  INFO 5727 --- [http-nio-4001-exec-1] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-04-14T14:19:25.457+07:00  INFO 5727 --- [http-nio-4001-exec-4] a.a.kernel.utils.LoggerUtils             : Get all users
+2024-04-14T14:19:25.502+07:00  INFO 5727 --- [http-nio-4001-exec-5] a.a.core.services.RoleServiceImpl        : Get all roles
