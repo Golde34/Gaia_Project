@@ -38,7 +38,7 @@ groupTaskRouter.post("/create",
 
 // update group task
 groupTaskRouter.put("/:id", 
-    RequestValidator.validate(GroupTaskRequestDto),
+    RequestValidator.validateV2(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const groupTaskResult = await groupTaskControllerImpl.updateGroupTask(req, next);
