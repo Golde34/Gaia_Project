@@ -19,7 +19,7 @@ func NewTaskAdapter() *TaskAdapter {
 }
 
 func (adapter *TaskAdapter) GetAllTasks() ([]response_dtos.TaskResponseDTO, error) {
-	listAllTasksURL := base.TaskManagerServiceURL + "task"
+	listAllTasksURL := base.TaskManagerServiceURL + "/task"
 	var tasks []response_dtos.TaskResponseDTO
 
 	bodyResult, err := base.BaseAPI(listAllTasksURL, "GET", nil)
@@ -42,22 +42,12 @@ func (adapter *TaskAdapter) GetAllTasks() ([]response_dtos.TaskResponseDTO, erro
 func (adapter *TaskAdapter) GetTaskById(id string) (response_dtos.TaskResponseDTO, error) {
 	getTaskByIdURL := base.TaskManagerServiceURL + "/task/" + id
 	var task response_dtos.TaskResponseDTO
-
-	bodyResult, err := base.BaseAPI(getTaskByIdURL, "GET", nil)
+	
+	result, err := base.BaseAPIV2(getTaskByIdURL, "GET", nil, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.TaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &task)
-	if err != nil {
-		return response_dtos.TaskResponseDTO{}, err
-	}
-
-	return task, nil
+	return result.(response_dtos.TaskResponseDTO), nil
 }
 
 func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dtos.TaskResponseDTO, error) {
@@ -85,21 +75,11 @@ func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (
 	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/update"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(updateTaskURL, "PUT", input)
+	result, err := base.BaseAPIV2(updateTaskURL, "PUT", input, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
-
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
-	if err != nil {
-		return response_dtos.TaskResponseDTO{}, err
-	}
-	err = json.Unmarshal(dataBytes, &task)
-	if err != nil {
-		return response_dtos.TaskResponseDTO{}, err
-	}
-
-	return task, nil
+	return result.(response_dtos.TaskResponseDTO), nil
 }
 
 func (adapter *TaskAdapter) DeleteTask(id string) (response_dtos.TaskResponseDTO, error) {
@@ -187,7 +167,7 @@ func (adapter *TaskAdapter) GenerateTaskWithoutGroupTask(input model.GenerateTas
 }
 
 func (adapter *TaskAdapter) UpdateTaskInDialog(input model.UpdateTaskInDialogInput, id string) (response_dtos.TaskResponseDTO, error) {
-	updateTaskInDialogURL := base.TaskManagerServiceURL + "/task/update-task-in-dialog/" + id
+	updateTaskInDialogURL := base.TaskManagerServiceURL + "/task/" + id + "/update-task-in-dialog"
 	var task response_dtos.TaskResponseDTO
 
 	bodyResult, err := base.BaseAPI(updateTaskInDialogURL, "PUT", input)

@@ -33,7 +33,7 @@ export const getTaskList = (groupTaskId) => async (dispatch) => {
 export const getDetailTask = (taskId) => async (dispatch) => {
     dispatch({ type: TASK_DETAIL_REQUEST, payload: taskId });
     try {
-        const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.GET, portName.middleware);
         dispatch({ type: TASK_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -75,7 +75,7 @@ export const updateTask = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
+        const { data } = await serverRequest(`/task/${task.id}`, HttpMethods.PUT, portName.middleware, task);
         dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -138,7 +138,7 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/update-task-in-dialog/${task._id}`, HttpMethods.PUT, portName.taskManager, task);
+        const { data } = await serverRequest(`/task/update-task-in-dialog/${task.id}`, HttpMethods.PUT, portName.middleware, task);
         dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

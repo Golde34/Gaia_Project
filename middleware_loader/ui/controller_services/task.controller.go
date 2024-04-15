@@ -42,12 +42,8 @@ func CreateTask(w http.ResponseWriter, r *http.Request, taskService *services.Ta
 
 	input := mapper.CreateTaskRequestDTOMapper(body)
 	
-	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "createTask", QueryInput: input, QueryOutput: model.Task{}})
-	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
-
-	// query := utils.GenerateGraphQLQueryWithInput("mutation", "createTask", input, model.Task{})
-	utils.ConnectToGraphQLServer(w, graphqlQuery)
+	query := utils.GenerateGraphQLQueryWithInput("mutation", "createTask", input, model.Task{})
+	utils.ConnectToGraphQLServer(w, query)
 }
 
 func UpdateTask(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {

@@ -139,7 +139,7 @@ class TaskController {
 
     async updateTaskInDialog(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
             const taskId = req.params.id;
             const task = plainToInstance(UpdateTaskInDialogDTO, bodyJson);
 
