@@ -152,7 +152,8 @@ func (r *mutationResolver) GenerateTaskWithoutGroupTask(ctx context.Context, inp
 
 // UpdateTaskInDialog is the resolver for the updateTaskInDialog field.
 func (r *mutationResolver) UpdateTaskInDialog(ctx context.Context, input model.UpdateTaskInDialogInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: UpdateTaskInDialog - updateTaskInDialog"))
+	task, err := taskService.UpdateTaskInDialog(ctx, input)
+	return &task, err	
 }
 
 // MoveTask is the resolver for the moveTask field.
@@ -296,7 +297,13 @@ func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.I
 
 // ListAllTasks is the resolver for the listAllTasks field.
 func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {
-	panic(fmt.Errorf("not implemented: ListAllTasks - listAllTasks"))
+	task, err := taskService.ListAllTasks(ctx)
+	modelTask := []*model.Task{}
+	for _, task := range task {
+		taskCopy := task
+		modelTask = append(modelTask, &taskCopy)
+	}
+	return modelTask, err	
 }
 
 // GetTaskByID is the resolver for the getTaskById field.
