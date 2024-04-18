@@ -96,7 +96,7 @@ export const deleteTask = (taskId) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.DELETE, portName.taskManager);
+        const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.DELETE, portName.middleware);
         dispatch({ type: TASK_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -138,7 +138,7 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/update-task-in-dialog/${task.id}`, HttpMethods.PUT, portName.middleware, task);
+        const { data } = await serverRequest(`/task/${task.id}/update-task-in-dialog`, HttpMethods.PUT, portName.middleware, task);
         dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
