@@ -90,7 +90,7 @@ func GenerateTaskWithoutGroupTask(w http.ResponseWriter, r *http.Request, taskSe
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
+	
 	input := mapper.GenerateTaskRequestDTOMapper(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}

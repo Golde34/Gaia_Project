@@ -58,6 +58,7 @@ func baseAPINoInput(url string, method string, bodyType string) (interface{}, er
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
+	log.Println("Request: ", req)
 
 	return returnResponse(req, bodyType)
 }

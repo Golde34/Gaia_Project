@@ -36,7 +36,7 @@ func NewGroupTaskRouter(groupTaskService *services.GroupTaskService, db database
 		r.Put("/{id}/update-name", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateGroupTaskName(w, r, groupTaskService)
 		})
-		r.Put("/{id}/tasks-complete", func(w http.ResponseWriter, r *http.Request) {
+		r.Get("/{id}/tasks-complete", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CalculateCompletedTasks(w, r, groupTaskService)
 		})
 		r.Put("/{id}/update-ordinal", func(w http.ResponseWriter, r *http.Request) {

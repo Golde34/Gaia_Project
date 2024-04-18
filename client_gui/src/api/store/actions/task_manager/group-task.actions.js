@@ -11,7 +11,6 @@ import { GROUP_TASK_CREATE_FAIL, GROUP_TASK_CREATE_REQUEST, GROUP_TASK_CREATE_SU
 } from "../../constants/task_manager/group-task.constants";
 
 const portName = {
-    taskManager: 'taskManagerPort',
     middlewarePort: 'middlewarePort'
 }
 
@@ -76,7 +75,7 @@ export const updateGroupTask = (groupTask) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/group-task/${groupTask._id}`, HttpMethods.PUT, portName.middlewarePort, groupTask);
+        const { data } = await serverRequest(`/group-task/${groupTask.id}`, HttpMethods.PUT, portName.middlewarePort, groupTask);
         dispatch({ type: GROUP_TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

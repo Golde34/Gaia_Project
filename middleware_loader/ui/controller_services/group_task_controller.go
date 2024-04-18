@@ -104,7 +104,7 @@ func CalculateCompletedTasks(w http.ResponseWriter, r *http.Request, groupTaskSe
 	input := mapper.GetId(groupTaskId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "calculateCompletedTask", QueryInput: input, QueryOutput: model.GroupTask{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "calculateCompletedTasks", QueryInput: input, QueryOutput: model.GroupTask{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)

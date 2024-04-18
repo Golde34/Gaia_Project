@@ -108,7 +108,7 @@ class TaskController {
 
     async generateTaskWithoutGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
             const projectId = bodyJson.projectId;
             const task = plainToInstance(TaskRequestDto, bodyJson)
             
@@ -152,7 +152,7 @@ class TaskController {
 
     async moveTaskToAnotherGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
             const taskId = req.params.id;
             const oldGroupTaskId = bodyJson.oldGroupTaskId;
             const newGroupTaskId = bodyJson.newGroupTaskId;

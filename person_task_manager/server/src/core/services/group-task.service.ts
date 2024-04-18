@@ -181,7 +181,7 @@ class GroupTaskService {
                     groupTask.completedTasks = completedTasks;
                     await groupTaskStore.updateGroupTask(groupTaskId, groupTask);
                     return msg200({
-                        message: groupTask,
+                        groupTask,
                     });
                 }
             }

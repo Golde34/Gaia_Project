@@ -1,6 +1,7 @@
 package client_adapter
 
 import (
+	"encoding/json"
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -102,14 +103,28 @@ func (adapter *GroupTaskAdapter) UpdateGroupTaskName(input converter_dtos.Update
 }
 
 func (adapter *GroupTaskAdapter) CalculateCompletedTasks(id string) (response_dtos.GroupTaskResponseDTO, error) {
-	calculateCompletedTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "tasks-complete"
+	calculateCompletedTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "/tasks-complete"
 	var groupTask response_dtos.GroupTaskResponseDTO
 
-	result, err := base.BaseAPIV2(calculateCompletedTasksURL, "GET", nil, &groupTask)
+	bodyResult, err := base.BaseAPI(calculateCompletedTasksURL, "GET", nil)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
-	return result.(response_dtos.GroupTaskResponseDTO), nil
+	
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return response_dtos.GroupTaskResponseDTO{}, err
+	}
+	dataBytes, err := base.ConvertResponseToMap(bodyResultMap["groupTask"])
+	if err != nil {
+		return response_dtos.GroupTaskResponseDTO{}, err
+	}
+	err = json.Unmarshal(dataBytes, &groupTask)
+	if err != nil {
+		return response_dtos.GroupTaskResponseDTO{}, err
+	}
+
+	return groupTask, nil
 }
 
 func (adapter *GroupTaskAdapter) UpdateGroupTaskOrdinal(input model.ProjectGroupTaskIDInput, id string) (response_dtos.GroupTaskResponseDTO, error) {

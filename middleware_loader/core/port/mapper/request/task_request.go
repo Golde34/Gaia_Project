@@ -55,7 +55,8 @@ func GenerateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Gene
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
 	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
-	
+	input.ProjectID = bodyMap["projectId"].(string)
+		
 	return input
 }
 
