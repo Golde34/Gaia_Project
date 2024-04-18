@@ -102,7 +102,7 @@ export const taskCompletedReducer = (
         case TASK_COMPLETED_REQUEST:
             return { loading: true };
         case TASK_COMPLETED_SUCCESS:
-            return { loading: false, task: action.payload.message };
+            return { loading: false, task: action.payload.calculateCompletedTasks };
         case TASK_COMPLETED_FAIL:
             return { loading: false, error: action.payload };
         default:

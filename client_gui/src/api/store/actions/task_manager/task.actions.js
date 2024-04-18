@@ -153,7 +153,7 @@ export const updateTaskInDialog = (task) => async (dispatch) => {
 export const getTasksCompleted = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TASK_COMPLETED_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks-complete`, HttpMethods.GET, portName.taskManager);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks-complete`, HttpMethods.GET, portName.middleware);
         dispatch({ type: TASK_COMPLETED_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
@@ -183,7 +183,7 @@ export const getTopTasks = (groupTaskId) => async (dispatch) => {
 export const moveTask = (taskId, oldGroupTaskId, newGroupTaskId) => async (dispatch) => {
     dispatch({ type: MOVE_TASK_REQUEST });
     try {
-        const { data } = await serverRequest(`/task/${taskId}/move-task`, HttpMethods.PUT, portName.taskManager, { oldGroupTaskId, newGroupTaskId });
+        const { data } = await serverRequest(`/task/${taskId}/move-task`, HttpMethods.PUT, portName.middleware, { oldGroupTaskId, newGroupTaskId });
         dispatch({ type: MOVE_TASK_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({ 
