@@ -142,12 +142,14 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTas
 
 // DeleteTask is the resolver for the deleteTask field.
 func (r *mutationResolver) DeleteTask(ctx context.Context, input model.IDInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: DeleteTask - deleteTask"))
+	task, err := taskService.DeleteTask(ctx, input)
+	return &task, err
 }
 
 // GenerateTaskWithoutGroupTask is the resolver for the generateTaskWithoutGroupTask field.
 func (r *mutationResolver) GenerateTaskWithoutGroupTask(ctx context.Context, input model.GenerateTaskWithoutGroupTaskInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: GenerateTaskWithoutGroupTask - generateTaskWithoutGroupTask"))
+	task, err := taskService.GenerateTaskWithoutGroupTask(ctx, input)
+	return &task, err
 }
 
 // UpdateTaskInDialog is the resolver for the updateTaskInDialog field.
@@ -158,7 +160,8 @@ func (r *mutationResolver) UpdateTaskInDialog(ctx context.Context, input model.U
 
 // MoveTask is the resolver for the moveTask field.
 func (r *mutationResolver) MoveTask(ctx context.Context, input model.MoveTaskInput) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented: MoveTask - moveTask"))
+	task, err := taskService.MoveTask(ctx, input)
+	return &task, err
 }
 
 // ArchiveTask is the resolver for the archiveTask field.

@@ -72,7 +72,7 @@ func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dt
 }
 
 func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (response_dtos.TaskResponseDTO, error) {
-	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/update"
+	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id 
 	var task response_dtos.TaskResponseDTO
 
 	result, err := base.BaseAPIV2(updateTaskURL, "PUT", input, &task)
@@ -83,7 +83,7 @@ func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (
 }
 
 func (adapter *TaskAdapter) DeleteTask(id string) (response_dtos.TaskResponseDTO, error) {
-	deleteTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/delete"
+	deleteTaskURL := base.TaskManagerServiceURL + "/task/" + id 
 	var task response_dtos.TaskResponseDTO
 
 	bodyResult, err := base.BaseAPI(deleteTaskURL, "DELETE", nil)

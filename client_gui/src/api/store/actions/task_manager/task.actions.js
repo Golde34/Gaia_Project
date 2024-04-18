@@ -117,7 +117,7 @@ export const generateTaskFromScratch = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // } 
-        const { data } = await serverRequest('/task/generate', HttpMethods.POST, portName.taskManager, task);
+        const { data } = await serverRequest('/task/generate', HttpMethods.POST, portName.middleware, task);
         dispatch({ type: TASK_GENERATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

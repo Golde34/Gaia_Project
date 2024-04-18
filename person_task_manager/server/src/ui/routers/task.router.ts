@@ -97,7 +97,7 @@ taskRouter.get("/:id/comments", async (req: Request, res: Response, next: NextFu
 
 // generate task from scratch
 taskRouter.post("/generate",
-    RequestValidator.validate(GenerateTaskFromScratchRequestDTO),
+    RequestValidator.validateV2(GenerateTaskFromScratchRequestDTO),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const taskResult = await taskControllerImpl.generateTaskWithoutGroupTask(req, next);

@@ -108,7 +108,7 @@ class TaskController {
 
     async generateTaskWithoutGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
             const projectId = bodyJson.projectId;
             const task = plainToInstance(TaskRequestDto, bodyJson)
             
