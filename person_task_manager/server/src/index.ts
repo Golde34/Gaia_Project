@@ -59,7 +59,7 @@ async function main(): Promise<void> {
     app.listen(config.server.listenPort, () => {
         console.log(`Server running on port ${port}`);
     });
-
+    
 }
 
 main();
