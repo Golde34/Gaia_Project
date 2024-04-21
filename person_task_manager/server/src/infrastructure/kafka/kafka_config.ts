@@ -1,17 +1,19 @@
-import { Consumer, Kafka, Producer } from "kafkajs";
+import { Consumer, Producer, Kafka, Partitioners } from 'kafkajs';
+import { config } from '../config/configuration';
 
-class KafkaConfig {
+export class KafkaConfig {
     consumer: Consumer;
-    kafka: Kafka;
     producer: Producer;
+    kafka: Kafka;
 
     constructor() {
         this.kafka = new Kafka({
-            clientId: 'javascript-kafka',
+            clientId: config.kafka.groupId,
+            // brokers: getArrayBrokers(config.kafka.bootstrapServers)
             brokers: ['localhost:9094']
-        });
-        this.producer = this.kafka.producer();
-        this.consumer = this.kafka.consumer({ groupId: 'test-group' });
+        })
+        this.consumer = this.kafka.consumer({ groupId: config.kafka.groupId });
+        this.producer = this.kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner});
     }
 
     async produce(topic: string, messages: any[]) {
@@ -19,7 +21,7 @@ class KafkaConfig {
             await this.producer.connect();
             await this.producer.send({
                 topic,
-                messages,
+                messages
             });
         } catch (error) {
             console.error(error);
@@ -34,11 +36,12 @@ class KafkaConfig {
             await this.consumer.subscribe({ topic: topic, fromBeginning: true });
             await this.consumer.run({
                 eachMessage: async ({ topic, partition, message }) => {
-                    console.log("Message is received with partition: "
-                        + partition + " in topic: " + topic);
+                    console.log("Message received with partition: " + partition
+                    + " and topic: " + topic
+                    + " and value: " + (message.value ? message.value.toString() : null));
                     const value = message.value ? message.value.toString() : null;
-                    callback(value);
-                },
+                    callback(message);
+                }
             });
         } catch (error) {
             console.error(error);
@@ -46,4 +49,7 @@ class KafkaConfig {
     }
 }
 
-export default KafkaConfig;
+function getArrayBrokers(bootstrapServers: string): string[] {
+    console.log(bootstrapServers.split(','));
+    return bootstrapServers.split(',');
+}

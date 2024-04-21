@@ -1,7 +1,5 @@
 package wo.work_optimization.core.domain.entity;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,7 +15,7 @@ public class SchedulePlan {
     private String id;
 
     private String userId;
-    private List<Task> tasks;
+//    private List<Task> tasks;
     private long startDate;
     private long endDate;
     private String status;
