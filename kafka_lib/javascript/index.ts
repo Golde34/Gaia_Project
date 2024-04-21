@@ -1,14 +1,11 @@
-import bodyParser from "body-parser";
 import KafkaConfig from "./config";
-
-const jsonParser = bodyParser.json();
 
 const kafkaConfig = new KafkaConfig();
 
 // Consumer
-kafkaConfig.consume("test", (value) => {
-    console.log("Message consume successfully with value: " + value);
-});
+// kafkaConfig.consume("test", (value) => {
+//     console.log("Message consume successfully with value: " + value);
+// });
 
 // Producer
 const sendMessageToKafka = (message: string) => {

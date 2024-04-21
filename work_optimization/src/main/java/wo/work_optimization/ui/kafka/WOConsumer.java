@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class WOConsumer extends KafkaMessageHandler {
     @Override
     public String getTopic() {
-        return "test";
+        return "OPTIMIZE_TASK";
     }
 
     @Override

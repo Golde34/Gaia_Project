@@ -1,4 +1,4 @@
-import { Consumer, Producer, Kafka } from 'kafkajs';
+import { Consumer, Producer, Kafka, Partitioners } from 'kafkajs';
 import { config } from '../config/configuration';
 
 export class KafkaConfig {
@@ -9,14 +9,16 @@ export class KafkaConfig {
     constructor() {
         this.kafka = new Kafka({
             clientId: config.kafka.groupId,
-            brokers: getArrayBrokers(config.kafka.bootstrapServers)
+            // brokers: getArrayBrokers(config.kafka.bootstrapServers)
+            brokers: ['localhost:9094']
         })
         this.consumer = this.kafka.consumer({ groupId: config.kafka.groupId });
-        this.producer = this.kafka.producer();
+        this.producer = this.kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner});
     }
 
     async produce(topic: string, messages: any[]) {
         try {
+            await this.producer.connect();
             await this.producer.send({
                 topic,
                 messages
@@ -36,7 +38,7 @@ export class KafkaConfig {
                 eachMessage: async ({ topic, partition, message }) => {
                     console.log("Message received with partition: " + partition
                     + " and topic: " + topic
-                    + " and value: " + message.value.toString());
+                    + " and value: " + (message.value ? message.value.toString() : null));
                     const value = message.value ? message.value.toString() : null;
                     callback(message);
                 }
@@ -48,5 +50,6 @@ export class KafkaConfig {
 }
 
 function getArrayBrokers(bootstrapServers: string): string[] {
+    console.log(bootstrapServers.split(','));
     return bootstrapServers.split(',');
 }

@@ -35,9 +35,11 @@ class TaskService {
             if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
                 await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
-                
-                this.kafkaConfig.produce(KafkaTopic.OPTIMIZE_TASK, 
-                    [createMessage(KafkaCommand.CREATE_TASK, '00', 'Successful', createTask)]);
+               
+                const messages = [{value: JSON.stringify(createMessage(
+                    KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
+                ))}]
+                this.kafkaConfig.produce(KafkaTopic.OPTIMIZE_TASK, messages);
 
                 return msg200({
                     message: (createTask as any)
