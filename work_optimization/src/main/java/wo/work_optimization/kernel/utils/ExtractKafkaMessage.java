@@ -10,7 +10,6 @@ public class ExtractKafkaMessage {
     
     public static String getCommand(String messsage) {
         KafkaBaseDto kafkaBaseDto = extractMessage(messsage);
-        log.info("Kafka message: {}", kafkaBaseDto);
         return kafkaBaseDto.getCommand();
     }
 
@@ -28,6 +27,10 @@ public class ExtractKafkaMessage {
                 .build();
     }
 
+    public static Object getData(String message) {
+        return extractMessage(message).getData();
+    }
+    
     private static KafkaBaseDto extractMessage(String messageJson) {
         return JsonUtils.gson.fromJson(messageJson, KafkaBaseDto.class);
     }
