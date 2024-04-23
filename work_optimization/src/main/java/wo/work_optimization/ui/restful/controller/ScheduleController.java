@@ -13,13 +13,13 @@ import wo.work_optimization.ui.restful.router.ScheduleRouter;
 
 @RestController
 public class ScheduleController implements ScheduleRouter {
-    
+
      @Autowired
      private ScheduleFactory scheduleFactory;
 
-    @Override
-    public ResponseEntity<GeneralResponse<TaskResponseDTO>> getMethodSchedule(TaskRequestDTO method) {
-         ScheduleConnector scheduleConnector = scheduleFactory.get(method.getMethod());
-         return scheduleConnector.schedule(method);
-    }
+     @Override
+     public ResponseEntity<GeneralResponse<TaskResponseDTO>> getMethodSchedule(TaskRequestDTO method) {
+          ScheduleConnector scheduleConnector = scheduleFactory.get(method.getMethod());
+          return scheduleConnector.schedule(method);
+     }
 }

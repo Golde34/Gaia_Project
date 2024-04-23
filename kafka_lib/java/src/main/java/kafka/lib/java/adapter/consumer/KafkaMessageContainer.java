@@ -23,9 +23,11 @@ public class KafkaMessageContainer {
 
     @PostConstruct
     public void init() {
+        log.info( "Initializing KafkaMessageContainer");
         messageHandlerMap = kafkaMessageHandlers
                 .stream()
                 .collect(Collectors.toMap(KafkaMessageHandler::getTopic, kafkaMessageHandler -> kafkaMessageHandler));
+                log.info("KafkaMessageContainer initialized with message handlers: " + messageHandlerMap.keySet());
     }
 
     public void contextHandlerMessage(String message, int partition, long offset, String topic) {
