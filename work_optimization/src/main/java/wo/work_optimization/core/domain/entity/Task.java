@@ -1,9 +1,8 @@
 package wo.work_optimization.core.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Task {
     @Id
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String title;
     private int priority;
@@ -27,4 +26,8 @@ public class Task {
     private long endDate;
     private String activeStatus;
     private String originalId;
+
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    private SchedulePlan schedulePlan;
 }

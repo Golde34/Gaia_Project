@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.domain.enums.TaskPriorityEnum;
 import wo.work_optimization.core.domain.request.CreateTaskRequestDTO;
 import wo.work_optimization.kernel.utils.DateTimeUtils;
 
@@ -43,12 +44,14 @@ public class TaskMapper {
     }
 
     private int convertTaskPriority(String priority) {
-        return switch (priority) {
-            case "HIGH" -> 3;
-            case "MEDIUM" -> 2;
-            case "LOW" -> 1;
-            case "STAR" -> 5;
+        TaskPriorityEnum taskPriorityEnum = TaskPriorityEnum.of(priority);
+        return switch (taskPriorityEnum) {
+            case HIGH -> taskPriorityEnum.getWeight();
+            case MEDIUM -> taskPriorityEnum.getWeight();
+            case LOW -> taskPriorityEnum.getWeight();
+            case STAR -> taskPriorityEnum.getWeight();
             default -> 0;
         };
     }
 }
+ 
