@@ -2,6 +2,8 @@ package wo.work_optimization.kernel.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,11 +12,15 @@ import io.micrometer.common.util.StringUtils;
 @UtilityClass
 public class DateTimeUtils {
     private static final String DEFAULT_DATETIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
-    private static final String VTB_DATETIME_PATTERN = "yyyyMMddHHmmss";
     public static final String YY_MM_DD = "yyMMdd";
+    private static final String DEFAULT_DASH_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     public static String currentDateTime() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN));
+    }
+
+    public static String currentDateTimeDash() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(DEFAULT_DASH_DATETIME_PATTERN));
     }
 
     public static String currentDateTime(String pattern) {
@@ -37,8 +43,13 @@ public class DateTimeUtils {
         return formatter.format(date);
     }
 
-    public static String currentDateTimeVTB() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(VTB_DATETIME_PATTERN));
+    public static String currentDateTimeYYMMDD() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(YY_MM_DD));
+    }
+
+    public static long convertStringDateTime(String dateTime) throws ParseException {
+        Instant instant = Instant.parse(dateTime);
+        return instant.toEpochMilli();
     }
 }
 

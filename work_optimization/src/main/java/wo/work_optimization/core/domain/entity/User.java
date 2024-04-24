@@ -1,9 +1,6 @@
 package wo.work_optimization.core.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -11,8 +8,8 @@ import lombok.Data;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(generator = "uuid")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String userId;
     private String username;
