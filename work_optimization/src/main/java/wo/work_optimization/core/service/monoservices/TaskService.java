@@ -12,30 +12,6 @@ import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 
-@Service
-@Slf4j
-public class TaskService {
-
-    private final TaskMapper taskMapper;
-    private final TaskStore taskStore;
-    private final TaskValidation taskValidation;
-
-    public TaskService(TaskMapper taskMapper, TaskStore taskStore, TaskValidation taskValidation) {
-        this.taskMapper = taskMapper;
-        this.taskStore = taskStore;
-        this.taskValidation = taskValidation;
-    }
-    
-    public void createTask(String message) {
-        try {
-            Task task = taskMapper.toEntity(ExtractKafkaMessage.getData(message));
-            if (ValidateConstants.PASS == taskValidation.validateCreateTask(task)) {
-                taskStore.createTask(task);
-            } else {
-                log.error(String.format("Task with originalId %s already exists", task.getOriginalId()));
-            }
-        } catch (ParseException e) {
-            log.error(String.format("Cannot map kafka task object to entity: %s", e.getMessage()), e);            
-        }
-    }
+public interface TaskService {
+    void createTask(String message);
 }
