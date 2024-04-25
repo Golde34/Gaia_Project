@@ -1,8 +1,8 @@
-package wo.work_optimization.core.service.impl.kafkacommand;
+package wo.work_optimization.core.command;
 
-import wo.work_optimization.core.service.kafka.MessageProcessingStrategy;
+import wo.work_optimization.core.port.kafka.MessageProcessingStrategy;
 
-public class KafkaDefaultServices implements MessageProcessingStrategy {
+public class ScheduleTaskCommand implements MessageProcessingStrategy {
 
     @Override
     public void process(String message, String command) {
