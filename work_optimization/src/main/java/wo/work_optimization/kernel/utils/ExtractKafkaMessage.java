@@ -1,11 +1,9 @@
 package wo.work_optimization.kernel.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.kafka.base.CommandStatus;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 
 @SuppressWarnings("rawtypes")
-@Slf4j
 public class ExtractKafkaMessage { 
     
     public static String getCommand(String messsage) {

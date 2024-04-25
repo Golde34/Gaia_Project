@@ -9,6 +9,9 @@ import wo.work_optimization.core.domain.entity.Task;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, String> {
+    
+    Task findByOriginalId(String originalId);
+
     @Override
     void deleteById(String id);
     @Override

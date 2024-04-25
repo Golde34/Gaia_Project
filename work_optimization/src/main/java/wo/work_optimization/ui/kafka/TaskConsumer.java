@@ -3,7 +3,7 @@ package wo.work_optimization.ui.kafka;
 import kafka.lib.java.adapter.consumer.messagehandlers.KafkaMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import wo.work_optimization.core.domain.constant.TopicConstants;
-import wo.work_optimization.core.service.kafka.CommandHandleFactory;
+import wo.work_optimization.core.port.kafka.CommandHandleFactory;
 import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 
 import org.springframework.stereotype.Component;
