@@ -24,4 +24,9 @@ public class TaskStoreAdapter implements TaskStore {
         taskRepository.save(task);
         log.info("Task created: {}", task);
     }
+
+    @Override
+    public Task findTaskByOriginalId(String originalId) {
+        return taskRepository.findByOriginalId(originalId);
+    }
 }
