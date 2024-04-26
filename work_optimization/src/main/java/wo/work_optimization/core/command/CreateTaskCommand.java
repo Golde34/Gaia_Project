@@ -20,8 +20,7 @@ public class CreateTaskCommand implements MessageProcessingStrategy {
     public void process(String message, String command) {
         try {
             taskService.createTask(message);
-            log.info("OK");
-        } catch (Exception e) {
+         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
