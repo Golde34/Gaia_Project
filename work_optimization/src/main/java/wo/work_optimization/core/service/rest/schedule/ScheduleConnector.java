@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.schedule;
+package wo.work_optimization.core.service.rest.schedule;
 
 import org.springframework.http.ResponseEntity;
 import wo.work_optimization.core.domain.response.base.GeneralResponse;
