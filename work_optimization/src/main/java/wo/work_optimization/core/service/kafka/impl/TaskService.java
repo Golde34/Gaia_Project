@@ -10,7 +10,6 @@ import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
-import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 
 import java.text.ParseException;
 
@@ -26,19 +25,6 @@ public class TaskService extends CommandService<Task, String> {
         this.taskMapper = taskMapper;
         this.taskStore = taskStore;
         this.taskValidation = taskValidation;
-    }
-
-    public void createTask(String message) {
-        try {
-            Task task = taskMapper.toEntity(ExtractKafkaMessage.getData(message));
-            if (ValidateConstants.PASS == taskValidation.validateCreateTask(task)) {
-                taskStore.createTask(task);
-            } else {
-                log.error(String.format("Task with originalId %s already exists", task.getOriginalId()));
-            }
-        } catch (ParseException e) {
-            log.error(String.format("Cannot map kafka task object to entity: %s", e.getMessage()), e);
-        }
     }
 
     @Override
@@ -69,6 +55,4 @@ public class TaskService extends CommandService<Task, String> {
         taskStore.createTask(request);
         return "OK";
     }
-
-
 }
