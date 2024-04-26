@@ -3,7 +3,7 @@ package wo.work_optimization.core.service.rest.impl.simpleschedule;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.response.TaskResponseDTO;
-import wo.work_optimization.core.service.schedule.ScheduleService;
+import wo.work_optimization.core.service.rest.schedule.ScheduleService;
 
 @Service
 public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
