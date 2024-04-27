@@ -15,13 +15,13 @@ import java.text.ParseException;
 
 @Service
 @Slf4j
-public class TaskService extends CommandService<Task, String> {
+public class CreateTaskCommand extends CommandService<Task, String> {
 
     private final TaskMapper taskMapper;
     private final TaskStore taskStore;
     private final TaskValidation taskValidation;
 
-    public TaskService(TaskMapper taskMapper, TaskStore taskStore, TaskValidation taskValidation) {
+    public CreateTaskCommand(TaskMapper taskMapper, TaskStore taskStore, TaskValidation taskValidation) {
         this.taskMapper = taskMapper;
         this.taskStore = taskStore;
         this.taskValidation = taskValidation;
@@ -53,6 +53,13 @@ public class TaskService extends CommandService<Task, String> {
     @Override
     public String doCommand(Task request) {
         taskStore.createTask(request);
+
+        // Neu khoang thoi gian thuc hien task nam trong vung khoang thoi gian cua schedule plan thi se add task vao schedule plan
+        // schedulePlanStore.addTaskToSchedulePlan(request);
+
+        // Thuc hien tinh toan lai schedule plan
+        // schedulService.calculateSchedulePlan();
+
         return "OK";
     }
 }
