@@ -12,11 +12,11 @@ import wo.work_optimization.core.service.kafka.CommandService;
 
 @Service
 @Slf4j
-public class ScheduleTask extends CommandService<Task, String> {
+public class ScheduleTaskCommand extends CommandService<Task, String> {
 
     private final TaskMapper taskMapper;
 
-    public ScheduleTask(TaskMapper taskMapper) {
+    public ScheduleTaskCommand(TaskMapper taskMapper) {
         this.taskMapper = taskMapper;
     }
 
