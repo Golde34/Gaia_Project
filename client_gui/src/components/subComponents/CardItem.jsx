@@ -14,8 +14,8 @@ const CardItem = (props) => {
     }
 
     return (
-        <button onClick={() => { redirectToTaskDetail() }}>
-            <Card className="w-xs" decoration="top" decorationColor="indigo">
+        <button onClick={() => { redirectToTaskDetail() }} className="m-4 card-item">
+            <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px' }}> 
                 <Flex justifyContent="between" alignItems="center">
                     <Metric>{task.title}</Metric>
                     <BadgeDelta deltaType="moderateIncrease">+12.5%</BadgeDelta>

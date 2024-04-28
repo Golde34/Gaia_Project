@@ -2,6 +2,7 @@ import React from "react";
 import {
 	ArrowUpIcon,
 	BellIcon,
+	CalendarIcon,
 	ChartBarIcon,
 	ClipboardCheckIcon,
 	DocumentSearchIcon,
@@ -25,6 +26,22 @@ const Sidebar = () => {
 			<div className="fixed left-3 sm:left-6 top-[100px]">
 				<Grid numItems={1}>
 					<Col numColSpan={1}>
+						<a href="/client-gui/schedule">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<CalendarIcon width={20} />
+							</Button>
+						</a>
+					</Col>				
+					<Col numColSpan={1}>
+						<a href="/client-gui/project">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<ClipboardCheckIcon width={20} />
+							</Button>
+						</a>
+					</Col>
+					<Col numColSpan={1}>
 						<a href="/client-gui/profile">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
@@ -37,14 +54,6 @@ const Sidebar = () => {
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
 								<ShieldCheckIcon width={20} />
-							</Button>
-						</a>
-					</Col>
-					<Col numColSpan={1}>
-						<a href="/client-gui/project">
-							<Button variant="primary" color="indigo"
-								className="p-2 rounded-lg mb-4">
-								<ClipboardCheckIcon width={20} />
 							</Button>
 						</a>
 					</Col>
