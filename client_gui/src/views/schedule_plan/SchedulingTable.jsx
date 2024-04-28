@@ -6,6 +6,7 @@ import cn from "../../kernels/utils/cn";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { Button, Card, Metric, Title } from '@tremor/react';
 import CardItem from '../../components/subComponents/CardItem';
+import { useNavigate } from 'react-router-dom';
 
 const task = {
   title: 'Meeting 1 is very long text that\'s good',
@@ -14,6 +15,8 @@ const task = {
 }
 
 function ContentArea() {
+  const navigate = useNavigate();
+
   const days = ["S", "M", "T", "W", "T", "F", "S"];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
@@ -104,6 +107,9 @@ function ContentArea() {
 
             <div className=' grid grid-cols-7'>
               <Button className='col-span-7 mt-5' color='indigo'>Add Event</Button>
+              <Button className='col-span-7 mt-5' color='indigo' type='button'
+                onClick={() => navigate('/calendar')}
+              >Full calendar</Button>
             </div>
           </div>
           <div className="w-full sm:px-5">

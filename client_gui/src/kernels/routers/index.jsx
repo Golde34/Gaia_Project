@@ -10,6 +10,7 @@ import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
 import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
 import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
+import Calendar from '../../views/schedule_plan/Calendar';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -71,6 +72,11 @@ const routeList = [
         path: '/schedule',
         key: 'schedule',
         element: <SchedulingTable/>,
+    },
+    {
+        path: '/calendar',
+        key: 'calendar',
+        element: <Calendar />,
     }
 ]
 
