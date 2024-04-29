@@ -1,0 +1,34 @@
+.fc .fc-daygrid-day-number {
+    color: white;
+}
+
+:root {
+    --fc-today-bg-color: #4cceac;
+    --fc-daygrid-day-number-color: #6366f1;
+    --fc-border-color: #6366f1;
+    --fc-neutral-bg-color: #6366f1;
+    --fc-page-bg-color: #6366f1;
+    --fc-list-event-hover-bg-color: #4cceac;
+    --fc-list-event-hover-color: black;
+}
+
+.fc .fc-popover-body {
+    background-color: rgb(144, 99, 184);
+}
+
+.fc .fc-popover-title {
+    color: black;
+}
+
+.fc-list-table .fc-list-day .fc-list-day-cushion .fc-list-day-text {
+    color: black;
+    font-size: larger;
+}
+
+.fc-list-table .fc-list-day .fc-list-day-cushion .fc-list-day-side-text {
+    color: black;
+}
+
+.fc-event:hover {
+    color: black;
+}
