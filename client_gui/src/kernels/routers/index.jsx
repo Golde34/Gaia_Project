@@ -11,6 +11,7 @@ import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
 import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
 import Calendar from '../../views/schedule_plan/Calendar';
+import RoleDashboard from '../../views/auth_service/RoleDashboard';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -67,6 +68,11 @@ const routeList = [
         path: '/auth-manager',
         key: 'auth-manager',
         element: <AuthManagerDashboard />,
+    },
+    {
+        path: '/role-dashboard',
+        key: 'role-dashboard',
+        element: <RoleDashboard />,
     },
     {
         path: '/schedule',
