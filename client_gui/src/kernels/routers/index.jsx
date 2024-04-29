@@ -3,35 +3,14 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import Dashboard from '../../views/Dashboard';
 import Project from '../../views/task_manager/Project';
-import SchedulingTable from '../../views/task_manager/SchedulingTable';
+import SchedulingTable from '../../views/schedule_plan/SchedulingTable';
 import TaskDashboard from '../../views/task_manager/TaskDashboard';
 import SignIn from '../../screens/authScreen/Signin';
 import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
 import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
 import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
-
-// const schedule = [
-//   {
-//     id: 1,
-//     title: "Opening Remarks",
-//     startTime: "8:00am",
-//     endTime: "8:30am",
-//     track: 1,
-//     presenter: "Jane Doe",
-//     color: "#457b9d", // Dark blue
-//   },
-//   {
-//     id: 2,
-//     title: "Keynote: The Future of Tech",
-//     startTime: "8:30am",
-//     endTime: "10:00am",
-//     track: 2,
-//     presenter: "John Smith",
-//     color: "#1d3557", // Navy blue
-//   },
-//   // More sessions...
-// ];
+import Calendar from '../../views/schedule_plan/Calendar';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -89,11 +68,16 @@ const routeList = [
         key: 'auth-manager',
         element: <AuthManagerDashboard />,
     },
-    // {
-    //     path: '/scheduling-table',
-    //     key: 'scheduling-table',
-    //     element: <SchedulingTable schedule={schedule}/>,
-    // }
+    {
+        path: '/schedule',
+        key: 'schedule',
+        element: <SchedulingTable/>,
+    },
+    {
+        path: '/calendar',
+        key: 'calendar',
+        element: <Calendar />,
+    }
 ]
 
 const RenderRouter = (props) => {
