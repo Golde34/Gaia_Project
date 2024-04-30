@@ -13,6 +13,11 @@ function ContentArea() {
                     navigate('/role-dashboard');
                 }}
             >Role Dashboard</Button>
+            <Button
+                onClick={() => {
+                    navigate('/privilege-dashboard');
+                }}
+            >Privilege Dashboard</Button>
         </div>
     )
 }

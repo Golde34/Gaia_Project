@@ -2,7 +2,6 @@ import { Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeader
 import Template from "../../components/template";
 import { myData } from "./role-example";
 import { useState } from "react";
-import UpdateUserModal from "../../screens/userScreen/UpdateUserModal";
 import AddPrivilegeModal from "../../screens/roleScreen/AddPrivilegeModal";
 
 

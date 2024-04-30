@@ -12,6 +12,7 @@ import UserProfile from '../../views/user_gui/UserProfile';
 import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
 import Calendar from '../../views/schedule_plan/Calendar';
 import RoleDashboard from '../../views/auth_service/RoleDashboard';
+import PrivilegeDashboard from '../../views/auth_service/PrivilegeDashboard';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -73,6 +74,11 @@ const routeList = [
         path: '/role-dashboard',
         key: 'role-dashboard',
         element: <RoleDashboard />,
+    },
+    {
+        path: '/privilege-dashboard',
+        key: 'privilege-dashboard',
+        element: <PrivilegeDashboard />,
     },
     {
         path: '/schedule',
