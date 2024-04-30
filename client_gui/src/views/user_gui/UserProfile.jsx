@@ -10,14 +10,9 @@ function ContentArea() {
             <p>User Profile</p>
             <Button
                 onClick={() => {
-                    navigate('/role-dashboard');
+                    navigate('/privilege-role-dashboard');
                 }}
-            >Role Dashboard</Button>
-            <Button
-                onClick={() => {
-                    navigate('/privilege-dashboard');
-                }}
-            >Privilege Dashboard</Button>
+            >Privielge And Role Dashboard</Button>
         </div>
     )
 }

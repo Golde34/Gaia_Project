@@ -1,0 +1,71 @@
+import { Card, Col, Flex, Grid, Metric, Switch, Title } from "@tremor/react";
+import RoleDashboard from "../../screens/roleScreen/RoleDashboard";
+import PrivilegeDashboard from "../../screens/roleScreen/PrivilegeDashboard";
+import Template from "../../components/template";
+import { useState } from "react";
+
+function ContentArea() {
+    const [isRoleSwitchOn, setIsRoleSwitchOn] = useState(true);
+    const [isPrivilegeSwitchOn, setIsPrivilegeSwitchOn] = useState(false);
+
+    const handleRoleSwitchChange = (e) => {
+        setIsRoleSwitchOn(e);
+    }
+
+    const handlePrivilegeSwitchChange = (e) => {
+        setIsPrivilegeSwitchOn(e);
+    }
+
+    return (
+        <>
+            <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
+                className="text-2xl font-bold text-gray-800">Role & Privilege Settings
+            </Metric>
+            <Card>
+                <div className="flex justify-end">
+                    <Switch
+                        id="role-switch"
+                        name="role-switch"
+                        checked={isRoleSwitchOn}
+                        className="me-2"
+                        onChange={handleRoleSwitchChange} />
+                    <label htmlFor="role-switch"
+                    ><Title>Role Dashboard</Title></label>
+                    <Switch
+                        id="privilege-switch"
+                        name="privilege-switch"
+                        checked={isPrivilegeSwitchOn}
+                        className="ms-5"
+                        onChange={handlePrivilegeSwitchChange} />
+                    <label htmlFor="privielge-switch"><Title>Privilege Dashboard</Title></label>
+                </div>
+            </Card>
+            <Grid numItems={1}>
+                {isRoleSwitchOn ? (
+                    <Col numColSpan={1}>
+                        <RoleDashboard />
+                    </Col>
+                ) : (
+                    <></>
+                )}
+                {isPrivilegeSwitchOn ? (
+                    <Col numColSpan={1}>
+                        <PrivilegeDashboard />
+                    </Col>
+                ) : (
+                    <></>
+                )}
+            </Grid>
+        </>
+    )
+}
+
+const PrivilegeAndRoleDashboard = () => {
+    return (
+        <Template>
+            <ContentArea />
+        </Template>
+    )
+}
+
+export default PrivilegeAndRoleDashboard;

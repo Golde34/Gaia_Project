@@ -2,10 +2,10 @@ import { Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeader
 import Template from "../../components/template";
 import { myData } from "./role-example";
 import { useState } from "react";
-import AddPrivilegeModal from "../../screens/roleScreen/AddPrivilegeModal";
+import AddPrivilegeModal from "./AddPrivilegeModal";
 
 
-function ContentArea() {
+function RoleDashboard() {
     const data = myData;
 
     let [isOpen, setIsOpen] = useState(false);
@@ -42,7 +42,7 @@ function ContentArea() {
                                             openModal();
                                         }}
                                         >
-                                            Add Privilege
+                                            Insert Privilege
                                         </button>
                                 </Flex>
                                 <Title>{role}</Title>
@@ -121,14 +121,6 @@ function ContentArea() {
             </div>
         </>
     );
-}
-
-const RoleDashboard = () => {
-    return (
-        <Template>
-            <ContentArea />
-        </Template>
-    )
 }
 
 export default RoleDashboard;
