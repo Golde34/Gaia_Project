@@ -1,10 +1,13 @@
-import { Card, Col, Flex, Grid, Metric, Switch, Title } from "@tremor/react";
+import { Button, Card, Col, Grid, Metric, Switch, Title } from "@tremor/react";
 import RoleDashboard from "../../screens/roleScreen/RoleDashboard";
 import PrivilegeDashboard from "../../screens/roleScreen/PrivilegeDashboard";
-import Template from "../../components/template";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ManagerTemplate from "../../components/template/ManagerTemplate";
 
 function ContentArea() {
+    const navigate = useNavigate();
+
     const [isRoleSwitchOn, setIsRoleSwitchOn] = useState(true);
     const [isPrivilegeSwitchOn, setIsPrivilegeSwitchOn] = useState(false);
 
@@ -23,6 +26,10 @@ function ContentArea() {
             </Metric>
             <Card>
                 <div className="flex justify-end">
+                    <Button type="button" onClick={() => navigate('/privilege-url-settings')}
+                        className="me-10">
+                        Privilege Url Settings
+                    </Button>
                     <Switch
                         id="role-switch"
                         name="role-switch"
@@ -62,9 +69,9 @@ function ContentArea() {
 
 const PrivilegeAndRoleDashboard = () => {
     return (
-        <Template>
+        <ManagerTemplate>
             <ContentArea />
-        </Template>
+        </ManagerTemplate>
     )
 }
 

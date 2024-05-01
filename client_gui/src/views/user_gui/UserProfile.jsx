@@ -1,5 +1,5 @@
 import { Button } from "@tremor/react";
-import Template from "../../components/template"
+import Template from "../../components/template/Template"
 import { useNavigate } from "react-router-dom";
 
 function ContentArea() {

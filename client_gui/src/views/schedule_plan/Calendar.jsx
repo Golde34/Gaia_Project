@@ -1,4 +1,4 @@
-import Template from "../../components/template";
+import Template from "../../components/template/Template";
 import { useState } from "react";
 import '@fullcalendar/react/dist/vdom';
 import FullCalendar, { formatDate } from "@fullcalendar/react";

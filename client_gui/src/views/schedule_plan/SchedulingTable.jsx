@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Template from '../../components/template';
+import Template from '../../components/template/Template';
 import dayjs from 'dayjs';
 import { generateDate, months } from "../../kernels/utils/calendar";
 import cn from "../../kernels/utils/cn";

@@ -112,6 +112,7 @@ public class RoleServiceImpl implements RoleService {
             listRole.setNumberOfUsers(role.getUsers().size());
             totalUser[0] += role.getUsers().size();
             listRole.setTotalNumberOfUsers(totalUser[0]);
+            listRole.setPrivileges(role.getPrivileges());
             listRoles.add(listRole);
         });
 
