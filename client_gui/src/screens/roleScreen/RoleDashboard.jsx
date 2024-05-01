@@ -1,5 +1,4 @@
 import { Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import Template from "../../components/template";
 import { myData } from "./role-example";
 import { useState } from "react";
 import AddPrivilegeModal from "./AddPrivilegeModal";
