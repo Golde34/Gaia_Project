@@ -148,3 +148,5 @@
 2024-05-01T19:29:20.668+07:00  INFO 23459 --- [http-nio-4001-exec-9] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
 2024-05-01T19:29:20.669+07:00  INFO 23459 --- [http-nio-4001-exec-9] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
 2024-05-01T19:29:20.678+07:00  INFO 23459 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-05-01T20:13:58.977+07:00  INFO 23459 --- [http-nio-4001-exec-3] a.a.core.services.RoleServiceImpl        : Get all roles
+2024-05-01T20:29:55.115+07:00  INFO 23459 --- [http-nio-4001-exec-8] a.a.core.services.RoleServiceImpl        : Get all roles

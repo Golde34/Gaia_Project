@@ -17,11 +17,9 @@ function ContentArea() {
 
 const GaiaManagerDashboard = () => {
     return (
-        <>
-            <ManagerTemplate>
-                <ContentArea />
-            </ManagerTemplate>
-        </>
+        <ManagerTemplate>
+            <ContentArea />
+        </ManagerTemplate>
     )
 }
 

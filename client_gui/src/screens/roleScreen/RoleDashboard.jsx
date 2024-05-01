@@ -1,7 +1,10 @@
 import { Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
 import { myData } from "./role-example";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AddPrivilegeModal from "./AddPrivilegeModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoles } from "../../api/store/actions/auth_service/role.actions";
+import RoleListScreen from "./RoleListScreen";
 
 
 function RoleDashboard() {
@@ -9,15 +12,15 @@ function RoleDashboard() {
 
     let [isOpen, setIsOpen] = useState(false);
     const [role, setRole] = useState("ROLE_BOSS");
-   
+
     function loadPrivileges(roleName) {
         setRole(roleName);
     }
-    
+
     function closeModal() {
         setIsOpen(false)
     }
-    
+
     function openModal() {
         setIsOpen(true)
     }
@@ -36,13 +39,13 @@ function RoleDashboard() {
                                     <Title>List of Role's Privileges</Title>
                                     <button
                                         type="button"
-                                        className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" 
+                                        className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                         onClick={() => {
                                             openModal();
                                         }}
-                                        >
-                                            Insert Privilege
-                                        </button>
+                                    >
+                                        Insert Privilege
+                                    </button>
                                 </Flex>
                                 <Title>{role}</Title>
                                 <Table className="mt-5">
@@ -71,50 +74,8 @@ function RoleDashboard() {
                 </div>
                 <div className="col-span-2 w-full">
                     <div className="w-full p-2">
-                        <Card>
-                            <Flex>
-                                <Title>Roles</Title>
-                                <button
-                                    type="button"
-                                    className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    onClick={() => {
-                                        console.log("Add Role");
-                                    }}
-                                > Add role</button>
-                            </Flex>
-                            <Table className="mt-5">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableHeaderCell>Id</TableHeaderCell>
-                                        <TableHeaderCell>Name</TableHeaderCell>
-                                        <TableHeaderCell>Description</TableHeaderCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow className="hover:cursor-pointer hover:bg-[#4cceac]" onClick={() => loadPrivileges("ROLE_BOSS")}>
-                                        <TableCell>1</TableCell>
-                                        <TableCell>BOSS</TableCell>
-                                        <TableCell>Can manage all users, all actions, full access</TableCell>
-                                    </TableRow>
-                                    <TableRow className="hover:cursor-pointer hover:bg-[white]" onClick={() => loadPrivileges("ROLE_SUBBOSS")}>
-                                        <TableCell>2</TableCell>
-                                        <TableCell>SUBBOSS</TableCell>
-                                        <TableCell>Cannot give permission access for users</TableCell>
-                                    </TableRow>
-                                    <TableRow className="hover:cursor-pointer hover:bg-[#4cceac]" onClick={() => loadPrivileges("ROLE_ADMIN")}>
-                                        <TableCell>3</TableCell>
-                                        <TableCell>ADMIN</TableCell>
-                                        <TableCell>Can manage all users, can not order to Gaia, limit access</TableCell>
-                                    </TableRow>
-                                    <TableRow className="hover:cursor-pointer hover:bg-[white]" onClick={() => loadPrivileges("ROLE_USER")}>
-                                        <TableCell>4</TableCell>
-                                        <TableCell>USER</TableCell>
-                                        <TableCell>Can only view, cannot edit or delete</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </Card>
-                        <AddPrivilegeModal isOpen={isOpen} closeModal={closeModal} role={role}/>
+                        <RoleListScreen selectedRole={setRole}/>
+                        <AddPrivilegeModal isOpen={isOpen} closeModal={closeModal} role={role} />
                     </div>
                 </div>
             </div>
