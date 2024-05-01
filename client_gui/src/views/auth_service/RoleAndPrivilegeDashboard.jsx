@@ -1,9 +1,9 @@
 import { Button, Card, Col, Grid, Metric, Switch, Title } from "@tremor/react";
 import RoleDashboard from "../../screens/roleScreen/RoleDashboard";
 import PrivilegeDashboard from "../../screens/roleScreen/PrivilegeDashboard";
-import Template from "../../components/template";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ManagerTemplate from "../../components/template/ManagerTemplate";
 
 function ContentArea() {
     const navigate = useNavigate();
@@ -69,9 +69,9 @@ function ContentArea() {
 
 const PrivilegeAndRoleDashboard = () => {
     return (
-        <Template>
+        <ManagerTemplate>
             <ContentArea />
-        </Template>
+        </ManagerTemplate>
     )
 }
 

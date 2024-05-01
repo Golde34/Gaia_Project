@@ -13,6 +13,7 @@ import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard'
 import Calendar from '../../views/schedule_plan/Calendar';
 import PrivilegeAndRoleDashboard from '../../views/auth_service/RoleAndPrivilegeDashboard';
 import PrivilegeUrlSettings from '../../views/auth_service/PrivilegeUrlSettings';
+import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboard';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -66,8 +67,13 @@ const routeList = [
         element: <UserProfile />,
     },
     {
-        path: '/auth-manager',
-        key: 'auth-manager',
+        path: '/manager',
+        key: 'manager',
+        element: <GaiaManagerDashboard />,
+    },
+    {
+        path: '/user-manager',
+        key: 'user-manager',
         element: <AuthManagerDashboard />,
     },
     {

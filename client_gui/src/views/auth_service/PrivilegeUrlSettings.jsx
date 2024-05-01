@@ -1,7 +1,8 @@
 import { Button, Card, Col, Flex, Grid, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, TextInput, Title } from "@tremor/react";
-import Template from "../../components/template"
+import Template from "../../components/template/Template"
 import { SearchCircleIcon } from "@heroicons/react/solid";
 import { useState } from "react";
+import ManagerTemplate from "../../components/template/ManagerTemplate";
 
 function ContentArea() {
     const [text, setText] = useState("");
@@ -143,9 +144,9 @@ function ContentArea() {
 
 function PrivilegeUrlSettings() {
     return (
-        <Template>
+        <ManagerTemplate>
             <ContentArea />
-        </Template>
+        </ManagerTemplate>
     )
 }
 
