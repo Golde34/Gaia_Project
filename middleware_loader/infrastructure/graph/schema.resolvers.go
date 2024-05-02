@@ -17,6 +17,8 @@ var taskService = task_manager.NewTaskService()
 var projectService = task_manager.NewProjectService()
 var userService = auth_services.NewUserService()
 var groupTaskService = task_manager.NewGroupTaskService()
+var roleService = auth_services.NewRoleService()
+var privilegeService = auth_services.NewPrivilegeService()
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
@@ -155,7 +157,7 @@ func (r *mutationResolver) GenerateTaskWithoutGroupTask(ctx context.Context, inp
 // UpdateTaskInDialog is the resolver for the updateTaskInDialog field.
 func (r *mutationResolver) UpdateTaskInDialog(ctx context.Context, input model.UpdateTaskInDialogInput) (*model.Task, error) {
 	task, err := taskService.UpdateTaskInDialog(ctx, input)
-	return &task, err	
+	return &task, err
 }
 
 // MoveTask is the resolver for the moveTask field.
@@ -238,9 +240,15 @@ func (r *queryResolver) GetUserByUsername(ctx context.Context, input model.UserI
 	panic(fmt.Errorf("not implemented: GetUserByUsername - getUserByUsername"))
 }
 
-// ListAllRoles is the resolver for the listAllRoles field.
-func (r *queryResolver) ListAllRoles(ctx context.Context) ([]*model.Role, error) {
-	panic(fmt.Errorf("not implemented: ListAllRoles - listAllRoles"))
+// GetAllRoles is the resolver for the getAllRoles field.
+func (r *queryResolver) GetAllRoles(ctx context.Context) ([]*model.Role, error) {
+	roles, err := roleService.GetAllRoles(ctx)
+	modelRole := []*model.Role{}
+	for _, role := range roles {
+		roleCopy := role
+		modelRole = append(modelRole, &roleCopy)
+	}
+	return modelRole, err
 }
 
 // GetRoleByName is the resolver for the getRoleByName field.
@@ -248,9 +256,9 @@ func (r *queryResolver) GetRoleByName(ctx context.Context, input model.RoleInput
 	panic(fmt.Errorf("not implemented: GetRoleByName - getRoleByName"))
 }
 
-// ListAllPrivileges is the resolver for the listAllPrivileges field.
-func (r *queryResolver) ListAllPrivileges(ctx context.Context) ([]*model.Privilege, error) {
-	panic(fmt.Errorf("not implemented: ListAllPrivileges - listAllPrivileges"))
+// GetAllPrivileges is the resolver for the getAllPrivileges field.
+func (r *queryResolver) GetAllPrivileges(ctx context.Context) ([]*model.Privilege, error) {
+	panic(fmt.Errorf("not implemented: GetAllPrivileges - getAllPrivileges"))
 }
 
 // GetPrivilegeByName is the resolver for the getPrivilegeByName field.
@@ -306,7 +314,7 @@ func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error)
 		taskCopy := task
 		modelTask = append(modelTask, &taskCopy)
 	}
-	return modelTask, err	
+	return modelTask, err
 }
 
 // GetTaskByID is the resolver for the getTaskById field.

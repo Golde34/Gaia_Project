@@ -1,8 +1,9 @@
 type Role {
-    id: ID!
+    id: Float!
     name: String!
+    description: String
 
-    privilege: [Privilege!]!
+    privileges: [Privilege!]!
 }
 
 input RoleInput {

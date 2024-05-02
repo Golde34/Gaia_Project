@@ -1,43 +1,43 @@
 type GroupTask {
-  id: ID!
-  title: String!
-  description: String!
-  priority: [String!]!
-  status: String!
-  ordinalNumber: Int
-  activeStatus: String!    
+	id: ID!
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	ordinalNumber: Int
+	activeStatus: String!    
 
-  project: String!
-  tasks: [String!]!
-  totalTasks: Int
-  completedTasks: Int
+	project: String!
+	tasks: [String!]!
+	totalTasks: Int
+	completedTasks: Int
 
-  createdAt: String!
-  updatedAt: String!
+	createdAt: String!
+	updatedAt: String!
 }
 
 input CreateGroupTaskInput {
-  title: String!
-  description: String!
-  priority: [String!]!
-  status: String!
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
 
-  projectId: String!
-  tasks: [String!]
+	projectId: String!
+	tasks: [String!]
 }
 
 input UpdateGroupTaskInput {
-  groupTaskId: String!
-  title: String!
-  description: String!
-  priority: [String!]!
-  status: String!
+	groupTaskId: String!
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
 
-  projectId: String!
-  tasks: [String!]
+	projectId: String!
+	tasks: [String!]
 }
 
 input ProjectGroupTaskIdInput {
-  projectId: String!
-  groupTaskId: String!
+	projectId: String!
+	groupTaskId: String!
 }

@@ -120,8 +120,9 @@ type Mutation struct {
 }
 
 type Privilege struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID          float64 `json:"id"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
 }
 
 type PrivilegeInput struct {
@@ -151,9 +152,10 @@ type Query struct {
 }
 
 type Role struct {
-	ID        string       `json:"id"`
-	Name      string       `json:"name"`
-	Privilege []*Privilege `json:"privilege"`
+	ID          float64      `json:"id"`
+	Name        string       `json:"name"`
+	Description *string      `json:"description,omitempty"`
+	Privileges  []*Privilege `json:"privileges"`
 }
 
 type RoleInput struct {

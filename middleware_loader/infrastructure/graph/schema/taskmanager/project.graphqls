@@ -1,38 +1,38 @@
 type Project {
-  id: ID!
-  name: String!
-  description: String!
-  status: String!
-  color: String!
-  activeStatus: String!
+	id: ID!
+	name: String!
+	description: String!
+	status: String!
+	color: String!
+	activeStatus: String!
 
-  groupTasks: [String!]!
-  ownerId: Float!
+	groupTasks: [String!]!
+	ownerId: Float!
 
-  createdAt: String!
-  updatedAt: String!
+	createdAt: String!
+	updatedAt: String!
 }
 
 input CreateProjectInput {
-  name: String!
-  description: String!
-  status: String!
-  color: String!
-  ownerId: String!
-  activeStatus: String!
+	name: String!
+	description: String!
+	status: String!
+	color: String!
+	ownerId: String!
+	activeStatus: String!
 }
 
 input UpdateProjectInput {
-  projectId: String!
-  name: String!
-  description: String!
-  status: String!
-  color: String!
-  ownerId: String!
-  activeStatus: String!
+	projectId: String!
+	name: String!
+	description: String!
+	status: String!
+	color: String!
+	ownerId: String!
+	activeStatus: String!
 }
 
 input UpdateColorInput {
-  id: String!
-  color: String!
+	id: String!
+	color: String!
 }

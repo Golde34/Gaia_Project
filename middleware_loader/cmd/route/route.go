@@ -21,6 +21,8 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	// SERVICES
 	authService := auth_services.NewAuthService()
 	userService := auth_services.NewUserService()
+	roleService := auth_services.NewRoleService()
+	privilegeService := auth_services.NewPrivilegeService()
 	gaiaService := gaia_connector.NewGaiaService()
 	taskService := task_manager.NewTaskService()
 	projectService := task_manager.NewProjectService()
@@ -34,6 +36,8 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 				Resolvers: &graph.Resolver{
 					AuthGraphQLService:    authService,
 					UserGraphQLService:    userService,
+					RoleGraphQLService:    roleService,
+					PrivilegeGraphQLService: privilegeService,
 					TaskGraphQLService:    taskService,
 					ProjectGraphQLService: projectService,
 					GroupTaskGraphQLService: groupTaskService,
@@ -51,6 +55,8 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	router.Group(func(r chi.Router) {
 		auth_router.NewAuthRouter(authService, db, router)
 		auth_router.NewUserRouter(userService, db, router)
+		auth_router.NewRoleRouter(roleService, db, router)
+		auth_router.NewPrivilegeRouter(privilegeService, db, router)
 	})
 
 	gaia_router.NewGaiaRouter(gaiaService, db, router)

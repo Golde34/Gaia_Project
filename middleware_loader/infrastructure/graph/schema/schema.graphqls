@@ -1,86 +1,88 @@
 type Query {
-  # Authentication Service
-  listAllUsers: [ListAllUsers]!
-  getUserByUsername(input: UserInput!): User!
-  listAllRoles: [Role]!
-  getRoleByName(input: RoleInput!): Role!
-  listAllPrivileges: [Privilege]!
-  getPrivilegeByName(input: PrivilegeInput!): Privilege!
+	# Authentication Service
+	listAllUsers: [ListAllUsers]!
+	getUserByUsername(input: UserInput!): User!
 
-  # Task Manager
-  listAllProjects: [Project]!
-  getProjectById(input: IdInput!): Project! 
-  
-  getGroupTasksInProject(input: IdInput!): [GroupTask]!
-  getGroupTaskById(input: IdInput!): GroupTask!
+	getAllRoles: [Role]!
+	getRoleByName(input: RoleInput!): Role!
+	
+	getAllPrivileges: [Privilege]!
+	getPrivilegeByName(input: PrivilegeInput!): Privilege!
 
-  getTasksByGroupTaskId(input: IdInput!): TaskDashboard!
-  listAllTasks: [Task]!
-  getTaskById(input: IdInput!): Task!
+	# Task Managerz
+	listAllProjects: [Project]!
+	getProjectById(input: IdInput!): Project! 
+	
+	getGroupTasksInProject(input: IdInput!): [GroupTask]!
+	getGroupTaskById(input: IdInput!): GroupTask!
+
+	getTasksByGroupTaskId(input: IdInput!): TaskDashboard!
+	listAllTasks: [Task]!
+	getTaskById(input: IdInput!): Task!
 }
 
 type Mutation {
-  # Authentication Service
-  signin(input: SigninInput!): AuthTokenResponse!
-  gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
-  checkToken(input: TokenInput!): TokenResponse!
-  checkPermission(input: UserPermissionInput!): UserPermissionResponse!
- 
-  createUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!): UpdateUser!
-  deleteUser(input: UserInput!): User!
-  
-  createRole(input: RoleInput!): Role!
-  updateRole(input: RoleInput!): Role!
-  deleteRole(input: RoleInput!): Role!
-  
-  createPrivilege(input: PrivilegeInput!): Privilege!
-  updatePrivilege(input: PrivilegeInput!): Privilege!
-  deletePrivilege(input: PrivilegeInput!): Privilege!
-  
-  # Task Manager
-  createProject(input: CreateProjectInput!): Project!
-  updateProject(input: UpdateProjectInput!): Project!
-  deleteProject(input: IdInput!): Project!
-  updateProjectName(input: UpdateObjectNameInput!): Project!
-  updateProjectColor(input: UpdateColorInput!): Project!
-  archiveProject(input: IdInput!): Project!
-  enableProject(input: IdInput!): Project!
+	# Authentication Service
+	signin(input: SigninInput!): AuthTokenResponse!
+	gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
+	checkToken(input: TokenInput!): TokenResponse!
+	checkPermission(input: UserPermissionInput!): UserPermissionResponse!
+	
+	createUser(input: CreateUserInput!): User!
+	updateUser(input: UpdateUserInput!): UpdateUser!
+	deleteUser(input: UserInput!): User!
+	
+	createRole(input: RoleInput!): Role!
+	updateRole(input: RoleInput!): Role!
+	deleteRole(input: RoleInput!): Role!
+	
+	createPrivilege(input: PrivilegeInput!): Privilege!
+	updatePrivilege(input: PrivilegeInput!): Privilege!
+	deletePrivilege(input: PrivilegeInput!): Privilege!
+	
+	# Task Manager
+	createProject(input: CreateProjectInput!): Project!
+	updateProject(input: UpdateProjectInput!): Project!
+	deleteProject(input: IdInput!): Project!
+	updateProjectName(input: UpdateObjectNameInput!): Project!
+	updateProjectColor(input: UpdateColorInput!): Project!
+	archiveProject(input: IdInput!): Project!
+	enableProject(input: IdInput!): Project!
 
-  createTask(input: CreateTaskInput!): Task!
-  updateTask(input: UpdateTaskInput!): Task!
-  deleteTask(input: IdInput!): Task!
-  generateTaskWithoutGroupTask(input: GenerateTaskWithoutGroupTaskInput!): Task!
-  updateTaskInDialog(input: UpdateTaskInDialogInput!): Task!
-  moveTask(input: MoveTaskInput!): Task!
-  archiveTask(input: IdInput!): Task!
-  enable(input: IdInput!): Task!
+	createTask(input: CreateTaskInput!): Task!
+	updateTask(input: UpdateTaskInput!): Task!
+	deleteTask(input: IdInput!): Task!
+	generateTaskWithoutGroupTask(input: GenerateTaskWithoutGroupTaskInput!): Task!
+	updateTaskInDialog(input: UpdateTaskInDialogInput!): Task!
+	moveTask(input: MoveTaskInput!): Task!
+	archiveTask(input: IdInput!): Task!
+	enable(input: IdInput!): Task!
 
-  createGroupTask(input: CreateGroupTaskInput!): GroupTask!
-  updateGroupTask(input: UpdateGroupTaskInput!): GroupTask!
-  deleteGroupTask(input: IdInput!): GroupTask!
-  updateGroupTaskName(input: UpdateObjectNameInput!): GroupTask!
-  calculateCompletedTasks(input: IdInput!): GroupTask!
-  updateOrdinalNumber(input: ProjectGroupTaskIdInput!): GroupTask!
-  archieveGroupTask(input: IdInput!): GroupTask!
-  enableGroupTask(input: IdInput!): GroupTask!
+	createGroupTask(input: CreateGroupTaskInput!): GroupTask!
+	updateGroupTask(input: UpdateGroupTaskInput!): GroupTask!
+	deleteGroupTask(input: IdInput!): GroupTask!
+	updateGroupTaskName(input: UpdateObjectNameInput!): GroupTask!
+	calculateCompletedTasks(input: IdInput!): GroupTask!
+	updateOrdinalNumber(input: ProjectGroupTaskIdInput!): GroupTask!
+	archieveGroupTask(input: IdInput!): GroupTask!
+	enableGroupTask(input: IdInput!): GroupTask!
 }
 
 input IdInput {
-  id: String!
+  	id: String!
 }
 
 input UpdateObjectNameInput {
-  id: String!
-  name: String!
+ 	id: String!
+  	name: String!
 }
 
 input UserPermissionInput {
-  userId: ID!
-  permissionId: String!
+  	userId: ID!
+  	permissionId: String!
 }
 
 type UserPermissionResponse {
-  id: ID!
-  name: String!
+  	id: ID!
+  	name: String!
 }
