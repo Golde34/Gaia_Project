@@ -1,54 +1,54 @@
 type User {
-  id: Float!
-  name: String!
-  username: String!
-  email: String!
-  password: String!
-  lastLogin: String!
-  enabled: Boolean!
-  isUsing2FA: Boolean!
-  secret: String!
+    id: Float!
+    name: String!
+    username: String!
+    email: String!
+    password: String!
+    lastLogin: String!
+    enabled: Boolean!
+    isUsing2FA: Boolean!
+    secret: String!
 
-  roles: [Role]!
+    roles: [Role]!
 }
 
 input UserInput {
-  id: Float!
-  name: String!
-  username: String!
-  email: String!
+    id: Float!
+    name: String!
+    username: String!
+    email: String!
 }
 
 type ListAllUsers {
-  id: Float!
-  name: String!
-  username: String!
-  email: String!
-  lastLogin: String!
-  roles: [String!]!
+	id: Float!
+	name: String!
+	username: String!
+	email: String!
+	lastLogin: String!
+	roles: [String!]!
 }
 
 input CreateUserInput {
-  name: String!
-  username: String!
-  email: String!
-  password: String!
-  matchingPassword: String!
+	name: String!
+	username: String!
+	email: String!
+	password: String!
+	matchingPassword: String!
 }
 
 input UpdateUserInput {
-  userId: Float!
-  name: String!
-  username: String!
-  email: String!
-  roles: [String!]!
+	userId: Float!
+	name: String!
+	username: String!
+	email: String!
+	roles: [String!]!
 }
 
 type UpdateUser {
-  id: Float!
-  name: String!
-  username: String!
-  email: String!
-  lastLogin: String!
-  roles: [String!]!
+	id: Float!
+	name: String!
+	username: String!
+	email: String!
+	lastLogin: String!
+	roles: [String!]!
 }

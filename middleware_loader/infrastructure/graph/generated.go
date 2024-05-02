@@ -141,8 +141,9 @@ type ComplexityRoot struct {
 	}
 
 	Privilege struct {
-		ID   func(childComplexity int) int
-		Name func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
 	}
 
 	Project struct {
@@ -159,6 +160,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetAllPrivileges       func(childComplexity int) int
+		GetAllRoles            func(childComplexity int) int
 		GetGroupTaskByID       func(childComplexity int, input model.IDInput) int
 		GetGroupTasksInProject func(childComplexity int, input model.IDInput) int
 		GetPrivilegeByName     func(childComplexity int, input model.PrivilegeInput) int
@@ -167,17 +170,16 @@ type ComplexityRoot struct {
 		GetTaskByID            func(childComplexity int, input model.IDInput) int
 		GetTasksByGroupTaskID  func(childComplexity int, input model.IDInput) int
 		GetUserByUsername      func(childComplexity int, input model.UserInput) int
-		ListAllPrivileges      func(childComplexity int) int
 		ListAllProjects        func(childComplexity int) int
-		ListAllRoles           func(childComplexity int) int
 		ListAllTasks           func(childComplexity int) int
 		ListAllUsers           func(childComplexity int) int
 	}
 
 	Role struct {
-		ID        func(childComplexity int) int
-		Name      func(childComplexity int) int
-		Privilege func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Privileges  func(childComplexity int) int
 	}
 
 	SubTask struct {
@@ -290,9 +292,9 @@ type MutationResolver interface {
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
 	GetUserByUsername(ctx context.Context, input model.UserInput) (*model.User, error)
-	ListAllRoles(ctx context.Context) ([]*model.Role, error)
+	GetAllRoles(ctx context.Context) ([]*model.Role, error)
 	GetRoleByName(ctx context.Context, input model.RoleInput) (*model.Role, error)
-	ListAllPrivileges(ctx context.Context) ([]*model.Privilege, error)
+	GetAllPrivileges(ctx context.Context) ([]*model.Privilege, error)
 	GetPrivilegeByName(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
 	ListAllProjects(ctx context.Context) ([]*model.Project, error)
 	GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error)
@@ -1027,6 +1029,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(model.UpdateUserInput)), true
 
+	case "Privilege.description":
+		if e.complexity.Privilege.Description == nil {
+			break
+		}
+
+		return e.complexity.Privilege.Description(childComplexity), true
+
 	case "Privilege.id":
 		if e.complexity.Privilege.ID == nil {
 			break
@@ -1110,6 +1119,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Project.UpdatedAt(childComplexity), true
+
+	case "Query.getAllPrivileges":
+		if e.complexity.Query.GetAllPrivileges == nil {
+			break
+		}
+
+		return e.complexity.Query.GetAllPrivileges(childComplexity), true
+
+	case "Query.getAllRoles":
+		if e.complexity.Query.GetAllRoles == nil {
+			break
+		}
+
+		return e.complexity.Query.GetAllRoles(childComplexity), true
 
 	case "Query.getGroupTaskById":
 		if e.complexity.Query.GetGroupTaskByID == nil {
@@ -1207,26 +1230,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetUserByUsername(childComplexity, args["input"].(model.UserInput)), true
 
-	case "Query.listAllPrivileges":
-		if e.complexity.Query.ListAllPrivileges == nil {
-			break
-		}
-
-		return e.complexity.Query.ListAllPrivileges(childComplexity), true
-
 	case "Query.listAllProjects":
 		if e.complexity.Query.ListAllProjects == nil {
 			break
 		}
 
 		return e.complexity.Query.ListAllProjects(childComplexity), true
-
-	case "Query.listAllRoles":
-		if e.complexity.Query.ListAllRoles == nil {
-			break
-		}
-
-		return e.complexity.Query.ListAllRoles(childComplexity), true
 
 	case "Query.listAllTasks":
 		if e.complexity.Query.ListAllTasks == nil {
@@ -1242,6 +1251,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListAllUsers(childComplexity), true
 
+	case "Role.description":
+		if e.complexity.Role.Description == nil {
+			break
+		}
+
+		return e.complexity.Role.Description(childComplexity), true
+
 	case "Role.id":
 		if e.complexity.Role.ID == nil {
 			break
@@ -1256,12 +1272,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Role.Name(childComplexity), true
 
-	case "Role.privilege":
-		if e.complexity.Role.Privilege == nil {
+	case "Role.privileges":
+		if e.complexity.Role.Privileges == nil {
 			break
 		}
 
-		return e.complexity.Role.Privilege(childComplexity), true
+		return e.complexity.Role.Privileges(childComplexity), true
 
 	case "SubTask.activeStatus":
 		if e.complexity.SubTask.ActiveStatus == nil {
@@ -4730,8 +4746,10 @@ func (ec *executionContext) fieldContext_Mutation_createRole(ctx context.Context
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4793,8 +4811,10 @@ func (ec *executionContext) fieldContext_Mutation_updateRole(ctx context.Context
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4856,8 +4876,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteRole(ctx context.Context
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -4919,6 +4941,8 @@ func (ec *executionContext) fieldContext_Mutation_createPrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -4980,6 +5004,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -5041,6 +5067,8 @@ func (ec *executionContext) fieldContext_Mutation_deletePrivilege(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -6968,9 +6996,9 @@ func (ec *executionContext) _Privilege_id(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Privilege_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6980,7 +7008,7 @@ func (ec *executionContext) fieldContext_Privilege_id(ctx context.Context, field
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7018,6 +7046,47 @@ func (ec *executionContext) _Privilege_name(ctx context.Context, field graphql.C
 }
 
 func (ec *executionContext) fieldContext_Privilege_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Privilege",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Privilege_description(ctx context.Context, field graphql.CollectedField, obj *model.Privilege) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Privilege_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Privilege_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Privilege",
 		Field:      field,
@@ -7605,8 +7674,8 @@ func (ec *executionContext) fieldContext_Query_getUserByUsername(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_listAllRoles(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_listAllRoles(ctx, field)
+func (ec *executionContext) _Query_getAllRoles(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAllRoles(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7619,7 +7688,7 @@ func (ec *executionContext) _Query_listAllRoles(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListAllRoles(rctx)
+		return ec.resolvers.Query().GetAllRoles(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7636,7 +7705,7 @@ func (ec *executionContext) _Query_listAllRoles(ctx context.Context, field graph
 	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_listAllRoles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getAllRoles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -7648,8 +7717,10 @@ func (ec *executionContext) fieldContext_Query_listAllRoles(ctx context.Context,
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -7700,8 +7771,10 @@ func (ec *executionContext) fieldContext_Query_getRoleByName(ctx context.Context
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -7720,8 +7793,8 @@ func (ec *executionContext) fieldContext_Query_getRoleByName(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_listAllPrivileges(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_listAllPrivileges(ctx, field)
+func (ec *executionContext) _Query_getAllPrivileges(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAllPrivileges(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7734,7 +7807,7 @@ func (ec *executionContext) _Query_listAllPrivileges(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListAllPrivileges(rctx)
+		return ec.resolvers.Query().GetAllPrivileges(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7751,7 +7824,7 @@ func (ec *executionContext) _Query_listAllPrivileges(ctx context.Context, field 
 	return ec.marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_listAllPrivileges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getAllPrivileges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -7763,6 +7836,8 @@ func (ec *executionContext) fieldContext_Query_listAllPrivileges(ctx context.Con
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -7813,6 +7888,8 @@ func (ec *executionContext) fieldContext_Query_getPrivilegeByName(ctx context.Co
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -8515,9 +8592,9 @@ func (ec *executionContext) _Role_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Role_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8527,7 +8604,7 @@ func (ec *executionContext) fieldContext_Role_id(ctx context.Context, field grap
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -8577,8 +8654,8 @@ func (ec *executionContext) fieldContext_Role_name(ctx context.Context, field gr
 	return fc, nil
 }
 
-func (ec *executionContext) _Role_privilege(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Role_privilege(ctx, field)
+func (ec *executionContext) _Role_description(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Role_description(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -8591,7 +8668,48 @@ func (ec *executionContext) _Role_privilege(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Privilege, nil
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Role_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Role",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Role_privileges(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Role_privileges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Privileges, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8608,7 +8726,7 @@ func (ec *executionContext) _Role_privilege(ctx context.Context, field graphql.C
 	return ec.marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilegeᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Role_privilege(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Role_privileges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Role",
 		Field:      field,
@@ -8620,6 +8738,8 @@ func (ec *executionContext) fieldContext_Role_privilege(ctx context.Context, fie
 				return ec.fieldContext_Privilege_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Privilege_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
 		},
@@ -10666,8 +10786,10 @@ func (ec *executionContext) fieldContext_User_roles(ctx context.Context, field g
 				return ec.fieldContext_Role_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Role_name(ctx, field)
-			case "privilege":
-				return ec.fieldContext_Role_privilege(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -14265,6 +14387,8 @@ func (ec *executionContext) _Privilege(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "description":
+			out.Values[i] = ec._Privilege_description(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -14435,7 +14559,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "listAllRoles":
+		case "getAllRoles":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -14444,7 +14568,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_listAllRoles(ctx, field)
+				res = ec._Query_getAllRoles(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -14479,7 +14603,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "listAllPrivileges":
+		case "getAllPrivileges":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -14488,7 +14612,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_listAllPrivileges(ctx, field)
+				res = ec._Query_getAllPrivileges(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -14729,8 +14853,10 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "privilege":
-			out.Values[i] = ec._Role_privilege(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._Role_description(ctx, field, obj)
+		case "privileges":
+			out.Values[i] = ec._Role_privileges(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

@@ -7,6 +7,6 @@ func NewPrivilegeService() *PrivilegeService {
 	return &PrivilegeService{}
 }
 
-func (s *PrivilegeService) ListAllPrivileges() ([]string, error) {
+func (s *PrivilegeService) GetAllPrivileges() ([]string, error) {
 	return nil, nil
 }
