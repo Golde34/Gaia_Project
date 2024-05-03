@@ -5,7 +5,7 @@ import (
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	"middleware_loader/core/port/store"
-	"middleware_loader/core/services/base"
+	"middleware_loader/kernel/utils"
 	"time"
 )
 
@@ -22,7 +22,7 @@ func (s *URLPermissionService) GetURLPermission(input request_dtos.UrlPermission
 	defer cancel()
 	result := s.Store.GetUrlPermission(ctx, input)
 	if result == nil {
-		return base.ReturnErrorResponse(400, "Cannot get url permission from database")
+		return utils.ReturnErrorResponse(400, "Cannot get url permission from database")
 	}
-	return base.ReturnSuccessResponse("OK", result)
+	return utils.ReturnSuccessResponse("OK", result)
 }

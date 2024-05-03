@@ -34,11 +34,11 @@ func (in *UserDTO) MapperToGraphQLModel(input UserDTO) model.ListAllUsers {
 	out.Username = input.Username
 	out.Email = input.Email
 	out.LastLogin = input.LastLogin
-	out.Roles = convertRoles(input.Roles) // Convert []interface{} to []string
+	out.Roles = convertRoleName(input.Roles) // Convert []interface{} to []string
 	return out
 }
 
-func convertRoles(roles []interface{}) []string {
+func convertRoleName(roles []interface{}) []string {
 	var out []string
 	for _, role := range roles {
 		roleMap := role.(map[string]interface{})

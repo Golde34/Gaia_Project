@@ -5,9 +5,9 @@ import (
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
-	"middleware_loader/core/services/base"
 	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 )
 
 type GroupTaskService struct{}
@@ -40,7 +40,7 @@ func (s *GroupTaskService) CreateGroupTask(ctx context.Context, input model.Crea
 }
 
 func (s *GroupTaskService) UpdateGroupTask(ctx context.Context, input model.UpdateGroupTaskInput) (model.GroupTask, error) {
-	input.Priority = base.ConvertStringToArray(input.Priority)
+	input.Priority = utils.ConvertStringToArray(input.Priority)
 	groupTaskId := input.GroupTaskID
 	groupTask, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).UpdateGroupTask(input, groupTaskId)
 	if err != nil {

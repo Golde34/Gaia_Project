@@ -2,6 +2,7 @@ package auth.authentication_service.core.services;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.PrivilegeDto;
+import auth.authentication_service.core.domain.dto.response.ListPrivilegeResponse;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.PrivilegeMapper;
 import auth.authentication_service.core.port.store.PrivilegeStore;
 import auth.authentication_service.core.services.interfaces.PrivilegeService;
 import auth.authentication_service.kernel.utils.GenericResponse;
@@ -30,6 +33,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Autowired
     private ModelMapperConfig modelMapperConfig;
+
+    @Autowired
+    private PrivilegeMapper privilegeMapper;
 
     public PrivilegeServiceImpl(PrivilegeStore privilegeStore) {
         this.privilegeStore = privilegeStore;
@@ -94,7 +100,10 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     @Override
     public ResponseEntity<?> getAllPrivileges() {
         List<Privilege> privileges = privilegeStore.findAll();
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(privileges, ResponseEnum.msg200));
+        List<ListPrivilegeResponse> privilegeResponses = privileges.stream()
+                .map(privilegeMapper::mapPrivilegeResponse)
+                .collect(Collectors.toList());
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(privilegeResponses, ResponseEnum.msg200));
     }
 
     @Override

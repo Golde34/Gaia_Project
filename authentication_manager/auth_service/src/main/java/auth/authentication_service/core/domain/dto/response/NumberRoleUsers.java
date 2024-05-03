@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ListRole extends Role{
+public class NumberRoleUsers extends Role{
     private int numberOfUsers;
     private int totalNumberOfUsers;
 }

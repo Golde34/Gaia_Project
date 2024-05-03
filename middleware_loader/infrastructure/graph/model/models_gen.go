@@ -110,6 +110,13 @@ type ListAllUsers struct {
 	Roles     []string `json:"roles"`
 }
 
+type ListPrivilegeResponse struct {
+	ID          float64             `json:"id"`
+	Name        string              `json:"name"`
+	Description *string             `json:"description,omitempty"`
+	Roles       []*RoleOnlyResponse `json:"roles"`
+}
+
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
@@ -161,6 +168,12 @@ type Role struct {
 type RoleInput struct {
 	ID   *string `json:"id,omitempty"`
 	Name string  `json:"name"`
+}
+
+type RoleOnlyResponse struct {
+	ID          float64 `json:"id"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
 }
 
 type SigninInput struct {

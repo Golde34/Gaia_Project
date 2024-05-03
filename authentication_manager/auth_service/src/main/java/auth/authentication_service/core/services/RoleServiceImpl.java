@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import auth.authentication_service.core.domain.dto.response.NumberRoleUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.PrivilegeDto;
 import auth.authentication_service.core.domain.dto.RoleDto;
-import auth.authentication_service.core.domain.dto.response.ListRole;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.enums.LoggerType;
@@ -102,11 +102,11 @@ public class RoleServiceImpl implements RoleService {
     @Cacheable(value = "roles")
     public ResponseEntity<?> getAllRoles() {
         log.info("Get all roles");
-        List<ListRole> listRoles = new ArrayList<>();
+        List<NumberRoleUsers> listRoles = new ArrayList<>();
         List<Role> roles = roleStore.findAll();
         final int[] totalUser = { 0 };
         roles.forEach(role -> {
-            ListRole listRole = new ListRole();
+            NumberRoleUsers listRole = new NumberRoleUsers();
             listRole.setId(role.getId());
             listRole.setName(role.getName());
             listRole.setNumberOfUsers(role.getUsers().size());

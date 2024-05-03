@@ -5,6 +5,7 @@ import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
+	"middleware_loader/kernel/utils"
 )
 
 type RoleAdapter struct {
@@ -19,7 +20,7 @@ func (adapter *RoleAdapter) GetAllRoles() ([]response_dtos.RoleDTO, error) {
 	getAllRolesURL := base.AuthServiceURL + "/role/get-all-roles"
 	var roles []response_dtos.RoleDTO
 
-	bodyResult, err := base.BaseAPI(getAllRolesURL, "GET", nil)
+	bodyResult, err := utils.BaseAPI(getAllRolesURL, "GET", nil)
 	if err != nil {
 		return []response_dtos.RoleDTO{}, err
 	}

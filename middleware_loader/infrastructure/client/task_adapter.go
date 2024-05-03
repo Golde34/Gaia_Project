@@ -7,6 +7,7 @@ import (
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 )
 
 type TaskAdapter struct {
@@ -22,7 +23,7 @@ func (adapter *TaskAdapter) GetAllTasks() ([]response_dtos.TaskResponseDTO, erro
 	listAllTasksURL := base.TaskManagerServiceURL + "/task"
 	var tasks []response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(listAllTasksURL, "GET", nil)
+	bodyResult, err := utils.BaseAPI(listAllTasksURL, "GET", nil)
 	if err != nil {
 		return []response_dtos.TaskResponseDTO{}, err
 	}
@@ -43,7 +44,7 @@ func (adapter *TaskAdapter) GetTaskById(id string) (response_dtos.TaskResponseDT
 	getTaskByIdURL := base.TaskManagerServiceURL + "/task/" + id
 	var task response_dtos.TaskResponseDTO
 	
-	result, err := base.BaseAPIV2(getTaskByIdURL, "GET", nil, &task)
+	result, err := utils.BaseAPIV2(getTaskByIdURL, "GET", nil, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -54,12 +55,12 @@ func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dt
 	createTaskURL := base.TaskManagerServiceURL + "/task/create"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(createTaskURL, "POST", input)
+	bodyResult, err := utils.BaseAPI(createTaskURL, "POST", input)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -75,7 +76,7 @@ func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (
 	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id 
 	var task response_dtos.TaskResponseDTO
 
-	result, err := base.BaseAPIV2(updateTaskURL, "PUT", input, &task)
+	result, err := utils.BaseAPIV2(updateTaskURL, "PUT", input, &task)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -86,12 +87,12 @@ func (adapter *TaskAdapter) DeleteTask(id string) (response_dtos.TaskResponseDTO
 	deleteTaskURL := base.TaskManagerServiceURL + "/task/" + id 
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(deleteTaskURL, "DELETE", nil)
+	bodyResult, err := utils.BaseAPI(deleteTaskURL, "DELETE", nil)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -149,12 +150,12 @@ func (adapter *TaskAdapter) GenerateTaskWithoutGroupTask(input model.GenerateTas
 	generateTaskURL := base.TaskManagerServiceURL + "/task/generate"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(generateTaskURL, "POST", input)
+	bodyResult, err := utils.BaseAPI(generateTaskURL, "POST", input)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -170,12 +171,12 @@ func (adapter *TaskAdapter) UpdateTaskInDialog(input model.UpdateTaskInDialogInp
 	updateTaskInDialogURL := base.TaskManagerServiceURL + "/task/" + id + "/update-task-in-dialog"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(updateTaskInDialogURL, "PUT", input)
+	bodyResult, err := utils.BaseAPI(updateTaskInDialogURL, "PUT", input)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -191,12 +192,12 @@ func (adapter *TaskAdapter) MoveTask(input model.MoveTaskInput, id string) (resp
 	moveTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/move-task"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(moveTaskURL, "PUT", input)
+	bodyResult, err := utils.BaseAPI(moveTaskURL, "PUT", input)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -212,12 +213,12 @@ func (adapter *TaskAdapter) ArchiveTask(id string) (response_dtos.TaskResponseDT
 	archiveTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/archive"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(archiveTaskURL, "PUT", nil)
+	bodyResult, err := utils.BaseAPI(archiveTaskURL, "PUT", nil)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
@@ -233,12 +234,12 @@ func (adapter *TaskAdapter) EnableTask(id string) (response_dtos.TaskResponseDTO
 	enableTaskURL := base.TaskManagerServiceURL + "/task/" + id + "/enable"
 	var task response_dtos.TaskResponseDTO
 
-	bodyResult, err := base.BaseAPI(enableTaskURL, "PUT", nil)
+	bodyResult, err := utils.BaseAPI(enableTaskURL, "PUT", nil)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}

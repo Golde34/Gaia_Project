@@ -1,4 +1,4 @@
-package base
+package utils 
 
 import "middleware_loader/core/domain/dtos/base"
 

@@ -1,9 +1,10 @@
 package client_adapter
 
 import (
-	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/domain/dtos/base"
+	"middleware_loader/core/domain/enums"
 	"middleware_loader/infrastructure/client/base"
+	"middleware_loader/kernel/utils"
 )
 
 type MicroserviceAdapter struct {
@@ -18,7 +19,7 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 	microserviceUrl := getMicroserviceUrlByName(microserviceName)
 	microserviceUrl = microserviceUrl + "/status"
 
-	bodyResult, err := base.FullResponseBaseAPI(microserviceUrl, "GET", nil)
+	bodyResult, err := utils.FullResponseBaseAPI(microserviceUrl, "GET", nil)
 	if err != nil {
 		return base_dtos.ErrorResponse{}, err
 	}

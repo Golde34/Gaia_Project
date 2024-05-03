@@ -2,7 +2,7 @@ package mapper
 
 import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	"middleware_loader/core/port/mapper/base"
+	"middleware_loader/kernel/utils"
 )
 
 func ReturnGroupTaskObjectMapper(body map[string]interface{}) *response_dtos.GroupTaskResponseDTO {
@@ -10,9 +10,9 @@ func ReturnGroupTaskObjectMapper(body map[string]interface{}) *response_dtos.Gro
 	input.ID = body["_id"].(string)
 	input.Title = body["title"].(string)
 	input.Description = body["description"].(string)
-	input.Priority = base.ConvertStringToStringArray(body["priority"].([]interface{}))
+	input.Priority = utils.ConvertStringToStringArray(body["priority"].([]interface{}))
 	input.Status = body["status"].(string)
-	input.Tasks = base.ConvertStringToStringArray(body["tasks"].([]interface{}))
+	input.Tasks = utils.ConvertStringToStringArray(body["tasks"].([]interface{}))
 	if body["totalTasks"] != nil {
 		totalTasks := int(body["totalTasks"].(float64))
 		input.TotalTasks = &totalTasks
