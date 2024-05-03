@@ -2,8 +2,7 @@ package mapper
 
 import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
-	"middleware_loader/core/port/mapper/base"
-	// "github.com/mitchellh/mapstructure"
+	"middleware_loader/kernel/utils"
 )
 
 func GetTaskId(id string) request_dtos.IdInputDTO {
@@ -23,7 +22,7 @@ func CreateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Create
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
 	input.GroupTaskId = bodyMap["groupTaskId"].(string)
-	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Priority = utils.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
 	
 	return input
 }
@@ -38,7 +37,7 @@ func UpdateTaskRequestDTOMapper(body map[string]interface{}, taskId string) requ
 	input.Deadline = bodyMap["deadline"].(string)
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
-	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Priority = utils.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
 	input.TaskId = taskId
 
 	return input
@@ -54,7 +53,7 @@ func GenerateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Gene
 	input.Deadline = bodyMap["deadline"].(string)
 	input.Duration = bodyMap["duration"].(string)
 	input.ActiveStatus = bodyMap["activeStatus"].(string)
-	input.Priority = base.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
+	input.Priority = utils.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
 	input.ProjectID = bodyMap["projectId"].(string)
 		
 	return input

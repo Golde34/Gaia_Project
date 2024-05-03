@@ -6,10 +6,10 @@ import (
 
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
-	"middleware_loader/core/services/base"
 	"middleware_loader/core/validator"
 	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 )
 
 type TaskService struct {
@@ -50,7 +50,7 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 	}
 	log.Println("Validation passed!")
 
-	input.Priority = base.ConvertStringToArray(input.Priority)
+	input.Priority = utils.ConvertStringToArray(input.Priority)
 
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).CreateTask(input)
 	if err != nil {
@@ -68,7 +68,7 @@ func (s *TaskService) UpdateTask(ctx context.Context, input model.UpdateTaskInpu
 	}
 	log.Println("Validation passed!")
 
-	input.Priority = base.ConvertStringToArray(input.Priority)
+	input.Priority = utils.ConvertStringToArray(input.Priority)
 	taskId := input.TaskID
 
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).UpdateTask(input, taskId)

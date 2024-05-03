@@ -2,7 +2,7 @@ package mapper
 
 import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	"middleware_loader/core/port/mapper/base"
+	"middleware_loader/kernel/utils"
 )
 
 func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.ProjectResponseDTO {
@@ -14,7 +14,7 @@ func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.Proje
 	input.Color = body["color"].(string)
 	input.Owner = body["ownerId"].(float64)
 	input.ActiveStatus = body["activeStatus"].(string)
-	input.GroupTasks = base.ConvertStringToStringArray(body["groupTasks"].([]interface{}))
+	input.GroupTasks = utils.ConvertStringToStringArray(body["groupTasks"].([]interface{}))
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)
 	return &input

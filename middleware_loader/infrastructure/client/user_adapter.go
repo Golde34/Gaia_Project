@@ -7,6 +7,7 @@ import (
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 )
 
 type UserAdapter struct {
@@ -21,7 +22,7 @@ func (adapter *UserAdapter) ListAllUsers() ([]response_dtos.UserDTO, error) {
 	listAllUsersURL := base.AuthServiceURL + "/user/get-all-users"
 	var users []response_dtos.UserDTO
 
-	bodyResult, err := base.BaseAPI(listAllUsersURL, "GET", nil)
+	bodyResult, err := utils.BaseAPI(listAllUsersURL, "GET", nil)
 	if err != nil {
 		return []response_dtos.UserDTO{}, err
 	}
@@ -42,12 +43,12 @@ func (adapter *UserAdapter) UpdateUser(input model.UpdateUserInput) (response_dt
 	updateUserURL := base.AuthServiceURL + "/user/update-user"
 	var user response_dtos.UserDTO
 
-	bodyResult, err := base.BaseAPI(updateUserURL, "PUT", input)
+	bodyResult, err := utils.BaseAPI(updateUserURL, "PUT", input)
 	if err != nil {
 		return response_dtos.UserDTO{}, err
 	}
 
-	dataBytes, err := base.ConvertResponseToMap(bodyResult)
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
 	if err != nil {
 		return response_dtos.UserDTO{}, err
 	}

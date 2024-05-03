@@ -2,7 +2,7 @@ package mapper
 
 import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
-	base "middleware_loader/core/port/mapper/base"
+	"middleware_loader/kernel/utils"
 )
 
 func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResponseDTO {
@@ -10,7 +10,7 @@ func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResp
 	input.ID = body["_id"].(string)
 	input.Title = body["title"].(string)
 	input.Description = body["description"].(string)
-	input.Priority = base.ConvertStringToStringArray(body["priority"].([]interface{}))
+	input.Priority = utils.ConvertStringToStringArray(body["priority"].([]interface{}))
 	input.Status = body["status"].(string)
 	if body["startDate"] != nil {
 		input.StartDate = body["startDate"].(string)
@@ -25,7 +25,7 @@ func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResp
 	if body["groupTaskId"] != nil {
 		input.GroupTaskId = body["groupTaskId"].(string)
 	}
-	input.SubTasks = base.ConvertStringToStringArray(body["subTasks"].([]interface{}))
-	input.Comments = base.ConvertStringToStringArray(body["comments"].([]interface{}))
+	input.SubTasks = utils.ConvertStringToStringArray(body["subTasks"].([]interface{}))
+	input.Comments = utils.ConvertStringToStringArray(body["comments"].([]interface{}))
 	return &input	
 }
