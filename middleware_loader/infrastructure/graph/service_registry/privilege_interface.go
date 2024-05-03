@@ -1,5 +1,7 @@
 package service_registry
 
+import "context"
+
 type PrivilegeService interface {
-	GetAllPrivileges() ([]string, error)
+	GetAllPrivileges(ctx context.Context) ([]string, error)
 }
