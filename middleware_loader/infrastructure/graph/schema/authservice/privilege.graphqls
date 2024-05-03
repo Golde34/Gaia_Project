@@ -1,11 +1,17 @@
 type Privilege {
     id: Float!
     name: String!
-
     description: String
 }
 
 input PrivilegeInput {
     id: String
     name: String!
+}
+
+type ListPrivilegeResponse {
+    id: Float!
+    name: String!
+    description: String
+    roles: [RoleOnlyResponse]!
 }

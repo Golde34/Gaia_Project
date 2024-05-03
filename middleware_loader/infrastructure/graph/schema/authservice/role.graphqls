@@ -10,3 +10,9 @@ input RoleInput {
     id: String
     name: String!
 }
+
+type RoleOnlyResponse {
+    id: Float!
+    name: String!
+    description: String
+}
