@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 
 @Service
+@Slf4j
 public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Autowired
@@ -98,7 +101,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    @Cacheable(value = "privileges")
     public ResponseEntity<?> getAllPrivileges() {
+        log.info("Get all privileges");
         List<Privilege> privileges = privilegeStore.findAll();
         List<ListPrivilegeResponse> privilegeResponses = privileges.stream()
                 .map(privilegeMapper::mapPrivilegeResponse)

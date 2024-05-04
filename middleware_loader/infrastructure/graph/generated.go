@@ -307,7 +307,7 @@ type QueryResolver interface {
 	GetUserByUsername(ctx context.Context, input model.UserInput) (*model.User, error)
 	GetAllRoles(ctx context.Context) ([]*model.Role, error)
 	GetRoleByName(ctx context.Context, input model.RoleInput) (*model.Role, error)
-	GetAllPrivileges(ctx context.Context) ([]*model.Privilege, error)
+	GetAllPrivileges(ctx context.Context) ([]*model.ListPrivilegeResponse, error)
 	GetPrivilegeByName(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
 	ListAllProjects(ctx context.Context) ([]*model.Project, error)
 	GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error)
@@ -8062,9 +8062,9 @@ func (ec *executionContext) _Query_getAllPrivileges(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Privilege)
+	res := resTmp.([]*model.ListPrivilegeResponse)
 	fc.Result = res
-	return ec.marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx, field.Selections, res)
+	return ec.marshalNListPrivilegeResponse2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐListPrivilegeResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAllPrivileges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8076,13 +8076,15 @@ func (ec *executionContext) fieldContext_Query_getAllPrivileges(ctx context.Cont
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_Privilege_id(ctx, field)
+				return ec.fieldContext_ListPrivilegeResponse_id(ctx, field)
 			case "name":
-				return ec.fieldContext_Privilege_name(ctx, field)
+				return ec.fieldContext_ListPrivilegeResponse_name(ctx, field)
 			case "description":
-				return ec.fieldContext_Privilege_description(ctx, field)
+				return ec.fieldContext_ListPrivilegeResponse_description(ctx, field)
+			case "roles":
+				return ec.fieldContext_ListPrivilegeResponse_roles(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type ListPrivilegeResponse", field.Name)
 		},
 	}
 	return fc, nil
@@ -16330,16 +16332,7 @@ func (ec *executionContext) marshalNListAllUsers2ᚕᚖmiddleware_loaderᚋinfra
 	return ret
 }
 
-func (ec *executionContext) unmarshalNMoveTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐMoveTaskInput(ctx context.Context, v interface{}) (model.MoveTaskInput, error) {
-	res, err := ec.unmarshalInputMoveTaskInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNPrivilege2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v model.Privilege) graphql.Marshaler {
-	return ec._Privilege(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v []*model.Privilege) graphql.Marshaler {
+func (ec *executionContext) marshalNListPrivilegeResponse2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐListPrivilegeResponse(ctx context.Context, sel ast.SelectionSet, v []*model.ListPrivilegeResponse) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -16363,7 +16356,7 @@ func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPrivilege2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx, sel, v[i])
+			ret[i] = ec.marshalOListPrivilegeResponse2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐListPrivilegeResponse(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16375,6 +16368,15 @@ func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastr
 	wg.Wait()
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalNMoveTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐMoveTaskInput(ctx context.Context, v interface{}) (model.MoveTaskInput, error) {
+	res, err := ec.unmarshalInputMoveTaskInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPrivilege2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v model.Privilege) graphql.Marshaler {
+	return ec._Privilege(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPrivilege2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilegeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Privilege) graphql.Marshaler {
@@ -17165,11 +17167,11 @@ func (ec *executionContext) marshalOListAllUsers2ᚖmiddleware_loaderᚋinfrastr
 	return ec._ListAllUsers(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPrivilege2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐPrivilege(ctx context.Context, sel ast.SelectionSet, v *model.Privilege) graphql.Marshaler {
+func (ec *executionContext) marshalOListPrivilegeResponse2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐListPrivilegeResponse(ctx context.Context, sel ast.SelectionSet, v *model.ListPrivilegeResponse) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._Privilege(ctx, sel, v)
+	return ec._ListPrivilegeResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOProject2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProject(ctx context.Context, sel ast.SelectionSet, v *model.Project) graphql.Marshaler {

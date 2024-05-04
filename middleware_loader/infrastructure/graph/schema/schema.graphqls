@@ -6,7 +6,7 @@ type Query {
 	getAllRoles: [Role]!
 	getRoleByName(input: RoleInput!): Role!
 	
-	getAllPrivileges: [Privilege]!
+	getAllPrivileges: [ListPrivilegeResponse]!
 	getPrivilegeByName(input: PrivilegeInput!): Privilege!
 
 	# Task Managerz
