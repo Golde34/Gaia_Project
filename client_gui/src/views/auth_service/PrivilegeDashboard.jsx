@@ -9,8 +9,7 @@ function PrivilegeDashboard() {
 
     const listPrivilege = useSelector((state) => state.privilegeList);
     const { loading, error, privileges } = listPrivilege;
-    console.log(privileges);
-
+ 
     const getPrivilegeList = useCallback(() => {
         dispatch(getPrivileges());
     }, [dispatch]);

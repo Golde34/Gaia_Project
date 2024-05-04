@@ -257,15 +257,14 @@ func (r *queryResolver) GetRoleByName(ctx context.Context, input model.RoleInput
 }
 
 // GetAllPrivileges is the resolver for the getAllPrivileges field.
-func (r *queryResolver) GetAllPrivileges(ctx context.Context) ([]*model.Privilege, error) {
-	// privileges, err := privilegeService.GetAllPrivileges(ctx)
-	// modelPrivilege := []*model.Privilege{}
-	// for _, privilege := range privileges {
-	// 	privilegeCopy := privilege
-	// 	modelPrivilege = append(modelPrivilege, &privilegeCopy)
-	// }
-	// return modelPrivilege, err
-	panic(fmt.Errorf("not implemented: GetAllPrivileges - getAllPrivileges"))
+func (r *queryResolver) GetAllPrivileges(ctx context.Context) ([]*model.ListPrivilegeResponse, error) {
+	privileges, err := privilegeService.GetAllPrivileges(ctx)
+	modelPrivilege := []*model.ListPrivilegeResponse{}
+	for _, privilege := range privileges {
+		privilegeCopy := privilege
+		modelPrivilege = append(modelPrivilege, &privilegeCopy)
+	}
+	return modelPrivilege, err
 }
 
 // GetPrivilegeByName is the resolver for the getPrivilegeByName field.

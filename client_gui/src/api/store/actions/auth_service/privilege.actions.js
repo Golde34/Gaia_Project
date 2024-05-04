@@ -3,14 +3,14 @@ import { PRIVILEGE_LIST_FAIL, PRIVILEGE_LIST_REQUEST, PRIVILEGE_LIST_SUCCESS }
 from "../../constants/auth_service/privilege.constants";
 
 const portName = {
-    authPort: 'authenticationServicePort',
+    middlewarePort: "middlewarePort"
 }
 
 export const getPrivileges = () => async (dispatch) => {
     dispatch({ type: PRIVILEGE_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/privilege/get-all-privileges', HttpMethods.GET, portName.authPort, null); 
-        dispatch({ type: PRIVILEGE_LIST_SUCCESS, payload: data.data.message });
+        const { data } = await serverRequest('/privilege/get-all-privileges', HttpMethods.GET, portName.middlewarePort, null); 
+        dispatch({ type: PRIVILEGE_LIST_SUCCESS, payload: data.data.getAllPrivileges });
     } catch (error) {
         dispatch({
             type: PRIVILEGE_LIST_FAIL,

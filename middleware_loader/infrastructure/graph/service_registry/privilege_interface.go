@@ -1,7 +1,10 @@
 package service_registry
 
-import "context"
+import (
+	"context"
+	"middleware_loader/infrastructure/graph/model"
+)
 
 type PrivilegeService interface {
-	GetAllPrivileges(ctx context.Context) ([]string, error)
+	GetAllPrivileges(ctx context.Context) ([]model.ListPrivilegeResponse, error)
 }
