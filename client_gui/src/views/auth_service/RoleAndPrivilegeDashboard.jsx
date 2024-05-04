@@ -1,6 +1,6 @@
 import { Button, Card, Col, Grid, Metric, Switch, Title } from "@tremor/react";
-import RoleDashboard from "../../screens/roleScreen/RoleDashboard";
-import PrivilegeDashboard from "../../screens/roleScreen/PrivilegeDashboard";
+import RoleDashboard from "./RoleDashboard";
+import PrivilegeDashboard from "./PrivilegeDashboard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ManagerTemplate from "../../components/template/ManagerTemplate";
@@ -36,7 +36,7 @@ function ContentArea() {
                         checked={isRoleSwitchOn}
                         className="me-2"
                         onChange={handleRoleSwitchChange} />
-                    <label htmlFor="role-switch"
+                    <label htmlFor="role-switch" className="me-5 ms-2"
                     ><Title>Role Dashboard</Title></label>
                     <Switch
                         id="privilege-switch"
@@ -44,7 +44,8 @@ function ContentArea() {
                         checked={isPrivilegeSwitchOn}
                         className="ms-5"
                         onChange={handlePrivilegeSwitchChange} />
-                    <label htmlFor="privielge-switch"><Title>Privilege Dashboard</Title></label>
+                    <label htmlFor="privielge-switch" className="me-5 ms-2"
+                    ><Title>Privilege Dashboard</Title></label>
                 </div>
             </Card>
             <Grid numItems={1}>

@@ -9,8 +9,8 @@ const portName = {
 export const getPrivileges = () => async (dispatch) => {
     dispatch({ type: PRIVILEGE_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/privilege/get-all-privileges', HttpMethods.GET, portName.authPort, null);
-        dispatch({ type: PRIVILEGE_LIST_SUCCESS, payload: data });
+        const { data } = await serverRequest('/privilege/get-all-privileges', HttpMethods.GET, portName.authPort, null); 
+        dispatch({ type: PRIVILEGE_LIST_SUCCESS, payload: data.data.message });
     } catch (error) {
         dispatch({
             type: PRIVILEGE_LIST_FAIL,
