@@ -1,11 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input } from "@material-tailwind/react";
 import { Fragment } from "react";
-import { useDispatch } from "react-redux"
 
-const AddRoleModal = (props) => {
-    const dispatch = useDispatch();
-
+const AddPrivilegeModal = (props) => {
     const isOpen = props.isOpen;
     const closeModal = props.closeModal;
 
@@ -40,7 +37,7 @@ const AddRoleModal = (props) => {
                                     <Dialog.Title
                                         as="h1"
                                         className="text-lg font-medium leading-6 text-gray-900" >
-                                        <span className="text-lg cursor-pointer" >Add New Role</span>
+                                        <span className="text-lg cursor-pointer" >Add New Privilege</span>
                                     </Dialog.Title>
 
                                     <div className="mt-4">
@@ -66,8 +63,9 @@ const AddRoleModal = (props) => {
                     </div>
                 </Dialog>
             </Transition >
+
         </>
     )
 }
 
-export default AddRoleModal;
+export default AddPrivilegeModal;

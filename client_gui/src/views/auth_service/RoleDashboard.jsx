@@ -5,7 +5,6 @@ import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 import RoleListScreen from "../../screens/roleScreen/RoleListScreen";
 import InsertPrivilegeModal from "../../screens/roleScreen/InsertPrivilegeModal";
 
-
 function RoleDashboard() {
     const dispatch = useDispatch();
 
