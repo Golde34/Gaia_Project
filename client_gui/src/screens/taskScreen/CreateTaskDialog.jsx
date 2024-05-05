@@ -64,6 +64,8 @@ export const CreateTaskDialog = (props) => {
         task.startDate = startDate;
         if (duration === 0) {
             task.duration = defaultDuration.toString();
+        } else {
+            task.duration = duration.toString();
         }
         task.activeStatus = 'ACTIVE';
 

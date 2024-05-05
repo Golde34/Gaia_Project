@@ -36,6 +36,7 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                             <TableHeaderCell>Id</TableHeaderCell>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Description</TableHeaderCell>
+                            <TableHeaderCell>Actions</TableHeaderCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -44,6 +45,12 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                                 <TableCell>{role.id}</TableCell>
                                 <TableCell>{role.name}</TableCell>
                                 <TableCell>{role.description}</TableCell>
+                                <TableCell>
+                                    <button
+                                        type="button"
+                                        className="m-2 inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                    > Delete</button>
+                                </TableCell>
                             </TableRow>
                         ))
                         }
