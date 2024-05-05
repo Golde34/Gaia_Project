@@ -1,10 +1,20 @@
 import { Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
+import { useState } from "react";
+import AddRoleModal from "./AddRoleModal";
 
 const RoleListScreen = ({ selectedRole, roles }) => {
     const listRole = roles;
  
     function loadPrivileges(role) {
         selectedRole(role);
+    }
+
+    let [isRoleOpen, setRoleOpen] = useState(false);
+    function closeRoleModal() {
+        setRoleOpen(false)
+    }
+    function openRoleModal() {
+        setRoleOpen(true)
     }
 
     return (
@@ -16,7 +26,7 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                         type="button"
                         className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         onClick={() => {
-                            console.log("Add Role");
+                           openRoleModal(); 
                         }}
                     > Add role</button>
                 </Flex>
@@ -40,6 +50,7 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                     </TableBody>
                 </Table>
             </Card>
+            <AddRoleModal isOpen={isRoleOpen} closeModal={closeRoleModal} />
         </>
     );
 }

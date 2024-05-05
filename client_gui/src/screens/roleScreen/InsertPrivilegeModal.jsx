@@ -5,7 +5,7 @@ import { Card, Col, Grid, SearchSelect, SearchSelectItem, TextInput, Title } fro
 import { Dialog, Transition } from "@headlessui/react";
 import { SearchIcon } from "@heroicons/react/solid";
 
-const AddPrivilegeModal = (props) => {
+const InsertPrivilegeModal = (props) => {
     const dispatch = useDispatch();
 
     // const listPrivileges = useSelector((state) => state.privilegeList);
@@ -150,4 +150,4 @@ const AddPrivilegeModal = (props) => {
     )
 }
 
-export default AddPrivilegeModal;
+export default InsertPrivilegeModal;

@@ -1,13 +1,15 @@
 import { Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import AddPrivilegeModal from "../../screens/roleScreen/AddPrivilegeModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 import RoleListScreen from "../../screens/roleScreen/RoleListScreen";
+import InsertPrivilegeModal from "../../screens/roleScreen/InsertPrivilegeModal";
 
 
 function RoleDashboard() {
     const dispatch = useDispatch();
+
+    const [roleName, setRoleName] = useState("ROLE_BOSS");
 
     const listRole = useSelector((state) => state.roleList);
     const { loading, error, roles } = listRole;
@@ -25,16 +27,13 @@ function RoleDashboard() {
         }, 200);
     }, []);
 
-    let [isOpen, setIsOpen] = useState(false);
-    const [roleName, setRoleName] = useState("ROLE_BOSS");
-
-    function closeModal() {
-        setIsOpen(false)
+    let [isPrivilegeOpen, setPrivilegeOpen] = useState(false);
+    function closePrivilegeModal() {
+        setPrivilegeOpen(false)
     }
-
-    function openModal() {
-        setIsOpen(true)
-    }
+    function openPrivilegeModal() {
+        setPrivilegeOpen(true)
+    } 
 
     return (
         <>
@@ -59,7 +58,7 @@ function RoleDashboard() {
                                                     type="button"
                                                     className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                                     onClick={() => {
-                                                        openModal();
+                                                        openPrivilegeModal();
                                                     }}
                                                 >
                                                     Insert Privilege
@@ -93,10 +92,10 @@ function RoleDashboard() {
                             <div className="col-span-2 w-full">
                                 <div className="w-full p-2">
                                     <RoleListScreen selectedRole={setRoleName} roles={roles} />
-                                    <AddPrivilegeModal isOpen={isOpen} closeModal={closeModal} role={roleName} />
                                 </div>
                             </div>
                         </div>
+                        <InsertPrivilegeModal isOpen={isPrivilegeOpen} closeModal={closePrivilegeModal} role={roleName} />
                     </>
 
                 )
