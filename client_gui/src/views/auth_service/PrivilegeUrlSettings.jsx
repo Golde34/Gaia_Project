@@ -1,5 +1,4 @@
 import { Button, Card, Col, Flex, Grid, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, TextInput, Title } from "@tremor/react";
-import Template from "../../components/template/Template"
 import { SearchCircleIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import ManagerTemplate from "../../components/template/ManagerTemplate";

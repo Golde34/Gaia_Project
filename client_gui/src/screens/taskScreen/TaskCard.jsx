@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Input } from "@material-tailwind/react";
+import { Input, Textarea } from "@material-tailwind/react";
 import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
@@ -179,9 +179,9 @@ export const TaskCard = (props) => {
                                     </Dialog.Title>
                                     <div className="mt-4">
                                         <label htmlFor="description" className="block text-md font-medium text-gray-700 mb-2">Description</label>
-                                            <Input
+                                            <Textarea
                                                 type="text"
-                                                className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-32"
                                                 value={description}
                                                 onChange={(e) => {setDescription(e.target.value)}}
                                                 onBlur={() => {setIsEditingDescription(!isEditingDescription)}}

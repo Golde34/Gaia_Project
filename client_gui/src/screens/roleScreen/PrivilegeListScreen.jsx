@@ -1,4 +1,6 @@
 import { Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
+import { useState } from "react";
+import AddPrivilegeModal from "./AddPrivilegeModal";
 
 const PrivilegeListScreen = ({ selectedPrivilege, privileges}) => {
     const listPrivilege = privileges;
@@ -6,6 +8,14 @@ const PrivilegeListScreen = ({ selectedPrivilege, privileges}) => {
     function loadPrivilege(privilege) {
         selectedPrivilege(privilege);
         console.log(privilege);
+    }
+
+    let [isPrivilegeOpen, setPrivilegeOpen] = useState(false);
+    function closeRoleModal() {
+        setPrivilegeOpen(false)
+    }
+    function openModal() {
+        setPrivilegeOpen(true)
     }
 
     return (
@@ -43,6 +53,7 @@ const PrivilegeListScreen = ({ selectedPrivilege, privileges}) => {
                     </TableBody>
                 </Table>
             </Card> 
+            <AddPrivilegeModal isOpen={isPrivilegeOpen} closeModal={closeRoleModal} />
         </>
     )
 }

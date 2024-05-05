@@ -3,9 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPrivileges } from "../../api/store/actions/auth_service/privilege.actions";
 import PrivilegeListScreen from "../../screens/roleScreen/PrivilegeListScreen";
+import InsertPrivilegeModal from "../../screens/roleScreen/InsertPrivilegeModal";
 
 function PrivilegeDashboard() {
     const dispatch = useDispatch();
+
+    const [privilegeName, setPrivilegeName] = useState();
 
     const listPrivilege = useSelector((state) => state.privilegeList);
     const { loading, error, privileges } = listPrivilege;
@@ -24,12 +27,9 @@ function PrivilegeDashboard() {
     }, []);
 
     let [isOpen, setIsOpen] = useState(false);
-    const [privilegeName, setPrivilegeName] = useState();
-
     function closeModal() {
         setIsOpen(false)
     }
-
     function openModal() {
         setIsOpen(true)
     }
@@ -93,6 +93,7 @@ function PrivilegeDashboard() {
                                 </div>
                             </div>
                         </div>
+                        <InsertPrivilegeModal isOpen={isOpen} closeModal={closeModal} />
                     </>
                 )
             }

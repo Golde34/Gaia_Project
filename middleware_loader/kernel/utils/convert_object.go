@@ -1,6 +1,9 @@
 package utils
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 func ConvertStringToStringArrayPointer(aInterface []interface{}) *[]string {
 	aString := []string{}
@@ -26,4 +29,8 @@ func ConvertStringToStringArray(aInterface []interface{}) []string {
 		aString = append(aString, v.(string))
 	}
 	return aString
+}
+
+func ConvertStringWithPunctuation(input string) string {
+	return strings.Trim(strconv.Quote(input), "\"")
 }
