@@ -16,7 +16,7 @@ public class RoleController {
 
     @PostMapping("/create-role")
     public ResponseEntity<?> createRole(@RequestBody RoleDto roleDto) {
-        return roleService.createRole(roleDto.getName());
+        return roleService.createRole(roleDto);
     }
 
     @PutMapping("/update-role")

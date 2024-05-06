@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import auth.authentication_service.core.domain.dto.response.NumberRoleUsers;
+import auth.authentication_service.core.exceptions.BusinessException;
+import auth.authentication_service.core.port.mapper.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
@@ -42,25 +44,50 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleStore roleStore;
     private final RoleServiceValidation roleServiceValidation;
+    private final RoleMapper roleMapper;
 
-    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation) {
+    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation, RoleMapper roleMapper) {
         this.roleStore = roleStore;
         this.roleServiceValidation = roleServiceValidation;
+        this.roleMapper = roleMapper;
     }
 
     @Override
-    public ResponseEntity<?> createRole(String roleName) {
-        if (roleServiceValidation.checkExistRoleName(roleName)) {
-            _logger.log("Create role failed", LoggerType.ERROR);
-            return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(Constants.ResponseMessage.ROLE_EXISTED, ResponseEnum.msg400));
-        } else {
-            Role newRole = new Role();
-            newRole.setName(roleName);
-            roleStore.save(newRole);
-            _logger.log("Create role: " + roleName, LoggerType.INFO);
+    public ResponseEntity<?> createRole(RoleDto roleDto) {
+        try {
+            if (roleServiceValidation.checkExistRoleName(roleDto.getName())) {
+                _logger.log("Create role failed", LoggerType.ERROR);
+                return genericResponse.matchingResponseMessage(
+                        new GenericResponse<>(Constants.ResponseMessage.ROLE_EXISTED, ResponseEnum.msg400));
+            }
+            Role newRole = roleMapper.map(roleDto);
+            saveRole(newRole);
+            updateRoleHierarchy();
             return genericResponse.matchingResponseMessage(new GenericResponse<>(newRole, ResponseEnum.msg201));
+        } catch (BusinessException e) {
+            log.error("Create role failed", e);
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.EXECUTION_FAILED, ResponseEnum.msg500));
         }
+    }
+
+    private synchronized void saveRole(Role role) {
+        roleStore.save(role);
+        log.info("Save role {}", role);
+    }
+
+    private void updateRoleHierarchy() {
+        StringBuilder roleHierarchy = new StringBuilder();
+        List<Role> roles = roleStore.findAllOrderByGrantedRank().stream().toList();
+
+        roles.stream()
+                .limit(roles.size() - 1) // Exclude the last role
+                .forEach(role -> roleHierarchy.append(role.getName()).append(" > ")
+                        .append(roles.get(roles.indexOf(role) + 1).getName()).append(" \n "));
+
+        log.info("Role hierarchy: {}", roleHierarchy);
+
+
     }
 
     @Override
@@ -104,7 +131,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Get all roles");
         List<NumberRoleUsers> listRoles = new ArrayList<>();
         List<Role> roles = roleStore.findAll();
-        final int[] totalUser = { 0 };
+        final int[] totalUser = {0};
         roles.forEach(role -> {
             NumberRoleUsers listRole = new NumberRoleUsers();
             listRole.setId(role.getId());
