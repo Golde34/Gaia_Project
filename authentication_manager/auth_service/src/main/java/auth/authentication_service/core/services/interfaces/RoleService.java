@@ -10,7 +10,7 @@ import auth.authentication_service.core.domain.dto.RoleDto;
 import auth.authentication_service.core.domain.entities.Role;
 
 public interface RoleService {
-    public ResponseEntity<?> createRole(String roleName);
+    public ResponseEntity<?> createRole(RoleDto roleDto);
     public ResponseEntity<?> updateRole(RoleDto roleDto);
     public ResponseEntity<?> deleteRole(RoleDto roleDto);
     public ResponseEntity<?> getAllRoles();

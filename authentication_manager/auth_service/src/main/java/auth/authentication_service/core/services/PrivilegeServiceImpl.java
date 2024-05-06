@@ -55,7 +55,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
             newPrivilege.setName(privilegeName);
             privilegeStore.save(newPrivilege);
             _logger.log("Create privilege: " + privilegeName, LoggerType.INFO);
-            return genericResponse.matchingResponseMessage(new GenericResponse<>(newPrivilege, ResponseEnum.msg201));
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(newPrivilege, ResponseEnum.msg200));
         }
     }
 

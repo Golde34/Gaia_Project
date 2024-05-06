@@ -7,6 +7,7 @@ import auth.authentication_service.core.domain.dto.response.RoleOnlyResponse;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,7 @@ public class PrivilegeMapper {
                 .id(privilege.getId())
                 .name(privilege.getName())
                 .description(privilege.getDescription())
-                .roles(convertRoleResponse(privilege.getRoles().stream().collect(Collectors.toList())))
+                .roles(convertRoleResponse(new ArrayList<>(privilege.getRoles())))
                 .build();
     }
 

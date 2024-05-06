@@ -18,6 +18,8 @@ public class Role {
     private String name;
     private String description;
 
+    private int grantedRank;
+
     @JsonBackReference
     @ManyToMany(mappedBy="roles")
     private Collection<User> users;

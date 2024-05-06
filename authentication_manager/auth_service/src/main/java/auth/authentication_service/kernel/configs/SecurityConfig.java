@@ -1,5 +1,10 @@
 package auth.authentication_service.kernel.configs;
 
+import auth.authentication_service.core.domain.constant.Constants;
+import auth.authentication_service.core.services.GlobalConfigService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -20,16 +25,21 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import auth.authentication_service.infrastructure.task.JwtRequestFilter;
+import org.yaml.snakeyaml.scanner.Constant;
 
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final JwtRequestFilter jwtF;
+    private final GlobalConfigService globalConfigService;
 
-    public SecurityConfig(JwtRequestFilter jwtF) {
+    public SecurityConfig(JwtRequestFilter jwtF, GlobalConfigService globalConfigService) {
         this.jwtF = jwtF;
+        this.globalConfigService = globalConfigService;
     }
 
     @Bean
@@ -57,7 +67,9 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_BOSS > ROLE_ADMIN \n ROLE_ADMIN > ROLE_USER");
+        String roleHierarchyStr = globalConfigService.getGlobalParamAsString(Constants.AuthConfiguration.ROLE_HIERARCHY);
+        log.info("RoleHierarchy : {}", roleHierarchyStr);
+        roleHierarchy.setHierarchy(roleHierarchyStr);
         return roleHierarchy;
     }
 
@@ -65,8 +77,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.disable())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> {
-                    authz
+                .authorizeHttpRequests(auth -> {
+                    auth
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
                                     new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
                                     new AntPathRequestMatcher("/auth/check-permission"),

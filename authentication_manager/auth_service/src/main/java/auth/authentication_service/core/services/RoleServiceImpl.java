@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import auth.authentication_service.core.domain.dto.response.NumberRoleUsers;
+import auth.authentication_service.core.exceptions.BusinessException;
+import auth.authentication_service.core.port.mapper.RoleMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
@@ -26,6 +29,7 @@ import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 import auth.authentication_service.kernel.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.UnexpectedRollbackException;
 
 @Service
 @Slf4j
@@ -42,25 +46,54 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleStore roleStore;
     private final RoleServiceValidation roleServiceValidation;
+    private final RoleMapper roleMapper;
+    private final GlobalConfigService globalConfigService;
 
-    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation) {
+    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation, RoleMapper roleMapper, GlobalConfigService globalConfigService) {
         this.roleStore = roleStore;
         this.roleServiceValidation = roleServiceValidation;
+        this.roleMapper = roleMapper;
+        this.globalConfigService = globalConfigService;
     }
 
     @Override
-    public ResponseEntity<?> createRole(String roleName) {
-        if (roleServiceValidation.checkExistRoleName(roleName)) {
-            _logger.log("Create role failed", LoggerType.ERROR);
+    @Transactional(rollbackOn = Exception.class)
+    public ResponseEntity<?> createRole(RoleDto roleDto) {
+        try {
+            if (roleServiceValidation.checkExistRoleName(roleDto.getName())) {
+                _logger.log("Create role failed", LoggerType.ERROR);
+                return genericResponse.matchingResponseMessage(
+                        new GenericResponse<>(Constants.ResponseMessage.ROLE_EXISTED, ResponseEnum.msg400));
+            }
+            Role newRole = roleMapper.map(roleDto);
+            saveRole(newRole);
+            updateRoleHierarchy();
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(newRole, ResponseEnum.msg200));
+        } catch (BusinessException e) {
+            log.error("Create role failed", e);
             return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(Constants.ResponseMessage.ROLE_EXISTED, ResponseEnum.msg400));
-        } else {
-            Role newRole = new Role();
-            newRole.setName(roleName);
-            roleStore.save(newRole);
-            _logger.log("Create role: " + roleName, LoggerType.INFO);
-            return genericResponse.matchingResponseMessage(new GenericResponse<>(newRole, ResponseEnum.msg201));
+                    new GenericResponse<>(Constants.ResponseMessage.EXECUTION_FAILED, ResponseEnum.msg500));
         }
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public synchronized void saveRole(Role role) {
+        roleStore.save(role);
+        log.info("Save role {}", role);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void updateRoleHierarchy() {
+        StringBuilder roleHierarchy = new StringBuilder();
+        List<Role> roles = roleStore.findAllOrderByGrantedRank().stream().toList();
+
+        roles.stream()
+                .limit(roles.size() - 1) // Exclude the last role
+                .forEach(role -> roleHierarchy.append(role.getName()).append(" > ")
+                        .append(roles.get(roles.indexOf(role) + 1).getName()).append(" \n "));
+
+        log.info("Role hierarchy: {}", roleHierarchy);
+        globalConfigService.setAuthServiceConfig(Constants.AuthConfiguration.ROLE_HIERARCHY, roleHierarchy.toString());
     }
 
     @Override
@@ -83,18 +116,26 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> deleteRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
             if (roleServiceValidation.checkExistRole(role)) {
                 roleStore.delete(role);
+                updateRoleHierarchy();
+                return genericResponse.matchingResponseMessage(
+                        new GenericResponse<>("Role " + role.getName() + " deleted!", ResponseEnum.msg200));
             }
+            throw new BusinessException(Constants.ResponseMessage.ROLE_NOT_FOUND);
+        } catch (BusinessException e) {
+            _logger.log("Role not found", LoggerType.ERROR);
             return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>("Role " + role.getName() + " deleted!", ResponseEnum.msg200));
+                    new GenericResponse<>(e.getMessage(), ResponseEnum.msg400));
         } catch (Exception e) {
             _logger.log("Delete role failed", LoggerType.ERROR);
+            String message = String.format(Constants.ResponseMessage.DELETE_ROLE, roleDto.getName());
             return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(Constants.ResponseMessage.DELETE_ROLE, ResponseEnum.msg400));
+                    new GenericResponse<>(message, ResponseEnum.msg400));
         }
     }
 
@@ -104,7 +145,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Get all roles");
         List<NumberRoleUsers> listRoles = new ArrayList<>();
         List<Role> roles = roleStore.findAll();
-        final int[] totalUser = { 0 };
+        final int[] totalUser = {0};
         roles.forEach(role -> {
             NumberRoleUsers listRole = new NumberRoleUsers();
             listRole.setId(role.getId());
@@ -113,6 +154,7 @@ public class RoleServiceImpl implements RoleService {
             totalUser[0] += role.getUsers().size();
             listRole.setTotalNumberOfUsers(totalUser[0]);
             listRole.setPrivileges(role.getPrivileges());
+            listRole.setGrantedRank(role.getGrantedRank());
             listRoles.add(listRole);
         });
 

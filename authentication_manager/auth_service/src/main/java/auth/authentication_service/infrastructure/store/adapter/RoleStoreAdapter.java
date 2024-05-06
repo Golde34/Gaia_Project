@@ -1,5 +1,6 @@
 package auth.authentication_service.infrastructure.store.adapter;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ public class RoleStoreAdapter implements RoleStore {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    public Collection<Role> findAllOrderByGrantedRank() {
+        return roleRepository.findAllOrderByGrantedRank();
+    }
 
     public Role findByName(String name) {
         return roleRepository.findByName(name);
