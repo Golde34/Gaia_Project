@@ -10,7 +10,7 @@ import java.util.Collection;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Query("select r from Role r order by r.grantedRank")
+    @Query("select r from Role r order by r.grantedRank desc")
     Collection<Role> findAllOrderByGrantedRank();
     Role findByName(String name);
     Role findRoleById(Long Id);

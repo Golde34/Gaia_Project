@@ -65,8 +65,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.disable())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> {
-                    authz
+                .authorizeHttpRequests(auth -> {
+                    auth
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
                                     new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
                                     new AntPathRequestMatcher("/auth/check-permission"),

@@ -1,20 +1,22 @@
 package auth.authentication_service.core.services;
 
+import auth.authentication_service.core.domain.constant.Constants;
+import auth.authentication_service.core.domain.entities.AuthServiceConfiguration;
+import auth.authentication_service.core.exceptions.BusinessException;
+import auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository;
+import auth.authentication_service.kernel.utils.StringUtils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.com.viettel.vds.constant.GlobalConfigConstants;
-import vn.com.viettel.vds.entity.crosssale.GlobalConfig;
-import vn.com.viettel.vds.repository.crosssale.GlobalConfigRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -23,13 +25,15 @@ import java.util.stream.Collectors;
 public class GlobalConfigService {
 
     @Autowired
-    GlobalConfigRepository globalConfigRepository;
+    AuthServiceConfigRepository globalConfigRepository;
 
     private LoadingCache<String, String> globalConfigCache;
+    @Autowired
+    private AuthServiceConfigRepository authServiceConfigRepository;
 
     @PostConstruct
     public void init() {
-        Long reloadMin = Long.parseLong(findParam(GlobalConfigConstants.SYSTEM_CACHE_RELOAD_MINUTE));
+        long reloadMin = Long.parseLong(findParam(Constants.AuthConfiguration.SYSTEM_CACHE_RELOAD_MINUTE));
         globalConfigCache =
                 CacheBuilder.newBuilder()
                         .maximumSize(100000)
@@ -58,7 +62,7 @@ public class GlobalConfigService {
     }
 
     private String findParam(String paramName) {
-        GlobalConfig globalConfig =
+        AuthServiceConfiguration globalConfig =
                 globalConfigRepository
                         .findParam(paramName)
                         .orElseGet(
@@ -109,6 +113,18 @@ public class GlobalConfigService {
         return Arrays.stream(StringUtils.split(getGlobalParamCache(paramName), ";"))
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());
+    }
+
+    public void setAuthServiceConfig(String paramName, String paramValue) {
+        try {
+            Optional<AuthServiceConfiguration> authServiceConfiguration = authServiceConfigRepository.findParam(paramName);
+            if (authServiceConfiguration.isPresent()) {
+                authServiceConfiguration.get().setParamValue(paramValue);
+                globalConfigRepository.save(authServiceConfiguration.get());
+            }
+        } catch (BusinessException e) {
+            log.error(String.format("Cannot set auth service config: %s", paramName), e);
+        }
     }
 }
 

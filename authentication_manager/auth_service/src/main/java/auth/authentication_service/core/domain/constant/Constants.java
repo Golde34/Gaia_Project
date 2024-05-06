@@ -53,11 +53,17 @@ public class Constants {
         public static final String ROLE_NOT_FOUND = "role not found";
         public static final String CREATE_ROLE = "create role failed";
         public static final String UPDATE_ROLE = "update role failed";
-        public static final String DELETE_ROLE = "delete role failed";
+        public static final String DELETE_ROLE = "delete role failed. You must delete all user had role name %s";
         public static final String ADD_PRIVILEGE_TO_ROLE = "add privilege to role failed";
 
         public static final String PRIVILEGE_EXISTED = "privilege existed";
         public static final String UPDATE_PRIVILEGE = "update privilege failed";
         public static final String DELETE_PRIVILEGE = "delete privilege failed";
+    }
+
+    @UtilityClass
+    public static class AuthConfiguration {
+        public static String SYSTEM_CACHE_RELOAD_MINUTE = "global.config.minute";
+        public static String ROLE_HIERARCHY = "role.role_hierarchy";
     }
 }

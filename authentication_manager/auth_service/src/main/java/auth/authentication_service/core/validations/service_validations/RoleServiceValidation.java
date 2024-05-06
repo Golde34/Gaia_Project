@@ -1,6 +1,9 @@
 package auth.authentication_service.core.validations.service_validations;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleServiceValidation {
 
     private final RoleStore roleStore;
-    private ObjectUtils objectUtils;
+    private final ObjectUtils objectUtils;
 
-    public RoleServiceValidation(RoleStore roleStore) {
+    public RoleServiceValidation(RoleStore roleStore, ObjectUtils objectUtils) {
         this.roleStore = roleStore;
+        this.objectUtils = objectUtils;
     }
 
     public Pair<String, Boolean> canUpdateRole(Role role, String newName) {
@@ -53,11 +57,12 @@ public class RoleServiceValidation {
                 return false;
             }
 
-            Optional<Role> existingRole = roleStore.findAll().stream()
+            List<Role> existingRole = roleStore.findAll();
+            Optional<Role> existingRoleOptional = existingRole.stream()
                     .filter(r -> r.getId().equals(role.getId()))
                     .findFirst();
 
-            return existingRole.isPresent();
+            return existingRoleOptional.isPresent();
         } catch (Exception e) {
             log.error("Check if can delete role failed: ", e);
             return false;
