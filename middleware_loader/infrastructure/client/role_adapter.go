@@ -2,6 +2,7 @@ package client_adapter
 
 import (
 	"fmt"
+	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
@@ -35,4 +36,54 @@ func (adapter *RoleAdapter) GetAllRoles() ([]response_dtos.RoleDTO, error) {
 	}
 
 	return roles, nil
+}
+
+func (adapter *RoleAdapter) CreateRole(input model.RoleInput) (response_dtos.RoleDTO, error) {
+	createRoleURL := base.AuthServiceURL + "/role/create-role"
+	var role response_dtos.RoleDTO
+	result, err := utils.BaseAPIV2(createRoleURL, "POST", input, &role)
+	if err != nil {
+		return response_dtos.RoleDTO{}, err
+	}
+	return result.(response_dtos.RoleDTO), nil
+}
+
+func (adapter *RoleAdapter) UpdateRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+	updateRoleURL := base.AuthServiceURL + "/role/update-role"
+	var role response_dtos.RoleDTO
+	result, err := utils.BaseAPIV2(updateRoleURL, "PUT", input, &role)
+	if err != nil {
+		return response_dtos.RoleDTO{}, err
+	}
+	return result.(response_dtos.RoleDTO), nil
+}
+
+func (adapter *RoleAdapter) DeleteRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+	deleteRoleURL := base.AuthServiceURL + "/role/delete-role"
+	var role response_dtos.RoleDTO
+	result, err := utils.BaseAPIV2(deleteRoleURL, "DELETE", input, &role)
+	if err != nil {
+		return response_dtos.RoleDTO{}, err
+	}
+	return result.(response_dtos.RoleDTO), nil
+} 
+
+func (adapter *RoleAdapter) GetRole(input converter_dtos.NameConverterDTO) (response_dtos.RoleDTO) {
+	getRoleURL := basee.AuthServiceURL + "role/get-role"
+	var role response_dtos.RoleDTO
+	result, err := utils.BaseAPIV2(getRoleURL, "GET", input, &role)
+	if err != nil {
+		return response_dtos.RoleDTO{}
+	}
+	return result.(response_dtos.RoleDTO), nil
+}
+
+func (adapter *RoleAdapter) AddPrivilegeToRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+	addPrivilegeURL := base.AuthServiceURL + "/add-privilege-to-role"
+	var role response_dtos.RoleDTO
+	result, err := utils.BaseAPIV2(addPrivilegeURL, "PUT", input, &role)
+	if err != nil {
+		return response_dtos.RoleDTO{}, err
+	}
+	return result.(response_dtos.RoleDTO), nil
 }

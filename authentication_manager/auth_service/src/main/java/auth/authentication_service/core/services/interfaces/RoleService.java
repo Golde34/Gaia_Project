@@ -14,7 +14,7 @@ public interface RoleService {
     public ResponseEntity<?> updateRole(RoleDto roleDto);
     public ResponseEntity<?> deleteRole(RoleDto roleDto);
     public ResponseEntity<?> getAllRoles();
-    public ResponseEntity<?> getRoleByName(RoleDto roleDto);
+    public ResponseEntity<?> getRoleByName(String name);
     public ResponseEntity<?> addPrivilegeToRole(RoleDto roleDto, List<PrivilegeDto> privilegeNames);
     public Role getBiggestRole(Collection<Role> roles);
 }

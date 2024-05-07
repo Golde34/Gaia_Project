@@ -162,8 +162,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public ResponseEntity<?> getRoleByName(RoleDto roleDto) {
-        Role role = roleStore.findByName(roleDto.getName());
+    public ResponseEntity<?> getRoleByName(String name) {
+        Role role = roleStore.findByName(name);
         return genericResponse.matchingResponseMessage(new GenericResponse<>(role, ResponseEnum.msg200));
     }
 
