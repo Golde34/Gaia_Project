@@ -35,8 +35,8 @@ public class RoleController {
     }
     
     @GetMapping("/get-role")
-    public ResponseEntity<?> getRole(@RequestBody RoleDto roleDto) {
-        return roleService.getRoleByName(roleDto);
+    public ResponseEntity<?> getRole(@RequestBody String name) {
+        return roleService.getRoleByName(name);
     }
 
     @PutMapping("/add-privilege-to-role")
