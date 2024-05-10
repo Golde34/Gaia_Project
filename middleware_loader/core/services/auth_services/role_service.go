@@ -27,3 +27,14 @@ func (s *RoleService) GetAllRoles(ctc context.Context) ([]model.Role, error) {
 
 	return rolesModel, nil
 }
+
+func (s *RoleService) CreateRole(ctc context.Context, input model.RoleInput) (model.Role, error) {
+	role, err := client.IRoleAdapter(&adapter.RoleAdapter{}).CreateRole(input)
+	if err != nil {
+		return model.Role{}, err
+	}
+
+	roleModel := roleResponse.MapperToGraphQLModel(role)
+
+	return roleModel, nil
+}

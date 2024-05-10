@@ -162,6 +162,7 @@ type Role struct {
 	ID          float64      `json:"id"`
 	Name        string       `json:"name"`
 	Description *string      `json:"description,omitempty"`
+	GrantedRank float64      `json:"grantedRank"`
 	Privileges  []*Privilege `json:"privileges"`
 }
 

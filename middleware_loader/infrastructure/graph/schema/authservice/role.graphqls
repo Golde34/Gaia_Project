@@ -2,6 +2,7 @@ type Role {
     id: Float!
     name: String!
     description: String
+    grantedRank: Float!
 
     privileges: [Privilege!]!
 }

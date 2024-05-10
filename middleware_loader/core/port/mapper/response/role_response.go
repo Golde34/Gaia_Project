@@ -10,6 +10,7 @@ func ReturnGetAllRolesObjectMapper(body map[string]interface{}) *response_dtos.R
 	input.ID = body["id"].(float64)
 	input.Name = body["name"].(string)
 	input.Description = utils.CheckNullPointer(body["description"])
+	input.GrantedRank = body["grantedRank"].(float64)
 	input.Privileges = body["privileges"].([]interface{})
 	return &input
 }
