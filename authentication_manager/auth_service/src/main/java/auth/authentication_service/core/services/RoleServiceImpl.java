@@ -29,7 +29,6 @@ import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 import auth.authentication_service.kernel.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.UnexpectedRollbackException;
 
 @Service
 @Slf4j

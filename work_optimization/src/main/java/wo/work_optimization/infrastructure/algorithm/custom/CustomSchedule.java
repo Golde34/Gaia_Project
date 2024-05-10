@@ -1,4 +1,4 @@
-package wo.work_optimization.infrastructure.algorithm;
+package wo.work_optimization.infrastructure.algorithm.custom;
 
 public class CustomSchedule {
     private final double c1 = 0.56;     // Constant 1
@@ -36,7 +36,7 @@ public class CustomSchedule {
         setEffort(getEffort()*4/9 + 5f/9);
     }
 
-    private double calculateLinearFunction() {
+    private double calculateFlowState() {
         return c1*this.effort + c2*this.enjoyability + c3;
     }
 
@@ -53,7 +53,7 @@ public class CustomSchedule {
         // Initial productivity
         double p0 = calculateInitialProductivity();
         // derivative score
-        double k = -(this.t / calculateLinearFunction());
+        double k = -(this.t / calculateFlowState());
         // Model score
         double alpha = calculateAlpha();
         return p0 + alpha * this.t * Math.exp(k);
