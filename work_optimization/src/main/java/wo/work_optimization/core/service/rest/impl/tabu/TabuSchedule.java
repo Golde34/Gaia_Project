@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.response.TaskResponseDTO;
 import wo.work_optimization.core.service.rest.schedule.ScheduleService;
-import wo.work_optimization.infrastructure.algorithm.CustomSchedule;
 
 @Service
 public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
@@ -22,9 +21,7 @@ public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDT
 
     @Override
     public TaskResponseDTO doSchedule(TaskRequestDTO request) {
-        CustomSchedule customSchedule = new CustomSchedule(request.getEffort(), request.getEnjoyability(), request.getDuration());
-        double result = customSchedule.calculateModel();
-        return TaskResponseDTO.builder().schedule(String.valueOf(result)).build();
+        return null;
     }
 
     @Override
