@@ -13584,7 +13584,7 @@ func (ec *executionContext) unmarshalInputRoleInput(ctx context.Context, obj int
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "name"}
+	fieldsInOrder := [...]string{"id", "name", "description", "grantedRank"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -13593,7 +13593,7 @@ func (ec *executionContext) unmarshalInputRoleInput(ctx context.Context, obj int
 		switch k {
 		case "id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13605,6 +13605,20 @@ func (ec *executionContext) unmarshalInputRoleInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "grantedRank":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grantedRank"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GrantedRank = data
 		}
 	}
 
@@ -17204,6 +17218,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) marshalOGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v *model.GroupTask) graphql.Marshaler {

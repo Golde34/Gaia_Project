@@ -61,7 +61,8 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, input model.UserInput
 
 // CreateRole is the resolver for the createRole field.
 func (r *mutationResolver) CreateRole(ctx context.Context, input model.RoleInput) (*model.Role, error) {
-	panic(fmt.Errorf("not implemented: CreateRole - createRole"))
+	role, err := roleService.CreateRole(ctx, input)
+	return &role, err
 }
 
 // UpdateRole is the resolver for the updateRole field.

@@ -17,7 +17,7 @@ func NewRoleDTO() *RoleDTO {
 	return &RoleDTO{}
 }
 
-func (in *RoleDTO) MapperToGraphQLModel(input RoleDTO) model.Role {
+func (in RoleDTO) MapperToGraphQLModel(input RoleDTO) model.Role {
 	var out model.Role
 	out.ID = input.ID
 	out.Name = input.Name

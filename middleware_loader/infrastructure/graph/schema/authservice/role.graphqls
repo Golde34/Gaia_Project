@@ -8,8 +8,10 @@ type Role {
 }
 
 input RoleInput {
-    id: String
+    id: Float
     name: String!
+    description: String
+    grantedRank: Float!
 }
 
 type RoleOnlyResponse {
