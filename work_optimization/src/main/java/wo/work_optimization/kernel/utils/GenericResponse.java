@@ -2,8 +2,9 @@ package wo.work_optimization.kernel.utils;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
+import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
-import wo.work_optimization.core.domain.response.base.GeneralResponse;
 
 @Data
 @Component

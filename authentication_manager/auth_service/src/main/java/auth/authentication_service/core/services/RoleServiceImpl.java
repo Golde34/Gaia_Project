@@ -29,7 +29,6 @@ import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 import auth.authentication_service.kernel.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.UnexpectedRollbackException;
 
 @Service
 @Slf4j
@@ -49,7 +48,8 @@ public class RoleServiceImpl implements RoleService {
     private final RoleMapper roleMapper;
     private final GlobalConfigService globalConfigService;
 
-    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation, RoleMapper roleMapper, GlobalConfigService globalConfigService) {
+    public RoleServiceImpl(RoleStore roleStore, RoleServiceValidation roleServiceValidation, RoleMapper roleMapper,
+            GlobalConfigService globalConfigService) {
         this.roleStore = roleStore;
         this.roleServiceValidation = roleServiceValidation;
         this.roleMapper = roleMapper;
@@ -144,19 +144,19 @@ public class RoleServiceImpl implements RoleService {
     public ResponseEntity<?> getAllRoles() {
         log.info("Get all roles");
         List<NumberRoleUsers> listRoles = new ArrayList<>();
-        List<Role> roles = roleStore.findAll();
-        final int[] totalUser = {0};
+        Collection<Role> roles = roleStore.findAllOrderByGrantedRank();
+        final int[] totalUser = { 0 };
         roles.forEach(role -> {
-            NumberRoleUsers listRole = new NumberRoleUsers();
-            listRole.setId(role.getId());
-            listRole.setName(role.getName());
-            listRole.setNumberOfUsers(role.getUsers().size());
-            totalUser[0] += role.getUsers().size();
-            listRole.setTotalNumberOfUsers(totalUser[0]);
-            listRole.setPrivileges(role.getPrivileges());
-            listRole.setGrantedRank(role.getGrantedRank());
-            listRoles.add(listRole);
-        });
+                    NumberRoleUsers listRole = new NumberRoleUsers();
+                    listRole.setId(role.getId());
+                    listRole.setName(role.getName());
+                    listRole.setNumberOfUsers(role.getUsers().size());
+                    totalUser[0] += role.getUsers().size();
+                    listRole.setTotalNumberOfUsers(totalUser[0]);
+                    listRole.setPrivileges(role.getPrivileges());
+                    listRole.setGrantedRank(role.getGrantedRank());
+                    listRoles.add(listRole);
+                });
 
         return genericResponse.matchingResponseMessage(new GenericResponse<>(listRoles, ResponseEnum.msg200));
     }

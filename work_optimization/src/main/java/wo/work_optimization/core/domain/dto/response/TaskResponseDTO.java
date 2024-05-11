@@ -1,4 +1,4 @@
-package wo.work_optimization.core.domain.response;
+package wo.work_optimization.core.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

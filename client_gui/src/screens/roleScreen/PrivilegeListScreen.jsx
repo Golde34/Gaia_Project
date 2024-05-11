@@ -3,8 +3,6 @@ import { useState } from "react";
 import AddPrivilegeModal from "./AddPrivilegeModal";
 
 const PrivilegeListScreen = ({ selectedPrivilege, privileges}) => {
-    const listPrivilege = privileges;
-
     function loadPrivilege(privilege) {
         selectedPrivilege(privilege);
         console.log(privilege);

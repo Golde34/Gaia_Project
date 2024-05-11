@@ -1,9 +1,11 @@
 package wo.work_optimization.core.service.rest.impl.simpleschedule;
 
 import org.springframework.stereotype.Service;
-import wo.work_optimization.core.domain.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.response.TaskResponseDTO;
+
+import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.service.rest.schedule.ScheduleService;
+import wo.work_optimization.infrastructure.algorithm.custom.CustomSchedule;
 
 @Service
 public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
@@ -22,7 +24,9 @@ public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponse
 
     @Override
     public TaskResponseDTO doSchedule(TaskRequestDTO request) {
-        return null;
+        CustomSchedule customSchedule = new CustomSchedule(request.getEffort(), request.getEnjoyability(), request.getDuration());
+        double result = customSchedule.calculateModel();
+        return TaskResponseDTO.builder().schedule(String.valueOf(result)).build();
     }
 
     @Override
