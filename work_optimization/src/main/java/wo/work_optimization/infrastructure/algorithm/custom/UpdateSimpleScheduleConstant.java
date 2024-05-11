@@ -1,28 +1,33 @@
 package wo.work_optimization.infrastructure.algorithm.custom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import wo.work_optimization.core.domain.constant.Constants;
+import wo.work_optimization.core.domain.dto.CustomScheduleTask;
+import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.rest.GlobalConfigService;
 
-public class UpdateConstant {
+@Component
+public class UpdateSimpleScheduleConstant {
 
-    private final GlobalConfigService globalConfigService;
-    // private final TaskService
+    @Autowired
+    private GlobalConfigService globalConfigService;
+    @Autowired
+    private TaskStore taskStore;
 
-    public UpdateConstant(GlobalConfigService globalConfigService) {
-        this.globalConfigService = globalConfigService;
-    }
-
-    public void UpdateConstant() {
+    public void UpdateConstant(String scheduleId) {
         // get constant store in config param
         RealVector constantVector = getConstantConfig();        
         // get list task with effort and enjoyability
-        
+        List<CustomScheduleTask> tasks = getListTaskOfSchedulePlan(scheduleId);        
         // calculate the elements of the coefficient matrix
 
         // construct the coefficient matrix
@@ -42,11 +47,24 @@ public class UpdateConstant {
         return constantVector;
     }
 
-    private void getListTaskOfUser() {
+    private List<CustomScheduleTask> getListTaskOfSchedulePlan(String scheduleId) {
         // get list task cua user trong mot schedule plan
-
+        List<Task> tasks = taskStore.findAllBySchedulePlan(scheduleId);
         // convert task to array wrap effort value and enjoyability value
+        List<CustomScheduleTask> convertedTask = new ArrayList<>();
+        tasks.forEach(i -> convertedTask.add(CustomScheduleTask.builder()
+                            .effort(convertEffort(i.getPriority(), i.getDuration()))
+                            .enjoyability(convertEnjoyability(i.getPriority()))
+                            .build()));
+        return convertedTask;
+    }
 
+    private double convertEffort(double priority, double duration) {
+        return (double) priority * duration;
+    }
+
+    private double convertEnjoyability(double priority) {
+        return 3;
     }
 
     private void calculateCoefficientMatrix() {

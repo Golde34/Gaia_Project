@@ -1,6 +1,9 @@
 package wo.work_optimization.infrastructure.store.adapter;
 
 import jakarta.transaction.Transactional;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +31,15 @@ public class TaskStoreAdapter implements TaskStore {
     @Override
     public Task findTaskByOriginalId(String originalId) {
         return taskRepository.findByOriginalId(originalId);
+    }
+
+    @Override
+    public List<Task> findAll() {
+        return taskRepository.findAll();
+    }
+
+    @Override
+    public List<Task> findAllBySchedulePlan(String scheduleId) {
+        return taskRepository.findBySchedulePlanId(scheduleId);
     }
 }

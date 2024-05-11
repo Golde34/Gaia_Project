@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
-import wo.work_optimization.core.domain.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.response.base.ResponseFactory;
 import wo.work_optimization.core.exception.BusinessException;

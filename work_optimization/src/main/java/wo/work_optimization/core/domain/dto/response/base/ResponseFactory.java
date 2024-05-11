@@ -1,4 +1,4 @@
-package wo.work_optimization.core.domain.response.base;
+package wo.work_optimization.core.domain.dto.response.base;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

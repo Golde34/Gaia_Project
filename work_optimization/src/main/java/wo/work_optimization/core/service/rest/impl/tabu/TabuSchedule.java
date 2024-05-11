@@ -1,8 +1,9 @@
 package wo.work_optimization.core.service.rest.impl.tabu;
 
 import org.springframework.stereotype.Service;
-import wo.work_optimization.core.domain.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.response.TaskResponseDTO;
+
+import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.service.rest.schedule.ScheduleService;
 
 @Service

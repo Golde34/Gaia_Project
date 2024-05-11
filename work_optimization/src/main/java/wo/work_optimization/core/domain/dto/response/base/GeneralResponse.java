@@ -1,4 +1,4 @@
-package wo.work_optimization.core.domain.response.base;
+package wo.work_optimization.core.domain.dto.response.base;
 
 import lombok.*;
 
@@ -13,6 +13,4 @@ public class GeneralResponse<T> {
     private Integer errorCode;
     private String errorMessage;
     private T data;
-
-
 }

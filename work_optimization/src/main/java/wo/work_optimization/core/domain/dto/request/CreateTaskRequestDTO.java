@@ -1,4 +1,4 @@
-package wo.work_optimization.core.domain.request;
+package wo.work_optimization.core.domain.dto.request;
 
 import lombok.*;
 
