@@ -29,12 +29,10 @@ public class GlobalConfigService {
     WOServiceRepository globalConfigRepository;
 
     private LoadingCache<String, String> globalConfigCache;
-    @Autowired
-    private WOServiceRepository woServiceRepository;
-
+    
     @PostConstruct
     public void init() {
-        long reloadMin = Long.parseLong(findParam(Constants.AuthConfiguration.SYSTEM_CACHE_RELOAD_MINUTE));
+        long reloadMin = Long.parseLong(findParam(Constants.WOConfiguration.SYSTEM_CACHE_RELOAD_MINUTE));
         globalConfigCache =
                 CacheBuilder.newBuilder()
                         .maximumSize(100000)

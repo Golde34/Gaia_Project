@@ -15,6 +15,7 @@
     <description>work_optimization</description>
     <properties>
         <java.version>17</java.version>
+        <guava.version>32.0.0-jre</guava.version>
     </properties>
     <dependencies>
         <dependency>
@@ -65,6 +66,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
             <version>3.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 

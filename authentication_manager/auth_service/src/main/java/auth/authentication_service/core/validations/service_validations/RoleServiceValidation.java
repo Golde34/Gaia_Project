@@ -1,9 +1,7 @@
 package auth.authentication_service.core.validations.service_validations;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;

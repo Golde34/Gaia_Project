@@ -10,6 +10,6 @@ import wo.work_optimization.core.domain.entity.WOServiceConfiguration;
 
 @Repository
 public interface WOServiceRepository extends JpaRepository<WOServiceConfiguration, Long> {
-    @Query("select c from AuthServiceConfiguration c where c.paramName = :paramName")
+    @Query("select c from WOServiceConfiguration c where c.paramName = :paramName")
     Optional<WOServiceConfiguration> findParam(String paramName);
 }

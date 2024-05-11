@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.enums.TaskPriorityEnum;
-import wo.work_optimization.core.domain.request.CreateTaskRequestDTO;
+import wo.work_optimization.core.domain.dto.request.CreateTaskRequestDTO;
 import wo.work_optimization.kernel.utils.DateTimeUtils;
 
 import java.text.ParseException;
