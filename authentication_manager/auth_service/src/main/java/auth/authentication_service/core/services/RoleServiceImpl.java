@@ -145,7 +145,6 @@ public class RoleServiceImpl implements RoleService {
         log.info("Get all roles");
         List<NumberRoleUsers> listRoles = new ArrayList<>();
         Collection<Role> roles = roleStore.findAllOrderByGrantedRank();
-        log.info("Roles: {}", roles);
         final int[] totalUser = { 0 };
         roles.forEach(role -> {
                     NumberRoleUsers listRole = new NumberRoleUsers();

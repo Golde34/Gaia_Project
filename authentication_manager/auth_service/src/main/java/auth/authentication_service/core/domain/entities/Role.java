@@ -3,12 +3,14 @@ package auth.authentication_service.core.domain.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Collection;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -37,5 +39,9 @@ public class Role {
 
     public Role() {
 
+    }
+
+    public String toString() {
+        return "[Role] id: " + id + ", name: " + name + ", description: " + description + ", grantedRank: " + grantedRank + ", users: " + users + ", privileges: " + privileges;
     }
 }
