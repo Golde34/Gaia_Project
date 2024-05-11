@@ -36,6 +36,7 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                             <TableHeaderCell>Id</TableHeaderCell>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Description</TableHeaderCell>
+                            <TableHeaderCell>GrantedRank</TableHeaderCell>
                             <TableHeaderCell>Actions</TableHeaderCell>
                         </TableRow>
                     </TableHead>
@@ -45,6 +46,7 @@ const RoleListScreen = ({ selectedRole, roles }) => {
                                 <TableCell>{role.id}</TableCell>
                                 <TableCell>{role.name}</TableCell>
                                 <TableCell>{role.description}</TableCell>
+                                <TableCell>{role.grantedRank}</TableCell>
                                 <TableCell>
                                     <button
                                         type="button"

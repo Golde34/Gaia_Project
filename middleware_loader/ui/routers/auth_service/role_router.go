@@ -21,9 +21,9 @@ func NewRoleRouter(roleService *services.RoleService, db database_mongo.Database
 		r.Get("/get-all-roles", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetAllRoles(w, r, roleService)
 		})
-		// r.Post("/create-role", func(w http.ResponseWriter, r *http.Request) {
-		// 	controller_services.CreateRole(w, r, roleService)
-		// })
+		r.Post("/create-role", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.CreateRole(w, r, roleService)
+		})
 		r.Put("/update-role", func(w http.ResponseWriter, r *http.Request) {
 			// controller_services.UpdateRole(w, r, roleService)
 		})

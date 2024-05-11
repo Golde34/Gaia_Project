@@ -162,12 +162,15 @@ type Role struct {
 	ID          float64      `json:"id"`
 	Name        string       `json:"name"`
 	Description *string      `json:"description,omitempty"`
+	GrantedRank float64      `json:"grantedRank"`
 	Privileges  []*Privilege `json:"privileges"`
 }
 
 type RoleInput struct {
-	ID   *string `json:"id,omitempty"`
-	Name string  `json:"name"`
+	ID          *float64 `json:"id,omitempty"`
+	Name        string   `json:"name"`
+	Description *string  `json:"description,omitempty"`
+	GrantedRank float64  `json:"grantedRank"`
 }
 
 type RoleOnlyResponse struct {

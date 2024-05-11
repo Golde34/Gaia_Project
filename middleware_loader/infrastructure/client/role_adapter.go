@@ -6,6 +6,7 @@ import (
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
+	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
 )
 
@@ -48,7 +49,7 @@ func (adapter *RoleAdapter) CreateRole(input model.RoleInput) (response_dtos.Rol
 	return result.(response_dtos.RoleDTO), nil
 }
 
-func (adapter *RoleAdapter) UpdateRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+func (adapter *RoleAdapter) UpdateRole(input model.RoleInput) (response_dtos.RoleDTO, error) {
 	updateRoleURL := base.AuthServiceURL + "/role/update-role"
 	var role response_dtos.RoleDTO
 	result, err := utils.BaseAPIV2(updateRoleURL, "PUT", input, &role)
@@ -58,7 +59,7 @@ func (adapter *RoleAdapter) UpdateRole(input model.RoleInput) (response_dtos.Rol
 	return result.(response_dtos.RoleDTO), nil
 }
 
-func (adapter *RoleAdapter) DeleteRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+func (adapter *RoleAdapter) DeleteRole(input model.RoleInput) (response_dtos.RoleDTO, error) {
 	deleteRoleURL := base.AuthServiceURL + "/role/delete-role"
 	var role response_dtos.RoleDTO
 	result, err := utils.BaseAPIV2(deleteRoleURL, "DELETE", input, &role)
@@ -68,17 +69,17 @@ func (adapter *RoleAdapter) DeleteRole(input model.RoleInput) (response_dtos.Rol
 	return result.(response_dtos.RoleDTO), nil
 } 
 
-func (adapter *RoleAdapter) GetRole(input converter_dtos.NameConverterDTO) (response_dtos.RoleDTO) {
-	getRoleURL := basee.AuthServiceURL + "role/get-role"
+func (adapter *RoleAdapter) GetRole(input converter_dtos.NameConverterDTO) (response_dtos.RoleDTO, error) {
+	getRoleURL := base.AuthServiceURL + "role/get-role"
 	var role response_dtos.RoleDTO
 	result, err := utils.BaseAPIV2(getRoleURL, "GET", input, &role)
 	if err != nil {
-		return response_dtos.RoleDTO{}
+		return response_dtos.RoleDTO{}, err
 	}
 	return result.(response_dtos.RoleDTO), nil
 }
 
-func (adapter *RoleAdapter) AddPrivilegeToRole(input model.RoleInput) (response_dtos.RoleDTO, err) {
+func (adapter *RoleAdapter) AddPrivilegeToRole(input model.RoleInput) (response_dtos.RoleDTO, error) {
 	addPrivilegeURL := base.AuthServiceURL + "/add-privilege-to-role"
 	var role response_dtos.RoleDTO
 	result, err := utils.BaseAPIV2(addPrivilegeURL, "PUT", input, &role)
