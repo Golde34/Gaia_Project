@@ -23,7 +23,8 @@ public class Constants {
     }
 
     @UtilityClass
-    public static class AuthConfiguration {
+    public static class WOConfiguration {
         public static String SYSTEM_CACHE_RELOAD_MINUTE = "global.config.minute";
+        public static String CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS = "schedule.custom-algorithm.constant";
     } 
 }
