@@ -3,6 +3,7 @@ import { createGroupTask } from '../../api/store/actions/task_manager/group-task
 import { createProject } from '../../api/store/actions/task_manager/project.actions';
 import { createTask, generateTaskFromScratch } from '../../api/store/actions/task_manager/task.actions';
 import { updateUser } from '../../api/store/actions/auth_service/user.actions';
+import { createRole } from '../../api/store/actions/auth_service/role.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -52,4 +53,16 @@ export const useUpdateUserDispatch = () => {
     }
 
     return updateUserDispatch;
+}
+
+export const useCreateRoleDispatch = () => {
+    const dispatch = useDispatch();
+    console.log("useCreateRoleDispatch called")
+    const createRoleDispatch = (role) => {
+        console.log("createRoleDispatch called with role: ", role)
+        dispatch(createRole(role));
+        console.log("createRoleDispatch called failed.")
+    }
+
+    return createRoleDispatch;
 }
