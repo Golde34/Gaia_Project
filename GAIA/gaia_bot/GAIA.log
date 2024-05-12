@@ -1,3 +1,19 @@
-2024-05-05 19:04:59,822 - root - INFO - Microservice is running
-2024-05-05 19:05:00,275 - root - INFO - Bot wakeup...
-2024-05-05 19:05:00,275 - root - INFO - Listen command
+2024-05-12 12:27:27,094 - root - INFO - Microservice is running
+2024-05-12 12:27:27,537 - root - INFO - Bot wakeup...
+2024-05-12 12:27:27,537 - root - INFO - Listen command
+2024-05-12 12:34:18,017 - root - INFO - Handle input
+2024-05-12 12:34:20,956 - root - INFO - Skill tag:Greeting
+2024-05-12 12:34:20,956 - root - INFO - Response transcript with skill: Greeting
+2024-05-12 12:34:20,956 - root - INFO - Listen command
+2024-05-12 12:34:25,354 - root - INFO - Handle input
+2024-05-12 12:34:27,533 - root - INFO - Skill tag:Greeting
+2024-05-12 12:34:27,533 - root - INFO - Response transcript with skill: Greeting
+2024-05-12 12:34:27,533 - root - INFO - Listen command
+2024-05-12 12:34:35,175 - root - INFO - Handle input
+2024-05-12 12:34:37,277 - root - INFO - Skill tag:Greeting
+2024-05-12 12:34:37,277 - root - INFO - Response transcript with skill: Greeting
+2024-05-12 12:34:37,277 - root - INFO - Listen command
+2024-05-12 12:34:43,100 - root - INFO - Handle input
+2024-05-12 12:34:45,656 - root - INFO - Skill tag:Greeting
+2024-05-12 12:34:45,656 - root - INFO - Response transcript with skill: Greeting
+2024-05-12 12:34:45,656 - root - INFO - Listen command

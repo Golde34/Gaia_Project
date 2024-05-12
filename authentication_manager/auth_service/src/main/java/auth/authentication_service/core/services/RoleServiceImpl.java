@@ -9,6 +9,7 @@ import auth.authentication_service.core.exceptions.BusinessException;
 import auth.authentication_service.core.port.mapper.RoleMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,7 @@ public class RoleServiceImpl implements RoleService {
             Role newRole = roleMapper.map(roleDto);
             saveRole(newRole);
             updateRoleHierarchy();
+            log.info("End create role process");
             return genericResponse.matchingResponseMessage(new GenericResponse<>(newRole, ResponseEnum.msg200));
         } catch (BusinessException e) {
             log.error("Create role failed", e);
