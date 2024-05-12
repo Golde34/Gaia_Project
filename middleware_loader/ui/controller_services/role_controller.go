@@ -1,7 +1,6 @@
 package controller_services
 
 import (
-	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/auth_services"
@@ -28,7 +27,6 @@ func CreateRole(w http.ResponseWriter, r *http.Request, roleService *services.Ro
 	}
 
 	input := mapper.CreateRoleRequestMapper(body)
-	log.Println(input)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "createRole", QueryInput: input, QueryOutput: model.Role{}})
