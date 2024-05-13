@@ -10,6 +10,10 @@ public class CustomModel {
     private final double c2 = -0.24;    // Constant 2
     private final double c3 = 0;        // Constant 3
 
+    private double p0;
+    private double k;
+    private double alpha;
+
     private double t;                   // Time
     private double effort;              // 1 <= E <= 5
     private double enjoyability;        // 1 <= B <= 2
@@ -26,70 +30,68 @@ public class CustomModel {
     }
 
     private double calculateFlowState() {
-        defineInputBoundary();
         return c1*this.effort + c2*this.enjoyability + c3;
     }
 
-    private double calculateInitialProductivity() {
-        return Math.pow(this.enjoyability, 2) / Math.pow(this.effort, 2);
+    private void calculateK(double t) {
+        double onePerFlowState = t / calculateFlowState();
+        setK(onePerFlowState);
     }
 
-    private double calculateAlpha() {
-        return Math.pow(this.enjoyability, 2) * Math.log(this.effort)+ Math.pow(this.enjoyability, 2);
+    private void calculateInitialProductivity() {
+        double initialProductivity = Math.pow(this.enjoyability, 2) / Math.pow(this.effort, 2);
+        setP0(initialProductivity);
+    }
+
+    private void calculateAlpha() {
+        double a = Math.pow(this.enjoyability, 2) * Math.log(this.effort)+ Math.pow(this.enjoyability, 2);
+        setAlpha(a);
     }
 
     public double calculateProductivityCurve(double t) {
-        // Initial productivity
-        double p0 = calculateInitialProductivity();
-        // derivative score
-        double k = -(double) (t / calculateFlowState());
-        // Model score
-        double alpha = calculateAlpha();
-        return p0 + alpha * t * Math.exp(k);
+        return this.p0 + this.alpha * t * Math.exp(this.k * -1);
     }
 
-    public double solveIntegral() {
-        double a = solveEquation();
-        return a * calculateFlowState();
+    public double optimizeTaskTime() {
+        defineInputBoundary();
+        calculateAlpha();
+        return solveEquation();
+    }
+
+    private double getFunction(double t, double flowState) {
+        return this.alpha * Math.exp(-t / flowState) * (Math.pow(t, 2) / Math.pow(flowState, 2) + t / flowState + 1) - this.alpha;
+    }
+
+    private double getDerivative(double t, double flowState) {
+        return -alpha * Math.exp(-t / flowState) * (2 * t / Math.pow(flowState, 3) + 1 / Math.pow(flowState, 2));
     }
 
     public double solveEquation() {
-        double initialGuess = 1.75f; // Initial guess for a
-        double tolerance = 0.000001; // Tolerance level for convergence
+        double flowState = calculateFlowState();
+        double t = 1;
+        int maxIterations = 1000;
+        double tolerance = 1e-6;
 
-        // Call the Newton-Raphson method to find the root
-        double solution = newtonRaphson(initialGuess, tolerance);
-        System.out.println(solution);
-        return solution;
-    }
-    // Define the function f(a) = e^(-a) - (a^2 + a + 1)
-    public static double f(double a) {
-        return Math.exp(-a) - (a * a + a + 1);
-    }
+        for (int i = 0; i < maxIterations; i++) {
+            double f = getFunction(t, flowState);
+            double fPrime = getDerivative(t, flowState);
 
-    // Define the derivative of the function f'(a) = -e^(-a) - 2a - 1
-    public static double df(double a) {
-        return -Math.exp(-a) - 2 * a - 1;
-    }
+            // Update the guess using the Newton-Raphson formula
+            double nextGuess = t - f / fPrime;
 
-    // Implement the Newton-Raphson method
-    public static double newtonRaphson(double initialGuess, double tolerance) {
-        double a = initialGuess;
-        double aPrev;
+            if (Math.abs(nextGuess - t) < tolerance) {
+                return nextGuess;
+            }
 
-        do {
-            aPrev = a;
-            a = a - f(a) / df(a);
-            double temp = Math.abs(a - aPrev);
-            System.out.println(temp);
-        } while (Math.abs(a - aPrev) > tolerance);
+            t = nextGuess;
+        }
 
-        return a;
+        return Double.NaN;
     }
 
     public static void main(String[] args) {
         CustomModel customModel = new CustomModel(7, 3, 0);
-        double t = customModel.solveIntegral();
+        double t = customModel.optimizeTaskTime();
         System.out.println(t);
     }
 }
