@@ -25,7 +25,7 @@ public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponse
     @Override
     public TaskResponseDTO doSchedule(TaskRequestDTO request) {
         CustomModel customModel = new CustomModel(request.getEffort(), request.getEnjoyability(), request.getDuration());
-        double result = customModel.solveIntegral();
+        double result = customModel.solveEquation();
         return TaskResponseDTO.builder().schedule(String.valueOf(result)).build();
     }
 

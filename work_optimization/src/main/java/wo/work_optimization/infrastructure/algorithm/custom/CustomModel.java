@@ -3,6 +3,17 @@ package wo.work_optimization.infrastructure.algorithm.custom;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.math3.analysis.MultivariateFunction;
+import org.apache.commons.math3.optim.InitialGuess;
+import org.apache.commons.math3.optim.MaxEval;
+import org.apache.commons.math3.optim.SimpleValueChecker;
+import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
+import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
+import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
+import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer.Formula;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
+
 @Getter
 @Setter
 public class CustomModel {
@@ -49,11 +60,14 @@ public class CustomModel {
     }
 
     public double calculateProductivityCurve(double t) {
+        calculateInitialProductivity();
+        calculateAlpha();
+        calculateK(t);
         return this.p0 + this.alpha * t * Math.exp(this.k * -1);
     }
 
     public double optimizeTaskTime() {
-        defineInputBoundary();
+//        defineInputBoundary();
         calculateAlpha();
         return solveEquation();
     }
@@ -89,9 +103,71 @@ public class CustomModel {
         return Double.NaN;
     }
 
+//    public static void main(String[] args) {
+//        CustomModel customModel = new CustomModel(4.11, 1.22, 0);
+//        double t = customModel.optimizeTaskTime(); // Max time được thực hiện task
+//        System.out.println(t);
+//        double pt = customModel.calculateProductivityCurve(t);
+//        System.out.println(pt);
+//        System.out.println(0.8215125208403288 + 2.156742825380549 + 1.2862060639064254 + 2.2415182525369306);
+//    }
+
+
+
+
     public static void main(String[] args) {
-        CustomModel customModel = new CustomModel(7, 3, 0);
-        double t = customModel.optimizeTaskTime();
-        System.out.println(t);
+        double[] p0 = {0.34, 0.20, 0.33, 0.09}; // Khởi tạo mảng p0
+        double[] k = {1.26, 0.69, 1.01, 0.50}; // Khởi tạo mảng k1
+        double[] a = {2.02, 4.50, 3.27, 3.57};  // Khởi tạo mảng a
+        double T = 6;                          // Tổng thời gian có sẵn
+
+        // Khởi tạo mảng t ban đầu
+        double[] initialT = {T / 4, T / 4, T / 4, T / 4};
+
+        SimplexOptimizer optimizer = new SimplexOptimizer(1e-6, 1e-6);
+        double[] optimizedT = optimizer.optimize(
+                new ObjectiveFunction(new ProductivityFunction(p0, a, k)),
+                new InitialGuess(initialT),
+                GoalType.MAXIMIZE,
+                new NelderMeadSimplex(4), // 4-dimensional simplex
+                new MaxEval(1000)
+        ).getPoint();
+
+        double sum = 0;
+        System.out.println("Optimized Time Allocation:");
+        for (double t : optimizedT) {
+            System.out.println(t);
+            sum += t;
+        }
+        System.out.println("Sum: " + sum);
+    }
+    static class ProductivityFunction implements MultivariateFunction {
+        double[] p0, a, k;
+        double T = 6.0;  // Tổng thời gian sẵn có
+
+        public ProductivityFunction(double[] p0, double[] a, double[] k) {
+            this.p0 = p0;
+            this.a = a;
+            this.k = k;
+        }
+
+        @Override
+        public double value(double[] t) {
+            double sum = 0;
+            double lastT = T;
+            for (int i = 0; i < t.length - 1; i++) {
+                lastT -= t[i];
+            }
+            t[t.length - 1] = lastT; // Đảm bảo tổng thời gian là T
+            for (int i = 0; i < t.length; i++) {
+                double productivity = (p0[i] * Math.pow(k[i], 2) * t[i] - a[i] * Math.exp(-k[i] * t[i]) * (k[i] * t[i] + 1) + a[i]) / (Math.pow(k[i], 2) * t[i]);
+                sum += productivity;
+            }
+            return sum;
+        }
     }
 }
+// 0.8215125208403288
+// 2.156742825380549
+// 1.2862060639064254
+// 2.2415182525369306
