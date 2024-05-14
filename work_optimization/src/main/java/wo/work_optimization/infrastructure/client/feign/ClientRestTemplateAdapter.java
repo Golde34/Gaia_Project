@@ -1,20 +1,12 @@
 package wo.work_optimization.infrastructure.client.feign;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHost;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
-import wo.work_optimization.core.port.client.ClientTemplate;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import wo.work_optimization.core.port.client.ClientTemplate;
 
 @Component
 @Slf4j
@@ -23,11 +15,6 @@ public class ClientRestTemplateAdapter implements ClientTemplate {
     private static final String RESPONSE = "REST RESPONSE: STATUS[{}], MESSAGE[{}], BODY[{}]";
 
     private final RestTemplate restTemplate;
-
-    @Value("${rest.core-service.proxy-host}")
-    private String proxyHost;
-    @Value("${rest.core-service.proxy-port}")
-    private Integer proxyPort;
 
     public ClientRestTemplateAdapter(@Qualifier("woRestTemplate") RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
