@@ -1,9 +1,7 @@
 package wo.work_optimization.infrastructure.client.feign;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import wo.work_optimization.core.port.client.ClientTemplate;
 
 import org.springframework.beans.factory.annotation.Qualifier;

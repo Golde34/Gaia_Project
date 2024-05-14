@@ -1,9 +1,7 @@
 package wo.work_optimization.infrastructure.algorithm.custom;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.math3.linear.*;

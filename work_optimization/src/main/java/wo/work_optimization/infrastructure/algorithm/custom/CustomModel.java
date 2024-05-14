@@ -11,6 +11,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 @Getter
@@ -28,11 +29,13 @@ public class CustomModel {
     private double maximumWorkTime;     // Maximum Work Time
     private double[] effort;              // 1 <= E <= 5
     private double[] enjoyability;        // 1 <= B <= 2
+    private int taskLength;
 
-    public CustomModel(double[] effort, double[] enjoyability, double maximumWorkTime) {
+    public CustomModel(double[] effort, double[] enjoyability, double maximumWorkTime, int taskLength) {
         this.effort = convertEffortValues(effort);
         this.enjoyability = convertEnjoyabilityValues(enjoyability);
         this.maximumWorkTime = maximumWorkTime;
+        this.taskLength = taskLength;
         this.p0 = this.calculateInitialProductivity(this.effort, this.enjoyability);
         this.k = this.calculateK(this.effort, this.enjoyability);
         this.alpha = this.calculateAlpha(this.effort, this.enjoyability);
@@ -62,25 +65,25 @@ public class CustomModel {
     }
 
     private double[] calculateFlowState(double[] effort, double[] enjoyability) {
-        return IntStream.range(0, effort.length).mapToDouble(
+        return IntStream.range(0, taskLength).mapToDouble(
                 i -> c1 * effort[i] + c2 * enjoyability[i] + c3
         ).toArray();
     }
 
     private double[] calculateK(double[] effort, double[] enjoyability) {
-        return IntStream.range(0, effort.length).mapToDouble(
+        return IntStream.range(0, taskLength).mapToDouble(
                 i -> 1 / (c1 * effort[i] + c2 * enjoyability[i] + c3)
         ).toArray();
     }
 
     private double[] calculateInitialProductivity(double[] effort, double[] enjoyability) {
-        return IntStream.range(0, effort.length).mapToDouble(
+        return IntStream.range(0, taskLength).mapToDouble(
                 i -> Math.pow(enjoyability[i], 2) / Math.pow(effort[i], 2)
         ).toArray();
     }
 
     private double[] calculateAlpha(double[] effort, double[] enjoyability) {
-        return IntStream.range(0, effort.length).mapToDouble(
+        return IntStream.range(0, taskLength).mapToDouble(
                 i -> Math.pow(enjoyability[i], 2) * Math.log(effort[i]) + Math.pow(enjoyability[i], 2)
         ).toArray();
     }
@@ -103,11 +106,9 @@ public class CustomModel {
 
             // Update the guess using the Newton-Raphson formula
             double nextGuess = t - f / fPrime;
-
             if (Math.abs(nextGuess - t) < tolerance) {
                 return nextGuess;
             }
-
             t = nextGuess;
         }
 
@@ -123,9 +124,9 @@ public class CustomModel {
     }
 
     public void optimize() {
-        double[] initialT = new double[effort.length];
-        for (int i = 0; i < effort.length; i++) {
-            initialT[i] = maximumWorkTime / effort.length;
+        double[] initialT = new double[taskLength];
+        for (int i = 0; i < taskLength; i++) {
+            initialT[i] = maximumWorkTime / taskLength;
         }
 
         SimplexOptimizer optimizer = new SimplexOptimizer(1e-6, 1e-6);
@@ -133,20 +134,21 @@ public class CustomModel {
                 new ObjectiveFunction(new ProductivityFunction(p0, alpha, k)),
                 new InitialGuess(initialT),
                 GoalType.MAXIMIZE,
-                new NelderMeadSimplex(effort.length), // 4-dimensional simplex
+                new NelderMeadSimplex(taskLength), // taskLength-dimensional simplex
                 new MaxEval(1000)
         ).getPoint();
 
-        double sum = 0;
+        AtomicReference<Double> sum = new AtomicReference<>((double) 0);
         System.out.println("Optimized Time Allocation:");
-        // index loop
-        for (int i = 0; i < optimizedT.length; i++) {
-            System.out.printf("Productivity Curve: %s + %s * t * e ^ -(%s * t)%n", p0[i], alpha[i], k[i]);
-            System.out.println("Productivity Curve value: " + calculateProductivityCurve(p0[i], alpha[i], k[i], optimizedT[i]));
-            System.out.println("Average stop time: " + getMaximumDeepWorkTimePerTask(alpha[i], phi[i]));
-            System.out.println("Final T: " + optimizedT[i]);
-            sum += optimizedT[i];
-        }
+
+        IntStream.range(0, taskLength)
+                .forEach(index -> {
+                    System.out.printf("Productivity Curve: %s + %s * t * e ^ -(%s * t)%n", p0[index], alpha[index], k[index]);
+                    System.out.println("Productivity Curve value: " + calculateProductivityCurve(p0[index], alpha[index], k[index], optimizedT[index]));
+                    System.out.println("Average stop time: " + getMaximumDeepWorkTimePerTask(alpha[index], phi[index]));
+                    System.out.println("Final T: " + optimizedT[index]);
+                    sum.updateAndGet(v -> v + optimizedT[index]);
+                });
         System.out.println("Sum: " + sum);
     }
 
@@ -180,14 +182,9 @@ public class CustomModel {
         double[] effort = {3, 6, 4, 8, 7}; // Khởi tạo mảng p0
         double[] enjoyability = {2, 5, 4, 3, 3}; // Khởi tạo mảng k1
         double T = 6;                          // Tổng thời gian có sẵn
+        int taskLength = effort.length;
 
-        CustomModel customModel = new CustomModel(effort, enjoyability, T);
+        CustomModel customModel = new CustomModel(effort, enjoyability, T, taskLength);
         customModel.optimize();
     }
 }
-
-
-// 0.8215125208403288
-// 2.156742825380549
-// 1.2862060639064254
-// 2.2415182525369306
