@@ -17,21 +17,25 @@ import java.util.stream.IntStream;
 @Getter
 @Setter
 public class CustomModel {
-    private final double c1 = 0.56;     // Constant 1
-    private final double c2 = -0.24;    // Constant 2
-    private final double c3 = 0;        // Constant 3
+    private double c1; // Constant 1
+    private double c2; // Constant 2
+    private double c3; // Constant 3
+
+    private double maximumWorkTime; // Maximum Work Time
+    private double[] effort; // 1 <= E <= 5
+    private double[] enjoyability; // 1 <= B <= 2
+    private int taskLength;
 
     private double[] p0;
     private double[] k;
     private double[] alpha;
     private double[] phi;
 
-    private double maximumWorkTime;     // Maximum Work Time
-    private double[] effort;              // 1 <= E <= 5
-    private double[] enjoyability;        // 1 <= B <= 2
-    private int taskLength;
-
-    public CustomModel(double[] effort, double[] enjoyability, double maximumWorkTime, int taskLength) {
+    public CustomModel(double c1, double c2, double c3, double[] effort,
+            double[] enjoyability, double maximumWorkTime, int taskLength) {
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
         this.effort = convertEffortValues(effort);
         this.enjoyability = convertEnjoyabilityValues(enjoyability);
         this.maximumWorkTime = maximumWorkTime;
@@ -59,40 +63,38 @@ public class CustomModel {
      * @param t     time
      * @return productivityCurveMaxValue
      */
-
     public double calculateProductivityCurve(double p0, double alpha, double k, double t) {
         return p0 + alpha * t * Math.exp(k * -1);
     }
 
     private double[] calculateFlowState(double[] effort, double[] enjoyability) {
         return IntStream.range(0, taskLength).mapToDouble(
-                i -> c1 * effort[i] + c2 * enjoyability[i] + c3
-        ).toArray();
+                i -> c1 * effort[i] + c2 * enjoyability[i] + c3).toArray();
     }
 
     private double[] calculateK(double[] effort, double[] enjoyability) {
         return IntStream.range(0, taskLength).mapToDouble(
-                i -> 1 / (c1 * effort[i] + c2 * enjoyability[i] + c3)
-        ).toArray();
+                i -> 1 / (c1 * effort[i] + c2 * enjoyability[i] + c3)).toArray();
     }
 
     private double[] calculateInitialProductivity(double[] effort, double[] enjoyability) {
         return IntStream.range(0, taskLength).mapToDouble(
-                i -> Math.pow(enjoyability[i], 2) / Math.pow(effort[i], 2)
-        ).toArray();
+                i -> Math.pow(enjoyability[i], 2) / Math.pow(effort[i], 2)).toArray();
     }
 
     private double[] calculateAlpha(double[] effort, double[] enjoyability) {
         return IntStream.range(0, taskLength).mapToDouble(
-                i -> Math.pow(enjoyability[i], 2) * Math.log(effort[i]) + Math.pow(enjoyability[i], 2)
-        ).toArray();
+                i -> Math.pow(enjoyability[i], 2) * Math.log(effort[i]) + Math.pow(enjoyability[i], 2)).toArray();
     }
 
     /**
      * When to stop doing a task
-     * Measure the best time to do a task, that time to execute task not too long that you will burn out
+     * Measure the best time to do a task, that time to execute task not too long
+     * that you will burn out
      * or not too short that you not get enough value to your task
      *
+     * @param alpha     alpha
+     * @param flowState flowState
      * @return time
      */
     public double getMaximumDeepWorkTimePerTask(double alpha, double flowState) {
@@ -123,6 +125,10 @@ public class CustomModel {
         return -alpha * Math.exp(-t / flowState) * (2 * t / Math.pow(flowState, 3) + 1 / Math.pow(flowState, 2));
     }
 
+    /**
+     * Optimize the time allocation for each task
+     * Using Zenith gradient algorithm
+     */
     public void optimize() {
         double[] initialT = new double[taskLength];
         for (int i = 0; i < taskLength; i++) {
@@ -135,16 +141,17 @@ public class CustomModel {
                 new InitialGuess(initialT),
                 GoalType.MAXIMIZE,
                 new NelderMeadSimplex(taskLength), // taskLength-dimensional simplex
-                new MaxEval(1000)
-        ).getPoint();
+                new MaxEval(1000)).getPoint();
 
         AtomicReference<Double> sum = new AtomicReference<>((double) 0);
         System.out.println("Optimized Time Allocation:");
 
         IntStream.range(0, taskLength)
                 .forEach(index -> {
-                    System.out.printf("Productivity Curve: %s + %s * t * e ^ -(%s * t)%n", p0[index], alpha[index], k[index]);
-                    System.out.println("Productivity Curve value: " + calculateProductivityCurve(p0[index], alpha[index], k[index], optimizedT[index]));
+                    System.out.printf("Productivity Curve: %s + %s * t * e ^ -(%s * t)%n", p0[index], alpha[index],
+                            k[index]);
+                    System.out.println("Productivity Curve value: "
+                            + calculateProductivityCurve(p0[index], alpha[index], k[index], optimizedT[index]));
                     System.out.println("Average stop time: " + getMaximumDeepWorkTimePerTask(alpha[index], phi[index]));
                     System.out.println("Final T: " + optimizedT[index]);
                     sum.updateAndGet(v -> v + optimizedT[index]);
@@ -152,9 +159,13 @@ public class CustomModel {
         System.out.println("Sum: " + sum);
     }
 
-    static class ProductivityFunction implements MultivariateFunction {
+    private double lagrangeFunction(double p0, double alpha, double k, double t) {
+        return (p0 * Math.pow(k, 2) * t - alpha * Math.exp(-k * t) * (k * t + 1) + alpha) / (Math.pow(k, 2) * t);
+    }
+
+    class ProductivityFunction implements MultivariateFunction {
         double[] p0, a, k;
-        double T = 6.0;  // Tổng thời gian sẵn có
+        double T = 6.0; // Tổng thời gian sẵn có
 
         public ProductivityFunction(double[] p0, double[] a, double[] k) {
             this.p0 = p0;
@@ -171,20 +182,21 @@ public class CustomModel {
             }
             t[t.length - 1] = lastT; // Đảm bảo tổng thời gian là T
             for (int i = 0; i < t.length; i++) {
-                double productivity = (p0[i] * Math.pow(k[i], 2) * t[i] - a[i] * Math.exp(-k[i] * t[i]) * (k[i] * t[i] + 1) + a[i]) / (Math.pow(k[i], 2) * t[i]);
+                double productivity = lagrangeFunction(p0[i], a[i], k[i], t[i]);
                 sum += productivity;
             }
             return sum;
         }
     }
 
-    public static void main(String[] args) {
-        double[] effort = {3, 6, 4, 8, 7}; // Khởi tạo mảng p0
-        double[] enjoyability = {2, 5, 4, 3, 3}; // Khởi tạo mảng k1
-        double T = 6;                          // Tổng thời gian có sẵn
-        int taskLength = effort.length;
+    // public static void main(String[] args) {
+    // double[] effort = {3, 6, 4, 8, 7}; // Khởi tạo mảng p0
+    // double[] enjoyability = {2, 5, 4, 3, 3}; // Khởi tạo mảng k1
+    // double T = 6; // Tổng thời gian có sẵn
+    // int taskLength = effort.length;
 
-        CustomModel customModel = new CustomModel(effort, enjoyability, T, taskLength);
-        customModel.optimize();
-    }
+    // CustomModel customModel = new CustomModel(effort, enjoyability, T,
+    // taskLength);
+    // customModel.optimize();
+    // }
 }

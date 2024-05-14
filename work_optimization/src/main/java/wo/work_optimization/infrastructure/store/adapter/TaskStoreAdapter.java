@@ -42,4 +42,10 @@ public class TaskStoreAdapter implements TaskStore {
     public List<Task> findAllBySchedulePlan(String scheduleId) {
         return taskRepository.findBySchedulePlanId(scheduleId);
     }
+
+    @Override
+    public void save(Task task) {
+        taskRepository.save(task);
+        log.info("Task saved: {}", task);
+    }
 }

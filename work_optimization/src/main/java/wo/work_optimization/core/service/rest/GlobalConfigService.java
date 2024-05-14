@@ -6,7 +6,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,20 +32,19 @@ public class GlobalConfigService {
     WOServiceRepository globalConfigRepository;
 
     private LoadingCache<String, String> globalConfigCache;
-    
+
     @PostConstruct
     public void init() {
         long reloadMin = Long.parseLong(findParam(Constants.WOConfiguration.SYSTEM_CACHE_RELOAD_MINUTE));
-        globalConfigCache =
-                CacheBuilder.newBuilder()
-                        .maximumSize(100000)
-                        .refreshAfterWrite(reloadMin, TimeUnit.MINUTES)
-                        .build(
-                                new CacheLoader<String, String>() {
-                                    public String load(String key) { // no checked exception
-                                        return findParam(key);
-                                    }
-                                });
+        globalConfigCache = CacheBuilder.newBuilder()
+                .maximumSize(100000)
+                .refreshAfterWrite(reloadMin, TimeUnit.MINUTES)
+                .build(
+                        new CacheLoader<String, String>() {
+                            public String load(String key) { // no checked exception
+                                return findParam(key);
+                            }
+                        });
     }
 
     private String getGlobalParamCache(String paramName) {
@@ -61,14 +63,13 @@ public class GlobalConfigService {
     }
 
     private String findParam(String paramName) {
-        WOServiceConfiguration globalConfig =
-                globalConfigRepository
-                        .findParam(paramName)
-                        .orElseGet(
-                                () -> {
-                                    log.warn("Cannot find param name {}", paramName);
-                                    return null;
-                                });
+        WOServiceConfiguration globalConfig = globalConfigRepository
+                .findParam(paramName)
+                .orElseGet(
+                        () -> {
+                            log.warn("Cannot find param name {}", paramName);
+                            return null;
+                        });
         return globalConfig == null ? StringUtils.EMPTY : globalConfig.getParamValue();
     }
 
@@ -120,6 +121,14 @@ public class GlobalConfigService {
                 .collect(Collectors.toList());
     }
 
+    public RealVector getGlobalParamAsRealVector(String paramName) {
+        List<Double> globalParam = getGlobalParamAsListDouble(paramName);
+        RealVector realVector = new ArrayRealVector(globalParam.size());
+        IntStream.range(0, globalParam.size())
+                .forEach(i -> realVector.setEntry(i, globalParam.get(i)));
+        return realVector;
+    }
+
     public void setParamConfig(String paramName, String paramValue) {
         try {
             Optional<WOServiceConfiguration> woServiceConfig = globalConfigRepository.findParam(paramName);
@@ -132,5 +141,3 @@ public class GlobalConfigService {
         }
     }
 }
-
-
