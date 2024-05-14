@@ -35,25 +35,4 @@ public interface ClientTemplate {
     <R> ResponseEntity<R> put(String uri, HttpHeaders headers, Object body, Class<R> responseClass);
 
     <R> ResponseEntity<R> put(String uri, HttpHeaders headers, Object body, ParameterizedTypeReference<R> responseClass);
-
-    <R> ResponseEntity<R> putByProxy(String uri, HttpHeaders headers, Object body, Class<R> responseClass);
-
-    <R> ResponseEntity<R> putByProxy(String uri, HttpHeaders headers, Object body, ParameterizedTypeReference<R> responseClass);
-
-    <R> ResponseEntity<R> getByProxy(String uri, HttpHeaders headers, Class<R> responseClass, Object... uriVariables);
-
-    <R> ResponseEntity<R> getByProxy(String uri, HttpHeaders headers, ParameterizedTypeReference<R> responseClass, Object... uriVariables);
-
-    /**
-     * POST asynchronous
-     *
-     * @param uri           uri
-     * @param headers       http headers
-     * @param body          class của body request
-     * @param responseClass class của response
-     * @return responseDTO
-     */
-    <R> ResponseEntity<R> postByProxy(String uri, HttpHeaders headers, Object body, Class<R> responseClass);
-
-    <R> ResponseEntity<R> postByProxy(String uri, HttpHeaders headers, Object body, ParameterizedTypeReference<R> responseClass);
 }

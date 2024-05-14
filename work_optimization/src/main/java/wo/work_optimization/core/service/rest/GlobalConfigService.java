@@ -114,6 +114,12 @@ public class GlobalConfigService {
                 .collect(Collectors.toList());
     }
 
+    public List<Double> getGlobalParamAsListDouble(String paramName) {
+        return Arrays.stream(StringUtils.split(getGlobalParamCache(paramName), ";"))
+                .map(Double::valueOf)
+                .collect(Collectors.toList());
+    }
+
     public void setParamConfig(String paramName, String paramValue) {
         try {
             Optional<WOServiceConfiguration> woServiceConfig = globalConfigRepository.findParam(paramName);
