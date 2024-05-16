@@ -1,9 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
-import { ActiveStatus, Priority, Status } from "../domain/enums/enums";
 import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
-import { GroupTaskEntity } from "../domain/entities/group-task.entity";
-import { ITaskEntity, TaskEntity } from "../domain/entities/task.entity";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
 import { projectService } from "./project.service";
@@ -15,6 +12,7 @@ import { groupTaskStore } from "../store/group-task.store";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka_config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create_message";
+import { ITaskEntity } from "../../infrastructure/entities/task.entity";
 
 class TaskService {
     constructor(

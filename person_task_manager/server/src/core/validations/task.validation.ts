@@ -1,4 +1,4 @@
-import { TaskEntity } from "../domain/entities/task.entity"
+import { TaskEntity } from "../../infrastructure/entities/task.entity";
 
 export const taskValidation = {
     async checkExistedTaskByTaskId(taskId: string): Promise<boolean> {

@@ -1,7 +1,7 @@
+import { TaskEntity } from "../../infrastructure/entities/task.entity";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
-import { TaskEntity } from "../domain/entities/task.entity";
 import { groupTaskStore } from "../store/group-task.store";
 import { projectStore } from "../store/project.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
