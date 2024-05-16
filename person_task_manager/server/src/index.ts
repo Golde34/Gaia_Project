@@ -13,6 +13,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { msg200 } from "./core/common/response_helpers";
+import { userTagRouter } from "./ui/routers/user-tag.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -53,6 +54,7 @@ async function main(): Promise<void> {
     app.use("/task", taskRouter);
     app.use("/sub-task", subTaskRouter);
     app.use("/comment", commentRouter);
+    app.use("/user-tag", userTagRouter);
 
     app.use((req: Request, res: Response, next: NextFunction) => next(new Error("Not Found")))
 
