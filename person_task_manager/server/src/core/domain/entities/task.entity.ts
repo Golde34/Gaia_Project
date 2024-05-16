@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../enums/enums";
+import { TaskTag, tagSchema } from "./sub-entities/tag.sub-entity";
 
 export interface ITaskEntity extends Document {
     _id: string;
@@ -17,6 +18,7 @@ export interface ITaskEntity extends Document {
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
+    tag: TaskTag
 }
 
 export const taskSchema = new mongoose.Schema(
@@ -72,6 +74,10 @@ export const taskSchema = new mongoose.Schema(
             enum: Object.values(ActiveStatus),
             default: ActiveStatus.active,
         },
+        tag: {
+            type: [tagSchema],
+            require: true,
+        }
     },
     {
         toJSON: { virtuals: true },
