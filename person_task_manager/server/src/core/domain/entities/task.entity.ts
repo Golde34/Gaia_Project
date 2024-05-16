@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../enums/enums";
-import { TaskTag, tagSchema } from "./sub-entities/tag.sub-entity";
+import { TaskTag } from "../dtos/request_dtos/tag.dto";
 
 export interface ITaskEntity extends Document {
     _id: string;
@@ -75,7 +75,7 @@ export const taskSchema = new mongoose.Schema(
             default: ActiveStatus.active,
         },
         tag: {
-            type: [tagSchema],
+            type: Object,
             require: true,
         }
     },

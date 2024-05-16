@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
-import { TaskTagRequest } from "./request_dtos/task-tag-request.dto";
+import { TaskTagRequest } from "./request_dtos/tag.dto";
 
 export class TaskRequestDto {
     @IsString()
@@ -21,10 +21,8 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     duration?: number;
-    @IsString()
     @IsOptional()
     subTasks?: string[];
-    @IsString()
     @IsOptional()
     comments?: string[];
     @IsString()

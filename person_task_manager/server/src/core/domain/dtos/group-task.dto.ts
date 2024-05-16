@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
-import { TaskTagRequest } from "./request_dtos/task-tag-request.dto";
+import { TaskTagRequest } from "./request_dtos/tag.dto";
 
 export class GroupTaskRequestDto {
     @IsString()

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IGroupTaskEntity } from "./group-task.entity";
 import { ActiveStatus } from "../enums/enums";
-import { TaskTag, tagSchema } from "./sub-entities/tag.sub-entity";
+import { TaskTag } from "../dtos/request_dtos/tag.dto";
 
 export interface IProjectEntity extends Document {
     _id: string;
@@ -59,7 +59,7 @@ export const projectSchema = new mongoose.Schema(
             required: true,
         },
         tag: {
-            type: [tagSchema],
+            type: Object,
             require: true,
         }
     },
