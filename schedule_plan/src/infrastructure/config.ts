@@ -22,18 +22,10 @@ interface Configuration {
     server: {
         listenPort: number;
     };
-    authServer: {
-        host: string;
-        port: number;
-    };
-    jwt: {
-        accessSecret: string;
-        refreshSecret: string;
-    };
     kafka: {
         bootstrapServers: string;
         groupId: string;
-    }
+    };
 }
 
 export const config: Configuration = {
@@ -45,15 +37,7 @@ export const config: Configuration = {
         password: process.env.DATABASE_PASSWORD ?? 'root',
     },
     server: {
-        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3000,
-    },
-    authServer: {
-        host: process.env.AUTH_SERVICE_HOST ?? 'localhost',
-        port: Number(String(process.env.AUTH_SERVICE_PORT)) ?? 4001,
-    },
-    jwt: {
-        accessSecret: String(process.env.ACCESS_SECRET),
-        refreshSecret: String(process.env.REFRESH_SECRET)
+        listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3002,
     },
     kafka: {
         bootstrapServers: process.env.KAFKA_BOOTSTRAP_SERVERS ?? 'localhost:9094',

@@ -34,3 +34,5 @@ async function main(): Promise<void> {
         console.log(`Server is running on port ${config.server.listenPort}`);
     })
 }
+
+main();
