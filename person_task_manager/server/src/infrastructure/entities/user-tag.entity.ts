@@ -6,8 +6,6 @@ export interface IUserTagEntity extends Document {
     name: string;
     color: string;
     weight: number;
-    createdAt: Date;
-    updatedAt: Date;
     activeStatus: ActiveStatus;
     ownerId: number;
 }
@@ -26,18 +24,14 @@ export const userTagSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        createdAt: {
-            type: Date,
-            required: false,
-        },
-        updatedAt: {
-            type: Date,
-            required: false,
-        },
         activeStatus: {
             type: String,
             required: true,
         },
+        ownerId: {
+            type: Number,
+            required: true,
+        }
     },
     {
         toJSON: { virtuals: true },
