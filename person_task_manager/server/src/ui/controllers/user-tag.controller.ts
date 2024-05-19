@@ -5,17 +5,6 @@ import { userTagService } from "../../core/services/user-tag.service";
 class UserTagController {
     constructor() {}
 
-//     async getUserTagListByUserId(req: Request, next: NextFunction): Promise<IResponse> {
-//         try {
-//             const userId = req.params.id;
-//             const userTagListResult = await userTagService.(userId);
-
-//             return userTagListResult;
-//         } catch (err) {
-//             next(err);
-//         }
-//     }
-
     async createUserTag(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const bodyJson = req.body;

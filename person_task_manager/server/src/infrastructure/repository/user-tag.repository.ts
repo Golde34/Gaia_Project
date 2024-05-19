@@ -26,6 +26,18 @@ class UserTagRepository {
         });
     }
 
+    async findTagByUserIdAndTagName(userId: number, tagName: string): Promise<IUserTagEntity | null> {
+        return await UserTagEntity.findOne({
+            ownerId: userId,
+            tagName: tagName,
+            ActiveStatus: ActiveStatus.active
+        });
+    }
+
+    async findOneTag(tagId: string): Promise<IUserTagEntity | null> {
+        return await UserTagEntity.findOne({ _id: tagId });
+    }
+
     async archieveTag(tagId: string): Promise<UpdateWriteOpResult> {
         return await UserTagEntity
             .updateOne({ _id: tagId },

@@ -13,6 +13,7 @@ import { KafkaConfig } from "../../infrastructure/kafka/kafka_config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create_message";
 import { ITaskEntity } from "../../infrastructure/entities/task.entity";
+import { NOT_EXISTED } from "../domain/constants/constants";
 
 class TaskService {
     constructor(
@@ -22,18 +23,24 @@ class TaskService {
 
     async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
         try {
+            // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
 
+            // create new task
             task.createdAt = new Date();
             task.updatedAt = new Date();
             if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
             const createTask = await taskStore.createTask(task);
             const taskId = (createTask as any)._id;
-
-            if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
+            
+            // validate new task
+            if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === NOT_EXISTED) {
+                // push task id to group task
                 await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
                
+                // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
+                
                 const messages = [{value: JSON.stringify(createMessage(
                     KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
                 ))}]

@@ -23,7 +23,7 @@ export const userTagSchema = new mongoose.Schema(
         weight: {
             type: Number,
             required: true,
-        },
+        }, 
         activeStatus: {
             type: String,
             required: true,
