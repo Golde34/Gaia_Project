@@ -1,5 +1,5 @@
+import { ITaskEntity } from "../../../infrastructure/entities/task.entity";
 import { priorityOrder } from "../../../kernel/util/order-enums";
-import { ITaskEntity } from "../../domain/entities/task.entity";
 import { groupTaskStore } from "../../store/group-task.store";
 import { taskStore } from "../../store/task.store";
 

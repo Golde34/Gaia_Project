@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ActiveStatus } from "../enums/enums";
+import { ActiveStatus } from "../../core/domain/enums/enums";
 
 export interface ICommentEntity extends Document {
     _id: string;

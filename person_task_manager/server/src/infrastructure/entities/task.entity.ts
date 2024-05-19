@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
-import { ActiveStatus } from "../enums/enums";
-import { TaskTag } from "../dtos/request_dtos/tag.dto";
+import { ActiveStatus } from "../../core/domain/enums/enums";
+import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
 
 export interface ITaskEntity extends Document {
     _id: string;

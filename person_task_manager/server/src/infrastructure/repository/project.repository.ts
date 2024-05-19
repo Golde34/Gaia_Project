@@ -1,5 +1,5 @@
 import { DeleteResult } from "mongodb";
-import { IProjectEntity, ProjectEntity } from "../../core/domain/entities/project.entity";
+import { IProjectEntity, ProjectEntity } from "../entities/project.entity";
 import { UpdateWriteOpResult } from "mongoose";
 import { ActiveStatus, Status } from "../../core/domain/enums/enums";
 

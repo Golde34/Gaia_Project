@@ -1,8 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { SUB_TASK_NOT_FOUND } from "../domain/constants/error.constant";
-import { SubTaskEntity } from "../domain/entities/sub-task.entity";
-import { ActiveStatus } from "../domain/enums/enums";
 import { subTaskStore } from "../store/sub-task.store";
 import { subTaskValidation } from "../validations/sub-task.validation";
 import { taskService } from "./task.service";

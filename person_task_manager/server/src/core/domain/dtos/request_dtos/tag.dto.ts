@@ -1,12 +1,15 @@
 import { IsString } from "class-validator";
+import { ActiveStatus } from "../../enums/enums";
 
 export interface TaskTag {
-    tagName: string;
-    tagWeightValue: number;
+    name: string;
+    weight: number;
+    color: string;
+    activeStatus: ActiveStatus;
+    ownerId: number;
 }
 
 export class TaskTagRequest {
-    @IsString()
     tagName!: string;
     tagWeightName!: number;
 }
