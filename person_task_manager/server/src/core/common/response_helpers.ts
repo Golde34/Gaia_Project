@@ -42,6 +42,16 @@ export function msg404(message: string): IResponse {
     };
 }
 
+export function msg405(message: string): IResponse {
+    return {
+        status: "error",
+        statusMessage: "Method Not Allowed",
+        errorCode: 405,
+        errorMessage: message,
+        data: null,
+    };
+}
+
 export function msg500(message: string): IResponse {
     return {
         status: "error",
@@ -83,6 +93,10 @@ export function sendResponse(result: IResponse, response: Response, next: NextFu
             }
             case 404: {
                 response.status(404).send(result);
+                break;
+            }
+            case 405: {
+                response.status(405).send(result);
                 break;
             }
             case 500: {
