@@ -12,7 +12,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { msg200 } from "./core/common/response_helpers";
+import { msg200, msg400, msg405, sendResponse } from "./core/common/response_helpers";
 import { userTagRouter } from "./ui/routers/user-tag.router";
 
 async function main(): Promise<void> {
@@ -56,12 +56,14 @@ async function main(): Promise<void> {
     app.use("/comment", commentRouter);
     app.use("/user-tag", userTagRouter);
 
-    app.use((req: Request, res: Response, next: NextFunction) => next(new Error("Not Found")))
+    app.use((req: Request, res: Response, next: NextFunction) => {
+        sendResponse(msg405("Method Not Allowed"), res, next);
+    });
 
     app.listen(config.server.listenPort, () => {
         console.log(`Server running on port ${port}`);
     });
-    
+
 }
 
 main();

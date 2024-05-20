@@ -41,7 +41,7 @@ export const userTagSchema = new mongoose.Schema(
 );
 
 userTagSchema.virtual("id").get(function () {
-    return this.id.toString();
+    return this._id.toString();
 });
 
 export const UserTagEntity = mongoose.model<IUserTagEntity>("UserTag", userTagSchema);

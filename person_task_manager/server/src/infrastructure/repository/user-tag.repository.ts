@@ -29,8 +29,8 @@ class UserTagRepository {
     async findTagByUserIdAndTagName(userId: number, tagName: string): Promise<IUserTagEntity | null> {
         return await UserTagEntity.findOne({
             ownerId: userId,
-            tagName: tagName,
-            ActiveStatus: ActiveStatus.active
+            name: tagName,
+            activeStatus: ActiveStatus.active
         });
     }
 
@@ -38,7 +38,7 @@ class UserTagRepository {
         return await UserTagEntity.findOne({ _id: tagId });
     }
 
-    async archieveTag(tagId: string): Promise<UpdateWriteOpResult> {
+    async archiveTag(tagId: string): Promise<UpdateWriteOpResult> {
         return await UserTagEntity
             .updateOne({ _id: tagId },
                 { activeStatus: ActiveStatus.inactive });
