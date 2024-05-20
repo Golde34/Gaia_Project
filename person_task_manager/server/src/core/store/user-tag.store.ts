@@ -31,8 +31,8 @@ class UserTagStore {
         return await userTagRepository.findOneTag(tagId);
     }
 
-    async archieveTag(tagId: string): Promise<UpdateWriteOpResult> {
-        return await userTagRepository.archieveTag(tagId);
+    async archiveTag(tagId: string): Promise<UpdateWriteOpResult> {
+        return await userTagRepository.archiveTag(tagId);
     }
 
     async enableTag(tagId: string): Promise<UpdateWriteOpResult> {

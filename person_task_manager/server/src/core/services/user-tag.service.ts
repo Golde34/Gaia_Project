@@ -31,9 +31,10 @@ class UserTagService {
                 return msg400(NOT_EXISTED_MESSAGE.replace('%s', tagId));
             }
 
-            const updateUserTagResult = await userTagStore.updateUserTag(tagId, tag);
+            await userTagStore.updateUserTag(tagId, tag);
+            const updateUserTag = await userTagStore.findOneTag(tagId);
             return msg200({
-                message: (updateUserTagResult as any)
+                message: (updateUserTag as any)
             });
         } catch (error: any) {
             return msg400(error.message.toString());
@@ -66,13 +67,13 @@ class UserTagService {
         }
     }
 
-    async archieveTag(tagId: string): Promise<IResponse> {
+    async archiveTag(tagId: string): Promise<IResponse> {
         try {
             if (await userTagValidation.checkExistedTagByTagId(tagId) === NOT_EXISTED) {
                 return msg400(NOT_EXISTED_MESSAGE.replace('%s', tagId));
             }
 
-            const archieveTagResult = await userTagStore.archieveTag(tagId);
+            const archieveTagResult = await userTagStore.archiveTag(tagId);
             return msg200({
                 message: (archieveTagResult as any)
             });

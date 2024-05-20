@@ -70,23 +70,23 @@ export function sendResponse(result: IResponse, response: Response, next: NextFu
                 break;
             }
             case 400: {
-                next(new BadRequestError(result.errorMessage));
+                response.status(400).send(result);
                 break;
             }
             case 401: {
-                next(new UnauthorizedError(result.errorMessage));
+                response.status(401).send(result);
                 break;
             }
             case 403: {
-                next(new ForbiddenError(result.errorMessage));
+                response.status(403).send(result);
                 break;
             }
             case 404: {
-                next(new NotFoundError(result.errorMessage));
+                response.status(404).send(result);
                 break;
             }
             case 500: {
-                next(new InternalServerError(result.errorMessage));
+                response.status(500).send(result);
                 break;
             }
         }
