@@ -19,8 +19,9 @@ class ProjectService {
         if (project.activeStatus == null || project.activeStatus === "") {
             project.activeStatus = ActiveStatus.active;
         }
+        
         const createProject = await projectStore.createProject(project);
-
+        
         return msg200({
             message: (createProject as any)
         });

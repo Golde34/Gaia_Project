@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../../core/domain/enums/enums";
@@ -52,12 +52,12 @@ export const taskSchema = new mongoose.Schema(
             required: false,
         },
         subTasks: {
-            type: [mongoose.Schema.Types.ObjectId],
+            type: [Schema.Types.ObjectId],
             ref: 'SubTask',
             required: false,
         },
         comments: {
-            type: [mongoose.Schema.Types.ObjectId],
+            type: [Schema.Types.ObjectId],
             ref: 'Comment',
             required: false,
         },
@@ -75,8 +75,9 @@ export const taskSchema = new mongoose.Schema(
             default: ActiveStatus.active,
         },
         tag: {
-            type: Object,
-            require: true,
+            type: [Schema.Types.ObjectId],
+            ref: 'Tag',
+            required: false,
         }
     },
     {
