@@ -38,6 +38,18 @@ class UserTagStore {
     async enableTag(tagId: string): Promise<UpdateWriteOpResult> {
         return await userTagRepository.enableTag(tagId);
     }
+
+    async findTagByProjectId(projectId: string): Promise<IUserTagEntity | null> {
+        return await userTagRepository.findTagByProjectId(projectId);
+    }
+
+    async findTagByGroupTaskId(groupTaskId: string): Promise<IUserTagEntity | null> {
+        return await userTagRepository.findTagByGroupTaskId(groupTaskId);
+    }
+
+    async findTagByTaskId(taskId: string): Promise<IUserTagEntity | null> {
+        return await userTagRepository.findTagByTaskId(taskId);
+    }
 }
 
 export const userTagStore = new UserTagStore();

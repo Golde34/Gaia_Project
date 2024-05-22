@@ -4,6 +4,7 @@ import { TaskTag } from "../domain/dtos/request_dtos/tag.dto";
 import { userTagStore } from "../store/user-tag.store";
 import { EXISTED, EXISTED_MESSAGE, NOT_EXISTED, NOT_EXISTED_MESSAGE } from "../domain/constants/constants";
 import { userTagValidation } from "../validations/user-tag.validation";
+import { IUserTagEntity } from "../../infrastructure/entities/user-tag.entity";
 
 class UserTagService {
     constructor(
@@ -94,6 +95,36 @@ class UserTagService {
             });
         } catch (error: any) {
             return msg400(error.message.toString());
+        }
+    }
+
+    async findTagByProjectId(projectId: string): Promise<IUserTagEntity | null> {
+        try {
+            const tag = await userTagStore.findTagByProjectId(projectId);
+            if (tag === null || tag === undefined) return null;
+            return tag;
+        } catch (error: any) {
+            return null;
+        }
+    }
+
+    async findTagByGroupTaskId(groupId: string): Promise<IUserTagEntity | null> {
+        try {
+            const tag = await userTagStore.findTagByGroupTaskId(groupId);
+            if (tag === null || tag === undefined) return null;
+            return tag;
+        } catch (error: any) {
+            return null;
+        }
+    }
+
+    async findTagByTaskId(taskId: string): Promise<IUserTagEntity | null> {
+        try {
+            const tag = await userTagStore.findTagByTaskId(taskId);
+            if (tag === null || tag === undefined) return null;
+            return tag;
+        } catch (error: any) {
+            return null;
         }
     }
 }

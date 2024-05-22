@@ -2,8 +2,9 @@ import mongoose, { Schema } from "mongoose";
 import { ITaskEntity } from "./task.entity";
 import { ActiveStatus } from "../../core/domain/enums/enums";
 import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
+import { IUserTagEntity } from "./user-tag.entity";
 
-export interface IGroupTaskEntity extends Document{
+export interface IGroupTaskEntity extends Document {
     _id: string;
     title: string;
     description: string;
@@ -16,7 +17,7 @@ export interface IGroupTaskEntity extends Document{
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
-    tag: TaskTag
+    tag: IUserTagEntity
 }
 
 export const groupTaskSchema = new mongoose.Schema(
@@ -68,8 +69,9 @@ export const groupTaskSchema = new mongoose.Schema(
             default: ActiveStatus.active,
         },
         tag: {
-            type: Object,
-            require: true,
+            type: [Schema.Types.ObjectId],
+            ref: 'Tag',
+            required: false,
         }
     },
     {

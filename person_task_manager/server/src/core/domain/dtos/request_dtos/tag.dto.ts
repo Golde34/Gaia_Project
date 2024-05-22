@@ -10,6 +10,9 @@ export interface TaskTag {
 }
 
 export class TaskTagRequest {
-    tagName!: string;
-    tagWeightName!: number;
+    name!: string;
+    weight!: number;
+    color!: string;
+    activeStatus!: ActiveStatus;
+    ownerId!: number;
 }

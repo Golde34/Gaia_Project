@@ -7,8 +7,10 @@ import { projectStore } from "../store/project.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
+import { userTagService } from "./user-tag.service";
 
 const projectServiceImpl = projectService;
+const userTagServiceImpl = userTagService;
 const groupTaskValidationImpl = groupTaskValidation;
 
 class GroupTaskService {
