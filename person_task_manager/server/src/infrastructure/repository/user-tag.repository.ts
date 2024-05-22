@@ -5,6 +5,7 @@ import { IUserTagEntity, UserTagEntity } from "../entities/user-tag.entity";
 import { ActiveStatus } from "../../core/domain/enums/enums";
 import { ProjectEntity } from "../entities/project.entity";
 import { GroupTaskEntity } from "../entities/group-task.entity";
+import { TaskEntity } from "../entities/task.entity";
 
 class UserTagRepository {
     constructor() { }
@@ -65,10 +66,8 @@ class UserTagRepository {
     }
 
     async findTagByTaskId(taskId: string): Promise<IUserTagEntity | null> {
-        const groupTask = await GroupTaskEntity.findOne({
-            tasks: taskId
-        }).populate('tag');
-        return groupTask ? groupTask.tag : null;
+        const task = await TaskEntity.findOne({ _id: taskId }).populate('tag');
+        return task ? task.tag : null; 
     }
 }
 export const userTagRepository = new UserTagRepository();

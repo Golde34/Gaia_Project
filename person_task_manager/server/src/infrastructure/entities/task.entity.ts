@@ -3,6 +3,7 @@ import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../../core/domain/enums/enums";
 import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
+import { IUserTagEntity } from "./user-tag.entity";
 
 export interface ITaskEntity extends Document {
     _id: string;
@@ -18,7 +19,7 @@ export interface ITaskEntity extends Document {
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
-    tag: TaskTag
+    tag: IUserTagEntity 
 }
 
 export const taskSchema = new mongoose.Schema(
