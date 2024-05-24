@@ -32,7 +32,7 @@ public class CustomModel {
     private double[] phi;
 
     public CustomModel(double c1, double c2, double c3, double[] effort,
-            double[] enjoyability, double maximumWorkTime, int taskLength) {
+                       double[] enjoyability, double maximumWorkTime, int taskLength) {
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;
@@ -141,7 +141,7 @@ public class CustomModel {
                 new InitialGuess(initialT),
                 GoalType.MAXIMIZE,
                 new NelderMeadSimplex(taskLength), // taskLength-dimensional simplex
-                new MaxEval(1000)).getPoint();
+                new MaxEval(500)).getPoint();
 
         AtomicReference<Double> sum = new AtomicReference<>((double) 0);
         System.out.println("Optimized Time Allocation:");
@@ -165,7 +165,7 @@ public class CustomModel {
 
     class ProductivityFunction implements MultivariateFunction {
         double[] p0, a, k;
-        double T = 6.0; // Tổng thời gian sẵn có
+        double T = 8; // Tổng thời gian sẵn có
 
         public ProductivityFunction(double[] p0, double[] a, double[] k) {
             this.p0 = p0;
@@ -180,7 +180,6 @@ public class CustomModel {
             for (int i = 0; i < t.length - 1; i++) {
                 lastT -= t[i];
             }
-            t[t.length - 1] = lastT; // Đảm bảo tổng thời gian là T
             for (int i = 0; i < t.length; i++) {
                 double productivity = lagrangeFunction(p0[i], a[i], k[i], t[i]);
                 sum += productivity;
@@ -189,14 +188,16 @@ public class CustomModel {
         }
     }
 
-    // public static void main(String[] args) {
-    // double[] effort = {3, 6, 4, 8, 7}; // Khởi tạo mảng p0
-    // double[] enjoyability = {2, 5, 4, 3, 3}; // Khởi tạo mảng k1
-    // double T = 6; // Tổng thời gian có sẵn
-    // int taskLength = effort.length;
-
-    // CustomModel customModel = new CustomModel(effort, enjoyability, T,
-    // taskLength);
-    // customModel.optimize();
-    // }
+    public static void main(String[] args) {
+//        double[] effort = {3.408, 2.556, 0.852, 1.331, 1.065, 0.015};
+//        double[] enjoyability = {1.938, 0.831, 0.242, 1.732, 1.23, 0.058};
+        double[] effort = {8.52, 6.39, 2.13};
+        double[] enjoyability = {3.876, 1.662, 0.484};
+//        double[] effort = {7.4976, 5.6232, 1.8744, 2.9282, 2.343, 0.033};
+//        double[] enjoyability = {4.2636, 1.8282, 0.5324, 3.8104, 2.706, 0.1276};
+        double T = 8; // Tổng thời gian có sẵn
+        int taskLength = effort.length;
+        CustomModel customModel = new CustomModel(0.56, -0.24, 0, effort, enjoyability, T, taskLength);
+        customModel.optimize();
+    }
 }
