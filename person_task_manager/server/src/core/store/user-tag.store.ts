@@ -50,6 +50,10 @@ class UserTagStore {
     async findTagByTaskId(taskId: string): Promise<IUserTagEntity | null> {
         return await userTagRepository.findTagByTaskId(taskId);
     }
+
+    async findTagByTagId(tagId: string): Promise<IUserTagEntity | null> {
+        return await userTagRepository.findTagByTagId(tagId);
+    }
 }
 
 export const userTagStore = new UserTagStore();

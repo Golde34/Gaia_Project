@@ -17,5 +17,6 @@ export class GroupTaskRequestDto {
     tasks?: string[];
     @IsString()
     projectId!: string;
-    tag!: TaskTagRequest;
+    @IsOptional()
+    tag?: TaskTagRequest;
 }

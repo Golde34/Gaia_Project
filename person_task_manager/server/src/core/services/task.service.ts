@@ -14,6 +14,7 @@ import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create_message";
 import { ITaskEntity } from "../../infrastructure/entities/task.entity";
 import { NOT_EXISTED } from "../domain/constants/constants";
+import { userTagStore } from "../store/user-tag.store";
 
 class TaskService {
     constructor(
@@ -25,7 +26,14 @@ class TaskService {
         try {
             // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
+            console.log('groupTaskId', groupTaskId);
 
+            // check existed user tag
+            const userTag = await userTagStore.findTagByTagId(task.tag);
+            if (userTag === null) {
+                return msg400('Tag not found');
+            }
+            task.tag = userTag._id;
             // create new task
             task.createdAt = new Date();
             task.updatedAt = new Date();

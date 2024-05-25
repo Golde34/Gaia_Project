@@ -20,7 +20,8 @@ export class ProjectRequestDto {
     @IsString()
     @IsOptional()
     activeStatus?: string;
-    tag!: TaskTagRequest;
+    @IsOptional()
+    tag?: TaskTagRequest;
 }
 
 export class UpdateColorDto {
