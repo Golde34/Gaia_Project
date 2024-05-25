@@ -14,6 +14,7 @@ import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create_message";
 import { ITaskEntity } from "../../infrastructure/entities/task.entity";
 import { NOT_EXISTED } from "../domain/constants/constants";
+import { userTagStore } from "../store/user-tag.store";
 
 class TaskService {
     constructor(
@@ -26,24 +27,33 @@ class TaskService {
             // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
 
+            // check existed user tag
+            const userTag = await userTagStore.findTagByTagId(task.tag);
+            if (userTag === null) {
+                console.log("This task is no need to have tag");
+            } else {
+                task.tag = userTag._id;
+            }
             // create new task
             task.createdAt = new Date();
             task.updatedAt = new Date();
             if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
             const createTask = await taskStore.createTask(task);
             const taskId = (createTask as any)._id;
-            
+
             // validate new task
             if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === NOT_EXISTED) {
                 // push task id to group task
                 await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
-               
+
                 // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
-                
-                const messages = [{value: JSON.stringify(createMessage(
-                    KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
-                ))}]
+
+                const messages = [{
+                    value: JSON.stringify(createMessage(
+                        KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
+                    ))
+                }]
                 this.kafkaConfig.produce(KafkaTopic.OPTIMIZE_TASK, messages);
 
                 return msg200({

@@ -69,5 +69,9 @@ class UserTagRepository {
         const task = await TaskEntity.findOne({ _id: taskId }).populate('tag');
         return task ? task.tag : null; 
     }
+
+    async findTagByTagId(tagId: string): Promise<IUserTagEntity | null> {
+        return await UserTagEntity.findOne({ _id: tagId });
+    }
 }
 export const userTagRepository = new UserTagRepository();
