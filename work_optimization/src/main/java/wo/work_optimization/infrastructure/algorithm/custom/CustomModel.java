@@ -141,7 +141,7 @@ public class CustomModel {
                 new InitialGuess(initialT),
                 GoalType.MAXIMIZE,
                 new NelderMeadSimplex(taskLength), // taskLength-dimensional simplex
-                new MaxEval(500)).getPoint();
+                new MaxEval(1000)).getPoint();
 
         AtomicReference<Double> sum = new AtomicReference<>((double) 0);
         System.out.println("Optimized Time Allocation:");
@@ -165,7 +165,7 @@ public class CustomModel {
 
     class ProductivityFunction implements MultivariateFunction {
         double[] p0, a, k;
-        double T = 8; // Tổng thời gian sẵn có
+        double T = 13; // Tổng thời gian sẵn có
 
         public ProductivityFunction(double[] p0, double[] a, double[] k) {
             this.p0 = p0;
@@ -180,6 +180,7 @@ public class CustomModel {
             for (int i = 0; i < t.length - 1; i++) {
                 lastT -= t[i];
             }
+            t[t.length - 1] = lastT;
             for (int i = 0; i < t.length; i++) {
                 double productivity = lagrangeFunction(p0[i], a[i], k[i], t[i]);
                 sum += productivity;
@@ -191,11 +192,17 @@ public class CustomModel {
     public static void main(String[] args) {
 //        double[] effort = {3.408, 2.556, 0.852, 1.331, 1.065, 0.015};
 //        double[] enjoyability = {1.938, 0.831, 0.242, 1.732, 1.23, 0.058};
-        double[] effort = {8.52, 6.39, 2.13};
-        double[] enjoyability = {3.876, 1.662, 0.484};
+//        double[] effort = {8.52, 6.39, 2.13};
+//        double[] enjoyability = {3.876, 1.662, 0.484};
+        double[] effort= {8.520710059171599, 6.390532544378699, 2.1301775147928996, 3.3284023668639056, 2.6627218934911245, 0.07396449704142012};
+        double[] enjoyability= {3.876923076923077, 1.6615384615384619, 0.4846153846153846, 3.4615384615384617, 2.4615384615384617, 0.6923076923076924};
+
+
 //        double[] effort = {7.4976, 5.6232, 1.8744, 2.9282, 2.343, 0.033};
 //        double[] enjoyability = {4.2636, 1.8282, 0.5324, 3.8104, 2.706, 0.1276};
-        double T = 8; // Tổng thời gian có sẵn
+//        double[] effort = {3, 6, 4, 8}; // Khởi tạo mảng p0
+//         double[] enjoyability = {2, 5, 4, 3};
+        double T = 13; // Tổng thời gian có sẵn
         int taskLength = effort.length;
         CustomModel customModel = new CustomModel(0.56, -0.24, 0, effort, enjoyability, T, taskLength);
         customModel.optimize();
