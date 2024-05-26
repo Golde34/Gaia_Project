@@ -11,8 +11,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String userId;
-    private String username;
-    private String email;
-    private String role;
+    private String name;
+    private Double maxWorkTime;
+    private double constant1;
+    private double constant2;
+    private double constant3;
 }
