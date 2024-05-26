@@ -32,7 +32,7 @@ export const config: Configuration = {
     database: {
         host: process.env.DATABASE_HOST ?? 'localhost',
         port: Number(String(process.env.DATABASE_PORT)) ?? 27017,
-        name: process.env.DATABASE_NAME ?? 'task_database',
+        name: process.env.DATABASE_NAME ?? 'schedule_plan',
         username: process.env.DATABASE_USERNAME ?? 'root',
         password: process.env.DATABASE_PASSWORD ?? 'root',
     },

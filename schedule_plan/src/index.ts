@@ -4,11 +4,23 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { MongoHelper } from "./infrastructure/database/mongodb.db";
 
 async function main(): Promise<void> {
     validateEnvironmentVars();
 
+    const mongoHelper = new MongoHelper(
+        config.database.host,
+        config.database.port,
+        config.database.name,
+        config.database.username,
+        config.database.password,
+    )
+    await mongoHelper.connect();
+    console.log("Connected to MongoDB");
+
     const app: Application = express();
+    const port = config.server.listenPort;
 
     app.use(
         bodyParser.urlencoded({
