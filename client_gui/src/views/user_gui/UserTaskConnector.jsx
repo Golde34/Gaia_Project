@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom";
 import Template from "../../components/template/Template";
-import { Button, Card, CategoryBar, Col, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
+import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 
 function ContentArea(props) {
     const redirectPage = props.redirectPage;
@@ -43,6 +43,7 @@ function ContentArea(props) {
     function convertTimeToPercents(time) {
         return time * 100 / 24;
     }
+
     return (
         <>
             {loading ? (
@@ -74,8 +75,8 @@ function ContentArea(props) {
                                     <Col numColSpan={2}>
                                         <Legend
                                             className="mt-4"
-                                            categories={['Work Time']}
-                                            colors={['emerald']}
+                                            categories={['Sleeping Time']}
+                                            colors={['indigo']}
                                         />
                                     </Col>
                                     <Col numColSpan={4}>
@@ -216,7 +217,18 @@ function ContentArea(props) {
 
                             </Card>
                         </Col>
+
                     </Grid>
+                    <Flex justifyContent="end">
+                        <Button className="mt-4"
+                            variant="primary" color="indigo"
+                            onClick={() => {
+                                console.log("Task Registration")
+                            }
+                            }>
+                            Register
+                        </Button>
+                    </Flex>
                 </>
             )}
         </>

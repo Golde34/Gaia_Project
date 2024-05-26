@@ -1,5 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { config, validateEnvironmentVars } from "./infrastructure/config";
+import { config, validateEnvironmentVars } from "./infrastructure/config/config";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
