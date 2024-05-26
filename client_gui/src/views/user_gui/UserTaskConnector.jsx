@@ -44,6 +44,10 @@ function ContentArea(props) {
         return time * 100 / 24;
     }
 
+    function createTaskRegistry() {
+        
+    }
+
     return (
         <>
             {loading ? (

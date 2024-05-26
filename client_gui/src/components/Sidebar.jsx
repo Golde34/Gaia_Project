@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/solid";
 import { Button, Col, Grid } from "@tremor/react";
 import styled from "styled-components";
+import { TemplateIcon } from "@heroicons/react/outline";
 
 const Description = styled.div`
   display: none;
@@ -47,6 +48,15 @@ const Sidebar = () => {
 								<HomeIcon width={20} />
 							</Button>
 							<Description>Schedule Calendar</Description>
+						</LinkWrapper>
+					</Col>
+					<Col numColSpan={1}>
+						<LinkWrapper href="/client-gui/user-task-connector">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+								<TemplateIcon width={20} />
+							</Button>
+							<Description>Task Registration</Description>
 						</LinkWrapper>
 					</Col>
 					<Col numColSpan={1}>
