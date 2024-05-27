@@ -48,4 +48,4 @@ reportSchema.virtual("id").get(function(this: IReportEntity) {
     return this._id.toString();
 });
 
-export const Report = mongoose.model<IReportEntity>("Report", reportSchema);
+export const ReportEntity = mongoose.model<IReportEntity>("Report", reportSchema);

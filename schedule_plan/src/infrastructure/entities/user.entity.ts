@@ -63,4 +63,4 @@ export const userSchema = new mongoose.Schema(
     },
 );
 
-export const User = mongoose.model<IUserEntity>("User", userSchema);
+export const UserEntity = mongoose.model<IUserEntity>("User", userSchema);
