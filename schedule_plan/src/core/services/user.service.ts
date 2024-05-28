@@ -4,7 +4,7 @@ import { IResponse, msg200, msg400, msg500 } from "../common/response";
 class UserService {
     constructor() { }
 
-    async createuser(user: any): Promise<IResponse> {
+    async createUser(user: any): Promise<IResponse> {
         try {
             const createuser = await userRepository.createScheduleUser(user);
             return msg200({
@@ -15,7 +15,7 @@ class UserService {
         }
     }
 
-    async updateuser(userId: string, user: any): Promise<IResponse> {
+    async updateUser(userId: string, user: any): Promise<IResponse> {
         try {
             const updateuser = await userRepository.updateScheduleUser(userId, user);
             return msg200({
@@ -26,7 +26,7 @@ class UserService {
         }
     }
 
-    async deleteuser(userId: string): Promise<IResponse> {
+    async deleteUser(userId: string): Promise<IResponse> {
         try {
             const deleteuser = await userRepository.deleteScheduleUser(userId);
             return msg200({
@@ -37,7 +37,7 @@ class UserService {
         }
     }
 
-    async finduserById(userId: string): Promise<IResponse> {
+    async findUserById(userId: string): Promise<IResponse> {
         try {
             const user = await userRepository.findScheduleUserById(userId);
             return msg200({

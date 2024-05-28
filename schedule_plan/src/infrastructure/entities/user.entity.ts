@@ -9,8 +9,8 @@ export interface IUserEntity extends Document {
     relaxTime: number;
     eatTime: number;
     travelTime: number;
-    sleepStart: number;
-    sleepEnd: number;
+    sleepStart: string;
+    sleepEnd: string;
 }
 
 export const userSchema = new mongoose.Schema(
@@ -48,11 +48,11 @@ export const userSchema = new mongoose.Schema(
             required: true,
         },
         sleepStart: {
-            type: Number,
+            type: String,
             required: true,
         },
         sleepEnd: {
-            type: Number,
+            type: String,
             required: true,
         },
     }, 
@@ -63,4 +63,4 @@ export const userSchema = new mongoose.Schema(
     },
 );
 
-export const UserEntity = mongoose.model<IUserEntity>("User", userSchema);
+export const User = mongoose.model<IUserEntity>("User", userSchema);

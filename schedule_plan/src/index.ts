@@ -1,10 +1,10 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { config, validateEnvironmentVars } from "./kernel/config/configuration";
+import { config, validateEnvironmentVars } from "./infrastructure/config/config";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { MongoHelper } from "./kernel/database/mongodb.db";
+import { MongoHelper } from "./infrastructure/database/mongodb.db";
 
 async function main(): Promise<void> {
     validateEnvironmentVars();
