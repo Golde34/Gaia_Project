@@ -39,5 +39,3 @@ if bot doesnt know which task is, then create a "Add new Skill mechanism"
 gaia connector has access token and refresh token -> open client port 
 -> require sign in  -> call back to gaia connector to get token 
 -> open dashboard
-
-Im came back
