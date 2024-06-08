@@ -1,0 +1,76 @@
+version: '3.8'
+
+x-kafka-common: &kafka-common
+  image: 'bitnami/kafka:latest'
+  ports:
+    - "9094:9094"
+  networks:
+    - kafka
+  healthcheck:
+    test: "bash -c 'printf \"\" > /dev/tcp/127.0.0.1/9092; exit $$?;'"
+    interval: 5s
+    timeout: 10s
+    retries: 3
+    start_period: 30s
+  restart: unless-stopped
+
+x-kafka-env-common: &kafka-env-common
+  ALLOW_PLAINTEXT_LISTENER: 'yes'
+  KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  # KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka-0:9093,1@kafka-1:9093
+  KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka-0:9093
+  KAFKA_KRAFT_CLUSTER_ID: abcdefghijklmnopqrstuv
+  KAFKA_CFG_PROCESS_ROLES: controller,broker
+  KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER 
+  EXTRA_ARGS: "-Xms128m -Xmx256m"
+
+services:
+
+  kafka-0:
+    <<: *kafka-common
+    environment:
+      <<: *kafka-env-common
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-0:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+    volumes:
+      - kafka_0_data:/bitnami/kafka
+
+  # kafka-1:
+  #   <<: *kafka-common
+  #   environment:
+  #     <<: *kafka-env-common
+  #     KAFKA_CFG_NODE_ID: 1
+  #   volumes:
+  #     - kafka_1_data:/bitnami/kafka
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    volumes:
+      - ./kafka-ui/config.yml:/etc/kafkaui/dynamic_config.yaml
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    depends_on:
+      - kafka-0
+      # - kafka-1
+    networks:
+      - kafka
+    ports:
+      - '8080:8080'
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:8080 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  kafka:
+
+volumes:
+  kafka_0_data:
+    driver: local
+  # kafka_1_data:
+  #   driver: local

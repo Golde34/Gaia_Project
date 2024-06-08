@@ -3,14 +3,21 @@ package auth.authentication_service.core.domain.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
 @Table(name = "user_account")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Column(unique = true, nullable = false)
@@ -46,4 +53,20 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<AuthToken> tokens;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", lastLogin=" + lastLogin +
+                ", enabled=" + enabled +
+                ", isUsing2FA=" + isUsing2FA +
+                ", secret='" + secret + '\'' +
+                ", roles=" + roles.stream().map(Role::getId).collect(Collectors.toList()) +
+                '}';
+    }
 }

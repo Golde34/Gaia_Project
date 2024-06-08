@@ -1,8 +1,9 @@
-import Template from "../../components/template";
+import Template from "../../components/template/Template";
 import UserRolesScreen from "../../screens/userScreen/UserRolesScreen";
 import UserListScreen from "../../screens/userScreen/UserListScreen";
 import UserSearchScreen from "../../screens/userScreen/UserSearchScreen";
 import { useState } from "react";
+import ManagerTemplate from "../../components/template/ManagerTemplate";
 
 function ContentArea() {
     const [searchText, setSearchText] = useState("");
@@ -30,9 +31,9 @@ function ContentArea() {
 
 const AuthManagerDashboard = () => {
     return (
-        <Template>
+        <ManagerTemplate>
             <ContentArea />
-        </Template>
+        </ManagerTemplate>
     )
 }
 

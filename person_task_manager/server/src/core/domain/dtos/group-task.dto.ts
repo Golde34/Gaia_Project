@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
+import { TaskTagRequest } from "./request_dtos/tag.dto";
 
 export class GroupTaskRequestDto {
     @IsString()
@@ -16,4 +17,6 @@ export class GroupTaskRequestDto {
     tasks?: string[];
     @IsString()
     projectId!: string;
+    @IsOptional()
+    tag?: TaskTagRequest;
 }

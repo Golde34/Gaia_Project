@@ -1,10 +1,10 @@
 type Comment {
-  id: ID!
-  content: String!
-  activeStatus: String!
+    id: ID!
+    content: String!
+    activeStatus: String!
 
-  createdAt: String!
-  updatedAt: String!
+    createdAt: String!
+    updatedAt: String!
 
-  task: String!
+    task: String!
 }

@@ -18,7 +18,7 @@ export const taskListReducer = (
         case TASK_LIST_REQUEST:
             return { loading: true };
         case TASK_LIST_SUCCESS:
-            return { loading: false, tasks: action.payload.message };
+            return { loading: false, tasks: action.payload.getTasksByGroupTaskId };
         case TASK_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
@@ -102,7 +102,7 @@ export const taskCompletedReducer = (
         case TASK_COMPLETED_REQUEST:
             return { loading: true };
         case TASK_COMPLETED_SUCCESS:
-            return { loading: false, task: action.payload.message };
+            return { loading: false, task: action.payload.calculateCompletedTasks };
         case TASK_COMPLETED_FAIL:
             return { loading: false, error: action.payload };
         default:

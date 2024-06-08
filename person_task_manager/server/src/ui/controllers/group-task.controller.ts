@@ -24,7 +24,7 @@ class GroupTaskController {
 
     async createGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const createGroupTaskObjectDto = plainToInstance(GroupTaskRequestDto, bodyJson);
             const projectId = bodyJson.projectId;
@@ -38,7 +38,7 @@ class GroupTaskController {
 
     async updateGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const groupTaskId = req.params.id;
             const groupTask = plainToInstance(GroupTaskRequestDto, bodyJson);
@@ -63,26 +63,12 @@ class GroupTaskController {
         } catch (err) {
             next(err);
         }
-    }
-
-    async getTasksByGroupTaskId(req: Request, next: NextFunction): Promise<IResponse | undefined> {
-        try {
-            const groupTaskId = req.params.id;
-            const tasksResult = await taskService.getTaskDashboard(groupTaskId);
-
-            return tasksResult;
-        } catch (err) {
-            next(err);
-        }
-    }
+    } 
 
     async updateGroupTaskName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
-
             const groupTaskId = req.params.id;
-            const groupTaskName = bodyJson.newName;
-            const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, groupTaskName);
+            const groupTaskResult = await groupTaskService.updateGroupTaskName(groupTaskId, req.body.name);
 
             return groupTaskResult;
         } catch (err) {
@@ -90,10 +76,10 @@ class GroupTaskController {
         }
     }
 
-    async calculateTotalTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async calculateCompletedTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupTaskId = req.params.id;
-            const totalTasksResult = await groupTaskService.calculateTotalTasks(groupTaskId);
+            const totalTasksResult = await groupTaskService.calculateCompletedTasks(groupTaskId);
 
             return totalTasksResult;
         } catch (err) {
@@ -103,7 +89,7 @@ class GroupTaskController {
 
     async updateOrdinalNumber(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body.body;
+            const bodyJson = req.body;
 
             const groupTaskId = req.params.id;
             const projectId = bodyJson.projectId;

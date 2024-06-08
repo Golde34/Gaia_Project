@@ -5,13 +5,15 @@ import { USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS,
 
 const portName = {
     authPort: 'authenticationServicePort',
+    middlewarePort: 'middlewarePort'
 }
 
 export const getUsers = () => async (dispatch) => {
     dispatch({ type: USER_LIST_REQUEST });
     try {
-        const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.authPort, null);
-        dispatch({ type: USER_LIST_SUCCESS, payload: data });
+        const { data } = await serverRequest('/user/get-all-users', HttpMethods.GET, portName.middlewarePort, null);
+        console.log(data.data)
+        dispatch({ type: USER_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
             type: USER_LIST_FAIL,
@@ -25,7 +27,7 @@ export const getUsers = () => async (dispatch) => {
 export const updateUser = (user) => async (dispatch) => {
     dispatch({ type: USER_UPDATE_REQUEST });
     try {
-        const { data } = await serverRequest('/user/update-user', HttpMethods.PUT, portName.authPort, user);
+        const { data } = await serverRequest('/user/update-user', HttpMethods.PUT, portName.middlewarePort, user);
         dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({

@@ -2,10 +2,10 @@ package mapper
 
 import (
 	request_dtos "middleware_loader/core/domain/dtos/request"
-	"middleware_loader/core/port/mapper/base"
+	"middleware_loader/kernel/utils"
 )
 
-func GetProjectId(id string) *request_dtos.IdInputDTO {
+func GetId(id string) *request_dtos.IdInputDTO {
 	var input request_dtos.IdInputDTO
 	input.Id = id
 	return &input
@@ -14,12 +14,12 @@ func GetProjectId(id string) *request_dtos.IdInputDTO {
 func CreateProjectRequestDTOMapper(body map[string]interface{}) *request_dtos.CreateProjectRequestDTO {
 	var input request_dtos.CreateProjectRequestDTO
 	bodyMap := body["body"].(map[string]interface{})
-	input.Name = base.GetStringValue(bodyMap, "name", "")
-	input.Description = base.GetStringValue(bodyMap, "description", "")
-	input.Status = base.GetStringValue(bodyMap, "status", "")
-	input.Color = base.GetStringValue(bodyMap, "color", "")
-	input.OwnerId = base.GetStringValue(bodyMap, "ownerId", "")
-	input.ActiveStatus = base.GetStringValue(bodyMap, "activeStatus", "")
+	input.Name = utils.GetStringValue(bodyMap, "name", "")
+	input.Description = utils.GetStringValue(bodyMap, "description", "")
+	input.Status = utils.GetStringValue(bodyMap, "status", "")
+	input.Color = utils.GetStringValue(bodyMap, "color", "")
+	input.OwnerId = utils.GetStringValue(bodyMap, "ownerId", "")
+	input.ActiveStatus = utils.GetStringValue(bodyMap, "activeStatus", "")
 
 	return &input
 }

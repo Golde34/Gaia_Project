@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 work_optimization.log
-.gz
+*.gz
 
 ### STS ###
 .apt_generated

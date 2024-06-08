@@ -3,8 +3,8 @@ package controller_services
 import (
 	"encoding/json"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services"
-	"middleware_loader/core/services/base"
+	"middleware_loader/core/services/middleware_loader"
+	"middleware_loader/kernel/utils"
 	"net/http"
 )
 
@@ -37,7 +37,7 @@ func GetAllMicroservices(w http.ResponseWriter, r *http.Request, miccroserviceCo
 		return
 	}
 
-	response := base.ReturnSuccessResponse("Get all microservices successfully", result)
+	response := utils.ReturnSuccessResponse("Get all microservices successfully", result)
 
 	dataBytes, err := json.Marshal(response)
 	if err != nil {

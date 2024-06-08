@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Bold, Button, Card, Col, Divider, DonutChart, Flex, Grid, Legend, Metric, Tab, TabGroup, TabList, Table, TableBody, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import { getRoles } from "../../api/store/actions/auth_service/role.actions";
 import { ChartPieIcon, ViewListIcon } from "@heroicons/react/solid";
+import { useNavigate } from "react-router-dom";
 
 const UserRolesScreen = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const listRoles = useSelector((state) => state.roleList);
     const { loading, error, roles } = listRoles;
@@ -102,8 +104,12 @@ const UserRolesScreen = () => {
                         )}
                         <Divider />
                         <Flex className="mt-6 justify-center" >
-                            <Button>List Roles</Button>
-                            <Button className="ms-2">List Privileges</Button>
+                            <Button
+                                onClick={() => navigate('/privilege-role-dashboard')}
+                            >Privileges and Roles Dashboard</Button>
+                            <Button className="ms-2"
+                                onClick={() => navigate('/privilege-url-settings')}
+                            >Privilege Urls Settings</Button>
                         </Flex>
                     </Card>
                 </>

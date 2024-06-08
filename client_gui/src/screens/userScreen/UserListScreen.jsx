@@ -70,12 +70,12 @@ const UserListScreen = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {users.map((user) => (
+                                {users.length > 0 ? users.map((user) => (
                                     <TableRow key={user.id}>
                                         <TableCell>{user.id}</TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.username}</TableCell>
-                                        <TableCell>{user.roles.map((role) => role.name + " ")}</TableCell>
+                                        <TableCell>{user.roles.map((role) => role + " ")}</TableCell>
                                         <TableCell>{user.lastLogin}</TableCell>
                                         <TableCell>
                                             <button
@@ -94,7 +94,11 @@ const UserListScreen = (props) => {
                                             >Delete</button>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={6}>No users found</TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </Card>

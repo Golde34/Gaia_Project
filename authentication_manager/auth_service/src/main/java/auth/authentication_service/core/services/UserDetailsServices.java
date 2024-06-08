@@ -4,8 +4,9 @@ import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.LoggerType;
-import auth.authentication_service.core.store.UserCRUDStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.kernel.utils.LoggerUtils;
+import auth.authentication_service.kernel.utils.ObjectUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,12 +26,14 @@ public class UserDetailsServices implements UserDetailsService {
 
     @Autowired
     LoggerUtils _logger;
-
+    
+    private final ObjectUtils objectUtils;
     private final UserCRUDStore userStore;
 
 
-    public UserDetailsServices(UserCRUDStore userStore) {
+    public UserDetailsServices(UserCRUDStore userStore, ObjectUtils objectUtils) {
         super();
+        this.objectUtils = objectUtils;
         this.userStore = userStore;
     }
 
@@ -40,7 +43,7 @@ public class UserDetailsServices implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         try {
             final User user = userStore.findByUsername(username);
-            if (user == null) {
+            if (objectUtils.isNullOrEmpty(user)) {
                 _logger.log("No user found with username: " + username, LoggerType.ERROR);
                 return null;
             }

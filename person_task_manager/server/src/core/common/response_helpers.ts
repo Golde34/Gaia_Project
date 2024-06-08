@@ -42,6 +42,16 @@ export function msg404(message: string): IResponse {
     };
 }
 
+export function msg405(message: string): IResponse {
+    return {
+        status: "error",
+        statusMessage: "Method Not Allowed",
+        errorCode: 405,
+        errorMessage: message,
+        data: null,
+    };
+}
+
 export function msg500(message: string): IResponse {
     return {
         status: "error",
@@ -70,23 +80,27 @@ export function sendResponse(result: IResponse, response: Response, next: NextFu
                 break;
             }
             case 400: {
-                next(new BadRequestError(result.errorMessage));
+                response.status(400).send(result);
                 break;
             }
             case 401: {
-                next(new UnauthorizedError(result.errorMessage));
+                response.status(401).send(result);
                 break;
             }
             case 403: {
-                next(new ForbiddenError(result.errorMessage));
+                response.status(403).send(result);
                 break;
             }
             case 404: {
-                next(new NotFoundError(result.errorMessage));
+                response.status(404).send(result);
+                break;
+            }
+            case 405: {
+                response.status(405).send(result);
                 break;
             }
             case 500: {
-                next(new InternalServerError(result.errorMessage));
+                response.status(500).send(result);
                 break;
             }
         }

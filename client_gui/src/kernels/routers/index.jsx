@@ -3,35 +3,18 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import Dashboard from '../../views/Dashboard';
 import Project from '../../views/task_manager/Project';
-import SchedulingTable from '../../views/task_manager/SchedulingTable';
+import SchedulingTable from '../../views/schedule_plan/SchedulingTable';
 import TaskDashboard from '../../views/task_manager/TaskDashboard';
 import SignIn from '../../screens/authScreen/Signin';
 import GaiaAutoSignin from '../../screens/authScreen/GaiaAutoSignin';
 import Microservices from '../../views/microservices_gui/Microservices';
 import UserProfile from '../../views/user_gui/UserProfile';
 import AuthManagerDashboard from '../../views/auth_service/UserManagerDashboard';
-
-// const schedule = [
-//   {
-//     id: 1,
-//     title: "Opening Remarks",
-//     startTime: "8:00am",
-//     endTime: "8:30am",
-//     track: 1,
-//     presenter: "Jane Doe",
-//     color: "#457b9d", // Dark blue
-//   },
-//   {
-//     id: 2,
-//     title: "Keynote: The Future of Tech",
-//     startTime: "8:30am",
-//     endTime: "10:00am",
-//     track: 2,
-//     presenter: "John Smith",
-//     color: "#1d3557", // Navy blue
-//   },
-//   // More sessions...
-// ];
+import Calendar from '../../views/schedule_plan/Calendar';
+import PrivilegeAndRoleDashboard from '../../views/auth_service/RoleAndPrivilegeDashboard';
+import PrivilegeUrlSettings from '../../views/auth_service/PrivilegeUrlSettings';
+import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboard';
+import UserTaskConnector from '../../views/user_gui/UserTaskConnector';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -65,6 +48,11 @@ const routeList = [
         element: <Dashboard />,
     },
     {
+        path: '/user-task-connector',
+        key: 'user-task-connector',
+        element: <UserTaskConnector />,
+    },
+    {
         path: '/project',
         key: 'project',
         element: <Project />,
@@ -85,15 +73,35 @@ const routeList = [
         element: <UserProfile />,
     },
     {
-        path: '/auth-manager',
-        key: 'auth-manager',
+        path: '/manager',
+        key: 'manager',
+        element: <GaiaManagerDashboard />,
+    },
+    {
+        path: '/user-manager',
+        key: 'user-manager',
         element: <AuthManagerDashboard />,
     },
-    // {
-    //     path: '/scheduling-table',
-    //     key: 'scheduling-table',
-    //     element: <SchedulingTable schedule={schedule}/>,
-    // }
+    {
+        path: '/privilege-role-dashboard',
+        key: 'privilege-role-dashboard',
+        element: <PrivilegeAndRoleDashboard />,
+    },
+    {
+        path: '/privilege-url-settings',
+        key: 'privilege-url-settings',
+        element: <PrivilegeUrlSettings />,  
+    },
+    {
+        path: '/schedule',
+        key: 'schedule',
+        element: <SchedulingTable/>,
+    },
+    {
+        path: '/calendar',
+        key: 'calendar',
+        element: <Calendar />,
+    }
 ]
 
 const RenderRouter = (props) => {

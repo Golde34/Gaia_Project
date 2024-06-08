@@ -2,100 +2,124 @@ package auth.authentication_service.core.services;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.PrivilegeDto;
+import auth.authentication_service.core.domain.dto.response.ListPrivilegeResponse;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.enums.LoggerType;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.PrivilegeMapper;
+import auth.authentication_service.core.port.store.PrivilegeStore;
 import auth.authentication_service.core.services.interfaces.PrivilegeService;
-import auth.authentication_service.core.store.PrivilegeStore;
+import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 
 @Service
-public class PrivilegeServiceImpl implements PrivilegeService{
+@Slf4j
+public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Autowired
     private LoggerUtils _logger;
+    @Autowired
+    private GenericResponse<?> genericResponse;
 
     private final PrivilegeStore privilegeStore;
 
     @Autowired
     private ModelMapperConfig modelMapperConfig;
 
+    @Autowired
+    private PrivilegeMapper privilegeMapper;
+
     public PrivilegeServiceImpl(PrivilegeStore privilegeStore) {
         this.privilegeStore = privilegeStore;
     }
 
     @Override
-    public Privilege createPrivilege(String privilegeName) {
+    public ResponseEntity<?> createPrivilege(String privilegeName) {
         if (_checkExistPrivilegeName(privilegeName)) {
             _logger.log("Create privilege failed", LoggerType.ERROR);
-            throw new RuntimeException("Privilege existed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.PRIVILEGE_EXISTED, ResponseEnum.msg400));
         } else {
             Privilege newPrivilege = new Privilege();
             newPrivilege.setName(privilegeName);
             privilegeStore.save(newPrivilege);
             _logger.log("Create privilege: " + privilegeName, LoggerType.INFO);
-            return newPrivilege;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(newPrivilege, ResponseEnum.msg200));
         }
     }
 
     @Override
-    public Privilege updatePrivilege(PrivilegeDto privilegeDto){
+    public ResponseEntity<?> updatePrivilege(PrivilegeDto privilegeDto) {
         try {
             Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
             if (_checkExistPrivilege(privilege)) {
                 if (!_checkExistPrivilegeName(privilege.getName())) {
                     privilegeStore.save(privilege);
                     _logger.log("Update privilege: " + privilege.getName(), LoggerType.INFO);
-                    return privilege;
-                } else {
-                    _logger.log("Privilege name existed!", LoggerType.ERROR);
-                    throw new RuntimeException("Privilege name existed");
+                    return genericResponse
+                            .matchingResponseMessage(new GenericResponse<>(privilege, ResponseEnum.msg200));
                 }
-            } else {
-                _logger.log("Privilege not found", LoggerType.INFO);
-                throw new RuntimeException("Privilege not found");
             }
-        } catch (Exception e){
             _logger.log("Update privilege failed", LoggerType.ERROR);
-            throw new RuntimeException("Update privilege failed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.UPDATE_PRIVILEGE, ResponseEnum.msg400));
+        } catch (Exception e) {
+            _logger.log("Update privilege failed", LoggerType.ERROR);
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.UPDATE_PRIVILEGE, ResponseEnum.msg400));
         }
     }
 
     @Override
-    public void deletePrivilege(PrivilegeDto privilegeDto) {
+    public ResponseEntity<?> deletePrivilege(PrivilegeDto privilegeDto) {
         try {
             Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
             if (_checkExistPrivilege(privilege)) {
                 privilegeStore.delete(privilege);
                 _logger.log("Delete privilege: " + privilege.getName(), LoggerType.INFO);
-            } else {
-                _logger.log("Privilege not found", LoggerType.INFO);
-                throw new RuntimeException("Privilege not found");
+                return genericResponse.matchingResponseMessage(new GenericResponse<>(
+                        "Privilege: %s delete!".formatted(privilege), ResponseEnum.msg200));
             }
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.DELETE_PRIVILEGE, ResponseEnum.msg400));
         } catch (Exception e) {
             _logger.log("Delete privilege failed", LoggerType.ERROR);
-            throw new RuntimeException("Delete privilege failed");
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ResponseMessage.DELETE_PRIVILEGE, ResponseEnum.msg400));
         }
     }
 
     @Override
-    public List<Privilege> getAllPrivileges() {
-        return privilegeStore.findAll();
+    @Cacheable(value = "privileges")
+    public ResponseEntity<?> getAllPrivileges() {
+        log.info("Get all privileges");
+        List<Privilege> privileges = privilegeStore.findAll();
+        List<ListPrivilegeResponse> privilegeResponses = privileges.stream()
+                .map(privilegeMapper::mapPrivilegeResponse)
+                .collect(Collectors.toList());
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(privilegeResponses, ResponseEnum.msg200));
     }
 
     @Override
-    public Privilege getPrivilegeByName(PrivilegeDto privilegeDto) {
-        return privilegeStore.findByName(privilegeDto.getName());
+    public ResponseEntity<?> getPrivilegeByName(PrivilegeDto privilegeDto) {
+        Privilege privilege = privilegeStore.findByName(privilegeDto.getName());
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(privilege, ResponseEnum.msg200));
     }
 
     private boolean _checkExistPrivilege(Privilege privilege) {
         try {
-            for (Privilege item: privilegeStore.findAll()) {
+            for (Privilege item : privilegeStore.findAll()) {
                 if (Objects.equals(item.getId(), privilege.getId())) {
                     return true;
                 }
@@ -109,7 +133,7 @@ public class PrivilegeServiceImpl implements PrivilegeService{
 
     private boolean _checkExistPrivilegeName(String privilegeName) {
         try {
-            for (Privilege item: privilegeStore.findAll()) {
+            for (Privilege item : privilegeStore.findAll()) {
                 if (Objects.equals(item.getName(), privilegeName)) {
                     return true;
                 }

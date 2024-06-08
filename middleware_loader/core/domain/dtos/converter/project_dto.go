@@ -9,3 +9,7 @@ type UpdateNameConverterDTO struct {
 type UpdateColorConverterDTO struct {
 	Color string `json:"color"`
 }
+
+type NameConverterDTO struct {
+	Name string `json:"name"`
+}

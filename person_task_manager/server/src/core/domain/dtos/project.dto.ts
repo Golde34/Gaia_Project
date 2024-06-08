@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
+import { TaskTagRequest } from "./request_dtos/tag.dto";
 
 export class ProjectRequestDto {
     @IsString()
@@ -19,6 +20,8 @@ export class ProjectRequestDto {
     @IsString()
     @IsOptional()
     activeStatus?: string;
+    @IsOptional()
+    tag?: TaskTagRequest;
 }
 
 export class UpdateColorDto {

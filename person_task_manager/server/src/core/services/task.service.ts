@@ -1,9 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
-import { ActiveStatus, Priority, Status } from "../domain/enums/enums";
 import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
-import { GroupTaskEntity } from "../domain/entities/group-task.entity";
-import { ITaskEntity, TaskEntity } from "../domain/entities/task.entity";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
 import { projectService } from "./project.service";
@@ -12,25 +9,52 @@ import { taskServiceUtils } from "./service_utils/task.service-utils";
 import { CREATE_TASK_FAILED, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../domain/constants/error.constant";
 import { taskStore } from "../store/task.store";
 import { groupTaskStore } from "../store/group-task.store";
-
-const taskValidationImpl = taskValidation;
+import { KafkaConfig } from "../../infrastructure/kafka/kafka_config";
+import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
+import { createMessage } from "../../infrastructure/kafka/create_message";
+import { ITaskEntity } from "../../infrastructure/entities/task.entity";
+import { NOT_EXISTED } from "../domain/constants/constants";
+import { userTagStore } from "../store/user-tag.store";
 
 class TaskService {
-    constructor() { }
+    constructor(
+        public kafkaConfig = new KafkaConfig(),
+        public taskValidationImpl = taskValidation,
+    ) { }
 
     async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
         try {
+            // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
 
+            // check existed user tag
+            const userTag = await userTagStore.findTagByTagId(task.tag);
+            if (userTag === null) {
+                console.log("This task is no need to have tag");
+            } else {
+                task.tag = userTag._id;
+            }
+            // create new task
             task.createdAt = new Date();
             task.updatedAt = new Date();
             if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
             const createTask = await taskStore.createTask(task);
             const taskId = (createTask as any)._id;
 
-            if (await taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === false) {
+            // validate new task
+            if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === NOT_EXISTED) {
+                // push task id to group task
                 await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
+
+                // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
+
+                const messages = [{
+                    value: JSON.stringify(createMessage(
+                        KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
+                    ))
+                }]
+                this.kafkaConfig.produce(KafkaTopic.OPTIMIZE_TASK, messages);
 
                 return msg200({
                     message: (createTask as any)
@@ -46,7 +70,7 @@ class TaskService {
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const updateTask = await taskStore.updateTask(taskId, task);
 
                 return msg200({
@@ -62,7 +86,7 @@ class TaskService {
 
     async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 // delete task id in group task
                 await groupTaskStore.pullTaskFromSpecifiedGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
@@ -125,7 +149,7 @@ class TaskService {
 
     async updateTaskInDialog(taskId: string, task: UpdateTaskInDialogDTO): Promise<IResponse> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const taskUpdate = await taskStore.findTaskById(taskId);
 
                 if (taskUpdate === null) return msg400(TASK_NOT_FOUND);
@@ -205,7 +229,7 @@ class TaskService {
 
     async archiveTask(taskId: string): Promise<IResponse | undefined> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const task = await taskStore.findActiveTaskById(taskId);
                 if (task === null) {
                     return msg400(TASK_NOT_FOUND);
@@ -223,7 +247,7 @@ class TaskService {
 
     async enableTask(taskId: string): Promise<IResponse | undefined> {
         try {
-            if (await taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const task = await taskStore.findInactiveTaskById(taskId);
                 if (task === null) {
                     return msg400(TASK_NOT_FOUND);

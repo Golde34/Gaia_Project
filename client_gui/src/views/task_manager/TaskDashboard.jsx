@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Template from "../../components/template";
+import Template from "../../components/template/Template";
 import { useCallback, useEffect, useRef } from "react";
 import { getGroupTaskList } from "../../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";

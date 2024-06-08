@@ -1,7 +1,21 @@
 type Role {
- id: ID!
- name: String!
+    id: Float!
+    name: String!
+    description: String
+    grantedRank: Float!
 
- privilege: [Privilege!]!
- user: [User!]!
+    privileges: [Privilege!]!
+}
+
+input RoleInput {
+    id: Float
+    name: String!
+    description: String
+    grantedRank: Float!
+}
+
+type RoleOnlyResponse {
+    id: Float!
+    name: String!
+    description: String
 }

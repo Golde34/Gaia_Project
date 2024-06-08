@@ -3,7 +3,7 @@ package auth.authentication_service.ui.controllers;
 import auth.authentication_service.core.domain.dto.TokenDto;
 import auth.authentication_service.core.domain.dto.UserPermissionDto;
 import auth.authentication_service.core.domain.dto.request.SignInDtoRequest;
-import auth.authentication_service.core.domain.enums.ResponseMessage;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.services.interfaces.AuthService;
 import auth.authentication_service.kernel.utils.GenericResponse;
 
@@ -35,27 +35,27 @@ public class AuthController {
         return ResponseEntity.ok("<h1>Test admin role.</h1>");
     }
 
-    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    @GetMapping("/status")
     public ResponseEntity<?> status() {
-        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseMessage.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseEnum.msg200));
     }
 
-    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
+    @PostMapping("/sign-in")
     public ResponseEntity<?> signIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
         return authService.authenticated(accountDto.getUsername(), accountDto.getPassword());
     }
 
-    @RequestMapping(value = "/gaia-auto-sign-in", method = RequestMethod.POST)
+    @PostMapping("/gaia-auto-sign-in")
     public ResponseEntity<?> gaiaAutoSignIn(@RequestBody SignInDtoRequest accountDto) throws Exception {
         return authService.gaiaAutoSignin(accountDto.getUsername(), accountDto.getPassword());
     }
 
-    @RequestMapping(value = "/check-token", method = RequestMethod.GET)
+    @GetMapping("/check-token")
     public ResponseEntity<?> checkToken(@RequestBody TokenDto token) throws Exception {
         return authService.checkToken(token);
     }
 
-    @RequestMapping(value = "/check-permission", method = RequestMethod.GET)
+    @GetMapping("/check-permission")
     public ResponseEntity<?> checkPermission(@RequestBody UserPermissionDto permission) throws Exception {
         return authService.checkPermission(permission);
     }

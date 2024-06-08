@@ -1,13 +1,13 @@
 type SubTask {
-  id: ID!
-  mission: String!
-  deadline: String!
-  priority: [String!]!
-  status: String!
-  activeStatus: String!
+	id: ID!
+	mission: String!
+	deadline: String!
+	priority: [String!]!
+	status: String!
+	activeStatus: String!
 
-  createdAt: String!
-  updatedAt: String!
+	createdAt: String!
+	updatedAt: String!
 
-  task: String!
+	task: String!
 }

@@ -1,13 +1,10 @@
-import { TaskEntity } from "../domain/entities/task.entity"
+import { TaskEntity } from "../../infrastructure/entities/task.entity";
 
 export const taskValidation = {
     async checkExistedTaskByTaskId(taskId: string): Promise<boolean> {
         try {
-            if (await TaskEntity.findOne({ _id: taskId }) != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            const existedTask = await TaskEntity.findOne({ _id: taskId }) != null
+            return existedTask;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -16,11 +13,8 @@ export const taskValidation = {
 
     async checkExistedTaskByTitle(title: string): Promise<boolean> {
         try {
-            if (await TaskEntity.findOne({ title: title }) != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            const existedTask = await TaskEntity.findOne({ title: title }) != null
+            return existedTask;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -29,12 +23,8 @@ export const taskValidation = {
 
     async checkExistedTaskInGroupTask(taskId: string, groupTaskId: string): Promise<boolean> {
         try {
-            const groupTask = TaskEntity.findOne({ _id: groupTaskId, tasks: taskId });
-            if (await groupTask != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            const existedTask = await TaskEntity.findOne({ _id: groupTaskId, tasks: taskId });
+            return existedTask != null;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;

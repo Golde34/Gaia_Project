@@ -3,7 +3,7 @@ package routers
 import (
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/middleware"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/task_manager"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	"middleware_loader/ui/controller_services"
 	"net/http"
@@ -27,10 +27,10 @@ func NewTaskRouter(taskService *services.TaskService, db database_mongo.Database
 		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.CreateTask(w, r, taskService)
 		})
-		r.Put("/{id}/update", func(w http.ResponseWriter, r *http.Request) {
+		r.Put("/{id}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateTask(w, r, taskService)
 		})
-		r.Delete("/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
+		r.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.DeleteTask(w, r, taskService)
 		})
 		r.Get("/{id}/sub-tasks", func(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +42,7 @@ func NewTaskRouter(taskService *services.TaskService, db database_mongo.Database
 		r.Post("/generate", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GenerateTaskWithoutGroupTask(w, r, taskService)
 		})
-		r.Put("/update-task-in-dialog/{id}", func(w http.ResponseWriter, r *http.Request) {
+		r.Put("/{id}/update-task-in-dialog", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateTaskInDialog(w, r, taskService)
 		})
 		r.Put("/{id}/move-task", func(w http.ResponseWriter, r *http.Request) {

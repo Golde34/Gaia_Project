@@ -15,8 +15,8 @@ const TabGroupTask = (props) => {
 
     if (activeTab === null || activeTab === undefined) {
         if (localStorage.getItem("activeTab") === 'none') {
-            localStorage.setItem("activeTab", groupTasks[0]._id);
-            setActiveTab(groupTasks[0]._id);
+            localStorage.setItem("activeTab", groupTasks[0].id);
+            setActiveTab(groupTasks[0].id);
         } else {
             setActiveTab(localStorage.getItem("activeTab"));
         }
@@ -32,14 +32,14 @@ const TabGroupTask = (props) => {
             <TabGroup className="mt-3" color="indigo">
                 <TabList>
                     {groupTasks.map((groupTask) => (
-                        <div key={groupTask._id}>
+                        <div key={groupTask.id}>
                             <Flex>
                                 <Tab
-                                    key={groupTask._id}
-                                    icon={activeTab === groupTask._id ? ArrowCircleRightIcon : null}
-                                    onClick={() => handleTabChange(groupTask._id)}
+                                    key={groupTask.id}
+                                    icon={activeTab === groupTask.id ? ArrowCircleRightIcon : null}
+                                    onClick={() => handleTabChange(groupTask.id)}
                                     style={
-                                        activeTab === groupTask._id
+                                        activeTab === groupTask.id
                                             ? { color: "#6366f1", fontSize: "20px" }
                                             : { color: "white", fontSize: "20px" }
                                     }
@@ -48,7 +48,7 @@ const TabGroupTask = (props) => {
                                         <div className="col-span-2 mt-1" >{groupTask.title}</div>
                                     </div>
                                 </Tab>
-                                <EllipsisMenu elementName="Group Task" elementId={groupTask._id} projectId={projectId} />
+                                <EllipsisMenu elementName="Group Task" elementId={groupTask.id} projectId={projectId} />
                             </Flex>
                         </div>
                     ))}
@@ -56,14 +56,14 @@ const TabGroupTask = (props) => {
                 </TabList>
                 <TabPanels>
                     {groupTasks.map((groupTask) => (
-                        <div key={groupTask._id}>
-                            {activeTab && activeTab === groupTask._id ? (
+                        <div key={groupTask.id}>
+                            {activeTab && activeTab === groupTask.id ? (
                                 <>
                                     <div className="mt-10">
                                         <Grid numItems={12} className="gap-2">
                                             <Col numColSpan={10}>
-                                                {activeTab && activeTab === groupTask._id && (
-                                                    <TaskProgress groupTaskId={groupTasks[0]._id} activeTab={activeTab} />
+                                                {activeTab && activeTab === groupTask.id && (
+                                                    <TaskProgress groupTaskId={groupTasks[0].id} activeTab={activeTab} />
                                                 )}
                                             </Col>
                                             <Col numColSpan={2} className="mt-4">

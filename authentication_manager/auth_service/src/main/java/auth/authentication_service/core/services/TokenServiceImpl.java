@@ -2,8 +2,8 @@ package auth.authentication_service.core.services;
 
 import auth.authentication_service.core.domain.dto.response.CheckTokenDtoResponse;
 import auth.authentication_service.core.domain.entities.User;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.TokenService;
-import auth.authentication_service.core.store.UserCRUDStore;
 import auth.authentication_service.kernel.utils.JwtUtil;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
 

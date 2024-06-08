@@ -12,4 +12,8 @@ type Resolver struct{
 	AuthGraphQLService service_registry.AuthService
 	TaskGraphQLService service_registry.TaskService
 	ProjectGraphQLService service_registry.ProjectService
+	UserGraphQLService service_registry.UserService
+	GroupTaskGraphQLService service_registry.GroupTaskService
+	RoleGraphQLService service_registry.RoleService
+	PrivilegeGraphQLService service_registry.PrivilegeService
 }

@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
+import { TaskTagRequest } from "./request_dtos/tag.dto";
 
 export class TaskRequestDto {
     @IsString()
@@ -20,15 +21,16 @@ export class TaskRequestDto {
     @IsString()
     @IsOptional()
     duration?: number;
-    @IsString()
     @IsOptional()
     subTasks?: string[];
-    @IsString()
     @IsOptional()
     comments?: string[];
     @IsString()
     @IsOptional()
     activeStatus?: string;
+    @IsString()
+    @IsOptional()
+    tag?: string;
 }
 
 export class GenerateTaskFromScratchRequestDTO {
@@ -56,6 +58,8 @@ export class GenerateTaskFromScratchRequestDTO {
     @IsString()
     @IsOptional()
     activeStatus?: string;
+    @IsOptional()
+    tag?: TaskTagRequest;
 }
 
 export class UpdateTaskInDialogDTO {
@@ -64,6 +68,7 @@ export class UpdateTaskInDialogDTO {
     @IsString()
     @IsOptional()
     description?: string;
+    tag!: TaskTagRequest;
     @IsString()
     status!: string;
 }
