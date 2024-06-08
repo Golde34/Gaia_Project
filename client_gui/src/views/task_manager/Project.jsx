@@ -1,19 +1,29 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../../api/store/actions/task_manager/project.actions";
-import Template from "../../components/template";
+import Template from "../../components/template/Template";
 import CardButton from "../../components/subComponents/CardButton";
 import { Metric } from "@tremor/react";
 import { CreateNewProject } from "../../screens/projectScreen/CreateNewProject";
 
 function ContentArea() {
     const dispatch = useDispatch();
+
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
 
-    useEffect(() => {
+    const getListProjects = useCallback(() => {
         dispatch(getProjects());
     }, [dispatch]);
+
+	const debounceRef = useRef(null);
+
+    useEffect(() => {
+		clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(() => {
+			getListProjects();
+		}, 200);
+    }, []);
 
     localStorage.setItem("activeTab", 'none');  
 

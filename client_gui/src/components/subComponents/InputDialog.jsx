@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Input } from '@material-tailwind/react';
 import { Fragment, useState } from 'react'
-import { useUpdateComponentNameDispatch } from '../../utils/dialog-api-requests';
+import { useUpdateComponentNameDispatch } from '../../kernels/utils/dialog-api-requests';
 
 export const InputDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);

@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useParams } from "react-router-dom";
-import { useCreateGroupTaskDispatch } from '../../utils/create-dialog-api-requests';
+import { useCreateGroupTaskDispatch } from '../../kernels/utils/write-dialog-api-requests';
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { Button } from "@tremor/react";
@@ -266,7 +266,6 @@ export const CreateNewGroupTask = (props) => {
                                             onClick={() => {
                                                 setObjectGroupTask(newName, description, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
                                                 closeModal();
-                                                // window.location.reload();
                                             }}
                                         >
                                             Create

@@ -1,20 +1,27 @@
 package auth.authentication_service.core.services;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.UserDto;
+import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
+import auth.authentication_service.core.domain.enums.BossType;
 import auth.authentication_service.core.domain.enums.LoggerType;
-import auth.authentication_service.core.domain.enums.ResponseMessage;
+import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.UserMapper;
+import auth.authentication_service.core.port.store.RoleStore;
+import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.UserService;
-import auth.authentication_service.core.store.RoleStore;
-import auth.authentication_service.core.store.UserCRUDStore;
 import auth.authentication_service.core.validations.service_validations.UserServiceValidation;
 import auth.authentication_service.kernel.utils.BCryptPasswordEncoder;
 import auth.authentication_service.kernel.utils.GenericResponse;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ModelMapperConfig;
+import auth.authentication_service.kernel.utils.ResponseUtils;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +33,7 @@ import java.util.List;
 @Service
 @Transactional
 @Primary
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -37,10 +45,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapperConfig modelMapperConfig;
     @Autowired
-    private GenericResponse<String> genericResponse;
+    private GenericResponse<?> genericResponse;
+    @Autowired
+    private ResponseUtils responseUtils;
 
     @Autowired
     UserServiceValidation userServiceValidation;
+    @Autowired
+    UserMapper userMapper;
 
     public UserServiceImpl(UserCRUDStore userStore, RoleStore roleStore) {
         this.userStore = userStore;
@@ -52,8 +64,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapperConfig._mapperDtoToEntity(userDto);
 
         GenericResponse<?> validation = userServiceValidation._validateUserCreation(userDto, user);
-        if (validation.getResponseMessage() != ResponseMessage.msg200) {
-            // return http status code base on validate response message
+        if (validation.getResponseMessage() != ResponseEnum.msg200) {
             return genericResponse.matchingResponseMessage(validation);
         }
 
@@ -61,38 +72,49 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
         userStore.save(user);
         _logger.log("Create user: " + user.getUsername(), LoggerType.INFO);
-        return ResponseEntity.ok(user);
+
+        return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
     }
+
     private Role _isBoss(final boolean isBoss) {
         if (isBoss) {
-            return roleStore.findByName("ROLE_BOSS");
+            return roleStore.findByName(BossType.BOSS.getRole());
         } else {
-            return roleStore.findByName("ROLE_USER");
+            return roleStore.findByName(BossType.USER.getRole());
         }
     }
 
     @Override
-    public ResponseEntity<?> updateUser(UserDto userDto) {
+    public ResponseEntity<?> updateUser(UpdateUserRequest userDto) {
         try {
-            User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserUpdates(userDto);
-            if (validation.getResponseMessage() != ResponseMessage.msg200) {
-                // return http status code base on validate response message
+            log.info("UserDTO: {}", userDto);
+            if (validation.getResponseMessage() != ResponseEnum.msg200) {
                 return genericResponse.matchingResponseMessage(validation);
             }
 
-            User updatedUser = userStore.getUserById(user.getId());
-            updatedUser.setUsername(userDto.getUsername());
-            updatedUser.setEmail(userDto.getEmail());
-            updatedUser.setName(userDto.getName());
-            userStore.save(updatedUser);
-            _logger.log("Update user: " + userDto.getUsername() + " to: " + updatedUser.getUsername(), LoggerType.INFO);
-            return ResponseEntity.ok(user);
+            User user = userStore.getUserById(userDto.getUserId());
+            _logger.log("Update user: " + user.getUsername() + " to: " + userDto.getUsername(), LoggerType.INFO);
+            user = updateUserRoles(userDto, user);
+            user = userMapper.updateUserMapper(userDto, user);
+            userStore.save(user);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Update user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
-            return ResponseEntity.badRequest().body("Update user failed");
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    "Update User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.UPDATE_USER,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
+    }
+
+    private User updateUserRoles(UpdateUserRequest userDto, User user) {
+        user.getRoles().clear();
+        userDto.getRoles().stream().forEach(roleName -> {
+            Role role = roleStore.findByName(roleName);
+            user.getRoles().add(role);
+        });
+        return user;
     }
 
     @Override
@@ -100,7 +122,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = modelMapperConfig._mapperDtoToEntity(userDto);
             GenericResponse<?> validation = userServiceValidation._validateUserDeletion(user);
-            if (validation.getResponseMessage() != ResponseMessage.msg200) {
+            if (validation.getResponseMessage() != ResponseEnum.msg200) {
                 // return http status code base on validate response message
                 return genericResponse.matchingResponseMessage(validation);
             }
@@ -108,24 +130,30 @@ public class UserServiceImpl implements UserService {
             User deleteUser = userStore.getUserById(user.getId());
             userStore.delete(deleteUser);
             _logger.log("Delete user: " + userDto.getUsername(), LoggerType.INFO);
-            return ResponseEntity.ok(user);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(deleteUser, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Delete user: " + userDto.getUsername() + " failed", LoggerType.ERROR);
-            return ResponseEntity.badRequest().body("Delete user failed");
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    "Delete User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.DELETE_USER,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         try {
             List<User> users = userStore.findAll();
+            // List<UserResponse> userResponses =
+            // modelMapperConfig._mapperEntityToDto(users);
             _logger.log("Get all users", LoggerType.INFO);
-            return users;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Get all users failed", LoggerType.ERROR);
-            return null;
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    "Get all users failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.GET_ALL_USERS,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 
@@ -143,15 +171,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public ResponseEntity<?> getUserByUsername(UserDto userDto) {
         try {
+            String username = userDto.getUsername();
             User user = userStore.findByUsername(username);
             _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
-            return user;
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             e.printStackTrace();
-            _logger.log("Get user: " + username + " failed", LoggerType.ERROR);
-            return null;
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    "Get user failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
         }
     }
 

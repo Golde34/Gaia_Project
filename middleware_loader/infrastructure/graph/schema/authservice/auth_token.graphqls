@@ -1,0 +1,36 @@
+type AuthToken {
+	id: ID!
+	token: String!
+	tokenType: String!
+	expiryDate: String!
+
+	user: User!
+}
+
+input SigninInput {
+	username: String!
+	password: String!
+}
+
+type AuthTokenResponse {
+	accessToken: String!
+	refreshToken: String!
+	name: String!
+	username: String!
+	email: String!
+	lastLogin: String!
+	bossType: String!
+	role: String!
+	gaiaHealth: String!
+}
+
+input TokenInput {
+  	token: String!
+}
+
+type TokenResponse {
+	id: ID!
+	username: String!
+	accessToken: String!
+	expiryDate: String!
+}

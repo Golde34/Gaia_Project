@@ -8,6 +8,7 @@
 
 *\.csv
 *\.zip
+*.gz
 
 *\.vite
 
@@ -25,3 +26,4 @@ __config__.py
 # gitignore json
 token.json
 commits.json
+*.xml

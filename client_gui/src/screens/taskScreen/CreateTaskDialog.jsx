@@ -1,4 +1,4 @@
-import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../utils/create-dialog-api-requests";
+import { useCreateTaskDispatch, useGenerateTaskFromScratchDispatch } from "../../kernels/utils/write-dialog-api-requests";
 import { Transition, Dialog } from "@headlessui/react";
 import { Textarea } from "@material-tailwind/react";
 import { Button, Col, DatePicker, Grid, TextInput } from "@tremor/react";
@@ -64,6 +64,8 @@ export const CreateTaskDialog = (props) => {
         task.startDate = startDate;
         if (duration === 0) {
             task.duration = defaultDuration.toString();
+        } else {
+            task.duration = duration.toString();
         }
         task.activeStatus = 'ACTIVE';
 

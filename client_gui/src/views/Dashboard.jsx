@@ -1,6 +1,6 @@
 import LeftColumn from "../components/LeftColumn"
 import RightColumn from "../components/RightColumn"
-import Template from "../components/template"
+import Template from "../components/template/Template"
 
 function ContentArea() {
   return (

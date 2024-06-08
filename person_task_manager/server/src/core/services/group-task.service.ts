@@ -1,14 +1,16 @@
+import { TaskEntity } from "../../infrastructure/entities/task.entity";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response_helpers";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
-import { TaskEntity } from "../domain/entities/task.entity";
 import { groupTaskStore } from "../store/group-task.store";
 import { projectStore } from "../store/project.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
+import { userTagService } from "./user-tag.service";
 
 const projectServiceImpl = projectService;
+const userTagServiceImpl = userTagService;
 const groupTaskValidationImpl = groupTaskValidation;
 
 class GroupTaskService {
@@ -156,7 +158,7 @@ class GroupTaskService {
     }
 
     // calculate totalTasks, completedTasks
-    async calculateTotalTasks(groupTaskId: string): Promise<IResponse> {
+    async calculateCompletedTasks(groupTaskId: string): Promise<IResponse> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
                 const groupTask = await groupTaskStore.findGroupTaskById(groupTaskId);
@@ -181,7 +183,7 @@ class GroupTaskService {
                     groupTask.completedTasks = completedTasks;
                     await groupTaskStore.updateGroupTask(groupTaskId, groupTask);
                     return msg200({
-                        message: groupTask,
+                        groupTask,
                     });
                 }
             }

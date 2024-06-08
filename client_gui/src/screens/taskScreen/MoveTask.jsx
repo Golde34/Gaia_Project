@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Button, Flex } from "@tremor/react";
 import { Fragment, useState } from "react";
-import { useMoveTaskDispatch } from "../../utils/dialog-api-requests";
+import { useMoveTaskDispatch } from "../../kernels/utils/dialog-api-requests";
 
 export const MoveTask = (props) => {
     const projectId = props.projectId;
@@ -70,16 +70,16 @@ export const MoveTask = (props) => {
                                     </Dialog.Title>
 
                                     {listGroupTasks.map((groupTask) => (
-                                        (groupTask._id === oldGroupTaskId) ? (
+                                        (groupTask.id === oldGroupTaskId) ? (
                                             <></>
                                         ) : (
                                             <>
-                                                <div key={groupTask._id} className="flex items-center mt-4">
+                                                <div key={groupTask.id} className="flex items-center mt-4">
                                                     <input type="radio" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                                        name={groupTask._id} value={groupTask._id} 
+                                                        name={groupTask.id} value={groupTask.id}
                                                         onChange={(e) => setNewGroupTaskId(e.target.value)}
-                                                        />
-                                                    <label htmlFor={groupTask._id} className="ml-3 block text-sm font-medium text-gray-700">
+                                                    />
+                                                    <label htmlFor={groupTask.id} className="ml-3 block text-sm font-medium text-gray-700">
                                                         {groupTask.title}
                                                     </label>
                                                 </div>

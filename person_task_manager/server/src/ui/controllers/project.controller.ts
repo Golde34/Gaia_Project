@@ -31,9 +31,7 @@ class ProjectController {
 
     async createProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const bodyJson = req.body;        
-
-            const createProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
+            const createProjectObjectDto = plainToInstance(ProjectRequestDto, req.body);
             const projectResult = await projectService.createProject(createProjectObjectDto);
 
             return projectResult;
@@ -45,9 +43,7 @@ class ProjectController {
     async updateProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const bodyJson = req.body.body;
-
-            const updateProjectObjectDto = plainToInstance(ProjectRequestDto, bodyJson);
+            const updateProjectObjectDto = plainToInstance(ProjectRequestDto, req.body);
             const projectResult = await projectService.updateProject(id, updateProjectObjectDto);
 
             return projectResult;
@@ -81,10 +77,7 @@ class ProjectController {
     async updateProjectName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const bodyJson = req.body.body;
-            const name = bodyJson.newName;
-
-            const projectResult = await projectService.updateProjectName(id, name);
+            const projectResult = await projectService.updateProjectName(id, req.body.name);
 
             return projectResult;
         } catch (err) {
@@ -95,10 +88,7 @@ class ProjectController {
     async updateProjectColor(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const id = req.params.id;
-            const bodyJson = req.body;
-            const color = bodyJson.color;
-
-            const projectResult = await projectService.updateProjectColor(id, color);
+            const projectResult = await projectService.updateProjectColor(id, req.body.color);
 
             return projectResult;
         } catch (err) {

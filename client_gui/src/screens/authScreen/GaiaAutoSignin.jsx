@@ -1,20 +1,20 @@
 import { useDispatch, useSelector } from "react-redux"
-import { gaiaSignin } from "../../api/store/actions/auth_service/userActions";
-import Signin from "./Signin";
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from 'react-use';
+import { gaiaSignin } from "../../api/store/actions/auth_service/auth.actions";
+import { useEffect, useMemo, useRef } from "react";
+import { useCookies } from "react-cookie";
+import { Navigate } from "react-router-dom"
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const [cookies, setCookies] = useCookies(['accessToken'])
 
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
-
-    const [sessionUserInfo, setSessionUserInfo] = useSessionStorage('userInfo', null);
-    const userInfo = localStorage.getItem('userInfo');
-
+    const obj = useMemo(() => {
+        if (gaiaInfo !== null && gaiaInfo !== undefined && gaiaInfo !== '') {
+            return gaiaInfo;
+        }
+    })
     const didGaiaAuthenticateRef = useRef();
 
     useEffect(() => {
@@ -23,22 +23,20 @@ const GaiaAutoSignin = () => {
         didGaiaAuthenticateRef.current = true;
     }, [dispatch]);
 
-    const navigateToCorrectPage = (path) => {
-        navigate('/' + path);
-    }
-    
+    useEffect(() => {
+        setCookies('accessToken', obj)
+    }, [obj]);
+
     return (
         <div>
             {loading ? (
                 <div>Loading...</div>
             ) : error ? (
-                <div><Signin /></div>
+                <div><Navigate to='/signin' /></div>
             ) : gaiaInfo ? (
-                <div>{navigateToCorrectPage('dashboard')}</div>
-            ) : userInfo != null ? (
-                <div>{navigateToCorrectPage('dashboard')}</div>
+                <div><Navigate to='/dashboard' /></div>
             ) : (
-                <div>{navigateToCorrectPage('signin')}</div>
+                <div><></></div>
             )
             }
         </div >

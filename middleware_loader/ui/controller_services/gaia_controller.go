@@ -2,7 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
-	"middleware_loader/core/services"
+	"middleware_loader/core/services/gaia_connector"
 	"net/http"
 )
 

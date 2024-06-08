@@ -1,5 +1,5 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { ISubTaskEntity, SubTaskEntity } from "../../core/domain/entities/sub-task.entity";
+import { ISubTaskEntity, SubTaskEntity } from "../entities/sub-task.entity";
 import { ActiveStatus } from "../../core/domain/enums/enums";
 import { DeleteResult } from "mongodb";
 

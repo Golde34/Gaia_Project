@@ -12,6 +12,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { msg200, msg400, msg405, sendResponse } from "./core/common/response_helpers";
+import { userTagRouter } from "./ui/routers/user-tag.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -38,9 +40,13 @@ async function main(): Promise<void> {
     );
     app.use(bodyParser.json({ limit: "50mb" }));
     app.use(cors());
-	app.use(helmet());
+    app.use(helmet());
     app.use(morgan("dev"));
 
+    app.get("/status", (req: Request, res: Response) => {
+        // return msg200("Task-manager Server is running");
+        res.status(200).send(msg200("3000"));
+    });
     app.use("/dashboard", dashboardRouter);
     app.use("/auth", authRouter)
     app.use("/project", projectRouter);
@@ -48,8 +54,11 @@ async function main(): Promise<void> {
     app.use("/task", taskRouter);
     app.use("/sub-task", subTaskRouter);
     app.use("/comment", commentRouter);
+    app.use("/user-tag", userTagRouter);
 
-    app.use((req: Request, res: Response, next: NextFunction) => next(new Error("Not Found")))
+    app.use((req: Request, res: Response, next: NextFunction) => {
+        sendResponse(msg405("Method Not Allowed"), res, next);
+    });
 
     app.listen(config.server.listenPort, () => {
         console.log(`Server running on port ${port}`);

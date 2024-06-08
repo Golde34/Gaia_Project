@@ -2,6 +2,14 @@
 
 package model
 
+type AuthToken struct {
+	ID         string `json:"id"`
+	Token      string `json:"token"`
+	TokenType  string `json:"tokenType"`
+	ExpiryDate string `json:"expiryDate"`
+	User       *User  `json:"user"`
+}
+
 type AuthTokenResponse struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
@@ -21,6 +29,15 @@ type Comment struct {
 	CreatedAt    string `json:"createdAt"`
 	UpdatedAt    string `json:"updatedAt"`
 	Task         string `json:"task"`
+}
+
+type CreateGroupTaskInput struct {
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Priority    []string `json:"priority"`
+	Status      string   `json:"status"`
+	ProjectID   string   `json:"projectId"`
+	Tasks       []string `json:"tasks,omitempty"`
 }
 
 type CreateProjectInput struct {
@@ -44,6 +61,14 @@ type CreateTaskInput struct {
 	GroupTaskID  string   `json:"groupTaskId"`
 }
 
+type CreateUserInput struct {
+	Name             string `json:"name"`
+	Username         string `json:"username"`
+	Email            string `json:"email"`
+	Password         string `json:"password"`
+	MatchingPassword string `json:"matchingPassword"`
+}
+
 type GenerateTaskWithoutGroupTaskInput struct {
 	Title        string   `json:"title"`
 	Description  string   `json:"description"`
@@ -62,12 +87,12 @@ type GroupTask struct {
 	Description    string   `json:"description"`
 	Priority       []string `json:"priority"`
 	Status         string   `json:"status"`
-	OrdinalNumber  string   `json:"ordinalNumber"`
+	OrdinalNumber  *int     `json:"ordinalNumber,omitempty"`
 	ActiveStatus   string   `json:"activeStatus"`
 	Project        string   `json:"project"`
 	Tasks          []string `json:"tasks"`
-	TotalTasks     int      `json:"totalTasks"`
-	CompletedTasks int      `json:"completedTasks"`
+	TotalTasks     *int     `json:"totalTasks,omitempty"`
+	CompletedTasks *int     `json:"completedTasks,omitempty"`
 	CreatedAt      string   `json:"createdAt"`
 	UpdatedAt      string   `json:"updatedAt"`
 }
@@ -76,10 +101,40 @@ type IDInput struct {
 	ID string `json:"id"`
 }
 
+type ListAllUsers struct {
+	ID        float64  `json:"id"`
+	Name      string   `json:"name"`
+	Username  string   `json:"username"`
+	Email     string   `json:"email"`
+	LastLogin string   `json:"lastLogin"`
+	Roles     []string `json:"roles"`
+}
+
+type ListPrivilegeResponse struct {
+	ID          float64             `json:"id"`
+	Name        string              `json:"name"`
+	Description *string             `json:"description,omitempty"`
+	Roles       []*RoleOnlyResponse `json:"roles"`
+}
+
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
 	TaskID         string `json:"taskId"`
+}
+
+type Mutation struct {
+}
+
+type Privilege struct {
+	ID          float64 `json:"id"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+}
+
+type PrivilegeInput struct {
+	ID   *string `json:"id,omitempty"`
+	Name string  `json:"name"`
 }
 
 type Project struct {
@@ -93,6 +148,35 @@ type Project struct {
 	OwnerID      float64  `json:"ownerId"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
+}
+
+type ProjectGroupTaskIDInput struct {
+	ProjectID   string `json:"projectId"`
+	GroupTaskID string `json:"groupTaskId"`
+}
+
+type Query struct {
+}
+
+type Role struct {
+	ID          float64      `json:"id"`
+	Name        string       `json:"name"`
+	Description *string      `json:"description,omitempty"`
+	GrantedRank float64      `json:"grantedRank"`
+	Privileges  []*Privilege `json:"privileges"`
+}
+
+type RoleInput struct {
+	ID          *float64 `json:"id,omitempty"`
+	Name        string   `json:"name"`
+	Description *string  `json:"description,omitempty"`
+	GrantedRank float64  `json:"grantedRank"`
+}
+
+type RoleOnlyResponse struct {
+	ID          float64 `json:"id"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
 }
 
 type SigninInput struct {
@@ -120,13 +204,18 @@ type Task struct {
 	Status       string   `json:"status"`
 	StartDate    string   `json:"startDate"`
 	Deadline     string   `json:"deadline"`
-	Duration     string   `json:"duration"`
+	Duration     float64  `json:"duration"`
 	ActiveStatus string   `json:"activeStatus"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
 	GroupTask    string   `json:"groupTask"`
 	SubTasks     []string `json:"subTasks"`
 	Comments     []string `json:"comments"`
+}
+
+type TaskDashboard struct {
+	DoneTaskList    []*Task `json:"doneTaskList"`
+	NotDoneTaskList []*Task `json:"notDoneTaskList"`
 }
 
 type TokenInput struct {
@@ -143,6 +232,16 @@ type TokenResponse struct {
 type UpdateColorInput struct {
 	ID    string `json:"id"`
 	Color string `json:"color"`
+}
+
+type UpdateGroupTaskInput struct {
+	GroupTaskID string   `json:"groupTaskId"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Priority    []string `json:"priority"`
+	Status      string   `json:"status"`
+	ProjectID   string   `json:"projectId"`
+	Tasks       []string `json:"tasks,omitempty"`
 }
 
 type UpdateObjectNameInput struct {
@@ -179,17 +278,41 @@ type UpdateTaskInput struct {
 	TaskID       string   `json:"taskId"`
 }
 
+type UpdateUser struct {
+	ID        float64  `json:"id"`
+	Name      string   `json:"name"`
+	Username  string   `json:"username"`
+	Email     string   `json:"email"`
+	LastLogin string   `json:"lastLogin"`
+	Roles     []string `json:"roles"`
+}
+
+type UpdateUserInput struct {
+	UserID   float64  `json:"userId"`
+	Name     string   `json:"name"`
+	Username string   `json:"username"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles"`
+}
+
 type User struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Username   string `json:"username"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	Enabled    bool   `json:"enabled"`
-	IsUsing2fa bool   `json:"isUsing2FA"`
-	Secret     string `json:"secret"`
-	CreatedAt  string `json:"createdAt"`
-	UpdatedAt  string `json:"updatedAt"`
+	ID         float64 `json:"id"`
+	Name       string  `json:"name"`
+	Username   string  `json:"username"`
+	Email      string  `json:"email"`
+	Password   string  `json:"password"`
+	LastLogin  string  `json:"lastLogin"`
+	Enabled    bool    `json:"enabled"`
+	IsUsing2fa bool    `json:"isUsing2FA"`
+	Secret     string  `json:"secret"`
+	Roles      []*Role `json:"roles"`
+}
+
+type UserInput struct {
+	ID       float64 `json:"id"`
+	Name     string  `json:"name"`
+	Username string  `json:"username"`
+	Email    string  `json:"email"`
 }
 
 type UserPermissionInput struct {

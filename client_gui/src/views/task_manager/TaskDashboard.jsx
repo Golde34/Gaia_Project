@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Template from "../../components/template";
+import Template from "../../components/template/Template";
 import { useCallback, useEffect, useRef } from "react";
 import { getGroupTaskList } from "../../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
@@ -8,10 +8,13 @@ import TabGroupTask from "../../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
 import MessageBox from "../../components/subComponents/MessageBox";
+import { useCookies } from "react-cookie";
 
 function ContentArea() {
     const projectId = useParams().id;
     const dispatch = useDispatch();
+    const [cookies] = useCookies(['accessToken'])
+    console.log("my cookie: " + cookies.accessToken)
 
     const listGroupTasks = useSelector((state) => state.groupTaskList);
     const { loading, error, groupTasks } = listGroupTasks;

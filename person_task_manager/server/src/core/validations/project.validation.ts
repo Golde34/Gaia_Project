@@ -1,13 +1,10 @@
-import { ProjectEntity } from "../domain/entities/project.entity";
+import { ProjectEntity } from "../../infrastructure/entities/project.entity";
 
 export const projectValidation = {
     async checkExistedProjectById(projectId: string): Promise<boolean> {
         try {
-            if(await ProjectEntity.findOne({ _id: projectId }) != null) {
-                return true;
-            } else {
-                return false;
-            }
+            const existedProject = await ProjectEntity.findOne({ _id: projectId }) != null
+            return existedProject;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -16,11 +13,8 @@ export const projectValidation = {
 
     async checkExistedProjectByName(projectName: string): Promise<boolean> {
         try {
-            if (await ProjectEntity.findOne({ projectName: projectName }) != null) {
-                return true; // existed
-            } else {
-                return false;
-            }
+            const existedProject = await ProjectEntity.findOne({ projectName: projectName }) != null
+            return existedProject;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;
@@ -29,11 +23,8 @@ export const projectValidation = {
 
     async checkOwnerProject(projectId: string, userId: string): Promise<boolean> {
         try {
-            if (await ProjectEntity.findOne({ _id: projectId, owner: userId }) != null) {
-                return true; // owner
-            } else {
-                return false;
-            }
+            const existedProject = await ProjectEntity.findOne({ _id: projectId, owner: userId }) != null 
+            return existedProject;
         } catch (error: any) {
             console.log(error.message.toString());
             return false;

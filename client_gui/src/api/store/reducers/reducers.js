@@ -3,7 +3,7 @@ import {
     userSigninReducer,
     gaiaSigninReducer,
     bossSigninReducer,
-} from './auth_service/userReducers'
+} from './auth_service/auth.reducer'
 
 import { projectCreateReducer, projectDeleteReducer, projectDetailReducer,
     projectListReducer, projectUpdateReducer } from './task_manager/project.reducers'
@@ -15,12 +15,21 @@ import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer,
     subTaskListReducer, subTaskUpdateReducer } from './task_manager/sub-task.reducers'
 import { commentCreateReducer, commentDeleteReducer, commentDetailReducer, 
     commentListReducer, commentUpdateReducer } from './task_manager/comment.reducers'
+import { microserviceListReducer } from "./middleware_loader/microservices.reducer";
+import { userListReducer, userUpdateReducer } from "./auth_service/user.reducer";
+import { roleCreateReducer, roleListReducer } from "./auth_service/role.reducer";
+import { privilegeListReducer } from "./auth_service/privilege.reducer";
 
 export const reducer = combineReducers({
     // auth service
     gaiaSignin: gaiaSigninReducer,
     bossSignin: bossSigninReducer,
     userSignin: userSigninReducer,
+    userList: userListReducer,
+    userUpdate: userUpdateReducer,
+    roleList: roleListReducer,
+    roleCreate: roleCreateReducer,
+    privilegeList: privilegeListReducer,
     // task manager
     projectList: projectListReducer,
     projectDetail: projectDetailReducer,
@@ -51,4 +60,6 @@ export const reducer = combineReducers({
     commentCreate: commentCreateReducer,
     commentUpdate: commentUpdateReducer,
     commentDelete: commentDeleteReducer,
+    // middleware loader
+    microserviceList: microserviceListReducer,
 })

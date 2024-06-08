@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan({ "auth.authentication_service.task"})
+@ComponentScan({ "auth.authentication_service.infrastructure.task"})
 public class SpringTaskConfig {
     
 }
