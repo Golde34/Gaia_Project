@@ -26,7 +26,7 @@ class AuthenticationConnector:
         token_string = self.authenticate_command()
         return token_string
         
-    def authenticate_command(self):
+    def call_login_api(self):
         username = USER_PROFILE['username']
         password = USER_PROFILE['password']
         
