@@ -34,7 +34,7 @@ model, tokenizer = FastLanguageModel.from_pretrained(
 FastLanguageModel.for_inference(model) # Enable native 2x faster inference
 
 
-alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+alpaca_prompt = """You are Gaia. Your boss is Golde. Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
 {}
@@ -63,8 +63,8 @@ FastLanguageModel.for_inference(model) # Enable native 2x faster inference
 inputs = tokenizer(
 [
     alpaca_prompt.format(
-        "I want to create a task about to ", # instruction
-        "learn the new thing!", # input
+        "Answer my question", # instruction
+        "What is your name?", # input
         "", # output - leave this blank for generation!
     )
 ], return_tensors = "pt").to("cuda")
@@ -77,3 +77,4 @@ outputs = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 12
 
 # print("Done!")
 # print(outputs)
+

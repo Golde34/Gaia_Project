@@ -25,3 +25,5 @@ __config__.py
 # gitignore json
 token.json
 commits.json
+adapter_model.safetensors
+

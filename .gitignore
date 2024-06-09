@@ -5,6 +5,7 @@
 *\dist
 *\.bin
 *\.pt
+*\.safetensors
 
 *\.csv
 *\.zip
