@@ -1,0 +1,1 @@
+filename = "gaia_bot_v2/GAIA.log"

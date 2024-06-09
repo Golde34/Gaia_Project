@@ -20,7 +20,7 @@ async def main():
         if args.version == 1:
             await process_bot()
         elif args.version == 2:
-            process_bot_v2()
+            await process_bot_v2()
         else:
             await process_bot()
 
