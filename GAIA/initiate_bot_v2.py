@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import asyncio
 import colorama
 from gaia_bot_v2.commands.authentication import AuthenticationCommand
@@ -8,10 +9,18 @@ from gaia_bot_v2.process.processor import Processor
 
 
 async def process_bot_v2():
+=======
+import colorama
+from gaia_bot_v2.commands.authentication import AuthenticationCommand
+
+
+async def process_bot_v2(): 
+>>>>>>> 5deb538553f6a3a268cddcf5959fd1eb064ffa05
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: 2.0.0")
     # Startup
+<<<<<<< HEAD
     loop = asyncio.get_event_loop()
     console_manager, assistant = await loop.run_in_executor(None, _startup)
     services = await loop.run_in_executor(None, _start_satellite_services)
@@ -68,3 +77,25 @@ async def _initiate_gaia(console_manager, assistant, settings, token, services):
             text=response_transcript,
             info_log="Response transcript with skill: " + skill,
         )
+=======
+    console_manager, assistant = _startup()
+     # Authen user
+    token = await AuthenticationCommand().process()
+    if token == None:
+        print("Authentication failed, process user to guess mode.")    
+        _process_guess_mode(console_manager, assistant)
+    print(token)
+    # initiate
+    await _initiate_gaia(console_manager=console_manager, assistant=assistant)
+
+
+def _startup():
+    pass
+
+def _process_guess_mode(console_manager, assistant):
+    pass
+
+async def _initiate_gaia(console_manager, assistant):
+    await print(console_manager, assistant)
+    pass
+>>>>>>> 5deb538553f6a3a268cddcf5959fd1eb064ffa05
