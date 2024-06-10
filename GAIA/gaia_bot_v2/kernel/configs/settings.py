@@ -1,9 +1,11 @@
-from gaia_bot_v2.kernel.configs import __filename__
+import gaia_bot_v2
+from gaia_bot_v2.kernel.configs.__config__ import __filename__
 from gaia_bot_v2.domain.enums import InputMode
+from gaia_bot.modules.local.models.task_detect.prompt_to_response.inference import model
 
 
 ROOT_LOG_CONFIG = {
-    'version': 2,
+    'version': 1,
     'root': {
         'level': 'INFO',
         'handlers': ['file'],
@@ -34,6 +36,7 @@ DEFAULT_GENERAL_SETTINGS = {
 }
 
 AI_MODEL_LOCATION = {
+    'alpaca': './gaia_bot_v2/models/alpaca/golde_llama'
     # 'gpt2': "./gaia_bot/modules/local/models/gpt/model.pt",
     # 'task_detect': "./gaia_bot/modules/local/models/task_detect/prompt_to_response/TrainData.pth",
 }
