@@ -1,4 +1,3 @@
-
 from logging import config
 
 from gaia_bot_v2.domain.enums import InputMode
