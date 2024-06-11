@@ -53,7 +53,6 @@ def _startup():
     )
     return console_manager, assistant, response_model, response_tokenizer
 
-
 def _start_satellite_services():
     pass
 
