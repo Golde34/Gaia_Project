@@ -1,6 +1,6 @@
 import socket
 import asyncio
-import gaia_bot_v2.kernel.config.port_configs as PORTS, PORT_COMPONENTS
+from gaia_bot_v2.kernel.configs.port_configs import PORTS, PORT_COMPONENTS
 
 class MicroserviceConnection():
     
