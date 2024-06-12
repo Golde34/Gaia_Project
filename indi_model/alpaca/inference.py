@@ -77,4 +77,3 @@ outputs = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 12
 
 # print("Done!")
 # print(outputs)
-

@@ -1,7 +1,8 @@
 import logging
+import re
 
 from gaia_bot_v2.models.alpaca import inference
-
+import gaia_bot_v2.kernel.utils.gpu_threads as gpuutils
 
 # logging.basicConfig(level=logging.ERROR)
 
@@ -16,9 +17,12 @@ class AlpacaResponse():
             return last_response
         except Exception as e:
             print(f"Error: {e}")
-            cls.console_manager.console_output('Failed to generate response.')
+            return "Failed to generate response."
             
     @classmethod
     def _format_response(cls, response):
+        parts = response.split("### Response:\n")
+        if len(parts) > 1:
+            return parts[1].strip()
         return response
     
