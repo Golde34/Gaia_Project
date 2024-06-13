@@ -2,7 +2,6 @@ import logging
 import re
 
 from gaia_bot_v2.models.alpaca import inference
-import gaia_bot_v2.kernel.utils.gpu_threads as gpuutils
 
 # logging.basicConfig(level=logging.ERROR)
 
