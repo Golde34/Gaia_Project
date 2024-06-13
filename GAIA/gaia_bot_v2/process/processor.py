@@ -7,15 +7,15 @@ from gaia_bot.modules.local.models.task_detect.prompt_to_response.utils.model_ut
 
 
 class Processor:
-
-    def __init__(self, console_manager, assistant, settings, response_model, response_tokenizer):
+    def __init__(self, console_manager, assistant, settings, response_model, response_tokenizer, detect_skill_model):
         self.console_manager = console_manager
         self.assistant = assistant
         self.settings = settings
         self.skills = SKILLS
         self.response_model = response_model
         self.response_tokenizer = response_tokenizer
-        
+        self.detect_skill_model = detect_skill_model
+    
     async def run(self):
         transcript = gaia_bot_v2.input_engine.recognize_input()
         self.console_manager.console_output(
@@ -26,7 +26,7 @@ class Processor:
         # user_skills = create_skill_trie(self.skills)
         # Response transcript
         response_transcript = self._generate_response(transcript, self.response_model, self.response_tokenizer) 
-        # tag_skill = self.assistant.detect_skill_tag(transcript)
+        tag_skill = self.assistant.detect_skill_tag(transcript, model=self.detect_skill_model)
         
         # self.assistant.sentence_detect(transcript, self.skills)
         # await self.assistant.validate_assistant_response(tag_skill, user_skills)

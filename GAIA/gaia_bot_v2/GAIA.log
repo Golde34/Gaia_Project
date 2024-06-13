@@ -1,20 +1,6 @@
-2024-06-11 21:15:07,287 - root - INFO - Bot wakeup...
-2024-06-11 21:15:07,288 - root - INFO - Listen command
-2024-06-11 21:15:08,706 - root - INFO - Handle input
-2024-06-11 21:15:09,817 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:15:09,817 - root - INFO - Listen command
-2024-06-11 21:15:23,454 - root - INFO - Handle input
-2024-06-11 21:15:24,612 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:15:24,612 - root - INFO - Listen command
-2024-06-11 21:15:47,282 - root - INFO - Handle input
-2024-06-11 21:15:48,796 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:15:48,796 - root - INFO - Listen command
-2024-06-11 21:16:15,000 - root - INFO - Handle input
-2024-06-11 21:16:15,285 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:16:15,285 - root - INFO - Listen command
-2024-06-11 21:16:25,179 - root - INFO - Handle input
-2024-06-11 21:16:25,787 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:16:25,787 - root - INFO - Listen command
-2024-06-11 21:16:51,375 - root - INFO - Handle input
-2024-06-11 21:16:52,021 - root - INFO - Response transcript with skill: Test response.
-2024-06-11 21:16:52,021 - root - INFO - Listen command
+2024-06-14 00:00:23,962 - root - INFO - Bot wakeup...
+2024-06-14 00:00:27,886 - root - INFO - Listen command
+2024-06-14 00:00:30,709 - root - INFO - Handle input
+2024-06-14 00:00:32,123 - root - INFO - Skill tag:Greeting
+2024-06-14 00:00:32,123 - root - INFO - Response transcript with skill: Test response.
+2024-06-14 00:00:32,123 - root - INFO - Listen command
