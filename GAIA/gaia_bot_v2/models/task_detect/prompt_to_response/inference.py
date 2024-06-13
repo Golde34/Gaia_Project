@@ -1,3 +1,4 @@
+import gaia_bot.modules.local.models.task_detect.prompt_to_response.inference
 import torch
 from gaia_bot.modules.local.models.task_detect.prompt_to_response.model import SimpleNetwork
 from gaia_bot.modules.local.models.task_detect.prompt_to_response.utils.model_utils import bag_words, tokenize
@@ -14,14 +15,13 @@ all_words = data["prompt_all_words"]
 tags = data["tags"]
 model_state = data["model_state"]
 
-model = SimpleNetwork(input_size, hidden_size, num_classes).to(device)
-model.load_state_dict(model_state)
-model.eval()
+def get_detect_skill_model():
+    model = SimpleNetwork(input_size, hidden_size, num_classes).to(device)
+    model.load_state_dict(model_state)
+    model.eval()
+    return model
 
-# -------------
-Name = "Gaia"
-
-def infer(sentence):
+def infer(sentence, model):
 
     sentence = tokenize(sentence)
     X = bag_words(sentence, all_words)
