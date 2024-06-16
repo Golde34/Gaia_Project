@@ -11,6 +11,7 @@ from gaia_bot_v2.process.assistant_skill import AssistantSkill
 from gaia_bot_v2.process.processor import Processor
 from gaia_bot_v2.models.alpaca.inference import get_model_and_tokenizer
 from gaia_bot_v2.models.task_detect.prompt_to_response.inference import get_detect_skill_model
+from gaia_bot_v2.models import load_models
 
 
 async def process_bot_v2():
@@ -57,38 +58,44 @@ def _startup():
 
 
 def _startup_ai_model():
-    models_result, count_models = _run_models_in_parallel(
-        check_response=True, check_detect_skill=True
-    )
+    results = load_models.run_model_in_parallel()
+    response_model, resposne_tokenizer = results['response']
+    task_detect_model = results['detect_skill']
+    return response_model, resposne_tokenizer, task_detect_model
 
-    if count_models['response']==1:
-        response_model, response_tokenizer = models_result[0]
-    else:
-        response_model, response_tokenizer = None, None
-    if count_models['detect_skill']==1:
-        detect_skill_model = models_result[1]
-    else:
-        detect_skill_model = None
+# def _startup_ai_model():
+#     models_result, count_models = _run_models_in_parallel(
+#         check_response=True, check_detect_skill=True
+#     )
 
-    gpu_utils.check_gpu_memory()
-    return response_model, response_tokenizer, detect_skill_model
+#     if count_models['response']==1:
+#         response_model, response_tokenizer = models_result[0]
+#     else:
+#         response_model, response_tokenizer = None, None
+#     if count_models['detect_skill']==1:
+#         detect_skill_model = models_result[1]
+#     else:
+#         detect_skill_model = None
+
+#     gpu_utils.check_gpu_memory()
+#     return response_model, response_tokenizer, detect_skill_model
 
 
-def _run_models_in_parallel(check_response, check_detect_skill):
-    count_models = {}
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        futures = []
-        if check_response:
-            futures.append(executor.submit(get_model_and_tokenizer))
-            count_models["response"] = 1
+# def _run_models_in_parallel(check_response, check_detect_skill):
+#     count_models = {}
+#     with ThreadPoolExecutor(max_workers=2) as executor:
+#         futures = []
+#         if check_response:
+#             futures.append(executor.submit(get_model_and_tokenizer))
+#             count_models["response"] = 1
 
-        if check_detect_skill:
-            futures.append(executor.submit(get_detect_skill_model))
-            count_models["detect_skill"] = 1
+#         if check_detect_skill:
+#             futures.append(executor.submit(get_detect_skill_model))
+#             count_models["detect_skill"] = 1
 
-        results = [future.result() for future in futures]
+#         results = [future.result() for future in futures]
 
-    return results, count_models
+#     return results, count_models
 
 
 def _start_satellite_services():
