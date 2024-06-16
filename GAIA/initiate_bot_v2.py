@@ -53,12 +53,6 @@ def _startup():
 def _register_ai_models():
     return load_models.run_model_in_parallel()
 
-def _startup_ai_model():
-    results = load_models.run_model_in_parallel()
-    response_model, resposne_tokenizer = results["response"]
-    task_detect_model = results["detect_skill"]
-    return response_model, resposne_tokenizer, task_detect_model
-
 
 def _start_satellite_services():
     pass
@@ -69,12 +63,7 @@ def _process_guess_mode(console_manager, assistant):
 
 
 async def _initiate_gaia(
-    console_manager,
-    assistant,
-    settings,
-    token,
-    services,
-    register_models
+    console_manager, assistant, settings, token, services, register_models
 ):
     boolean_loop = True
     process = Processor(

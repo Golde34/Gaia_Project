@@ -24,6 +24,9 @@ class Processor:
         self.console_manager.console_output(
             text="Handling your command", info_log="Handle input"
         )
+        
+        self._check_exit_gaia(transcript)
+        
         # TODO
         # user skills based on user authorization and available satellite services
         # user_skills = create_skill_trie(self.skills)
@@ -39,6 +42,13 @@ class Processor:
         # return response_transcript
         tag_skill = "Test response."
         return response_transcript, tag_skill
+
+    def _check_exit_gaia(self, transcript):
+        if transcript.lower() in ["exit", "quit", "q", "bye"]:
+            self.console_manager.console_output(
+                text="Goodbye, see you later.", info_log="Exit Gaia"
+            )
+            exit()
 
     def _response_and_detect_skill(self, transcript):
         response_model, response_tokenizer = self.register_models["response"]
