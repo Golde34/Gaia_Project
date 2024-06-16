@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from gaia_bot_v2.models.alpaca.inference import get_model_and_tokenizer
-from gaia_bot_v2.kernel.configs.ai_models_config import AI_INFERENCE
+from gaia_bot_v2.kernel.configs.ai_models_register import AI_INFERENCE
 from gaia_bot_v2.kernel.utils import gpu_threads
 
 

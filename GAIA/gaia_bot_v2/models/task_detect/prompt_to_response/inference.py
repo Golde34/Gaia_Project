@@ -1,8 +1,8 @@
-import gaIa_bot_v2.modules.local.models.task_detect.prompt_to_response.inference
 import torch
-from gaIa_bot_v2.modules.local.models.task_detect.prompt_to_response.model import SimpleNetwork
-from gaIa_bot_v2.modules.local.models.task_detect.prompt_to_response.utils.model_utils import bag_words, tokenize
-from gaIa_bot_v2.kernel.configs.settings import AI_MODEL_LOCATION
+from gaia_bot_v2.models.task_detect.prompt_to_response.model import SimpleNetwork
+from gaia_bot_v2.models.task_detect.prompt_to_response.utils.model_utils import bag_words, tokenize
+from gaia_bot_v2.kernel.configs.settings import AI_MODEL_LOCATION
+
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
