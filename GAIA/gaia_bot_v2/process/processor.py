@@ -3,7 +3,6 @@ import gaia_bot_v2
 from gaia_bot_v2.commands.response import AlpacaResponse
 from gaia_bot_v2.domain.skills import SKILLS
 from gaia_bot_v2.kernel.utils.trie_node import create_skill_trie
-from gaia_bot.modules.local.models.task_detect.prompt_to_response.utils.model_utils import tokenize
 
 
 class Processor:
