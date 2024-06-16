@@ -1,16 +1,12 @@
 import asyncio
 import colorama
-import threading
-from concurrent.futures import ThreadPoolExecutor
 
 from gaia_bot_v2.commands.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
-from gaia_bot_v2.kernel.utils import gpu_threads as gpu_utils
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
 from gaia_bot_v2.process.processor import Processor
-from gaia_bot_v2.models.alpaca.inference import get_model_and_tokenizer
-from gaia_bot_v2.models.task_detect.prompt_to_response.inference import get_detect_skill_model
+from gaia_bot_v2.models import load_models
 
 
 async def process_bot_v2():
@@ -20,7 +16,7 @@ async def process_bot_v2():
     # Startup
     loop = asyncio.get_event_loop()
     console_manager, assistant = await loop.run_in_executor(None, _startup)
-    response_model, response_tokenizer, detect_skill_model = await loop.run_in_executor(None, _startup_ai_model)
+    results = await loop.run_in_executor(None, _register_ai_models)
     services = await loop.run_in_executor(None, _start_satellite_services)
     # Authen user
     # token = await AuthenticationCommand().process()
@@ -39,9 +35,7 @@ async def process_bot_v2():
         settings=settings,
         token=token,
         services=services,
-        response_model=response_model,
-        response_tokenizer=response_tokenizer,
-        detect_skill_model=detect_skill_model,
+        register_models=results,
     )
 
 
@@ -56,39 +50,8 @@ def _startup():
     return console_manager, assistant
 
 
-def _startup_ai_model():
-    models_result, count_models = _run_models_in_parallel(
-        check_response=True, check_detect_skill=True
-    )
-
-    if count_models['response']==1:
-        response_model, response_tokenizer = models_result[0]
-    else:
-        response_model, response_tokenizer = None, None
-    if count_models['detect_skill']==1:
-        detect_skill_model = models_result[1]
-    else:
-        detect_skill_model = None
-
-    gpu_utils.check_gpu_memory()
-    return response_model, response_tokenizer, detect_skill_model
-
-
-def _run_models_in_parallel(check_response, check_detect_skill):
-    count_models = {}
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        futures = []
-        if check_response:
-            futures.append(executor.submit(get_model_and_tokenizer))
-            count_models["response"] = 1
-
-        if check_detect_skill:
-            futures.append(executor.submit(get_detect_skill_model))
-            count_models["detect_skill"] = 1
-
-        results = [future.result() for future in futures]
-
-    return results, count_models
+def _register_ai_models():
+    return load_models.run_model_in_parallel()
 
 
 def _start_satellite_services():
@@ -100,23 +63,14 @@ def _process_guess_mode(console_manager, assistant):
 
 
 async def _initiate_gaia(
-    console_manager,
-    assistant,
-    settings,
-    token,
-    services,
-    response_model,
-    response_tokenizer,
-    detect_skill_model,
+    console_manager, assistant, settings, token, services, register_models
 ):
     boolean_loop = True
     process = Processor(
         console_manager=console_manager,
         assistant=assistant,
         settings=settings,
-        response_model=response_model,
-        response_tokenizer=response_tokenizer,
-        detect_skill_model=detect_skill_model,
+        register_models=register_models,
     )
     while boolean_loop:
         console_manager.console_output(

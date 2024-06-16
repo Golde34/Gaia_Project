@@ -26,7 +26,7 @@ class AssistantSkill:
     def detect_skill_tag(cls, transcript, model):
         try:
             infer = inference.infer(transcript, model) 
-            cls.console_manager.console_output(info_log="Skill tag:" + infer)
+            cls.console_manager.console_output(info_log="Skill tag: " + infer)
             return infer
         except Exception as e:
             cls.console_manager.console_output(error_log="Failed to detect skill tag.")
