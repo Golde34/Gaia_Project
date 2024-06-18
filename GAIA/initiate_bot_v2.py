@@ -7,6 +7,7 @@ from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
 from gaia_bot_v2.process.processor import Processor
 from gaia_bot_v2.models import load_models
+from gaia_bot_v2.commands.microservice_connections import MicroserviceConnection
 
 
 async def process_bot_v2():
@@ -17,18 +18,14 @@ async def process_bot_v2():
     loop = asyncio.get_event_loop()
     console_manager, assistant = await loop.run_in_executor(None, _startup)
     results = await loop.run_in_executor(None, _register_ai_models)
-    services = await loop.run_in_executor(None, _start_satellite_services)
-    # Authen user
-    # token = await AuthenticationCommand().process()
-    # if token == None:
-    #     print("Authentication failed, process user to guess mode.")
-    #     _process_guess_mode(console_manager, assistant)
-    # print("Authentication success, initiate Gaia.")
-    # print("Your gaia authen token: ", token)
-    # print("You can access these services: ", services)
+    authentication_result = _authentication_process()
+    services = await _start_satellite_services()
     # Initiate
-    token = "token"
-    print(console_manager)
+    token = authentication_result
+    print("Authentication success, initiate Gaia.")
+    print("Your gaia authen token: ", token)
+    print("You can access these services: ", services)
+    
     await _initiate_gaia(
         console_manager=console_manager,
         assistant=assistant,
@@ -54,11 +51,21 @@ def _register_ai_models():
     return load_models.run_model_in_parallel()
 
 
-def _start_satellite_services():
-    pass
+async def _start_satellite_services():
+    microservice_connection = MicroserviceConnection()
+    return await microservice_connection.activate_microservice()
+
+def _authentication_process():
+    # token = await AuthenticationCommand().process()
+    # if token == None:
+    #     print("Authentication failed, process user to guess mode.")
+    #     _process_guess_mode()
+    token = "ok"
+    return token 
+    
 
 
-def _process_guess_mode(console_manager, assistant):
+def _process_guess_mode(c):
     pass
 
 
