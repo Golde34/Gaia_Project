@@ -1,7 +1,7 @@
-import gaia_bot_v2.kernel.configs.settings as settings
 import torch
 from unsloth import FastLanguageModel
-from gaia_bot.kernel.configs.settings import AI_MODEL_LOCATION
+
+import gaia_bot_v2.kernel.configs.settings as settings
 
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
@@ -77,5 +77,24 @@ def model_inference(inp):
     return response
 
 
+def gaia_wakeup_generate(model, tokenizer):
+    inputs = tokenizer(
+        [
+            alpaca_prompt.format(
+                "Generate a greeting to your boss. For example: ",  # instruction
+                "Hello boss, I'm available now!",  # input
+                "",  # output - leave this blank for generation!
+            )
+        ],
+        return_tensors="pt",
+    ).to("cuda")
+    
+    outputs = model.generate(**inputs, max_new_tokens=64)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    print(response)
+    return response
+
+
 if __name__ == "__main__":
-    print(model_inference("What is your name?"))
+    # print(model_inference("What is your name?"))
+    print(gaia_wakeup_generate())

@@ -11,7 +11,7 @@ class ConsoleManager:
     def __init__(self) -> None:
         pass
 
-    def wakeup(self, text='', info_log=None, refresh_console=None):
+    def wakeup(self, text='', info_log=None, refresh_console=None, services=None, authentication=None):
         if refresh_console is True:
             self._clear()
 
@@ -26,6 +26,15 @@ class ConsoleManager:
             print(OutputStyler.HEADER + headerize('ASSISTANT') + OutputStyler.ENDC)
             if text:
                 print(OutputStyler.BOLD + '> ' + text + '\r' + OutputStyler.ENDC)
+                
+                print(OutputStyler.HEADER + headerize('SERVICES') + OutputStyler.ENDC)
+                print(OutputStyler.BOLD + 'You can access these services' + OutputStyler.ENDC)
+                for service in services:
+                    for key, value in service.items():
+                        print(OutputStyler.BOLD + '> ' + key + ': ' + str(value) + '\r' + OutputStyler.ENDC)
+                
+                print(OutputStyler.HEADER + headerize('AUTHENTICATION') + OutputStyler.ENDC)
+                print(OutputStyler.BOLD + '> ' + authentication + '\r' + OutputStyler.ENDC)
                 print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
         else:
             if text:

@@ -10,9 +10,16 @@ class MicroserviceConnection:
         microservice_state = self.check_microservice_state()
         for item in microservice_state:
             if microservice_state[item] == False:
-                await asyncio.gather(self.activate_microservice_by_name(item))
-                services.append({item: microservice_state[item]})
-
+                process = await asyncio.gather(self.activate_microservice_by_name(item))
+                await process[0].wait()
+                if process[0].returncode == 0:
+                    services.append({item: "ACTIVE"})
+                else: 
+                    print(f"Failed to activate {item}")
+                    services.append({item: "INACTIVE"})
+            else:
+                services.append({item: "ACTIVE"})
+            
         return services
 
     async def activate_microservice_by_name(self, microservice_name):

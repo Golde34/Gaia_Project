@@ -63,15 +63,15 @@ FastLanguageModel.for_inference(model) # Enable native 2x faster inference
 inputs = tokenizer(
 [
     alpaca_prompt.format(
-        "Answer my question", # instruction
-        "What is your name?", # input
+        "Say hello to your boss. For example,", # instruction
+        "Hello boss, I'm available now!", # input
         "", # output - leave this blank for generation!
     )
 ], return_tensors = "pt").to("cuda")
 
 from transformers import TextStreamer
 text_streamer = TextStreamer(tokenizer)
-outputs = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 128)
+outputs = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 64)
 # outputs = model.generate(**inputs, max_new_tokens = 64, use_cache = True)
 # tokenizer.batch_decode(outputs)
 

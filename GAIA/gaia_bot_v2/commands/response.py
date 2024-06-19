@@ -17,6 +17,17 @@ class AlpacaResponse():
         except Exception as e:
             print(f"Error: {e}")
             return "Failed to generate response."
+
+    @classmethod
+    def generate_greeting(cls, model, tokenize):
+        try:
+            print("Generating greeting by alpaca")
+            response = inference.gaia_wakeup_generate(model, tokenize)
+            last_response = cls._format_response(response)
+            return last_response
+        except Exception as e:
+            print(f"Error: {e}")
+            return "Failed to generate greeting."      
             
     @classmethod
     def _format_response(cls, response):
