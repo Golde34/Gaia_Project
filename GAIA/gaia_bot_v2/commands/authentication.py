@@ -4,9 +4,6 @@ from gaia_bot_v2.kernel.configs.auth_config import USER_PROFILE
 class AuthenticationCommand():
     
     def __init__(self, auth_service_status):
-        face_recognition_status = False
-        voice_recognition_status = False
-        username_password_status = False
         self.token = None
         self.auth_service_status = auth_service_status
     
