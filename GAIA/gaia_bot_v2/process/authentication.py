@@ -14,21 +14,21 @@ class AuthenticationCommand():
 
     def process(self):
         try:
+            username = USER_PROFILE.get("username")
+            password = USER_PROFILE.get("password")
             method, status = self.select_authentication_method()
             if method != None and status:
-                username = USER_PROFILE.get("username")
-                password = USER_PROFILE.get("password")
                 self.auth_service_status = self.check_auth_service_status()
                 if self.auth_service_status:
                     self.login_to_get_token(username, password)
                     self.token = self.save_token()
-                    return self.token, True
+                    return self.token, username, True
                 else:
                     raise Exception("Authentication service is not available")
-            return None, False
+            raise Exception("Authentication failed")
         except Exception as e:
             print(f"Error: {e}")
-            return None
+            return None, username, False
 
     async def select_authentication_method(self):
         if self.input_mode == InputMode.VOICE.value:
