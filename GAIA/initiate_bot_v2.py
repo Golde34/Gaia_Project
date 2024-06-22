@@ -3,7 +3,7 @@ import colorama
 
 import gaia_bot.kernel.utils.activate_microservice
 from gaia_bot_v2.commands.response import AlpacaResponse
-from gaia_bot_v2.commands.authentication import AuthenticationCommand
+from GAIA.gaia_bot_v2.process.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
