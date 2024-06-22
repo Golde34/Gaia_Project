@@ -19,7 +19,7 @@ class MicroserviceConnection:
                     services.append({item: "INACTIVE"})
             else:
                 services.append({item: "ACTIVE"})
-            
+        
         return services
 
     async def activate_microservice_by_name(self, microservice_name):

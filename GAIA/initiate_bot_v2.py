@@ -1,9 +1,8 @@
 import asyncio
 import colorama
 
-import gaia_bot.kernel.utils.activate_microservice
 from gaia_bot_v2.commands.response import AlpacaResponse
-from gaia_bot_v2.commands.authentication import AuthenticationCommand
+from GAIA.gaia_bot_v2.process.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
@@ -27,8 +26,8 @@ async def process_bot_v2():
     authentication_service_status = [item for item in services if "authentication_service" in item.keys()]
     print(authentication_service_status[0].get("authentication_service") == "ACTIVE")
     
-    # token = await _authentication_process(console_manager=console_manager, auth_service_status=authentication_service_status)
-    token = "OK"
+    token = await _authentication_process(console_manager=console_manager, auth_service_status=authentication_service_status)
+
     await _initiate_gaia(
         console_manager=console_manager,
         assistant=assistant,
@@ -63,16 +62,22 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-    token = await AuthenticationCommand().process(auth_service_status)
-    if token == None:
-        print("Authentication failed, process user to guess mode.")
+
+    token, username, auth_status = await AuthenticationCommand().process(auth_service_status)
+    if auth_status is False or token is None:
+        print("Authentication failed, process user {} to guess mode.", username)
         _process_guess_mode()
-    console_manager.authentication(token, info_log=("Authentication success."))    
-    
+
+    console_manager.authentication(username, info_log=("Authentication success."))        
     return token
 
 
 def _process_guess_mode(c):
+    # Create temporary user profile
+    # Store in database
+    # Crons job to delete temporary profile after 30 days
+    # Delete all actions like tasks, schedules, etc.
+    # Crons job check, if last access - created_at > 90 days, sugguess user to create new account, or delete all data
     pass
 
 

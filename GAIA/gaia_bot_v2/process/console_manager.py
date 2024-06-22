@@ -29,23 +29,10 @@ class ConsoleManager:
                 print(OutputStyler.BOLD + "> " + text + "\r" + OutputStyler.ENDC)
 
                 print(OutputStyler.HEADER + headerize("SERVICES") + OutputStyler.ENDC)
-                print(
-                    OutputStyler.BOLD
-                    + "You can access these services"
-                    + OutputStyler.ENDC
-                )
+                print(OutputStyler.BOLD + "You can access these services" + OutputStyler.ENDC)
                 for service in services:
                     for key, value in service.items():
-                        print(
-                            OutputStyler.BOLD
-                            + "> "
-                            + key
-                            + ": "
-                            + str(value)
-                            + "\r"
-                            + OutputStyler.ENDC
-                        )
-                        
+                        print(OutputStyler.BOLD + "> " + key + ": " + str(value) + "\r" + OutputStyler.ENDC)        
                 print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
         else:
             if text:
