@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 def load_env_for_auth():
-    username = os.getenv("username")
-    password = os.getenv("password")
-    name = os.getenv("name")
-    email = os.getenv("email")
-    email_password = os.getenv("email_password")
+    username = os.getenv("USERNAME")
+    password = os.getenv("PASSWORD")
+    name = os.getenv("NAME")
+    email = os.getenv("EMAIL")
+    email_password = os.getenv("EMAIL_PWD")
     return username, password, name, email, email_password
