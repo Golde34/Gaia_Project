@@ -6,5 +6,6 @@ public enum ResponseEnum {
     msg401,
     msg403,
     msg404,
-    msg500
+    msg500,
+    status
 }

@@ -61,8 +61,7 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-    auth_command = AuthenticationCommand()
-    token, username, auth_status = await AuthenticationCommand().process(auth_service_status)
+    token, username, auth_status = await AuthenticationCommand(auth_service_status).process()
     if auth_status is False or token is None:
         print(f"Authentication failed, process user {username} to guess mode.")
         _process_guess_mode()

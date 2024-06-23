@@ -37,7 +37,7 @@ public class AuthController {
 
     @GetMapping("/status")
     public ResponseEntity<?> status() {
-        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseEnum.msg200));
+        return genericResponse.matchingResponseMessage(new GenericResponse<>("4001", ResponseEnum.status));
     }
 
     @PostMapping("/sign-in")

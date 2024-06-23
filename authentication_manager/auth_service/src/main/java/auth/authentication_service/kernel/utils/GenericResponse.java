@@ -77,6 +77,15 @@ public class GenericResponse<T> {
                         .data(validation.message)
                         .build());
             }
+            case status -> {
+                return ResponseEntity.ok().body(BaseResponseDto.builder()
+                        .status(Constants.HttpStatus.SUCCESS)
+                        .statusMessage(Constants.HttpStatus.SUCCESS)
+                        .errorCode(200)
+                        .errorMessage(Constants.ErrorMessage.OK)
+                        .data(validation.getMessage())
+                        .build());
+            }
             default -> {
                 return ResponseEntity.badRequest().body(BaseResponseDto.builder()
                         .status(Constants.HttpStatus.ERROR)
