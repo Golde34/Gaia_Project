@@ -12,11 +12,13 @@ class AuthenticationCommand():
         self.auth_service_status = auth_service_status
         self.input_mode = DEFAULT_GENERAL_SETTINGS['input_mode']
 
-    def process(self):
+    async def process(self):
         try:
             username = USER_PROFILE.get("username")
             password = USER_PROFILE.get("password")
-            method, status = self.select_authentication_method()
+            print(f"Username: {username}")
+            print(f"Password: {password}")
+            method, status = await self.select_authentication_method()
             if method != None and status:
                 self.auth_service_status = self.check_auth_service_status()
                 if self.auth_service_status:

@@ -3,7 +3,7 @@ import colorama
 
 from gaia_bot_v2.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot_v2.abilities.response import AlpacaResponse
-from GAIA.gaia_bot_v2.process.authentication import AuthenticationCommand
+from gaia_bot_v2.process.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
@@ -62,8 +62,7 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-
-    token, username, auth_status = await AuthenticationCommand().process(auth_service_status)
+    token, username, auth_status = await AuthenticationCommand(auth_service_status=auth_service_status).process()
     if auth_status is False or token is None:
         print("Authentication failed, process user {} to guess mode.", username)
         _process_guess_mode()
@@ -72,7 +71,7 @@ async def _authentication_process(console_manager, auth_service_status):
     return token
 
 
-def _process_guess_mode(c):
+def _process_guess_mode():
     # Create temporary user profile
     # Store in database
     # Crons job to delete temporary profile after 30 days
