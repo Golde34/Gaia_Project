@@ -42,7 +42,7 @@ def _startup(services, register_models):
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
     generate_model, generate_tokenizer = register_models["response"]
-    wakeup_text=AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
+    wakeup_text = AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
     console_manager.wakeup(
         text=wakeup_text,   
         info_log="Bot wakeup...",

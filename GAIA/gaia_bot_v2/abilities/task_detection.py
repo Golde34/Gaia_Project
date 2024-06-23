@@ -1,17 +1,16 @@
-# from gaia_bot.modules.skills.assistant_skill import AssistantSkill
-# from gaia_bot.modules.local.models.task_detect.prompt_to_response import inference
+from gaia_bot_v2.models.task_detect.prompt_to_response import inference
 
-
-class DetectSkill(AssistantSkill):
+class DetectSkill():
     
-    def __init__(self):
-        pass
+    def __init__(self, text, model):
+        self.text = text
+        self.model = model
 
     @classmethod
-    def detect_skill_tag(cls, text):
+    def detect_skill_tag(cls, text, model):
         try:
-            infer = inference.infer(text)
-            cls.console_manager.console_output(infer)
-            cls.response(str(infer))
+            detected_task = inference.infer(text, model)
+            return detected_task
         except Exception as e:
-            cls.console_manager.console_output('Failed to detect skill tag.')
+            print(f"Failed to detect skill tag: {e}")
+            return None

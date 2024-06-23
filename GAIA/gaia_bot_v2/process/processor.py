@@ -62,7 +62,7 @@ class Processor:
             )
 
         if detect_skill_model is None:
-            return self._handle_insufficient_resources("detect_skill")
+            response_transcript, _ = self._handle_insufficient_resources("detect_skill")
 
         tag_skill = self.assistant.detect_skill_tag(
             transcript, model=detect_skill_model
