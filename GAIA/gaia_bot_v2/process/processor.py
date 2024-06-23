@@ -1,6 +1,6 @@
 import gaia_bot_v2
 
-from gaia_bot_v2.commands.response import AlpacaResponse
+from gaia_bot_v2.abilities.response import AlpacaResponse
 from gaia_bot_v2.domain.skills import SKILLS
 from gaia_bot_v2.kernel.utils.trie_node import create_skill_trie
 

@@ -1,14 +1,14 @@
 import asyncio
 import colorama
 
-from gaia_bot_v2.commands.response import AlpacaResponse
+from gaia_bot_v2.abilities.microservice_connections import MicroserviceConnection
+from gaia_bot_v2.abilities.response import AlpacaResponse
 from GAIA.gaia_bot_v2.process.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
 from gaia_bot_v2.process.processor import Processor
 from gaia_bot_v2.models import load_models
-from gaia_bot_v2.commands.microservice_connections import MicroserviceConnection
 from gaia_bot.modules.local.models.task_detect.prompt_to_response.inference import infer
 
 
