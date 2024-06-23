@@ -22,11 +22,10 @@ async def process_bot_v2():
     services = await _start_satellite_services()
     console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
     # Initiate
-    # Lấy ra item là dictionary với phần tử đầu tiên key là authentication service trong một list services
-    authentication_service_status = [item for item in services if "authentication_service" in item.keys()]
-    print(authentication_service_status[0].get("authentication_service") == "ACTIVE")
+    authentication_service = [item for item in services if "authentication_service" in item.keys()]
+    auth_status = authentication_service[0].get("authentication_service") == "ACTIVE"
     
-    token = await _authentication_process(console_manager=console_manager, auth_service_status=authentication_service_status)
+    token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
     await _initiate_gaia(
         console_manager=console_manager,
@@ -62,9 +61,10 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-    token, username, auth_status = await AuthenticationCommand(auth_service_status=auth_service_status).process()
+    auth_command = AuthenticationCommand()
+    token, username, auth_status = await AuthenticationCommand().process(auth_service_status)
     if auth_status is False or token is None:
-        print("Authentication failed, process user {} to guess mode.", username)
+        print(f"Authentication failed, process user {username} to guess mode.")
         _process_guess_mode()
 
     console_manager.authentication(username, info_log=("Authentication success."))        
