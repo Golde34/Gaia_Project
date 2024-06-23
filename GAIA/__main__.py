@@ -3,6 +3,7 @@ import asyncio
 
 from initiate_bot import process_bot
 from initiate_bot_v2 import process_bot_v2
+from gaia_bot_v2.process.authentication import AuthenticationCommand
 
 
 async def main():
@@ -24,7 +25,6 @@ async def main():
             await process_bot_v2()
         else:
             await process_bot()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,6 +1,6 @@
 import gaia_bot_v2
 
-from gaia_bot_v2.commands.response import AlpacaResponse
+from gaia_bot_v2.abilities.response import AlpacaResponse
 from gaia_bot_v2.domain.skills import SKILLS
 from gaia_bot_v2.kernel.utils.trie_node import create_skill_trie
 
@@ -62,7 +62,7 @@ class Processor:
             )
 
         if detect_skill_model is None:
-            return self._handle_insufficient_resources("detect_skill")
+            response_transcript, _ = self._handle_insufficient_resources("detect_skill")
 
         tag_skill = self.assistant.detect_skill_tag(
             transcript, model=detect_skill_model

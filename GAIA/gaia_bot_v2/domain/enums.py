@@ -14,3 +14,13 @@ class AuthenType(Enum):
     FACE = 'face'
     VOICE = 'voice'
     TOKEN = 'token'
+
+class MicroserviceAcronymsEnum(Enum):
+    GC = 'gaia_connector'
+    CLG = 'client_gui'
+    ML = 'middleware_loader'
+    AS = 'authentication_service'
+    TM = 'task_manager'
+    SP = 'schedule_plan'
+    WO = 'work_optimization'
+ 

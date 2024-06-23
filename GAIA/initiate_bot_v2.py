@@ -1,14 +1,14 @@
 import asyncio
 import colorama
 
-from gaia_bot_v2.commands.response import AlpacaResponse
-from GAIA.gaia_bot_v2.process.authentication import AuthenticationCommand
+from gaia_bot_v2.abilities.microservice_connections import MicroserviceConnection
+from gaia_bot_v2.abilities.response import AlpacaResponse
+from gaia_bot_v2.process.authentication import AuthenticationCommand
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.configs import settings
 from gaia_bot_v2.process.assistant_skill import AssistantSkill
 from gaia_bot_v2.process.processor import Processor
 from gaia_bot_v2.models import load_models
-from gaia_bot_v2.commands.microservice_connections import MicroserviceConnection
 from gaia_bot.modules.local.models.task_detect.prompt_to_response.inference import infer
 
 
@@ -22,11 +22,10 @@ async def process_bot_v2():
     services = await _start_satellite_services()
     console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
     # Initiate
-    # Lấy ra item là dictionary với phần tử đầu tiên key là authentication service trong một list services
-    authentication_service_status = [item for item in services if "authentication_service" in item.keys()]
-    print(authentication_service_status[0].get("authentication_service") == "ACTIVE")
+    authentication_service = [item for item in services if "authentication_service" in item.keys()]
+    auth_status = authentication_service[0].get("authentication_service") == "ACTIVE"
     
-    token = await _authentication_process(console_manager=console_manager, auth_service_status=authentication_service_status)
+    token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
     await _initiate_gaia(
         console_manager=console_manager,
@@ -42,7 +41,7 @@ def _startup(services, register_models):
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
     generate_model, generate_tokenizer = register_models["response"]
-    wakeup_text=AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
+    wakeup_text = AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
     console_manager.wakeup(
         text=wakeup_text,   
         info_log="Bot wakeup...",
@@ -62,17 +61,16 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-
-    token, username, auth_status = await AuthenticationCommand().process(auth_service_status)
+    token, username, auth_status = await AuthenticationCommand(auth_service_status).process()
     if auth_status is False or token is None:
-        print("Authentication failed, process user {} to guess mode.", username)
+        print(f"Authentication failed, process user {username} to guess mode.")
         _process_guess_mode()
 
     console_manager.authentication(username, info_log=("Authentication success."))        
     return token
 
 
-def _process_guess_mode(c):
+def _process_guess_mode():
     # Create temporary user profile
     # Store in database
     # Crons job to delete temporary profile after 30 days

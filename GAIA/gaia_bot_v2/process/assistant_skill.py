@@ -1,8 +1,9 @@
 import os
 
+from gaia_bot_v2.abilities.task_detection import DetectSkill
 from gaia_bot_v2.process.console_manager import ConsoleManager
 from gaia_bot_v2.kernel.utils.trie_node import Trie
-from gaia_bot_v2.models.task_detect.prompt_to_response import inference
+
 
 class AssistantSkill:
     first_activation = False
@@ -25,9 +26,9 @@ class AssistantSkill:
     @classmethod
     def detect_skill_tag(cls, transcript, model):
         try:
-            infer = inference.infer(transcript, model) 
-            cls.console_manager.console_output(info_log="Skill tag: " + infer)
-            return infer
+            detected_task = DetectSkill.detect_skill_tag(transcript, model) 
+            cls.console_manager.console_output(info_log="Skill tag: " + detected_task)
+            return detected_task
         except Exception as e:
             cls.console_manager.console_output(error_log="Failed to detect skill tag.")
         
