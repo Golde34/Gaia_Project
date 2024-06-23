@@ -18,8 +18,6 @@ class AuthenticationCommand():
         try:
             username = USER_PROFILE.get("username")
             password = USER_PROFILE.get("password")
-            print(f"Username: {username}")
-            print(f"Password: {password}")
             method, status = await self.select_authentication_method()
             if method is not None and status:
                 if self.auth_service_status:
