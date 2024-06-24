@@ -10,7 +10,6 @@ class AlpacaResponse():
     @classmethod
     def generate_response(cls, text, model, tokenize, **kwargs):
         try:
-            print("Generating response by alpaca")
             response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize)
             last_response = cls._format_response(response)
             return last_response
@@ -21,7 +20,6 @@ class AlpacaResponse():
     @classmethod
     def generate_greeting(cls, model, tokenize):
         try:
-            print("Generating greeting by alpaca")
             response = inference.gaia_wakeup_generate(model, tokenize)
             last_response = cls._format_response(response)
             return last_response
