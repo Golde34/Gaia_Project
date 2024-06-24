@@ -3,7 +3,7 @@ import colorama
 
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse
-from gaia_bot.abilities.authentication import authentication
+from gaia_bot.abilities import user_authentication
 from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.kernel.configs import settings
 from gaia_bot.process.assistant_skill import AssistantSkill
@@ -60,7 +60,7 @@ async def _start_satellite_services():
 
 
 async def _authentication_process(console_manager, auth_service_status):
-    token, username, auth_status = await authentication.AuthenticationCommand(console_manager, auth_service_status).process()
+    token, username, auth_status = await user_authentication.AuthenticationCommand(console_manager, auth_service_status).process()
     if auth_status is False or token is None:
         print(f"Authentication failed, process user {username} to guess mode.")
         _process_guess_mode()

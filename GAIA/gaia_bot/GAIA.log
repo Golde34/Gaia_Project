@@ -1,36 +1,18 @@
-2024-06-24 17:30:17,013 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-06-24 17:30:27,915 - root - INFO - Bot wakeup...
-2024-06-24 17:30:27,915 - root - INFO - Face authentication
-2024-06-24 17:30:28,016 - root - INFO - Starting video stream...
-2024-06-24 17:30:34,387 - root - INFO - Authentication success.
-2024-06-24 17:30:34,387 - root - INFO - Listen command
-2024-06-24 17:31:04,815 - root - INFO - Handle input
-2024-06-24 17:31:05,083 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:05,083 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:05,083 - root - INFO - Listen command
-2024-06-24 17:31:10,306 - root - INFO - Handle input
-2024-06-24 17:31:12,401 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:12,401 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:12,401 - root - INFO - Listen command
-2024-06-24 17:31:20,009 - root - INFO - Handle input
-2024-06-24 17:31:22,618 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:22,618 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:22,618 - root - INFO - Listen command
-2024-06-24 17:31:41,433 - root - INFO - Handle input
-2024-06-24 17:31:42,296 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:42,296 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:42,296 - root - INFO - Listen command
-2024-06-24 17:31:49,227 - root - INFO - Handle input
-2024-06-24 17:31:51,838 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:51,838 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:51,838 - root - INFO - Listen command
-2024-06-24 17:31:57,710 - root - INFO - Handle input
-2024-06-24 17:31:57,986 - root - INFO - Skill tag: Greeting
-2024-06-24 17:31:57,987 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:31:57,987 - root - INFO - Listen command
-2024-06-24 17:32:06,887 - root - INFO - Handle input
-2024-06-24 17:32:09,502 - root - INFO - Skill tag: Greeting
-2024-06-24 17:32:09,502 - root - INFO - Response transcript with skill: Test response.
-2024-06-24 17:32:09,502 - root - INFO - Listen command
-2024-06-24 17:32:37,013 - root - INFO - Handle input
-2024-06-24 17:32:37,014 - root - INFO - Exit Gaia
+2024-06-24 17:49:01,080 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-24 17:49:07,463 - root - INFO - Bot wakeup...
+2024-06-24 17:49:07,464 - root - INFO - Face authentication
+2024-06-24 17:49:07,498 - root - INFO - Starting video stream...
+2024-06-24 17:49:14,414 - root - INFO - Authentication success.
+2024-06-24 17:49:14,414 - root - INFO - Listen command
+2024-06-24 17:49:30,942 - root - INFO - Handle input
+2024-06-24 17:49:33,604 - root - INFO - Skill tag: Greeting
+2024-06-24 17:49:33,605 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 17:49:33,605 - root - INFO - Listen command
+2024-06-24 17:49:45,280 - root - INFO - Handle input
+2024-06-24 17:49:45,540 - root - INFO - Skill tag: Greeting
+2024-06-24 17:49:45,540 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 17:49:45,540 - root - INFO - Listen command
+2024-06-24 17:49:51,462 - root - INFO - Handle input
+2024-06-24 17:49:54,108 - root - INFO - Skill tag: Greeting
+2024-06-24 17:49:54,108 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 17:49:54,108 - root - INFO - Listen command

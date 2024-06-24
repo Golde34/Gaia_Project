@@ -1,6 +1,17 @@
 reinforcement learning 
 chat bot answer question by source text like location, time, etc.
 from the question answering we generate text include location, time keywords.
+1. Schedule meetings and appointments
+2. Manage your calendar
+3. Send and receive emails
+4. Research and find information
+5. Take notes during meetings
+6. Organize your files and documents
+7. Set reminders and alarms
+8. Create and send invoices
+9. Handle customer inquiries and complaints
+10. Manage your social media accounts
+11. Monitor your website traffi
 
 tasks:
 convert token to word
@@ -29,13 +40,3 @@ optimize: 3013
 github api: 3012
 auto tool: 3011
 AI model: 3010
-
-kafka-conduktor: 8080
-
-15-9-23
-if bot doesnt know which task is, then create a "Add new Skill mechanism"
-
-29-10-23
-gaia connector has access token and refresh token -> open client port 
--> require sign in  -> call back to gaia connector to get token 
--> open dashboard
