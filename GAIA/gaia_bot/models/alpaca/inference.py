@@ -8,7 +8,7 @@ max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
 dtype = None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 
-alpaca_prompt = """Answer or reply your boss question or talk with him as Gaia the virtual assistant. 
+alpaca_prompt = """Answer, reply your boss question or chat with him as Gaia the virtual assistant. 
     Your boss named """ + auth_config.username + """. 
     Below is an instruction that describes a task, paired with an input that provides further context. 
     Write a response that appropriately completes the request.
@@ -73,7 +73,7 @@ def model_inference(inp):
         return_tensors="pt",
     ).to("cuda")
 
-    outputs = model.generate(**inputs, max_new_tokens=128)
+    outputs = model.generate(**inputs, max_new_tokens=256)
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     torch.cuda.empty_cache()
     
