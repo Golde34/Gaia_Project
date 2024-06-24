@@ -1,0 +1,8 @@
+2024-06-24 10:54:25,520 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-24 10:54:31,466 - root - INFO - Bot wakeup...
+2024-06-24 10:54:31,732 - root - INFO - Authentication success.
+2024-06-24 10:54:31,732 - root - INFO - Listen command
+2024-06-24 10:54:59,941 - root - INFO - Handle input
+2024-06-24 10:55:00,713 - root - INFO - Skill tag: Greeting
+2024-06-24 10:55:00,713 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 10:55:00,713 - root - INFO - Listen command

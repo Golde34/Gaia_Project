@@ -1,55 +1,99 @@
+import asyncio
 import colorama
 
-from gaia_bot.core.console_manager import ConsoleManager
-from gaia_bot.core.processor import Processor
-from gaia_bot.modules.skills.assistant_skill import AssistantSkill
-from gaia_bot.modules.skills.registry import SKILLS
+from gaia_bot.abilities.microservice_connections import MicroserviceConnection
+from gaia_bot.abilities.response import AlpacaResponse
+from gaia_bot.process.authentication import AuthenticationCommand
+from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.kernel.configs import settings
-from gaia_bot.kernel.utils.startup import recognize_owner_by_authen_service
-from gaia_bot.kernel.utils.activate_microservice import activate_microservice
-from gaia_bot.kernel.configs.__version__ import __version__
+from gaia_bot.process.assistant_skill import AssistantSkill
+from gaia_bot.process.processor import Processor
+from gaia_bot.models import load_models
 
 
 async def process_bot():
-    # Activate microservices
-    await activate_microservice()
-    # Authenticate user
-    auth_info = {
-        "username": "golde",
-        "password": "483777"
-    }
-    access_token = await recognize_owner_by_authen_service(auth_info['username'], auth_info['password'])
-    print(access_token)
     # Initiate bot console
     colorama.init()
-    print(f"Gaia version: ${__version__}")
+    print(f"Gaia version: 2.0.0")
     # Startup
-    console_manager, assistant = _startup()
-    # initiate
-    await _initiate_gaia_command(console_manager=console_manager, assistant=assistant, settings=settings) 
+    loop = asyncio.get_event_loop()
+    register_models = await loop.run_in_executor(None, _register_ai_models) 
+    services = await _start_satellite_services()
+    console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
+    # Initiate
+    authentication_service = [item for item in services if "authentication_service" in item.keys()]
+    auth_status = authentication_service[0].get("authentication_service") == "ACTIVE"
+    
+    token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
-def _startup():
+    await _initiate_gaia(
+        console_manager=console_manager,
+        assistant=assistant,
+        settings=settings,
+        token=token,
+        services=services,
+        register_models=register_models,
+    )
+
+
+def _startup(services, register_models):
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
-    console_manager.wakeup(text="Hello boss, I'm available now",
-                          info_log="Bot wakeup...",
-                          refresh_console=True)
+    generate_model, generate_tokenizer = register_models["response"]
+    wakeup_text = AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
+    console_manager.wakeup(
+        text=wakeup_text,   
+        info_log="Bot wakeup...",
+        refresh_console=True,
+        services=services
+    )
     return console_manager, assistant
 
-async def _initiate_gaia_command(console_manager, assistant, settings):
+
+def _register_ai_models():
+    return load_models.run_model_in_parallel()
+
+
+async def _start_satellite_services():
+    microservice_connection = MicroserviceConnection()
+    return await microservice_connection.activate_microservice()
+
+
+async def _authentication_process(console_manager, auth_service_status):
+    token, username, auth_status = await AuthenticationCommand(auth_service_status).process()
+    if auth_status is False or token is None:
+        print(f"Authentication failed, process user {username} to guess mode.")
+        _process_guess_mode()
+
+    console_manager.authentication(username, token, info_log="Authentication success.")        
+    return token
+
+
+def _process_guess_mode():
+    # Create temporary user profile
+    # Store in database
+    # Crons job to delete temporary profile after 30 days
+    # Delete all actions like tasks, schedules, etc.
+    # Crons job check, if last access - created_at > 90 days, sugguess user to create new account, or delete all data
+    pass
+
+
+async def _initiate_gaia(
+    console_manager, assistant, settings, token, services, register_models
+):
     boolean_loop = True
-    process = Processor(console_manager=console_manager, assistant=assistant, settings=settings)
+    process = Processor(
+        console_manager=console_manager,
+        assistant=assistant,
+        settings=settings,
+        register_models=register_models,
+    )
     while boolean_loop:
-        console_manager.console_output(text="Listen your command",
-                                       info_log="Listen command")
+        console_manager.console_output(
+            text="Listen your command", info_log="Listen command"
+        )
         response_transcript, skill = await process.run()
-        console_manager.console_output(text=response_transcript, info_log="Response transcript with skill: " + skill)
-        # _boolean_loop = simple_handle_testing(i)
- 
-def simple_handle_testing(console_input):
-    if console_input == "bye" or console_input == "off":
-        boolean_loop = False
-    else:
-        boolean_loop = True
-    
-    return boolean_loop
+        console_manager.console_output(
+            text=response_transcript,
+            info_log="Response transcript with skill: " + skill,
+        )
