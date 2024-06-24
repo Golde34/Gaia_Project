@@ -47,6 +47,7 @@ class ConsoleManager:
         if error_log:
             logging.error(error_log)
 
+        print(OutputStyler.CYAN + "Authentication successful" + OutputStyler.ENDC)
         print(OutputStyler.BOLD + "> Username: " + username + "\r" + OutputStyler.ENDC)
         print(OutputStyler.BOLD + "> Token: " + token + "\r" + OutputStyler.ENDC)
         print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)

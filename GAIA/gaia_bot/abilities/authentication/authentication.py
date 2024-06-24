@@ -15,8 +15,9 @@ warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 
 class AuthenticationCommand():
     
-    def __init__(self, auth_service_status):
+    def __init__(self, console_manager, auth_service_status):
         self.token = None
+        self.console_manager = console_manager
         self.auth_service_status = auth_service_status
         self.input_mode = DEFAULT_GENERAL_SETTINGS['input_mode']
 
@@ -33,11 +34,18 @@ class AuthenticationCommand():
                     raise Exception("Authentication service is not available")
             raise Exception("Authentication failed")
         except Exception as e:
-            print(f"Error: {e}")
+            self.console_manager.console_output(
+                text="Authentication failed",
+                error_log=f"Authentication failed with error: {e}",
+            )
             return None, username, False
 
     async def select_authentication_method(self):
         if self.input_mode == InputMode.VOICE.value:
+            self.console_manager.console_output(
+                text="Voice authentication is in progress...",
+                info_log="Voice authentication",
+            )
             result = await self.authentication_task(self.voice_recognition_method)
             if result:
                 print("Voice authentication successful")
@@ -46,6 +54,10 @@ class AuthenticationCommand():
                 print("Voice authentication failed")
 
         # If input_mode is text, or voice authentication failed
+        self.console_manager.console_output(
+            text="Face authentication is in progress...",
+            info_log="Face authentication",
+        )
         face_task = asyncio.create_task(self.authentication_task(self.face_recognition_method))
         done, pending = await asyncio.wait([face_task], timeout=15)
 
