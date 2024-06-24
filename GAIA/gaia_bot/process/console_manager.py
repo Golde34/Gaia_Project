@@ -29,10 +29,13 @@ class ConsoleManager:
                 print(OutputStyler.BOLD + "> " + text + "\r" + OutputStyler.ENDC)
 
                 print(OutputStyler.HEADER + headerize("SERVICES") + OutputStyler.ENDC)
-                print(OutputStyler.BOLD + "You can access these services" + OutputStyler.ENDC)
+                print(OutputStyler.CYAN + "You can access these services" + OutputStyler.ENDC)
                 for service in services:
                     for key, value in service.items():
-                        print(OutputStyler.BOLD + "> " + key + ": " + str(value) + "\r" + OutputStyler.ENDC)        
+                        if str(value) == "ACTIVE":
+                            print(OutputStyler.GREEN + "> " + key + ": " + str(value) + "\r" + OutputStyler.ENDC)        
+                        else:
+                            print(OutputStyler.FAIL + "> " + key + ": " + str(value) + "\r" + OutputStyler.ENDC)
                 print(OutputStyler.HEADER + headerize("AUTHENTICATION") + OutputStyler.ENDC)
         else:
             if text:
@@ -44,6 +47,7 @@ class ConsoleManager:
         if error_log:
             logging.error(error_log)
 
+        print(OutputStyler.CYAN + "Authentication successful" + OutputStyler.ENDC)
         print(OutputStyler.BOLD + "> Username: " + username + "\r" + OutputStyler.ENDC)
         print(OutputStyler.BOLD + "> Token: " + token + "\r" + OutputStyler.ENDC)
         print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
