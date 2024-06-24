@@ -1,9 +1,10 @@
 from logging import config
 
-from gaia_bot.domain.enums import InputMode
-from gaia_bot.kernel.configs.settings import ROOT_LOG_CONFIG, DEFAULT_GENERAL_SETTINGS
-from gaia_bot.process.engines import stt, tts, ttt
-from gaia_bot.process.console_manager import ConsoleManager
+from gaia_bot.kernel.configs.settings import ROOT_LOG_CONFIG
+from gaia_bot.infrastructure.engines import stt, tts, ttt
+from gaia_bot.kernel.configs.settings import DEFAULT_GENERAL_SETTINGS
+from gaia_bot.kernel.configs.enums import InputMode
+from gaia_bot.core.console_manager import ConsoleManager
 
 
 config.dictConfig(ROOT_LOG_CONFIG)

@@ -8,7 +8,7 @@ PORTS = {
         "router": "gaia",
         "database": "MongoDB",
         "database_name": "gaia",
-        "shell_path": "gaia_bot/microservices/bash_shell/gaia_connector.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/gaia_connector.sh"
     },
     "client_gui": {
         "name": "Client GUI",
@@ -18,7 +18,7 @@ PORTS = {
         "router": None,
         "database": None,
         "database_name": None,
-        "shell_path": "gaia_bot/microservices/bash_shell/client_gui.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/client_gui.sh"
     },
     "mobile_app": {
         "name": "Mobile App",
@@ -28,7 +28,7 @@ PORTS = {
         "router": None,
         "database": None,
         "database_name": None,
-        "shell_path": ""
+        "shell_path": "gaia_bot/modules/ports/bash_shells/mobile_app.sh"
     },
     
     ## MIDDLEWARE
@@ -40,7 +40,7 @@ PORTS = {
         "router": "middleware",
         "database": None,
         "database_name": None,
-        "shell_path": "gaia_bot/microservices/bash_shell/middleware_loader.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/middleware_loader.sh"
     },
     "authentication_service": {
         "name": "Authentication Service",
@@ -50,7 +50,7 @@ PORTS = {
         "router": "auth",
         "database": "MySQL",
         "database_name": "authentication_service",
-        "shell_path": "gaia_bot/microservices/bash_shell/auth_service.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/auth_service.sh"
     },
 
     ## BACKEND MICROSERVICES
@@ -62,7 +62,7 @@ PORTS = {
         "router": "task-manager",
         "database": "MongoDB",
         "database_name": "task_manager",
-        "shell_path": "gaia_bot/microservices/bash_shell/task_manager.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/task_manager.sh"
     },
     "github_api": {
         "name": "GitHub API",
@@ -72,7 +72,7 @@ PORTS = {
         "router": "github-api",
         "database": None,
         "database_name": None,
-        "shell_path": ""
+        "shell_path": "gaia_bot/modules/ports/bash_shells/github_api.sh"
     },
     
     ## THIRD PARTY
@@ -84,7 +84,7 @@ PORTS = {
         "router": None,
         "database": None,
         "database_name": None,
-        "shell_path": "gaia_bot/microservices/bash_shell/kafka_server.sh"
+        "shell_path": "gaia_bot/modules/ports/bash_shells/kafka_server.sh"
     },
 }
 

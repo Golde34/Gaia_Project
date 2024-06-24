@@ -922,3 +922,479 @@ Caused by: java.lang.NumberFormatException: For input string: ""
 2024-06-23T23:54:31.607+07:00  INFO 23934 --- [http-nio-4001-exec-8] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
 2024-06-23T23:54:31.608+07:00  INFO 23934 --- [http-nio-4001-exec-8] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
 2024-06-23T23:54:31.619+07:00  INFO 23934 --- [http-nio-4001-exec-8] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T00:29:09.305+07:00  INFO 74150 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 74150 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T00:29:09.308+07:00  INFO 74150 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T00:29:10.274+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T00:29:10.275+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T00:29:10.303+07:00  INFO 74150 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:29:10.304+07:00  INFO 74150 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:29:10.305+07:00  INFO 74150 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:29:10.306+07:00  INFO 74150 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:29:10.307+07:00  INFO 74150 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:29:10.307+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 JDBC repository interfaces.
+2024-06-24T00:29:10.315+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T00:29:10.316+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T00:29:10.339+07:00  INFO 74150 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 5 JPA repository interfaces.
+2024-06-24T00:29:10.626+07:00  WARN 74150 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T00:29:10.656+07:00  INFO 74150 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T00:29:10.905+07:00  INFO 74150 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T00:29:10.918+07:00  INFO 74150 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T00:29:10.919+07:00  INFO 74150 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T00:29:10.957+07:00  INFO 74150 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T00:29:10.958+07:00  INFO 74150 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1540 ms
+2024-06-24T00:29:11.090+07:00  INFO 74150 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T00:29:11.151+07:00  INFO 74150 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T00:29:11.187+07:00  INFO 74150 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T00:29:11.392+07:00  INFO 74150 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T00:29:11.420+07:00  INFO 74150 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T00:29:11.694+07:00  INFO 74150 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2d38db6f
+2024-06-24T00:29:11.697+07:00  INFO 74150 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T00:29:12.424+07:00  INFO 74150 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T00:29:12.477+07:00  INFO 74150 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T00:29:12.742+07:00  INFO 74150 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T00:29:12.743+07:00  INFO 74150 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T00:29:13.182+07:00  WARN 74150 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T00:29:13.246+07:00  WARN 74150 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T00:29:13.248+07:00  INFO 74150 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T00:29:13.622+07:00  INFO 74150 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@17cf5dcc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6bd5cb99, org.springframework.security.web.context.SecurityContextHolderFilter@2bf3ec4a, org.springframework.security.web.header.HeaderWriterFilter@7e5c04a4, org.springframework.security.web.authentication.logout.LogoutFilter@3a973b5e, auth.authentication_service.infrastructure.task.JwtRequestFilter@3ae91bcc, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4191774f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@429ad94a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@11c95035, org.springframework.security.web.access.ExceptionTranslationFilter@685dceb8, org.springframework.security.web.access.intercept.AuthorizationFilter@5c74025e]
+2024-06-24T00:29:14.108+07:00  INFO 74150 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4001 (http) with context path ''
+2024-06-24T00:29:14.227+07:00  INFO 74150 --- [main] a.a.AuthServiceApplication               : Started AuthServiceApplication in 5.448 seconds (process running for 5.799)
+2024-06-24T00:29:21.486+07:00  INFO 74150 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T00:29:21.491+07:00  INFO 74150 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T00:29:21.506+07:00  INFO 74150 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T00:30:13.108+07:00  INFO 75320 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 75320 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T00:30:13.117+07:00  INFO 75320 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T00:30:14.556+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T00:30:14.557+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T00:30:14.588+07:00  INFO 75320 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:30:14.589+07:00  INFO 75320 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:30:14.590+07:00  INFO 75320 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:30:14.591+07:00  INFO 75320 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:30:14.591+07:00  INFO 75320 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T00:30:14.591+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 0 JDBC repository interfaces.
+2024-06-24T00:30:14.600+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T00:30:14.601+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T00:30:14.633+07:00  INFO 75320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 5 JPA repository interfaces.
+2024-06-24T00:30:15.021+07:00  WARN 75320 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T00:30:15.061+07:00  INFO 75320 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T00:30:15.514+07:00  INFO 75320 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T00:30:15.531+07:00  INFO 75320 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T00:30:15.532+07:00  INFO 75320 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T00:30:15.589+07:00  INFO 75320 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T00:30:15.590+07:00  INFO 75320 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2351 ms
+2024-06-24T00:30:15.810+07:00  INFO 75320 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T00:30:15.896+07:00  INFO 75320 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T00:30:15.945+07:00  INFO 75320 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T00:30:16.207+07:00  INFO 75320 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T00:30:16.245+07:00  INFO 75320 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T00:30:16.684+07:00  INFO 75320 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@77cd235b
+2024-06-24T00:30:16.687+07:00  INFO 75320 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T00:30:17.899+07:00  INFO 75320 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T00:30:17.964+07:00  INFO 75320 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T00:30:18.358+07:00  INFO 75320 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T00:30:18.358+07:00  INFO 75320 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T00:30:18.963+07:00  WARN 75320 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T00:30:19.068+07:00  WARN 75320 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T00:30:19.071+07:00  INFO 75320 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T00:30:19.661+07:00  INFO 75320 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71d92487, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c9a8e12, org.springframework.security.web.context.SecurityContextHolderFilter@4b45016d, org.springframework.security.web.header.HeaderWriterFilter@73193fe0, org.springframework.security.web.authentication.logout.LogoutFilter@6a8fa30a, auth.authentication_service.infrastructure.task.JwtRequestFilter@53570fff, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3057728e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5dbd7f00, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1acf7db2, org.springframework.security.web.access.ExceptionTranslationFilter@271bbb75, org.springframework.security.web.access.intercept.AuthorizationFilter@6faa24]
+2024-06-24T00:30:20.309+07:00  INFO 75320 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4001 (http) with context path ''
+2024-06-24T00:30:20.489+07:00  INFO 75320 --- [main] a.a.AuthServiceApplication               : Started AuthServiceApplication in 7.927 seconds (process running for 8.294)
+2024-06-24T00:30:40.763+07:00  INFO 75320 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T00:30:40.767+07:00  INFO 75320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T00:30:40.774+07:00  INFO 75320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T09:39:07.899+07:00  INFO 10756 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 10756 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T09:39:07.905+07:00  INFO 10756 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T09:39:09.221+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T09:39:09.222+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T09:39:09.267+07:00  INFO 10756 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:39:09.269+07:00  INFO 10756 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:39:09.270+07:00  INFO 10756 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:39:09.271+07:00  INFO 10756 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:39:09.271+07:00  INFO 10756 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:39:09.272+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 0 JDBC repository interfaces.
+2024-06-24T09:39:09.281+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T09:39:09.282+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T09:39:09.319+07:00  INFO 10756 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 33 ms. Found 5 JPA repository interfaces.
+2024-06-24T09:39:09.637+07:00  WARN 10756 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T09:39:09.692+07:00  INFO 10756 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T09:39:10.026+07:00  INFO 10756 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T09:39:10.037+07:00  INFO 10756 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T09:39:10.037+07:00  INFO 10756 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T09:39:10.069+07:00  INFO 10756 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T09:39:10.070+07:00  INFO 10756 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2062 ms
+2024-06-24T09:39:10.261+07:00  INFO 10756 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T09:39:10.395+07:00  INFO 10756 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T09:39:10.458+07:00  INFO 10756 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T09:39:10.764+07:00  INFO 10756 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T09:39:10.800+07:00  INFO 10756 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T09:39:11.242+07:00  INFO 10756 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75f4d8a8
+2024-06-24T09:39:11.244+07:00  INFO 10756 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T09:39:12.285+07:00  INFO 10756 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T09:39:12.350+07:00  INFO 10756 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T09:39:12.650+07:00  INFO 10756 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T09:39:12.650+07:00  INFO 10756 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T09:39:13.232+07:00  WARN 10756 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T09:39:13.301+07:00  WARN 10756 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T09:39:13.303+07:00  INFO 10756 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T09:39:13.811+07:00  INFO 10756 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4a83740e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5d8319a7, org.springframework.security.web.context.SecurityContextHolderFilter@3f29e67e, org.springframework.security.web.header.HeaderWriterFilter@655e024, org.springframework.security.web.authentication.logout.LogoutFilter@139e291e, auth.authentication_service.infrastructure.task.JwtRequestFilter@1390a43a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6aa16117, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5771adf3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@453ff774, org.springframework.security.web.access.ExceptionTranslationFilter@7c9a0166, org.springframework.security.web.access.intercept.AuthorizationFilter@6a8fa30a]
+2024-06-24T09:39:14.710+07:00  INFO 10756 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4001 (http) with context path ''
+2024-06-24T09:39:14.874+07:00  INFO 10756 --- [main] a.a.AuthServiceApplication               : Started AuthServiceApplication in 7.512 seconds (process running for 7.936)
+2024-06-24T09:53:00.324+07:00  INFO 10756 --- [http-nio-4001-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-06-24T09:53:00.325+07:00  INFO 10756 --- [http-nio-4001-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-06-24T09:53:00.326+07:00  INFO 10756 --- [http-nio-4001-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-06-24T09:53:00.598+07:00  INFO 10756 --- [http-nio-4001-exec-1] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T09:53:00.598+07:00  INFO 10756 --- [http-nio-4001-exec-1] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T09:53:00.711+07:00  INFO 10756 --- [http-nio-4001-exec-1] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T09:54:56.766+07:00  INFO 10756 --- [http-nio-4001-exec-3] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T09:54:56.766+07:00  INFO 10756 --- [http-nio-4001-exec-3] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T09:54:56.779+07:00  INFO 10756 --- [http-nio-4001-exec-3] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T09:57:09.304+07:00  INFO 10756 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T09:57:09.310+07:00  INFO 10756 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T09:57:09.322+07:00  INFO 10756 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T09:57:27.639+07:00  INFO 26392 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 26392 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T09:57:27.646+07:00  INFO 26392 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T09:57:29.042+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T09:57:29.044+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T09:57:29.084+07:00  INFO 26392 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:57:29.086+07:00  INFO 26392 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:57:29.087+07:00  INFO 26392 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:57:29.088+07:00  INFO 26392 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:57:29.089+07:00  INFO 26392 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T09:57:29.090+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42 ms. Found 0 JDBC repository interfaces.
+2024-06-24T09:57:29.101+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T09:57:29.102+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T09:57:29.134+07:00  INFO 26392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 5 JPA repository interfaces.
+2024-06-24T09:57:29.536+07:00  WARN 26392 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T09:57:29.591+07:00  INFO 26392 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T09:57:30.035+07:00  INFO 26392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T09:57:30.052+07:00  INFO 26392 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T09:57:30.053+07:00  INFO 26392 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T09:57:30.109+07:00  INFO 26392 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T09:57:30.109+07:00  INFO 26392 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2347 ms
+2024-06-24T09:57:30.299+07:00  INFO 26392 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T09:57:30.384+07:00  INFO 26392 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T09:57:30.431+07:00  INFO 26392 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T09:57:30.681+07:00  INFO 26392 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T09:57:30.720+07:00  INFO 26392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T09:57:31.128+07:00  INFO 26392 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@18811c42
+2024-06-24T09:57:31.130+07:00  INFO 26392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T09:57:32.175+07:00  INFO 26392 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T09:57:32.233+07:00  INFO 26392 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T09:57:32.589+07:00  INFO 26392 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T09:57:32.589+07:00  INFO 26392 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T09:57:33.302+07:00  WARN 26392 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T09:57:33.412+07:00  WARN 26392 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T09:57:33.415+07:00  INFO 26392 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T09:57:33.981+07:00  INFO 26392 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1f3c3291, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a0c384d, org.springframework.security.web.context.SecurityContextHolderFilter@383b3357, org.springframework.security.web.header.HeaderWriterFilter@76bfecef, org.springframework.security.web.authentication.logout.LogoutFilter@5da61ee2, auth.authentication_service.infrastructure.task.JwtRequestFilter@23307c6c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@21584b99, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@728cef8e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3e8cf854, org.springframework.security.web.access.ExceptionTranslationFilter@4191774f, org.springframework.security.web.access.intercept.AuthorizationFilter@9918487]
+2024-06-24T09:57:34.686+07:00  INFO 26392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4001 (http) with context path ''
+2024-06-24T09:57:34.869+07:00  INFO 26392 --- [main] a.a.AuthServiceApplication               : Started AuthServiceApplication in 7.832 seconds (process running for 8.209)
+2024-06-24T09:57:35.024+07:00  INFO 26392 --- [http-nio-4001-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-06-24T09:57:35.024+07:00  INFO 26392 --- [http-nio-4001-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-06-24T09:57:35.026+07:00  INFO 26392 --- [http-nio-4001-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-06-24T09:57:35.359+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T09:57:35.360+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T09:57:35.479+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T09:59:17.976+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T09:59:17.976+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T09:59:17.988+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:00:42.660+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:00:42.661+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:00:42.671+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:08:01.823+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:08:01.823+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:08:01.836+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:09:49.643+07:00  INFO 26392 --- [http-nio-4001-exec-9] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:09:49.643+07:00  INFO 26392 --- [http-nio-4001-exec-9] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:09:49.655+07:00  INFO 26392 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:09:50.117+07:00  INFO 43032 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 43032 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T10:09:50.119+07:00  INFO 43032 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T10:09:50.826+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:09:50.826+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T10:09:50.850+07:00  INFO 43032 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:09:50.851+07:00  INFO 43032 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:09:50.852+07:00  INFO 43032 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:09:50.852+07:00  INFO 43032 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:09:50.853+07:00  INFO 43032 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:09:50.853+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 JDBC repository interfaces.
+2024-06-24T10:09:50.860+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:09:50.860+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T10:09:50.887+07:00  INFO 43032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 5 JPA repository interfaces.
+2024-06-24T10:09:51.123+07:00  WARN 43032 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T10:09:51.146+07:00  INFO 43032 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T10:09:51.352+07:00  INFO 43032 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T10:09:51.360+07:00  INFO 43032 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T10:09:51.360+07:00  INFO 43032 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T10:09:51.384+07:00  INFO 43032 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T10:09:51.384+07:00  INFO 43032 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1201 ms
+2024-06-24T10:09:51.509+07:00  INFO 43032 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T10:09:51.551+07:00  INFO 43032 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T10:09:51.575+07:00  INFO 43032 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T10:09:51.706+07:00  INFO 43032 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T10:09:51.724+07:00  INFO 43032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T10:09:51.918+07:00  INFO 43032 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@173b1af1
+2024-06-24T10:09:51.920+07:00  INFO 43032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T10:09:52.535+07:00  INFO 43032 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T10:09:52.585+07:00  INFO 43032 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:09:52.824+07:00  INFO 43032 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T10:09:52.824+07:00  INFO 43032 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T10:09:53.281+07:00  WARN 43032 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T10:09:53.350+07:00  WARN 43032 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T10:09:53.353+07:00  INFO 43032 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T10:09:53.802+07:00  INFO 43032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3a973b5e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6225c800, org.springframework.security.web.context.SecurityContextHolderFilter@3e9053b3, org.springframework.security.web.header.HeaderWriterFilter@7119d1da, org.springframework.security.web.authentication.logout.LogoutFilter@5d8319a7, auth.authentication_service.infrastructure.task.JwtRequestFilter@4767be27, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@a700311, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3c832820, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3e60b1b, org.springframework.security.web.access.ExceptionTranslationFilter@53e7cc08, org.springframework.security.web.access.intercept.AuthorizationFilter@c9a8e12]
+2024-06-24T10:09:54.180+07:00  WARN 43032 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-06-24T10:09:54.182+07:00  INFO 43032 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:09:54.184+07:00  INFO 43032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T10:09:54.187+07:00  INFO 43032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T10:09:54.196+07:00  INFO 43032 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-06-24T10:09:54.209+07:00 ERROR 43032 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
+
+2024-06-24T10:16:09.962+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:16:09.962+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:16:09.975+07:00  INFO 26392 --- [http-nio-4001-exec-1] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:16:10.472+07:00  INFO 47817 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 47817 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T10:16:10.474+07:00  INFO 47817 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T10:16:11.330+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:16:11.331+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T10:16:11.357+07:00  INFO 47817 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:16:11.358+07:00  INFO 47817 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:16:11.358+07:00  INFO 47817 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:16:11.359+07:00  INFO 47817 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:16:11.360+07:00  INFO 47817 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:16:11.360+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 26 ms. Found 0 JDBC repository interfaces.
+2024-06-24T10:16:11.368+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:16:11.368+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T10:16:11.399+07:00  INFO 47817 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 5 JPA repository interfaces.
+2024-06-24T10:16:11.682+07:00  WARN 47817 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T10:16:11.715+07:00  INFO 47817 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T10:16:12.045+07:00  INFO 47817 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T10:16:12.060+07:00  INFO 47817 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T10:16:12.061+07:00  INFO 47817 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T10:16:12.093+07:00  INFO 47817 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T10:16:12.093+07:00  INFO 47817 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1551 ms
+2024-06-24T10:16:12.244+07:00  INFO 47817 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T10:16:12.303+07:00  INFO 47817 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T10:16:12.339+07:00  INFO 47817 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T10:16:12.482+07:00  INFO 47817 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T10:16:12.502+07:00  INFO 47817 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T10:16:12.732+07:00  INFO 47817 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@389a1e34
+2024-06-24T10:16:12.733+07:00  INFO 47817 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T10:16:13.401+07:00  INFO 47817 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T10:16:13.456+07:00  INFO 47817 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:16:13.700+07:00  INFO 47817 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T10:16:13.700+07:00  INFO 47817 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T10:16:14.124+07:00  WARN 47817 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T10:16:14.196+07:00  WARN 47817 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T10:16:14.198+07:00  INFO 47817 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T10:16:14.604+07:00  INFO 47817 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3e60b1b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@17f43f4a, org.springframework.security.web.context.SecurityContextHolderFilter@a700311, org.springframework.security.web.header.HeaderWriterFilter@5dbd7f00, org.springframework.security.web.authentication.logout.LogoutFilter@2ea82cef, auth.authentication_service.infrastructure.task.JwtRequestFilter@46baac0d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32e9c8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@47d8c666, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@143abb21, org.springframework.security.web.access.ExceptionTranslationFilter@7119d1da, org.springframework.security.web.access.intercept.AuthorizationFilter@252da8f]
+2024-06-24T10:16:15.126+07:00  WARN 47817 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-06-24T10:16:15.128+07:00  INFO 47817 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:16:15.130+07:00  INFO 47817 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T10:16:15.134+07:00  INFO 47817 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T10:16:15.144+07:00  INFO 47817 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-06-24T10:16:15.160+07:00 ERROR 47817 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
+
+2024-06-24T10:32:40.349+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:32:40.349+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:32:40.363+07:00  INFO 26392 --- [http-nio-4001-exec-3] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:32:40.824+07:00  INFO 59639 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 59639 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T10:32:40.826+07:00  INFO 59639 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T10:32:41.549+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:32:41.550+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T10:32:41.577+07:00  INFO 59639 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:32:41.578+07:00  INFO 59639 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:32:41.579+07:00  INFO 59639 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:32:41.580+07:00  INFO 59639 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:32:41.580+07:00  INFO 59639 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:32:41.581+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 0 JDBC repository interfaces.
+2024-06-24T10:32:41.590+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:32:41.590+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T10:32:41.623+07:00  INFO 59639 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 5 JPA repository interfaces.
+2024-06-24T10:32:41.879+07:00  WARN 59639 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T10:32:41.900+07:00  INFO 59639 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T10:32:42.107+07:00  INFO 59639 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T10:32:42.116+07:00  INFO 59639 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T10:32:42.117+07:00  INFO 59639 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T10:32:42.144+07:00  INFO 59639 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T10:32:42.145+07:00  INFO 59639 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1253 ms
+2024-06-24T10:32:42.267+07:00  INFO 59639 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T10:32:42.316+07:00  INFO 59639 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T10:32:42.345+07:00  INFO 59639 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T10:32:42.479+07:00  INFO 59639 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T10:32:42.497+07:00  INFO 59639 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T10:32:42.705+07:00  INFO 59639 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3fe8ad3f
+2024-06-24T10:32:42.706+07:00  INFO 59639 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T10:32:43.351+07:00  INFO 59639 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T10:32:43.407+07:00  INFO 59639 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:32:43.658+07:00  INFO 59639 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T10:32:43.658+07:00  INFO 59639 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T10:32:44.107+07:00  WARN 59639 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T10:32:44.174+07:00  WARN 59639 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T10:32:44.177+07:00  INFO 59639 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T10:32:44.583+07:00  INFO 59639 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@9918487, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4cdd0f2f, org.springframework.security.web.context.SecurityContextHolderFilter@76bfecef, org.springframework.security.web.header.HeaderWriterFilter@3594b4b4, org.springframework.security.web.authentication.logout.LogoutFilter@143abb21, auth.authentication_service.infrastructure.task.JwtRequestFilter@77d42ed7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2c7fff1b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@383b3357, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@17cea679, org.springframework.security.web.access.ExceptionTranslationFilter@64bcf689, org.springframework.security.web.access.intercept.AuthorizationFilter@6bd5cb99]
+2024-06-24T10:32:45.004+07:00  WARN 59639 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-06-24T10:32:45.006+07:00  INFO 59639 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:32:45.007+07:00  INFO 59639 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T10:32:45.011+07:00  INFO 59639 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T10:32:45.020+07:00  INFO 59639 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-06-24T10:32:45.032+07:00 ERROR 59639 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
+
+2024-06-24T10:54:31.717+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T10:54:31.717+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T10:54:31.728+07:00  INFO 26392 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T10:54:32.210+07:00  INFO 79711 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 79711 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T10:54:32.212+07:00  INFO 79711 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T10:54:32.923+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:54:32.923+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T10:54:32.946+07:00  INFO 79711 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:54:32.947+07:00  INFO 79711 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:54:32.948+07:00  INFO 79711 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:54:32.948+07:00  INFO 79711 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:54:32.949+07:00  INFO 79711 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T10:54:32.949+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 JDBC repository interfaces.
+2024-06-24T10:54:32.956+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T10:54:32.956+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T10:54:32.983+07:00  INFO 79711 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 5 JPA repository interfaces.
+2024-06-24T10:54:33.202+07:00  WARN 79711 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T10:54:33.225+07:00  INFO 79711 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T10:54:33.454+07:00  INFO 79711 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T10:54:33.463+07:00  INFO 79711 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T10:54:33.463+07:00  INFO 79711 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T10:54:33.489+07:00  INFO 79711 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T10:54:33.489+07:00  INFO 79711 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1201 ms
+2024-06-24T10:54:33.600+07:00  INFO 79711 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T10:54:33.641+07:00  INFO 79711 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T10:54:33.665+07:00  INFO 79711 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T10:54:33.805+07:00  INFO 79711 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T10:54:33.822+07:00  INFO 79711 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T10:54:34.005+07:00  INFO 79711 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@595ec862
+2024-06-24T10:54:34.006+07:00  INFO 79711 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T10:54:34.640+07:00  INFO 79711 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T10:54:34.695+07:00  INFO 79711 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:54:34.939+07:00  INFO 79711 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T10:54:34.939+07:00  INFO 79711 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T10:54:35.370+07:00  WARN 79711 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T10:54:35.433+07:00  WARN 79711 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T10:54:35.435+07:00  INFO 79711 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T10:54:35.779+07:00  INFO 79711 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7fda0e30, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a516e4d, org.springframework.security.web.context.SecurityContextHolderFilter@271bbb75, org.springframework.security.web.header.HeaderWriterFilter@16d4757f, org.springframework.security.web.authentication.logout.LogoutFilter@758e8b8d, auth.authentication_service.infrastructure.task.JwtRequestFilter@23169374, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@73193fe0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@295d1a45, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6faa24, org.springframework.security.web.access.ExceptionTranslationFilter@77095c8c, org.springframework.security.web.access.intercept.AuthorizationFilter@5d8319a7]
+2024-06-24T10:54:36.258+07:00  WARN 79711 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-06-24T10:54:36.260+07:00  INFO 79711 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T10:54:36.262+07:00  INFO 79711 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T10:54:36.266+07:00  INFO 79711 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T10:54:36.275+07:00  INFO 79711 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-06-24T10:54:36.288+07:00 ERROR 79711 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
+
+2024-06-24T11:03:34.141+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-06-24T11:03:34.141+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-06-24T11:03:34.153+07:00  INFO 26392 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-06-24T11:03:34.631+07:00  INFO 86933 --- [main] a.a.AuthServiceApplication               : Starting AuthServiceApplication v0.0.1 using Java 17.0.11 with PID 86933 (/home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service/target/auth_service-0.0.1.jar started by golde in /home/golde/Code/PersonalProject/Golde_AI_Assistant_System/authentication_manager/auth_service)
+2024-06-24T11:03:34.633+07:00  INFO 86933 --- [main] a.a.AuthServiceApplication               : No active profile set, falling back to 1 default profile: "default"
+2024-06-24T11:03:35.331+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T11:03:35.331+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-06-24T11:03:35.355+07:00  INFO 86933 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.TokenRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T11:03:35.356+07:00  INFO 86933 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T11:03:35.356+07:00  INFO 86933 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.PrivilegeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T11:03:35.357+07:00  INFO 86933 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.AuthServiceConfigRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T11:03:35.357+07:00  INFO 86933 --- [main] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface auth.authentication_service.infrastructure.store.repositories.RoleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-06-24T11:03:35.358+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 JDBC repository interfaces.
+2024-06-24T11:03:35.365+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-06-24T11:03:35.365+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-24T11:03:35.387+07:00  INFO 86933 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 5 JPA repository interfaces.
+2024-06-24T11:03:35.606+07:00  WARN 86933 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-06-24T11:03:35.627+07:00  INFO 86933 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-06-24T11:03:35.833+07:00  INFO 86933 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4001 (http)
+2024-06-24T11:03:35.841+07:00  INFO 86933 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-24T11:03:35.842+07:00  INFO 86933 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-06-24T11:03:35.867+07:00  INFO 86933 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-24T11:03:35.867+07:00  INFO 86933 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1170 ms
+2024-06-24T11:03:35.970+07:00  INFO 86933 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-24T11:03:36.013+07:00  INFO 86933 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-24T11:03:36.037+07:00  INFO 86933 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-24T11:03:36.170+07:00  INFO 86933 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-24T11:03:36.188+07:00  INFO 86933 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-24T11:03:36.377+07:00  INFO 86933 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75f4d8a8
+2024-06-24T11:03:36.378+07:00  INFO 86933 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-24T11:03:37.019+07:00  INFO 86933 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-24T11:03:37.074+07:00  INFO 86933 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T11:03:37.340+07:00  INFO 86933 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2024-06-24T11:03:37.340+07:00  INFO 86933 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-06-24T11:03:37.793+07:00  WARN 86933 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-24T11:03:37.860+07:00  WARN 86933 --- [main] a.a.core.services.GlobalConfigService    : Cannot find param name role.role_hierarchy
+2024-06-24T11:03:37.862+07:00  INFO 86933 --- [main] a.a.kernel.configs.SecurityConfig        : RoleHierarchy : 
+2024-06-24T11:03:38.337+07:00  INFO 86933 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4a83740e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5d8319a7, org.springframework.security.web.context.SecurityContextHolderFilter@3f29e67e, org.springframework.security.web.header.HeaderWriterFilter@655e024, org.springframework.security.web.authentication.logout.LogoutFilter@139e291e, auth.authentication_service.infrastructure.task.JwtRequestFilter@1390a43a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6aa16117, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5771adf3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@453ff774, org.springframework.security.web.access.ExceptionTranslationFilter@7c9a0166, org.springframework.security.web.access.intercept.AuthorizationFilter@6a8fa30a]
+2024-06-24T11:03:39.035+07:00  WARN 86933 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-06-24T11:03:39.037+07:00  INFO 86933 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-24T11:03:39.038+07:00  INFO 86933 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-24T11:03:39.042+07:00  INFO 86933 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-06-24T11:03:39.051+07:00  INFO 86933 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-06-24T11:03:39.063+07:00 ERROR 86933 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
+

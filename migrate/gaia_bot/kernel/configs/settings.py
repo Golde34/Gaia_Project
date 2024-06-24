@@ -1,5 +1,5 @@
 from gaia_bot.kernel.configs.__config__ import __filename__
-from gaia_bot.domain.enums import InputMode
+from gaia_bot.kernel.configs.enums import InputMode
 
 
 ROOT_LOG_CONFIG = {
@@ -34,6 +34,14 @@ DEFAULT_GENERAL_SETTINGS = {
 }
 
 AI_MODEL_LOCATION = {
-    'alpaca': './gaia_bot/models/alpaca/golde_llama',
-    'task_detect': "./gaia_bot/models/task_detect/prompt_to_response/TrainData.pth",
+    'gpt2': "./gaia_bot/modules/local/models/gpt/model.pt",
+    'task_detect': "./gaia_bot/modules/local/models/task_detect/prompt_to_response/TrainData.pth",
+}
+
+USER_PROFILE = {
+    'username': 'golde',
+    'name': 'Nguyen Dong Duc Viet',
+    'password': '483777',
+    'email': 'nguyendongducviet2001@gmail.com',
+    'email_password': 'Gegterss03042001@'
 }

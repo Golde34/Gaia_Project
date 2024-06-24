@@ -1,1 +1,18 @@
-2024-06-23 23:44:26,335 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-24 11:03:27,642 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-24 11:03:33,896 - root - INFO - Bot wakeup...
+2024-06-24 11:03:34,156 - root - INFO - Authentication success.
+2024-06-24 11:03:34,156 - root - INFO - Listen command
+2024-06-24 11:03:39,466 - root - INFO - Handle input
+2024-06-24 11:03:39,753 - root - INFO - Skill tag: Greeting
+2024-06-24 11:03:39,754 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 11:03:39,754 - root - INFO - Listen command
+2024-06-24 11:04:00,448 - root - INFO - Handle input
+2024-06-24 11:04:00,738 - root - INFO - Skill tag: Greeting
+2024-06-24 11:04:00,739 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 11:04:00,739 - root - INFO - Listen command
+2024-06-24 11:04:14,979 - root - INFO - Handle input
+2024-06-24 11:04:17,595 - root - INFO - Skill tag: Greeting
+2024-06-24 11:04:17,595 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 11:04:17,595 - root - INFO - Listen command
+2024-06-24 11:04:31,102 - root - INFO - Handle input
+2024-06-24 11:04:31,102 - root - INFO - Exit Gaia
