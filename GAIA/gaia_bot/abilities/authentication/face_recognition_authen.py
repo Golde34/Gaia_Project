@@ -6,6 +6,7 @@ import numpy as np
 from imutils.video import VideoStream, FPS
 
 from gaia_bot.process.console_manager import ConsoleManager
+from gaia_bot.kernel.configs import auth_config
 
 
 def master_recognize(protoPath, modelPath, embeddedPath, recognizePath, lePath):
@@ -75,7 +76,7 @@ def master_recognize(protoPath, modelPath, embeddedPath, recognizePath, lePath):
                 proba = preds[j]
                 name = le.classes_[j]
                 if name == "data/my_face":
-                    name = "Golde"
+                    name = auth_config.name
                     boss_face += 1
                     detect_boss_face = True
                 else:

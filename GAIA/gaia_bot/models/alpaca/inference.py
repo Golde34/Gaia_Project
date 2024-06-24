@@ -2,13 +2,14 @@ import torch
 from unsloth import FastLanguageModel
 
 import gaia_bot.kernel.configs.settings as settings
-
+import gaia_bot.kernel.configs.auth_config as auth_config
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
 dtype = None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 
-alpaca_prompt = """Answer or reply your boss question or talk with him as Gaia the virtual assistant. Your boss named Golde. 
+alpaca_prompt = """Answer or reply your boss question or talk with him as Gaia the virtual assistant. 
+    Your boss named """ + auth_config.username + """. 
     Below is an instruction that describes a task, paired with an input that provides further context. 
     Write a response that appropriately completes the request.
 
