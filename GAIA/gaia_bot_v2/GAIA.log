@@ -1,3 +1,7 @@
-2024-06-23 23:44:31,956 - root - INFO - Bot wakeup...
-2024-06-23 23:44:32,397 - root - INFO - Authentication success.
-2024-06-23 23:44:32,397 - root - INFO - Listen command
+2024-06-24 10:32:40,085 - root - INFO - Bot wakeup...
+2024-06-24 10:32:40,367 - root - INFO - Authentication success.
+2024-06-24 10:32:40,367 - root - INFO - Listen command
+2024-06-24 10:32:45,784 - root - INFO - Handle input
+2024-06-24 10:32:46,331 - root - INFO - Skill tag: Greeting
+2024-06-24 10:32:46,331 - root - INFO - Response transcript with skill: Test response.
+2024-06-24 10:32:46,331 - root - INFO - Listen command

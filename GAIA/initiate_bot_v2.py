@@ -66,7 +66,7 @@ async def _authentication_process(console_manager, auth_service_status):
         print(f"Authentication failed, process user {username} to guess mode.")
         _process_guess_mode()
 
-    console_manager.authentication(username, info_log=("Authentication success."))        
+    console_manager.authentication(username, token, info_log="Authentication success.")        
     return token
 
 

@@ -2,9 +2,10 @@ import requests
 import json
 import os
 
-from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
-from gaia_bot.kernel.configs.settings import USER_PROFILE
-from gaia_bot.modules.ports.commands.microservices_state.call_microservices import CallMicroservices
+from gaia_bot_v2.kernel.configs.port_configs import PORTS, DOMAIN
+from gaia_bot_v2.kernel.configs.auth_config import USER_PROFILE
+from gaia_bot_v2.abilities.microservice_connections import MicroserviceConnection
+from gaia_bot_v2.domain.enums import MicroserviceAcronymsEnum
 
 
 class AuthenticationConnector:
@@ -18,7 +19,7 @@ class AuthenticationConnector:
         self.router = PORTS['authentication_service']['router']
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
-        self.microservice_state = CallMicroservices(self.auth_bash, self.gaia_url) 
+        self.microservice_state = MicroserviceConnection().call_microservice_by_name(MicroserviceAcronymsEnum.AS._value_)
     
     def activate_authentication_command(self):
         self.microservice_state.activate_service()
@@ -35,18 +36,15 @@ class AuthenticationConnector:
         
         if response.status_code == 200:
             result = response.json()
-            print(result)
             body = result['response']
-            print(body)
             self._save_response_to_file(result['response'])
             if result['authenticated']:
-                token = body['data']['gaiaAutoSignin']['accessToken']
-                return f"Authenticated successfully. Token: {token}"
+                return body['data']['gaiaAutoSignin']['accessToken']
         else:
             return "Invalid credentials"
         
     def _save_response_to_file(self, result):
-        filepath = "../../local/resources/authen_cache/token.json"
+        filepath = "../../resources/authen_cache/token.json"
         
         script_dir = os.path.dirname(__file__)
         absolute_path = os.path.join(script_dir, filepath)

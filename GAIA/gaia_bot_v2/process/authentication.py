@@ -21,9 +21,8 @@ class AuthenticationCommand():
             method, status = await self.select_authentication_method()
             if method is not None and status:
                 if self.auth_service_status:
-                    self.login_to_get_token(username, password)
-                    self.token = self.save_token()
-                    return self.token, username, True
+                    token = await self.login_to_get_token(username, password)
+                    return token, username, True
                 else:
                     raise Exception("Authentication service is not available")
             raise Exception("Authentication failed")
@@ -72,14 +71,11 @@ class AuthenticationCommand():
 
     def username_password_method(self):
         return "Golde", "483777"
-
-    def check_auth_service_status(self):
-        auth_service_status = MicroserviceConnection().check_microservice_state_by_name(MicroserviceAcronymsEnum.AS.value())
-        return auth_service_status
     
-    def login_to_get_token(self, username, password):
-        authenticationConnector = AuthenticationConnector(username, password)
-        return authenticationConnector.call_login_api()
-    
-    def save_token(self):
-        pass
+    async def login_to_get_token(self, username, password):
+        wait = await MicroserviceConnection().wait_microservice(MicroserviceAcronymsEnum.AS._value_)
+        if wait == True: 
+            authenticationConnector = AuthenticationConnector(username, password)
+            return authenticationConnector.call_login_api()
+        else:
+            return "Later kickoff authen process."

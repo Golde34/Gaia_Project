@@ -33,19 +33,19 @@ class ConsoleManager:
                 for service in services:
                     for key, value in service.items():
                         print(OutputStyler.BOLD + "> " + key + ": " + str(value) + "\r" + OutputStyler.ENDC)        
-                print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
+                print(OutputStyler.HEADER + headerize("AUTHENTICATION") + OutputStyler.ENDC)
         else:
             if text:
                 print(OutputStyler.BOLD + text + "\r" + OutputStyler.ENDC)
 
-    def authentication(self, username, info_log=None, error_log=None):
+    def authentication(self, username, token, info_log=None, error_log=None):
         if info_log:
             logging.info(info_log)
         if error_log:
             logging.error(error_log)
 
-        print(OutputStyler.HEADER + headerize("AUTHENTICATION") + OutputStyler.ENDC)
-        print(OutputStyler.BOLD + "> " + username + "\r" + OutputStyler.ENDC)
+        print(OutputStyler.BOLD + "> Username: " + username + "\r" + OutputStyler.ENDC)
+        print(OutputStyler.BOLD + "> Token: " + token + "\r" + OutputStyler.ENDC)
         print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
 
     @staticmethod

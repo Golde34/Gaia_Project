@@ -1,5 +1,7 @@
 import socket
 import asyncio
+import subprocess
+
 from gaia_bot_v2.kernel.configs.port_configs import PORTS, PORT_COMPONENTS
 
 
@@ -27,6 +29,15 @@ class MicroserviceConnection:
         return await asyncio.create_subprocess_exec(
             "gnome-terminal", "--", "bash", "-c", f"bash {bash_script_path}"
         )
+
+    def call_microservice_by_name(self, microservice_name):
+        bash_script_path = PORTS[microservice_name]["shell_path"]
+        try:
+            subprocess.run(
+                ["gnome-terminal", "--", "bash", "-c", f"bash {bash_script_path}"]
+            )
+        except subprocess.CalledProcessError as e:
+            print("Error running the bash script: ", e)
 
     def check_microservice_state(self):
         microservice_state = {}
