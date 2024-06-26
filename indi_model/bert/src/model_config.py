@@ -9,6 +9,7 @@ MODEL_PATH = "model.bin"
 TRAINING_FILE = "../input/ner_dataset.csv"
 META_MODEL = "meta.bin"
 TOKENIZER = transformers.BertTokenizer.from_pretrained(
+    # "bert-base-uncased",
     BASE_MODEL_PATH,
     do_lower_case=True
 )
