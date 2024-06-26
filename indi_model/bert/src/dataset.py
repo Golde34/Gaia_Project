@@ -22,9 +22,12 @@ class EntityDataset:
 
         for i, s in enumerate(text):
             inputs = model_config.TOKENIZER.encode(
-                s,
-                add_special_tokens=False
-            )
+                str(s),                       
+                add_special_tokens = False)
+            # inputs = model_config.TOKENIZER.encode(
+            #     s,
+            #     add_special_tokens=False
+            # )
             input_length = len(inputs)
             ids.extend(inputs)
             target_pos.extend([pos[i]] * input_length)
