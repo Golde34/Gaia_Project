@@ -19,6 +19,7 @@ async def process_bot():
     loop = asyncio.get_event_loop()
     register_models = await loop.run_in_executor(None, _register_ai_models) 
     services = await _start_satellite_services()
+    print(f"Satellite services: {services}")
     console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
     # Initiate
     authentication_service = [item for item in services if "authentication_service" in item.keys()]
@@ -88,6 +89,7 @@ async def _initiate_gaia(
         settings=settings,
         register_models=register_models,
     )
+    # user_skills = SkillRegistry
     while boolean_loop:
         console_manager.console_output(
             text="Listen your command", info_log="Listen command"
