@@ -5,7 +5,7 @@ from initiate_bot import process_bot
 
 ## DEBUG
 if __name__ == "__main__":
-    asyncio.run(process_bot())
+    asyncio.run(process_bot(mode="debug"))
     
 ## TEST BETA FUNCTION
 # async def why_you_always_die_gaia_connector():

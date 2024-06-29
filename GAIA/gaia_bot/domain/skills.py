@@ -2,7 +2,8 @@ SKILLS = [
     {
         'func': None,
         'tags': 'first skill, default skill',
-        'description': 'Detect all objects in the sentence like geography, time, person, etc.'
+        'description': 'Detect all objects in the sentence like geography, time, person, etc.',
+        'service': 'ALL'
     },
     {
         'func': None,

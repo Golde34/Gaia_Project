@@ -4,14 +4,15 @@ import colorama
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse
 from gaia_bot.abilities import user_authentication
-from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.kernel.configs import settings
+from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.process.assistant_skill import AssistantSkill
 from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
+from gaia_bot.process.skill_registry import SkillRegistry
 
 
-async def process_bot():
+async def process_bot(mode="run"):
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: 2.0.0")
@@ -19,6 +20,7 @@ async def process_bot():
     loop = asyncio.get_event_loop()
     register_models = await loop.run_in_executor(None, _register_ai_models) 
     services = await _start_satellite_services()
+    print(f"Satellite services: {services}")
     console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
     # Initiate
     authentication_service = [item for item in services if "authentication_service" in item.keys()]
@@ -27,6 +29,7 @@ async def process_bot():
     token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
     await _initiate_gaia(
+        mode=mode,
         console_manager=console_manager,
         assistant=assistant,
         settings=settings,
@@ -79,7 +82,7 @@ def _process_guess_mode():
 
 
 async def _initiate_gaia(
-    console_manager, assistant, settings, token, services, register_models
+    mode, console_manager, assistant, settings, token, services, register_models
 ):
     boolean_loop = True
     process = Processor(
@@ -88,11 +91,13 @@ async def _initiate_gaia(
         settings=settings,
         register_models=register_models,
     )
+    # user_skills = SkillRegistry(services, token).generate_user_skill()
+    # print(f"User skills: {user_skills}")
     while boolean_loop:
         console_manager.console_output(
             text="Listen your command", info_log="Listen command"
         )
-        response_transcript, skill = await process.run()
+        response_transcript, skill = await process.run(mode=mode)
         console_manager.console_output(
             text=response_transcript,
             info_log="Response transcript with skill: " + skill,

@@ -1,4 +1,4 @@
-from gaia_bot.modules.local.models.bert import model_config
+from gaia_bot.models.bert import model_config
 import torch
 
 
@@ -22,7 +22,7 @@ class EntityDataset:
 
         for i, s in enumerate(text):
             inputs = model_config.TOKENIZER.encode(
-                s,
+                str(s),
                 add_special_tokens=False
             )
             input_length = len(inputs)
