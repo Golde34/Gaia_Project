@@ -1,5 +1,6 @@
 from gaia_bot.abilities.detect_sentence_objects import DetectSentenceObjects
 from gaia_bot.abilities.task_detection import DetectSkill
+from gaia_bot.abilities.open_client_gui import OpenClientGUI
 
 SKILLS = [
     {
@@ -15,7 +16,7 @@ SKILLS = [
         'service': 'All'
     },
     {
-        'func': None,
+        'func': OpenClientGUI.open_client_gui,
         'tags': 'open client gui, open gui, open client',
     }, 
 ]
