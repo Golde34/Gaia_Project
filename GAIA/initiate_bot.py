@@ -12,7 +12,7 @@ from gaia_bot.models import load_models
 from gaia_bot.process.skill_registry import SkillRegistry
 
 
-async def process_bot():
+async def process_bot(mode="run"):
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: 2.0.0")
@@ -29,6 +29,7 @@ async def process_bot():
     token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
     await _initiate_gaia(
+        mode=mode,
         console_manager=console_manager,
         assistant=assistant,
         settings=settings,
@@ -81,7 +82,7 @@ def _process_guess_mode():
 
 
 async def _initiate_gaia(
-    console_manager, assistant, settings, token, services, register_models
+    mode, console_manager, assistant, settings, token, services, register_models
 ):
     boolean_loop = True
     process = Processor(
@@ -96,7 +97,7 @@ async def _initiate_gaia(
         console_manager.console_output(
             text="Listen your command", info_log="Listen command"
         )
-        response_transcript, skill = await process.run()
+        response_transcript, skill = await process.run(mode=mode)
         console_manager.console_output(
             text=response_transcript,
             info_log="Response transcript with skill: " + skill,

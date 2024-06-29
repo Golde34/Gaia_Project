@@ -13,7 +13,7 @@ class Processor:
         self.skills = SKILLS
         self.register_models = register_models
 
-    async def run(self):
+    async def run(self, mode="run"):
         """This function is used to run the Gaia bot.
 
         Returns:
@@ -36,7 +36,7 @@ class Processor:
         # user skills based on user authorization and available satellite services
         # user_skills = create_skill_trie(self.skills)
         # Response transcript
-        response_transcript, tag_skill = self._response_and_detect_skill(transcript)
+        response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
 
         # self.assistant.sentence_detect(transcript, self.skills)
         # await self.assistant.validate_assistant_response(tag_skill, user_skills)
@@ -64,7 +64,7 @@ class Processor:
             )
             exit()
 
-    def _response_and_detect_skill(self, transcript):
+    def _response_and_detect_skill(self, transcript, mode="run"):
         response_model, response_tokenizer = self.register_models["response"]
         detect_skill_model = self.register_models["detect_skill"]
 
@@ -72,7 +72,7 @@ class Processor:
             response_transcript, _ = self._handle_insufficient_resources("response")
         else:
             response_transcript = self._generate_response(
-                transcript, response_model, response_tokenizer
+                mode, transcript, response_model, response_tokenizer
             )
 
         if detect_skill_model is None:
@@ -107,9 +107,9 @@ class Processor:
             
             return "Redirect to web", None
 
-    def _generate_response(self, text, model, tokenizer, **kwargs):
+    def _generate_response(self, mode, text, model, tokenizer, **kwargs):
         try:
-            response = AlpacaResponse.generate_response(text, model, tokenizer)
+            response = AlpacaResponse.generate_response(mode, text, model, tokenizer)
             return response
         except Exception as e:
             response = "Failed to generate response: {}".format(e)

@@ -6,11 +6,13 @@ from gaia_bot.models.alpaca import inference
 class AlpacaResponse():
     
     @classmethod
-    def generate_response(cls, text, model, tokenize, **kwargs):
+    def generate_response(cls, mode, text, model, tokenize, **kwargs):
         try:
             response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize)
-            last_response = cls._format_response(response)
-            return last_response
+            if mode == "run":
+                last_response = cls._format_response(response)
+                return last_response
+            return response
         except Exception as e:
             print(f"Error: {e}")
             return "Failed to generate response."
