@@ -14,13 +14,11 @@ async def main():
                         choices=["response", "task_detection", "object_detection"], 
                         help="Train model")
     parser.add_argument("--version", "-v", action="store_true", help=f"Show Gaia version")
-
+    # parser.add_argument("--version", "-v", type=int, default=1, help=f"Gaia version: {__version__}"
     # parser.add_argument('-t', '--test', action='store_true', help='test mode')
-    # parser.add_argument('-d', '--debug', action='store_true', help='debug mode')
     # parser.add_argument('-s', '--skill', action='store_true', help='skill mode')
     # parser.add_argument('-a', '--authen', action='store_true', help='authen mode')
     # parser.add_argument('-m', '--microservice', action='store_true', help='microservice mode')
-    # parser.add_argument("--version", "-v", type=int, default=1, help=f"Gaia version: {__version__}")
     
     args, unknown = parser.parse_known_args()
     if unknown:
