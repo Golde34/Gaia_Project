@@ -1,17 +1,15 @@
 import gaia_bot
 
 from gaia_bot.abilities.response import AlpacaResponse
-from gaia_bot.domain.skills import SKILLS
-from gaia_bot.kernel.utils.trie_node import create_skill_trie
 
 
 class Processor:
-    def __init__(self, console_manager, assistant, settings, register_models):
+    def __init__(self, console_manager, assistant, settings, register_models, user_skills):
         self.console_manager = console_manager
         self.assistant = assistant
         self.settings = settings
-        self.skills = SKILLS
         self.register_models = register_models
+        self.user_skills = user_skills
 
     async def run(self, mode="run"):
         """This function is used to run the Gaia bot.
@@ -32,19 +30,11 @@ class Processor:
             return help_message, "Help message"
         
         # Process
-        # TODO
-        # user skills based on user authorization and available satellite services
-        # user_skills = create_skill_trie(self.skills)
         # Response transcript
         response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
 
-        # self.assistant.sentence_detect(transcript, self.skills)
-        # await self.assistant.validate_assistant_response(tag_skill, user_skills)
+        await self.assistant.validate_assistant_response(transcript, self.user_skills)
 
-        # test skill
-        # await self.assistant.test_only_skill(self.skills, 'create a new task')
-
-        # return response_transcript
         tag_skill = "Test response."
         return response_transcript, tag_skill
 

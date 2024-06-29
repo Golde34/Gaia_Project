@@ -8,7 +8,7 @@ async def main():
     parser = argparse.ArgumentParser(description="Gaia Bot's command line interface")
     parser.add_argument("--gaia-help", "-gh", action="store_true", help="Gaia show help message")
     parser.add_argument("-p", "--process", action="store_true", help="Initiate bot process")
-    parser.add_argument("--mode", "-mo", type=str, choices=["run", "debug"], default="run", help="Bot mode")
+    parser.add_argument("--mode", type=str, choices=["run", "debug"], default="run", help="Bot mode")
     parser.add_argument("--debug", "-d", action="store_true", help="Debug mode")
     parser.add_argument("-tm", "--train-model", type=str, 
                         choices=["response", "task_detection", "object_detection"], 
