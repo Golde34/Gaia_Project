@@ -4,11 +4,12 @@ import colorama
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse
 from gaia_bot.abilities import user_authentication
-from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.kernel.configs import settings
+from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.process.assistant_skill import AssistantSkill
 from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
+from gaia_bot.process.skill_registry import SkillRegistry
 
 
 async def process_bot():
@@ -89,7 +90,8 @@ async def _initiate_gaia(
         settings=settings,
         register_models=register_models,
     )
-    # user_skills = SkillRegistry
+    user_skills = SkillRegistry(services, token).generate_user_skill()
+    print(f"User skills: {user_skills}")
     while boolean_loop:
         console_manager.console_output(
             text="Listen your command", info_log="Listen command"
