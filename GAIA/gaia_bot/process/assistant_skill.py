@@ -33,14 +33,15 @@ class AssistantSkill:
             cls.console_manager.console_output(error_log="Failed to detect skill tag.")
         
     @classmethod
-    def validate_assistant_response(cls, detected_skill, skills):
+    async def validate_assistant_response(cls, detected_skill, skills):
         try:
             trie_skill = Trie()
             trie_skill.search(detected_skill)
             if trie_skill == None:
                 cls.console_manager.console_output(error_log="Skill not found.")
             else:
-                cls.execute_skill(trie_skill, detected_skill)
+                print(f"Skill found: {trie_skill}")
+                await cls.execute_skill(trie_skill, detected_skill)
         except:
             cls.console_manager.console_output(error_log="Failed to validate assistant response.")
             
@@ -49,7 +50,9 @@ class AssistantSkill:
         if skill:
             cls.console_manager.console_output(info_log='Executing skill...')
             try:
+                print(f"Skill: {skill}")
                 await skill(text)
+                print(f"Skill executed: {skill}")
             except Exception as e:
                 cls.console_manager.console_output(error_log="Failed to execute skill...")
                 

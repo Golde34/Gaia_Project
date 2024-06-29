@@ -23,4 +23,12 @@ class MicroserviceAcronymsEnum(Enum):
     TM = 'task_manager'
     SP = 'schedule_plan'
     WO = 'work_optimization'
- 
+
+class MicroserviceStatusEnum(Enum):
+    ACTIVE = 'ACTIVE'
+    INACTIVE = 'INACTIVE'
+
+class StringConstant:
+    Authenticated = 'Authenticated'
+    All = 'All'
+    NotAuthenticated = 'Not Authenticated'

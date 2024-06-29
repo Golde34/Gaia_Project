@@ -85,14 +85,15 @@ async def _initiate_gaia(
     mode, console_manager, assistant, settings, token, services, register_models
 ):
     boolean_loop = True
+    user_skills = SkillRegistry(services, token).generate_user_skill()
     process = Processor(
         console_manager=console_manager,
         assistant=assistant,
         settings=settings,
         register_models=register_models,
+        user_skills=user_skills,
     )
-    # user_skills = SkillRegistry(services, token).generate_user_skill()
-    # print(f"User skills: {user_skills}")
+    
     while boolean_loop:
         console_manager.console_output(
             text="Listen your command", info_log="Listen command"

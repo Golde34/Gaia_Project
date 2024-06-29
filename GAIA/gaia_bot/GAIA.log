@@ -1,1 +1,14 @@
-2024-06-29 19:12:08,801 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-29 22:34:11,635 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-29 22:34:18,072 - root - INFO - Bot wakeup...
+2024-06-29 22:34:18,072 - root - INFO - Face authentication
+2024-06-29 22:34:18,108 - root - INFO - Starting video stream...
+2024-06-29 22:34:22,524 - root - INFO - Authentication success.
+2024-06-29 22:34:22,524 - root - INFO - Listen command
+2024-06-29 22:34:26,627 - root - INFO - Handle input
+2024-06-29 22:34:27,145 - root - INFO - Skill tag: Greeting
+2024-06-29 22:34:27,145 - root - INFO - Executing skill...
+2024-06-29 22:34:27,145 - root - ERROR - Failed to execute skill...
+2024-06-29 22:34:27,145 - root - INFO - Response transcript with skill: Test response.
+2024-06-29 22:34:27,145 - root - INFO - Listen command
+2024-06-29 22:35:10,976 - root - INFO - Handle input
+2024-06-29 22:35:10,976 - root - INFO - Exit Gaia
