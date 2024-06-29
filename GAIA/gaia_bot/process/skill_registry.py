@@ -14,6 +14,7 @@ class SkillRegistry:
 
     def _generate_available_skills(self, services, token):
         services_status = {list(service.keys())[0]: list(service.values())[0] == 'ACTIVE' for service in services}
+        print(services_status)
         valid_role = self.token != None
         available_skills = [
             skill for skill in SKILLS
