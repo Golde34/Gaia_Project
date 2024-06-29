@@ -24,9 +24,14 @@ class Processor:
         self.console_manager.console_output(
             text="Handling your command", info_log="Handle input"
         )
-        
+
+        # Instruction
         self._check_exit_gaia(transcript)
+        help_message, help_message_status = self._check_help_message_gaia(transcript)
+        if help_message_status:
+            return help_message, "Help message"
         
+        # Process
         # TODO
         # user skills based on user authorization and available satellite services
         # user_skills = create_skill_trie(self.skills)
@@ -42,6 +47,15 @@ class Processor:
         # return response_transcript
         tag_skill = "Test response."
         return response_transcript, tag_skill
+
+    def _check_help_message_gaia(self, transcript):
+        if transcript.lower() == "help": 
+            text= "Gaia Bot's command line interface:\n" \
+                    "Input: exit, q, bye, quit  to exit the program\n" \
+                    "Input: help                to show this message"
+            return text, True
+        
+        return None, False
 
     def _check_exit_gaia(self, transcript):
         if transcript.lower() in ["exit", "quit", "q", "bye"]:

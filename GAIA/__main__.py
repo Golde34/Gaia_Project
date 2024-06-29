@@ -5,11 +5,11 @@ from gaia_bot.kernel.configs.__version__ import __version__
 
 async def main():
     parser = argparse.ArgumentParser(description="Gaia Bot's command line interface")
+    parser.add_argument("--gaia-help", "-gh", action="store_true", help="Gaia show help message")
     parser.add_argument("-p", "--process", action="store_true", help="Initiate bot process")
     parser.add_argument("-tm", "--train-model", type=str, 
                         choices=["response", "task_detection", "object_detection"], 
                         help="Train model")
-    parser.add_argument("--gaia-help", "-gh", action="store_true", help="Gaia show help message")
     parser.add_argument("--version", "-v", action="store_true", help=f"Show Gaia version")
     # parser.add_argument('-t', '--test', action='store_true', help='test mode')
     # parser.add_argument('-d', '--debug', action='store_true', help='debug mode')
@@ -31,7 +31,8 @@ async def main():
         from __train__ import model_switch_case
         model_switch_case(args.train_model) 
     if args.gaia_help or not any(vars(args).values()):
-        parser.print_help()
+        from gaia_bot.kernel.utils.help import help_message
+        help_message()
     if args.version:
         print(f"Gaia version: {__version__}")
 
