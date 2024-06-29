@@ -10,7 +10,7 @@ from transformers import get_linear_schedule_with_warmup
 from gaia_bot.models.bert import model_config
 from gaia_bot.models.bert import dataset
 from gaia_bot.models.bert import engine
-from bert_model import EntityModel
+from gaia_bot.models.bert.bert_model import EntityModel
 
 def process_data(data_path):
     df = pd.read_csv(data_path, encoding="latin-1")
