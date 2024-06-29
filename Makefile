@@ -1,2 +1,2 @@
-run:
-	python GAIA/__main__.py --process
+gaia:
+	cd GAIA && python __main__.py --process
