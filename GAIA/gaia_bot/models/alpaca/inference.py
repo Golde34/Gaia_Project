@@ -37,7 +37,7 @@ def call_alpaca_response(inp, model, tokenizer):
     inputs = tokenizer(
         [
             alpaca_prompt.format(
-                "Answer my question",  # instruction
+                "Answer my question or chat with me: ",  # instruction
                 inp,  # input
                 "",  # output - leave this blank for generation!
             )

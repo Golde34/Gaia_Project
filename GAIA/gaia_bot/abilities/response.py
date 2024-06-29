@@ -1,9 +1,7 @@
-import logging
 import re
 
 from gaia_bot.models.alpaca import inference
 
-# logging.basicConfig(level=logging.ERROR)
 
 class AlpacaResponse():
     
@@ -29,8 +27,12 @@ class AlpacaResponse():
             
     @classmethod
     def _format_response(cls, response):
-        parts = response.split("### Response:\n")
-        if len(parts) > 1:
-            return parts[1].strip()
+        match = re.search("### Response:\n(.*?)###", response, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        else:
+            parts = response.split("### Response:\n")
+            if len(parts) > 1:
+                return parts[1].strip()
         return response
     

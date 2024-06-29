@@ -1,19 +1,16 @@
-2024-06-29 13:40:19,154 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-06-29 13:40:26,058 - root - INFO - Bot wakeup...
-2024-06-29 13:40:26,058 - root - INFO - Face authentication
-2024-06-29 13:40:26,094 - root - INFO - Starting video stream...
-2024-06-29 13:40:32,582 - root - INFO - Authentication success.
-2024-06-29 13:40:32,582 - root - INFO - Listen command
-2024-06-29 13:40:43,562 - root - INFO - Handle input
-2024-06-29 13:40:43,563 - root - INFO - Response transcript with skill: Help message
-2024-06-29 13:40:43,563 - root - INFO - Listen command
-2024-06-29 13:40:52,568 - root - INFO - Handle input
-2024-06-29 13:40:53,242 - root - INFO - Skill tag: Greeting
-2024-06-29 13:40:53,242 - root - INFO - Response transcript with skill: Test response.
-2024-06-29 13:40:53,243 - root - INFO - Listen command
-2024-06-29 13:46:07,598 - root - INFO - Handle input
-2024-06-29 13:46:10,383 - root - INFO - Skill tag: Greeting
-2024-06-29 13:46:10,383 - root - INFO - Response transcript with skill: Test response.
-2024-06-29 13:46:10,383 - root - INFO - Listen command
-2024-06-29 13:46:15,663 - root - INFO - Handle input
-2024-06-29 13:46:15,664 - root - INFO - Exit Gaia
+2024-06-29 13:53:29,894 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-29 13:53:36,283 - root - INFO - Bot wakeup...
+2024-06-29 13:53:36,284 - root - INFO - Face authentication
+2024-06-29 13:53:36,321 - root - INFO - Starting video stream...
+2024-06-29 13:53:43,288 - root - INFO - Authentication success.
+2024-06-29 13:53:43,288 - root - INFO - Listen command
+2024-06-29 13:53:46,807 - root - INFO - Handle input
+2024-06-29 13:53:49,801 - root - INFO - Skill tag: Greeting
+2024-06-29 13:53:49,801 - root - INFO - Response transcript with skill: Test response.
+2024-06-29 13:53:49,801 - root - INFO - Listen command
+2024-06-29 13:53:57,930 - root - INFO - Handle input
+2024-06-29 13:54:00,776 - root - INFO - Skill tag: Greeting
+2024-06-29 13:54:00,776 - root - INFO - Response transcript with skill: Test response.
+2024-06-29 13:54:00,776 - root - INFO - Listen command
+2024-06-29 13:54:43,392 - root - INFO - Handle input
+2024-06-29 13:54:43,392 - root - INFO - Exit Gaia
