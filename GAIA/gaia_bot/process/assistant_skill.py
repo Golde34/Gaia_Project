@@ -2,7 +2,7 @@ import os
 
 from gaia_bot.abilities.task_detection import DetectSkill
 from gaia_bot.process.console_manager import ConsoleManager
-from gaia_bot.kernel.utils.trie_node import Trie
+from gaia_bot.kernel.utils.trie_node import search_skills
 
 
 class AssistantSkill:
@@ -27,50 +27,30 @@ class AssistantSkill:
     def detect_skill_tag(cls, transcript, model):
         try:
             detected_task = DetectSkill.detect_skill_tag(transcript, model) 
-            cls.console_manager.console_output(info_log="Skill tag: " + detected_task)
+            cls.console_manager.console_output(text=f"Skill tag: {detected_task}", info_log=f"Skill tag detected: {detected_task}")
             return detected_task
         except Exception as e:
-            cls.console_manager.console_output(error_log="Failed to detect skill tag.")
+            cls.console_manager.console_log(error_log="Failed to detect skill tag.")
         
     @classmethod
-    async def validate_assistant_response(cls, detected_skill, skills):
+    def validate_assistant_response(cls, detected_skill, skills):
         try:
-            trie_skill = Trie()
-            trie_skill.search(detected_skill)
-            if trie_skill == None:
-                cls.console_manager.console_output(error_log="Skill not found.")
+            detected_skill = str(detected_skill).lower()
+            results = search_skills(skills, detected_skill)
+            if results == None:
+                cls.console_manager.console_log(error_log="Skill not found.")
             else:
-                print(f"Skill found: {trie_skill}")
-                await cls.execute_skill(trie_skill, detected_skill)
+                cls.execute_skill(results[0].get('func'), detected_skill)
         except:
-            cls.console_manager.console_output(error_log="Failed to validate assistant response.")
+            cls.console_manager.console_log(error_log="Failed to validate assistant response.")
             
     @classmethod
-    async def execute_skill(cls, skill, text, *kwargs):
+    def execute_skill(cls, skill, text, *kwargs):
         if skill:
-            cls.console_manager.console_output(info_log='Executing skill...')
+            cls.console_manager.console_log(info_log=f'Executing skill {skill}')
             try:
-                print(f"Skill: {skill}")
-                await skill(text)
-                print(f"Skill executed: {skill}")
+                skill(text, *kwargs)
             except Exception as e:
-                cls.console_manager.console_output(error_log="Failed to execute skill...")
-                
-    @classmethod
-    def sentence_detect(cls, text, skills):
-        for skill in skills:
-            for tag in str(skill['tags']).split(', '):
-                if tag == 'default skill' or tag == 'first skill':
-                    cls.execute_skill(skill['func'], text)
-                    break
-                
-    @classmethod
-    async def test_only_skill(cls, skills, test_skill):
-        for skill in skills:
-            for tag in str(skill['tags']).split(', '):
-                if tag == test_skill:
-                    await cls.execute_skill(skill['func'], test_skill)
-                    break
-    
-    
+                cls.console_manager.console_log(error_log="Failed to execute skill...")
+
             

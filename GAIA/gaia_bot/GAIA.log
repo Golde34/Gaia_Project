@@ -1,14 +1,28 @@
-2024-06-29 22:34:11,635 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-06-29 22:34:18,072 - root - INFO - Bot wakeup...
-2024-06-29 22:34:18,072 - root - INFO - Face authentication
-2024-06-29 22:34:18,108 - root - INFO - Starting video stream...
-2024-06-29 22:34:22,524 - root - INFO - Authentication success.
-2024-06-29 22:34:22,524 - root - INFO - Listen command
-2024-06-29 22:34:26,627 - root - INFO - Handle input
-2024-06-29 22:34:27,145 - root - INFO - Skill tag: Greeting
-2024-06-29 22:34:27,145 - root - INFO - Executing skill...
-2024-06-29 22:34:27,145 - root - ERROR - Failed to execute skill...
-2024-06-29 22:34:27,145 - root - INFO - Response transcript with skill: Test response.
-2024-06-29 22:34:27,145 - root - INFO - Listen command
-2024-06-29 22:35:10,976 - root - INFO - Handle input
-2024-06-29 22:35:10,976 - root - INFO - Exit Gaia
+2024-06-30 11:39:33,770 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-30 11:39:39,624 - root - INFO - Bot wakeup...
+2024-06-30 11:39:39,625 - root - INFO - Face authentication
+2024-06-30 11:39:39,664 - root - INFO - Starting video stream...
+2024-06-30 11:39:47,475 - root - INFO - Authentication success.
+2024-06-30 11:39:47,475 - root - INFO - Listen command
+2024-06-30 11:40:18,990 - root - INFO - Handle input
+2024-06-30 11:40:21,800 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:40:21,800 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:40:21,800 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:40:21,800 - root - INFO - Listen command
+2024-06-30 11:40:57,641 - root - INFO - Handle input
+2024-06-30 11:40:59,621 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:40:59,621 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:40:59,621 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:40:59,621 - root - INFO - Listen command
+2024-06-30 11:41:28,075 - root - INFO - Handle input
+2024-06-30 11:41:28,344 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:41:28,344 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:41:28,344 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:41:28,344 - root - INFO - Listen command
+2024-06-30 11:41:45,179 - root - INFO - Handle input
+2024-06-30 11:41:45,855 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:41:45,855 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:41:45,855 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:41:45,855 - root - INFO - Listen command
+2024-06-30 11:41:48,349 - root - INFO - Handle input
+2024-06-30 11:41:48,349 - root - INFO - Exit Gaia

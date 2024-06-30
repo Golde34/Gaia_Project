@@ -14,6 +14,7 @@ class OutputStyler:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    BOLDGREEN = '\033[1;32m'
 
 DASH = '='
 USER_INPUT = Fore.CYAN + '~> ' + OutputStyler.ENDC

@@ -33,9 +33,8 @@ class Processor:
         # Response transcript
         response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
 
-        await self.assistant.validate_assistant_response(transcript, self.user_skills)
+        self.assistant.validate_assistant_response(tag_skill, self.user_skills)
 
-        tag_skill = "Test response."
         return response_transcript, tag_skill
 
     def _check_help_message_gaia(self, transcript):

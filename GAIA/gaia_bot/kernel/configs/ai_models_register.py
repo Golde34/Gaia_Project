@@ -3,7 +3,7 @@ from gaia_bot.models.task_detect.prompt_to_response.inference import get_detect_
 
 AI_MODEL_LOCATION = {
     'alpaca': './gaia_bot/models/alpaca/golde_llama',
-    'task_detect': './gaia_bot/models/task_detect/prompt_to_response/TrainData.pth'
+    'task_detect': "./gaia_bot/resources/ai_models/task_detect/TrainData.pth",
 }
 
 AI_INFERENCE = {
