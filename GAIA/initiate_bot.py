@@ -99,6 +99,6 @@ async def _initiate_gaia(
         )
         response_transcript, skill = await process.run(mode=mode)
         console_manager.gaia_output(
-            text=response_transcript,
+            text="~~> " + response_transcript,
             info_log="Response transcript with skill: " + skill,
         )

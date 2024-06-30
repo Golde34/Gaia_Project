@@ -106,7 +106,7 @@ class ConsoleManager:
         if warning_log:
             logging.warning(warning_log)
 
-        print(OutputStyler.GREEN + text + OutputStyler.ENDC)
+        print(OutputStyler.BOLDGREEN + text + OutputStyler.ENDC)
 
     @staticmethod
     def _clear():
