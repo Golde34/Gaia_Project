@@ -1,6 +1,6 @@
 import asyncio
 
-from initiate_bot import process_bot
+from gaia_bot.initiate_bot import process_bot
 
 
 ## DEBUG

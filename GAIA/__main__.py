@@ -29,13 +29,13 @@ async def main():
 
 async def _process_arguments(args):
     if args.process:
-        from initiate_bot import process_bot
+        from gaia_bot.initiate_bot import process_bot
         if args.mode == "debug":
             await process_bot(mode="debug")
         else:
             await process_bot()
     if args.debug:
-        from initiate_bot import process_bot
+        from gaia_bot.initiate_bot import process_bot
         await process_bot(mode="debug")
     if args.train_model:
         from __train__ import model_switch_case

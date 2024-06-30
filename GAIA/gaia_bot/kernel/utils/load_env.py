@@ -17,3 +17,7 @@ def load_bert_env():
     meta_model_path=os.getenv("META_MODEL_PATH")
     model_path=os.getenv("MODEL_PATH")
     return bert_model_path, training_dataset, meta_model_path, model_path
+
+def load_alpaca_env():
+    google_colab_link=os.getenv("GOOGLE_COLAB_LINK")
+    return google_colab_link
