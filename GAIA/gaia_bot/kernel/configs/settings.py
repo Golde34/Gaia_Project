@@ -32,8 +32,3 @@ DEFAULT_GENERAL_SETTINGS = {
     'input_language': 'en',
     'response_in_speech': False
 }
-
-AI_MODEL_LOCATION = {
-    'alpaca': './gaia_bot/models/alpaca/golde_llama',
-    'task_detect': "./gaia_bot/resources/ai_models/task_detect/TrainData.pth",
-}

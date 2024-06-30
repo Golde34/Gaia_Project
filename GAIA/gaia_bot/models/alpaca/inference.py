@@ -1,7 +1,7 @@
 import torch
 from unsloth import FastLanguageModel
 
-import gaia_bot.kernel.configs.settings as settings
+import gaia_bot.kernel.configs.ai_models_register as settings
 import gaia_bot.kernel.configs.auth_config as auth_config
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
