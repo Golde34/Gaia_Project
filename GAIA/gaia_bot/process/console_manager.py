@@ -73,6 +73,42 @@ class ConsoleManager:
         print(OutputStyler.CYAN + text + OutputStyler.ENDC)
 
     @staticmethod
+    def console_log(
+        info_log=None,
+        error_log=None,
+        warning_log=None,
+        debug_log=None,
+    ):
+        if info_log:
+            logging.info(info_log)
+        if debug_log:
+            logging.debug(debug_log)
+        if error_log:
+            logging.error(error_log)
+        if warning_log:
+            logging.warning(warning_log)
+
+    @staticmethod
+    def gaia_output(
+        text="",
+        info_log=None,
+        error_log=None,
+        warning_log=None,
+        debug_log=None,
+        refresh_console=False,
+    ):
+        if info_log:
+            logging.info(info_log)
+        if debug_log:
+            logging.debug(debug_log)
+        if error_log:
+            logging.error(error_log)
+        if warning_log:
+            logging.warning(warning_log)
+
+        print(OutputStyler.GREEN + text + OutputStyler.ENDC)
+
+    @staticmethod
     def _clear():
         clear = lambda: os.system("clear" if os.name == "posix" else "cls")
         return clear()

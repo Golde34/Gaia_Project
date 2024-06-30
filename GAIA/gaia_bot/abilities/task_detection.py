@@ -19,7 +19,6 @@ class DetectSkill():
     def test(cls, text):
         try:
             detected_task = "greeting " + text
-            print(detected_task)
             return detected_task
         except Exception as e:
             print(f"Failed to detect skill tag: {e}")

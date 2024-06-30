@@ -1,12 +1,16 @@
-2024-06-30 09:48:07,840 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-06-30 09:48:13,811 - root - INFO - Bot wakeup...
-2024-06-30 09:48:13,811 - root - INFO - Face authentication
-2024-06-30 09:48:13,848 - root - INFO - Starting video stream...
-2024-06-30 09:48:18,452 - root - INFO - Authentication success.
-2024-06-30 09:48:18,452 - root - INFO - Listen command
-2024-06-30 09:48:28,726 - root - INFO - Handle input
-2024-06-30 09:48:31,512 - root - INFO - Skill tag: Greeting
-2024-06-30 09:48:31,512 - root - INFO - Executing skill...
-2024-06-30 09:48:31,512 - root - ERROR - Failed to execute skill...
-2024-06-30 09:48:31,512 - root - INFO - Response transcript with skill: Test response.
-2024-06-30 09:48:31,512 - root - INFO - Listen command
+2024-06-30 11:12:58,579 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-06-30 11:13:04,626 - root - INFO - Bot wakeup...
+2024-06-30 11:13:04,627 - root - INFO - Face authentication
+2024-06-30 11:13:04,664 - root - INFO - Starting video stream...
+2024-06-30 11:13:13,550 - root - INFO - Authentication success.
+2024-06-30 11:13:13,550 - root - INFO - Listen command
+2024-06-30 11:13:18,739 - root - INFO - Handle input
+2024-06-30 11:13:21,610 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:13:21,610 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:13:21,610 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:13:21,610 - root - INFO - Listen command
+2024-06-30 11:13:33,998 - root - INFO - Handle input
+2024-06-30 11:13:35,130 - root - INFO - Skill tag detected: Greeting
+2024-06-30 11:13:35,130 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:13:35,130 - root - INFO - Response transcript with skill: Greeting
+2024-06-30 11:13:35,130 - root - INFO - Listen command
