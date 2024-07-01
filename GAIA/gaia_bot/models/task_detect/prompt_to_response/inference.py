@@ -1,12 +1,14 @@
 import torch
+
 from gaia_bot.models.task_detect.prompt_to_response.model import SimpleNetwork
 from gaia_bot.models.task_detect.prompt_to_response.utils.model_utils import bag_words, tokenize
 from gaia_bot.kernel.configs.settings import AI_MODEL_LOCATION
+from gaia_bot.domain.enums import AIModel
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-data = torch.load(AI_MODEL_LOCATION['task_detect'])
+data = torch.load(AI_MODEL_LOCATION[AIModel.SkillDetectionModel.value])
 
 input_size = data["input_size"]
 hidden_size = data["hidden_size"]

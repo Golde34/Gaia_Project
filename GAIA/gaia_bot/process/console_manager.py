@@ -52,8 +52,7 @@ class ConsoleManager:
         print(OutputStyler.BOLD + "> Token: " + token + "\r" + OutputStyler.ENDC)
         print(OutputStyler.HEADER + headerize() + OutputStyler.ENDC)
 
-    @staticmethod
-    def console_output(
+    def console_output(self,
         text="",
         info_log=None,
         error_log=None,
@@ -61,16 +60,21 @@ class ConsoleManager:
         debug_log=None,
         refresh_console=False,
     ):
-        if info_log:
-            logging.info(info_log)
-        if debug_log:
-            logging.debug(debug_log)
-        if error_log:
-            logging.error(error_log)
-        if warning_log:
-            logging.warning(warning_log)
+        self._console_written(text, info_log, error_log, warning_log, debug_log, 
+                              refresh_console, output_styler=OutputStyler.CYAN)
+        # print(OutputStyler.CYAN + text + OutputStyler.ENDC)
 
-        print(OutputStyler.CYAN + text + OutputStyler.ENDC)
+    def gaia_output(self,
+        text="",
+        info_log=None,
+        error_log=None,
+        warning_log=None,
+        debug_log=None,
+        refresh_console=False,
+    ):
+        self._console_written(text, info_log, error_log, warning_log, debug_log, 
+                              refresh_console, output_styler=OutputStyler.BOLDGREEN)
+        # print(OutputStyler.BOLDGREEN + text + OutputStyler.ENDC)
 
     @staticmethod
     def console_log(
@@ -89,13 +93,14 @@ class ConsoleManager:
             logging.warning(warning_log)
 
     @staticmethod
-    def gaia_output(
+    def _console_written(
         text="",
         info_log=None,
         error_log=None,
         warning_log=None,
         debug_log=None,
         refresh_console=False,
+        output_styler=None
     ):
         if info_log:
             logging.info(info_log)
@@ -105,9 +110,9 @@ class ConsoleManager:
             logging.error(error_log)
         if warning_log:
             logging.warning(warning_log)
-
-        print(OutputStyler.BOLDGREEN + text + OutputStyler.ENDC)
-
+             
+        print(output_styler + text + OutputStyler.ENDC)
+    
     @staticmethod
     def _clear():
         clear = lambda: os.system("clear" if os.name == "posix" else "cls")

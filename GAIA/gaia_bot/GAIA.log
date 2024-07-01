@@ -6,22 +6,22 @@
 2024-06-30 11:39:47,475 - root - INFO - Listen command
 2024-06-30 11:40:18,990 - root - INFO - Handle input
 2024-06-30 11:40:21,800 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:40:21,800 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:40:21,800 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
 2024-06-30 11:40:21,800 - root - INFO - Response transcript with skill: Greeting
 2024-06-30 11:40:21,800 - root - INFO - Listen command
 2024-06-30 11:40:57,641 - root - INFO - Handle input
 2024-06-30 11:40:59,621 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:40:59,621 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:40:59,621 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
 2024-06-30 11:40:59,621 - root - INFO - Response transcript with skill: Greeting
 2024-06-30 11:40:59,621 - root - INFO - Listen command
 2024-06-30 11:41:28,075 - root - INFO - Handle input
 2024-06-30 11:41:28,344 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:41:28,344 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:41:28,344 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
 2024-06-30 11:41:28,344 - root - INFO - Response transcript with skill: Greeting
 2024-06-30 11:41:28,344 - root - INFO - Listen command
 2024-06-30 11:41:45,179 - root - INFO - Handle input
 2024-06-30 11:41:45,855 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:41:45,855 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.task_detection.DetectSkill'>>
+2024-06-30 11:41:45,855 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
 2024-06-30 11:41:45,855 - root - INFO - Response transcript with skill: Greeting
 2024-06-30 11:41:45,855 - root - INFO - Listen command
 2024-06-30 11:41:48,349 - root - INFO - Handle input

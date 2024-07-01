@@ -3,6 +3,8 @@ import asyncio
 
 from gaia_bot.kernel.configs.__version__ import __version__
 from gaia_bot.kernel.utils.help import help_message
+from gaia_bot.domain.enums import Mode
+
 
 async def main():
     parser = argparse.ArgumentParser(description="Gaia Bot's command line interface")
@@ -11,7 +13,7 @@ async def main():
     parser.add_argument("--mode", type=str, choices=["run", "debug"], default="run", help="Bot mode")
     parser.add_argument("--debug", "-d", action="store_true", help="Debug mode")
     parser.add_argument("-tm", "--train-model", type=str, 
-                        choices=["response", "task_detection", "object_detection"], 
+                        choices=["response", "skill_detection", "object_detection"], 
                         help="Train model")
     parser.add_argument("--version", "-v", action="store_true", help=f"Show Gaia version")
     # parser.add_argument("--version", "-v", type=int, default=1, help=f"Gaia version: {__version__}"
@@ -30,13 +32,13 @@ async def main():
 async def _process_arguments(args):
     if args.process:
         from gaia_bot.initiate_bot import process_bot
-        if args.mode == "debug":
-            await process_bot(mode="debug")
+        if args.mode == Mode.DEBUG.value:
+            await process_bot(mode=Mode.DEBUG.value)
         else:
             await process_bot()
     if args.debug:
         from gaia_bot.initiate_bot import process_bot
-        await process_bot(mode="debug")
+        await process_bot(mode=Mode.DEBUG.value)
     if args.train_model:
         from __train__ import model_switch_case
         model_switch_case(args.train_model) 
