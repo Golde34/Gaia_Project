@@ -15,7 +15,7 @@ class AuthenType(Enum):
     VOICE = 'voice'
     TOKEN = 'token'
 
-class MicroserviceAcronymsEnum(Enum):
+class AcronymsEnum(Enum):
     GC = 'gaia_connector'
     CLG = 'client_gui'
     ML = 'middleware_loader'
@@ -32,3 +32,13 @@ class StringConstant:
     Authenticated = 'Authenticated'
     All = 'All'
     NotAuthenticated = 'Not Authenticated'
+    
+class AIModel:
+    ResponseModel = 'response'
+    SkillDetectionModel = 'skill_detection'
+    ObjectDetectionModel = 'object_detection'
+    
+class Mode:
+    RUN = 'run'
+    DEBUG = 'debug'
+    

@@ -1,5 +1,5 @@
 from gaia_bot.abilities.detect_sentence_objects import DetectSentenceObjects
-from gaia_bot.abilities.task_detection import DetectSkill
+from gaia_bot.abilities.skill_detection import DetectSkill
 from gaia_bot.abilities.open_client_gui import OpenClientGUI
 
 SKILLS = [

@@ -10,9 +10,10 @@ from gaia_bot.process.assistant_skill import AssistantSkill
 from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
 from gaia_bot.process.skill_registry import SkillRegistry
+from gaia_bot.domain.enums import Mode, MicroserviceStatusEnum, AcronymsEnum, AIModel
 
 
-async def process_bot(mode="run"):
+async def process_bot(mode=Mode.RUN.value):
     # Initiate bot console
     colorama.init()
     print(f"Gaia version: 2.0.0")
@@ -22,8 +23,8 @@ async def process_bot(mode="run"):
     services = await _start_satellite_services()
     console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
     # Initiate
-    authentication_service = [item for item in services if "authentication_service" in item.keys()]
-    auth_status = authentication_service[0].get("authentication_service") == "ACTIVE"
+    authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
+    auth_status = authentication_service[0].get(AcronymsEnum.AS.value) == MicroserviceStatusEnum.ACTIVE.value
     
     token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
@@ -41,7 +42,7 @@ async def process_bot(mode="run"):
 def _startup(services, register_models):
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
-    generate_model, generate_tokenizer = register_models["response"]
+    generate_model, generate_tokenizer = register_models[AIModel.ResponseModel.value]
     wakeup_text = AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
     console_manager.wakeup(
         text=wakeup_text,   

@@ -35,6 +35,6 @@ DEFAULT_GENERAL_SETTINGS = {
 
 AI_MODEL_LOCATION = {
     'alpaca': './gaia_bot/models/alpaca/golde_llama',
-    'task_detect': "./gaia_bot/resources/ai_models/task_detect/TrainData.pth",
+    'skill_detection': "./gaia_bot/resources/ai_models/task_detect/TrainData.pth",
     'object_detect': "./gaia_bot/resources/ai_models/bert/model.bin",
 }

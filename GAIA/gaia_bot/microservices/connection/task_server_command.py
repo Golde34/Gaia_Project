@@ -3,7 +3,7 @@ import json
 
 from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
-from gaia_bot.domain.enums import MicroserviceAcronymsEnum
+from gaia_bot.domain.enums import AcronymsEnum
 
 
 class TaskManagerConnector:
@@ -15,7 +15,7 @@ class TaskManagerConnector:
         self.router = PORTS['task_manager']['router']
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
-        self.microservice_state = MicroserviceConnection().call_microservice_by_name(MicroserviceAcronymsEnum.AS._value_)
+        self.microservice_state = MicroserviceConnection().call_microservice_by_name(AcronymsEnum.AS._value_)
 
     def execute_task_command(self, task, method, **kwargs):
         self.activate_task_manager_command()

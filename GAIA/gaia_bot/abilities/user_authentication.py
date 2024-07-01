@@ -7,7 +7,7 @@ from configparser import ConfigParser
 import gaia_bot
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.authentication import face_recognition_authen
-from gaia_bot.domain.enums import InputMode, AuthenType, MicroserviceAcronymsEnum
+from gaia_bot.domain.enums import InputMode, AuthenType, AcronymsEnum
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
 from gaia_bot.kernel.configs.settings import DEFAULT_GENERAL_SETTINGS
 from gaia_bot.kernel.configs.__config__ import __path__
@@ -129,7 +129,7 @@ class AuthenticationCommand():
         return "Golde", "483777"
     
     async def _login_to_get_token(self, username, password):
-        wait = await MicroserviceConnection().wait_microservice(MicroserviceAcronymsEnum.AS._value_)
+        wait = await MicroserviceConnection().wait_microservice(AcronymsEnum.AS._value_)
         if wait == True: 
             authenticationConnector = AuthenticationConnector(username, password)
             return authenticationConnector.call_login_api()

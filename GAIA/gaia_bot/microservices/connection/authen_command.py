@@ -5,7 +5,7 @@ import os
 from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
-from gaia_bot.domain.enums import MicroserviceAcronymsEnum
+from gaia_bot.domain.enums import AcronymsEnum
 
 
 class AuthenticationConnector:
@@ -19,7 +19,7 @@ class AuthenticationConnector:
         self.router = PORTS['authentication_service']['router']
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
-        self.microservice_state = MicroserviceConnection().call_microservice_by_name(MicroserviceAcronymsEnum.AS._value_)
+        self.microservice_state = MicroserviceConnection().call_microservice_by_name(AcronymsEnum.AS._value_)
     
     def activate_authentication_command(self):
         self.microservice_state.activate_service()

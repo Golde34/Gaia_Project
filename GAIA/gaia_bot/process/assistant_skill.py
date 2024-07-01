@@ -1,6 +1,6 @@
 import os
 
-from gaia_bot.abilities.task_detection import DetectSkill
+from gaia_bot.abilities.skill_detection import DetectSkill
 from gaia_bot.process.console_manager import ConsoleManager
 from gaia_bot.kernel.utils.trie_node import search_skills
 
@@ -33,7 +33,7 @@ class AssistantSkill:
             cls.console_manager.console_log(error_log="Failed to detect skill tag.")
         
     @classmethod
-    def validate_assistant_response(cls, detected_skill, skills):
+    def skill_process(cls, detected_skill, skills):
         try:
             detected_skill = str(detected_skill).lower()
             results = search_skills(skills, detected_skill)
