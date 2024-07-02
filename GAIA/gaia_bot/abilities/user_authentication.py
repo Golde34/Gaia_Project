@@ -16,6 +16,7 @@ from gaia_bot.microservices.connection.authen_command import AuthenticationConne
 
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 
+
 class AuthenticationCommand():
     
     def __init__(self, console_manager, auth_service_status):

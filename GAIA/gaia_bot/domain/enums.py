@@ -23,6 +23,7 @@ class AcronymsEnum(Enum):
     TM = 'task_manager'
     SP = 'schedule_plan'
     WO = 'work_optimization'
+    CMC = "camera_cv"
 
 class MicroserviceStatusEnum(Enum):
     ACTIVE = 'ACTIVE'
@@ -41,4 +42,6 @@ class AIModel:
 class Mode:
     RUN = 'run'
     DEBUG = 'debug'
-    
+
+class KafkaServiceName(Enum):
+    CAMERA_CV = 'CAMERA_CV'    

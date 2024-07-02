@@ -1,6 +1,6 @@
 import webbrowser
 
-from gaia_bot.kernel.utils.load_env import load_alpaca_env
+from gaia_bot.kernel.configs.load_env import load_alpaca_env
 from gaia_bot.domain.enums import AIModel
 
 def model_switch_case(model_name):
