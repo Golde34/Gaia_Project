@@ -1,51 +1,44 @@
 from random import randint
 from typing import Set, Any
-from kafka import Topicpartition
+from aiokafka.structs import TopicPartition
 
-import uvicorn
 import aiokafka
+import asyncio
+import warnings
+
+# from gaia_bot.kernel.configs.load_env import load_kafka_env
+# from gaia_bot.kernel.configs.kafka_topic_config import load_kakfka_topic, KAFKA_TOPICS
 
 
-register = {
-    'CAMERA_CV': [
-        'OPEN_CAMERA_SPACE_TOPIC',
-        'SHUTDOWN_CAMERA_SPACE_TOPIC'
-    ]
-}
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 
-async def initialize():
-    loop = asyncio.get_event_loop()
-    global consumer
-    group_id = f'{KAFKA_CONSUMER_GROUP}-{randint(0, 10000)}'
-    log.debug(f'Initializing KafkaConsumer for topic {KAFKA_TOPIC}, group_id {group_id}'
-              f' and using bootstrap servers {KAFKA_BOOTSTRAP_SERVERS}')
-    consumer = aiokafka.AIOKafkaConsumer(KAFKA_TOPIC, loop=loop,
-                                         bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
-                                         group_id=group_id)
-    # get cluster layout and join group
+consumer_task = None
+consumer = None
+
+# kafka_consumer_group, kafka_bootstrap_servers = load_kafka_env()
+# kafka_topics = load_kakfka_topic() 
+
+kafka_consumer_group = 'gaia_bot'
+kafka_bootstrap_servers = 'localhost:9094'
+kafka_topics = 'OPEN_CAMERA_SPACE'
+kafka_topics_2 = 'SHUTDOWN_CAMERA_SPACE'
+
+async def consume():
+    consumer = aiokafka.AIOKafkaConsumer(
+        kafka_topics, kafka_topics_2,
+        bootstrap_servers='localhost:9094',
+        group_id=kafka_consumer_group)
+    # Get cluster layout and join group `my-group`
     await consumer.start()
+    try:
+        # Consume messages
+        async for msg in consumer:
+            print("consumed: ", msg.topic, msg.partition, msg.offset,
+                  msg.key, msg.value, msg.timestamp)
+    finally:
+        # Will leave consumer group; perform autocommit if enabled.
+        await consumer.stop()
 
-    partitions: Set[TopicPartition] = consumer.assignment()
-    nr_partitions = len(partitions)
-    if nr_partitions != 1:
-        log.warning(f'Found {nr_partitions} partitions for topic {KAFKA_TOPIC}. Expecting '
-                    f'only one, remaining partitions will be ignored!')
-    for tp in partitions:
 
-        # get the log_end_offset
-        end_offset_dict = await consumer.end_offsets([tp])
-        end_offset = end_offset_dict[tp]
-
-        if end_offset == 0:
-            log.warning(f'Topic ({KAFKA_TOPIC}) has no messages (log_end_offset: '
-                        f'{end_offset}), skipping initialization ...')
-            return
-
-        log.debug(f'Found log_end_offset: {end_offset} seeking to {end_offset-1}')
-        consumer.seek(tp, end_offset-1)
-        msg = await consumer.getone()
-        log.info(f'Initializing API with data from msg: {msg}')
-
-        # update the API state
-        _update_state(msg)
-        return
+if __name__ == '__main__':
+    asyncio.run(consume())
