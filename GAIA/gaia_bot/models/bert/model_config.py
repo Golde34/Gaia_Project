@@ -1,5 +1,5 @@
 import transformers
-from gaia_bot.kernel.utils.load_env import load_bert_env
+from gaia_bot.kernel.configs.load_env import load_bert_env
 
 bert_model_path, training_dataset, meta_model_path, model_path = load_bert_env()
 
