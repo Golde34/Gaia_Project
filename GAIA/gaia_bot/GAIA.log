@@ -1,28 +1,8 @@
-2024-06-30 11:39:33,770 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-06-30 11:39:39,624 - root - INFO - Bot wakeup...
-2024-06-30 11:39:39,625 - root - INFO - Face authentication
-2024-06-30 11:39:39,664 - root - INFO - Starting video stream...
-2024-06-30 11:39:47,475 - root - INFO - Authentication success.
-2024-06-30 11:39:47,475 - root - INFO - Listen command
-2024-06-30 11:40:18,990 - root - INFO - Handle input
-2024-06-30 11:40:21,800 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:40:21,800 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-06-30 11:40:21,800 - root - INFO - Response transcript with skill: Greeting
-2024-06-30 11:40:21,800 - root - INFO - Listen command
-2024-06-30 11:40:57,641 - root - INFO - Handle input
-2024-06-30 11:40:59,621 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:40:59,621 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-06-30 11:40:59,621 - root - INFO - Response transcript with skill: Greeting
-2024-06-30 11:40:59,621 - root - INFO - Listen command
-2024-06-30 11:41:28,075 - root - INFO - Handle input
-2024-06-30 11:41:28,344 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:41:28,344 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-06-30 11:41:28,344 - root - INFO - Response transcript with skill: Greeting
-2024-06-30 11:41:28,344 - root - INFO - Listen command
-2024-06-30 11:41:45,179 - root - INFO - Handle input
-2024-06-30 11:41:45,855 - root - INFO - Skill tag detected: Greeting
-2024-06-30 11:41:45,855 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-06-30 11:41:45,855 - root - INFO - Response transcript with skill: Greeting
-2024-06-30 11:41:45,855 - root - INFO - Listen command
-2024-06-30 11:41:48,349 - root - INFO - Handle input
-2024-06-30 11:41:48,349 - root - INFO - Exit Gaia
+2024-07-04 00:05:19,372 - aiokafka.consumer.subscription_state - INFO - Updating subscribed topics to: frozenset({'OPEN_CAMERA_SPACE', 'SHUTDOWN_CAMERA_SPACE'})
+2024-07-04 00:05:19,382 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
+2024-07-04 00:05:19,382 - aiokafka.consumer.group_coordinator - INFO - Revoking previously assigned partitions set() for group gaia_bot
+2024-07-04 00:05:19,382 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
+2024-07-04 00:05:22,386 - aiokafka.consumer.group_coordinator - INFO - Joined group 'gaia_bot' (generation 20) with member_id aiokafka-0.11.0-0cf06b82-c312-433c-b4c3-03fd3fa6d699
+2024-07-04 00:05:22,386 - aiokafka.consumer.group_coordinator - INFO - Elected group leader -- performing partition assignments using roundrobin
+2024-07-04 00:05:22,390 - aiokafka.consumer.group_coordinator - INFO - Successfully synced group gaia_bot with generation 20
+2024-07-04 00:05:22,391 - aiokafka.consumer.group_coordinator - INFO - Setting newly assigned partitions {TopicPartition(topic='OPEN_CAMERA_SPACE', partition=0), TopicPartition(topic='SHUTDOWN_CAMERA_SPACE', partition=0)} for group gaia_bot

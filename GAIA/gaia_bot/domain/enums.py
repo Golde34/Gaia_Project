@@ -42,6 +42,3 @@ class AIModel:
 class Mode:
     RUN = 'run'
     DEBUG = 'debug'
-
-class KafkaServiceName(Enum):
-    CAMERA_CV = 'CAMERA_CV'    
