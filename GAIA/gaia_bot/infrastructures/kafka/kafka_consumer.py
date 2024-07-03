@@ -10,13 +10,6 @@ warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 consumer_task = None
 consumer = None
 
-kafka_consumer_group, kafka_bootstrap_servers = load_kafka_env()
-kafka_topics = load_kakfka_topic(AcronymsEnum.CMC.value) 
-
-# kafka_consumer_group = 'gaia_bot'
-# kafka_bootstrap_servers = 'localhost:9094'
-# kafka_topics = ['OPEN_CAMERA_SPACE', 'SHUTDOWN_CAMERA_SPACE']
-
 def registry_consumer(service_name):
     kafka_consumer_group, kafka_bootstrap_servers = load_kafka_env()
     topics = load_kakfka_topic(service_name)
