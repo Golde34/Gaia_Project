@@ -2,9 +2,8 @@ import aiokafka
 import asyncio
 import warnings
 
-from gaia_bot.kernel.configs.load_env import load_kafka_env
-from gaia_bot.kernel.configs.kafka_topic_config import load_kakfka_topic
-from gaia_bot.domain.enums import KafkaServiceName
+from gaia_bot.kernel.configs.load_env import load_kafka_env, load_kakfka_topic
+from gaia_bot.domain.enums import AcronymsEnum
 
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 
@@ -12,7 +11,7 @@ consumer_task = None
 consumer = None
 
 kafka_consumer_group, kafka_bootstrap_servers = load_kafka_env()
-kafka_topics = load_kakfka_topic(KafkaServiceName.CAMERA_CV.value) 
+kafka_topics = load_kakfka_topic(AcronymsEnum.CMC.value) 
 
 # kafka_consumer_group = 'gaia_bot'
 # kafka_bootstrap_servers = 'localhost:9094'
@@ -34,7 +33,7 @@ async def handle_consumer_message(consumer, consumer_function=None):
             print("consumed: ", msg.topic, msg.partition, msg.offset,
                   msg.key, msg.value, msg.timestamp)
             if consumer_function is not None:
-                await consumer_function(msg)
+                consumer_function(msg)
     finally:
         await consumer.stop()
 
@@ -68,5 +67,5 @@ async def handle_consumer_message(consumer, consumer_function=None):
 #         await consumer.stop()
 
 
-if __name__ == '__main__':
-    asyncio.run(consume())
+# if __name__ == '__main__':
+#     asyncio.run(consume())

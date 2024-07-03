@@ -1,15 +1,6 @@
-import os
+from gaia_bot.domain.enums import AcronymsEnum
+from gaia_bot.infrastructures.kafka.kafka_listener import handle_open_camera_space
 
-
-KAFKA_TOPICS = {
-    'CAMERA_CV': [
-        'OPEN_CAMERA_SPACE_TOPIC',
-        'SHUTDOWN_CAMERA_SPACE_TOPIC'
-    ],
+KAFKA_TOPICS_FUNCTION = {
+    AcronymsEnum.CMC.value: handle_open_camera_space,
 }
-
-def load_kakfka_topic(service_name: str):
-    topics = []
-    for item in KAFKA_TOPICS[service_name]:
-        topics.append(os.getenv(item))
-    return topics

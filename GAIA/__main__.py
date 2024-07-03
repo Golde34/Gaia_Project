@@ -10,7 +10,7 @@ async def main():
     parser = argparse.ArgumentParser(description="Gaia Bot's command line interface")
     parser.add_argument("--gaia-help", "-gh", action="store_true", help="Gaia show help message")
     parser.add_argument("-p", "--process", action="store_true", help="Initiate bot process")
-    parser.add_argument("--mode", type=str, choices=["run", "debug"], default="run", help="Bot mode")
+    parser.add_argument("--mode", type=str, choices=["run", "debug"], help="Bot mode")
     parser.add_argument("--debug", "-d", action="store_true", help="Debug mode")
     parser.add_argument("-tm", "--train-model", type=str, 
                         choices=["response", "skill_detection", "object_detection"], 
@@ -51,9 +51,10 @@ async def _process_arguments(args):
         print(f"You can only use the argument --mode in the process mode.")
         help_message()
     if args.kafka:
-        from gaia_bot.infrastructures.kafka import kafka_listener
+        from gaia_bot.kernel.configs.kafka_topic_config import KAFKA_TOPICS_FUNCTION
+        from gaia_bot.domain.enums import AcronymsEnum
         print("Kafka listener activate")
-        kafka_listener.handle_open_camera_space()
+        await KAFKA_TOPICS_FUNCTION[AcronymsEnum.CMC.value]()
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,8 +1,7 @@
 import asyncio
 
-from gaia_bot.domain.enums import KafkaServiceName
+from gaia_bot.domain.enums import AcronymsEnum
 from gaia_bot.infrastructures.kafka.kafka_consumer import registry_consumer, handle_consumer_message
-from gaia_bot.kernel.configs.kafka_topic_config import load_kakfka_topic
 
 
 class KafkaConsumerListener:
@@ -12,14 +11,14 @@ class KafkaConsumerListener:
 
     def __call__(self, func):
         def wrapper(*args, **kwargs):
-            return func(*args, **kwargs)
+            return func(self.service_name, *args, **kwargs)
         return wrapper
 
 
-@KafkaConsumerListener(KafkaServiceName.CAMERA_CV.value)
-def handle_open_camera_space(service_name: str):
+@KafkaConsumerListener(AcronymsEnum.CMC.value)
+async def handle_open_camera_space(service_name: str):
     consumer = registry_consumer(service_name)
-    handle_consumer_message(consumer=consumer, consumer_function=handle_camera_cv_message)
+    await handle_consumer_message(consumer=consumer, consumer_function=handle_camera_cv_message)
     
 
 def handle_camera_cv_message(msg):
