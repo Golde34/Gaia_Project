@@ -4,10 +4,6 @@ from gaia_bot.domain.enums import AcronymsEnum
 from gaia_bot.infrastructures.kafka.kafka_consumer import registry_consumer, handle_consumer_message
 
 
-KAFKA_TOPICS_FUNCTION = {
-    AcronymsEnum.CMC.value: handle_open_camera_space,
-}
-
 class KafkaConsumerListener:
     
     def __init__(self, service_name: str):
@@ -30,7 +26,11 @@ def handle_camera_cv_message(msg):
         print(f"Handling OPEN_CAMERA_SPACE message: {msg.value}")
     if msg.topic == 'SHUTDOWN_CAMERA_SPACE':
         print(f"Handling SHUTDOWN_CAMERA_SPACE message: {msg.value}")
-        
+
+KAFKA_TOPICS_FUNCTION = {
+    AcronymsEnum.CMC.value: handle_open_camera_space,
+}
+
         
 if __name__ == "__main__":
     asyncio.run(handle_open_camera_space())
