@@ -26,7 +26,11 @@ def handle_camera_cv_message(msg):
         print(f"Handling OPEN_CAMERA_SPACE message: {msg.value}")
     if msg.topic == 'SHUTDOWN_CAMERA_SPACE':
         print(f"Handling SHUTDOWN_CAMERA_SPACE message: {msg.value}")
-        
+
+KAFKA_TOPICS_FUNCTION = {
+    AcronymsEnum.CMC.value: handle_open_camera_space,
+}
+
         
 if __name__ == "__main__":
     asyncio.run(handle_open_camera_space())

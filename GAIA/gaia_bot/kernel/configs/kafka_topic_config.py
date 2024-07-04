@@ -1,6 +1,11 @@
 from gaia_bot.domain.enums import AcronymsEnum
-from gaia_bot.infrastructures.kafka.kafka_listener import handle_open_camera_space
 
-KAFKA_TOPICS_FUNCTION = {
-    AcronymsEnum.CMC.value: handle_open_camera_space,
+
+KAFKA_TOPICS = {
+    AcronymsEnum.CMC.value: {
+        'kafka_topics': [
+            'OPEN_CAMERA_SPACE_TOPIC',
+            'SHUTDOWN_CAMERA_SPACE_TOPIC'
+        ],
+    },
 }

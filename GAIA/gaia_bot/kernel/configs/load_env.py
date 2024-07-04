@@ -2,16 +2,8 @@ from dotenv import load_dotenv
 import os
 
 from gaia_bot.domain.enums import AcronymsEnum
+from gaia_bot.kernel.configs.kafka_topic_config import KAFKA_TOPICS  
 
-
-KAFKA_TOPICS = {
-    AcronymsEnum.CMC.value: {
-        'kafka_topics': [
-            'OPEN_CAMERA_SPACE_TOPIC',
-            'SHUTDOWN_CAMERA_SPACE_TOPIC'
-        ],
-    },
-}
 
 load_dotenv()
 
