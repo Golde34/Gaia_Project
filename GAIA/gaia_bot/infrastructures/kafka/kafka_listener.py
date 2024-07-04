@@ -4,6 +4,10 @@ from gaia_bot.domain.enums import AcronymsEnum
 from gaia_bot.infrastructures.kafka.kafka_consumer import registry_consumer, handle_consumer_message
 
 
+KAFKA_TOPICS_FUNCTION = {
+    AcronymsEnum.CMC.value: handle_open_camera_space,
+}
+
 class KafkaConsumerListener:
     
     def __init__(self, service_name: str):

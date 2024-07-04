@@ -51,12 +51,10 @@ async def _process_arguments(args):
         print(f"You can only use the argument --mode in the process mode.")
         help_message()
     if args.kafka:
-        # from gaia_bot.infrastructures.kafka import kafka_listener
-        from gaia_bot.kernel.configs.kafka_topic_config import KAFKA_TOPICS_FUNCTION
+        from gaia_bot.infrastructures.kafka.kafka_listener import KAFKA_TOPICS_FUNCTION
         from gaia_bot.domain.enums import AcronymsEnum
         print("Kafka listener activate")
         await KAFKA_TOPICS_FUNCTION[AcronymsEnum.CMC.value]()
-        # await kafka_listener.handle_open_camera_space()
 
 if __name__ == "__main__":
     asyncio.run(main())

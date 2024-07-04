@@ -5,6 +5,7 @@ import warnings
 from gaia_bot.kernel.configs.load_env import load_kafka_env, load_kakfka_topic
 from gaia_bot.domain.enums import AcronymsEnum
 
+
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.base")
 
 consumer_task = None
