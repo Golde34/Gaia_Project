@@ -26,7 +26,7 @@ middleware:
 	cd middleware_loader && go run cmd/main.go
 
 task-manager:
-	cd person_task_manager && npm run dev
+	cd person_task_manager/server && npm run dev
 
 schedule:
 	cd schedule_plan && npm run dev
