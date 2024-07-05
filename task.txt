@@ -28,9 +28,11 @@ middleware server: 4000
 auth service: 4001
 
 task manager: 3000
-schedule: 3001
-notification: 3002
-recommend: 3003
+work optimization: 3001
+schedule plan: 3002
+camera_cv: 3003
+
+notification: 3007
 health care: 3004
 finance: 3005
 search: 3006
