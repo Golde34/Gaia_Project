@@ -6,4 +6,4 @@ cors = CORS(app)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-from ui.controllers import common_controller
+from ui.rest import common_controller
