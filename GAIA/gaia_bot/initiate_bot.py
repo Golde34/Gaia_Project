@@ -12,8 +12,7 @@ from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
 from gaia_bot.process.skill_registry import SkillRegistry
 from gaia_bot.domain.enums import Mode, MicroserviceStatusEnum, AcronymsEnum, AIModel
-from gaia_bot.infrastructures.kafka.kafka_listener import KAFKA_TOPICS_FUNCTION
-
+from gaia_bot.process.kafka_handler import start_kafka_consumer_thread
 
 async def process_bot(mode=Mode.RUN):
     try:
@@ -28,7 +27,7 @@ async def process_bot(mode=Mode.RUN):
         console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
         
         # Kafka Consumer
-        _start_kafka_consumer_thread(services, console_manager)
+        start_kafka_consumer_thread(services, console_manager)
         # await _start_kafka_consumer(services)
         # Authentication
         authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
@@ -70,31 +69,6 @@ def _register_ai_models():
 async def _start_satellite_services():
     microservice_connection = MicroserviceConnection()
     return await microservice_connection.activate_microservice()
-
-
-def _start_kafka_consumer_thread(services, console_manager):
-    async def run_consumer():
-        await _start_kafka_consumer(services, console_manager)
-    
-    def start_loop():
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(run_consumer())
-    
-    thread = threading.Thread(target=start_loop)
-    thread.start()
-
-
-async def _start_kafka_consumer(services, console_manager):
-    try:
-        for service in services:
-            service_name = list(service.keys())[0]
-            service_status = service[service_name]
-            if service_name in KAFKA_TOPICS_FUNCTION.keys() and service_status == MicroserviceStatusEnum.ACTIVE.value:
-                await KAFKA_TOPICS_FUNCTION[service_name](console_manager)
-    except Exception as e:
-        print(f"Error in starting Kafka consumer: {e}")
-        pass
         
 
 async def _authentication_process(console_manager, auth_service_status):

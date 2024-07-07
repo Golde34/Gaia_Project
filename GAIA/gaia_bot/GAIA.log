@@ -1,24 +1,14 @@
-2024-07-08 06:45:59,760 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-07-08 06:46:11,672 - root - INFO - Bot wakeup...
-2024-07-08 06:46:11,673 - root - INFO - Face authentication
-2024-07-08 06:46:11,673 - aiokafka.consumer.subscription_state - INFO - Updating subscribed topics to: frozenset({'shutdown_camera_space', 'open_camera_space'})
-2024-07-08 06:46:11,706 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
-2024-07-08 06:46:11,706 - aiokafka.consumer.group_coordinator - INFO - Revoking previously assigned partitions set() for group gaia_bot
-2024-07-08 06:46:11,706 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
-2024-07-08 06:46:11,761 - root - INFO - Starting video stream...
-2024-07-08 06:46:14,737 - aiokafka.consumer.group_coordinator - INFO - Joined group 'gaia_bot' (generation 17) with member_id aiokafka-0.11.0-07135324-fa33-4833-8492-f531d93bf9e5
-2024-07-08 06:46:14,737 - aiokafka.consumer.group_coordinator - INFO - Elected group leader -- performing partition assignments using roundrobin
-2024-07-08 06:46:14,781 - aiokafka.consumer.group_coordinator - INFO - Successfully synced group gaia_bot with generation 17
-2024-07-08 06:46:14,782 - aiokafka.consumer.group_coordinator - INFO - Setting newly assigned partitions {TopicPartition(topic='shutdown_camera_space', partition=0), TopicPartition(topic='open_camera_space', partition=0)} for group gaia_bot
-2024-07-08 06:46:20,846 - root - INFO - Authentication success.
-2024-07-08 06:46:20,847 - root - INFO - Listen command
-2024-07-08 06:47:10,205 - root - INFO - Handle input
-2024-07-08 06:47:12,885 - root - INFO - Skill tag detected: Greeting
-2024-07-08 06:47:12,885 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-07-08 06:47:12,885 - root - INFO - Response transcript with skill: Greeting
-2024-07-08 06:47:12,885 - root - INFO - Listen command
-2024-07-08 06:47:20,586 - root - INFO - Handle input
-2024-07-08 06:47:23,196 - root - INFO - Skill tag detected: Greeting
-2024-07-08 06:47:23,196 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-07-08 06:47:23,196 - root - INFO - Response transcript with skill: Greeting
-2024-07-08 06:47:23,196 - root - INFO - Listen command
+2024-07-08 06:55:34,691 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-08 06:55:40,263 - root - INFO - Bot wakeup...
+2024-07-08 06:55:40,264 - root - INFO - Face authentication
+2024-07-08 06:55:40,264 - aiokafka.consumer.subscription_state - INFO - Updating subscribed topics to: frozenset({'shutdown_camera_space', 'open_camera_space'})
+2024-07-08 06:55:40,271 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
+2024-07-08 06:55:40,271 - aiokafka.consumer.group_coordinator - INFO - Revoking previously assigned partitions set() for group gaia_bot
+2024-07-08 06:55:40,271 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
+2024-07-08 06:55:40,299 - root - INFO - Starting video stream...
+2024-07-08 06:55:43,274 - aiokafka.consumer.group_coordinator - INFO - Joined group 'gaia_bot' (generation 19) with member_id aiokafka-0.11.0-d7fd704b-08ae-40ca-b3b2-f204f63fa9a7
+2024-07-08 06:55:43,274 - aiokafka.consumer.group_coordinator - INFO - Elected group leader -- performing partition assignments using roundrobin
+2024-07-08 06:55:43,276 - aiokafka.consumer.group_coordinator - INFO - Successfully synced group gaia_bot with generation 19
+2024-07-08 06:55:43,276 - aiokafka.consumer.group_coordinator - INFO - Setting newly assigned partitions {TopicPartition(topic='open_camera_space', partition=0), TopicPartition(topic='shutdown_camera_space', partition=0)} for group gaia_bot
+2024-07-08 06:55:44,749 - root - INFO - Authentication success.
+2024-07-08 06:55:44,749 - root - INFO - Listen command
