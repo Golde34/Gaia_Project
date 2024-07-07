@@ -2,25 +2,26 @@ import torch
 from unsloth import FastLanguageModel
 
 import gaia_bot.kernel.configs.settings as settings
-import gaia_bot.kernel.configs.auth_config as auth_config
+import gaia_bot.models.alpaca.prompt as prompt
+from gaia_bot.domain.enums import Mode
+
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
 dtype = None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 
-alpaca_prompt = """Answer, reply your boss question or chat with him as Gaia the virtual assistant. 
-    Your boss named """ + auth_config.username + """. 
-    Below is an instruction that describes a task, paired with an input that provides further context. 
+alpaca_prompt = """
+    Answer, reply your boss question or chat with him as Gaia the virtual assistant. Your boss name is Golde. 
     Write a response that appropriately completes the request.
 
-### Instruction:
-{}
+    ### Instruction:
+    {}
 
-### Input:
-{}
+    ### Input:
+    {}
 
-### Response:
-{}
+    ### Response:
+    {}
 """
 
 def get_model_and_tokenizer():
@@ -33,17 +34,29 @@ def get_model_and_tokenizer():
     FastLanguageModel.for_inference(model)
     return model, tokenizer
 
-def call_alpaca_response(inp, model, tokenizer): 
-    inputs = tokenizer(
-        [
-            alpaca_prompt.format(
-                "Answer my question or chat with me: ",  # instruction
-                inp,  # input
-                "",  # output - leave this blank for generation!
-            )
-        ],
-        return_tensors="pt",
-    ).to("cuda")
+def call_alpaca_response(inp, model, tokenizer, mode="run"): 
+    if mode == Mode.DEBUG:
+        inputs = tokenizer(
+            [
+                prompt.test_prompt.format(
+                    "Answer my question or chat with me: ",  # instruction
+                    inp,  # input
+                    "",  # output - leave this blank for generation!
+                )
+            ],
+            return_tensors="pt",
+        ).to("cuda")
+    else:
+        inputs = tokenizer(
+            [
+                prompt.final_prompt.format(
+                    "Answer my question or chat with me: ",  # instruction
+                    inp,  # input
+                    "",  # output - leave this blank for generation!
+                )
+            ],
+            return_tensors="pt",
+        ).to("cuda")
     
     outputs = model.generate(**inputs, max_new_tokens=128)
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
@@ -83,10 +96,10 @@ def model_inference(inp):
 def gaia_wakeup_generate(model, tokenizer):
     inputs = tokenizer(
         [
-            alpaca_prompt.format(
-                "Generate a greeting to your boss. For example: ",  # instruction
-                "Hello boss, I'm available now!",  # input
-                "",  # output - leave this blank for generation!
+            prompt.greeting_prompt.format(
+                "",
+                "",
+                ""
             )
         ],
         return_tensors="pt",

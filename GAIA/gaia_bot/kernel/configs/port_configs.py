@@ -74,6 +74,16 @@ PORTS = {
         "database_name": None,
         "shell_path": ""
     },
+    "camera_cv": {
+        "name": "Camera CV",
+        "port": 3007,
+        "programming_language": "Python",
+        "description": "Camera CV API",
+        "router": "camera-cv",
+        "database": None,
+        "database_name": None,
+        "shell_path": "gaia_bot/microservices/bash_shell/camera_cv.sh"
+    },
     
     ## THIRD PARTY
     "kafka_server": {
@@ -96,7 +106,8 @@ PORT_COMPONENTS = [
     "task_manager",
     "client_gui",
     "middleware_loader",
-    "kafka_server"
+    "kafka_server",
+    "camera_cv"
 ]
 
 DOMAIN = "localhost"

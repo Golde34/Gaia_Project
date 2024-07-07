@@ -1,5 +1,6 @@
 import asyncio
 import colorama
+import threading
 
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse
@@ -11,39 +12,47 @@ from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
 from gaia_bot.process.skill_registry import SkillRegistry
 from gaia_bot.domain.enums import Mode, MicroserviceStatusEnum, AcronymsEnum, AIModel
-from gaia_bot.kernel.configs.kafka_topic_config import KAFKA_TOPICS_FUNCTION
+from gaia_bot.infrastructures.kafka.kafka_listener import KAFKA_TOPICS_FUNCTION
 
-async def process_bot(mode=Mode.RUN.value):
-    # Initiate bot console
-    colorama.init()
-    print(f"Gaia version: 2.0.0")
-    
-    # Startup
-    loop = asyncio.get_event_loop()
-    register_models = await loop.run_in_executor(None, _register_ai_models) 
-    services = await _start_satellite_services()
-    console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
-    await _start_kafka_consumer(services)
-    # Authentication
-    authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
-    auth_status = authentication_service[0].get(AcronymsEnum.AS.value) == MicroserviceStatusEnum.ACTIVE.value
-    token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
 
-    await _initiate_gaia(
-        mode=mode,
-        console_manager=console_manager,
-        assistant=assistant,
-        settings=settings,
-        token=token,
-        services=services,
-        register_models=register_models,
-    )
+async def process_bot(mode=Mode.RUN):
+    try:
+        # Initiate bot console
+        colorama.init()
+        print(f"Gaia version: 2.0.0")
+        
+        # Startup
+        loop = asyncio.get_event_loop()
+        register_models = await loop.run_in_executor(None, _register_ai_models) 
+        services = await _start_satellite_services()
+        console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
+        
+        # Kafka Consumer
+        _start_kafka_consumer_thread(services)
+        # await _start_kafka_consumer(services)
+        # Authentication
+        authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
+        auth_status = authentication_service[0].get(AcronymsEnum.AS.value) == MicroserviceStatusEnum.ACTIVE.value
+        token = await _authentication_process(console_manager=console_manager, auth_service_status=auth_status)
+
+        await _initiate_gaia(
+            mode=mode,
+            console_manager=console_manager,
+            assistant=assistant,
+            settings=settings,
+            token=token,
+            services=services,
+            register_models=register_models,
+        )
+    except Exception as e:
+        print(f"Error in process_bot: {e}")
+        pass
 
 
 def _startup(services, register_models):
     console_manager = ConsoleManager()
     assistant = AssistantSkill()
-    generate_model, generate_tokenizer = register_models[AIModel.ResponseModel.value]
+    generate_model, generate_tokenizer = register_models[AIModel.ResponseModel]
     wakeup_text = AlpacaResponse.generate_greeting(generate_model, generate_tokenizer)
     console_manager.wakeup(
         text=wakeup_text,   
@@ -63,11 +72,31 @@ async def _start_satellite_services():
     return await microservice_connection.activate_microservice()
 
 
+def _start_kafka_consumer_thread(services):
+    async def run_consumer():
+        await _start_kafka_consumer(services)
+    
+    def start_loop():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(run_consumer())
+    
+    thread = threading.Thread(target=start_loop)
+    thread.start()
+
+
 async def _start_kafka_consumer(services):
-    for service in services:
-        if service.keys() in KAFKA_TOPICS_FUNCTION.keys() and service.values() == MicroserviceStatusEnum.ACTIVE.value:
-            await KAFKA_TOPICS_FUNCTION[service.keys()]()
-            
+    try:
+        for service in services:
+            service_name = list(service.keys())[0]
+            service_status = service[service_name]
+            if service_name in KAFKA_TOPICS_FUNCTION.keys() and service_status == MicroserviceStatusEnum.ACTIVE.value:
+                await KAFKA_TOPICS_FUNCTION[service_name]()
+        print(f"Kafka consumer started successfully.")
+    except Exception as e:
+        print(f"Error in starting Kafka consumer: {e}")
+        pass
+        
 
 async def _authentication_process(console_manager, auth_service_status):
     token, username, auth_status = await user_authentication.AuthenticationCommand(console_manager, auth_service_status).process()
