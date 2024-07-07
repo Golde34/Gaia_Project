@@ -21,6 +21,7 @@ def registry_consumer(service_name):
     return consumer
 
 async def handle_consumer_message(consumer, consumer_function=None):
+    print("Consume message...")
     await consumer.start()
     try:
         async for msg in consumer:

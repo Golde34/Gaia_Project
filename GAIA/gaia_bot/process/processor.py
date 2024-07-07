@@ -55,19 +55,19 @@ class Processor:
             )
             exit()
 
-    def _response_and_detect_skill(self, transcript, mode=Mode.RUN.value):
-        response_model, response_tokenizer = self.register_models[AIModel.ResponseModel.value]
-        detect_skill_model = self.register_models[AIModel.SkillDetectionModel.value]
+    def _response_and_detect_skill(self, transcript, mode=Mode.RUN):
+        response_model, response_tokenizer = self.register_models[AIModel.ResponseModel]
+        detect_skill_model = self.register_models[AIModel.SkillDetectionModel]
 
         if response_model is None:
-            response_transcript, _ = self._handle_insufficient_resources(AIModel.ResponseModel.value)
+            response_transcript, _ = self._handle_insufficient_resources(AIModel.ResponseModel)
         else:
             response_transcript = self._generate_response(
                 mode, transcript, response_model, response_tokenizer
             )
 
         if detect_skill_model is None:
-            response_transcript, _ = self._handle_insufficient_resources(AIModel.SkillDetectionModel.value)
+            response_transcript, _ = self._handle_insufficient_resources(AIModel.SkillDetectionModel)
 
         tag_skill = self.assistant.detect_skill_tag(
             transcript, model=detect_skill_model
@@ -76,7 +76,7 @@ class Processor:
         return response_transcript, tag_skill
 
     def _handle_insufficient_resources(self, resource_type):
-        if resource_type == AIModel.ResponseModel.value:
+        if resource_type == AIModel.ResponseModel:
             self.console_manager.console_output(
                 text=f"You do not have enough resources for GAIA to {resource_type} directly. Do you want to redirect to use the web? (Y/N)",
                 info_log=f"Not enough resources to {resource_type} directly",
@@ -89,7 +89,7 @@ class Processor:
             elif transcript.lower() == "n":
                 return "Response model is not available", None
         
-        if resource_type == AIModel.SkillDetectionModel.value:
+        if resource_type == AIModel.SkillDetectionModel:
             self.console_manager.console_output(
                 text=f"You do not have enough resources for GAIA to {resource_type}. Redirect to use the web.",
                 info_log=f"Not enough resources to {resource_type} directly",

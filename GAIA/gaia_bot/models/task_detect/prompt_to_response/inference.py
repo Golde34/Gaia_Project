@@ -8,7 +8,7 @@ from gaia_bot.domain.enums import AIModel
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-data = torch.load(AI_MODEL_LOCATION[AIModel.SkillDetectionModel.value])
+data = torch.load(AI_MODEL_LOCATION[AIModel.SkillDetectionModel])
 
 input_size = data["input_size"]
 hidden_size = data["hidden_size"]

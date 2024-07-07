@@ -1,7 +1,7 @@
 import asyncio 
 import webbrowser
 
-from gaia_bot.kernel.infrastructures.internal_cache import internal_cache
+from gaia_bot.infrastructures.cache.internal_cache import internal_cache
 from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 
