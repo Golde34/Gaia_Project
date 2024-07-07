@@ -28,7 +28,7 @@ async def process_bot(mode=Mode.RUN):
         console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
         
         # Kafka Consumer
-        _start_kafka_consumer_thread(services)
+        _start_kafka_consumer_thread(services, console_manager)
         # await _start_kafka_consumer(services)
         # Authentication
         authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
@@ -72,9 +72,9 @@ async def _start_satellite_services():
     return await microservice_connection.activate_microservice()
 
 
-def _start_kafka_consumer_thread(services):
+def _start_kafka_consumer_thread(services, console_manager):
     async def run_consumer():
-        await _start_kafka_consumer(services)
+        await _start_kafka_consumer(services, console_manager)
     
     def start_loop():
         loop = asyncio.new_event_loop()
@@ -85,14 +85,13 @@ def _start_kafka_consumer_thread(services):
     thread.start()
 
 
-async def _start_kafka_consumer(services):
+async def _start_kafka_consumer(services, console_manager):
     try:
         for service in services:
             service_name = list(service.keys())[0]
             service_status = service[service_name]
             if service_name in KAFKA_TOPICS_FUNCTION.keys() and service_status == MicroserviceStatusEnum.ACTIVE.value:
-                await KAFKA_TOPICS_FUNCTION[service_name]()
-        print(f"Kafka consumer started successfully.")
+                await KAFKA_TOPICS_FUNCTION[service_name](console_manager)
     except Exception as e:
         print(f"Error in starting Kafka consumer: {e}")
         pass
