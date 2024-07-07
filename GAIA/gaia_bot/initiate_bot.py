@@ -1,5 +1,6 @@
 import asyncio
 import colorama
+import threading
 
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse
@@ -13,6 +14,7 @@ from gaia_bot.process.skill_registry import SkillRegistry
 from gaia_bot.domain.enums import Mode, MicroserviceStatusEnum, AcronymsEnum, AIModel
 from gaia_bot.infrastructures.kafka.kafka_listener import KAFKA_TOPICS_FUNCTION
 
+
 async def process_bot(mode=Mode.RUN):
     try:
         # Initiate bot console
@@ -24,7 +26,10 @@ async def process_bot(mode=Mode.RUN):
         register_models = await loop.run_in_executor(None, _register_ai_models) 
         services = await _start_satellite_services()
         console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
-        await _start_kafka_consumer(services)
+        
+        # Kafka Consumer
+        _start_kafka_consumer_thread(services)
+        # await _start_kafka_consumer(services)
         # Authentication
         authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
         auth_status = authentication_service[0].get(AcronymsEnum.AS.value) == MicroserviceStatusEnum.ACTIVE.value
@@ -67,12 +72,24 @@ async def _start_satellite_services():
     return await microservice_connection.activate_microservice()
 
 
+def _start_kafka_consumer_thread(services):
+    async def run_consumer():
+        await _start_kafka_consumer(services)
+    
+    def start_loop():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(run_consumer())
+    
+    thread = threading.Thread(target=start_loop)
+    thread.start()
+
+
 async def _start_kafka_consumer(services):
     try:
         for service in services:
             service_name = list(service.keys())[0]
             service_status = service[service_name]
-            print(service_name)
             if service_name in KAFKA_TOPICS_FUNCTION.keys() and service_status == MicroserviceStatusEnum.ACTIVE.value:
                 await KAFKA_TOPICS_FUNCTION[service_name]()
         print(f"Kafka consumer started successfully.")
