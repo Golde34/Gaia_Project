@@ -12,12 +12,14 @@ consumer_task = None
 consumer = None
 
 def registry_consumer(service_name):
+    print(f"Registry consumer for service: {service_name}")
     kafka_consumer_group, kafka_bootstrap_servers = load_kafka_env()
     topics = load_kakfka_topic(service_name)
     consumer = aiokafka.AIOKafkaConsumer(
         *topics,
         bootstrap_servers=kafka_bootstrap_servers,
         group_id=kafka_consumer_group)
+    print(f"Consumer: {consumer}")
     return consumer
 
 async def handle_consumer_message(consumer, consumer_function=None):

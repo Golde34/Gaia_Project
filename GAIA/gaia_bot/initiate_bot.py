@@ -70,10 +70,10 @@ async def _start_satellite_services():
 async def _start_kafka_consumer(services):
     try:
         for service in services:
-            service_name = list(service.keys())[0]  # Correctly access the service name
-            service_status = service[service_name]  # Correctly access the service status
+            service_name = list(service.keys())[0]
+            service_status = service[service_name]
+            print(service_name)
             if service_name in KAFKA_TOPICS_FUNCTION.keys() and service_status == MicroserviceStatusEnum.ACTIVE.value:
-                # Correctly reference the function to call from KAFKA_TOPICS_FUNCTION
                 await KAFKA_TOPICS_FUNCTION[service_name]()
         print(f"Kafka consumer started successfully.")
     except Exception as e:

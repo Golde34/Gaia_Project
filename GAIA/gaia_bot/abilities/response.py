@@ -8,7 +8,7 @@ class AlpacaResponse():
     @classmethod
     def generate_response(cls, mode, text, model, tokenize, **kwargs):
         try:
-            response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize)
+            response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize, mode=mode)
             if mode == "run":
                 last_response = cls._format_response(response)
                 return last_response

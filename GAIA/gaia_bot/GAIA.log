@@ -1,15 +1,6 @@
-2024-07-07 12:01:20,542 - aiokafka.consumer.subscription_state - INFO - Updating subscribed topics to: frozenset({'shutdown_camera_space', 'open_camera_space'})
-2024-07-07 12:01:20,551 - aiokafka.consumer.group_coordinator - ERROR - Group Coordinator Request failed: [Error 15] GroupCoordinatorNotAvailableError
-2024-07-07 12:01:20,655 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
-2024-07-07 12:01:20,655 - aiokafka.consumer.group_coordinator - INFO - Revoking previously assigned partitions set() for group gaia_bot
-2024-07-07 12:01:20,655 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
-2024-07-07 12:01:20,658 - aiokafka.consumer.group_coordinator - WARNING - Marking the coordinator dead (node 0)for group gaia_bot.
-2024-07-07 12:01:20,762 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
-2024-07-07 12:01:20,762 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
-2024-07-07 12:01:20,764 - aiokafka.consumer.group_coordinator - WARNING - Marking the coordinator dead (node 0)for group gaia_bot.
-2024-07-07 12:01:20,868 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
-2024-07-07 12:01:20,869 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
-2024-07-07 12:01:23,916 - aiokafka.consumer.group_coordinator - INFO - Joined group 'gaia_bot' (generation 1) with member_id aiokafka-0.11.0-a448407d-43c5-4413-a4c9-0d3d1cea3c2e
-2024-07-07 12:01:23,916 - aiokafka.consumer.group_coordinator - INFO - Elected group leader -- performing partition assignments using roundrobin
-2024-07-07 12:01:23,941 - aiokafka.consumer.group_coordinator - INFO - Successfully synced group gaia_bot with generation 1
-2024-07-07 12:01:23,941 - aiokafka.consumer.group_coordinator - INFO - Setting newly assigned partitions {TopicPartition(topic='shutdown_camera_space', partition=0), TopicPartition(topic='open_camera_space', partition=0)} for group gaia_bot
+2024-07-07 15:09:03,806 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-07 15:09:11,386 - root - INFO - Bot wakeup...
+2024-07-07 15:09:11,386 - root - INFO - Face authentication
+2024-07-07 15:09:11,423 - root - INFO - Starting video stream...
+2024-07-07 15:09:22,587 - root - INFO - Authentication success.
+2024-07-07 15:09:22,587 - root - INFO - Listen command
