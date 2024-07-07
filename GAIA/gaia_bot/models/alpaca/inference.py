@@ -3,7 +3,7 @@ from unsloth import FastLanguageModel
 
 import gaia_bot.kernel.configs.settings as settings
 import gaia_bot.models.alpaca.prompt as prompt
-import gaia_bot.domain.enums as Mode
+from gaia_bot.domain.enums import Mode
 
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!

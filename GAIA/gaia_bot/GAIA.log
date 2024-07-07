@@ -1,6 +1,11 @@
-2024-07-07 15:09:03,806 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-07-07 15:09:11,386 - root - INFO - Bot wakeup...
-2024-07-07 15:09:11,386 - root - INFO - Face authentication
-2024-07-07 15:09:11,423 - root - INFO - Starting video stream...
-2024-07-07 15:09:22,587 - root - INFO - Authentication success.
-2024-07-07 15:09:22,587 - root - INFO - Listen command
+2024-07-07 15:31:12,466 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-07 15:31:20,870 - root - INFO - Bot wakeup...
+2024-07-07 15:31:20,870 - root - INFO - Face authentication
+2024-07-07 15:31:20,905 - root - INFO - Starting video stream...
+2024-07-07 15:31:36,225 - root - INFO - Authentication success.
+2024-07-07 15:31:36,225 - root - INFO - Listen command
+2024-07-07 15:31:48,709 - root - INFO - Handle input
+2024-07-07 15:31:48,740 - root - INFO - Skill tag detected: Greeting
+2024-07-07 15:31:48,740 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
+2024-07-07 15:31:48,740 - root - INFO - Response transcript with skill: Greeting
+2024-07-07 15:31:48,740 - root - INFO - Listen command
