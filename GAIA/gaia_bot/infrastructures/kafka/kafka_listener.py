@@ -16,10 +16,9 @@ class KafkaConsumerListener:
 
 
 @KafkaConsumerListener(AcronymsEnum.CMC.value)
-async def handle_open_camera_space(service_name: str):
-    print(f"Handling OPEN_CAMERA_SPACE message: {service_name}")
+async def handle_open_camera_space(service_name: str, console_manager=None):
     consumer = registry_consumer(service_name)
-    await handle_consumer_message(consumer=consumer, consumer_function=handle_camera_cv_message)
+    await handle_consumer_message(consumer=consumer, consumer_function=handle_camera_cv_message, console_manager=console_manager)
     
 
 def handle_camera_cv_message(msg):
