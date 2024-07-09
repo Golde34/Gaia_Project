@@ -1,13 +1,14 @@
 import json
 import os
 
-from core.configs.gaia_resources import gaia_resource_path
+from kernel.configs.gaia_resources import gaia_resource_path
 
 
 token_path = gaia_resource_path / 'authen_cache' / 'token.json'
 
 def _get_token_parameters():
     try:
+        print(token_path)
         with open(token_path, 'r') as f:
             response = json.load(f)
         
