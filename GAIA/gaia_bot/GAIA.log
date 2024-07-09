@@ -17,3 +17,4 @@
 2024-07-09 20:45:24,538 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
 2024-07-09 20:45:24,538 - root - INFO - Response transcript with skill: Greeting
 2024-07-09 20:45:24,538 - root - INFO - Listen command
+2024-07-09 20:55:05,654 - root - ERROR - Failed to recognize uer input with message 
