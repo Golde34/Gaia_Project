@@ -1,12 +1,12 @@
 from flask import request
 
 from ui import app
-from infrastructure.adapter import Adapter 
-from core.services.request.middleware_service import MiddlewareServiceRequest
-from core.services.response.middleware_service import MiddlewareServiceReponse
+from kernel.utils.middleware_connection import MiddlewareConnection
+from core.services.client.middleware_service import MiddlewareServiceRequest
+from core.services.receiver.middleware_service import MiddlewareServiceReponse
 
 
-middleware_loader_url = Adapter('middleware_loader').url
+middleware_loader_url = MiddlewareConnection('middleware_loader').url
 middleware_service_request = MiddlewareServiceRequest(middleware_loader_url)
 middleware_service_response = MiddlewareServiceReponse()
 

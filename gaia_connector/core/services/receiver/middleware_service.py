@@ -1,5 +1,5 @@
 from kernel.utils.get_auth_token import _save_middleware_response, _get_token_parameters, _load_user_info
-from infrastructure.base_response import status_response
+from kernel.utils.base_response import status_response
 
 
 class MiddlewareServiceReponse:

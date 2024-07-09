@@ -6,4 +6,4 @@ cors = CORS(app)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-from ui.controllers import middleware_loader_controller, auth_service_controller, task_manager_controller
+from ui.rest import middleware_loader_controller, auth_service_controller, task_manager_controller

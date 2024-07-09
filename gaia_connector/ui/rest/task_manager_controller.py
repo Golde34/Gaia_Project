@@ -2,12 +2,12 @@ from flask import request, jsonify
 import requests
 
 from ui import app
-from infrastructure.adapter import Adapter
+from kernel.utils.middleware_connection import MiddlewareConnection
 from kernel.utils.get_auth_token import _get_token_parameters
-from core.services.request.task_service import TaskServiceRequest
+from core.services.client.task_service import TaskServiceRequest
 
 
-task_manager_url = Adapter('task_manager').url
+task_manager_url = MiddlewareConnection('task_manager').url
 task_service_request = TaskServiceRequest(task_manager_url)
 
 @app.route('/task-manager/create-task', methods=['POST'])

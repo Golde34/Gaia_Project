@@ -1,11 +1,12 @@
 from flask import request
 
 from ui import app
-from infrastructure.adapter import Adapter
-from core.services.request.auth_service import AuthServiceRequest
+from kernel.utils.middleware_connection import MiddlewareConnection
+from core.services.client.auth_service import AuthServiceRequest
 
-authentication_service_url = Adapter('authentication_service').url
-auth_service = AuthServiceRequest(authentication_service_url)
+
+auth_service_url = MiddlewareConnection('authentication_service').url
+auth_service = AuthServiceRequest(auth_service_url)
 
 @app.route('/auth/sign-in', methods=['POST'])
 def auth():

@@ -1,10 +1,10 @@
-from core.configs.port_configs import PORTS, DOMAIN
+from kernel.configs.port_configs import DOMAIN, PORTS
 
-class Adapter:
+
+class MiddlewareConnection:
     def __init__(self, microservice):
-        self.middleware = 'middleware_loader'
         self.domain = DOMAIN
-        self.port = PORTS[self.middleware]['port']
+        self.port = PORTS['middleware_loader']['port']
         self.router = self._get_microservice_router(microservice)
         self.url = f"http://{self.domain}:{self.port}/{self.router}"
         
