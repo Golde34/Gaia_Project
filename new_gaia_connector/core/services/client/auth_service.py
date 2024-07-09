@@ -1,11 +1,11 @@
 from flask import jsonify
-import request
+import requests
 
 from core.domain.enums import Status
 from kernel.utils.build_response import build_auth_login_response, build_auth_status_response
 
 
-class AuthService:
+class AuthServiceRequest:
     def __init__(self, url):
         self.url = url
         
