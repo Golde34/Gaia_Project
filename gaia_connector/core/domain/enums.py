@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class StringConstant(Enum):
     authenticated = 'authenticated'
     response = 'response'
@@ -18,3 +19,7 @@ class AcronymsEnum(Enum):
     SP = 'schedule_plan'
     WO = 'work_optimization'
     CMC = "camera_cv"
+
+class KafkaTopic(Enum):
+    OPEN_CAMERA_SPACE = 'OPEN_CAMERA_SPACE_TOPIC'
+    SHUTDOWN_CAMERA_SPACE = 'SHUTDOWN_CAMERA_SPACE_TOPIC'

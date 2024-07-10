@@ -85,3 +85,7 @@ PORT_COMPONENTS = [
 ]
 
 DOMAIN = "localhost"
+
+KAFKA_COMPONENTS = [
+    "camera_cv"
+]
