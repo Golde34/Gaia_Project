@@ -16,7 +16,6 @@ def registry_consumer(service_name):
         *topics,
         bootstrap_servers=kafka_bootstrap_servers,
         group_id=kafka_consumer_group)
-    print(consumer)
     return consumer
 
 async def handle_consumer_message(consumer, consumer_function=None):

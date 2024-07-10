@@ -1,13 +1,13 @@
-2024-07-10 20:23:03,781 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-07-10 20:23:13,943 - root - INFO - Bot wakeup...
-2024-07-10 20:23:13,944 - root - INFO - Face authentication
-2024-07-10 20:23:13,946 - aiokafka.consumer.subscription_state - INFO - Updating subscribed topics to: frozenset({'shutdown_camera_space', 'open_camera_space'})
-2024-07-10 20:23:13,961 - aiokafka.consumer.group_coordinator - INFO - Discovered coordinator 0 for group gaia_bot
-2024-07-10 20:23:13,961 - aiokafka.consumer.group_coordinator - INFO - Revoking previously assigned partitions set() for group gaia_bot
-2024-07-10 20:23:13,961 - aiokafka.consumer.group_coordinator - INFO - (Re-)joining group gaia_bot
-2024-07-10 20:23:14,050 - root - INFO - Starting video stream...
-2024-07-10 20:23:16,850 - aiokafka.consumer.group_coordinator - INFO - Joined group 'gaia_bot' (generation 68) with member_id aiokafka-0.11.0-86d3d7f4-83fa-45c6-bd54-30e147e1db23
-2024-07-10 20:23:16,853 - aiokafka.consumer.group_coordinator - INFO - Successfully synced group gaia_bot with generation 68
-2024-07-10 20:23:16,853 - aiokafka.consumer.group_coordinator - INFO - Setting newly assigned partitions {TopicPartition(topic='shutdown_camera_space', partition=0)} for group gaia_bot
-2024-07-10 20:23:22,115 - root - ERROR - Authentication failed with error: 'response'
-2024-07-10 20:23:22,115 - root - INFO - Authentication success.
+2024-07-10 23:00:09,625 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-10 23:00:15,666 - root - INFO - Bot wakeup...
+2024-07-10 23:00:15,667 - root - INFO - Face authentication
+2024-07-10 23:00:15,700 - root - INFO - Starting video stream...
+2024-07-10 23:00:24,198 - root - INFO - Authentication success.
+2024-07-10 23:00:24,198 - root - INFO - Listen command
+2024-07-10 23:00:30,078 - root - INFO - Handle input
+2024-07-10 23:00:30,500 - root - INFO - Skill tag detected: Greeting
+2024-07-10 23:00:30,500 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
+2024-07-10 23:00:30,500 - root - INFO - Response transcript with skill: Greeting
+2024-07-10 23:00:30,500 - root - INFO - Listen command
+2024-07-10 23:00:32,255 - root - INFO - Handle input
+2024-07-10 23:00:32,256 - root - INFO - Exit Gaia

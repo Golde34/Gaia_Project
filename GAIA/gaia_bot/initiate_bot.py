@@ -12,7 +12,7 @@ from gaia_bot.process.processor import Processor
 from gaia_bot.models import load_models
 from gaia_bot.process.skill_registry import SkillRegistry
 from gaia_bot.domain.enums import Mode, MicroserviceStatusEnum, AcronymsEnum, AIModel
-from gaia_bot.process.kafka_handler import start_kafka_consumer_thread
+
 
 async def process_bot(mode=Mode.RUN):
     try:
@@ -26,9 +26,6 @@ async def process_bot(mode=Mode.RUN):
         services = await _start_satellite_services()
         console_manager, assistant = await loop.run_in_executor(None, _startup, services, register_models)
         
-        # Kafka Consumer
-        start_kafka_consumer_thread(services, console_manager)
-        # await _start_kafka_consumer(services)
         # Authentication
         authentication_service = [item for item in services if AcronymsEnum.AS.value in item.keys()]
         auth_status = authentication_service[0].get(AcronymsEnum.AS.value) == MicroserviceStatusEnum.ACTIVE.value
