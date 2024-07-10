@@ -22,8 +22,8 @@ async def handle_consumer_message(consumer, consumer_function=None):
     await consumer.start()
     try:
         async for msg in consumer:
-            # print("consumed: ", msg.topic, msg.partition, msg.offset,
-            #       msg.key, msg.value, msg.timestamp)
+            print("consumed: ", msg.topic, msg.partition, msg.offset,
+                  msg.key, msg.value, msg.timestamp)
             if consumer_function is not None:
                 consumer_function(msg)
     finally:

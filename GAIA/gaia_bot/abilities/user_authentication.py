@@ -33,9 +33,14 @@ class AuthenticationCommand():
                 username, password = self._save_user_profile()
 
             method, status = await self._select_authentication_method()
+            print(method)
+            print(status)
             if method is not None and status:
                 if self.auth_service_status:
                     token = await self._login_to_get_token(username, password)
+                    print(token)
+                    print(username)
+                    print(password)
                     return token, username, True
                 else:
                     raise Exception("Authentication service is not available")
@@ -131,7 +136,9 @@ class AuthenticationCommand():
     
     async def _login_to_get_token(self, username, password):
         wait = await MicroserviceConnection().wait_microservice(AcronymsEnum.AS._value_)
-        if wait == True: 
+        print('OKOK')
+        if wait == True:
+            print('Inside wait') 
             authenticationConnector = AuthenticationConnector(username, password)
             return authenticationConnector.call_login_api()
         else:

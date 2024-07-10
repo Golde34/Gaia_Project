@@ -15,7 +15,6 @@ async def main():
     parser.add_argument("-tm", "--train-model", type=str, 
                         choices=["response", "skill_detection", "object_detection"], 
                         help="Train model")
-    parser.add_argument("--kafka", "-k", action="store_true", help="Run kafka only")
     parser.add_argument("--version", "-v", action="store_true", help=f"Show Gaia version")
     # parser.add_argument("--version", "-v", type=int, default=1, help=f"Gaia version: {__version__}"
     # parser.add_argument('-t', '--test', action='store_true', help='test mode')
@@ -50,11 +49,7 @@ async def _process_arguments(args):
     if args.mode:
         print(f"You can only use the argument --mode in the process mode.")
         help_message()
-    if args.kafka:
-        from gaia_bot.infrastructures.kafka.kafka_listener import KAFKA_TOPICS_FUNCTION
-        from gaia_bot.domain.enums import AcronymsEnum
-        print("Kafka listener activate")
-        await KAFKA_TOPICS_FUNCTION[AcronymsEnum.CMC.value]()
+ 
 
 if __name__ == "__main__":
     asyncio.run(main())
