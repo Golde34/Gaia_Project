@@ -1,5 +1,6 @@
-2024-07-12 19:59:55,523 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-07-12 20:00:02,374 - root - INFO - Bot wakeup...
-2024-07-12 20:00:02,375 - root - INFO - Face authentication
-2024-07-12 20:00:02,375 - root - ERROR - Authentication failed with error: [Errno 2] No such file or directory: 'resources/face_recognize_model/recognizer.pickle'
-2024-07-12 20:00:02,375 - root - INFO - Authentication success.
+2024-07-13 00:38:31,660 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-13 00:38:43,124 - root - INFO - Bot wakeup...
+2024-07-13 00:38:43,125 - root - INFO - Face authentication
+2024-07-13 00:38:43,277 - root - INFO - Starting video stream...
+2024-07-13 00:38:57,666 - root - INFO - Authentication success.
+2024-07-13 00:38:57,666 - root - INFO - Listen command
