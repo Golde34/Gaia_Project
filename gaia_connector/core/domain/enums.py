@@ -9,6 +9,7 @@ class StringConstant(Enum):
 class Status(Enum):
     OK = 'OK'
     ERROR = 'ERROR'
+    FAIL = 'FAIL'
 
 class AcronymsEnum(Enum):
     GC = 'gaia_connector'

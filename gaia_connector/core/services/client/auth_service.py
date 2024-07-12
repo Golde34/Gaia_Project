@@ -2,7 +2,7 @@ from flask import jsonify
 import requests
 
 from core.domain.enums import Status
-from kernel.utils.build_response import build_auth_login_response, build_auth_status_response
+from kernel.utils.build_response import build_auth_login_response, build_status_response
 
 
 class AuthServiceRequest:
@@ -36,10 +36,10 @@ class AuthServiceRequest:
             
             if auth_response.status_code == 200:
                 print('Get status successfully')
-                return build_auth_status_response(Status.OK)
+                return build_status_response(Status.OK)
             else:
                 print('Get status failed')
-                return build_auth_status_response(Status.ERROR)
+                return build_status_response(Status.FAIL)
         except Exception as e:
             print(f"Exception when calling auth service: {e}")
-            return build_auth_status_response(Status.ERROR) 
+            return build_status_response(Status.ERROR) 
