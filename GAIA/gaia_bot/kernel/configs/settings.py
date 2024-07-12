@@ -1,4 +1,4 @@
-from gaia_bot.kernel.configs.__config__ import __filename__
+from GAIA.gaia_bot.kernel.configs.__config_path__ import __filename__
 from gaia_bot.domain.enums import InputMode
 
 

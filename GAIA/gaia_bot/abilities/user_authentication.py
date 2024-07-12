@@ -10,7 +10,7 @@ from gaia_bot.abilities.authentication import face_recognition_authen
 from gaia_bot.domain.enums import InputMode, AuthenType, AcronymsEnum
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
 from gaia_bot.kernel.configs.settings import DEFAULT_GENERAL_SETTINGS
-from gaia_bot.kernel.configs.__config__ import __path__
+from GAIA.gaia_bot.kernel.configs.__config_path__ import __path__
 from gaia_bot.microservices.connection.authen_command import AuthenticationConnector
 
 
