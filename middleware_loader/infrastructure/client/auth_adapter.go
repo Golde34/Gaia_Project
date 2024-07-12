@@ -47,7 +47,11 @@ func (adapter *AuthAdapter) callSigninAuthService(input model.SigninInput) (resp
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
-	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
+	bodyMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return response_dtos.AuthTokenResponseDTO{}, err
+	}
+	dataBytes, err := utils.ConvertResponseToMap(bodyMap["message"])
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
@@ -103,7 +107,6 @@ func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dt
 		return response_dtos.AuthTokenResponseDTO{}, nil
 	}
 }
-
 
 func (adapter *AuthAdapter) CheckToken(input model.TokenInput) (model.TokenResponse, error) {
 	authServiceURL := base.AuthServiceURL + "/auth/check-token"

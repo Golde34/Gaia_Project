@@ -18,7 +18,6 @@
 *\bin
 
 .ipynb_checkpoints
-__config__.py
 *\.parquet
 *\tmp
 

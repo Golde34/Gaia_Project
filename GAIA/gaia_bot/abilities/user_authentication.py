@@ -10,7 +10,7 @@ from gaia_bot.abilities.authentication import face_recognition_authen
 from gaia_bot.domain.enums import InputMode, AuthenType, AcronymsEnum
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
 from gaia_bot.kernel.configs.settings import DEFAULT_GENERAL_SETTINGS
-from gaia_bot.kernel.configs.__config__ import __path__
+from gaia_bot.kernel.configs.__config_path__ import __path__
 from gaia_bot.microservices.connection.authen_command import AuthenticationConnector
 
 
@@ -33,14 +33,9 @@ class AuthenticationCommand():
                 username, password = self._save_user_profile()
 
             method, status = await self._select_authentication_method()
-            print(method)
-            print(status)
             if method is not None and status:
                 if self.auth_service_status:
                     token = await self._login_to_get_token(username, password)
-                    print(token)
-                    print(username)
-                    print(password)
                     return token, username, True
                 else:
                     raise Exception("Authentication service is not available")
@@ -118,8 +113,9 @@ class AuthenticationCommand():
         return result
 
     def face_recognition_method(self):
-        utils_dir = os.path.dirname(__path__)
-
+        path = os.path.dirname(__path__)
+        utils_dir = os.path.join(path, 'gaia_bot')
+        
         protoPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'deploy.prototxt')
         modelPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'res10_300x300_ssd_iter_140000.caffemodel')
         embedderPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'embedding_model.t7')
@@ -136,9 +132,7 @@ class AuthenticationCommand():
     
     async def _login_to_get_token(self, username, password):
         wait = await MicroserviceConnection().wait_microservice(AcronymsEnum.AS._value_)
-        print('OKOK')
         if wait == True:
-            print('Inside wait') 
             authenticationConnector = AuthenticationConnector(username, password)
             return authenticationConnector.call_login_api()
         else:
