@@ -1,6 +1,5 @@
 import asyncio
 import colorama
-import threading
 
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 from gaia_bot.abilities.response import AlpacaResponse

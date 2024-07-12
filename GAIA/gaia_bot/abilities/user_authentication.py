@@ -118,8 +118,9 @@ class AuthenticationCommand():
         return result
 
     def face_recognition_method(self):
-        utils_dir = os.path.dirname(__path__)
-
+        path = os.path.dirname(__path__)
+        utils_dir = os.path.join(path, 'gaia_bot')
+        
         protoPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'deploy.prototxt')
         modelPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'res10_300x300_ssd_iter_140000.caffemodel')
         embedderPath = os.path.join(utils_dir, 'resources', 'face_recognize_model', 'embedding_model.t7')
