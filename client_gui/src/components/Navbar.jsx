@@ -1,22 +1,15 @@
 import { Flex, TextInput } from "@tremor/react"
 import { SearchIcon } from "@heroicons/react/outline"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { signout } from "../api/store/actions/auth_service/auth.actions";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
     const dispatch = useDispatch();
-
+    const [cookies, setCookies] = useCookies(['accessToken']);
     let auth = false;
-    const gaiaSignin = useSelector((state) => state.gaiaSignin);
-    const { gaiaInfo } = gaiaSignin;
-    const userSignin = useSelector((state) => state.userSignin);
-    const { userInfo } = userSignin;
-    const bossSignin = useSelector((state) => state.bossSignin);
-    const { bossInfo } = bossSignin;
-    if (gaiaInfo || userInfo || bossInfo) {
+    if (cookies.accessToken) {
         auth = true;
-    } else {
-        auth = false;
     }
 
     const signoutHandler = () => {
