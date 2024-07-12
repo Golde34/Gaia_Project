@@ -97,3 +97,43 @@ Action:
 
 Identify and stop the process that's listening on port 4001 or configure this application to listen on another port.
 
+2024-07-13T00:47:05.750+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:47:05.750+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:47:05.763+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T00:48:37.554+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:48:37.554+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:48:37.567+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T00:50:21.804+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:50:21.804+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:50:21.816+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-07-13T00:50:56.763+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:50:56.763+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:50:56.775+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : Boss: golde sign-in success
+2024-07-13T00:52:10.777+07:00  INFO 15884 --- [http-nio-4001-exec-2] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:52:10.778+07:00  INFO 15884 --- [http-nio-4001-exec-2] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:52:10.788+07:00  INFO 15884 --- [http-nio-4001-exec-2] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T00:54:58.701+07:00  WARN 15884 --- [http-nio-4001-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
+2024-07-13T00:55:02.340+07:00  INFO 15884 --- [http-nio-4001-exec-6] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:55:02.340+07:00  INFO 15884 --- [http-nio-4001-exec-6] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:55:02.352+07:00  INFO 15884 --- [http-nio-4001-exec-6] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T00:59:34.402+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:59:34.402+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:59:34.413+07:00  INFO 15884 --- [http-nio-4001-exec-8] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T00:59:55.758+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T00:59:55.759+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T00:59:55.769+07:00  INFO 15884 --- [http-nio-4001-exec-9] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T01:07:10.175+07:00  INFO 15884 --- [http-nio-4001-exec-1] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T01:07:10.175+07:00  INFO 15884 --- [http-nio-4001-exec-1] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T01:07:10.186+07:00  INFO 15884 --- [http-nio-4001-exec-1] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T01:11:37.239+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T01:11:37.240+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T01:11:37.250+07:00  INFO 15884 --- [http-nio-4001-exec-3] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T01:12:03.517+07:00  INFO 15884 --- [http-nio-4001-exec-4] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T01:12:03.517+07:00  INFO 15884 --- [http-nio-4001-exec-4] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T01:12:03.526+07:00  INFO 15884 --- [http-nio-4001-exec-4] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T01:12:35.198+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T01:12:35.198+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T01:12:35.208+07:00  INFO 15884 --- [http-nio-4001-exec-5] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
+2024-07-13T01:17:47.319+07:00  INFO 15884 --- [http-nio-4001-exec-7] a.a.c.v.s.UserServiceValidation          : Validate authentication function: validate success
+2024-07-13T01:17:47.319+07:00  INFO 15884 --- [http-nio-4001-exec-7] a.a.kernel.utils.ResponseUtils           : Validate user signin function:  validate success
+2024-07-13T01:17:47.329+07:00  INFO 15884 --- [http-nio-4001-exec-7] a.a.kernel.utils.LoggerUtils             : User: golde sign-in success
