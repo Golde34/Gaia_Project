@@ -1,2 +1,2 @@
-client-gui:
+run:
 	npm run dev

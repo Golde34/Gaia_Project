@@ -1,2 +1,2 @@
-middleware-loader:
+run:
 	go run cmd/main.go
