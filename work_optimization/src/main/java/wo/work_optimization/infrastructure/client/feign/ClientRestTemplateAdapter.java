@@ -1,12 +1,13 @@
 package wo.work_optimization.infrastructure.client.feign;
 
 import lombok.extern.slf4j.Slf4j;
+import wo.work_optimization.infrastructure.client.ClientTemplate;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import wo.work_optimization.core.port.client.ClientTemplate;
 
 @Component
 @Slf4j

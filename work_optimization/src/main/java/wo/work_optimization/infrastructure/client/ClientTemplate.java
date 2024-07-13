@@ -1,4 +1,4 @@
-package wo.work_optimization.core.port.client;
+package wo.work_optimization.infrastructure.client;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
