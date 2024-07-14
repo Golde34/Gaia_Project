@@ -7,4 +7,5 @@ import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 
 public interface AuthServiceClient {
     UserResponseDTO checkExistedUser(Long userId);
+    UserResponseDTO getExistedUser(Long userId);
 }

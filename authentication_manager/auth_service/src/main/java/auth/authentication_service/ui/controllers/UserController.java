@@ -3,7 +3,7 @@ package auth.authentication_service.ui.controllers;
 import auth.authentication_service.core.domain.dto.RegisterDto;
 import auth.authentication_service.core.domain.dto.UserDto;
 import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
-import auth.authentication_service.core.services.UserServiceImpl;
+import auth.authentication_service.core.services.interfaces.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody RegisterDto userDto) {
@@ -39,5 +39,10 @@ public class UserController {
     @RequestMapping(value = "/get-user")
     public ResponseEntity<?> getUser(@RequestBody UserDto userDto) {
         return userService.getUserByUsername(userDto);
+    }
+
+    @GetMapping("/get-user-by-id")
+    public ResponseEntity<?> getUserById(@RequestParam Long id) {
+        return userService.getUserResponseById(id);
     }
 }

@@ -55,7 +55,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
 
     private boolean checkExistedUser(Long userId) {
         // check existed user
-        UserResponseDTO response = authServiceClient.checkExistedUser(userId);
+        UserResponseDTO response = authServiceClient.getExistedUser(userId);
         log.info("Check existed user: {}", response.toString());
         return userId.equals(Objects.requireNonNull(response.getId()));
     }
