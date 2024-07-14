@@ -198,4 +198,19 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
+
+    @Override
+    public ResponseEntity<?> getUserResponseById(Long id) {
+        try {
+            User user = getUserById(id);
+            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
+        } catch (Exception e) {
+            e.printStackTrace();
+            GenericResponse<String> response = responseUtils.returnMessage(
+                    "Get user failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
+                    ResponseEnum.msg400);
+            return genericResponse.matchingResponseMessage(response);
+        } 
+    }
 }
