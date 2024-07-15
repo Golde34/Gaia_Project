@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure.task;
+package auth.authentication_service.core.filters;
 
 import auth.authentication_service.core.services.UserDetailsServices;
 import auth.authentication_service.kernel.utils.JwtUtil;
@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserDetailsServices userDetailsServices;
@@ -26,9 +28,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
+    private static final String SERVICE_TOKEN_HEADER = "Service";
+    private static final String SERVICE_TOKEN_VALUE = "authentication_service";
+
+    private static final String PRIVATE_TOKEN_HEADER = "Service-Token";
+    private static final String PRIVATE_TOKEN_VALUE = "Golde34";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        final String serviceTokenHeader = request.getHeader(SERVICE_TOKEN_HEADER);
+        final String privateTokenHeader = request.getHeader(PRIVATE_TOKEN_HEADER);
+        if (serviceTokenHeader != null && privateTokenHeader != null
+                && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
+                && request.getHeader(PRIVATE_TOKEN_HEADER).equals(PRIVATE_TOKEN_VALUE)) {
+            log.info("Header token valid, no need to filter");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
@@ -45,9 +64,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                filterChain.doFilter(request, response);
             }
         }
 
-        filterChain.doFilter(request, response);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.flushBuffer();
     }
 }

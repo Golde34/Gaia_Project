@@ -95,12 +95,11 @@ public class UserServiceImpl implements UserService {
 
             User user = userStore.getUserById(userDto.getUserId());
             _logger.log("Update user: " + user.getUsername() + " to: " + userDto.getUsername(), LoggerType.INFO);
-            user = updateUserRoles(userDto, user);
+            updateUserRoles(userDto, user);
             user = userMapper.updateUserMapper(userDto, user);
             userStore.save(user);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
-            e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
                     "Update User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.UPDATE_USER,
                     ResponseEnum.msg400);
@@ -108,13 +107,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private User updateUserRoles(UpdateUserRequest userDto, User user) {
+    private void updateUserRoles(UpdateUserRequest userDto, User user) {
         user.getRoles().clear();
-        userDto.getRoles().stream().forEach(roleName -> {
+        userDto.getRoles().forEach(roleName -> {
             Role role = roleStore.findByName(roleName);
             user.getRoles().add(role);
         });
-        return user;
     }
 
     @Override
@@ -132,7 +130,6 @@ public class UserServiceImpl implements UserService {
             _logger.log("Delete user: " + userDto.getUsername(), LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(deleteUser, ResponseEnum.msg200));
         } catch (Exception e) {
-            e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
                     "Delete User failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.DELETE_USER,
                     ResponseEnum.msg400);
@@ -149,7 +146,6 @@ public class UserServiceImpl implements UserService {
             _logger.log("Get all users", LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {
-            e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
                     "Get all users failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.GET_ALL_USERS,
                     ResponseEnum.msg400);
@@ -164,7 +160,6 @@ public class UserServiceImpl implements UserService {
             _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return user;
         } catch (Exception e) {
-            e.printStackTrace();
             _logger.log("Get user: " + id + " failed", LoggerType.ERROR);
             return null;
         }
@@ -178,7 +173,6 @@ public class UserServiceImpl implements UserService {
             _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
-            e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
                     "Get user failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
                     ResponseEnum.msg400);
@@ -193,7 +187,6 @@ public class UserServiceImpl implements UserService {
             _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
             return user;
         } catch (Exception e) {
-            e.printStackTrace();
             _logger.log("Get user: " + email + " failed", LoggerType.ERROR);
             return null;
         }
@@ -203,10 +196,9 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> getUserResponseById(Long id) {
         try {
             User user = getUserById(id);
-            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
+            log.info("User response: {}", user.toString());
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
-            e.printStackTrace();
             GenericResponse<String> response = responseUtils.returnMessage(
                     "Get user failed: %s ".formatted(e.getMessage()), Constants.ResponseMessage.USER_NOT_FOUND,
                     ResponseEnum.msg400);

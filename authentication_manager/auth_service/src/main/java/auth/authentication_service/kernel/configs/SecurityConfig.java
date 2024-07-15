@@ -1,6 +1,7 @@
 package auth.authentication_service.kernel.configs;
 
 import auth.authentication_service.core.domain.constant.Constants;
+import auth.authentication_service.core.filters.JwtRequestFilter;
 import auth.authentication_service.core.services.GlobalConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,6 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import auth.authentication_service.infrastructure.task.JwtRequestFilter;
 
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @Configuration
@@ -63,7 +62,8 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String roleHierarchyStr = globalConfigService.getGlobalParamAsString(Constants.AuthConfiguration.ROLE_HIERARCHY);
+        String roleHierarchyStr = globalConfigService
+                .getGlobalParamAsString(Constants.AuthConfiguration.ROLE_HIERARCHY);
         log.info("RoleHierarchy : {}", roleHierarchyStr);
         roleHierarchy.setHierarchy(roleHierarchyStr);
         return roleHierarchy;
@@ -78,10 +78,10 @@ public class SecurityConfig {
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
                                     new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
                                     new AntPathRequestMatcher("/auth/check-permission"),
-                                    new AntPathRequestMatcher("/auth/status"),
                                     new AntPathRequestMatcher("/user/**"),
                                     new AntPathRequestMatcher("/role/**"),
-                                    new AntPathRequestMatcher("/privilege/**"))
+                                    new AntPathRequestMatcher("/privilege/**"),
+                                    new AntPathRequestMatcher("/auth/status"))
                             .permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
