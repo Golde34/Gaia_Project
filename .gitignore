@@ -27,4 +27,5 @@
 token.json
 commits.json
 *.xml
+!pom.xml
 *\auth_service.log
