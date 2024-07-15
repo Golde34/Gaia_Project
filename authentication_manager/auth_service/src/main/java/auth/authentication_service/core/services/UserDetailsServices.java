@@ -1,5 +1,6 @@
 package auth.authentication_service.core.services;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.domain.entities.Privilege;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
@@ -7,6 +8,7 @@ import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.kernel.utils.LoggerUtils;
 import auth.authentication_service.kernel.utils.ObjectUtils;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,8 +39,6 @@ public class UserDetailsServices implements UserDetailsService {
         this.userStore = userStore;
     }
 
-    // API
-
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         try {
@@ -55,10 +55,16 @@ public class UserDetailsServices implements UserDetailsService {
         }
     }
 
-    // UTIL
-
     private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
+        final List<GrantedAuthority> authorities = new ArrayList<>();
+        for (final String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
     }
 
     private List<String> getPrivileges(final Collection<Role> roles) {
@@ -75,11 +81,17 @@ public class UserDetailsServices implements UserDetailsService {
         return privileges;
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
-        final List<GrantedAuthority> authorities = new ArrayList<>();
-        for (final String privilege : privileges) {
-            authorities.add(new SimpleGrantedAuthority(privilege));
+    @PostConstruct
+    public UserDetails loadPostConstructServiceUser() throws UsernameNotFoundException {
+        try {
+            UserDetails user = org.springframework.security.core.userdetails.User.withUsername("services")
+                    .password("")
+                    .authorities(new SimpleGrantedAuthority(Constants.Role.ADMIN))
+                    .build();
+            return new org.springframework.security.core.userdetails.User(
+                    user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, user.getAuthorities());
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
-        return authorities;
     }
 }

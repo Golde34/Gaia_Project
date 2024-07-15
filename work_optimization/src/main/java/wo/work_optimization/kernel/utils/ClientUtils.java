@@ -25,9 +25,9 @@ public class ClientUtils {
         return httpHeaders;
     }
 
-    public HttpHeaders buildAuthorizationHeader(String service, String token) {
+    public HttpHeaders buildAuthorizationHeader(String service) {
         HttpHeaders httpHeaders = buildDefaultHeaders();
-        httpHeaders.add("Authorization", "Bearer " + token);
+        httpHeaders.add("Service-Token", "Golde34");
         httpHeaders.add("Service", service);
         return httpHeaders;
     }

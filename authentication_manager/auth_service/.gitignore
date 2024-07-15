@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.gz
+auth_service.log
 
 ### STS ###
 .apt_generated

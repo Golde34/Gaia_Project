@@ -1,6 +1,7 @@
 package auth.authentication_service.kernel.configs;
 
 import auth.authentication_service.core.domain.constant.Constants;
+import auth.authentication_service.core.filters.AuthorizationFilter;
 import auth.authentication_service.core.services.GlobalConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,18 +23,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import auth.authentication_service.infrastructure.task.JwtRequestFilter;
-
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @Configuration
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfig {
 
-    private final JwtRequestFilter jwtF;
+    private final AuthorizationFilter jwtF;
     private final GlobalConfigService globalConfigService;
 
-    public SecurityConfig(JwtRequestFilter jwtF, GlobalConfigService globalConfigService) {
+    public SecurityConfig(AuthorizationFilter jwtF, GlobalConfigService globalConfigService) {
         this.jwtF = jwtF;
         this.globalConfigService = globalConfigService;
     }
@@ -63,7 +62,8 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String roleHierarchyStr = globalConfigService.getGlobalParamAsString(Constants.AuthConfiguration.ROLE_HIERARCHY);
+        String roleHierarchyStr = globalConfigService
+                .getGlobalParamAsString(Constants.AuthConfiguration.ROLE_HIERARCHY);
         log.info("RoleHierarchy : {}", roleHierarchyStr);
         roleHierarchy.setHierarchy(roleHierarchyStr);
         return roleHierarchy;
@@ -77,17 +77,16 @@ public class SecurityConfig {
                     auth
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
                                     new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
-                                    new AntPathRequestMatcher("/auth/check-permission"),
-                                    new AntPathRequestMatcher("/auth/status"),
-                                    new AntPathRequestMatcher("/user/**"),
-                                    new AntPathRequestMatcher("/role/**"),
-                                    new AntPathRequestMatcher("/privilege/**"))
+                                    new AntPathRequestMatcher("/auth/check-permission"))
                             .permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/privilege/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
+                            // Admin Role has no permission
+                            .requestMatchers(new AntPathRequestMatcher("auth/status")).hasAnyRole("BOSS", "USER")
                             .anyRequest().authenticated();
                 });
         http.addFilterBefore(jwtF, UsernamePasswordAuthenticationFilter.class);
