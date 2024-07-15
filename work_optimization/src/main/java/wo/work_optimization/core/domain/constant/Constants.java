@@ -27,5 +27,12 @@ public class Constants {
         public static String SYSTEM_CACHE_RELOAD_MINUTE = "global.config.minute";
         public static String CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS = "schedule.custom-algorithm.constant";
         public static String DEEP_WORK_TIME = "schedule.custom-algorithm.deep-work-time.%s";
-    } 
+    }
+
+    @UtilityClass
+    public static class CustomHeader {
+        public static String SERVICE_HEADER = "Service";
+        public static String SERVICE_TOKEN_HEADER = "Service-Token";
+        public static String AUTHORIZATION_HEADER = "Authorization";
+    }
 }

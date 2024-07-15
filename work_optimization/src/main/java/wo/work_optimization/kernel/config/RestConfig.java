@@ -1,4 +1,4 @@
-package wo.work_optimization.infrastructure.config;
+package wo.work_optimization.kernel.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
