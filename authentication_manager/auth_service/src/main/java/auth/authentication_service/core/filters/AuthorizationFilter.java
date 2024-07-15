@@ -1,5 +1,6 @@
 package auth.authentication_service.core.filters;
 
+import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.services.UserDetailsServices;
 import auth.authentication_service.kernel.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -28,27 +29,48 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    private static final String SERVICE_TOKEN_HEADER = "Service";
-    private static final String SERVICE_TOKEN_VALUE = "authentication_service";
-
-    private static final String PRIVATE_TOKEN_HEADER = "Service-Token";
-    private static final String PRIVATE_TOKEN_VALUE = "Golde34";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        boolean headerTokenValidation = validateHeaderToken(request);
+        if (headerTokenValidation) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        boolean jwtTokenValidation = validateJwtToken(request);
+        if (jwtTokenValidation) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        log.info("Security Filter Chain");
+        filterChain.doFilter(request, response);
+    }
+
+    private static final String SERVICE_TOKEN_HEADER = Constants.CustomHeader.SERVICE_HEADER;
+    private static final String SERVICE_TOKEN_VALUE = Constants.SERVICE_NAME;
+
+    private static final String PRIVATE_TOKEN_HEADER = Constants.CustomHeader.SERVICE_TOKEN_HEADER;
+    private static final String PRIVATE_TOKEN_VALUE = "Golde34";
+
+    private boolean validateHeaderToken(HttpServletRequest request) {
         final String serviceTokenHeader = request.getHeader(SERVICE_TOKEN_HEADER);
         final String privateTokenHeader = request.getHeader(PRIVATE_TOKEN_HEADER);
         if (serviceTokenHeader != null && privateTokenHeader != null
                 && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
                 && request.getHeader(PRIVATE_TOKEN_HEADER).equals(PRIVATE_TOKEN_VALUE)) {
             log.info("Header token is valid, no need to filter jwt token");
-            filterChain.doFilter(request, response);
-            return;
+            UserDetails serviceUser = userDetailsServices.loadPostConstructServiceUser();
+            securityUsernamePassword(request, serviceUser);
+            return true;
         }
+        return false;
+    }
 
-        final String authorizationHeader = request.getHeader("Authorization");
+    private boolean validateJwtToken(HttpServletRequest request) {
+        final String authorizationHeader = request.getHeader(Constants.CustomHeader.AUTHORIZATION_HEADER);
         String username = null;
         String jwt = null;
 
@@ -60,15 +82,18 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsServices.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                filterChain.doFilter(request, response);
+                securityUsernamePassword(request, userDetails);
+                return true;
             }
         }
 
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.flushBuffer();
+        return false;
+    }
+
+    private void securityUsernamePassword(HttpServletRequest request, UserDetails userDetails) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 }

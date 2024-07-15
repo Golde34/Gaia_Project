@@ -5,6 +5,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Constants {
 
+    public static final String SERVICE_NAME = "authentication_service";
+
     @UtilityClass
     public static class HttpStatus {
         public static final String ERROR = "error";
@@ -65,5 +67,12 @@ public class Constants {
     public static class AuthConfiguration {
         public static String SYSTEM_CACHE_RELOAD_MINUTE = "global.config.minute";
         public static String ROLE_HIERARCHY = "role.role_hierarchy";
+    }
+
+    @UtilityClass
+    public static class CustomHeader {
+        public static String SERVICE_HEADER = "Service";
+        public static String SERVICE_TOKEN_HEADER = "Service-Token";
+        public static String AUTHORIZATION_HEADER = "Authorization";
     }
 }

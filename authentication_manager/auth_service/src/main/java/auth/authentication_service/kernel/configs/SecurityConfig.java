@@ -77,17 +77,16 @@ public class SecurityConfig {
                     auth
                             .requestMatchers(new AntPathRequestMatcher("/auth/sign-in"),
                                     new AntPathRequestMatcher("/auth/gaia-auto-sign-in"),
-                                    new AntPathRequestMatcher("/auth/check-permission"),
-                                    new AntPathRequestMatcher("/user/**"),
-                                    new AntPathRequestMatcher("/role/**"),
-                                    new AntPathRequestMatcher("/privilege/**"),
-                                    new AntPathRequestMatcher("/auth/status"))
+                                    new AntPathRequestMatcher("/auth/check-permission"))
                             .permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/role/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/privilege/**")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/**")).hasRole("BOSS")
+                            // Admin Role has no permission
+                            .requestMatchers(new AntPathRequestMatcher("auth/status")).hasAnyRole("BOSS", "USER")
                             .anyRequest().authenticated();
                 });
         http.addFilterBefore(jwtF, UsernamePasswordAuthenticationFilter.class);
