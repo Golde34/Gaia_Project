@@ -18,12 +18,12 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class AuthorizationFilter extends OncePerRequestFilter {
 
     private final UserDetailsServices userDetailsServices;
     private final JwtUtil jwtUtil;
 
-    public JwtRequestFilter(UserDetailsServices userDetailsServices, JwtUtil jwtUtil) {
+    public AuthorizationFilter(UserDetailsServices userDetailsServices, JwtUtil jwtUtil) {
         this.userDetailsServices = userDetailsServices;
         this.jwtUtil = jwtUtil;
     }
@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (serviceTokenHeader != null && privateTokenHeader != null
                 && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
                 && request.getHeader(PRIVATE_TOKEN_HEADER).equals(PRIVATE_TOKEN_VALUE)) {
-            log.info("Header token valid, no need to filter");
+            log.info("Header token is valid, no need to filter jwt token");
             filterChain.doFilter(request, response);
             return;
         }

@@ -1,7 +1,7 @@
 package auth.authentication_service.kernel.configs;
 
 import auth.authentication_service.core.domain.constant.Constants;
-import auth.authentication_service.core.filters.JwtRequestFilter;
+import auth.authentication_service.core.filters.AuthorizationFilter;
 import auth.authentication_service.core.services.GlobalConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +29,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Slf4j
 public class SecurityConfig {
 
-    private final JwtRequestFilter jwtF;
+    private final AuthorizationFilter jwtF;
     private final GlobalConfigService globalConfigService;
 
-    public SecurityConfig(JwtRequestFilter jwtF, GlobalConfigService globalConfigService) {
+    public SecurityConfig(AuthorizationFilter jwtF, GlobalConfigService globalConfigService) {
         this.jwtF = jwtF;
         this.globalConfigService = globalConfigService;
     }
