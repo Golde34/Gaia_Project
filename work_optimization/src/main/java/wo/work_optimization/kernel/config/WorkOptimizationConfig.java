@@ -1,4 +1,4 @@
-package wo.work_optimization.infrastructure.config;
+package wo.work_optimization.kernel.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;

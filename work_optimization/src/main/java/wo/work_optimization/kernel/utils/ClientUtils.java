@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.AuthServiceResponse;
 import wo.work_optimization.core.domain.dto.response.UserResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
@@ -13,22 +14,24 @@ import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 public class ClientUtils {
 
     private final ObjectMapper objectMapper;
+    private final SecurityEncrypt securityEncrypt;
 
-    public ClientUtils(ObjectMapper objectMapper) {
+    public ClientUtils(ObjectMapper objectMapper, SecurityEncrypt securityEncrypt) {
         this.objectMapper = objectMapper;
+        this.securityEncrypt = securityEncrypt;
     }
 
     public HttpHeaders buildDefaultHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/json");
-        httpHeaders.add("Accept", "application/json");
+        httpHeaders.add(HttpHeaders.ACCEPT, "application/json");
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
         return httpHeaders;
     }
 
-    public HttpHeaders buildAuthorizationHeader(String service) {
+    public HttpHeaders buildAuthorizationHeader(String service, Long userId) throws Exception {
         HttpHeaders httpHeaders = buildDefaultHeaders();
-        httpHeaders.add("Service-Token", "Golde34");
-        httpHeaders.add("Service", service);
+        httpHeaders.add(Constants.CustomHeader.SERVICE_TOKEN_HEADER, securityEncrypt.encrypt(String.valueOf(userId)));
+        httpHeaders.add(Constants.CustomHeader.SERVICE_HEADER, service);
         return httpHeaders;
     }
 

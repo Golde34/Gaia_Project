@@ -31,7 +31,7 @@ public class AuthServiceAdapter implements AuthServiceClient {
 
     public UserResponseDTO getExistedUser(Long userId) {
         try {
-            HttpHeaders requestHeaders = clientUtils.buildAuthorizationHeader(ServiceEnum.AS.getServiceName());
+            HttpHeaders requestHeaders = clientUtils.buildAuthorizationHeader(ServiceEnum.AS.getServiceName(), userId);
             String uri = String.format(authServiceApiGetUser, userId);
             log.info("Calling api to auth service: {}", uri);
             ResponseEntity<GeneralResponse<Object>> response = clientTemplate.get(uri, requestHeaders, new ParameterizedTypeReference<GeneralResponse<Object>>() {});
