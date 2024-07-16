@@ -32,7 +32,6 @@ public class SecurityDecryption {
 
     private final UserService userService;
 
-    private static final String FORMATED_TOKEN_HEADER = "%s::%s::%s";
     private static final String DELIMITER = "::";
 
     public SecurityDecryption(UserService userService) {
