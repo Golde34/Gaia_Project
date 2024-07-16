@@ -2,11 +2,12 @@ package auth.authentication_service.core.filters;
 
 import auth.authentication_service.core.domain.constant.Constants;
 import auth.authentication_service.core.services.UserDetailsServices;
+import auth.authentication_service.infrastructure.security.SecurityDecryption;
 import auth.authentication_service.kernel.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @Component
 @Slf4j
@@ -23,15 +31,17 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     private final UserDetailsServices userDetailsServices;
     private final JwtUtil jwtUtil;
+    private final SecurityDecryption securityDecryption;
 
-    public AuthorizationFilter(UserDetailsServices userDetailsServices, JwtUtil jwtUtil) {
+    public AuthorizationFilter(UserDetailsServices userDetailsServices, JwtUtil jwtUtil, SecurityDecryption securityDecryption) {
         this.userDetailsServices = userDetailsServices;
         this.jwtUtil = jwtUtil;
+        this.securityDecryption = securityDecryption;
     }
 
+    @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
 
         boolean headerTokenValidation = validateHeaderToken(request);
         if (headerTokenValidation) {
@@ -53,14 +63,15 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     private static final String SERVICE_TOKEN_VALUE = Constants.SERVICE_NAME;
 
     private static final String PRIVATE_TOKEN_HEADER = Constants.CustomHeader.SERVICE_TOKEN_HEADER;
-    private static final String PRIVATE_TOKEN_VALUE = "Golde34";
 
-    private boolean validateHeaderToken(HttpServletRequest request) {
+    private boolean validateHeaderToken(HttpServletRequest request) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         final String serviceTokenHeader = request.getHeader(SERVICE_TOKEN_HEADER);
         final String privateTokenHeader = request.getHeader(PRIVATE_TOKEN_HEADER);
+        System.out.println(privateTokenHeader);
+
         if (serviceTokenHeader != null && privateTokenHeader != null
                 && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
-                && request.getHeader(PRIVATE_TOKEN_HEADER).equals(PRIVATE_TOKEN_VALUE)) {
+                && securityDecryption.validateToken(securityDecryption.decrypt(privateTokenHeader))) {
             log.info("Header token is valid, no need to filter jwt token");
             UserDetails serviceUser = userDetailsServices.loadPostConstructServiceUser();
             securityUsernamePassword(request, serviceUser);

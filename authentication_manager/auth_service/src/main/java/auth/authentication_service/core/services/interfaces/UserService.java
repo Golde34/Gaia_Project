@@ -14,6 +14,6 @@ public interface UserService {
     public ResponseEntity<?> getAllUsers();
     public ResponseEntity<?> getUserByUsername(UserDto userDto);
     public User getUserByEmail(String email);
-    public User getUserById(Long id);
+    public User getUserById(Long id, String usedClass);
     public ResponseEntity<?> getUserResponseById(Long id);
 }

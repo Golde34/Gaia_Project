@@ -154,10 +154,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(Long id, String usedClass) {
         try {
             User user = userStore.getUserById(id);
-            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
+            log.info("Get user: {} from: {}", user.getUsername(), usedClass);
             return user;
         } catch (Exception e) {
             _logger.log("Get user: " + id + " failed", LoggerType.ERROR);
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> getUserResponseById(Long id) {
         try {
-            User user = getUserById(id);
+            User user = getUserById(id, "Get User Response");
             log.info("User response: {}", user.toString());
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
