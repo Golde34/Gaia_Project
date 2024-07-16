@@ -8,7 +8,13 @@ const PRIVATE_KEY_STRING = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKQU
 function encrypt(plainText) {
   const publicKey = `-----BEGIN PUBLIC KEY-----\n${PUBLIC_KEY_STRING}\n-----END PUBLIC KEY-----`;
   const buffer = Buffer.from(plainText, 'utf8');
-  const encrypted = crypto.publicEncrypt(publicKey, buffer);
+  
+  const encrypted = crypto.publicEncrypt({
+    key: publicKey,
+    padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+    oaepHash: "sha256"
+  }, buffer);
+
   return encrypted.toString('base64');
 }
 
@@ -16,10 +22,17 @@ const plainText = "auth_service::Golde34::1";
 const encryptedText = encrypt(plainText);
 console.log("Encrypted Text:", encryptedText);
 
+
 function decrypt(encryptedText) {
   const privateKey = `-----BEGIN PRIVATE KEY-----\n${PRIVATE_KEY_STRING}\n-----END PRIVATE KEY-----`;
   const buffer = Buffer.from(encryptedText, 'base64');
-  const decrypted = crypto.privateDecrypt(privateKey, buffer);
+  
+  const decrypted = crypto.privateDecrypt({
+    key: privateKey,
+    padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+    oaepHash: "sha256"
+  }, buffer);
+
   return decrypted.toString('utf8');
 }
 
