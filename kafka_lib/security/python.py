@@ -24,10 +24,15 @@ def encrypt(plain_text, public_key):
     )
     return base64.b64encode(encrypted).decode('utf-8')
 
-def load_public_key_from_string(public_key_string):
-    public_key_bytes = base64.b64decode(public_key_string)
-    public_key = serialization.load_der_public_key(public_key_bytes, backend=default_backend())
-    return public_key
+public_key = load_public_key_from_string(PUBLIC_KEY_STRING)
+plain_text = "auth_service::Golde34::1"
+encrypted_text = encrypt(plain_text, public_key)
+print("Encrypted Text:", encrypted_text)
+
+def load_private_key_from_string(private_key_string):
+    private_key_bytes = base64.b64decode(private_key_string)
+    private_key = serialization.load_der_private_key(private_key_bytes, password=None, backend=default_backend())
+    return private_key
 
 def decrypt(encrypted_text, private_key):
     encrypted_bytes = base64.b64decode(encrypted_text)
@@ -41,8 +46,6 @@ def decrypt(encrypted_text, private_key):
     )
     return decrypted.decode('utf-8')
 
-public_key = load_public_key_from_string(PUBLIC_KEY_STRING)
-plain_text = "This is a sample token"
-encrypted_text = encrypt(plain_text, public_key)
-print("Encrypted Text:", encrypted_text)
-
+private_key = load_private_key_from_string(PRIVATE_KEY_STRING)
+decrypted_text = decrypt(encrypted_text, private_key)
+print("Decrypted Text:", decrypted_text)
