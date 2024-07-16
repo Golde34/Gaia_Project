@@ -9,14 +9,15 @@ import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.AuthServiceResponse;
 import wo.work_optimization.core.domain.dto.response.UserResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
+import wo.work_optimization.infrastructure.security.SecurityEncryption;
 
 @Service
 public class ClientUtils {
 
     private final ObjectMapper objectMapper;
-    private final SecurityEncrypt securityEncrypt;
+    private final SecurityEncryption securityEncrypt;
 
-    public ClientUtils(ObjectMapper objectMapper, SecurityEncrypt securityEncrypt) {
+    public ClientUtils(ObjectMapper objectMapper, SecurityEncryption securityEncrypt) {
         this.objectMapper = objectMapper;
         this.securityEncrypt = securityEncrypt;
     }
