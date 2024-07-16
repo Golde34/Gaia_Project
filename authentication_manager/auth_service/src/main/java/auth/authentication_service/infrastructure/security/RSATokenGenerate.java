@@ -1,4 +1,4 @@
-package auth.authentication_service.infrastructure;
+package auth.authentication_service.infrastructure.security;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

@@ -141,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public ResponseEntity<?> checkPermission(UserPermissionDto permission) {
-        User user = userService.getUserById(permission.getUserId());
+        User user = userService.getUserById(permission.getUserId(), "Check Permission");
         Collection<Role> userRole = user.getRoles();
         for (Role role : userRole) {
             Collection<Privilege> rolePrivilege = role.getPrivileges();
