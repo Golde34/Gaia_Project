@@ -80,7 +80,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         }
 
         log.info("There is no information of user: {} in task registration. Can initiate task registration information", userId);
-        return Pair.of(Constants.ErrorMessage.OK, true);
+        return Pair.of(Constants.ErrorMessage.SUCCESS, true);
     }
 
     private boolean validateCalculatedTimeInDay(TaskRegistrationRequestDTO request) {
