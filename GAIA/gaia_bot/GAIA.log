@@ -1,11 +1,18 @@
-2024-07-13 10:11:51,724 - datasets - INFO - PyTorch version 2.3.0 available.
-2024-07-13 10:12:02,166 - root - INFO - Bot wakeup...
-2024-07-13 10:12:02,167 - root - INFO - Face authentication
-2024-07-13 10:12:02,295 - root - INFO - Starting video stream...
-2024-07-13 10:12:09,398 - root - INFO - Authentication success.
-2024-07-13 10:12:09,399 - root - INFO - Listen command
-2024-07-13 10:14:44,435 - root - INFO - Handle input
-2024-07-13 10:14:47,129 - root - INFO - Skill tag detected: Greeting
-2024-07-13 10:14:47,129 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
-2024-07-13 10:14:47,129 - root - INFO - Response transcript with skill: Greeting
-2024-07-13 10:14:47,129 - root - INFO - Listen command
+2024-07-17 20:12:01,329 - datasets - INFO - PyTorch version 2.3.0 available.
+2024-07-17 20:12:08,150 - root - INFO - Bot wakeup...
+2024-07-17 20:12:08,151 - root - INFO - Face authentication
+2024-07-17 20:12:08,186 - root - INFO - Starting video stream...
+2024-07-17 20:12:14,597 - root - INFO - Authentication success.
+2024-07-17 20:12:14,597 - root - INFO - Listen command
+2024-07-17 20:12:24,910 - root - INFO - Handle input
+2024-07-17 20:12:27,710 - root - INFO - Skill tag detected: Greeting
+2024-07-17 20:12:27,711 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
+2024-07-17 20:12:27,711 - root - INFO - Response transcript with skill: Greeting
+2024-07-17 20:12:27,711 - root - INFO - Listen command
+2024-07-17 20:12:33,084 - root - INFO - Handle input
+2024-07-17 20:12:35,876 - root - INFO - Skill tag detected: Greeting
+2024-07-17 20:12:35,876 - root - INFO - Executing skill <bound method DetectSkill.test of <class 'gaia_bot.abilities.skill_detection.DetectSkill'>>
+2024-07-17 20:12:35,876 - root - INFO - Response transcript with skill: Greeting
+2024-07-17 20:12:35,876 - root - INFO - Listen command
+2024-07-17 20:12:39,914 - root - INFO - Handle input
+2024-07-17 20:12:39,914 - root - INFO - Exit Gaia

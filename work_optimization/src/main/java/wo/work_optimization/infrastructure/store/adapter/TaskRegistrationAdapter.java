@@ -8,6 +8,8 @@ import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.infrastructure.store.repository.TaskRegistrationRepository;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class TaskRegistrationAdapter implements TaskRegistrationStore {
@@ -23,5 +25,11 @@ public class TaskRegistrationAdapter implements TaskRegistrationStore {
     public void userRegisterTaskOperation(TaskRegistration taskRegistration) {
         taskRegistrationRepository.save(taskRegistration);
         log.info("Task registered: {}", taskRegistration);
+    }
+
+    @Override
+    @Transactional
+    public Optional<TaskRegistration> getTaskRegistrationByUserId(Long id) {
+        return taskRegistrationRepository.findByUserId(id);
     }
 }

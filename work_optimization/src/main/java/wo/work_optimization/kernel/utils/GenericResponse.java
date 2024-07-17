@@ -20,8 +20,7 @@ public class GenericResponse<T> {
     public GenericResponse() {
     }
 
-    @SuppressWarnings("rawtypes")
-    public GeneralResponse matchingResponseMessage(GenericResponse<?> validation) {
+    public GeneralResponse<?> matchingResponseMessage(GenericResponse<?> validation) {
         switch (validation.getResponseMessage()) {
             case msg200 -> { 
                 return GeneralResponse.builder()

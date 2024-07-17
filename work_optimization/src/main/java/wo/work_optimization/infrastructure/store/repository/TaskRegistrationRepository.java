@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 
+import java.util.Optional;
+
 @Repository
 public interface TaskRegistrationRepository extends JpaRepository<TaskRegistration, Long> {
-    
+    Optional<TaskRegistration> findByUserId(Long userId);
 }

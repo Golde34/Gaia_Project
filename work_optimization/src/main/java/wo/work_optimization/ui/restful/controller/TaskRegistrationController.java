@@ -21,7 +21,7 @@ public class TaskRegistrationController implements TaskRegistrationRouter {
 
     @Override
     public ResponseEntity<GeneralResponse<String>> registerWorkOptimization(TaskRegistrationRequestDTO request) {
-        GeneralResponse<String> response = taskRegistrationService.registerWorkOptimization(request);
+        GeneralResponse<String> response = (GeneralResponse<String>) taskRegistrationService.registerWorkOptimization(request);
         return responseFactory.success(response);
     }
 }

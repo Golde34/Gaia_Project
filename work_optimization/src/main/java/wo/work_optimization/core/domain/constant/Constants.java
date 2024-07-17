@@ -11,7 +11,7 @@ public class Constants {
     }
 
     @UtilityClass
-    public static class ErrorMessage {
+    public static class HttpCodeMessage {
         public static final String OK = "OK";
         public static final String INVALID = "Invalid";
         public static final String NOT_FOUND = "Not Found";
@@ -34,5 +34,16 @@ public class Constants {
         public static String SERVICE_HEADER = "Service";
         public static String SERVICE_TOKEN_HEADER = "Service-Token";
         public static String AUTHORIZATION_HEADER = "Authorization";
+    }
+
+    @UtilityClass
+    public static class ErrorMessage {
+        public static String SUCCESS = "Success";
+
+        public static String INVALID_REQUEST = "Invalid Request";
+        public static String INTERNAL_SERVER_ERROR = "There's something wrong with the server";
+        public static String NOT_FOUND = "Transaction Not Found";
+        public static String USER_NOT_FOUND = "User Not Found";
+        public static String TOTAL_TIME_IN_DAY_ERROR = "The total time in day must be 24 hours";
     }
 }
