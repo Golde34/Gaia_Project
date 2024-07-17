@@ -50,7 +50,7 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
     }
 
     private GeneralResponse<TaskResponseDTO> readResponse(TaskResponseDTO response, ResponseMessage responseMessage) {
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(response, responseMessage));
+        return (GeneralResponse<TaskResponseDTO>) genericResponse.matchingResponseMessage(new GenericResponse<>(response, responseMessage));
     }
 
     public abstract void validateRequest(TaskRequestDTO request);

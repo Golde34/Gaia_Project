@@ -1,18 +1,25 @@
 package wo.work_optimization.core.domain.entity;
 
-import java.util.Date;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "task_registration")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskRegistration {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    private Long userId;
     private String name;
     private Double maxWorkTime;
     private double constant1;
