@@ -5,8 +5,8 @@ import (
 	"middleware_loader/core/middleware"
 	"middleware_loader/core/services/gaia_connector"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services"
 	"middleware_loader/ui/controller_services/controller_utils"
+	controller_services "middleware_loader/ui/controller_services/gaia_connector"
 	"net/http"
 
 	"github.com/go-chi/chi"

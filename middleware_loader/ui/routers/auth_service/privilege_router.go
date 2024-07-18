@@ -5,7 +5,7 @@ import (
 	"middleware_loader/core/middleware"
 	services "middleware_loader/core/services/auth_services"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services"
+	controller "middleware_loader/ui/controller_services/auth_service"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -19,7 +19,7 @@ func NewPrivilegeRouter(privilegeService *services.PrivilegeService, db database
 	r.Route("/privilege", func(r chi.Router) {
 		r.Use(middleware.CheckMicroserviceStatus(db, enums.AUTH_SERVICE))
 		r.Get("/get-all-privileges", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.GetAllPrivileges(w, r, privilegeService)
+			controller.GetAllPrivileges(w, r, privilegeService)
 		})
 	})
 	return &PrivilegeRouter{PrivilegeService: privilegeService}
