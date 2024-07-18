@@ -5,7 +5,7 @@ import (
 	"middleware_loader/core/middleware"
 	"middleware_loader/core/services/auth_services"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services"
+	controller "middleware_loader/ui/controller_services/auth_service"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -19,10 +19,10 @@ func NewAuthRouter(authService *services.AuthService, db database_mongo.Database
 	r.Route("/auth", func(r chi.Router) {
 		r.Use(middleware.CheckMicroserviceStatus(db, enums.AUTH_SERVICE))
 		r.Post("/sign-in", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.Signin(w, r, authService)
+			controller.Signin(w, r, authService)
 		})
 		r.Post("/gaia-auto-sign-in", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.GaiaAutoSignin(w, r, authService)
+			controller.GaiaAutoSignin(w, r, authService)
 		})
 	})
 	return &AuthRouter{

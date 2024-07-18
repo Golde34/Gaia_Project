@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 
-@RequestMapping("/task-registration")
+@RequestMapping("/${spring.application.url-name}/register-task-config")
 public interface TaskRegistrationRouter {
     
-    @PostMapping("/register-work-optimization")
+    @PostMapping("")
     ResponseEntity<GeneralResponse<String>> registerWorkOptimization(@RequestBody TaskRegistrationRequestDTO request);
 }

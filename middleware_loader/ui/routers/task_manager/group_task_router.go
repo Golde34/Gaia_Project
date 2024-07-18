@@ -5,7 +5,7 @@ import (
 	"middleware_loader/core/middleware"
 	services "middleware_loader/core/services/task_manager"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services"
+	"middleware_loader/ui/controller_services/task_manager"
 	"net/http"
 
 	"github.com/go-chi/chi"

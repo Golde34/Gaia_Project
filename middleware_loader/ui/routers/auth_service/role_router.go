@@ -5,7 +5,7 @@ import (
 	"middleware_loader/core/middleware"
 	services "middleware_loader/core/services/auth_services"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services"
+	controller "middleware_loader/ui/controller_services/auth_service"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -19,10 +19,10 @@ func NewRoleRouter(roleService *services.RoleService, db database_mongo.Database
 	r.Route("/role", func(r chi.Router) {
 		r.Use(middleware.CheckMicroserviceStatus(db, enums.AUTH_SERVICE))
 		r.Get("/get-all-roles", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.GetAllRoles(w, r, roleService)
+			controller.GetAllRoles(w, r, roleService)
 		})
 		r.Post("/create-role", func(w http.ResponseWriter, r *http.Request) {
-			controller_services.CreateRole(w, r, roleService)
+			controller.CreateRole(w, r, roleService)
 		})
 		r.Put("/update-role", func(w http.ResponseWriter, r *http.Request) {
 			// controller_services.UpdateRole(w, r, roleService)
