@@ -1,0 +1,23 @@
+type RegisterTaskConfig {
+    userId: Float!
+    workTime: Float!
+}
+
+type IsTaskExisted {
+    isTaskExist: Boolean!
+}
+
+type IsScheduleExisted {
+    isScheduleExist: Boolean!
+}
+
+input RegisterTaskInput {
+    userId: Float!
+    sleepDuration: Float!
+    startSleepTime: String!
+    endSleepTime: String!
+    relaxTime: Float!
+    eatTime: Float!
+    travelTime: Float!
+    workTime: Float! 
+}

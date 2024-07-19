@@ -33,7 +33,7 @@ type UpdateGroupTaskRequestDTO struct {
 	ProjectId   string    `json:"projectId"`
 }
 
-func NewUpdateGropuTaskRequestDTO() *UpdateGroupTaskRequestDTO {
+func NewUpdateGroupTaskRequestDTO() *UpdateGroupTaskRequestDTO {
 	return &UpdateGroupTaskRequestDTO{}
 }
 

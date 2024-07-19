@@ -313,6 +313,22 @@ func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.I
 	return &taskDashboard, err
 }
 
+// RegisterTaskConfig is the resolver for the registerTaskConfig field.
+func (r *queryResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
+	panic(fmt.Errorf("not implemented: RegisterTaskConfig - registerTaskConfig"))
+}
+
+// IsTaskExisted is the resolver for the isTaskExisted field.
+func (r *queryResolver) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error) {
+	panic(fmt.Errorf("not implemented: IsTaskExisted - isTaskExisted"))
+}
+
+// IsScheduleExisted is the resolver for the isScheduleExisted field.
+func (r *queryResolver) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error) {
+	panic(fmt.Errorf("not implemented: IsScheduleExisted - isScheduleExisted"))
+}
+
+
 // ListAllTasks is the resolver for the listAllTasks field.
 func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {
 	task, err := taskService.ListAllTasks(ctx)
