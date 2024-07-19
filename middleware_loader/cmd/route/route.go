@@ -65,5 +65,6 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 		task_router.NewProjectRouter(projectService, db, router)
 		task_router.NewTaskRouter(taskService, db, router)
 		task_router.NewGroupTaskRouter(groupTaskService, db, router)
+		task_router.NewWorkOptimizationRouter(db, router)
 	})
 }
