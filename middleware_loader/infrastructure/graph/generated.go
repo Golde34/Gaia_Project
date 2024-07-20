@@ -140,7 +140,10 @@ type ComplexityRoot struct {
 		EnableProject                func(childComplexity int, input model.IDInput) int
 		GaiaAutoSignin               func(childComplexity int, input model.SigninInput) int
 		GenerateTaskWithoutGroupTask func(childComplexity int, input model.GenerateTaskWithoutGroupTaskInput) int
+		IsScheduleExisted            func(childComplexity int, input model.RegisterTaskInput) int
+		IsTaskExisted                func(childComplexity int, input model.RegisterTaskInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
+		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
 		Signin                       func(childComplexity int, input model.SigninInput) int
 		UpdateGroupTask              func(childComplexity int, input model.UpdateGroupTaskInput) int
 		UpdateGroupTaskName          func(childComplexity int, input model.UpdateObjectNameInput) int
@@ -185,12 +188,9 @@ type ComplexityRoot struct {
 		GetTaskByID            func(childComplexity int, input model.IDInput) int
 		GetTasksByGroupTaskID  func(childComplexity int, input model.IDInput) int
 		GetUserByUsername      func(childComplexity int, input model.UserInput) int
-		IsScheduleExisted      func(childComplexity int, input model.RegisterTaskInput) int
-		IsTaskExisted          func(childComplexity int, input model.RegisterTaskInput) int
 		ListAllProjects        func(childComplexity int) int
 		ListAllTasks           func(childComplexity int) int
 		ListAllUsers           func(childComplexity int) int
-		RegisterTaskConfig     func(childComplexity int, input model.RegisterTaskInput) int
 	}
 
 	RegisterTaskConfig struct {
@@ -282,6 +282,9 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
+	RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error)
+	IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error)
+	IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error)
 	Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
 	GaiaAutoSignin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
 	CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error)
@@ -333,9 +336,6 @@ type QueryResolver interface {
 	GetTasksByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskDashboard, error)
 	ListAllTasks(ctx context.Context) ([]*model.Task, error)
 	GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error)
-	RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error)
-	IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error)
-	IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error)
 }
 
 type executableSchema struct {
@@ -948,6 +948,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.GenerateTaskWithoutGroupTask(childComplexity, args["input"].(model.GenerateTaskWithoutGroupTaskInput)), true
 
+	case "Mutation.isScheduleExisted":
+		if e.complexity.Mutation.IsScheduleExisted == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_isScheduleExisted_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.IsScheduleExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
+
+	case "Mutation.isTaskExisted":
+		if e.complexity.Mutation.IsTaskExisted == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_isTaskExisted_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.IsTaskExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
+
 	case "Mutation.moveTask":
 		if e.complexity.Mutation.MoveTask == nil {
 			break
@@ -959,6 +983,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.MoveTask(childComplexity, args["input"].(model.MoveTaskInput)), true
+
+	case "Mutation.registerTaskConfig":
+		if e.complexity.Mutation.RegisterTaskConfig == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerTaskConfig_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterTaskConfig(childComplexity, args["input"].(model.RegisterTaskInput)), true
 
 	case "Mutation.signin":
 		if e.complexity.Mutation.Signin == nil {
@@ -1305,30 +1341,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetUserByUsername(childComplexity, args["input"].(model.UserInput)), true
 
-	case "Query.isScheduleExisted":
-		if e.complexity.Query.IsScheduleExisted == nil {
-			break
-		}
-
-		args, err := ec.field_Query_isScheduleExisted_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.IsScheduleExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
-
-	case "Query.isTaskExisted":
-		if e.complexity.Query.IsTaskExisted == nil {
-			break
-		}
-
-		args, err := ec.field_Query_isTaskExisted_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.IsTaskExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
-
 	case "Query.listAllProjects":
 		if e.complexity.Query.ListAllProjects == nil {
 			break
@@ -1349,18 +1361,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListAllUsers(childComplexity), true
-
-	case "Query.registerTaskConfig":
-		if e.complexity.Query.RegisterTaskConfig == nil {
-			break
-		}
-
-		args, err := ec.field_Query_registerTaskConfig_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.RegisterTaskConfig(childComplexity, args["input"].(model.RegisterTaskInput)), true
 
 	case "RegisterTaskConfig.userId":
 		if e.complexity.RegisterTaskConfig.UserID == nil {
@@ -2262,6 +2262,36 @@ func (ec *executionContext) field_Mutation_generateTaskWithoutGroupTask_args(ctx
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_isScheduleExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.RegisterTaskInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_isTaskExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.RegisterTaskInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_moveTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2269,6 +2299,21 @@ func (ec *executionContext) field_Mutation_moveTask_args(ctx context.Context, ra
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNMoveTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐMoveTaskInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerTaskConfig_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.RegisterTaskInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2584,51 +2629,6 @@ func (ec *executionContext) field_Query_getUserByUsername_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUserInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_isScheduleExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_isTaskExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_registerTaskConfig_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4669,6 +4669,185 @@ func (ec *executionContext) fieldContext_ListPrivilegeResponse_roles(ctx context
 			}
 			return nil, fmt.Errorf("no field named %q was found under type RoleOnlyResponse", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_registerTaskConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_registerTaskConfig(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RegisterTaskConfig(rctx, fc.Args["input"].(model.RegisterTaskInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.RegisterTaskConfig)
+	fc.Result = res
+	return ec.marshalNRegisterTaskConfig2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskConfig(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_registerTaskConfig(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "userId":
+				return ec.fieldContext_RegisterTaskConfig_userId(ctx, field)
+			case "workTime":
+				return ec.fieldContext_RegisterTaskConfig_workTime(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RegisterTaskConfig", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_registerTaskConfig_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_isTaskExisted(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_isTaskExisted(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().IsTaskExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.IsTaskExisted)
+	fc.Result = res
+	return ec.marshalNIsTaskExisted2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIsTaskExisted(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_isTaskExisted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "isTaskExist":
+				return ec.fieldContext_IsTaskExisted_isTaskExist(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type IsTaskExisted", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_isTaskExisted_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_isScheduleExisted(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_isScheduleExisted(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().IsScheduleExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.IsScheduleExisted)
+	fc.Result = res
+	return ec.marshalNIsScheduleExisted2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIsScheduleExisted(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_isScheduleExisted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "isScheduleExist":
+				return ec.fieldContext_IsScheduleExisted_isScheduleExist(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type IsScheduleExisted", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_isScheduleExisted_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -8912,185 +9091,6 @@ func (ec *executionContext) fieldContext_Query_getTaskById(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getTaskById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_registerTaskConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_registerTaskConfig(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().RegisterTaskConfig(rctx, fc.Args["input"].(model.RegisterTaskInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.RegisterTaskConfig)
-	fc.Result = res
-	return ec.marshalNRegisterTaskConfig2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskConfig(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_registerTaskConfig(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "userId":
-				return ec.fieldContext_RegisterTaskConfig_userId(ctx, field)
-			case "workTime":
-				return ec.fieldContext_RegisterTaskConfig_workTime(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RegisterTaskConfig", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_registerTaskConfig_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_isTaskExisted(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_isTaskExisted(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().IsTaskExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.IsTaskExisted)
-	fc.Result = res
-	return ec.marshalNIsTaskExisted2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIsTaskExisted(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_isTaskExisted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "isTaskExist":
-				return ec.fieldContext_IsTaskExisted_isTaskExist(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IsTaskExisted", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_isTaskExisted_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_isScheduleExisted(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_isScheduleExisted(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().IsScheduleExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.IsScheduleExisted)
-	fc.Result = res
-	return ec.marshalNIsScheduleExisted2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIsScheduleExisted(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_isScheduleExisted(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "isScheduleExist":
-				return ec.fieldContext_IsScheduleExisted_isScheduleExist(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IsScheduleExisted", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_isScheduleExisted_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -15233,6 +15233,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "registerTaskConfig":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_registerTaskConfig(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isTaskExisted":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_isTaskExisted(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isScheduleExisted":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_isScheduleExisted(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "signin":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_signin(ctx, field)
@@ -15931,72 +15952,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getTaskById(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "registerTaskConfig":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_registerTaskConfig(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "isTaskExisted":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_isTaskExisted(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "isScheduleExisted":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_isScheduleExisted(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

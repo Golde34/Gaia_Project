@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	auth_services "middleware_loader/core/services/auth_services"
 	task_manager "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
@@ -19,6 +20,24 @@ var userService = auth_services.NewUserService()
 var groupTaskService = task_manager.NewGroupTaskService()
 var roleService = auth_services.NewRoleService()
 var privilegeService = auth_services.NewPrivilegeService()
+
+// RegisterTaskConfig is the resolver for the registerTaskConfig field.
+func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
+	log.Println("RegisterTaskConfig")
+	panic(fmt.Errorf("not implemented: RegisterTaskConfig - registerTaskConfig"))
+}
+
+// IsTaskExisted is the resolver for the isTaskExisted field.
+func (r *mutationResolver) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error) {
+	log.Println("IsTaskExisted")
+	panic(fmt.Errorf("not implemented: IsTaskExisted - isTaskExisted"))
+}
+
+// IsScheduleExisted is the resolver for the isScheduleExisted field.
+func (r *mutationResolver) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error) {
+	log.Println("IsScheduleExisted")
+	panic(fmt.Errorf("not implemented: IsScheduleExisted - isScheduleExisted"))
+}
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {
@@ -312,22 +331,6 @@ func (r *queryResolver) GetTasksByGroupTaskID(ctx context.Context, input model.I
 	taskDashboard, err := groupTaskService.GetTasksByGroupTask(ctx, input)
 	return &taskDashboard, err
 }
-
-// RegisterTaskConfig is the resolver for the registerTaskConfig field.
-func (r *queryResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
-	panic(fmt.Errorf("not implemented: RegisterTaskConfig - registerTaskConfig"))
-}
-
-// IsTaskExisted is the resolver for the isTaskExisted field.
-func (r *queryResolver) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error) {
-	panic(fmt.Errorf("not implemented: IsTaskExisted - isTaskExisted"))
-}
-
-// IsScheduleExisted is the resolver for the isScheduleExisted field.
-func (r *queryResolver) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error) {
-	panic(fmt.Errorf("not implemented: IsScheduleExisted - isScheduleExisted"))
-}
-
 
 // ListAllTasks is the resolver for the listAllTasks field.
 func (r *queryResolver) ListAllTasks(ctx context.Context) ([]*model.Task, error) {

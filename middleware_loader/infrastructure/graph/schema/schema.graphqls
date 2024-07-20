@@ -18,15 +18,15 @@ type Query {
 
 	getTasksByGroupTaskId(input: IdInput!): TaskDashboard!
 	listAllTasks: [Task]!
-	getTaskById(input: IdInput!): Task!
+	getTaskById(input: IdInput!): Task!	
+}
 
+type Mutation {
 	# Gaia Major Function
 	registerTaskConfig(input:RegisterTaskInput!): RegisterTaskConfig!
 	isTaskExisted(input:RegisterTaskInput!): IsTaskExisted!
 	isScheduleExisted(input:RegisterTaskInput!): IsScheduleExisted!
-}
-
-type Mutation {
+	
 	# Authentication Service
 	signin(input: SigninInput!): AuthTokenResponse!
 	gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
