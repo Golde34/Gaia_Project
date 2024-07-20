@@ -20,9 +20,11 @@ var userService = auth_services.NewUserService()
 var groupTaskService = task_manager.NewGroupTaskService()
 var roleService = auth_services.NewRoleService()
 var privilegeService = auth_services.NewPrivilegeService()
+var taskRegisterService = task_manager.NewTaskRegisterService()
 
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
+
 	log.Println("RegisterTaskConfig")
 	panic(fmt.Errorf("not implemented: RegisterTaskConfig - registerTaskConfig"))
 }

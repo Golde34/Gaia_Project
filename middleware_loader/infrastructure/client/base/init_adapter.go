@@ -8,3 +8,5 @@ var TaskManagerServiceURL = env.Url + env.TaskManagerPort
 var AuthServiceURL = env.Url + env.AuthServicePort
 var GaiaServiceURL = env.Url + env.GaiaPort
 var ClientURL = env.ClientCORSAllowedUrl
+var WorkOptimizationServiceURL = env.Url + env.WorkOptimServicePort
+var schedulePlanServiceURL = env.Url + env.SchedulePlanServicePort

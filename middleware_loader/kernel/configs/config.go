@@ -8,12 +8,14 @@ import (
 )
 
 type Config struct {
-	Url                  string
-	Port                 string
-	GaiaPort             string
-	AuthServicePort      string
-	TaskManagerPort      string
-	ClientCORSAllowedUrl string
+	Url                     string
+	Port                    string
+	GaiaPort                string
+	AuthServicePort         string
+	TaskManagerPort         string
+	ClientCORSAllowedUrl    string
+	WorkOptimServicePort    string
+	SchedulePlanServicePort string
 }
 
 func (in *Config) LoadEnv() (Config, error) {
@@ -28,6 +30,8 @@ func (in *Config) LoadEnv() (Config, error) {
 	authServicePort := os.Getenv("AUTH_SERVICE_PORT")
 	taskManagerPort := os.Getenv("TASK_MANAGER_PORT")
 	clientCORSAllowedUrl := os.Getenv("CLIENT_CORS_ALLOWED_URL")
+	workOptimServicePort := os.Getenv("WORK_OPTIM_SERVICE_PORT")
+	schedulePlanServicePort := os.Getenv("SCHEDULE_PLAN_SERVICE_PORT")
 
 	config := Config{
 		Url:                  url,
@@ -36,6 +40,8 @@ func (in *Config) LoadEnv() (Config, error) {
 		AuthServicePort:      authServicePort,
 		TaskManagerPort:      taskManagerPort,
 		ClientCORSAllowedUrl: clientCORSAllowedUrl,
+		WorkOptimServicePort: workOptimServicePort,
+		SchedulePlanServicePort: schedulePlanServicePort,
 	}
 	return config, nil
 }
