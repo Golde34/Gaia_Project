@@ -47,7 +47,7 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base
 		panic("No query to generate")
 	}
 	if len(graphQLQuery) == 1 {
-		GenerateGraphQLQueryWithInput(action, graphQLQuery[0].Functionname, 
+		return GenerateGraphQLQueryWithInput(action, graphQLQuery[0].Functionname, 
 			graphQLQuery[0].QueryInput, graphQLQuery[0].QueryOutput)
 	}
 
@@ -85,7 +85,7 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_d
 		panic("No query to generate")
 	}
 	if len(graphQLQuery) == 1 {
-		GenerateGraphQLQueryNoInput(action, graphQLQuery[0].Functionname, graphQLQuery[0].QueryOutput)
+		return GenerateGraphQLQueryNoInput(action, graphQLQuery[0].Functionname, graphQLQuery[0].QueryOutput)
 	}
 
 	for i := 0; i < len(graphQLQuery); i++ {
