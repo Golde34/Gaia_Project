@@ -1,2 +1,2 @@
-schedule-plan:
+run:
 	npm run dev

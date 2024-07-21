@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"middleware_loader/core/domain/dtos/base"
 	"middleware_loader/core/domain/enums"
@@ -73,7 +73,11 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	if (resp.StatusCode != 200) && (resp.StatusCode != 201) {
+		return errorReturnBlock("response status code", fmt.Errorf("response status code: %d", resp.StatusCode))
+	}
+
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("read response body: %v", err)
 	}

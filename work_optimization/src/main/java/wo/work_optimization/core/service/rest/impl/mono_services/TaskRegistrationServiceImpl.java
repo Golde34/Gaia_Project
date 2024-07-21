@@ -6,6 +6,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
+import wo.work_optimization.core.domain.dto.response.RegisteredTaskConfigStatus;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.dto.response.UserResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
@@ -37,49 +38,50 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         log.info("Validate request: {}", request);
         Pair<String, Boolean> requestValidation = validateRequest(request);
         if (!requestValidation.getSecond()) {
-            return genericResponse.matchingResponseMessage(new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
+        }
+
+        boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
+        if (!isUserRegisteredTask) {
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ErrorMessage.EXISTED_USER, ResponseMessage.msg400));
         }
 
         TaskRegistration taskRegistration = createRequest(request);
         taskRegistrationStore.userRegisterTaskOperation(taskRegistration);
         return genericResponse.matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
     }
-    
+
     private Pair<String, Boolean> validateRequest(TaskRegistrationRequestDTO request) {
         if (dataUtils.isNullOrEmpty(request)
                 || dataUtils.isNullOrEmpty(request.getUserId())
                 || dataUtils.isNullOrEmpty(request.getWorkTime())
-                || request.getWorkTime() <= 0
-        ) {
+                || request.getWorkTime() <= 0) {
             return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
         }
-        if (!checkExistedUser(request.getUserId()).getSecond()) {
-            return Pair.of(Constants.ErrorMessage.USER_NOT_FOUND, false);
+
+        Pair<String, Boolean> isUserExisted = checkExistedUser(request.getUserId());
+        if (!isUserExisted.getSecond()) {
+            return Pair.of(isUserExisted.getFirst(), isUserExisted.getSecond());
         }
+
         if (!validateCalculatedTimeInDay(request)) {
             return Pair.of(Constants.ErrorMessage.TOTAL_TIME_IN_DAY_ERROR, false);
         }
+
         return Pair.of(Constants.ErrorMessage.SUCCESS, true);
     }
+
     private Pair<String, Boolean> checkExistedUser(Long userId) {
         // check existed user in auth service
         UserResponseDTO response = authServiceClient.getExistedUser(userId);
         log.info("Check existed user in auth service: [{}] ", response.toString());
         if (dataUtils.isNullOrEmpty(response) || dataUtils.isNullOrEmpty(response.getId())) {
-            String error = "There is no information of user: " + userId + " in auth service";
-            log.error(error);
-            return Pair.of(error, false);
+            log.error("There is no information of user: {} in auth service", userId);
+            return Pair.of(Constants.ErrorMessage.USER_NOT_FOUND, false);
         }
 
-        log.info("Check existed user in task registration: [{}] ", userId);
-        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
-        if (taskRegistration.isPresent()) {
-            String error = "User has already registered task scheduling: " + userId;
-            log.error(error);
-            return Pair.of(error, false);
-        }
-
-        log.info("There is no information of user: {} in task registration. Can initiate task registration information", userId);
         return Pair.of(Constants.ErrorMessage.SUCCESS, true);
     }
 
@@ -87,6 +89,17 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         double sum = request.getEatTime() + request.getRelaxTime() + request.getTravelTime() +
                 request.getWorkTime() + request.getSleepDuration();
         return !(sum > 24) && !(sum < 24);
+    }
+
+    private boolean checkExistedTaskRegistration(Long userId) {
+        log.info("Check existed user in task registration: [{}] ", userId);
+        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
+        if (taskRegistration.isPresent()) {
+            log.error("User has already registered task scheduling: [{}] ", userId);
+            return false;
+        }
+
+        return true;
     }
 
     private TaskRegistration createRequest(TaskRegistrationRequestDTO request) {
@@ -99,5 +112,32 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
                 .travelTime(request.getTravelTime())
                 .eatTime(request.getEatTime())
                 .workTime(request.getWorkTime()).build();
+    }
+
+    @Override
+    public GeneralResponse<?> userRegisterTaskInformation(TaskRegistrationRequestDTO request) {
+        try {
+            log.info("validate request: {}", request);
+            Pair<String, Boolean> requestValidation = validateRequest(request);
+            if (!requestValidation.getSecond()) {
+                return genericResponse.matchingResponseMessage(
+                        new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
+            }
+
+            boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
+            if (isUserRegisteredTask) {
+                return genericResponse.matchingResponseMessage(
+                        new GenericResponse<>(Constants.ErrorMessage.USER_NOT_FOUND, ResponseMessage.msg400));
+            }
+
+            RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
+                    .isTaskConfigExisted(isUserRegisteredTask).build();
+            return genericResponse
+                    .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
+        } catch (Exception e) {
+            log.error("Error while getting user task information", e);
+            return genericResponse.matchingResponseMessage(
+                    new GenericResponse<>(Constants.ErrorMessage.INTERNAL_SERVER_ERROR, ResponseMessage.msg500));
+        }
     }
 }

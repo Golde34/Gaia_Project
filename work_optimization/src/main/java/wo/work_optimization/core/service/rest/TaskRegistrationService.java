@@ -5,4 +5,5 @@ import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 
 public interface TaskRegistrationService {
     GeneralResponse<?> registerWorkOptimization(TaskRegistrationRequestDTO request);
+    GeneralResponse<?> userRegisterTaskInformation(TaskRegistrationRequestDTO request);
 }

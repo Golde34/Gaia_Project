@@ -19,9 +19,9 @@ class ProjectService {
         if (project.activeStatus == null || project.activeStatus === "") {
             project.activeStatus = ActiveStatus.active;
         }
-        
+
         const createProject = await projectStore.createProject(project);
-        
+
         return msg200({
             message: (createProject as any)
         });
@@ -189,12 +189,29 @@ class ProjectService {
         }
     }
 
+    async checkExistedTasks(userId: number): Promise<IResponse> {
+        try {
+            const projects = await projectStore.findAllProjectsByOwnerId(userId);
+            let isTaskExist: boolean;
+            if (projects.length === 0) {
+                isTaskExist = false;
+            } 
+            isTaskExist = true;
+            
+            return msg200({
+                isTaskExist
+            });
+        } catch (err: any) {
+            console.log("Could not check existed tasks: ", err);
+            return msg400(err.message.toString());
+        }
+    }
 
     // MINI SERVICES
 
     async getProjectByGroupTaskId(groupTaskId: string): Promise<string> {
         try {
-            const project = await projectStore.findOneProjectByGroupTaskId(groupTaskId); 
+            const project = await projectStore.findOneProjectByGroupTaskId(groupTaskId);
             if (project === null) {
                 return PROJECT_NOT_FOUND;
             } else {

@@ -11,3 +11,14 @@ var (
 	OnlyStatus = "ONLY_STATUS"
 	OnlyMessage = "ONLY_MESSAGE"
 )
+
+// Http Methods
+var (
+	GET = "GET"
+	POST = "POST"
+	PUT = "PUT"
+	DELETE = "DELETE"
+	PATCH = "PATCH"
+	OPTIONS = "OPTIONS"
+	HEAD = "HEAD"
+)

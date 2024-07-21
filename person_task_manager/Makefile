@@ -1,2 +1,2 @@
-task-manager:
+run:
 	cd server && npm run dev
