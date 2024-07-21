@@ -44,6 +44,7 @@ public class Constants {
         public static String INTERNAL_SERVER_ERROR = "There's something wrong with the server";
         public static String NOT_FOUND = "Transaction Not Found";
         public static String USER_NOT_FOUND = "User Not Found";
+        public static String EXISTED_USER = "User already exists";
         public static String TOTAL_TIME_IN_DAY_ERROR = "The total time in day must be 24 hours";
     }
 }
