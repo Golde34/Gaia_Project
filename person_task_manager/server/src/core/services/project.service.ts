@@ -192,14 +192,14 @@ class ProjectService {
     async checkExistedTasks(userId: number): Promise<IResponse> {
         try {
             const projects = await projectStore.findAllProjectsByOwnerId(userId);
-            let existedTasks: boolean;
+            let isTaskExist: boolean;
             if (projects.length === 0) {
-                existedTasks = false;
+                isTaskExist = false;
             } 
-            existedTasks = true;
+            isTaskExist = true;
             
             return msg200({
-                message: {existedTasks}
+                message: {isTaskExist}
             });
         } catch (err: any) {
             console.log("Could not check existed tasks: ", err);
