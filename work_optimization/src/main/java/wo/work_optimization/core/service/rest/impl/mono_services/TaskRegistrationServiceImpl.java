@@ -85,16 +85,16 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
 
     private boolean validateCalculatedTimeInDay(TaskRegistrationRequestDTO request) {
         double sum = request.getEatTime() + request.getRelaxTime() + request.getTravelTime() +
-                request.getWorkTime() + request.getSleepTime().getSleepDuration();
+                request.getWorkTime() + request.getSleepDuration();
         return !(sum > 24) && !(sum < 24);
     }
 
     private TaskRegistration createRequest(TaskRegistrationRequestDTO request) {
         return TaskRegistration.builder()
                 .userId(request.getUserId())
-                .sleepDuration(request.getSleepTime().getSleepDuration())
-                .startSleepTime(request.getSleepTime().getStartSleepTime())
-                .endSleepTime(request.getSleepTime().getEndSleepTime())
+                .sleepDuration(request.getSleepDuration())
+                .startSleepTime(request.getStartSleepTime())
+                .endSleepTime(request.getEndSleepTime())
                 .relaxTime(request.getRelaxTime())
                 .travelTime(request.getTravelTime())
                 .eatTime(request.getEatTime())
