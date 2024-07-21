@@ -189,6 +189,16 @@ class ProjectService {
         }
     }
 
+    async checkExistedTasks(userId: number): Promise<IResponse> {
+        const projects = await projectStore.findAllProjectsByOwnerId(userId);
+        if (projects.length === 0) {
+            return msg400("No tasks found");
+        } else {
+            return msg200({
+                message: "Tasks found"
+            });
+        }
+    }
 
     // MINI SERVICES
 

@@ -20,3 +20,16 @@ dashboardRouter.get("/top-tasks",
             next(err);
         }
     });
+
+// check user created any projects or tasks in TM
+dashboardRouter.get("/check-existed-tasks",
+    async (res: Request, req: Response, next: NextFunction): Promise<void> => {
+        try {
+            const dashboardResult = await dashboardControllerImpl.checkExistedTasks(res, next);
+            returnResult(dashboardResult, TASK_NO_RECORDS, req, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    }
+)
