@@ -199,7 +199,7 @@ class ProjectService {
             isTaskExist = true;
             
             return msg200({
-                message: {isTaskExist}
+                isTaskExist
             });
         } catch (err: any) {
             console.log("Could not check existed tasks: ", err);
