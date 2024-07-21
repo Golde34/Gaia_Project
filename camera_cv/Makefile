@@ -1,2 +1,2 @@
-camera_cv:
+run:
 	python app_router.py

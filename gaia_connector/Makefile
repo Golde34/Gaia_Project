@@ -1,2 +1,2 @@
-gaia-connector:
+run:
 	python app_router.py
