@@ -30,8 +30,8 @@ func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.R
 
 // IsTaskExisted is the resolver for the isTaskExisted field.
 func (r *mutationResolver) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error) {
-	log.Println("IsTaskExisted")
-	panic(fmt.Errorf("not implemented: IsTaskExisted - isTaskExisted"))
+	result, err := taskRegisterService.IsTaskExisted(ctx, input)
+	return &result, err	
 }
 
 // IsScheduleExisted is the resolver for the isScheduleExisted field.
