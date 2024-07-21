@@ -24,7 +24,6 @@ var taskRegisterService = task_manager.NewTaskRegisterService()
 
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
-	log.Println("RegisterTaskConfig")
 	result, err := taskRegisterService.RegisterTaskConfig(ctx, input)
 	return &result, err
 }

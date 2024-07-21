@@ -22,11 +22,11 @@ func NewTaskRegisterAdapter(adapter *TaskRegisterAdapter) *TaskRegisterAdapter {
 func (adapter *TaskRegisterAdapter) RegisterTaskConfig(input model.RegisterTaskInput) (response_dtos.RegisterTaskConfigResponseDTO, error) {
 	registerTaskConfigURL := base.WorkOptimizationServiceURL + task_register_WO_domain + "/register-task-config"
 	var response response_dtos.RegisterTaskConfigResponseDTO
-	result, err := utils.BaseAPIV2(registerTaskConfigURL, "POST", input, &response)
+	_, err := utils.BaseAPIV2(registerTaskConfigURL, "POST", input, &response)
 	if err != nil {
 		return response_dtos.RegisterTaskConfigResponseDTO{}, err
 	}
-	return result.(response_dtos.RegisterTaskConfigResponseDTO), nil
+	return response, nil
 }
 
 func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.RegisterTaskInput) (response_dtos.IsTaskExistedResponseDTO, error) {
