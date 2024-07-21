@@ -101,6 +101,14 @@ type IDInput struct {
 	ID string `json:"id"`
 }
 
+type IsScheduleExisted struct {
+	IsScheduleExist bool `json:"isScheduleExist"`
+}
+
+type IsTaskExisted struct {
+	IsTaskExist bool `json:"isTaskExist"`
+}
+
 type ListAllUsers struct {
 	ID        float64  `json:"id"`
 	Name      string   `json:"name"`
@@ -156,6 +164,22 @@ type ProjectGroupTaskIDInput struct {
 }
 
 type Query struct {
+}
+
+type RegisterTaskConfig struct {
+	UserID   float64 `json:"userId"`
+	WorkTime float64 `json:"workTime"`
+}
+
+type RegisterTaskInput struct {
+	UserID         float64 `json:"userId"`
+	SleepDuration  float64 `json:"sleepDuration"`
+	StartSleepTime string  `json:"startSleepTime"`
+	EndSleepTime   string  `json:"endSleepTime"`
+	RelaxTime      float64 `json:"relaxTime"`
+	EatTime        float64 `json:"eatTime"`
+	TravelTime     float64 `json:"travelTime"`
+	WorkTime       float64 `json:"workTime"`
 }
 
 type Role struct {

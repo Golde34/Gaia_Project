@@ -20,6 +20,7 @@ public class TaskRegistrationController implements TaskRegistrationRouter {
     public ResponseFactory responseFactory;
 
     @Override
+    @SuppressWarnings("unchecked")
     public ResponseEntity<GeneralResponse<String>> registerWorkOptimization(TaskRegistrationRequestDTO request) {
         GeneralResponse<String> response = (GeneralResponse<String>) taskRegistrationService.registerWorkOptimization(request);
         return responseFactory.success(response);

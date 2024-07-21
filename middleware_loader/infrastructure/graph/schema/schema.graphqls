@@ -9,7 +9,7 @@ type Query {
 	getAllPrivileges: [ListPrivilegeResponse]!
 	getPrivilegeByName(input: PrivilegeInput!): Privilege!
 
-	# Task Managerz
+	# Task Manager
 	listAllProjects: [Project]!
 	getProjectById(input: IdInput!): Project! 
 	
@@ -18,10 +18,15 @@ type Query {
 
 	getTasksByGroupTaskId(input: IdInput!): TaskDashboard!
 	listAllTasks: [Task]!
-	getTaskById(input: IdInput!): Task!
+	getTaskById(input: IdInput!): Task!	
 }
 
 type Mutation {
+	# Gaia Major Function
+	registerTaskConfig(input:RegisterTaskInput!): RegisterTaskConfig!
+	isTaskExisted(input:RegisterTaskInput!): IsTaskExisted!
+	isScheduleExisted(input:RegisterTaskInput!): IsScheduleExisted!
+	
 	# Authentication Service
 	signin(input: SigninInput!): AuthTokenResponse!
 	gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!

@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	auth_services "middleware_loader/core/services/auth_services"
 	task_manager "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
@@ -19,6 +20,25 @@ var userService = auth_services.NewUserService()
 var groupTaskService = task_manager.NewGroupTaskService()
 var roleService = auth_services.NewRoleService()
 var privilegeService = auth_services.NewPrivilegeService()
+var taskRegisterService = task_manager.NewTaskRegisterService()
+
+// RegisterTaskConfig is the resolver for the registerTaskConfig field.
+func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
+	result, err := taskRegisterService.RegisterTaskConfig(ctx, input)
+	return &result, err
+}
+
+// IsTaskExisted is the resolver for the isTaskExisted field.
+func (r *mutationResolver) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error) {
+	log.Println("IsTaskExisted")
+	panic(fmt.Errorf("not implemented: IsTaskExisted - isTaskExisted"))
+}
+
+// IsScheduleExisted is the resolver for the isScheduleExisted field.
+func (r *mutationResolver) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error) {
+	log.Println("IsScheduleExisted")
+	panic(fmt.Errorf("not implemented: IsScheduleExisted - isScheduleExisted"))
+}
 
 // Signin is the resolver for the signin field.
 func (r *mutationResolver) Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error) {

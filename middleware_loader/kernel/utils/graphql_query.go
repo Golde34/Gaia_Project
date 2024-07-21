@@ -15,12 +15,9 @@ import (
 )
 
 func GenerateGraphQLQueryWithInput(action string, function string, input interface{}, output interface{}) string {
-	// Convert input
 	inputPairs := ConvertInput(input)
-
-	//Convert output
 	outputStr := ConvertOutput(output)
-
+	
 	// Generate query
 	query := fmt.Sprintf(`%s { 
 		%s(input: { %s}) {
@@ -32,9 +29,8 @@ func GenerateGraphQLQueryWithInput(action string, function string, input interfa
 }
 
 func GenerateGraphQLQueryNoInput(action string, function string, output interface{}) string {
-	//Convert output
 	outputStr := ConvertOutput(output)
-
+	
 	// Generate query
 	query := fmt.Sprintf(`%s { 
 		%s {
@@ -47,6 +43,13 @@ func GenerateGraphQLQueryNoInput(action string, function string, output interfac
 
 func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
+	if len(graphQLQuery) == 0 {
+		panic("No query to generate")
+	}
+	if len(graphQLQuery) == 1 {
+		return GenerateGraphQLQueryWithInput(action, graphQLQuery[0].Functionname, 
+			graphQLQuery[0].QueryInput, graphQLQuery[0].QueryOutput)
+	}
 
 	for i := 0; i < len(graphQLQuery); i++ {
 		if i == 0 {
@@ -57,8 +60,14 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base
 					%s(input: { %s }) {
 						%s
 					}
-				}
 			`, action, graphQLQuery[i].Functionname, inputPairs, outputStr))
+		} else if i == len(graphQLQuery)-1 {
+			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
+			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
+			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
+				%s
+			}
+		}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
 		} else {
 			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
@@ -72,6 +81,12 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base
 
 func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_dtos.GraphQLQuery) string {
 	var functionScripts []string
+	if len(graphQLQuery) == 0 {
+		panic("No query to generate")
+	}
+	if len(graphQLQuery) == 1 {
+		return GenerateGraphQLQueryNoInput(action, graphQLQuery[0].Functionname, graphQLQuery[0].QueryOutput)
+	}
 
 	for i := 0; i < len(graphQLQuery); i++ {
 		if i == 0 {
@@ -81,7 +96,6 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_d
 					%s {
 						%s
 					}
-				}
 			`, action, graphQLQuery[i].Functionname, outputStr))
 		} else {
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
