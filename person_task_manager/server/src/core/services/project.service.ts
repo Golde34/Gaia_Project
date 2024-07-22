@@ -195,9 +195,9 @@ class ProjectService {
             let isTaskExist: boolean;
             if (projects.length === 0) {
                 isTaskExist = false;
-            } 
-            isTaskExist = true;
-            
+            } else {
+                isTaskExist = true;
+            }
             return msg200({
                 isTaskExist
             });

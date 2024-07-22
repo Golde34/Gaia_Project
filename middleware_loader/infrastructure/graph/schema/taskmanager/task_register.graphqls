@@ -11,6 +11,10 @@ type IsScheduleExisted {
     isScheduleExist: Boolean!
 }
 
+type IsTaskConfigExisted {
+    isTaskConfigExist: Boolean!
+}
+
 input RegisterTaskInput {
     userId: Float!
     sleepDuration: Float!

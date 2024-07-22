@@ -5,9 +5,14 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { MongoHelper } from "./kernel/database/mongodb.db";
+import { msg404, sendResponse } from "./core/common/response";
+import { MSG404 } from "./core/domain/constants/string.constants";
+import { dashboardRouter } from "./ui/routers/dashboard.router";
+import { userRouter } from "./ui/routers/user.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars();
+    const applicationContext = "/schedule-plan";
 
     const mongoHelper = new MongoHelper(
         config.database.host,
@@ -38,8 +43,11 @@ async function main(): Promise<void> {
         res.status(200).send("OK");
     })
 
+    app.use(applicationContext + "/dashboard", dashboardRouter);
+    app.use(applicationContext + "/user", userRouter);
+
     app.use((req: Request, res: Response, next: NextFunction) => {
-        next(new Error("Not Found"));
+        sendResponse(msg404(MSG404), res, next);
     });
 
     app.listen(config.server.listenPort, () => {

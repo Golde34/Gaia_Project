@@ -40,3 +40,12 @@ func (s *TaskRegisterService) IsScheduleExisted(ctx context.Context, input model
 	taskRegisterModel := response_dtos.NewIsScheduleExistedResponseDTO().MapperToGraphQLModel(response)
 	return taskRegisterModel, nil
 }
+
+func (s *TaskRegisterService) QueryTaskConfig(ctx context.Context, input model.RegisterTaskInput) (model.IsTaskConfigExisted, error) {
+	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).QueryTaskConfig(input)
+	if err != nil {
+		return model.IsTaskConfigExisted{}, err
+	}
+	taskRegisterModel := response_dtos.NewIsTaskConfigExistedResponseDTO().MapperToGraphQLModel(response)
+	return taskRegisterModel, nil
+}

@@ -26,7 +26,8 @@ type Mutation {
 	registerTaskConfig(input:RegisterTaskInput!): RegisterTaskConfig!
 	isTaskExisted(input:RegisterTaskInput!): IsTaskExisted!
 	isScheduleExisted(input:RegisterTaskInput!): IsScheduleExisted!
-	
+	queryTaskConfig(input:RegisterTaskInput!): IsTaskConfigExisted!
+
 	# Authentication Service
 	signin(input: SigninInput!): AuthTokenResponse!
 	gaiaAutoSignin(input: SigninInput!): AuthTokenResponse!
