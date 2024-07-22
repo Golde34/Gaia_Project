@@ -105,6 +105,10 @@ type IsScheduleExisted struct {
 	IsScheduleExist bool `json:"isScheduleExist"`
 }
 
+type IsTaskConfigExisted struct {
+	IsTaskConfigExist bool `json:"isTaskConfigExist"`
+}
+
 type IsTaskExisted struct {
 	IsTaskExist bool `json:"isTaskExist"`
 }

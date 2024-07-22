@@ -49,3 +49,13 @@ func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.RegisterTaskIn
 	}
 	return response, nil
 }
+
+func (adapter *TaskRegisterAdapter) QueryTaskConfig(input model.RegisterTaskInput) (response_dtos.IsTaskConfigExistedResponseDTO, error) {
+	queryTaskConfigURL := base.WorkOptimizationServiceURL + task_register_WO_domain + "/register-task-config"
+	var response response_dtos.IsTaskConfigExistedResponseDTO
+	_, err := utils.BaseAPIV2(queryTaskConfigURL, enums.GET, input, &response)
+	if err != nil {
+		return response_dtos.IsTaskConfigExistedResponseDTO{}, err
+	}
+	return response, nil
+}

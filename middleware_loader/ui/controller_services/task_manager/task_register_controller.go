@@ -28,3 +28,21 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
+
+func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService * services.TaskRegisterService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	input := mapper.RegisterTaskConfigRequestDTOMapper(body)
+	log.Println("Input: ", input)
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "isTaskExisted", QueryInput: input, QueryOutput: model.IsTaskExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "isScheduleExisted", QueryInput: input, QueryOutput: model.IsScheduleExisted{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}
