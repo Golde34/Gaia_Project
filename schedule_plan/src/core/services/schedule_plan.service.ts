@@ -54,9 +54,9 @@ class SchedulePlanService {
             let isScheduleExist: boolean;
             if (schedulePlans.length === 0) {
                 isScheduleExist = false;
-            }
-            isScheduleExist = true;
-            return msg200({
+            } else {
+                isScheduleExist = true;
+            } return msg200({
                 isScheduleExist
             });
         } catch (error: any) {
