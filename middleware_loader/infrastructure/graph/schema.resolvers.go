@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"fmt"
-	"log"
 	auth_services "middleware_loader/core/services/auth_services"
 	task_manager "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
@@ -36,8 +35,8 @@ func (r *mutationResolver) IsTaskExisted(ctx context.Context, input model.Regist
 
 // IsScheduleExisted is the resolver for the isScheduleExisted field.
 func (r *mutationResolver) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error) {
-	log.Println("IsScheduleExisted")
-	panic(fmt.Errorf("not implemented: IsScheduleExisted - isScheduleExisted"))
+	result, err := taskRegisterService.IsScheduleExisted(ctx, input)
+	return &result, err	
 }
 
 // Signin is the resolver for the signin field.

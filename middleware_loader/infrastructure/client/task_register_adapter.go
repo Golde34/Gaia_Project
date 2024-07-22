@@ -43,9 +43,9 @@ func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.RegisterTaskInput)
 func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.RegisterTaskInput) (response_dtos.IsScheduleExistedResponseDTO, error) {
 	isScheduleExistedURL := base.SchedulePlanServiceURL + task_register_SP_domain + "/dashboard/check-existed-schedules"
 	var response response_dtos.IsScheduleExistedResponseDTO
-	result, err := utils.BaseAPIV2(isScheduleExistedURL, enums.GET, input, &response)
+	_, err := utils.BaseAPIV2(isScheduleExistedURL, enums.GET, input, &response)
 	if err != nil {
 		return response_dtos.IsScheduleExistedResponseDTO{}, err
 	}
-	return result.(response_dtos.IsScheduleExistedResponseDTO), nil
+	return response, nil
 }
