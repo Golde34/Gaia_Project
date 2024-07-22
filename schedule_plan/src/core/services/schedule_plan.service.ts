@@ -2,7 +2,7 @@ import { schedulePlanRepository } from "../../infrastructure/repository/schedule
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
 
 class SchedulePlanService {
-    constructor() {}
+    constructor() { }
 
     async createSchedulePlan(schedulePlan: any): Promise<IResponse> {
         try {
@@ -46,6 +46,23 @@ class SchedulePlanService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
+
+    async findSchedulePlanByUserId(userId: string): Promise<IResponse> {
+        try {
+            const schedulePlans = await schedulePlanRepository.findSchedulePlanByUserId(userId);
+            let isScheduleExist: boolean;
+            if (schedulePlans.length === 0) {
+                isScheduleExist = false;
+            }
+            isScheduleExist = true;
+            return msg200({
+                isScheduleExist
+            });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+
     }
 }
 
