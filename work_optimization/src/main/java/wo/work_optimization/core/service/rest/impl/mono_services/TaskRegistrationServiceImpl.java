@@ -95,7 +95,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         log.info("Check existed user in task registration: [{}] ", userId);
         Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
         if (taskRegistration.isPresent()) {
-            log.error("User has already registered task scheduling: [{}] ", userId);
+            log.info("User has already registered task scheduling: [{}] ", userId);
             return false;
         }
 
@@ -131,7 +131,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
             }
 
             RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
-                    .isTaskConfigExisted(isUserRegisteredTask).build();
+                    .isTaskConfigExist(true).build();
             return genericResponse
                     .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
         } catch (Exception e) {
