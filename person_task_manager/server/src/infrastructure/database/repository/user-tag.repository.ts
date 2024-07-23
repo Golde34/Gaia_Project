@@ -1,8 +1,8 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { DeleteResult } from "mongodb";
-import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
+import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
 import { IUserTagEntity, UserTagEntity } from "../entities/user-tag.entity";
-import { ActiveStatus } from "../../core/domain/enums/enums";
+import { ActiveStatus } from "../../../core/domain/enums/enums";
 import { ProjectEntity } from "../entities/project.entity";
 import { GroupTaskEntity } from "../entities/group-task.entity";
 import { TaskEntity } from "../entities/task.entity";

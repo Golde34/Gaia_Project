@@ -1,10 +1,10 @@
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response_helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { TaskTag } from "../domain/dtos/request_dtos/tag.dto";
 import { userTagStore } from "../store/user-tag.store";
 import { EXISTED, EXISTED_MESSAGE, NOT_EXISTED, NOT_EXISTED_MESSAGE } from "../domain/constants/constants";
 import { userTagValidation } from "../validations/user-tag.validation";
-import { IUserTagEntity } from "../../infrastructure/entities/user-tag.entity";
+import { IUserTagEntity } from "../../infrastructure/database/entities/user-tag.entity";
 
 class UserTagService {
     constructor(

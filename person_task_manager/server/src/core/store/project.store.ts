@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { projectRepository } from "../../infrastructure/repository/project.repository";
+import { projectRepository } from "../../infrastructure/database/repository/project.repository";
 import { DeleteResult } from "mongodb";
-import { IProjectEntity } from "../../infrastructure/entities/project.entity";
+import { IProjectEntity } from "../../infrastructure/database/entities/project.entity";
 
 class ProjectStore {
     constructor() {}

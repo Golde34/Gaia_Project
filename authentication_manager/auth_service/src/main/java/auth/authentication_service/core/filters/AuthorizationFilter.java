@@ -68,10 +68,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         final String serviceTokenHeader = request.getHeader(SERVICE_TOKEN_HEADER);
         final String privateTokenHeader = request.getHeader(PRIVATE_TOKEN_HEADER);
         System.out.println(privateTokenHeader);
-
+        String decryptedToken = securityDecryption.decrypt(privateTokenHeader);
         if (serviceTokenHeader != null && privateTokenHeader != null
                 && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
-                && securityDecryption.validateToken(securityDecryption.decrypt(privateTokenHeader))) {
+                && securityDecryption.validateToken(decryptedToken)) {
             log.info("Header token is valid, no need to filter jwt token");
             UserDetails serviceUser = userDetailsServices.loadPostConstructServiceUser();
             securityUsernamePassword(request, serviceUser);

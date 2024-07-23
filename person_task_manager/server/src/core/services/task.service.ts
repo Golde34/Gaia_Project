@@ -1,5 +1,5 @@
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response_helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { UpdateTaskInDialogDTO } from "../domain/dtos/task.dto";
 import { taskValidation } from "../validations/task.validation";
 import { groupTaskService } from "./group-task.service";
@@ -9,10 +9,10 @@ import { taskServiceUtils } from "./service_utils/task.service-utils";
 import { CREATE_TASK_FAILED, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../domain/constants/error.constant";
 import { taskStore } from "../store/task.store";
 import { groupTaskStore } from "../store/group-task.store";
-import { KafkaConfig } from "../../infrastructure/kafka/kafka_config";
+import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
-import { createMessage } from "../../infrastructure/kafka/create_message";
-import { ITaskEntity } from "../../infrastructure/entities/task.entity";
+import { createMessage } from "../../infrastructure/kafka/create-message";
+import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
 

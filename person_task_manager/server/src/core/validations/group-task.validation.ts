@@ -1,5 +1,5 @@
-import { GroupTaskEntity } from "../../infrastructure/entities/group-task.entity";
-import { ProjectEntity } from "../../infrastructure/entities/project.entity";
+import { GroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
+import { ProjectEntity } from "../../infrastructure/database/entities/project.entity";
 
 export const groupTaskValidation = {
     async checkExistedGroupTaskById(groupTaskId: string): Promise<boolean> {

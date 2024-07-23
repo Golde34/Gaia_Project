@@ -1,5 +1,5 @@
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response_helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { COMMENT_NOT_FOUND } from "../domain/constants/error.constant";
 import { commentStore } from "../store/comment.store";
 import { commentValidation } from "../validations/comment.validation";

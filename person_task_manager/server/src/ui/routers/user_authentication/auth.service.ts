@@ -1,6 +1,6 @@
 import axios from "axios";
-import { config } from "../../../infrastructure/config/configuration";
-import { msg200 } from "../../../core/common/response_helpers";
+import { config } from "../../../infrastructure/config/database-configuration";
+import { msg200 } from "../../../core/common/response-helpers";
 import { IResponse } from "../../../core/common/response";
 import { Permission } from "../../../core/domain/enums/enums";
 

@@ -1,7 +1,6 @@
 package controller_services
 
 import (
-	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/task_manager"
@@ -19,7 +18,7 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 		return
 	}
 	input := mapper.RegisterTaskConfigRequestDTOMapper(body)
-	log.Println("Input: ", input)
+
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "registerTaskConfig", QueryInput: input, QueryOutput: model.RegisterTaskConfig{}})
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "isTaskExisted", QueryInput: input, QueryOutput: model.IsTaskExisted{}})
@@ -37,7 +36,7 @@ func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService
 		return
 	}
 	input := mapper.RegisterTaskConfigRequestDTOMapper(body)
-	log.Println("Input: ", input)
+
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "isTaskExisted", QueryInput: input, QueryOutput: model.IsTaskExisted{}})

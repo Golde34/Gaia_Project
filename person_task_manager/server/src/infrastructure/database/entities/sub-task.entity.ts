@@ -1,17 +1,32 @@
 import mongoose from "mongoose";
-import { ActiveStatus } from "../../core/domain/enums/enums";
+import { ActiveStatus } from "../../../core/domain/enums/enums";
 
-export interface ICommentEntity extends Document {
+export interface ISubTaskEntity extends Document {
     _id: string;
-    content: string;
+    mission: string;
+    deadline: Date;
+    priority: string[];
+    status: string;
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
 }
 
-export const commentSchema = new mongoose.Schema(
+export const subTaskSchema = new mongoose.Schema(
     {
-        content: {
+        mission: {
+            type: String,
+            required: true,
+        },
+        deadline: {
+            type: Date,
+            required: true,
+        },
+        priority: {
+            type: [String],
+            required: true,
+        },
+        status: {
             type: String,
             required: true,
         },
@@ -36,8 +51,8 @@ export const commentSchema = new mongoose.Schema(
     },
 );
 
-commentSchema.virtual("id").get(function () {
+subTaskSchema.virtual("id").get(function () {
     return this._id.toString();
 });
 
-export const CommentEntity = mongoose.model<ICommentEntity>("Comment", commentSchema);
+export const SubTaskEntity = mongoose.model<ISubTaskEntity>("SubTask", subTaskSchema);

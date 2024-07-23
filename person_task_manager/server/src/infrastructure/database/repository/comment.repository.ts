@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { CommentEntity, ICommentEntity } from "../entities/comment.entity";
 import { DeleteResult } from "mongodb";
-import { ActiveStatus } from "../../core/domain/enums/enums";
+import { ActiveStatus } from "../../../core/domain/enums/enums";
 
 class CommentRepository {
     constructor() {}
