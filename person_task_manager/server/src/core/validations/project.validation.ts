@@ -1,4 +1,4 @@
-import { ProjectEntity } from "../../infrastructure/entities/project.entity";
+import { ProjectEntity } from "../../infrastructure/database/entities/project.entity";
 
 export const projectValidation = {
     async checkExistedProjectById(projectId: string): Promise<boolean> {

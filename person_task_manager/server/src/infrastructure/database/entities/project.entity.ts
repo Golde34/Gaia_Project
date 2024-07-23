@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IGroupTaskEntity } from "./group-task.entity";
-import { ActiveStatus } from "../../core/domain/enums/enums";
-import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
+import { ActiveStatus } from "../../../core/domain/enums/enums";
+import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
 import { IUserTagEntity } from "./user-tag.entity";
 
 export interface IProjectEntity extends Document {

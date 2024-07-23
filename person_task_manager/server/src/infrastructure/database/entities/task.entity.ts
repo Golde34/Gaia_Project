@@ -1,26 +1,28 @@
 import mongoose, { Schema } from "mongoose";
-import { ITaskEntity } from "./task.entity";
-import { ActiveStatus } from "../../core/domain/enums/enums";
-import { TaskTag } from "../../core/domain/dtos/request_dtos/tag.dto";
+import { ISubTaskEntity } from "./sub-task.entity";
+import { ICommentEntity } from "./comment.entity";
+import { ActiveStatus } from "../../../core/domain/enums/enums";
+import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
 import { IUserTagEntity } from "./user-tag.entity";
 
-export interface IGroupTaskEntity extends Document {
+export interface ITaskEntity extends Document {
     _id: string;
     title: string;
     description: string;
     priority: string[];
     status: string;
-    tasks: ITaskEntity["_id"][];
-    totalTasks: number;
-    completedTasks: number;
-    ordinalNumber: number;
+    startDate: Date;
+    deadline: Date;
+    duration: number;
+    subTasks: ISubTaskEntity["_id"][];
+    comments: ICommentEntity["_id"][];
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
-    tag: IUserTagEntity
+    tag: IUserTagEntity 
 }
 
-export const groupTaskSchema = new mongoose.Schema(
+export const taskSchema = new mongoose.Schema(
     {
         title: {
             type: String,
@@ -38,30 +40,35 @@ export const groupTaskSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        tasks: {
+        startDate: {
+            type: Date,
+            required: false,
+        },
+        deadline: {
+            type: Date,
+            required: false,
+        },
+        duration: {
+            type: Number,
+            required: false,
+        },
+        subTasks: {
             type: [Schema.Types.ObjectId],
-            ref: 'Task',
+            ref: 'SubTask',
             required: false,
         },
-        totalTasks: {
-            type: Number,
-            required: false,
-        },
-        completedTasks: {
-            type: Number,
-            required: false,
-        },
-        ordinalNumber: {
-            type: Number,
+        comments: {
+            type: [Schema.Types.ObjectId],
+            ref: 'Comment',
             required: false,
         },
         createdAt: {
             type: Date,
-            required: false,
+            required: true,
         },
         updatedAt: {
             type: Date,
-            required: false,
+            required: true,
         },
         activeStatus: {
             type: String,
@@ -81,10 +88,8 @@ export const groupTaskSchema = new mongoose.Schema(
     },
 );
 
-groupTaskSchema.virtual("id").get(function () {
+taskSchema.virtual("id").get(function () {
     return this._id.toString();
 });
 
-
-
-export const GroupTaskEntity = mongoose.model<IGroupTaskEntity>("GroupTask", groupTaskSchema);
+export const TaskEntity = mongoose.model<ITaskEntity>("Task", taskSchema);

@@ -12,7 +12,7 @@ import { groupTaskStore } from "../store/group-task.store";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka_config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create_message";
-import { ITaskEntity } from "../../infrastructure/entities/task.entity";
+import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
 
