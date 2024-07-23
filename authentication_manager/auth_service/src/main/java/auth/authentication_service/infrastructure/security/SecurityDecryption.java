@@ -3,6 +3,7 @@ package auth.authentication_service.infrastructure.security;
 import auth.authentication_service.core.domain.entities.User;
 import auth.authentication_service.core.domain.enums.ServiceEnum;
 import auth.authentication_service.core.services.interfaces.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class SecurityDecryption {
 
     @Value("${app.services.security.private-key}")
@@ -53,15 +55,20 @@ public class SecurityDecryption {
     }
 
     public boolean validateToken(String headerToken) {
-        String comparedToken = ServiceEnum.AS.getServiceName() + "::" + headerToken + "::";
-        String firstPartToken = sliceLastPart(headerToken).getFirst();
-        String secondPartToken = sliceLastPart(headerToken).getSecond();
-        if (comparedToken.equals(firstPartToken)) {
+        try {
+            String comparedToken = ServiceEnum.AS.getServiceName() + "::" + headerToken + "::";
+            String firstPartToken = sliceLastPart(headerToken).getFirst();
+            String secondPartToken = sliceLastPart(headerToken).getSecond();
+            if (comparedToken.equals(firstPartToken)) {
+                return false;
+            }
+
+            User user = userService.getUserById(Long.valueOf(secondPartToken), "Filter Token Service");
+            return !Objects.isNull(user);
+        } catch (Exception e) {
+            log.error("Error while validating token: " + e.getMessage());
             return false;
         }
-
-        User user = userService.getUserById(Long.valueOf(secondPartToken), "Filter Token Service");
-        return !Objects.isNull(user);
     }
 
     private Pair<String, String> sliceLastPart(String headerToken) {
