@@ -1,7 +1,10 @@
-import { msg400 } from "../../core/common/response-helpers";
-import { BAD_REQUEST } from "../../core/domain/constants/constants";
+import { INTERNAL_SERVER_ERROR } from "../../core/domain/constants/constants";
 import { ServiceAcronym } from "../../core/domain/enums/enums";
 import { buildAuthorizationHeaders } from "../../kernel/util/build-headers";
+import { getInternalServiceErrorResponse } from "../../kernel/util/return-result";
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: './src/.env'});
 
 class AuthServiceAdapter {
     constructor() { }
@@ -9,20 +12,21 @@ class AuthServiceAdapter {
     async checkExistedUser(userId: number) {
         try {
             const headers = buildAuthorizationHeaders(ServiceAcronym.AS, userId, {});
-            const uri = `http://localhost:4001/user/get-user-by-id?id=${userId}`;
+            const uri = process.env.AUTH_SERVICE_GET_USER_BY_ID+`${userId}`
             console.log(`Calling api to auth service: ${uri}`);
             const response = await fetch(uri, {
                 headers,
                 method: 'GET',
             });
-            console.log(response);
+            
             if (response.status !== 200) {
-                return BAD_REQUEST;
+                return getInternalServiceErrorResponse(response.status);
             }
+            
             return response.json();
         } catch (error: any) {
             console.log("Exception when calling auth service");
-            return null;
+            return getInternalServiceErrorResponse(INTERNAL_SERVER_ERROR);
         }
     }
 }
