@@ -1,5 +1,7 @@
+import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response-helpers";
+import { msg200, msg400, msg500 } from "../common/response-helpers";
+import { BAD_REQUEST } from "../domain/constants/constants";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ActiveStatus } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";
@@ -191,6 +193,15 @@ class ProjectService {
 
     async checkExistedTasks(userId: number): Promise<IResponse> {
         try {
+            const existedUser = await authServiceAdapter.checkExistedUser(userId);
+            console.log(existedUser);
+            if (existedUser === null) {
+                return msg500("Cannot call auth service");
+            }
+            if (existedUser === BAD_REQUEST) {
+                return msg400("Auth Service Response Failed: " + existedUser);
+            }
+
             const projects = await projectStore.findAllProjectsByOwnerId(userId);
             let isTaskExist: boolean;
             if (projects.length === 0) {

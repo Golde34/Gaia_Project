@@ -1,4 +1,4 @@
-import { SERVICE_HEADER, SERVICE_TOKEN_HEADER } from "../../core/domain/constants/constants";
+import { config } from "../../infrastructure/config/security-configuration";
 import { encrypt } from "../../infrastructure/security/encrypt-rsa";
 
 export const buildDefaultHeaders = (headers: Record<string, string>) => {
@@ -13,8 +13,8 @@ export const buildAuthorizationHeaders = (service: string, userId: number, heade
     return {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        SERVICE_TOKEN_HEADER: encrypt(`${userId}`),
-        SERVICE_HEADER: service,
+        'Service-Token': encrypt(`${service}::${config.privateToken}::${userId}`),
+        'Service': service,
         ...headers
     }
 }
