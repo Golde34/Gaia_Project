@@ -28,3 +28,14 @@ export enum ActiveStatus {
     active = "ACTIVE",
     inactive = "INACTIVE",
 }
+
+export enum ServiceAcronym {
+    AS = "authentication_service",
+    GC = "gaia_connector",
+    CLG = "client_gui",
+    ML = "middleware_loader",
+    SP = "schedule_plan",
+    WO = "work_optimization",
+    GAIA = "GAIA",
+    CMC = "camera_cv",
+}

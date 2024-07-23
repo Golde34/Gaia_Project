@@ -1,5 +1,5 @@
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response_helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ActiveStatus } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";

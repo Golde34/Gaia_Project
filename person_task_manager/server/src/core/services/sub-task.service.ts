@@ -1,5 +1,5 @@
 import { IResponse } from "../common/response";
-import { msg200, msg400 } from "../common/response_helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { SUB_TASK_NOT_FOUND } from "../domain/constants/error.constant";
 import { subTaskStore } from "../store/sub-task.store";
 import { subTaskValidation } from "../validations/sub-task.validation";
