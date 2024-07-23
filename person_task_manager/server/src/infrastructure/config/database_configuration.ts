@@ -30,10 +30,6 @@ interface Configuration {
         accessSecret: string;
         refreshSecret: string;
     };
-    kafka: {
-        bootstrapServers: string;
-        groupId: string;
-    }
 }
 
 export const config: Configuration = {
@@ -54,10 +50,6 @@ export const config: Configuration = {
     jwt: {
         accessSecret: String(process.env.ACCESS_SECRET),
         refreshSecret: String(process.env.REFRESH_SECRET)
-    },
-    kafka: {
-        bootstrapServers: process.env.KAFKA_BOOTSTRAP_SERVERS ?? 'localhost:9094',
-        groupId: process.env.KAFKA_GROUP_ID ?? 'task-manager'
     }
 };
 

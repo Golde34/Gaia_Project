@@ -1,5 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { config, validateEnvironmentVars } from "./infrastructure/config/configuration";
+import { config, validateEnvironmentVars } from "./infrastructure/config/database_configuration";
 import { MongoHelper } from "./infrastructure/database/mongodb.db";
 import { taskRouter } from "./ui/routers/task.router";
 import { groupTaskRouter } from "./ui/routers/group-task.router";
