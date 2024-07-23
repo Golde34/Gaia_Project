@@ -1,9 +1,9 @@
 import crypto from 'crypto';
-import { config } from '../config/security_configuration';
+import { config } from '../config/security-configuration';
 
 const PUBLIC_KEY = config.publicKey;
 
-function encrypt(plainText: string) {
+export function encrypt(plainText: string) {
   const publicKey = `-----BEGIN PUBLIC KEY-----\n${PUBLIC_KEY}\n-----END PUBLIC KEY-----`;
   const buffer = Buffer.from(plainText, 'utf8');
   

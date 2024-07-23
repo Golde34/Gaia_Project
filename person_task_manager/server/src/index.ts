@@ -1,5 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { config, validateEnvironmentVars } from "./infrastructure/config/database_configuration";
+import { config, validateEnvironmentVars } from "./infrastructure/config/database-configuration";
 import { MongoHelper } from "./infrastructure/database/mongodb.db";
 import { taskRouter } from "./ui/routers/task.router";
 import { groupTaskRouter } from "./ui/routers/group-task.router";
@@ -12,7 +12,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { msg200, msg400, msg405, sendResponse } from "./core/common/response_helpers";
+import { msg200, msg400, msg405, sendResponse } from "./core/common/response-helpers";
 import { userTagRouter } from "./ui/routers/user-tag.router";
 
 async function main(): Promise<void> {
