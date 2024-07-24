@@ -9,7 +9,7 @@ function ContentArea(props) {
     const redirectPage = props.redirectPage;
     const dispatch = useDispatch();
 
-    const taskRegistration = useSelector((state) => state.registerTaskConfig);
+    const taskRegistration = useSelector((state) => state.getTaskRegister);
     const { taskRegistry, loading, error} = taskRegistration;
     const didTaskRegisterRef = useRef();
 
