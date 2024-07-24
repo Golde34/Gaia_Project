@@ -50,3 +50,13 @@ export enum HttpCodeMessage {
     NOT_FOUND = 404,
     INTERNAL_SERVER_ERROR = 500
 }
+
+export enum HttpMethod {
+    GET = "GET",
+    POST = "POST",
+    PUT = "PUT",
+    DELETE = "DELETE",
+    PATCH = "PATCH",
+    HEAD = "HEAD",
+    OPTION = "OPTION"
+}

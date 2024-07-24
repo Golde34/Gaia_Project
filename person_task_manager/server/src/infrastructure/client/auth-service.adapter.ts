@@ -1,4 +1,4 @@
-import { HttpCodeMessage, ServiceAcronym } from "../../core/domain/enums/enums";
+import { HttpCodeMessage, ServiceAcronym, HttpMethod } from "../../core/domain/enums/enums";
 import { buildAuthorizationHeaders } from "../../kernel/util/build-headers";
 import { getInternalServiceErrorResponse } from "../../kernel/util/return-result";
 import * as dotenv from 'dotenv';
@@ -19,7 +19,7 @@ class AuthServiceAdapter {
             console.log(`Calling api to auth service: ${uri}`);
             const response = await fetch(uri, {
                 headers,
-                method: 'GET',
+                method: HttpMethod.GET,
             });
             
             if (response.status !== 200) {
