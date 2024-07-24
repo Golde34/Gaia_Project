@@ -1,4 +1,6 @@
+import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
 import { schedulePlanRepository } from "../../infrastructure/repository/schedule_plan.repository";
+import { returnInternalServiceErrorResponse } from "../../kernel/utils/return-result";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
 
 class SchedulePlanService {
@@ -48,8 +50,13 @@ class SchedulePlanService {
         }
     }
 
-    async findSchedulePlanByUserId(userId: string): Promise<IResponse> {
+    async findSchedulePlanByUserId(userId: number): Promise<IResponse> {
         try {
+            const existedUser = await authServiceAdapter.checkExistedUser(userId);
+            if (typeof existedUser === 'number') {
+                return returnInternalServiceErrorResponse(existedUser, "Call auth service failed: ")
+            }
+            
             const schedulePlans = await schedulePlanRepository.findSchedulePlanByUserId(userId);
             let isScheduleExist: boolean;
             if (schedulePlans.length === 0) {

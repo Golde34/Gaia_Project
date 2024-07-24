@@ -22,7 +22,7 @@ class SchedulePlanRepository implements SchedulePlanStore {
         return await SchedulePlanEntity.findOne({ _id: scheduleId });
     }
 
-    async findSchedulePlanByUserId(userId: string): Promise<ISchedulePlanEntity[]> {
+    async findSchedulePlanByUserId(userId: number): Promise<ISchedulePlanEntity[]> {
         return await SchedulePlanEntity.find({ userId: userId });
     }
 }
