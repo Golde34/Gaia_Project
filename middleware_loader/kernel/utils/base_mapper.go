@@ -27,3 +27,9 @@ func GetFloatValue(bodyMap map[string]interface{}, key string, defaultValue floa
 	return defaultValue
 }
 
+// func GetIntegerValue(bodyMap map[string]interface{}, key string, defaultValue int64) int64 {
+// 	if value, ok := bodyMap[key].(int64); ok {
+// 		return value
+// 	}
+// 	return defaultValue
+// }
