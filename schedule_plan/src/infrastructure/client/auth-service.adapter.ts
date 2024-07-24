@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: './src/.env'});
 
 class AuthServiceAdapter {
-    private getUserByUserId: string;
+    private getUserByUserId: string | undefined;
 
     constructor() {
         this.getUserByUserId = process.env.AUTH_SERVICE_GET_USER_BY_ID
