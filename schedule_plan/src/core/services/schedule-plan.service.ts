@@ -1,5 +1,5 @@
 import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
-import { schedulePlanRepository } from "../../infrastructure/repository/schedule_plan.repository";
+import { schedulePlanRepository } from "../../infrastructure/repository/schedule-plan.repository";
 import { returnInternalServiceErrorResponse } from "../../kernel/utils/return-result";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
 

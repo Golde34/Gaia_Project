@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { ISchedulePlanEntity, SchedulePlanEntity } from "../entities/schedule_plan.entity";
+import { ISchedulePlanEntity, SchedulePlanEntity } from "../entities/schedule-plan.entity";
 import { DeleteResult } from "mongodb";
-import { SchedulePlanStore } from "./store/schedule_plan.store";
+import { SchedulePlanStore } from "./store/schedule-plan.store";
 
 class SchedulePlanRepository implements SchedulePlanStore {
     constructor() {}

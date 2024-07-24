@@ -1,4 +1,4 @@
-import { scheduleTaskRepository } from "../../infrastructure/repository/schedule_task.repository";
+import { scheduleTaskRepository } from "../../infrastructure/repository/schedule-task.repository";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
 
 class ScheduleTaskService {

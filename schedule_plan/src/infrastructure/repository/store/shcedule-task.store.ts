@@ -1,5 +1,5 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { IScheduleTaskEntity } from "../../entities/schedule_task.entity";
+import { IScheduleTaskEntity } from "../../entities/schedule-task.entity";
 import { DeleteResult } from "mongodb";
 
 export interface ScheduleTaskStore {

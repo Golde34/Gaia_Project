@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { DeleteResult } from "mongodb";
-import { IScheduleTaskEntity, ScheduleTaskEntity } from "../entities/schedule_task.entity";
-import { ScheduleTaskStore } from "./store/shcedule_task.store";
+import { IScheduleTaskEntity, ScheduleTaskEntity } from "../entities/schedule-task.entity";
+import { ScheduleTaskStore } from "./store/shcedule-task.store";
 
 class ScheduleTaskRepository implements ScheduleTaskStore {
     constructor() {}

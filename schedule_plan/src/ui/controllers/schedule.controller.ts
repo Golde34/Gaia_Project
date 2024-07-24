@@ -1,6 +1,6 @@
 import { NextFunction, Request } from "express";
 import { IResponse, msg200 } from "../../core/common/response";
-import { schedulePlanService } from "../../core/services/schedule_plan.service";
+import { schedulePlanService } from "../../core/services/schedule-plan.service";
 
 class ScheduleController {
     constructor() {}

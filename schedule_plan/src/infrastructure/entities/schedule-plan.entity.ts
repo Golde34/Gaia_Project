@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { ActiveStatus } from "../../core/domain/enums/enums";
-import { IScheduleTaskEntity } from "./schedule_task.entity";
+import { IScheduleTaskEntity } from "./schedule-task.entity";
 
 export interface ISchedulePlanEntity extends Document {
     _id: number;
