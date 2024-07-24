@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.Constants;
+import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.RegisteredTaskConfigStatus;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
@@ -115,10 +116,10 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     }
 
     @Override
-    public GeneralResponse<?> userRegisterTaskInformation(TaskRegistrationRequestDTO request) {
+    public GeneralResponse<?> userRegisterTaskInformation(QueryTaskConfigRequestDTO request) {
         try {
             log.info("validate request: {}", request);
-            Pair<String, Boolean> requestValidation = validateRequest(request);
+            Pair<String, Boolean> requestValidation = validateQueryRequest(request);
             if (!requestValidation.getSecond()) {
                 return genericResponse.matchingResponseMessage(
                         new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
@@ -139,5 +140,19 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
             return genericResponse.matchingResponseMessage(
                     new GenericResponse<>(Constants.ErrorMessage.INTERNAL_SERVER_ERROR, ResponseMessage.msg500));
         }
+    }
+
+    private Pair<String, Boolean> validateQueryRequest(QueryTaskConfigRequestDTO request) {
+        if (dataUtils.isNullOrEmpty(request)
+                || dataUtils.isNullOrEmpty(request.getUserId())) {
+            return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
+        }
+
+        Pair<String, Boolean> isUserExisted = checkExistedUser(request.getUserId());
+        if (!isUserExisted.getSecond()) {
+            return Pair.of(isUserExisted.getFirst(), isUserExisted.getSecond());
+        }
+
+        return Pair.of(Constants.ErrorMessage.SUCCESS, true);
     }
 }

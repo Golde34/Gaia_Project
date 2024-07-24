@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 
@@ -16,5 +17,5 @@ public interface TaskRegistrationRouter {
     ResponseEntity<GeneralResponse<?>> registerTaskConfig(@RequestBody TaskRegistrationRequestDTO request);
 
     @GetMapping("")
-    ResponseEntity<GeneralResponse<?>> getTaskConfigInfo(@RequestBody TaskRegistrationRequestDTO request);
+    ResponseEntity<GeneralResponse<?>> getTaskConfigInfo(@RequestBody QueryTaskConfigRequestDTO request);
 }
