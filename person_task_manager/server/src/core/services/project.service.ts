@@ -1,8 +1,7 @@
 import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
 import { returnInternalServiceErrorResponse } from "../../kernel/util/return-result";
 import { IResponse } from "../common/response";
-import { msg200, msg400, msg500 } from "../common/response-helpers";
-import { BAD_REQUEST } from "../domain/constants/constants";
+import { msg200, msg400 } from "../common/response-helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ActiveStatus } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";
@@ -158,16 +157,14 @@ class ProjectService {
 
     async archiveProject(projectId: string): Promise<IResponse | undefined> {
         try {
-            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
-                const project = await projectStore.findOneActiveProjectById(projectId);
-                if (project === null) {
-                    return msg400(PROJECT_NOT_FOUND);
-                } else {
-                    await projectStore.archiveProject(projectId);
-                    return msg200({
-                        message: "Project archived"
-                    });
-                }
+            const project = await projectStore.findOneActiveProjectById(projectId);
+            if (project === null) {
+                return msg400(PROJECT_NOT_FOUND);
+            } else {
+                await projectStore.archiveProject(projectId);
+                return msg200({
+                    message: "Project archived"
+                });
             }
         } catch (err: any) {
             return msg400(err.message.toString());
@@ -176,17 +173,14 @@ class ProjectService {
 
     async enableProject(projectId: string): Promise<IResponse | undefined> {
         try {
-            if (await projectValidationImpl.checkExistedProjectById(projectId) === true) {
-                const project = await projectStore.findOneInactiveProjectById(projectId);
-                if (project === null) {
-                    return msg400(PROJECT_NOT_FOUND);
-                } else {
-                    await projectStore.enableProject(projectId);
-                    return msg200({
-                        message: "Project enabled"
-                    });
-                }
+            const project = await projectStore.findOneInactiveProjectById(projectId);
+            if (project === null) {
+                return msg400(PROJECT_NOT_FOUND);
             }
+            await projectStore.enableProject(projectId);
+            return msg200({
+                message: "Project enabled"
+            });
         } catch (err: any) {
             return msg400(err.message.toString());
         }
