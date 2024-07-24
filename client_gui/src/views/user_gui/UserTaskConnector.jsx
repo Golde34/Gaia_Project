@@ -3,34 +3,21 @@ import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom";
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
+import { formatHourNumber } from "../../kernels/utils/date-picker";
 
 function ContentArea(props) {
     const redirectPage = props.redirectPage;
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-    // const taskRegistration = useSelector((state) => state.taskRegistration);
-    // const { taskRegistry, loading, error} = taskRegistration;
-    // const didTaskRegisterRef = useRef();
+    const taskRegistration = useSelector((state) => state.registerTaskConfig);
+    const { taskRegistry, loading, error} = taskRegistration;
+    const didTaskRegisterRef = useRef();
 
-    // useEffect(() => {
-    //     if (didTaskRegisterRef.current) return;
-    //     dispatch(taskRegistration());
-    //     didTaskRegisterRef.current = true;
-    // }, [dispatch]);
-
-    const formatNumber = (value) => {
-        if (value < 0) {
-            return true;
-        }
-        if (value > 24) {
-            return true;
-        }
-        return false;
-    }
-
-    const taskRegistry = false;
-    const loading = false;
-    const error = false;
+    useEffect(() => {
+        if (didTaskRegisterRef.current) return;
+        dispatch(taskRegistration());
+        didTaskRegisterRef.current = true;
+    }, [dispatch]);
 
     const [sleepTime, setSleepTime] = useState(0);
     const [relaxTime, setRelaxTime] = useState(0);
@@ -95,7 +82,7 @@ function ContentArea(props) {
                                                 setSleepTime(newSleepTime)
                                                 handleWorkTime(newSleepTime, relaxTime, eatTime, travelTime)
                                             }}
-                                            error={formatNumber(sleepTime)}
+                                            error={formatHourNumber(sleepTime)}
                                             errorMessage="Please enter a valid number between 0 and 24"
                                         />
                                     </Col>
@@ -146,7 +133,7 @@ function ContentArea(props) {
                                                 setRelaxTime(newRelaxTime)
                                                 handleWorkTime(sleepTime, newRelaxTime, eatTime, travelTime)
                                             }}
-                                            error={formatNumber(relaxTime)}
+                                            error={formatHourNumber(relaxTime)}
                                             errorMessage="Please enter a valid number between 0 and 24"
                                         />
                                     </Col>
@@ -169,7 +156,7 @@ function ContentArea(props) {
                                                 setEatTime(newEatTime)
                                                 handleWorkTime(sleepTime, relaxTime, newEatTime, travelTime)
                                             }}
-                                            error={formatNumber(eatTime)}
+                                            error={formatHourNumber(eatTime)}
                                             errorMessage="Please enter a valid number between 0 and 24"
                                         />
                                     </Col>
@@ -192,7 +179,7 @@ function ContentArea(props) {
                                                 setTravelTime(newTravelTime)
                                                 handleWorkTime(sleepTime, relaxTime, eatTime, newTravelTime)
                                             }}
-                                            error={formatNumber(travelTime)}
+                                            error={formatHourNumber(travelTime)}
                                             errorMessage="Please enter a valid number between 0 and 24"
                                         />
                                     </Col>

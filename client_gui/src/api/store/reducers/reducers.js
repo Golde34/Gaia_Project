@@ -19,6 +19,7 @@ import { microserviceListReducer } from "./middleware_loader/microservices.reduc
 import { userListReducer, userUpdateReducer } from "./auth_service/user.reducer";
 import { roleCreateReducer, roleListReducer } from "./auth_service/role.reducer";
 import { privilegeListReducer } from "./auth_service/privilege.reducer";
+import { registerTaskConfigReducer } from "./task_manager/task-registration.reducers";
 
 export const reducer = combineReducers({
     // auth service
@@ -60,6 +61,7 @@ export const reducer = combineReducers({
     commentCreate: commentCreateReducer,
     commentUpdate: commentUpdateReducer,
     commentDelete: commentDeleteReducer,
+    registerTaskConfig: registerTaskConfigReducer,
     // middleware loader
     microserviceList: microserviceListReducer,
 })
