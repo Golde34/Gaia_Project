@@ -1,0 +1,1 @@
+export const SCHEDULE_PLAN_SERVICE_ERROR = "Schedule plan service error"

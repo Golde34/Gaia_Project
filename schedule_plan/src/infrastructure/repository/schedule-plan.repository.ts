@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { ISchedulePlanEntity, SchedulePlanEntity } from "../entities/schedule_plan.entity";
+import { ISchedulePlanEntity, SchedulePlanEntity } from "../entities/schedule-plan.entity";
 import { DeleteResult } from "mongodb";
-import { SchedulePlanStore } from "./store/schedule_plan.store";
+import { SchedulePlanStore } from "./store/schedule-plan.store";
 
 class SchedulePlanRepository implements SchedulePlanStore {
     constructor() {}
@@ -22,7 +22,7 @@ class SchedulePlanRepository implements SchedulePlanStore {
         return await SchedulePlanEntity.findOne({ _id: scheduleId });
     }
 
-    async findSchedulePlanByUserId(userId: string): Promise<ISchedulePlanEntity[]> {
+    async findSchedulePlanByUserId(userId: number): Promise<ISchedulePlanEntity[]> {
         return await SchedulePlanEntity.find({ userId: userId });
     }
 }

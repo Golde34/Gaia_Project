@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { userController } from "../controllers/user.controller";
-import { RequestValidator } from "../../core/common/request_validator";
+import { RequestValidator } from "../../core/common/request-validator";
 import { UserDTO } from "../../core/domain/request/user.dto";
 import { returnResult } from "../../kernel/utils/return-result";
 
