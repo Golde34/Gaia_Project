@@ -2,6 +2,7 @@ import gaia_bot
 
 from gaia_bot.abilities.response import AlpacaResponse
 from gaia_bot.domain.enums import Mode, AIModel
+from gaia_bot.process.command_input import CommandInput
 
 
 class Processor:
@@ -24,29 +25,19 @@ class Processor:
             text="Handling your command", info_log="Handle input"
         )
 
-        # Instruction
+        # Instruction command
         self._check_exit_gaia(transcript)
-        help_message, help_message_status = self._check_help_message_gaia(transcript)
-        if help_message_status:
-            return help_message, "Help message"
+        response_transcript, tag_skill = self._input_command(transcript)
         
         # Process
         # Response transcript
-        response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
+        if response_transcript is None and tag_skill is None:
+            response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
 
         # Skill process
         self.assistant.skill_process(tag_skill, self.user_skills)
 
         return response_transcript, tag_skill
-
-    def _check_help_message_gaia(self, transcript):
-        if transcript.lower() == "help": 
-            text= "Gaia Bot's command line interface:\n" \
-                    "Input: exit, q, bye, quit  to exit the program\n" \
-                    "Input: help                to show this message"
-            return text, True
-        
-        return None, False
 
     def _check_exit_gaia(self, transcript):
         if transcript.lower() in ["exit", "quit", "q", "bye"]:
@@ -54,6 +45,22 @@ class Processor:
                 text="Goodbye, see you later.", info_log="Exit Gaia"
             )
             exit()
+
+    def _input_command(self, transcript):
+        command_input = CommandInput(transcript)
+        command = command_input.get_command()
+        if command is None:
+            self.console_manager.console_log(
+                error_log="Command is not recognized"
+            )
+            return None, None
+        response_transcript, tag_skill = command_input.handle_command(command)
+        if  response_transcript is None or tag_skill is None:
+            self.console_manager.console_log(
+                error_log="There is an error when execute commands"
+            )
+            return None, None
+        return response_transcript, tag_skill
 
     def _response_and_detect_skill(self, transcript, mode=Mode.RUN):
         response_model, response_tokenizer = self.register_models[AIModel.ResponseModel]
