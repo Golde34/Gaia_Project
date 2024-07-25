@@ -67,11 +67,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     private boolean validateHeaderToken(HttpServletRequest request) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         final String serviceTokenHeader = request.getHeader(SERVICE_TOKEN_HEADER);
         final String privateTokenHeader = request.getHeader(PRIVATE_TOKEN_HEADER);
-        System.out.println(privateTokenHeader);
-        String decryptedToken = securityDecryption.decrypt(privateTokenHeader);
+
         if (serviceTokenHeader != null && privateTokenHeader != null
                 && serviceTokenHeader.equals(SERVICE_TOKEN_VALUE)
-                && securityDecryption.validateToken(decryptedToken)) {
+                && securityDecryption.validateToken(securityDecryption.decrypt(privateTokenHeader))) {
             log.info("Header token is valid, no need to filter jwt token");
             UserDetails serviceUser = userDetailsServices.loadPostConstructServiceUser();
             securityUsernamePassword(request, serviceUser);
