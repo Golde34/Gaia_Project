@@ -1,23 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom";
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
+import { queryTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
 
 function ContentArea(props) {
+    const userId = 1;
     const redirectPage = props.redirectPage;
     const dispatch = useDispatch();
 
-    const taskRegistration = useSelector((state) => state.getTaskRegister);
-    const { taskRegistry, loading, error} = taskRegistration;
+    const taskRegistration = useSelector((state) => state.queryTaskConfig);
+    const { loading, error, taskRegistry } = taskRegistration;
     const didTaskRegisterRef = useRef();
+
+    const taskConfig = useCallback(() => {
+        dispatch(queryTaskConfig(userId));
+    }, [dispatch, userId]);
 
     useEffect(() => {
         if (didTaskRegisterRef.current) return;
-        dispatch(taskRegistration());
+        taskConfig();
         didTaskRegisterRef.current = true;
-    }, [dispatch]);
+    }, [userId]);
 
     const [sleepTime, setSleepTime] = useState(0);
     const [relaxTime, setRelaxTime] = useState(0);

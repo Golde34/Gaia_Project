@@ -65,5 +65,5 @@ export const reducer = combineReducers({
     microserviceList: microserviceListReducer,
     // major flow
     registerTaskConfig: registerTaskConfigReducer,
-    getTaskConfig: queryTaskConfigReducer
+    queryTaskConfig: queryTaskConfigReducer
 })
