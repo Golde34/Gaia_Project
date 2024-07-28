@@ -1,11 +1,16 @@
+import { HttpMethods, serverRequest } from "../../../baseAPI";
 import { QUERY_TASK_CONFIG_FAIL, QUERY_TASK_CONFIG_REQUEST, QUERY_TASK_CONFIG_SUCCESS, 
     REGISTER_TASK_CONFIG_FAIL, REGISTER_TASK_CONFIG_REQUEST, REGISTER_TASK_CONFIG_SUCCESS } 
 from "../../constants/task_manager/task-registration.constants";
 
+const portName = {
+    middlewarePort: 'middlewarePort'
+}
+
 export const queryTaskConfig = (userId) => async (dispatch) => {
     dispatch({ type: QUERY_TASK_CONFIG_REQUEST, payload: userId });
     try {
-        const { data } = await serverRequest(`/work-optimization/query-task-config`, HttpMethods.GET, portName.middlewarePort, userId);
+        const { data } = await serverRequest(`/work-optimization/query-task-config/${userId}`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: QUERY_TASK_CONFIG_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

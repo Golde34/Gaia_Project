@@ -7,23 +7,26 @@ import { formatHourNumber } from "../../kernels/utils/date-picker";
 import { queryTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
 
 function ContentArea(props) {
-    const userId = 1;
+    const [userId, setUserId] = useState("1"); 
     const redirectPage = props.redirectPage;
     const dispatch = useDispatch();
 
     const taskRegistration = useSelector((state) => state.queryTaskConfig);
+    console.log(taskRegistration);
     const { loading, error, taskRegistry } = taskRegistration;
-    const didTaskRegisterRef = useRef();
-
+    
     const taskConfig = useCallback(() => {
         dispatch(queryTaskConfig(userId));
     }, [dispatch, userId]);
+    
+    const debounceRef = useRef();
 
     useEffect(() => {
-        if (didTaskRegisterRef.current) return;
-        taskConfig();
-        didTaskRegisterRef.current = true;
-    }, [userId]);
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            taskConfig();
+        }, 50);
+    }, []);
 
     const [sleepTime, setSleepTime] = useState(0);
     const [relaxTime, setRelaxTime] = useState(0);
@@ -232,7 +235,7 @@ function ContentArea(props) {
     )
 }
 
-const UserTaskConnector = (props) => {
+const TaskRegistration = (props) => {
     return (
         <>
             <Template>
@@ -242,4 +245,4 @@ const UserTaskConnector = (props) => {
     )
 }
 
-export default UserTaskConnector;
+export default TaskRegistration;

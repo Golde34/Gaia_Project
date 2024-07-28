@@ -14,7 +14,7 @@ import Calendar from '../../views/schedule_plan/Calendar';
 import PrivilegeAndRoleDashboard from '../../views/auth_service/RoleAndPrivilegeDashboard';
 import PrivilegeUrlSettings from '../../views/auth_service/PrivilegeUrlSettings';
 import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboard';
-import UserTaskConnector from '../../views/user_gui/UserTaskConnector';
+import TaskRegistration from '../../views/task_manager/TaskRegistration';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -50,7 +50,7 @@ const routeList = [
     {
         path: '/user-task-connector',
         key: 'user-task-connector',
-        element: <UserTaskConnector />,
+        element: <TaskRegistration />,
     },
     {
         path: '/project',
