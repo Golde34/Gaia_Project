@@ -20,3 +20,15 @@ func (in *UpdateUserRequestDTO) MapperToModel(input model.UpdateUserInput) {
 func NewUpdateUserRequestDTO() *UpdateUserRequestDTO {
 	return &UpdateUserRequestDTO{}
 }
+
+type UserIdInputDTO struct {
+	UserId float64 `json:"userId"`
+}
+
+func (in *UserIdInputDTO) MapperToModel(input model.RegisterTaskInput) {
+	mapper.AutoMapper(&input, in)
+}
+
+func NewUserIdInputDTO() *UserIdInputDTO {
+	return &UserIdInputDTO{}
+}

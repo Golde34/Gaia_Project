@@ -8,6 +8,8 @@ import (
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
 func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService * services.TaskRegisterService) {
@@ -29,13 +31,8 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 }
 
 func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService * services.TaskRegisterService) {
-	var body map[string]interface{}
-	body, err := controller_utils.MappingBody(w, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	input := mapper.RegisterTaskConfigRequestDTOMapper(body)
+	userId := chi.URLParam(r, "userId")	
+	input := mapper.GetUserId(userId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
