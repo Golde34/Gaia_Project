@@ -55,7 +55,8 @@ const routeList = [
     {
         path: '/project',
         key: 'project',
-        element: <Project />,
+        element: <TaskRegistration redirectPage="Task Manager"/>,
+        // element: <Project />,
     },
     {
         path: '/project/:id',
@@ -95,7 +96,7 @@ const routeList = [
     {
         path: '/schedule',
         key: 'schedule',
-        element: <SchedulingTable/>,
+        element: <TaskRegistration redirectPage="Schedule Plan" />,
     },
     {
         path: '/calendar',

@@ -8,7 +8,7 @@ export const queryTaskConfigReducer = (
         case QUERY_TASK_CONFIG_REQUEST:
             return { loading: true };
         case QUERY_TASK_CONFIG_SUCCESS:
-            return { loading: false, taskConfig: action.payload.taskConfig };
+            return { loading: false, taskRegistry: action.payload};
         case QUERY_TASK_CONFIG_FAIL:
             return { loading: false, error: action.payload };
         default:
@@ -22,7 +22,7 @@ export const registerTaskConfigReducer = (
         case REGISTER_TASK_CONFIG_REQUEST:
             return { loading: true };
         case REGISTER_TASK_CONFIG_SUCCESS:
-            return { loading: false, taskConfig: action.payload.taskConfig };
+            return { loading: false, taskRegistry: action.payload };
         case REGISTER_TASK_CONFIG_FAIL:
             return { loading: false, error: action.payload };
         default:
