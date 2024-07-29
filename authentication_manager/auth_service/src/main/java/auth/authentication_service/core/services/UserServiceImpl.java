@@ -14,17 +14,14 @@ import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.core.port.store.UserCRUDStore;
 import auth.authentication_service.core.services.interfaces.UserService;
 import auth.authentication_service.core.validations.service_validations.UserServiceValidation;
-import auth.authentication_service.kernel.utils.BCryptPasswordEncoder;
-import auth.authentication_service.kernel.utils.GenericResponse;
-import auth.authentication_service.kernel.utils.LoggerUtils;
-import auth.authentication_service.kernel.utils.ModelMapperConfig;
-import auth.authentication_service.kernel.utils.ResponseUtils;
+import auth.authentication_service.kernel.utils.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -53,6 +50,8 @@ public class UserServiceImpl implements UserService {
     UserServiceValidation userServiceValidation;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public UserServiceImpl(UserCRUDStore userStore, RoleStore roleStore) {
         this.userStore = userStore;
@@ -154,6 +153,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "userById", key = "#id", cacheManager = "cacheManager")
     public User getUserById(Long id, String usedClass) {
         try {
             User user = userStore.getUserById(id);
@@ -193,6 +193,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "userResponseById", key = "#id", cacheManager = "cacheManager")
     public ResponseEntity<?> getUserResponseById(Long id) {
         try {
             User user = getUserById(id, "Get User Response");
