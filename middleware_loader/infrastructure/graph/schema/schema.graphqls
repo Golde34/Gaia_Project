@@ -24,9 +24,9 @@ type Query {
 type Mutation {
 	# Gaia Major Function
 	registerTaskConfig(input:RegisterTaskInput!): RegisterTaskConfig!
-	isTaskExisted(input:RegisterTaskInput!): IsTaskExisted!
-	isScheduleExisted(input:RegisterTaskInput!): IsScheduleExisted!
-	queryTaskConfig(input:RegisterTaskInput!): IsTaskConfigExisted!
+	isTaskExisted(input:UserIdInput!): IsTaskExisted!
+	isScheduleExisted(input:UserIdInput!): IsScheduleExisted!
+	queryTaskConfig(input:UserIdInput!): IsTaskConfigExisted!
 
 	# Authentication Service
 	signin(input: SigninInput!): AuthTokenResponse!
@@ -91,4 +91,8 @@ input UserPermissionInput {
 type UserPermissionResponse {
   	id: ID!
   	name: String!
+}
+
+input UserIdInput {
+	userId: Float!
 }

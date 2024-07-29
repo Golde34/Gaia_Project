@@ -23,7 +23,7 @@ func (s *TaskRegisterService) RegisterTaskConfig(ctx context.Context, input mode
 	return taskRegisterModel, nil
 }
 
-func (s *TaskRegisterService) IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (model.IsTaskExisted, error) {
+func (s *TaskRegisterService) IsTaskExisted(ctx context.Context, input model.UserIDInput) (model.IsTaskExisted, error) {
 	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).IsTaskExisted(input)
 	if err != nil {
 		return model.IsTaskExisted{}, err
@@ -32,7 +32,7 @@ func (s *TaskRegisterService) IsTaskExisted(ctx context.Context, input model.Reg
 	return taskRegisterModel, nil
 }
 
-func (s *TaskRegisterService) IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (model.IsScheduleExisted, error) {
+func (s *TaskRegisterService) IsScheduleExisted(ctx context.Context, input model.UserIDInput) (model.IsScheduleExisted, error) {
 	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).IsScheduleExisted(input)
 	if err != nil {
 		return model.IsScheduleExisted{}, err
@@ -41,7 +41,7 @@ func (s *TaskRegisterService) IsScheduleExisted(ctx context.Context, input model
 	return taskRegisterModel, nil
 }
 
-func (s *TaskRegisterService) QueryTaskConfig(ctx context.Context, input model.RegisterTaskInput) (model.IsTaskConfigExisted, error) {
+func (s *TaskRegisterService) QueryTaskConfig(ctx context.Context, input model.UserIDInput) (model.IsTaskConfigExisted, error) {
 	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).QueryTaskConfig(input)
 	if err != nil {
 		return model.IsTaskConfigExisted{}, err
