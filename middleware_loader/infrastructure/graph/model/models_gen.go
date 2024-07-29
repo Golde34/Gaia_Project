@@ -336,6 +336,10 @@ type User struct {
 	Roles      []*Role `json:"roles"`
 }
 
+type UserIDInput struct {
+	UserID float64 `json:"userId"`
+}
+
 type UserInput struct {
 	ID       float64 `json:"id"`
 	Name     string  `json:"name"`

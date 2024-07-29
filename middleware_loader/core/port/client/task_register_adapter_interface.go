@@ -7,7 +7,7 @@ import (
 
 type ITaskRegisterAdapter interface {
 	RegisterTaskConfig(input model.RegisterTaskInput) (response_dtos.RegisterTaskConfigResponseDTO, error)
-	IsTaskExisted(input model.RegisterTaskInput) (response_dtos.IsTaskExistedResponseDTO, error)
-	IsScheduleExisted(input model.RegisterTaskInput) (response_dtos.IsScheduleExistedResponseDTO, error)
-	QueryTaskConfig(input model.RegisterTaskInput) (response_dtos.IsTaskConfigExistedResponseDTO, error)
+	IsTaskExisted(input model.UserIDInput) (response_dtos.IsTaskExistedResponseDTO, error)
+	IsScheduleExisted(input model.UserIDInput) (response_dtos.IsScheduleExistedResponseDTO, error)
+	QueryTaskConfig(input model.UserIDInput) (response_dtos.IsTaskConfigExistedResponseDTO, error)
 }

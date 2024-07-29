@@ -1,10 +1,15 @@
-package utils 
+package utils
+
+import (
+	"fmt"
+	"strconv"
+)
 
 func GetStringValue(bodyMap map[string]interface{}, key string, defaultValue string) string {
-    if value, ok := bodyMap[key].(string); ok {
-        return value
-    }
-    return defaultValue
+	if value, ok := bodyMap[key].(string); ok {
+		return value
+	}
+	return defaultValue
 }
 
 func GetArrayStringValue(bodyMap map[string]interface{}, key string, defaultValue []string) []string {
@@ -25,6 +30,14 @@ func GetFloatValue(bodyMap map[string]interface{}, key string, defaultValue floa
 		return value
 	}
 	return defaultValue
+}
+
+func ParseFloatValue(value string) (float64) {
+	floatValue, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		panic(fmt.Errorf("cannot parse value"))
+	}
+	return floatValue
 }
 
 // func GetIntegerValue(bodyMap map[string]interface{}, key string, defaultValue int64) int64 {

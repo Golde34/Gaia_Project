@@ -30,7 +30,7 @@ func (adapter *TaskRegisterAdapter) RegisterTaskConfig(input model.RegisterTaskI
 	return response, nil
 }
 
-func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.RegisterTaskInput) (response_dtos.IsTaskExistedResponseDTO, error) {
+func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.UserIDInput) (response_dtos.IsTaskExistedResponseDTO, error) {
 	isTaskExistedURL := base.TaskManagerServiceURL + task_register_TM_domain + "/check-existed-tasks"
 	var response response_dtos.IsTaskExistedResponseDTO
 	_, err := utils.BaseAPIV2(isTaskExistedURL, enums.GET, input, &response)
@@ -40,7 +40,7 @@ func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.RegisterTaskInput)
 	return response, nil
 }
 
-func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.RegisterTaskInput) (response_dtos.IsScheduleExistedResponseDTO, error) {
+func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.UserIDInput) (response_dtos.IsScheduleExistedResponseDTO, error) {
 	isScheduleExistedURL := base.SchedulePlanServiceURL + task_register_SP_domain + "/dashboard/check-existed-schedules"
 	var response response_dtos.IsScheduleExistedResponseDTO
 	_, err := utils.BaseAPIV2(isScheduleExistedURL, enums.GET, input, &response)
@@ -50,7 +50,7 @@ func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.RegisterTaskIn
 	return response, nil
 }
 
-func (adapter *TaskRegisterAdapter) QueryTaskConfig(input model.RegisterTaskInput) (response_dtos.IsTaskConfigExistedResponseDTO, error) {
+func (adapter *TaskRegisterAdapter) QueryTaskConfig(input model.UserIDInput) (response_dtos.IsTaskConfigExistedResponseDTO, error) {
 	queryTaskConfigURL := base.WorkOptimizationServiceURL + task_register_WO_domain + "/register-task-config"
 	var response response_dtos.IsTaskConfigExistedResponseDTO
 	_, err := utils.BaseAPIV2(queryTaskConfigURL, enums.GET, input, &response)

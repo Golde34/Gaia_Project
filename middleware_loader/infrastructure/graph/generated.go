@@ -144,10 +144,10 @@ type ComplexityRoot struct {
 		EnableProject                func(childComplexity int, input model.IDInput) int
 		GaiaAutoSignin               func(childComplexity int, input model.SigninInput) int
 		GenerateTaskWithoutGroupTask func(childComplexity int, input model.GenerateTaskWithoutGroupTaskInput) int
-		IsScheduleExisted            func(childComplexity int, input model.RegisterTaskInput) int
-		IsTaskExisted                func(childComplexity int, input model.RegisterTaskInput) int
+		IsScheduleExisted            func(childComplexity int, input model.UserIDInput) int
+		IsTaskExisted                func(childComplexity int, input model.UserIDInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
-		QueryTaskConfig              func(childComplexity int, input model.RegisterTaskInput) int
+		QueryTaskConfig              func(childComplexity int, input model.UserIDInput) int
 		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
 		Signin                       func(childComplexity int, input model.SigninInput) int
 		UpdateGroupTask              func(childComplexity int, input model.UpdateGroupTaskInput) int
@@ -288,9 +288,9 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error)
-	IsTaskExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskExisted, error)
-	IsScheduleExisted(ctx context.Context, input model.RegisterTaskInput) (*model.IsScheduleExisted, error)
-	QueryTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.IsTaskConfigExisted, error)
+	IsTaskExisted(ctx context.Context, input model.UserIDInput) (*model.IsTaskExisted, error)
+	IsScheduleExisted(ctx context.Context, input model.UserIDInput) (*model.IsScheduleExisted, error)
+	QueryTaskConfig(ctx context.Context, input model.UserIDInput) (*model.IsTaskConfigExisted, error)
 	Signin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
 	GaiaAutoSignin(ctx context.Context, input model.SigninInput) (*model.AuthTokenResponse, error)
 	CheckToken(ctx context.Context, input model.TokenInput) (*model.TokenResponse, error)
@@ -971,7 +971,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.IsScheduleExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
+		return e.complexity.Mutation.IsScheduleExisted(childComplexity, args["input"].(model.UserIDInput)), true
 
 	case "Mutation.isTaskExisted":
 		if e.complexity.Mutation.IsTaskExisted == nil {
@@ -983,7 +983,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.IsTaskExisted(childComplexity, args["input"].(model.RegisterTaskInput)), true
+		return e.complexity.Mutation.IsTaskExisted(childComplexity, args["input"].(model.UserIDInput)), true
 
 	case "Mutation.moveTask":
 		if e.complexity.Mutation.MoveTask == nil {
@@ -1007,7 +1007,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.QueryTaskConfig(childComplexity, args["input"].(model.RegisterTaskInput)), true
+		return e.complexity.Mutation.QueryTaskConfig(childComplexity, args["input"].(model.UserIDInput)), true
 
 	case "Mutation.registerTaskConfig":
 		if e.complexity.Mutation.RegisterTaskConfig == nil {
@@ -1814,6 +1814,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTaskInDialogInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateUserInput,
+		ec.unmarshalInputUserIdInput,
 		ec.unmarshalInputUserInput,
 		ec.unmarshalInputUserPermissionInput,
 	)
@@ -2290,10 +2291,10 @@ func (ec *executionContext) field_Mutation_generateTaskWithoutGroupTask_args(ctx
 func (ec *executionContext) field_Mutation_isScheduleExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
+	var arg0 model.UserIDInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2305,10 +2306,10 @@ func (ec *executionContext) field_Mutation_isScheduleExisted_args(ctx context.Co
 func (ec *executionContext) field_Mutation_isTaskExisted_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
+	var arg0 model.UserIDInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2335,10 +2336,10 @@ func (ec *executionContext) field_Mutation_moveTask_args(ctx context.Context, ra
 func (ec *executionContext) field_Mutation_queryTaskConfig_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.RegisterTaskInput
+	var arg0 model.UserIDInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4832,7 +4833,7 @@ func (ec *executionContext) _Mutation_isTaskExisted(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().IsTaskExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
+		return ec.resolvers.Mutation().IsTaskExisted(rctx, fc.Args["input"].(model.UserIDInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4891,7 +4892,7 @@ func (ec *executionContext) _Mutation_isScheduleExisted(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().IsScheduleExisted(rctx, fc.Args["input"].(model.RegisterTaskInput))
+		return ec.resolvers.Mutation().IsScheduleExisted(rctx, fc.Args["input"].(model.UserIDInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4950,7 +4951,7 @@ func (ec *executionContext) _Mutation_queryTaskConfig(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().QueryTaskConfig(rctx, fc.Args["input"].(model.RegisterTaskInput))
+		return ec.resolvers.Mutation().QueryTaskConfig(rctx, fc.Args["input"].(model.UserIDInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14782,6 +14783,33 @@ func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUserIdInput(ctx context.Context, obj interface{}) (model.UserIDInput, error) {
+	var it model.UserIDInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (model.UserInput, error) {
 	var it model.UserInput
 	asMap := map[string]interface{}{}
@@ -17869,6 +17897,11 @@ func (ec *executionContext) marshalNUser2ᚖmiddleware_loaderᚋinfrastructure�
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx context.Context, v interface{}) (model.UserIDInput, error) {
+	res, err := ec.unmarshalInputUserIdInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUserInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserInput(ctx context.Context, v interface{}) (model.UserInput, error) {

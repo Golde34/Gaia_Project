@@ -17,3 +17,16 @@ func UpdateUserRequestDTOMapper(body map[string]interface{}) *request_dtos.Updat
 
 	return &input
 }
+
+func GetUserId(userId string) *request_dtos.UserIdInputDTO {
+	var input request_dtos.UserIdInputDTO
+	input.UserId = utils.ParseFloatValue(userId)
+	return &input
+}
+
+func GetUserIdInBody(body map[string]interface{}) *request_dtos.UserIdInputDTO {
+	var input request_dtos.UserIdInputDTO
+	bodyMap := body["body"].(map[string]interface{})
+	input.UserId = utils.GetFloatValue(bodyMap, "userId", 0)
+	return &input
+}
