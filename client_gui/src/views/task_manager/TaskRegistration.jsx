@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
@@ -227,18 +227,6 @@ const TaskRegistration = (props) => {
         }, 50);
     }, []);
 
-    function redirectToScreen(taskRegistry, redirectPage) {
-        console.log(taskRegistry)
-        if (taskRegistry.queryTaskConfig.isTaskConfigExist) {
-            if (taskRegistry.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
-                return "TM";
-            }
-            if (taskRegistry.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
-                return "SP";
-            }
-        }
-        return null;
-    }
     return (
         <>
             {loading ? (
@@ -249,9 +237,19 @@ const TaskRegistration = (props) => {
                 <Project />
             ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP" ? (
                 <SchedulingTable />
-            ) : !taskRegistry ||
-                (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
-
+            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "ERROR" ? (
+                <Template>
+                    <Metric>Task manager and Schedule service get error, Report to Developer</Metric>
+                </Template>
+            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "TM_ERROR" ? (
+                <Template>
+                    <Metric>Task manager service get error, Report to Developer</Metric>
+                </Template>
+            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP_ERROR" ? (
+                <Template>
+                    <Metric>Schedule plan service get error, Report to Developer</Metric>
+                </Template>
+            ) : !taskRegistry || (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
                 <Template>
                     <ContentArea />
                 </Template>
@@ -261,5 +259,36 @@ const TaskRegistration = (props) => {
         </>
     )
 }
+
+function redirectToScreen(taskRegistry, redirectPage) {
+        if (taskRegistry.errors != undefined) {
+            let taskManagerError = false
+            let schedulePlanError = false
+            taskRegistry.errors.forEach(error => {
+                if (error.path[0] === "isTaskExisted") taskManagerError = true;
+                if (error.path[0] === "isScheduleExisted") schedulePlanError = true;
+            });
+            if (taskManagerError && schedulePlanError) {
+                return "ERROR";
+            }
+            if (redirectPage === "Task Manager" && taskManagerError) {
+                return "TM_ERROR";
+            }
+            if (redirectPage === "Schedule Plan" && schedulePlanError) {
+                return "SP_ERROR";
+            }
+            
+        } else {
+            if (taskRegistry.data.queryTaskConfig.isTaskConfigExist) {
+                if (taskRegistry.data.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
+                    return "TM";
+                }
+                if (taskRegistry.data.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
+                    return "SP";
+                }
+            }
+        }
+        return null;
+    }
 
 export default TaskRegistration;
