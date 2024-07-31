@@ -8,7 +8,7 @@ export const queryTaskConfigReducer = (
         case QUERY_TASK_CONFIG_REQUEST:
             return { loading: true };
         case QUERY_TASK_CONFIG_SUCCESS:
-            return { loading: false, taskRegistry: action.payload};
+            return { loading: false, taskRegistry: action.payload.data };
         case QUERY_TASK_CONFIG_FAIL:
             return { loading: false, error: action.payload };
         default:

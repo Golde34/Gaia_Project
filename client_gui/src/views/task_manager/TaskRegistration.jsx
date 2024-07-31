@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
@@ -227,18 +227,6 @@ const TaskRegistration = (props) => {
         }, 50);
     }, []);
 
-    function redirectToScreen(taskRegistry, redirectPage) {
-        console.log(taskRegistry)
-        if (taskRegistry.queryTaskConfig.isTaskConfigExist) {
-            if (taskRegistry.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
-                return "TM";
-            }
-            if (taskRegistry.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
-                return "SP";
-            }
-        }
-        return null;
-    }
     return (
         <>
             {loading ? (
@@ -249,9 +237,7 @@ const TaskRegistration = (props) => {
                 <Project />
             ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP" ? (
                 <SchedulingTable />
-            ) : !taskRegistry ||
-                (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
-
+            ) : !taskRegistry || (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
                 <Template>
                     <ContentArea />
                 </Template>
@@ -260,6 +246,18 @@ const TaskRegistration = (props) => {
             )}
         </>
     )
+}
+
+function redirectToScreen(taskRegistry, redirectPage) {
+    if (taskRegistry.queryTaskConfig.isTaskConfigExist) {
+        if (redirectPage === "Task Manager") {
+            return "TM";
+        }
+        if (redirectPage === "Schedule Plan") {
+            return "SP";
+        }
+    }
+    return null;
 }
 
 export default TaskRegistration;
