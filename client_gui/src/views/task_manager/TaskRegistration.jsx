@@ -237,18 +237,6 @@ const TaskRegistration = (props) => {
                 <Project />
             ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP" ? (
                 <SchedulingTable />
-            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "ERROR" ? (
-                <Template>
-                    <Metric>Task manager and Schedule service get error, Report to Developer</Metric>
-                </Template>
-            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "TM_ERROR" ? (
-                <Template>
-                    <Metric>Task manager service get error, Report to Developer</Metric>
-                </Template>
-            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP_ERROR" ? (
-                <Template>
-                    <Metric>Schedule plan service get error, Report to Developer</Metric>
-                </Template>
             ) : !taskRegistry || (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
                 <Template>
                     <ContentArea />
@@ -261,34 +249,15 @@ const TaskRegistration = (props) => {
 }
 
 function redirectToScreen(taskRegistry, redirectPage) {
-        if (taskRegistry.errors != undefined) {
-            let taskManagerError = false
-            let schedulePlanError = false
-            taskRegistry.errors.forEach(error => {
-                if (error.path[0] === "isTaskExisted") taskManagerError = true;
-                if (error.path[0] === "isScheduleExisted") schedulePlanError = true;
-            });
-            if (taskManagerError && schedulePlanError) {
-                return "ERROR";
-            }
-            if (redirectPage === "Task Manager" && taskManagerError) {
-                return "TM_ERROR";
-            }
-            if (redirectPage === "Schedule Plan" && schedulePlanError) {
-                return "SP_ERROR";
-            }
-            
-        } else {
-            if (taskRegistry.data.queryTaskConfig.isTaskConfigExist) {
-                if (taskRegistry.data.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
-                    return "TM";
-                }
-                if (taskRegistry.data.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
-                    return "SP";
-                }
-            }
+    if (taskRegistry.data.queryTaskConfig.isTaskConfigExist) {
+        if (taskRegistry.data.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
+            return "TM";
         }
-        return null;
+        if (taskRegistry.data.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
+            return "SP";
+        }
     }
+    return null;
+}
 
 export default TaskRegistration;
