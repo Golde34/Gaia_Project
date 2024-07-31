@@ -50,7 +50,7 @@ const Sidebar = () => {
 							<Description>Schedule Calendar</Description>
 						</LinkWrapper>
 					</Col>
-					<Col numColSpan={1}>
+					{/* <Col numColSpan={1}>
 						<LinkWrapper href="/client-gui/user-task-connector">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
@@ -58,7 +58,7 @@ const Sidebar = () => {
 							</Button>
 							<Description>Task Registration</Description>
 						</LinkWrapper>
-					</Col>
+					</Col> */}
 					<Col numColSpan={1}>
 						<LinkWrapper href="/client-gui/schedule">
 							<Button variant="primary" color="indigo"

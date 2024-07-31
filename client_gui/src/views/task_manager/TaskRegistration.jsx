@@ -249,11 +249,11 @@ const TaskRegistration = (props) => {
 }
 
 function redirectToScreen(taskRegistry, redirectPage) {
-    if (taskRegistry.data.queryTaskConfig.isTaskConfigExist) {
-        if (taskRegistry.data.isTaskExisted.isTaskExist && redirectPage === "Task Manager") {
+    if (taskRegistry.queryTaskConfig.isTaskConfigExist) {
+        if (redirectPage === "Task Manager") {
             return "TM";
         }
-        if (taskRegistry.data.isTaskExisted.isScheduleExist && redirectPage === "Schedule Plan") {
+        if (redirectPage === "Schedule Plan") {
             return "SP";
         }
     }
