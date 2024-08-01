@@ -2,6 +2,7 @@
 schema:
   - graph/schema/authservice/*.graphqls
   - graph/schema/taskmanager/*.graphqls
+  - graph/schema/workoptim/*.graphqls
   - graph/schema/*.graphqls
 
 # Where should the generated server code go?
