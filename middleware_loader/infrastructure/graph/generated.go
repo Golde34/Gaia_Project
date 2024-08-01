@@ -1913,7 +1913,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema/authservice/auth_token.graphqls" "schema/authservice/privilege.graphqls" "schema/authservice/role.graphqls" "schema/authservice/user.graphqls" "schema/taskmanager/comment.graphqls" "schema/taskmanager/group_task.graphqls" "schema/taskmanager/project.graphqls" "schema/taskmanager/sub_task.graphqls" "schema/taskmanager/task.graphqls" "schema/taskmanager/task_register.graphqls" "schema/schema.graphqls"
+//go:embed "schema/authservice/auth_token.graphqls" "schema/authservice/privilege.graphqls" "schema/authservice/role.graphqls" "schema/authservice/user.graphqls" "schema/taskmanager/comment.graphqls" "schema/taskmanager/group_task.graphqls" "schema/taskmanager/project.graphqls" "schema/taskmanager/sub_task.graphqls" "schema/taskmanager/task.graphqls" "schema/workoptim/task_register.graphqls" "schema/schema.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1934,7 +1934,7 @@ var sources = []*ast.Source{
 	{Name: "schema/taskmanager/project.graphqls", Input: sourceData("schema/taskmanager/project.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/sub_task.graphqls", Input: sourceData("schema/taskmanager/sub_task.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/task.graphqls", Input: sourceData("schema/taskmanager/task.graphqls"), BuiltIn: false},
-	{Name: "schema/taskmanager/task_register.graphqls", Input: sourceData("schema/taskmanager/task_register.graphqls"), BuiltIn: false},
+	{Name: "schema/workoptim/task_register.graphqls", Input: sourceData("schema/workoptim/task_register.graphqls"), BuiltIn: false},
 	{Name: "schema/schema.graphqls", Input: sourceData("schema/schema.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
