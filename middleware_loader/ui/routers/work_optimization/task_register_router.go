@@ -3,9 +3,9 @@ package routers
 import (
 	// "middleware_loader/core/domain/enums"
 	// "middleware_loader/core/middleware"
-	services "middleware_loader/core/services/task_manager"
+	services "middleware_loader/core/services/work_optimization"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	controller_services "middleware_loader/ui/controller_services/task_manager"
+	controller_services "middleware_loader/ui/controller_services/work_optimization"
 	"net/http"
 
 	"github.com/go-chi/chi"
