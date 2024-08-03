@@ -2,7 +2,7 @@ import CardItem from "../components/subComponents/CardItem"
 import AreaChartComponent from "../components/subComponents/AreaChartComponent"
 import TableComponent from "../components/subComponents/TableComponent"
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { getTopTasks } from "../api/store/actions/task_manager/task.actions";
 import MessageBox from "./subComponents/MessageBox";
 
@@ -11,8 +11,12 @@ const LeftColumn = () => {
 
     const taskList = useSelector((state) => state.topTask);
     const { loading, error, topTasks } = taskList;
+    const didGetTopTaskRef = useRef();
+
     useEffect(() => {
+        if (didGetTopTaskRef.current) return;
         dispatch(getTopTasks());
+        didGetTopTaskRef.current = true;
     }, [dispatch]);
 
     return (
