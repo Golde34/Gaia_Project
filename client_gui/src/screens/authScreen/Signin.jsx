@@ -11,7 +11,7 @@ import CookieManager from "../../kernels/utils/cookie-utils";
 const Signin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const cookieManger = new CookieManager();
+    const cookieManager = new CookieManager();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +27,9 @@ const Signin = () => {
     useEffect(() => {
         if (userInfo) {
             console.log(userInfo);
-            cookieManger.saveCookie('accessToken', userInfo['accessToken'], '/');
+            if (cookieManager.getCookie('accessToken') === undefined) {
+                cookieManager.saveCookie('accessToken', userInfo['accessToken'], '/');
+            }
             if (userInfo['data'] !== null) {
                 navigate('/dashboard');
             } else {
