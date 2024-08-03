@@ -24,6 +24,12 @@ const GaiaAutoSignin = () => {
         didGaiaAuthenticateRef.current = true;
     }, [dispatch]);
 
+    useEffect(() => {
+        if (obj && accessTokenCookie === undefined) {
+            cookieManager.saveCookie('accessToken', obj, '/');
+        }
+    }, [obj]);
+
     return (
         <div>
             {loading ? (

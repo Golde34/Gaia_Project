@@ -12,6 +12,7 @@ const Signin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cookieManager = new CookieManager();
+    const accessToken = cookieManager.getCookie('accessToken');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -26,11 +27,10 @@ const Signin = () => {
     };
     useEffect(() => {
         if (userInfo) {
-            console.log(userInfo);
-            if (cookieManager.getCookie('accessToken') === undefined) {
-                cookieManager.saveCookie('accessToken', userInfo['accessToken'], '/');
-            }
             if (userInfo['data'] !== null) {
+                if (accessToken === undefined) {
+                    cookieManager.saveCookie('accessToken', JSON.parse(userInfo)['accessToken'], '/');
+                }
                 navigate('/dashboard');
             } else {
                 setErrorMessage(userInfo['errors'][0]['message']);
