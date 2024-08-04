@@ -19,3 +19,7 @@ class CookieManager {
 }
 
 export default CookieManager;
+
+export const isAccessTokenCookieValid = () => {
+    return new Cookies().get('access_token') !== undefined;
+}

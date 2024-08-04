@@ -5,9 +5,16 @@ import Template from "../../components/template/Template";
 import CardButton from "../../components/subComponents/CardButton";
 import { Metric } from "@tremor/react";
 import { CreateNewProject } from "../../screens/projectScreen/CreateNewProject";
+import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
+import { useNavigate } from "react-router-dom";
 
 function ContentArea() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const isUserValid = isAccessTokenCookieValid();
+    if (isUserValid) {
+        navigate('/signin');
+    }
 
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
