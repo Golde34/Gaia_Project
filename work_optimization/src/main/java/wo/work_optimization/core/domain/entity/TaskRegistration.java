@@ -33,4 +33,5 @@ public class TaskRegistration {
     private double travelTime;
     private double eatTime;
     private double workTime;
+    private int status;
 }

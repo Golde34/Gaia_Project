@@ -25,7 +25,8 @@ export const queryTaskConfig = (userId) => async (dispatch) => {
 export const registerTaskConfig = (taskConfig) => async (dispatch) => {
     dispatch({ type: REGISTER_TASK_CONFIG_REQUEST, payload: taskConfig });
     try {
-        const { data } = await serverRequest('/task/register', HttpMethods.POST, portName.middlewarePort, taskConfig);
+        console.log("taskConfig: ", taskConfig)
+        const { data } = await serverRequest('/work-optimization/register-task-config', HttpMethods.POST, portName.middlewarePort, taskConfig);
         dispatch({ type: REGISTER_TASK_CONFIG_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
