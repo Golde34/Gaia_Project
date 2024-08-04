@@ -237,12 +237,12 @@ const TaskRegistration = (props) => {
                 <Project />
             ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === "SP" ? (
                 <SchedulingTable />
-            ) : !taskRegistry || (taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null) ? (
+            ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null ? (
                 <Template>
                     <ContentArea />
                 </Template>
-            ) : (
-                <Navigate to="/404" />
+            ): (
+                <></>
             )}
         </>
     )

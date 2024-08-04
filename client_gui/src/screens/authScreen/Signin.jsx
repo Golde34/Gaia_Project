@@ -6,12 +6,13 @@ import "../../assets/husky.scss";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import { signin } from "../../api/store/actions/auth_service/auth.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
-import { useCookies } from "react-cookie";
+import CookieManager from "../../kernels/utils/cookie-utils";
 
 const Signin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [cookies, setCookies] = useCookies(['accessToken']);
+    const cookieManager = new CookieManager();
+    const accessToken = cookieManager.getCookie('accessToken');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -26,8 +27,10 @@ const Signin = () => {
     };
     useEffect(() => {
         if (userInfo) {
-            setCookies('accessToken', userInfo['accessToken'], { path: '/' });
             if (userInfo['data'] !== null) {
+                if (accessToken === undefined) {
+                    cookieManager.saveCookie('accessToken', JSON.parse(userInfo)['accessToken'], '/');
+                }
                 navigate('/dashboard');
             } else {
                 setErrorMessage(userInfo['errors'][0]['message']);

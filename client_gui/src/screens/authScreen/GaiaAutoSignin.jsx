@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux"
 import { gaiaSignin } from "../../api/store/actions/auth_service/auth.actions";
 import { useEffect, useMemo, useRef } from "react";
-import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom"
+import CookieManager from "../../kernels/utils/cookie-utils";
 
 const GaiaAutoSignin = () => {
     const dispatch = useDispatch();
-    const [cookies, setCookies] = useCookies(['accessToken'])
+    const cookieManager = new CookieManager();
+    const accessTokenCookie = cookieManager.getCookie('accessToken');
 
     const gaia = useSelector((state) => state.gaiaSignin)
     const { gaiaInfo, loading, error } = gaia;
@@ -24,19 +25,21 @@ const GaiaAutoSignin = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        setCookies('accessToken', obj)
+        if (obj && accessTokenCookie === undefined) {
+            cookieManager.saveCookie('accessToken', obj, '/');
+        }
     }, [obj]);
 
     return (
         <div>
             {loading ? (
                 <div>Loading...</div>
-            ) : error ? (
+            ) : error && accessTokenCookie === undefined ? (
                 <div><Navigate to='/signin' /></div>
-            ) : gaiaInfo ? (
+            ) : accessTokenCookie !== undefined || gaiaInfo ? (
                 <div><Navigate to='/dashboard' /></div>
             ) : (
-                <div><></></div>
+                <></>
             )
             }
         </div >
