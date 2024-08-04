@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRegistrationRepository extends JpaRepository<TaskRegistration, Long> {
-    Optional<TaskRegistration> findByUserId(Long userId);
+    Optional<TaskRegistration> findByUserIdAndStatus(Long userId, int status);
 }

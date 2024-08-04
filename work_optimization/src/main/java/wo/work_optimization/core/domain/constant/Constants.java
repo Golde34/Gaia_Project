@@ -47,4 +47,10 @@ public class Constants {
         public static String EXISTED_USER = "User already exists";
         public static String TOTAL_TIME_IN_DAY_ERROR = "The total time in day must be 24 hours";
     }
+
+    @UtilityClass
+    public static class Status {
+        public static final int ACTIVE = 1;
+        public static final int INACTIVE = 0;
+    }
 }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.infrastructure.store.repository.TaskRegistrationRepository;
@@ -30,6 +31,6 @@ public class TaskRegistrationAdapter implements TaskRegistrationStore {
     @Override
     @Transactional
     public Optional<TaskRegistration> getTaskRegistrationByUserId(Long id) {
-        return taskRegistrationRepository.findByUserId(id);
+        return taskRegistrationRepository.findByUserIdAndStatus(id, Constants.Status.ACTIVE);
     }
 }

@@ -97,10 +97,10 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
         if (taskRegistration.isPresent()) {
             log.info("User has already registered task scheduling: [{}] ", userId);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private TaskRegistration createRequest(TaskRegistrationRequestDTO request) {
@@ -126,13 +126,8 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
             }
 
             boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
-            if (isUserRegisteredTask) {
-                return genericResponse.matchingResponseMessage(
-                        new GenericResponse<>(Constants.ErrorMessage.USER_NOT_FOUND, ResponseMessage.msg400));
-            }
-
             RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
-                    .isTaskConfigExist(true).build();
+                    .isTaskConfigExist(isUserRegisteredTask).build();
             return genericResponse
                     .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
         } catch (Exception e) {
