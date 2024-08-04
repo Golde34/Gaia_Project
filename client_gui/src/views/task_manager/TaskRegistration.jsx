@@ -7,9 +7,11 @@ import { queryTaskConfig } from "../../api/store/actions/task_manager/task-regis
 import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
 import { useCreateTaskRegistrationDispatch } from "../../kernels/utils/write-dialog-api-requests";
+import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
+import { useNavigate } from "react-router-dom";
 
 function ContentArea(props) {
-    const redirectPage = props.redirectPage;
+    const redirectPage = props.redirectPage; 
 
     const userId = "1";
     const [sleepTime, setSleepTime] = useState(0);
@@ -99,7 +101,7 @@ function ContentArea(props) {
                                     placeholder="Enter your sleep time..."
                                     type="time"
                                     value={startSleepTime}
-                                    onChange={e => {setStartSleepTime(e.target.value)}}
+                                    onChange={e => { setStartSleepTime(e.target.value) }}
                                 />
                             </Col>
                             <Col numColSpan={3}>
@@ -109,7 +111,7 @@ function ContentArea(props) {
                                     placeholder="Enter your sleep time..."
                                     type="time"
                                     value={endSleepTime}
-                                    onChange={e => {setEndSleepTime(e.target.value)}}
+                                    onChange={e => { setEndSleepTime(e.target.value) }}
                                 />
                             </Col>
                         </Grid>
@@ -238,6 +240,15 @@ function ContentArea(props) {
 }
 
 const TaskRegistration = (props) => {
+    const navigate = useNavigate();
+
+    const isUserValid = isAccessTokenCookieValid();
+    useEffect(() => {
+        if (isUserValid) {
+            navigate('/signin');
+        }
+    }, [isUserValid, navigate]);
+
     const [userId, setUserId] = useState("1");
     const redirectPage = props.redirectPage;
     const dispatch = useDispatch();
@@ -272,7 +283,7 @@ const TaskRegistration = (props) => {
                 <Template>
                     <ContentArea redirectPage={redirectPage} />
                 </Template>
-            ): (
+            ) : (
                 <></>
             )}
         </>
