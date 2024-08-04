@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { Navigate, redirect } from "react-router-dom";
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
 import { queryTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
 import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
+import { useCreateTaskRegistrationDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
-function ContentArea() {
-    const dispatch = useDispatch();
+function ContentArea(props) {
+    const redirectPage = props.redirectPage;
 
+    const userId = "1";
     const [sleepTime, setSleepTime] = useState(0);
+    const [startSleepTime, setStartSleepTime] = useState("");
+    const [endSleepTime, setEndSleepTime] = useState("");
     const [relaxTime, setRelaxTime] = useState(0);
     const [travelTime, setTravelTime] = useState(0);
     const [eatTime, setEatTime] = useState(0);
@@ -23,8 +26,24 @@ function ContentArea() {
         return time * 100 / 24;
     }
 
-    function createTaskRegistry() {
-
+    const createTaskRegistration = useCreateTaskRegistrationDispatch();
+    const setTaskConfigObject = (sleepDuration, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime) => {
+        console.log("Set Task Config Object");
+        console.log(sleepDuration);
+        const taskConfig = {
+            userId: userId,
+            sleepDuration: sleepDuration,
+            startSleepTime: startSleepTime,
+            endSleepTime: endSleepTime,
+            relaxTime: relaxTime,
+            eatTime: eatTime,
+            travelTime: travelTime,
+            workTime: workTime
+        }
+        console.log(taskConfig);
+        console.log(redirectPage);
+        // createTaskRegistration(taskRegistration);
+        // navigate base on redirectPage
     }
 
     return (
@@ -79,6 +98,8 @@ function ContentArea() {
                                     style={{ backgroundColor: "white", color: "black" }}
                                     placeholder="Enter your sleep time..."
                                     type="time"
+                                    value={startSleepTime}
+                                    onChange={e => {setStartSleepTime(e.target.value)}}
                                 />
                             </Col>
                             <Col numColSpan={3}>
@@ -87,6 +108,8 @@ function ContentArea() {
                                     style={{ backgroundColor: "white", color: "black" }}
                                     placeholder="Enter your sleep time..."
                                     type="time"
+                                    value={endSleepTime}
+                                    onChange={e => {setEndSleepTime(e.target.value)}}
                                 />
                             </Col>
                         </Grid>
@@ -193,10 +216,18 @@ function ContentArea() {
 
             </Grid>
             <Flex justifyContent="end">
+                <Button className="mt-4 me-4"
+                    variant="primary" color="red"
+                    onClick={() => {
+                        console.log("Skip");
+                    }
+                    }>
+                    Skip
+                </Button>
                 <Button className="mt-4"
                     variant="primary" color="indigo"
                     onClick={() => {
-                        console.log("Task Registration")
+                        setTaskConfigObject(sleepTime, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime);
                     }
                     }>
                     Register
@@ -239,7 +270,7 @@ const TaskRegistration = (props) => {
                 <SchedulingTable />
             ) : taskRegistry && redirectToScreen(taskRegistry, redirectPage) === null ? (
                 <Template>
-                    <ContentArea />
+                    <ContentArea redirectPage={redirectPage} />
                 </Template>
             ): (
                 <></>
