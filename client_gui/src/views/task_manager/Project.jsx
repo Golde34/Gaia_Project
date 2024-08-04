@@ -11,10 +11,13 @@ import { useNavigate } from "react-router-dom";
 function ContentArea() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    
     const isUserValid = isAccessTokenCookieValid();
-    if (isUserValid) {
-        navigate('/signin');
-    }
+    useEffect(() => {
+        if (isUserValid) {
+            navigate('/signin');
+        }
+    }, [isUserValid, navigate]);
 
     const listProjects = useSelector((state) => state.projectList);
     const { loading, error, projects } = listProjects;
@@ -23,16 +26,16 @@ function ContentArea() {
         dispatch(getProjects());
     }, [dispatch]);
 
-	const debounceRef = useRef(null);
+    const debounceRef = useRef(null);
 
     useEffect(() => {
-		clearTimeout(debounceRef.current);
-		debounceRef.current = setTimeout(() => {
-			getListProjects();
-		}, 200);
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            getListProjects();
+        }, 200);
     }, []);
 
-    localStorage.setItem("activeTab", 'none');  
+    localStorage.setItem("activeTab", 'none');
 
     return (
         <div>
