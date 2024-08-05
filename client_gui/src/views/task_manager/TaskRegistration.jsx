@@ -30,21 +30,18 @@ function ContentArea(props) {
 
     const createTaskRegistration = useCreateTaskRegistrationDispatch();
     const setTaskConfigObject = (sleepDuration, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime) => {
-        console.log("Set Task Config Object");
-        console.log(sleepDuration);
         const taskConfig = {
-            userId: userId,
-            sleepDuration: sleepDuration,
+            userId: parseInt(userId),
+            sleepDuration: parseInt(sleepDuration),
             startSleepTime: startSleepTime,
             endSleepTime: endSleepTime,
-            relaxTime: relaxTime,
-            eatTime: eatTime,
-            travelTime: travelTime,
-            workTime: workTime
+            relaxTime: parseInt(relaxTime),
+            eatTime: parseInt(eatTime),
+            travelTime: parseInt(travelTime),
+            workTime: parseInt(workTime)
         }
-        console.log(taskConfig);
-        console.log(redirectPage);
-        // createTaskRegistration(taskRegistration);
+        const response = createTaskRegistration(taskConfig);
+        console.log(response);
         // navigate base on redirectPage
     }
 

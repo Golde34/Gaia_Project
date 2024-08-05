@@ -22,7 +22,7 @@ export const registerTaskConfigReducer = (
         case REGISTER_TASK_CONFIG_REQUEST:
             return { loading: true };
         case REGISTER_TASK_CONFIG_SUCCESS:
-            return { loading: false, taskRegistry: action.payload };
+            return { loading: false, taskRegistry: action.payload.data.registerTaskConfig };
         case REGISTER_TASK_CONFIG_FAIL:
             return { loading: false, error: action.payload };
         default:
