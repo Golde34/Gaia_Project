@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Entity
 @Table(name = "task_registration")
@@ -27,8 +25,8 @@ public class TaskRegistration {
     private double constant3;
 
     private double sleepDuration;
-    private Date startSleepTime;
-    private Date endSleepTime;
+    private String startSleepTime;
+    private String endSleepTime;
     private double relaxTime;
     private double travelTime;
     private double eatTime;
