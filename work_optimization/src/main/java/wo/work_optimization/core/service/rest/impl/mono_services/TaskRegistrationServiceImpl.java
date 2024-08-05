@@ -44,7 +44,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         }
 
         boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
-        if (!isUserRegisteredTask) {
+        if (isUserRegisteredTask) {
             return genericResponse.matchingResponseMessage(
                     new GenericResponse<>(Constants.ErrorMessage.EXISTED_USER, ResponseMessage.msg400));
         }
