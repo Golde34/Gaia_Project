@@ -1,6 +1,7 @@
 type RegisterTaskConfig {
     userId: Float!
     workTime: Float!
+    taskConfigStatus: Boolean!
 }
 
 type IsTaskExisted {

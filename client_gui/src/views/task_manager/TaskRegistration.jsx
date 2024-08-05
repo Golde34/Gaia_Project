@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from "react-redux"
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
-import { queryTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
+import { queryTaskConfig, registerTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
 import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
-import { useCreateTaskRegistrationDispatch } from "../../kernels/utils/write-dialog-api-requests";
 import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { useNavigate } from "react-router-dom";
+import { isNullOrUndefined } from "../../kernels/utils/cn";
 
 function ContentArea(props) {
-    const redirectPage = props.redirectPage; 
+    const dispatch = useDispatch();
+    const redirectPage = props.redirectPage;
 
+    const [ validateErrors, setValidateErrors ] = useState({});
     const userId = "1";
     const [sleepTime, setSleepTime] = useState(0);
     const [startSleepTime, setStartSleepTime] = useState("");
@@ -28,24 +30,45 @@ function ContentArea(props) {
         return time * 100 / 24;
     }
 
-    const createTaskRegistration = useCreateTaskRegistrationDispatch();
+    const validateFields = () => {
+        const newErrors = {};
+        if (isNullOrUndefined(startSleepTime)) newErrors.startSleepTime = "Start sleep time is required";
+        if (isNullOrUndefined(endSleepTime)) newErrors.endSleepTime = "End sleep time is required";
+        if (relaxTime < 0 || relaxTime > 24) newErrors.relaxTime = "Please enter a valid number between 0 and 24";
+        if (eatTime < 0 || eatTime > 24) newErrors.eatTime = "Please enter a valid number between 0 and 24";
+        if (travelTime < 0 || travelTime > 24) newErrors.travelTime = "Please enter a valid number between 0 and 24";
+        setValidateErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const setTaskConfigObject = (sleepDuration, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime) => {
-        console.log("Set Task Config Object");
-        console.log(sleepDuration);
+        if (!validateFields()) return;
+
         const taskConfig = {
-            userId: userId,
-            sleepDuration: sleepDuration,
+            userId: parseInt(userId),
+            sleepDuration: parseInt(sleepDuration),
             startSleepTime: startSleepTime,
             endSleepTime: endSleepTime,
-            relaxTime: relaxTime,
-            eatTime: eatTime,
-            travelTime: travelTime,
-            workTime: workTime
+            relaxTime: parseInt(relaxTime),
+            eatTime: parseInt(eatTime),
+            travelTime: parseInt(travelTime),
+            workTime: parseInt(workTime)
         }
-        console.log(taskConfig);
-        console.log(redirectPage);
-        // createTaskRegistration(taskRegistration);
-        // navigate base on redirectPage
+        dispatch(registerTaskConfig(taskConfig))
+            .then(response => {
+                if (response.taskConfigStatus === true) {
+                    if (redirectPage === "Task Manager") {
+                        window.location.href = "/client-gui/project";
+                    }
+                    if (redirectPage === "Schedule Plan") {
+                        window.location.href = "/client-gui/schedule";
+                    }
+                }
+            })
+            .catch(error => {
+                console.log("Task Config registration failed: ", error);
+            })
+        // window.location.reload();
     }
 
     return (
@@ -102,6 +125,8 @@ function ContentArea(props) {
                                     type="time"
                                     value={startSleepTime}
                                     onChange={e => { setStartSleepTime(e.target.value) }}
+                                    error={isNullOrUndefined(startSleepTime)}
+                                    errorMessage="Please enter a valid time"
                                 />
                             </Col>
                             <Col numColSpan={3}>
@@ -112,6 +137,8 @@ function ContentArea(props) {
                                     type="time"
                                     value={endSleepTime}
                                     onChange={e => { setEndSleepTime(e.target.value) }}
+                                    error={isNullOrUndefined(endSleepTime)}
+                                    errorMessage="Please enter a valid time"
                                 />
                             </Col>
                         </Grid>

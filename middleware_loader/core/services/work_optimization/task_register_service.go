@@ -17,7 +17,9 @@ func NewTaskRegisterService() *TaskRegisterService {
 func (s *TaskRegisterService) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (model.RegisterTaskConfig, error) {
 	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).RegisterTaskConfig(input)
 	if err != nil {
-		return model.RegisterTaskConfig{}, err
+		return model.RegisterTaskConfig{
+			TaskConfigStatus: false,
+		}, err
 	}
 	taskRegisterModel := response_dtos.NewRegisterTaskConfigResponseDTO().MapperToGraphQLModel(response)
 	return taskRegisterModel, nil

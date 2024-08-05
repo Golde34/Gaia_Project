@@ -44,7 +44,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         }
 
         boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
-        if (!isUserRegisteredTask) {
+        if (isUserRegisteredTask) {
             return genericResponse.matchingResponseMessage(
                     new GenericResponse<>(Constants.ErrorMessage.EXISTED_USER, ResponseMessage.msg400));
         }
@@ -112,7 +112,9 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
                 .relaxTime(request.getRelaxTime())
                 .travelTime(request.getTravelTime())
                 .eatTime(request.getEatTime())
-                .workTime(request.getWorkTime()).build();
+                .workTime(request.getWorkTime())
+                .status(Constants.Status.ACTIVE)
+                .build();
     }
 
     @Override

@@ -27,6 +27,7 @@ func (adapter *TaskRegisterAdapter) RegisterTaskConfig(input model.RegisterTaskI
 	if err != nil {
 		return response_dtos.RegisterTaskConfigResponseDTO{}, err
 	}
+	response.TaskConfigStatus = true
 	return response, nil
 }
 
