@@ -8,11 +8,13 @@ import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
 import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { useNavigate } from "react-router-dom";
+import { isNullOrUndefined } from "../../kernels/utils/cn";
 
 function ContentArea(props) {
     const dispatch = useDispatch();
     const redirectPage = props.redirectPage;
 
+    const [ validateErrors, setValidateErrors ] = useState({});
     const userId = "1";
     const [sleepTime, setSleepTime] = useState(0);
     const [startSleepTime, setStartSleepTime] = useState("");
@@ -28,7 +30,20 @@ function ContentArea(props) {
         return time * 100 / 24;
     }
 
+    const validateFields = () => {
+        const newErrors = {};
+        if (isNullOrUndefined(startSleepTime)) newErrors.startSleepTime = "Start sleep time is required";
+        if (isNullOrUndefined(endSleepTime)) newErrors.endSleepTime = "End sleep time is required";
+        if (relaxTime < 0 || relaxTime > 24) newErrors.relaxTime = "Please enter a valid number between 0 and 24";
+        if (eatTime < 0 || eatTime > 24) newErrors.eatTime = "Please enter a valid number between 0 and 24";
+        if (travelTime < 0 || travelTime > 24) newErrors.travelTime = "Please enter a valid number between 0 and 24";
+        setValidateErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const setTaskConfigObject = (sleepDuration, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime) => {
+        if (!validateFields()) return;
+
         const taskConfig = {
             userId: parseInt(userId),
             sleepDuration: parseInt(sleepDuration),
@@ -110,6 +125,8 @@ function ContentArea(props) {
                                     type="time"
                                     value={startSleepTime}
                                     onChange={e => { setStartSleepTime(e.target.value) }}
+                                    error={isNullOrUndefined(startSleepTime)}
+                                    errorMessage="Please enter a valid time"
                                 />
                             </Col>
                             <Col numColSpan={3}>
@@ -120,6 +137,8 @@ function ContentArea(props) {
                                     type="time"
                                     value={endSleepTime}
                                     onChange={e => { setEndSleepTime(e.target.value) }}
+                                    error={isNullOrUndefined(endSleepTime)}
+                                    errorMessage="Please enter a valid time"
                                 />
                             </Col>
                         </Grid>
