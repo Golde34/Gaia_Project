@@ -7,8 +7,9 @@ import (
 )
 
 type RegisterTaskConfigResponseDTO struct {
-	UserId float64 `json:"userId"`
-	WorkTime float64 `json:"workTime"`
+	UserId           float64 `json:"userId"`
+	WorkTime         float64 `json:"workTime"`
+	TaskConfigStatus bool    `json:"taskConfigStatus"`
 }
 
 func NewRegisterTaskConfigResponseDTO() *RegisterTaskConfigResponseDTO {

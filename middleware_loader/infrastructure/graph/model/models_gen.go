@@ -171,8 +171,9 @@ type Query struct {
 }
 
 type RegisterTaskConfig struct {
-	UserID   float64 `json:"userId"`
-	WorkTime float64 `json:"workTime"`
+	UserID           float64 `json:"userId"`
+	WorkTime         float64 `json:"workTime"`
+	TaskConfigStatus bool    `json:"taskConfigStatus"`
 }
 
 type RegisterTaskInput struct {

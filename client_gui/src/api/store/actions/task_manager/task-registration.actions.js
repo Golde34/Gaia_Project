@@ -27,6 +27,7 @@ export const registerTaskConfig = (taskConfig) => async (dispatch) => {
     try {
         const { data } = await serverRequest('/work-optimization/register-task-config', HttpMethods.POST, portName.middlewarePort, taskConfig);
         dispatch({ type: REGISTER_TASK_CONFIG_SUCCESS, payload: data });
+        return data.data.registerTaskConfig;
     } catch (error) {
         dispatch({
             type: REGISTER_TASK_CONFIG_FAIL,

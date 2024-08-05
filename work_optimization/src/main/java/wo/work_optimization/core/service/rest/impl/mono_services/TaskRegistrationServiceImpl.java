@@ -112,7 +112,9 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
                 .relaxTime(request.getRelaxTime())
                 .travelTime(request.getTravelTime())
                 .eatTime(request.getEatTime())
-                .workTime(request.getWorkTime()).build();
+                .workTime(request.getWorkTime())
+                .status(Constants.Status.ACTIVE)
+                .build();
     }
 
     @Override

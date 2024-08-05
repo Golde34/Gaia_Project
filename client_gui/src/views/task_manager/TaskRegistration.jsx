@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from "react-redux"
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
-import { queryTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
+import { queryTaskConfig, registerTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
 import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
-import { useCreateTaskRegistrationDispatch } from "../../kernels/utils/write-dialog-api-requests";
 import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { useNavigate } from "react-router-dom";
 
 function ContentArea(props) {
-    const redirectPage = props.redirectPage; 
+    const dispatch = useDispatch();
+    const redirectPage = props.redirectPage;
 
     const userId = "1";
     const [sleepTime, setSleepTime] = useState(0);
@@ -28,7 +28,6 @@ function ContentArea(props) {
         return time * 100 / 24;
     }
 
-    const createTaskRegistration = useCreateTaskRegistrationDispatch();
     const setTaskConfigObject = (sleepDuration, startSleepTime, endSleepTime, relaxTime, eatTime, travelTime, workTime) => {
         const taskConfig = {
             userId: parseInt(userId),
@@ -40,9 +39,21 @@ function ContentArea(props) {
             travelTime: parseInt(travelTime),
             workTime: parseInt(workTime)
         }
-        const response = createTaskRegistration(taskConfig);
-        console.log(response);
-        // navigate base on redirectPage
+        dispatch(registerTaskConfig(taskConfig))
+            .then(response => {
+                if (response.taskConfigStatus === true) {
+                    if (redirectPage === "Task Manager") {
+                        window.location.href = "/client-gui/project";
+                    }
+                    if (redirectPage === "Schedule Plan") {
+                        window.location.href = "/client-gui/schedule";
+                    }
+                }
+            })
+            .catch(error => {
+                console.log("Task Config registration failed: ", error);
+            })
+        // window.location.reload();
     }
 
     return (
