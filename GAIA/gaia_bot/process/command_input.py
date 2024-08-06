@@ -31,8 +31,10 @@ class CommandInput:
     
     def _create_task(self):
         title = input("Enter your task title: ")
-        content = input("Enter your task content: ")
-        duration = input("Enter your task duration: ")
-        priority = input("Enter your task priority(Low, Medium, High, Star): ")
+        priority = input("Enter your task priority (Low, Medium, High, Star): ")
+        status = input("Enter your task status (To Do, In Progress, Done): ")
+        start_date = input("Enter your task start date: ")
         deadline = input("Enter your task deadline: ")
-        return f"Task created with title: {title}, content: {content}, duration: {duration}, priority: {priority}, deadline: {deadline}", "Create task"
+        duration = input("Enter your task duration: ")
+        return f"Task created with title: {title}, priority: {priority}, status: {status}, start date: {start_date}, deadline: {deadline}, duration: {duration}", "Create task" 
+        
