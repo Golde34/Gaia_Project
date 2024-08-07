@@ -1,7 +1,7 @@
 import pandas as pd
 import fastparquet
 
-from prompt_to_response.config import DATA_CSV_FILE, DATA_PARQUET_FILE
+from config import DATA_CSV_FILE, DATA_PARQUET_FILE
 
 
 def write_parquet_file():

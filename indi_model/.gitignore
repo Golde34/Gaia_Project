@@ -21,8 +21,9 @@
 __config__.py
 *\.parquet
 *\tmp
-
+data/
 .env
+*\.pth
 
 # gitignore json
 token.json
