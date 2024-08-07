@@ -39,7 +39,7 @@ def call_alpaca_response(inp, model, tokenizer, mode="run"):
         inputs = tokenizer(
             [
                 prompt.test_prompt.format(
-                    "Answer my question or chat with me: ",  # instruction
+                    "Answer my question or chat with me as my faithful virtual task butler: ",  # instruction
                     inp,  # input
                     "",  # output - leave this blank for generation!
                 )
