@@ -1,49 +1,35 @@
-import logging
 import json
 
-from gaia_bot.domain.model.task import Task
-from gaia_bot.domain.model.enum_model import TypeTaskCRUD
+from gaia_bot.domain.entity.task import Task
+from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
+from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
+
 
 class TaskCRUDSkill():
-    def detect_task_action(text):
-        return 'create'
-    
     @classmethod
-    def execute(cls, text, **kwargs):
-        # activate gaia connector
-        try:
-            task = cls.detect_task(text)
-            action = cls.detect_task_action(text)
-            cls.execute_task_action(action, task) 
-        except Exception as e:
-            logging.error("Cannot activate Gaia Connector")
-            cls.console_manager.console_output("Cannot activate Gaia Connector") 
-               
+    def create_task(cls, text):
+        print('Create task - Calling Gaia Connector...')
+        return cls.execute_task_action('POST', text, TypeTaskCRUD.TASK)
+
     @classmethod
-    def call_api(cls, type_task, task_object):
+    def update_task(cls, text):
+        print('Update task - Calling Gaia Connector...')
+        return cls.execute_task_action('PUT', text, TypeTaskCRUD.TASK)
+
+    @classmethod
+    def execute_task_action(cls, method, text, type_task):
         if type_task == TypeTaskCRUD.TASK:
-            task = Task().json_to_task(task_object)
-            return cls.execute_task_action(task)
-        return None
+            task_json = cls._transfer_text_to_task(text)
+            task  = Task().json_to_task(task_json)
+            return cls._send_request(task, method)
     
     @classmethod
-    def execute_task_action(cls, action, task,):
-        if action == 'create':
-            return cls._send_request(task, 'POST')
-        elif action == 'update':
-            return cls._send_request(task, 'PUT')
-        elif action == 'delete':
-            return cls._send_request(task, 'DELETE')
-        elif action == 'read':
-            return cls._send_request(task, 'GET')
-        else:
-            logging.error("Invalid action")
-            return False
+    def _send_request(cls, task, method):
+        task_manager = TaskManagerConnector()
+        json_task = json.dumps(task.__dict__)
+        cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {json_task}")
+        return task_manager.execute_task_command(json_task, method)
     
-    # @classmethod
-    # def _send_request(cls, task, method):
-    #     task_manager = TaskManagerConnector()
-    #     json_task = json.dumps(task.__dict__)
-    #     cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {json_task}")
-    #     return task_manager.execute_task_command(json_task, method)
-    
+    @classmethod
+    def _transfer_text_to_task(cls, text):
+        return {'task': text}
