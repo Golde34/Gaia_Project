@@ -20,9 +20,13 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 		return
 	}
 	registerTaskInput := mapper.RegisterTaskConfigRequestDTOMapper(body)
+	userInput := mapper.GetUserIdInBody(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})	
+	// Check if task and schedule existed for introduction purpose
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isTaskExisted", QueryInput: userInput, QueryOutput: model.IsTaskExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isScheduleExisted", QueryInput: userInput, QueryOutput: model.IsScheduleExisted{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
@@ -34,6 +38,9 @@ func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
+	// Check if task and schedule existed for introduction purpose
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isTaskExisted", QueryInput: input, QueryOutput: model.IsTaskExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isScheduleExisted", QueryInput: input, QueryOutput: model.IsScheduleExisted{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
