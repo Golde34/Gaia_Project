@@ -6,18 +6,19 @@ import (
 	"fmt"
 	"io"
 	"log"
+
 	// "middleware_loader/infrastructure/graph/model"
 	"net/http"
 	"reflect"
 	"strings"
 
-	"middleware_loader/core/domain/dtos/base"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 )
 
 func GenerateGraphQLQueryWithInput(action string, function string, input interface{}, output interface{}) string {
 	inputPairs := ConvertInput(input)
 	outputStr := ConvertOutput(output)
-	
+
 	// Generate query
 	query := fmt.Sprintf(`%s { 
 		%s(input: { %s}) {
@@ -30,7 +31,7 @@ func GenerateGraphQLQueryWithInput(action string, function string, input interfa
 
 func GenerateGraphQLQueryNoInput(action string, function string, output interface{}) string {
 	outputStr := ConvertOutput(output)
-	
+
 	// Generate query
 	query := fmt.Sprintf(`%s { 
 		%s {
@@ -47,7 +48,7 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base
 		panic("No query to generate")
 	}
 	if len(graphQLQuery) == 1 {
-		return GenerateGraphQLQueryWithInput(action, graphQLQuery[0].Functionname, 
+		return GenerateGraphQLQueryWithInput(action, graphQLQuery[0].FunctionName,
 			graphQLQuery[0].QueryInput, graphQLQuery[0].QueryOutput)
 	}
 
@@ -60,20 +61,20 @@ func GenerateGraphQLQueryWithMultipleFunction(action string, graphQLQuery []base
 					%s(input: { %s }) {
 						%s
 					}
-			`, action, graphQLQuery[i].Functionname, inputPairs, outputStr))
+			`, action, graphQLQuery[i].FunctionName, inputPairs, outputStr))
 		} else if i == len(graphQLQuery)-1 {
 			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
 			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
 				%s
 			}
-		}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
+		}`, graphQLQuery[i].FunctionName, inputPairs, outputStr))
 		} else {
 			inputPairs := ConvertInput(graphQLQuery[i].QueryInput)
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
 			functionScripts = append(functionScripts, fmt.Sprintf(`%s(input: { %s}) {
 				%s
-			}`, graphQLQuery[i].Functionname, inputPairs, outputStr))
+			}`, graphQLQuery[i].FunctionName, inputPairs, outputStr))
 		}
 	}
 	return strings.Join(functionScripts, "\n")
@@ -85,7 +86,7 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_d
 		panic("No query to generate")
 	}
 	if len(graphQLQuery) == 1 {
-		return GenerateGraphQLQueryNoInput(action, graphQLQuery[0].Functionname, graphQLQuery[0].QueryOutput)
+		return GenerateGraphQLQueryNoInput(action, graphQLQuery[0].FunctionName, graphQLQuery[0].QueryOutput)
 	}
 
 	for i := 0; i < len(graphQLQuery); i++ {
@@ -96,12 +97,12 @@ func GenerateGraphQLMultipleFunctionNoInput(action string, graphQLQuery []base_d
 					%s {
 						%s
 					}
-			`, action, graphQLQuery[i].Functionname, outputStr))
+			`, action, graphQLQuery[i].FunctionName, outputStr))
 		} else {
 			outputStr := ConvertOutput(graphQLQuery[i].QueryOutput)
 			functionScripts = append(functionScripts, fmt.Sprintf(`%s {
 				%s
-			}`, graphQLQuery[i].Functionname, outputStr))
+			}`, graphQLQuery[i].FunctionName, outputStr))
 		}
 	}
 	return strings.Join(functionScripts, "\n")

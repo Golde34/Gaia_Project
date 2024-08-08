@@ -22,7 +22,7 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 	registerTaskInput := mapper.RegisterTaskConfigRequestDTOMapper(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})	
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})	
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
@@ -33,7 +33,7 @@ func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService
 	input := mapper.GetUserId(userId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "queryTaskConfig", QueryInput: input, QueryOutput: model.IsTaskConfigExisted{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)

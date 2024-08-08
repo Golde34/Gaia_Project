@@ -12,7 +12,7 @@ import (
 
 func GetAllRoles(w http.ResponseWriter, r *http.Request, roleService *services.RoleService) {
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getAllRoles", QueryInput: nil, QueryOutput: model.Role{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getAllRoles", QueryInput: nil, QueryOutput: model.Role{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -29,7 +29,7 @@ func CreateRole(w http.ResponseWriter, r *http.Request, roleService *services.Ro
 	input := mapper.CreateRoleRequestMapper(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "createRole", QueryInput: input, QueryOutput: model.Role{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "createRole", QueryInput: input, QueryOutput: model.Role{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
