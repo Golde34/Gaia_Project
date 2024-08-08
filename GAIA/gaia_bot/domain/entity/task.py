@@ -1,6 +1,6 @@
 import json
 
-from gaia_bot.domain.model.enum_model import TypeTaskCRUD
+from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 
 
 class Task:
