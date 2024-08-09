@@ -2,9 +2,9 @@ package controller_services
 
 import (
 	"log"
-	"middleware_loader/core/domain/dtos/base"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services/auth_services"
+	services "middleware_loader/core/services/auth_services"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
@@ -12,9 +12,9 @@ import (
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
-	
+
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "listAllUsers", QueryInput: nil, QueryOutput: model.ListAllUsers{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllUsers", QueryInput: nil, QueryOutput: model.ListAllUsers{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -44,7 +44,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.Us
 	input := mapper.UpdateUserRequestDTOMapper(body)
 	log.Println(input)
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateUser", QueryInput: input, QueryOutput: model.UpdateUser{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateUser", QueryInput: input, QueryOutput: model.UpdateUser{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)

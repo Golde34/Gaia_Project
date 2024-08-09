@@ -5,14 +5,9 @@
 *\dist
 *\.bin
 *\.pt
-*\.safetensors
-*\.log
-*\.metals
-*\.bloop
 
 *\.csv
 *\.zip
-*.gz
 
 *\.vite
 
@@ -21,6 +16,7 @@
 *\bin
 
 .ipynb_checkpoints
+__config__.py
 *\.parquet
 *\tmp
 
@@ -29,6 +25,3 @@
 # gitignore json
 token.json
 commits.json
-*.xml
-!pom.xml
-*\auth_service.log

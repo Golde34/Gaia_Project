@@ -1,7 +1,7 @@
-package base_dtos 
+package base_dtos
 
 type GraphQLQuery struct {
-	Functionname string
+	FunctionName string
 	QueryInput   interface{}
 	QueryOutput  interface{}
 }

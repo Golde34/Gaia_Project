@@ -1,9 +1,9 @@
 package controller_services
 
 import (
-	"middleware_loader/core/domain/dtos/base"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
-	"middleware_loader/core/services/task_manager"
+	services "middleware_loader/core/services/task_manager"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
@@ -15,7 +15,7 @@ import (
 func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -27,7 +27,7 @@ func GetById(w http.ResponseWriter, r *http.Request, projectService *services.Pr
 	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getProjectById", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getProjectById", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -44,7 +44,7 @@ func CreateProject(w http.ResponseWriter, r *http.Request, projectService *servi
 	input := mapper.CreateProjectRequestDTOMapper(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "createProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "createProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -63,7 +63,7 @@ func UpdateProject(w http.ResponseWriter, r *http.Request, projectService *servi
 	input := mapper.UpdateProjectRequestDTOMapper(body, projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -74,7 +74,7 @@ func DeleteProject(w http.ResponseWriter, r *http.Request, projectService *servi
 	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "deleteProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "deleteProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -86,7 +86,7 @@ func GetGroupTasksInProject(w http.ResponseWriter, r *http.Request, projectServi
 	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getGroupTasksInProject", QueryInput: input, QueryOutput: model.GroupTask{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getGroupTasksInProject", QueryInput: input, QueryOutput: model.GroupTask{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -103,7 +103,7 @@ func UpdateProjectName(w http.ResponseWriter, r *http.Request, projectService *s
 	input := mapper.UpdateProjectNameRequestDTOMapper(body, projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateProjectName", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateProjectName", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -120,7 +120,7 @@ func UpdateProjectColor(w http.ResponseWriter, r *http.Request, projectService *
 	input := mapper.UpdateProjectColorRequestDTOMapper(body, projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "updateProjectColor", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateProjectColor", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -131,7 +131,7 @@ func ArchiveProject(w http.ResponseWriter, r *http.Request, projectService *serv
 	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "archiveProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "archiveProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
@@ -142,7 +142,7 @@ func EnableProject(w http.ResponseWriter, r *http.Request, projectService *servi
 	input := mapper.GetId(projectId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "enableProject", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "enableProject", QueryInput: input, QueryOutput: model.Project{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)

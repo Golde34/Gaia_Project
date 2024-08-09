@@ -10,7 +10,7 @@ import (
 
 func GetAllPrivileges(w http.ResponseWriter, r *http.Request, privilegeService *services.PrivilegeService) {
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{Functionname: "getAllPrivileges", QueryInput: nil, QueryOutput: model.ListPrivilegeResponse{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getAllPrivileges", QueryInput: nil, QueryOutput: model.ListPrivilegeResponse{}})
 	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
