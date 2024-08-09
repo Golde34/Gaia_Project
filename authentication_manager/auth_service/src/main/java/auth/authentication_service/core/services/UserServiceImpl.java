@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -50,8 +49,6 @@ public class UserServiceImpl implements UserService {
     UserServiceValidation userServiceValidation;
     @Autowired
     UserMapper userMapper;
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public UserServiceImpl(UserCRUDStore userStore, RoleStore roleStore) {
         this.userStore = userStore;
