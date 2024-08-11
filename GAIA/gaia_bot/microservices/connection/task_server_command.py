@@ -34,9 +34,7 @@ class TaskManagerConnector:
     def activate_task_manager_command(self):
         self.microservice_state.activate_service()
         
-    def create_task(self, task):
-        task_json = json.dumps(task)
-        
+    def create_task(self, task): 
         response = requests.post(f"{self.gaia_url}" + "/create-task", 
                                  json={'task': task})
         

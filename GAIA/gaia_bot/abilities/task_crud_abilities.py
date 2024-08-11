@@ -32,4 +32,13 @@ class TaskCRUDSkill():
     
     @classmethod
     def _transfer_text_to_task(cls, text):
-        return {'task': text}
+        return {'task': {
+            'title': text,
+            'description': 'Example description',
+            'priority': 'High',
+            'status': 'To Do',
+            'startDate': '2024-08-10',
+            'deadline': '2024-08-11',
+            'duration': '8',
+            'tag': 'Example'
+        }}
