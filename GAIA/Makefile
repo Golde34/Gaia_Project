@@ -6,3 +6,7 @@ gaia-debug:
 
 gaia-train-model:
 	python __main__.py --train-model
+
+gaia-abilities:
+	python __main__.py --abilities
+	
