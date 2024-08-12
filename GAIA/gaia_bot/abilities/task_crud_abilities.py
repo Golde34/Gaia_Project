@@ -18,21 +18,21 @@ class TaskCRUDSkill():
 
     @classmethod
     def execute_task_action(cls, method, text, type_task):
+        print(type_task == TypeTaskCRUD.TASK)
         if type_task == TypeTaskCRUD.TASK:
-            task_json = cls._transfer_text_to_task(text)
-            task  = Task().json_to_task(task_json)
+            task = cls._transfer_text_to_task(text)
             return cls._send_request(task, method)
     
     @classmethod
     def _send_request(cls, task, method):
         task_manager = TaskManagerConnector()
-        json_task = json.dumps(task.__dict__)
-        cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {json_task}")
-        return task_manager.execute_task_command(json_task, method)
+        print('Execute command to gaia connector...')
+        # cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {task}")
+        return task_manager.execute_task_command(task, method)
     
     @classmethod
     def _transfer_text_to_task(cls, text):
-        return {'task': {
+        return {
             'title': text,
             'description': 'Example description',
             'priority': 'High',
@@ -40,5 +40,7 @@ class TaskCRUDSkill():
             'startDate': '2024-08-10',
             'deadline': '2024-08-11',
             'duration': '8',
-            'tag': 'Example'
-        }}
+            'groupTaskId': 'abc',
+            'activeStatus': 'ACTIVE'
+            # 'tag': 'Example'
+        }

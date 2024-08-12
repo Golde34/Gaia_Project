@@ -112,3 +112,8 @@ class Processor:
         except Exception as e:
             response = "Failed to generate response: {}".format(e)
             return response
+
+    def access_abilities_privately(self, skills):
+        tag_skill = str(input("Enter the skill you want to access: "))
+        self.assistant.skill_process(tag_skill, skills)
+        pass

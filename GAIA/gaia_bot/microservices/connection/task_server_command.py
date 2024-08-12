@@ -15,11 +15,7 @@ class TaskManagerConnector:
         self.router = PORTS['task_manager']['router']
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
-        self.microservice_state = MicroserviceConnection().call_microservice_by_name(AcronymsEnum.AS._value_)
-
     def execute_task_command(self, task, method, **kwargs):
-        self.activate_task_manager_command()
-
         if method == 'POST':
             return self.create_task(task)
         elif method == 'PUT':
@@ -31,13 +27,10 @@ class TaskManagerConnector:
         else:
             return False
 
-    def activate_task_manager_command(self):
-        self.microservice_state.activate_service()
-        
     def create_task(self, task): 
         response = requests.post(f"{self.gaia_url}" + "/create-task", 
                                  json={'task': task})
-        
+        print(response)
         if response.status_code == 200:
             result = response.json()
             body = result['response']
