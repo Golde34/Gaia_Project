@@ -10,3 +10,9 @@ class MiddlewareConnection:
         
     def _get_microservice_router(self, microservice):
         return PORTS[microservice]['router']
+    
+class TaskManagerConnection:
+    def __init__(self):
+        self.domain = DOMAIN
+        self.port = PORTS['task_manager']['port']
+        self.url = f"http://{self.domain}:{self.port}"

@@ -11,10 +11,8 @@ class TaskServiceRequest:
     def create_task(self, data):
         try:
             task = data['task']
-            
-            tokens = self._get_tokens()
-            access_token = tokens['accessToken']
-            task_response = requests.post(f"{self.url}/create-task", json={'task': task, 'access_token': access_token})
+            print(task)
+            task_response = requests.post(f"{self.url}/task/create", json=task)
             
             if task_response.status_code == 200:
                 print('Create task successfully')
@@ -24,7 +22,7 @@ class TaskServiceRequest:
                 return jsonify({'status': 'ERROR', 'message': 'Create task failed'})
         except:
             print('Create task failed')
-            return jsonify({'s`tatus': 'ERROR', 'message': 'Invalid data'})
+            return jsonify({'status': 'ERROR', 'message': 'Invalid data'})
     
     def _get_tokens(self):
         access_token, refresh_token = _get_token_parameters()
@@ -39,7 +37,7 @@ class TaskServiceRequest:
             
             access_token = self._get_tokens()['accessToken']
             
-            task_response = requests.put(f"{self.url}/update-task", json={'task': task, 'access_token': access_token})
+            task_response = requests.put(f"{self.url}/task/update-task", json={'task': task, 'access_token': access_token})
             
             if task_response.status_code == 200:
                 print('Update task successfully')
@@ -57,7 +55,7 @@ class TaskServiceRequest:
             
             access_token = self._get_tokens()['accessToken']
             
-            task_response = requests.delete(f"{self.url}/delete-task", json={'task': task, 'access_token': access_token})
+            task_response = requests.delete(f"{self.url}/task/delete-task", json={'task': task, 'access_token': access_token})
             
             if task_response.status_code == 200:
                 print('Delete task successfully')
@@ -75,7 +73,7 @@ class TaskServiceRequest:
             
             access_token = self._get_tokens()['accessToken']
             
-            task_response = requests.get(f"{self.url}/view-task", json={'task': task, 'access_token': access_token})
+            task_response = requests.get(f"{self.url}/task/view-task", json={'task': task, 'access_token': access_token})
             
             if task_response.status_code == 200:
                 print('View task successfully')
