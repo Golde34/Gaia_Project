@@ -1,11 +1,14 @@
-import json
-
 from gaia_bot.domain.entity.task import Task
 from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
+from GAIA.gaia_bot.abilities.sentence_object_recognizer import SOR
 
 
 class TaskCRUDSkill():
+    def __init__(self):
+        self.task_manager = TaskManagerConnector()
+        self.detect_sentence = SOR()
+
     @classmethod
     def create_task(cls, text):
         print('Create task - Calling Gaia Connector...')
@@ -25,22 +28,10 @@ class TaskCRUDSkill():
     
     @classmethod
     def _send_request(cls, task, method):
-        task_manager = TaskManagerConnector()
         print('Execute command to gaia connector...')
         # cls.console_manager.console_output(text=f"Executing {method} request to Task Manager: {task}")
-        return task_manager.execute_task_command(task, method)
+        return cls.task_manager.execute_task_command(task, method)
     
     @classmethod
     def _transfer_text_to_task(cls, text):
-        return {
-            'title': text,
-            'description': 'Example description',
-            'priority': 'High',
-            'status': 'To Do',
-            'startDate': '2024-08-10',
-            'deadline': '2024-08-11',
-            'duration': '8',
-            'groupTaskId': 'abc',
-            'activeStatus': 'ACTIVE'
-            # 'tag': 'Example'
-        }
+        return cls.detect_sentence.call_detect_sentence_api(text)
