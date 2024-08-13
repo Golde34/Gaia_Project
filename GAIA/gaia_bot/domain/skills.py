@@ -1,4 +1,4 @@
-from gaia_bot.abilities.detect_sentence_objects import DetectSentenceObjects
+from GAIA.gaia_bot.abilities.sentence_object_recognizer import DetectSentenceObjects
 from gaia_bot.abilities.skill_detection import DetectSkill
 from gaia_bot.abilities.open_client_gui import OpenClientGUI
 from gaia_bot.abilities.task_crud_abilities import TaskCRUDSkill
