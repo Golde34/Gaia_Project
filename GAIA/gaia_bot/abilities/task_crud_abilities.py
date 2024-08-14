@@ -1,4 +1,3 @@
-from gaia_bot.domain.entity.task import Task
 from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
 from GAIA.gaia_bot.abilities.sentence_object_recognizer import SOR
