@@ -1,5 +1,4 @@
 import requests
-import json
 
 from gaia_bot.kernel.configs.port_configs import PORTS, DOMAIN
 from gaia_bot.abilities.microservice_connections import MicroserviceConnection

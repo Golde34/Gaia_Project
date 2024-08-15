@@ -1,8 +1,11 @@
 from gaia_bot.models.bert import predict as detect_sentence
+from gaia_bot.microservices.connection.sor_command import SORConnector
+from gaia_bot.domain.enums import SORModel
 
-
-class SOR():
-
+class SORSkill():
+    def __init__(self):
+        self.sor_connector = SORConnector()
+    
     @classmethod
     def handle_input(cls, sentence):
         token_sentence, sentence_list = detect_sentence.handle_input(sentence)
@@ -12,6 +15,7 @@ class SOR():
     
     @classmethod
     def call_detect_sentence_api(cls, sentence):
+        cls.sor_connector.execute_command(sentence, SORModel.TASK_DETECTION.value)
         return {
             'title': sentence,
             'description': 'Example description',

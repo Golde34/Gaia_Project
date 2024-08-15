@@ -1,12 +1,12 @@
 from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
-from GAIA.gaia_bot.abilities.sentence_object_recognizer import SOR
+from gaia_bot.abilities.sentence_object_recognizer import SORSkill
 
 
 class TaskCRUDSkill():
     def __init__(self):
         self.task_manager = TaskManagerConnector()
-        self.detect_sentence = SOR()
+        self.detect_sentence = SORSkill()
 
     @classmethod
     def create_task(cls, text):

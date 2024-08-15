@@ -42,3 +42,7 @@ class AIModel:
 class Mode:
     RUN = 'run'
     DEBUG = 'debug'
+
+class SORModel:
+    BERT = 'bert'
+    TASK_DETECTION = 'task-detection'
