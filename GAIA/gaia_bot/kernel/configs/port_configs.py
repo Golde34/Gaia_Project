@@ -1,15 +1,5 @@
 PORTS = {
-    ## CLIENT
-    "gaia_connector": {
-        "name": "GAIA",
-        "port": 5000,
-        "programming_language": "Python",
-        "description": "GAIA Connector to others microservices",
-        "router": "gaia",
-        "database": "MongoDB",
-        "database_name": "gaia",
-        "shell_path": "gaia_bot/microservices/bash_shell/gaia_connector.sh"
-    },
+    ## CLIENT 
     "client_gui": {
         "name": "Client GUI",
         "port": 5173,
@@ -42,6 +32,19 @@ PORTS = {
         "database_name": None,
         "shell_path": "gaia_bot/microservices/bash_shell/middleware_loader.sh"
     },
+    "gaia_connector": {
+        "name": "GAIA",
+        "port": 5000,
+        "programming_language": "Python",
+        "description": "GAIA Connector to others microservices",
+        "router": "gaia",
+        "database": "MongoDB",
+        "database_name": "gaia",
+        "shell_path": "gaia_bot/microservices/bash_shell/gaia_connector.sh"
+    }, 
+
+    ## BACKEND MICROSERVICES
+    # User Services
     "authentication_service": {
         "name": "Authentication Service",
         "port": 4001,
@@ -52,8 +55,7 @@ PORTS = {
         "database_name": "authentication_service",
         "shell_path": "gaia_bot/microservices/bash_shell/auth_service.sh"
     },
-
-    ## BACKEND MICROSERVICES
+    # Task Manager Services
     "task_manager": {
         "name": "Task Manager",
         "port": 3000,
@@ -74,9 +76,31 @@ PORTS = {
         "database_name": None,
         "shell_path": ""
     },
+    "schedule_plan": {
+        "name": "Schedule Plan",
+        "port": 3002,
+        "programming_language": "TypeScript",
+        "description": "Schedule API",
+        "router": "schedule-plan",
+        "database": "MongoDB",
+        "database_name": "schedule_plan",
+        "shell_path": ""
+    },
+    "work_optimization": {
+        "name": "Work Optimization",
+        "port": 3001,
+        "programming_language": "Java",
+        "description": "Work Optimization API",
+        "router": "work-optimization",
+        "database": "MySQL",
+        "database_name": "work_optimization",
+        "shell_path": ""
+    },
+    
+    ## AI MODELS MICROSERVICES
     "camera_cv": {
         "name": "Camera CV",
-        "port": 3007,
+        "port": 3003,
         "programming_language": "Python",
         "description": "Camera CV API",
         "router": "camera-cv",
@@ -84,12 +108,22 @@ PORTS = {
         "database_name": None,
         "shell_path": "gaia_bot/microservices/bash_shell/camera_cv.sh"
     },
+    "sentence_object_recognizer": {
+        "name": "Sentence Object Recognizer",
+        "port": 3004,
+        "programming_language": "Python",
+        "description": "Sentence Object Recognizer API",
+        "router": "sor",
+        "database": None,
+        "database_name": None,
+        "shell_path": ""
+    },
     
     ## THIRD PARTY
     "kafka_server": {
         "name": "Kafka Server",
         "port": 9094,
-        "programming_language": "Java, Golang, TypeScript, Python, Rust, C#",
+        "programming_language": "Java, Golang, TypeScript, Python, C#",
         "description": "Kafka Server",
         "router": None,
         "database": None,
@@ -107,7 +141,8 @@ PORT_COMPONENTS = [
     "client_gui",
     "middleware_loader",
     "kafka_server",
-    "camera_cv"
+    "camera_cv",
+    "sentence_object_recognizer"
 ]
 
 DOMAIN = "localhost"
