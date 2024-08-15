@@ -24,6 +24,7 @@ class TaskService {
 
     async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
         try {
+            console.log("Task: ", task);
             // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
 

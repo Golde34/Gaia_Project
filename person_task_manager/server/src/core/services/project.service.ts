@@ -3,7 +3,7 @@ import { returnInternalServiceErrorResponse } from "../../kernel/util/return-res
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
-import { ActiveStatus } from "../domain/enums/enums";
+import { ActiveStatus, BooleanStatus } from "../domain/enums/enums";
 import { projectStore } from "../store/project.store";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
@@ -22,6 +22,12 @@ class ProjectService {
             project.activeStatus = ActiveStatus.active;
         }
 
+        const defaultProject = await projectStore.checkDefaultProject(project.ownerId);
+        if (defaultProject.length === 0 || defaultProject === null) {
+            console.log("User does not have default project");
+            project.isDefault = BooleanStatus.true;
+        }
+        
         const createProject = await projectStore.createProject(project);
 
         return msg200({
