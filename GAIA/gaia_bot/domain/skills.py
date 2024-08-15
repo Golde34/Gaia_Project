@@ -1,4 +1,4 @@
-from GAIA.gaia_bot.abilities.sentence_object_recognizer import DetectSentenceObjects
+from gaia_bot.abilities.sentence_object_recognizer import SOR
 from gaia_bot.abilities.skill_detection import DetectSkill
 from gaia_bot.abilities.open_client_gui import OpenClientGUI
 from gaia_bot.abilities.task_crud_abilities import TaskCRUDSkill
@@ -6,7 +6,7 @@ from gaia_bot.abilities.task_crud_abilities import TaskCRUDSkill
 
 SKILLS = [
     {
-        'func': DetectSentenceObjects.handle_input,
+        'func': SOR.handle_input,
         'tags': 'detect sentence object, sentence object',
         'description': 'Detect all objects in the sentence like geography, time, person, etc.',
         'service': 'All',
