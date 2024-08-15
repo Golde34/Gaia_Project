@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IGroupTaskEntity } from "./group-task.entity";
-import { ActiveStatus } from "../../../core/domain/enums/enums";
-import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
+import { ActiveStatus, BooleanStatus } from "../../../core/domain/enums/enums";
 import { IUserTagEntity } from "./user-tag.entity";
 
 export interface IProjectEntity extends Document {
@@ -15,6 +14,7 @@ export interface IProjectEntity extends Document {
     createdAt: Date;
     updatedAt: Date;
     activeStatus: ActiveStatus;
+    isDefault: BooleanStatus;
     tag: IUserTagEntity;
 }
 
@@ -58,6 +58,12 @@ export const projectSchema = new mongoose.Schema(
             enum: Object.values(ActiveStatus),
             default: ActiveStatus.active,
             required: true,
+        },
+        isDefault: {
+            type: String,
+            enum: Object.values(BooleanStatus),
+            default: BooleanStatus.false,
+            required: false,
         },
         tag: {
             type: [Schema.Types.ObjectId],

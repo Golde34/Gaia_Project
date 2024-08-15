@@ -1,7 +1,7 @@
 import { DeleteResult } from "mongodb";
 import { IProjectEntity, ProjectEntity } from "../entities/project.entity";
 import { UpdateWriteOpResult } from "mongoose";
-import { ActiveStatus, Status } from "../../../core/domain/enums/enums";
+import { ActiveStatus, BooleanStatus, Status } from "../../../core/domain/enums/enums";
 
 class ProjectRepository {
     constructor() { }
@@ -79,6 +79,11 @@ class ProjectRepository {
     async enableProject(projectId: string): Promise<UpdateWriteOpResult> {
         return await ProjectEntity
             .updateOne({ _id: projectId }, { activeStatus: ActiveStatus.active });
+    }
+
+    async findDefaultProjectByOwnerId(ownerId: number): Promise<IProjectEntity[]> {
+        return await ProjectEntity
+            .find({ ownerId: ownerId, activeStatus: ActiveStatus.active, isDefault: BooleanStatus.true});
     }
 }
 
