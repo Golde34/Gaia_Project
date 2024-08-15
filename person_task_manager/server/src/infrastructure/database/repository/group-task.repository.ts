@@ -1,7 +1,8 @@
 import { DeleteResult } from "mongodb";
 import { GroupTaskEntity, IGroupTaskEntity } from "../entities/group-task.entity";
 import { UpdateWriteOpResult } from "mongoose";
-import { ActiveStatus, Status } from "../../../core/domain/enums/enums";
+import { ActiveStatus, BooleanStatus, Status } from "../../../core/domain/enums/enums";
+import { ProjectEntity } from "../entities/project.entity";
 
 class GroupTaskRepository {
     constructor() { }
@@ -92,6 +93,10 @@ class GroupTaskRepository {
                 path: 'tasks',
                 match: { activeStatus: ActiveStatus.active }
             });
+    }
+
+    async findDefaultGroupTaskByProjectId(projectId: string): Promise<IGroupTaskEntity[]> {
+        return await ProjectEntity.find({ projectId: projectId, activeStatus: ActiveStatus.active, isDefault: BooleanStatus.true})
     }
 }
 

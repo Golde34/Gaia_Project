@@ -60,3 +60,8 @@ export enum HttpMethod {
     HEAD = "HEAD",
     OPTION = "OPTION"
 }
+
+export enum BooleanStatus {
+    true = 1,
+    false = 0 
+}

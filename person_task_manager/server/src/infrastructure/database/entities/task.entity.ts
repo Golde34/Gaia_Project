@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import { ISubTaskEntity } from "./sub-task.entity";
 import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
-import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
 import { IUserTagEntity } from "./user-tag.entity";
 
 export interface ITaskEntity extends Document {

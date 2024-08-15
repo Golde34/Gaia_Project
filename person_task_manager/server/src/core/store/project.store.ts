@@ -65,6 +65,10 @@ class ProjectStore {
     async enableProject(projectId: string): Promise<UpdateWriteOpResult> {
         return projectRepository.enableProject(projectId);
     }
+
+    async checkDefaultProject(ownerId: number): Promise<IProjectEntity[]> {
+        return projectRepository.findDefaultProjectByOwnerId(ownerId);
+    }
 }
 
 export const projectStore = new ProjectStore();
