@@ -51,6 +51,7 @@ func (s *TaskService) CreateTask(ctx context.Context, input model.CreateTaskInpu
 	log.Println("Validation passed!")
 
 	input.Priority = utils.ConvertStringToArray(input.Priority)
+	log.Println("priority: ", input.Priority)
 
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).CreateTask(input)
 	if err != nil {

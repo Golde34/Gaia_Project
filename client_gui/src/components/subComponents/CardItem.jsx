@@ -13,11 +13,18 @@ const CardItem = (props) => {
         localStorage.setItem("activeTab", groupTaskId);
     }
 
+    const shortenTitle = (title) => {
+        if (title.length > 20) {
+            return title.substring(0, 20) + "...";
+        }
+        return title;
+    }
+
     return (
-        <button onClick={() => { redirectToTaskDetail() }} className="m-4 card-item">
-            <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px' }}> 
+        <button onClick={() => { redirectToTaskDetail() }} className="m-2">
+            <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px', maxHeight: '200px' }}> 
                 <Flex justifyContent="between" alignItems="center">
-                    <Metric>{task.title}</Metric>
+                    <Metric>{shortenTitle(task.title)}</Metric>
                     <BadgeDelta deltaType="moderateIncrease">+12.5%</BadgeDelta>
                 </Flex>
                 <Text> {task.description} </Text>

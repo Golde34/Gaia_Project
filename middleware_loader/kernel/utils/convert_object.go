@@ -14,13 +14,16 @@ func ConvertStringToStringArrayPointer(aInterface []interface{}) *[]string {
 }
 
 func ConvertStringToArray(input []string) []string {
-	if len(input) == 0 {
-		return nil
-	}
-	stringComponent := input[0]
-	stringComponent = strings.Trim(stringComponent, "[]")
-	listComponent := strings.Fields(stringComponent)
-	return listComponent
+    if len(input) == 0 {
+        return nil
+    }
+    var result []string
+    for _, stringComponent := range input {
+        stringComponent = strings.Trim(stringComponent, "[]")
+        listComponent := strings.Fields(stringComponent)
+        result = append(result, listComponent...)
+    }
+    return result
 }
 
 func ConvertStringToStringArray(aInterface []interface{}) []string {

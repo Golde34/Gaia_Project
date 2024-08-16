@@ -1,16 +1,16 @@
+import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
 import { TaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
+import { BooleanStatus } from "../domain/enums/enums";
 import { groupTaskStore } from "../store/group-task.store";
 import { projectStore } from "../store/project.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
-import { userTagService } from "./user-tag.service";
 
 const projectServiceImpl = projectService;
-const userTagServiceImpl = userTagService;
 const groupTaskValidationImpl = groupTaskValidation;
 
 class GroupTaskService {
@@ -18,12 +18,13 @@ class GroupTaskService {
 
     async createGroupTaskToProject(groupTask: any, projectId: string): Promise<IResponse> {
         try {
+            groupTask = await this.checkDefaultGroupTask(groupTask);
+
             const createGroupTask = await groupTaskStore.createGroupTask(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
 
             if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
                 projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
-
                 return msg200({
                     message: (createGroupTask as any)
                 });
@@ -36,15 +37,26 @@ class GroupTaskService {
         }
     }
 
-    // This fucntion doesnot response to client
+    async checkDefaultGroupTask(groupTask: any): Promise<IGroupTaskEntity> {
+        const defaultGroupTask = await groupTaskStore.checkDefaultGroupTask(groupTask.projectId);
+        if (defaultGroupTask.length === 0 || defaultGroupTask === null) {
+            console.log("Project does not have default group task");
+            groupTask.isDefault = BooleanStatus.true;
+            return groupTask;
+        }
+        return groupTask;
+    } 
+
+    // This fucntion does not response to client
     async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
+            groupTask = await this.checkDefaultGroupTask(groupTask);
+
             const createGroupTask = await groupTaskStore.createGroupTask(groupTask); 
             const groupTaskId = (createGroupTask as any)._id;
 
             if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
                 projectServiceImpl.updateProject(projectId, { $push: { groupTasks: groupTaskId } });
-
                 return groupTaskId;
             } else {
                 return undefined;
@@ -256,7 +268,6 @@ class GroupTaskService {
             return msg400(error.message.toString());
         }
     }
-
 }
 
 export const groupTaskService = new GroupTaskService();
