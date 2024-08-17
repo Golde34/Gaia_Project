@@ -77,7 +77,17 @@ libraryDependencies += "com.lihaoyi" %% "upickle" % "3.1.0"
 lazy val example = project.in(file("."))
   .settings(
     scalaVersion := "3.3.3",
-    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7"
+    version := "0.1.0",
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
+    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.7.0",
+    libraryDependencies += "org.apache.kafka" % "kafka-streams" % "3.7.0",
+    libraryDependencies += "org.apache.kafka" % "kafka-streams-scala_2.13" % "3.7.0",
+    // https://mvnrepository.com/artifact/io.circe/circe-core
+    libraryDependencies += "io.circe" %% "circe-core" % "0.15.0-M1",
+    libraryDependencies += "io.circe" %% "circe-generic" % "0.15.0-M1",
+    libraryDependencies += "io.circe" %% "circe-parser" % "0.15.0-M1"
   )
 
 // To learn more about multi-project builds, head over to the official sbt
