@@ -1,4 +1,3 @@
-
 // The simplest possible sbt build file is just one line:
 
 scalaVersion := "2.13.12"
@@ -21,13 +20,11 @@ version := "1.0"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype.
 
-
 // Want to use a published library in your project?
 // You can define other libraries as dependencies in your build like this:
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.3.0"
 libraryDependencies += "com.lihaoyi" %% "upickle" % "3.1.0"
-
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies
@@ -74,7 +71,8 @@ libraryDependencies += "com.lihaoyi" %% "upickle" % "3.1.0"
 //     )),
 //     name := "hello-world"
 //   )
-lazy val example = project.in(file("."))
+lazy val example = project
+  .in(file("."))
   .settings(
     scalaVersion := "3.3.3",
     version := "0.1.0",
@@ -87,7 +85,8 @@ lazy val example = project.in(file("."))
     // https://mvnrepository.com/artifact/io.circe/circe-core
     libraryDependencies += "io.circe" %% "circe-core" % "0.15.0-M1",
     libraryDependencies += "io.circe" %% "circe-generic" % "0.15.0-M1",
-    libraryDependencies += "io.circe" %% "circe-parser" % "0.15.0-M1"
+    libraryDependencies += "io.circe" %% "circe-parser" % "0.15.0-M1",
+    libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "8.11.1"
   )
 
 // To learn more about multi-project builds, head over to the official sbt
