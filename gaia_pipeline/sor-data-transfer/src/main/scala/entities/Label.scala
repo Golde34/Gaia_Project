@@ -1,10 +1,12 @@
-// case class LabelEntity(
-//     start: Int,
-//     end: Int,
-//     label: String
-// )
+package entities
 
-// case class SpacyData(
-//     sentence: String,
-//     labels: Seq[LabelEntity]
-// )
+case class LabelEntity(
+    start: Int,
+    end: Int,
+    label: String
+)
+
+case class SpacyData(
+    sentence: String,
+    labels: Seq[LabelEntity]
+)
