@@ -9,7 +9,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.{ProvenShape, Tag}
 
-class TaskData(tag: Tag) extends Table[(Int, String, String, String, String, String, String, String, String)](tag, "task") {
+class TaskData(tag: Tag) extends Table[(Int, String, String, String, String, String, String, String, String, String)](tag, "task") {
   def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def sentence: Rep[String] = column[String]("sentence")
   def project: Rep[String] = column[String]("project")
@@ -21,7 +21,7 @@ class TaskData(tag: Tag) extends Table[(Int, String, String, String, String, Str
   def deadline: Rep[String] = column[String]("deadline")
   def duration: Rep[String] = column[String]("duration")
 
-  def * : ProvenShape[(Int, String, String, String, String, String, String, String, String)] =
+  def * : ProvenShape[(Int, String, String, String, String, String, String, String, String, String)] =
     (id, sentence, project, groupTask, title, priority, status, startDate, deadline, duration)
 }
 
@@ -36,13 +36,13 @@ object TaskDatabaseService {
     Await.result(db.run(setup), 10.seconds)
   }
 
-  def insert(sentence: String, project: String, title: String, priority: String, status: String, startDate: String, deadline: String, duration: String): Unit = {
+  def insert(sentence: String, project: String, groupTask: String, title: String, priority: String, status: String, startDate: String, deadline: String, duration: String): Unit = {
     val entities = TableQuery[TaskData]
-    val insertAction = entities += (0, sentence, project, title, priority, status, startDate, deadline, duration)
+    val insertAction = entities += (0, sentence, project, groupTask, title, priority, status, startDate, deadline, duration)
     Await.result(db.run(insertAction), 10.seconds)
   }
 
-  def getAll(): Seq[(Int, String, String, String, String, String, String, String, String)] = {
+  def getAll(): Seq[(Int, String, String, String, String, String, String, String, String, String)] = {
     val entities = TableQuery[TaskData]
     val query = entities.result
     Await.result(db.run(query), 10.seconds)

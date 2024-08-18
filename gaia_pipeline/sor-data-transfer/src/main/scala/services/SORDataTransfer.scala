@@ -17,6 +17,48 @@ import database.TaskData
 
 object SORDataTransfer {
 
+  def saveOutputToDatabase(): Unit = {
+    // Dữ liệu đầu vào
+    val data = Seq(
+      (
+        "Please set a task in the Artemis project, about creating a user feedback system. This is an important task but not urgent.",
+        "Artemis",
+        "creating a user feedback system",
+        "Medium",
+        "Pending",
+        "null",
+        "null",
+        "null"
+      ),
+      (
+        "Create task to verify database integrity after recent updates. This is a star priority.",
+        "null",
+        "verifying database integrity",
+        "Star",
+        "In Progress",
+        "now",
+        "null",
+        "null"
+      )
+    )
+
+    // Store processed data to MySQL database
+    TaskDatabaseService.init()
+    data.foreach { row =>
+      TaskDatabaseService.insert(
+        sentence = row._1,
+        project = row._2,
+        groupTask = "null",
+        title = row._3,
+        priority = row._4,
+        status = row._5,
+        startDate = row._6,
+        deadline = row._7,
+        duration = row._8
+      )
+    }
+  }
+
   def writeOutputToJSONFile(): Unit = {
   // Dữ liệu đầu vào
   val data = Seq(
@@ -65,21 +107,6 @@ object SORDataTransfer {
   os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
 
   println(s"Data written to $outputFilePath")
-
-  // Store processed data to MySQL database
-  TaskDatabaseService.init()
-  data.foreach { row =>
-    TaskDatabaseService.insert(
-      sentence = row._1,
-      project = row._2,
-      title = row._3,
-      priority = row._4,
-      status = row._5,
-      startDate = row._6,
-      deadline = row._7,
-      duration = row._8
-    )
-  }
 
   // Read and beautify JSON file content
   val jsonContent = os.read(outputFilePath)
