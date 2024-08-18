@@ -9,6 +9,12 @@ import scala.collection.mutable
 
 object TextPreprocessing {
 
+  /**
+    * Stem a word using the Porter Stemmer algorithm
+    *
+    * @param word
+    * @return
+    */
   def stem(word: String): String = {
     val reader = new StringReader(word)
     val tokenizer = new WhitespaceTokenizer()
@@ -21,16 +27,27 @@ object TextPreprocessing {
     if (filter.incrementToken()) {
       termAttr.toString
     } else {
-      word // Trả về từ gốc nếu không thể stemming
+      word 
     }
   }
 
+  /**
+    * Stem a sentence using the Porter Stemmer algorithm
+    *
+    * @param words
+    * @return
+    */
   def stemStrings(words: String): String = {
     val stemmedWords = words.split(" ").map(stem)
     stemmedWords.mkString(" ")
   }
 
-  // Hàm để thực hiện stemming và lưu vị trí của từ trong câu gốc
+  /**
+    * Stem a sentence and return a mapping of the original word to the stemmed word 
+    *
+    * @param sentence
+    * @return
+    */
   def stemWithPositionMapping(
       sentence: String
   ): (String, mutable.Map[Int, String]) = {
@@ -47,7 +64,12 @@ object TextPreprocessing {
     (stemmedWords.mkString(" "), positionMapping)
   }
 
-  // Ham de loai bo cac ky tu dac biet system. -> system
+  /**
+    * Remove special characters from a text 
+    *
+    * @param text
+    * @return
+    */
   def removeSpecialCharacters(text: String): String = {
     text.replaceAll("[^a-zA-Z0-9 ]", "")
   }

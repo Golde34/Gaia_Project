@@ -39,7 +39,7 @@ object SORDataTransfer {
       )
     )
 
-    val spacyDataset = data.map(processRow)
+    val spacyDataset = data.map(EntityFinder.processRow)
 
     val jsonOutput = spacyDataset.map { spacyData =>
       ujson.Obj(
@@ -65,6 +65,9 @@ object SORDataTransfer {
     val jsonParsed = ujson.read(jsonContent)
     println(ujson.write(jsonParsed, indent = 4))
   }
+}
+
+object EntityFinder {
 
   def processRow(
       row: (String, String, String, String, String, String, String, String)
@@ -107,9 +110,7 @@ object SORDataTransfer {
       }
     }
     if (startDate != "null") {
-      findEntityPositions(sentence, startDate, "START_DATE").foreach(
-        labels += _
-      )
+      findEntityPositions(sentence, startDate, "STARTDATE").foreach(labels += _)
     }
     if (deadline != "null") {
       findEntityPositions(sentence, deadline, "DEADLINE").foreach(labels += _)
@@ -117,8 +118,7 @@ object SORDataTransfer {
     if (duration != "null") {
       findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
     }
-
-    SpacyData(sentence, labels.toSeq) // Convert ArrayBuffer to Seq
+    SpacyData(sentence, labels.toSeq)
   }
 
   def findEntityPositions(
@@ -129,20 +129,25 @@ object SORDataTransfer {
     if (entityValue == "null") {
       return None
     }
-    val preProcessingSentence = removeSpecialCharacters(sentence) 
-    val (stemmedSentence, positionMapping) = stemWithPositionMapping(preProcessingSentence)
-    val stemmedEntityValue = stemStrings(entityValue)
+    val preprocessingSentence = preprocessSentence(sentence)
 
+    val (stemmedSentence, positionMapping) = stemWithPositionMapping(preprocessingSentence)
+    val stemmedEntityValue = stemStrings(entityValue)
     val entity = findLabelInStemmedSentence(
       stemmedSentence,
       stemmedEntityValue,
       positionMapping,
       sentence,
-      label 
+      label
     )
     println(s"entity: $entity")
 
     return entity
+  }
+
+  def preprocessSentence(sentence: String): String = {
+    val preProcessingSentence = removeSpecialCharacters(sentence)
+    return preProcessingSentence
   }
 
   def findLabelInStemmedSentence(
@@ -152,8 +157,6 @@ object SORDataTransfer {
       originalSentence: String,
       label: String
   ): Option[LabelEntity] = {
-    println(s"stemmedSentence: $stemmedSentence")
-    println(s"stemmedLabel: $stemmedLabel")
     val wordsInSentence = stemmedSentence.split(" ")
     val wordsInLabel = stemmedLabel.split(" ")
 
@@ -163,32 +166,17 @@ object SORDataTransfer {
     var wordsMatched = 0
 
     for (i <- wordsInSentence.indices) {
-      println(s"After for loop wordsMatch: $wordsMatched")
-      println(s"wordsInSentence(i): ${wordsInSentence(i)} with i = $i")
-      println(s"wordsInLabel(wordsMatched): ${wordsInLabel(wordsMatched)}")
-      println(wordsMatched < wordsInLabel.length)
-      println(wordsInSentence(i) == wordsInLabel(wordsMatched))
       if (
         wordsMatched < wordsInLabel.length &&
         wordsInSentence(i) == wordsInLabel(wordsMatched)
       ) {
-        println(s"wordsMatched: $wordsMatched")
-        println(s"wordsInLabel.length: ${wordsInLabel.length}")
         if (startPosOriginal == -1) {
           startPosOriginal = i
         }
         wordsMatched += 1
         endPosOriginal = i
 
-        // Nếu đã khớp toàn bộ nhãn, kết thúc vòng lặp
         if (wordsMatched == wordsInLabel.length) {
-          println(s"startPosOriginal: $startPosOriginal")
-          println(s"endPosOriginal: $endPosOriginal")
-          println(s"originalMapping: $originalMapping")
-          println(s"originalSentence: $originalSentence")
-          println(s"wordsMatched: $wordsMatched")
-
-
           val originalStart = getOriginalPosition(
             startPosOriginal,
             originalMapping,
@@ -198,33 +186,32 @@ object SORDataTransfer {
             endPosOriginal,
             originalMapping,
             originalSentence
-          ) + originalMapping(endPosOriginal).length  
-          
-          println(s"originalStart: $originalStart")
-          println(s"originalEnd: $originalEnd")
+          ) + originalMapping(endPosOriginal).length
 
           return Some(LabelEntity(originalStart, originalEnd, label))
         }
       } else if (wordsMatched > 0) {
-        // Nếu một phần của nhãn đã khớp nhưng từ tiếp theo không khớp, reset lại
         wordsMatched = 0
         startPosOriginal = -1
         endPosOriginal = -1
       }
     }
-
     None
   }
 
-  def getOriginalPosition(stemmedIndex: Int, originalMapping: mutable.Map[Int, String], originalSentence: String): Int = {
+  def getOriginalPosition(
+      stemmedIndex: Int,
+      originalMapping: mutable.Map[Int, String],
+      originalSentence: String
+  ): Int = {
     val wordsInOriginalSentence = originalSentence.split(" ")
 
-    // Tính toán độ dài của các từ trước từ hiện tại để xác định vị trí bắt đầu
     var position = 0
     for (i <- 0 until stemmedIndex) {
-      position += wordsInOriginalSentence(i).length + 1 // +1 để tính khoảng trắng
+      position += wordsInOriginalSentence(
+        i
+      ).length + 1
     }
-
     position
   }
 }
