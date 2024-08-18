@@ -30,6 +30,7 @@
 token.json
 commits.json
 spacy_dataset.json
+application.conf
 *.xml
 !pom.xml
 *\auth_service.log
