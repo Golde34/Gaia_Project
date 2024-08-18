@@ -1,0 +1,12 @@
+// Add this config to application.conf file
+slick.dbs.default {
+  profile = "slick.jdbc.MySQLProfile$"
+  db {
+    driver = "com.mysql.cj.jdbc.Driver"
+    url = "jdbc:mysql://localhost:3306/"
+    user = ""
+    password = ""
+    connectionPool = "HikariCP"
+    keepAliveConnection = true
+  }
+}
