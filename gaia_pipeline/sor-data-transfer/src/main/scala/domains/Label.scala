@@ -1,4 +1,4 @@
-package entities
+package domains 
 
 case class LabelEntity(
     start: Int,
