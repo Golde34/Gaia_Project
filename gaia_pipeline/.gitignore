@@ -15,3 +15,6 @@
 *\.scala-build
 
 *\target
+
+
+spacy_dataset.json

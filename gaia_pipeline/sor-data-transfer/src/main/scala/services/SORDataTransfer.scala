@@ -56,10 +56,11 @@ object SORDataTransfer {
 
     val outputFilePath = os.pwd / "spacy_dataset.json"
     if (outputFilePath != null) os.remove(outputFilePath)
-    os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*)))
+    os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
 
     println(s"Data written to $outputFilePath")
 
+    
     // Beautify json file and print
     val jsonContent = os.read(outputFilePath)
     val jsonParsed = ujson.read(jsonContent)
