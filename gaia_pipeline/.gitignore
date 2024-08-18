@@ -3,25 +3,18 @@
 *\.vscode
 *\node_modules
 *\dist
-*\.bin
-*\.pt
 
 *\.csv
 *\.zip
 
-*\.vite
+*\.bsp
+*\.metals
+*\.bloop
+*\.bloop-config
+*\.metals.bsp
+*\.scala-build
 
-*\.vs
-*\obj
-*\bin
+*\target
 
-.ipynb_checkpoints
-__config__.py
-*\.parquet
-*\tmp
 
-.env
-
-# gitignore json
-token.json
-commits.json
+spacy_dataset.json

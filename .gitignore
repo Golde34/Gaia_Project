@@ -29,6 +29,7 @@
 # gitignore json
 token.json
 commits.json
+spacy_dataset.json
 *.xml
 !pom.xml
 *\auth_service.log
