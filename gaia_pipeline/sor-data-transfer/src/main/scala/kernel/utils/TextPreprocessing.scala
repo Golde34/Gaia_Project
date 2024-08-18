@@ -9,7 +9,7 @@ import scala.collection.mutable
 
 object TextPreprocessing {
 
-    def stem(word: String): String = {
+  def stem(word: String): String = {
     val reader = new StringReader(word)
     val tokenizer = new WhitespaceTokenizer()
     tokenizer.setReader(reader)
@@ -25,20 +25,30 @@ object TextPreprocessing {
     }
   }
 
+  def stemStrings(words: String): String = {
+    val stemmedWords = words.split(" ").map(stem)
+    stemmedWords.mkString(" ")
+  }
+
   // Hàm để thực hiện stemming và lưu vị trí của từ trong câu gốc
-  def stemWithPositionMapping(sentence: String): (String, mutable.Map[Int, String]) = {
+  def stemWithPositionMapping(
+      sentence: String
+  ): (String, mutable.Map[Int, String]) = {
     val words = sentence.split(" ")
     val stemmedWords = Array.ofDim[String](words.length)
     val positionMapping = mutable.Map[Int, String]()
 
     for (i <- words.indices) {
       val stemmed = stem(words(i))
-      stemmedWords(i) = stemmed
-      if (stemmed != words(i)) {
-        positionMapping(i) = stemmed
-      }
+      stemmedWords(i) = stemmed 
+      positionMapping += (i -> words(i))
     }
 
     (stemmedWords.mkString(" "), positionMapping)
+  }
+
+  // Ham de loai bo cac ky tu dac biet system. -> system
+  def removeSpecialCharacters(text: String): String = {
+    text.replaceAll("[^a-zA-Z0-9 ]", "")
   }
 }

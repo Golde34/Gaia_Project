@@ -3,10 +3,15 @@ package services
 import scala.collection.mutable.ArrayBuffer
 import entities.LabelEntity
 import entities.SpacyData
-import kernel.utils.TextPreprocessing.{stem, stemWithPositionMapping}
+import kernel.utils.TextPreprocessing.{
+  removeSpecialCharacters,
+  stem,
+  stemWithPositionMapping,
+  stemStrings
+}
 
 import scala.collection.mutable
-
+import java.awt.Label
 
 object SORDataTransfer {
 
@@ -54,6 +59,11 @@ object SORDataTransfer {
     os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*)))
 
     println(s"Data written to $outputFilePath")
+
+    // Beautify json file and print
+    val jsonContent = os.read(outputFilePath)
+    val jsonParsed = ujson.read(jsonContent)
+    println(ujson.write(jsonParsed, indent = 4))
   }
 
   def processRow(
@@ -77,7 +87,7 @@ object SORDataTransfer {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
     }
     if (title != "null") {
-      findEntityPositions2(sentence, title, "TASK").foreach(labels += _)
+      findEntityPositions(sentence, title, "TASK").foreach(labels += _)
     }
     if (priority != "null") {
       priority match {
@@ -119,41 +129,102 @@ object SORDataTransfer {
     if (entityValue == "null") {
       return None
     }
-    val startPos = sentence.indexOf(entityValue)
-    if (startPos != -1) {
-      val endPos = startPos + entityValue.length
-      Some(LabelEntity(startPos, endPos, label))
-    } else {
-      None
-    }
+    val preProcessingSentence = removeSpecialCharacters(sentence) 
+    val (stemmedSentence, positionMapping) = stemWithPositionMapping(preProcessingSentence)
+    val stemmedEntityValue = stemStrings(entityValue)
+
+    val entity = findLabelInStemmedSentence(
+      stemmedSentence,
+      stemmedEntityValue,
+      positionMapping,
+      sentence,
+      label 
+    )
+    println(s"entity: $entity")
+
+    return entity
   }
 
-  def findEntityPositions2(sentence: String, entityValue: String, label: String): Option[LabelEntity] = {
-    val (stemmedSentence, positionMapping) = stemWithPositionMapping(sentence)
-    val stemmedEntityValue = stemWithPositionMapping(entityValue)._1
+  def findLabelInStemmedSentence(
+      stemmedSentence: String,
+      stemmedLabel: String,
+      originalMapping: mutable.Map[Int, String],
+      originalSentence: String,
+      label: String
+  ): Option[LabelEntity] = {
+    println(s"stemmedSentence: $stemmedSentence")
+    println(s"stemmedLabel: $stemmedLabel")
+    val wordsInSentence = stemmedSentence.split(" ")
+    val wordsInLabel = stemmedLabel.split(" ")
 
-    // Tìm vị trí của cụm từ đã stemmed trong câu stemmed
-    val startPosStemmed = stemmedSentence.indexOf(stemmedEntityValue)
-    if (startPosStemmed != -1) {
-      val endPosStemmed = startPosStemmed + stemmedEntityValue.length - 1
+    var currentWordIndex = 0
+    var startPosOriginal = -1
+    var endPosOriginal = -1
+    var wordsMatched = 0
 
-      // Chuyển đổi vị trí stemmed về vị trí thực trong câu gốc
-      val originalPositions = stemmedSentence.split(" ").zipWithIndex.flatMap {
-        case (word, idx) =>
-          if (stemmedEntityValue.contains(word) && positionMapping.contains(idx)) {
-            Some(idx -> positionMapping(idx))
-          } else {
-            None
-          }
+    for (i <- wordsInSentence.indices) {
+      println(s"After for loop wordsMatch: $wordsMatched")
+      println(s"wordsInSentence(i): ${wordsInSentence(i)} with i = $i")
+      println(s"wordsInLabel(wordsMatched): ${wordsInLabel(wordsMatched)}")
+      println(wordsMatched < wordsInLabel.length)
+      println(wordsInSentence(i) == wordsInLabel(wordsMatched))
+      if (
+        wordsMatched < wordsInLabel.length &&
+        wordsInSentence(i) == wordsInLabel(wordsMatched)
+      ) {
+        println(s"wordsMatched: $wordsMatched")
+        println(s"wordsInLabel.length: ${wordsInLabel.length}")
+        if (startPosOriginal == -1) {
+          startPosOriginal = i
+        }
+        wordsMatched += 1
+        endPosOriginal = i
+
+        // Nếu đã khớp toàn bộ nhãn, kết thúc vòng lặp
+        if (wordsMatched == wordsInLabel.length) {
+          println(s"startPosOriginal: $startPosOriginal")
+          println(s"endPosOriginal: $endPosOriginal")
+          println(s"originalMapping: $originalMapping")
+          println(s"originalSentence: $originalSentence")
+          println(s"wordsMatched: $wordsMatched")
+
+
+          val originalStart = getOriginalPosition(
+            startPosOriginal,
+            originalMapping,
+            originalSentence
+          )
+          val originalEnd = getOriginalPosition(
+            endPosOriginal,
+            originalMapping,
+            originalSentence
+          ) + originalMapping(endPosOriginal).length  
+          
+          println(s"originalStart: $originalStart")
+          println(s"originalEnd: $originalEnd")
+
+          return Some(LabelEntity(originalStart, originalEnd, label))
+        }
+      } else if (wordsMatched > 0) {
+        // Nếu một phần của nhãn đã khớp nhưng từ tiếp theo không khớp, reset lại
+        wordsMatched = 0
+        startPosOriginal = -1
+        endPosOriginal = -1
       }
-
-      // Tìm vị trí thực sự trong câu gốc
-      val startPosOriginal = originalPositions.headOption.map(_._1).getOrElse(startPosStemmed)
-      val endPosOriginal = originalPositions.lastOption.map(_._1).getOrElse(endPosStemmed)
-
-      Some(LabelEntity(startPosOriginal, endPosOriginal, label))
-    } else {
-      None
     }
+
+    None
+  }
+
+  def getOriginalPosition(stemmedIndex: Int, originalMapping: mutable.Map[Int, String], originalSentence: String): Int = {
+    val wordsInOriginalSentence = originalSentence.split(" ")
+
+    // Tính toán độ dài của các từ trước từ hiện tại để xác định vị trí bắt đầu
+    var position = 0
+    for (i <- 0 until stemmedIndex) {
+      position += wordsInOriginalSentence(i).length + 1 // +1 để tính khoảng trắng
+    }
+
+    position
   }
 }
