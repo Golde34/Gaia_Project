@@ -7,7 +7,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import domains.TaskInput
-import services.SORDataTransfer 
+import services.SORDataTransfer
+import kafka_handler.SORKafkaHandler 
 
 class SORConsumerData() {
   private val kafkaTopic = "GC.sor-training-model"
@@ -31,20 +32,6 @@ class SORConsumerData() {
         println(s"Received message: ${record.value()}")
         if (record.topic() == "GC.sor-training-model") {
           SORKafkaHandler.handleMessage(record.value())
-        }
-      }
-    }
-  }
-
-  def consumeAndPrintMessages(): Unit = {
-    consumer.subscribe(List(kafkaTopic).asJava)
-
-    while (true) {
-      val records = consumer.poll(1000).asScala
-      for (record <- records) {
-        println(s"Received message: ${record.value()}")
-        if (record.value() == "save_to_data_lake") {
-          SORDataTransfer.writeOutputToJSONFile()
         }
       }
     }
