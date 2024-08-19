@@ -7,6 +7,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import domains.TaskInput
+import services.SORDataTransfer 
 
 class SORConsumerData(kafkaTopic: String, bootstrapServers: String) {
   private val consumerProps = new Properties()
@@ -39,6 +40,9 @@ class SORConsumerData(kafkaTopic: String, bootstrapServers: String) {
       val records = consumer.poll(1000).asScala
       for (record <- records) {
         println(s"Received message: ${record.value()}")
+        if (record.value() == "save_to_data_lake") {
+          SORDataTransfer.writeOutputToJSONFile()
+        }
       }
     }
   }

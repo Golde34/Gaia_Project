@@ -6,7 +6,7 @@ import ui.SORConsumerData
 
 object DataPipeline {
   def main(args: Array[String]): Unit = {
-    SORDataTransfer.writeOutputToJSONFile() 
+    // SORDataTransfer.writeOutputToJSONFile() 
     val kafkaTopic = "GC.sor-training-model" 
     val bootstrapServers = "localhost:9094"
 
