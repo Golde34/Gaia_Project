@@ -1,5 +1,9 @@
 package domains
 
+case class ActivateDataLakeSaving(
+  isSaving: Boolean
+)
+
 case class TaskInput(
   sentence: String,
   project: String,

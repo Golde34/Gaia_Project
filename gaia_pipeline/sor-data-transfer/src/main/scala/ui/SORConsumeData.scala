@@ -7,8 +7,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import domains.TaskInput
+import services.SORDataTransfer
+import kafka_handler.SORKafkaHandler 
 
-class SORConsumerData(kafkaTopic: String, bootstrapServers: String) {
+class SORConsumerData() {
+  private val kafkaTopic = "GC.sor-training-model"
+  private val bootstrapServers = "localhost:9094"
+
   private val consumerProps = new Properties()
   consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
   consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
@@ -18,27 +23,16 @@ class SORConsumerData(kafkaTopic: String, bootstrapServers: String) {
 
   private val consumer = new KafkaConsumer[String, String](consumerProps)
 
-  // def consumerMessages(): Future[Seq[TaskInput]] = Future {
-  //   consumer.subscribe(List(kafkaTopic).asJava)
-  //   val records = consumer.poll(1000)
-    
-  //   val taskInputs = records.iterator().asScala.map { record =>
-  //     // val taskInput = TaskInput.fromJson(record.value())
-  //     val taskInput = record.value()
-  //     println(s"Consumed task input: $taskInput")
-  //     taskInput
-  //   }.toSeq
-    
-  //   taskInputs
-  // }
-
-  def consumeAndPrintMessages(): Unit = {
+  def consumeMessages(): Unit = {
     consumer.subscribe(List(kafkaTopic).asJava)
 
-    while (true) {
+    while(true) {
       val records = consumer.poll(1000).asScala
       for (record <- records) {
         println(s"Received message: ${record.value()}")
+        if (record.topic() == "GC.sor-training-model") {
+          SORKafkaHandler.handleMessage(record.value())
+        }
       }
     }
   }

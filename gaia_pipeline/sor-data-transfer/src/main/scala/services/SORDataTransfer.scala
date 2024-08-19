@@ -1,12 +1,13 @@
 package services
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 import java.awt.Label
 
 import domains.LabelEntity
 import domains.SpacyData
-import kernel.utils.TextPreprocessing.{
+import utils.TextPreprocessing.{
   removeSpecialCharacters,
   stem,
   stemWithPositionMapping,
@@ -14,33 +15,14 @@ import kernel.utils.TextPreprocessing.{
 }
 import database.TaskDatabaseService
 import database.TaskData
+import utils.CSVReader.readSORCSV
 
 object SORDataTransfer {
 
   def saveOutputToDatabase(): Unit = {
     // Dữ liệu đầu vào
-    val data = Seq(
-      (
-        "Please set a task in the Artemis project, about creating a user feedback system. This is an important task but not urgent.",
-        "Artemis",
-        "creating a user feedback system",
-        "Medium",
-        "Pending",
-        "null",
-        "null",
-        "null"
-      ),
-      (
-        "Create task to verify database integrity after recent updates. This is a star priority.",
-        "null",
-        "verifying database integrity",
-        "Star",
-        "In Progress",
-        "now",
-        "null",
-        "null"
-      )
-    )
+    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
+    val data = readSORCSV(location)
 
     // Store processed data to MySQL database
     TaskDatabaseService.init()
@@ -60,59 +42,39 @@ object SORDataTransfer {
   }
 
   def writeOutputToJSONFile(): Unit = {
-  // Dữ liệu đầu vào
-  val data = Seq(
-    (
-      "Please set a task in the Artemis project, about creating a user feedback system. This is an important task but not urgent.",
-      "Artemis",
-      "creating a user feedback system",
-      "Medium",
-      "Pending",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      "Create task to verify database integrity after recent updates. This is a star priority.",
-      "null",
-      "verifying database integrity",
-      "Star",
-      "In Progress",
-      "now",
-      "null",
-      "null"
-    )
-  )
+    // Read data from file location
+    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
+    val data = readSORCSV(location)
 
-  // Process data with EntityFinder
-  val spacyDataset = data.map(EntityFinder.processRow)
+    // Process data with EntityFinder
+    val spacyDataset = data.map(EntityFinder.processRow)
 
-  // Convert processed data to JSON
-  val jsonOutput = spacyDataset.map { spacyData =>
-    ujson.Obj(
-      "sentence" -> spacyData.sentence,
-      "labels" -> spacyData.labels.map { e =>
-        ujson.Obj(
-          "start" -> e.start,
-          "end" -> e.end,
-          "label" -> e.label
-        )
-      }
-    )
+    // Convert processed data to JSON
+    val jsonOutput = spacyDataset.map { spacyData =>
+      ujson.Obj(
+        "sentence" -> spacyData.sentence,
+        "labels" -> spacyData.labels.map { e =>
+          ujson.Obj(
+            "start" -> e.start,
+            "end" -> e.end,
+            "label" -> e.label
+          )
+        }
+      )
+    }
+
+    // Write JSON output to file
+    val outputFilePath = os.pwd / "spacy_dataset.json"
+    if (os.exists(outputFilePath)) os.remove(outputFilePath)
+    os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
+
+    println(s"Data written to $outputFilePath")
+
+    // Read and beautify JSON file content
+    val jsonContent = os.read(outputFilePath)
+    val jsonParsed = ujson.read(jsonContent)
+    println(ujson.write(jsonParsed, indent = 4))
   }
-
-  // Write JSON output to file
-  val outputFilePath = os.pwd / "spacy_dataset.json"
-  if (os.exists(outputFilePath)) os.remove(outputFilePath)
-  os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
-
-  println(s"Data written to $outputFilePath")
-
-  // Read and beautify JSON file content
-  val jsonContent = os.read(outputFilePath)
-  val jsonParsed = ujson.read(jsonContent)
-  println(ujson.write(jsonParsed, indent = 4))
-}
 }
 
 object EntityFinder {

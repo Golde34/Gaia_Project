@@ -1,4 +1,4 @@
-package kernel.utils
+package utils
 
 import java.io.StringReader
 import org.apache.lucene.analysis.en.PorterStemFilter
