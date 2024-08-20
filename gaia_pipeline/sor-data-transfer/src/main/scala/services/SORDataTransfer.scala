@@ -29,15 +29,19 @@ object SORDataTransfer {
     TaskDatabaseService.init()
     data.foreach { row =>
       TaskDatabaseService.insert(
-        sentence = row._1,
-        project = row._2,
-        groupTask = "null",
-        title = row._3,
-        priority = row._4,
-        status = row._5,
-        startDate = row._6,
-        deadline = row._7,
-        duration = row._8
+        sentenceId = Some(row._1.toInt),
+        sentence = row._2,
+        project = row._3,
+        groupTask = Some(row._4),
+        title = row._5,
+        priority = row._6,
+        status = row._7,
+        startDate = Some(row._8),
+        deadline = Some(row._9),
+        duration = Some(row._10),
+        taskId = None,
+        scheduleTaskId = None,
+        taskConfigId = None
       )
     }
   }
@@ -95,11 +99,13 @@ object SORDataTransfer {
 object EntityFinder {
 
   def processRow(
-      row: (String, String, String, String, String, String, String, String)
+      row: (String, String, String, String, String, String, String, String, String, String)
   ): SpacyData = {
     val (
+      sentenceId,
       sentence,
       project,
+      groupTask,
       title,
       priority,
       status,
@@ -110,9 +116,13 @@ object EntityFinder {
 
     val labels = ArrayBuffer[LabelEntity]()
 
+    print(sentenceId)
     // Find positions of each entity
     if (project != "null") {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
+    }
+    if (groupTask != "null") {
+      labels += LabelEntity(0, 0, "GROUPTASK")
     }
     if (title != "null") {
       findEntityPositions(sentence, title, "TASK").foreach(labels += _)
@@ -135,13 +145,13 @@ object EntityFinder {
       }
     }
     if (startDate != "null") {
-      findEntityPositions(sentence, startDate, "STARTDATE").foreach(labels += _)
+      labels += LabelEntity(0, 0, "STARTDATE")
     }
-    if (deadline != "null") {
-      findEntityPositions(sentence, deadline, "DEADLINE").foreach(labels += _)
+    if (deadline != "null") {    
+      labels += LabelEntity(0, 0, "DEADLINE")
     }
     if (duration != "null") {
-      findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
+      labels += LabelEntity(0, 0, "DURATION")
     }
     SpacyData(sentence, labels.toSeq)
   }
