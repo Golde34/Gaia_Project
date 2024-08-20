@@ -4,6 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 import java.awt.Label
+import java.io.{PrintWriter, File}
 
 import domains.LabelEntity
 import domains.SpacyData
@@ -15,7 +16,7 @@ import utils.TextPreprocessing.{
 }
 import database.TaskDatabaseService
 import database.TaskData
-import utils.CSVReader.readSORCSV
+import utils.GAIACSVReader.readSORCSV
 
 object SORDataTransfer {
 
@@ -73,7 +74,21 @@ object SORDataTransfer {
     // Read and beautify JSON file content
     val jsonContent = os.read(outputFilePath)
     val jsonParsed = ujson.read(jsonContent)
-    println(ujson.write(jsonParsed, indent = 4))
+
+    val outputFilePathCsv = os.pwd / "spacy_dataset.csv"
+
+    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
+    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+    writer.println("Sentence,Start,End,Label")
+    val csvOutput = spacyDataset.flatMap { spacyData =>
+      spacyData.labels.map { label =>
+        s""""${spacyData.sentence}","${label.start}","${label.end}","${label.label}""""
+      }
+    }
+    csvOutput.foreach(writer.println)
+    writer.close()
+
+    println(s"Data written to $outputFilePathCsv")
   }
 }
 
@@ -150,7 +165,6 @@ object EntityFinder {
       sentence,
       label
     )
-    println(s"entity: $entity")
 
     return entity
   }
