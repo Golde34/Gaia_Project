@@ -4,6 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 import java.awt.Label
+import java.io.{PrintWriter, File}
 
 import domains.LabelEntity
 import domains.SpacyData
@@ -15,7 +16,7 @@ import utils.TextPreprocessing.{
 }
 import database.TaskDatabaseService
 import database.TaskData
-import utils.CSVReader.readSORCSV
+import utils.GAIACSVReader.readSORCSV
 
 object SORDataTransfer {
 
@@ -28,15 +29,19 @@ object SORDataTransfer {
     TaskDatabaseService.init()
     data.foreach { row =>
       TaskDatabaseService.insert(
-        sentence = row._1,
-        project = row._2,
-        groupTask = "null",
-        title = row._3,
-        priority = row._4,
-        status = row._5,
-        startDate = row._6,
-        deadline = row._7,
-        duration = row._8
+        sentenceId = Some(row._1.toInt),
+        sentence = row._2,
+        project = row._3,
+        groupTask = Some(row._4),
+        title = row._5,
+        priority = row._6,
+        status = row._7,
+        startDate = Some(row._8),
+        deadline = Some(row._9),
+        duration = Some(row._10),
+        taskId = None,
+        scheduleTaskId = None,
+        taskConfigId = None
       )
     }
   }
@@ -73,18 +78,34 @@ object SORDataTransfer {
     // Read and beautify JSON file content
     val jsonContent = os.read(outputFilePath)
     val jsonParsed = ujson.read(jsonContent)
-    println(ujson.write(jsonParsed, indent = 4))
+
+    val outputFilePathCsv = os.pwd / "spacy_dataset.csv"
+
+    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
+    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+    writer.println("Sentence,Start,End,Label")
+    val csvOutput = spacyDataset.flatMap { spacyData =>
+      spacyData.labels.map { label =>
+        s""""${spacyData.sentence}","${label.start}","${label.end}","${label.label}""""
+      }
+    }
+    csvOutput.foreach(writer.println)
+    writer.close()
+
+    println(s"Data written to $outputFilePathCsv")
   }
 }
 
 object EntityFinder {
 
   def processRow(
-      row: (String, String, String, String, String, String, String, String)
+      row: (String, String, String, String, String, String, String, String, String, String)
   ): SpacyData = {
     val (
+      sentenceId,
       sentence,
       project,
+      groupTask,
       title,
       priority,
       status,
@@ -95,9 +116,13 @@ object EntityFinder {
 
     val labels = ArrayBuffer[LabelEntity]()
 
+    print(sentenceId)
     // Find positions of each entity
     if (project != "null") {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
+    }
+    if (groupTask != "null") {
+      labels += LabelEntity(0, 0, "GROUPTASK")
     }
     if (title != "null") {
       findEntityPositions(sentence, title, "TASK").foreach(labels += _)
@@ -120,13 +145,13 @@ object EntityFinder {
       }
     }
     if (startDate != "null") {
-      findEntityPositions(sentence, startDate, "STARTDATE").foreach(labels += _)
+      labels += LabelEntity(0, 0, "STARTDATE")
     }
-    if (deadline != "null") {
-      findEntityPositions(sentence, deadline, "DEADLINE").foreach(labels += _)
+    if (deadline != "null") {    
+      labels += LabelEntity(0, 0, "DEADLINE")
     }
     if (duration != "null") {
-      findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
+      labels += LabelEntity(0, 0, "DURATION")
     }
     SpacyData(sentence, labels.toSeq)
   }
@@ -150,7 +175,6 @@ object EntityFinder {
       sentence,
       label
     )
-    println(s"entity: $entity")
 
     return entity
   }
