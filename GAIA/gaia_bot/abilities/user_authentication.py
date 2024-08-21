@@ -137,3 +137,6 @@ class AuthenticationCommand():
             return authenticationConnector.call_login_api()
         else:
             return "Later kickoff authen process."
+
+    def get_user_id(self):
+        return USER_PROFILE.get("user_id")
