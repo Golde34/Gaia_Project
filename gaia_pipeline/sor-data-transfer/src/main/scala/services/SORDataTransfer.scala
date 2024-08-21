@@ -116,7 +116,6 @@ object EntityFinder {
 
     val labels = ArrayBuffer[LabelEntity]()
 
-    print(sentenceId)
     // Find positions of each entity
     if (project != "null") {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
