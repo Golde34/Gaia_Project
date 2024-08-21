@@ -68,7 +68,7 @@ class GroupTaskStore {
 
     async checkDefaultGroupTask(projectId: string): Promise<IGroupTaskEntity[]> {
         return await groupTaskRepository.findDefaultGroupTaskByProjectId(projectId);
-    }
+    } 
 }
 
 export const groupTaskStore = new GroupTaskStore();

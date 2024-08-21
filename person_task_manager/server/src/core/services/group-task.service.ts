@@ -268,6 +268,17 @@ class GroupTaskService {
             return msg400(error.message.toString());
         }
     }
+
+    async findGroupTaskByName(name: string): Promise<IResponse | undefined> {
+        try {
+            // List all project
+            // Find the project that match with request
+            // List all group task in that project
+            // Find the group task that match with request    
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const groupTaskService = new GroupTaskService();

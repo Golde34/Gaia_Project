@@ -48,7 +48,6 @@ class TaskService {
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
                 // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
-
                 const messages = [{
                     value: JSON.stringify(createMessage(
                         KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
