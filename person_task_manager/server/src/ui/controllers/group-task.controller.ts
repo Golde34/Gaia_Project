@@ -125,7 +125,9 @@ class GroupTaskController {
     async findGroupTaskByName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupName = req.params.name;
-            const groupTaskResult = await groupTaskService.findGroupTaskByName(groupName);
+            const userId = req.body.userId;
+            const project = req.body.project;
+            const groupTaskResult = await groupTaskService.findGroupTaskByName(groupName, userId, project);
 
             return groupTaskResult;
         } catch (err) {

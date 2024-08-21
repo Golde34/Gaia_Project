@@ -14,7 +14,7 @@ class TaskServiceRequest:
         try:
             # Mapping TM task object and send to TM
             task = TaskMapper().map_create_task(data)
-            group_task_id = self._get_group_task_id(data['group_task'])
+            group_task_id = self._get_group_task_id(data['group_task'], data['user_id'], data['project'])
             if group_task_id is None:
                 return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid group task'})
             task['groupTaskId'] = group_task_id
@@ -37,9 +37,9 @@ class TaskServiceRequest:
             print('Create task failed')
             return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
    
-    def _get_group_task_id(self, group_task):
+    def _get_group_task_id(self, group_task, user_id, project):
         try:
-            group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}") 
+            group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}&userId={user_id}&projectId={project}") 
             if group_task_response.status_code == 200:
                 return group_task_response.json()['id']
             else:

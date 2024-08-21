@@ -269,12 +269,34 @@ class GroupTaskService {
         }
     }
 
-    async findGroupTaskByName(name: string): Promise<IResponse | undefined> {
+    async findGroupTaskByName(groupTaskTitle: String, userId: String, project: String): Promise<IResponse | undefined> {
         try {
             // List all project
+            const userIdInt = parseInt(userId.valueOf());
+            const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
             // Find the project that match with request
+            const projectIndex = userProjects.findIndex((projectItem) => projectItem.title === project);
+            if (projectIndex === -1) {
+                return msg400(PROJECT_NOT_FOUND);
+            }
+            const projectItem = userProjects[projectIndex];
             // List all group task in that project
-            // Find the group task that match with request    
+            const groupTaskIds = projectItem.groupTasks; // List id of group tasks
+            const groupTasks = groupTaskIds.map(async (groupTaskId) => {
+                return await groupTaskStore.findGroupTaskById(groupTaskId);
+            });
+            const groupTasksResult = await Promise.all(groupTasks);
+            // Find the group task that match with request
+            const groupTaskIndex = groupTasksResult.findIndex((groupTaskItem) => {
+                if (groupTaskItem === null) {
+                    return false;
+                }
+                groupTaskItem.title === groupTaskTitle
+            });
+            if (groupTaskIndex === -1) {
+                return msg400(GROUP_TASK_NOT_FOUND);
+            }
+            const result = groupTasksResult[groupTaskIndex];
         } catch (error: any) {
             return msg400(error.message.toString());
         }
