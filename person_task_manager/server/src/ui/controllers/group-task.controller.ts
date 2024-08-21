@@ -5,7 +5,6 @@ import { plainToInstance } from "class-transformer";
 import { GroupTaskRequestDto } from "../../core/domain/dtos/group-task.dto";
 import { projectService } from "../../core/services/project.service";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
-import { taskService } from "../../core/services/task.service";
 
 class GroupTaskController {
 
@@ -116,6 +115,17 @@ class GroupTaskController {
         try {
             const groupTaskId = req.params.id;
             const groupTaskResult = await groupTaskService.enableGroupTask(groupTaskId);
+
+            return groupTaskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async findGroupTaskByName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const groupName = req.params.name;
+            const groupTaskResult = await groupTaskService.findGroupTaskByName(groupName);
 
             return groupTaskResult;
         } catch (err) {

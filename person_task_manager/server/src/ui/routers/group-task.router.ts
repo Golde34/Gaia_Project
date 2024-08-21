@@ -27,27 +27,27 @@ groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 groupTaskRouter.post("/create",
     RequestValidator.validateV2(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const groupTaskResult = await groupTaskControllerImpl.createGroupTask(req, next);
-        returnResult(groupTaskResult, CREATE_GROUP_TASK_FAILED, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+        try {
+            const groupTaskResult = await groupTaskControllerImpl.createGroupTask(req, next);
+            returnResult(groupTaskResult, CREATE_GROUP_TASK_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // update group task
-groupTaskRouter.put("/:id", 
+groupTaskRouter.put("/:id",
     RequestValidator.validateV2(GroupTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const groupTaskResult = await groupTaskControllerImpl.updateGroupTask(req, next);
-        returnResult(groupTaskResult, UPDATE_GROUP_TASK_FAILED, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+        try {
+            const groupTaskResult = await groupTaskControllerImpl.updateGroupTask(req, next);
+            returnResult(groupTaskResult, UPDATE_GROUP_TASK_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // delete group task
 groupTaskRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -72,17 +72,17 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
 });
 
 // update group task name
-groupTaskRouter.put("/:id/update-name", 
+groupTaskRouter.put("/:id/update-name",
     RequestValidator.validateV2(updateNameRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const groupTaskResult = await groupTaskControllerImpl.updateGroupTaskName(req, next);
-        returnResult(groupTaskResult, UPDATE_GROUP_TASK_FAILED, res, next);
-    }
-    catch (err) {
-        next(err);
-    }
-});
+        try {
+            const groupTaskResult = await groupTaskControllerImpl.updateGroupTaskName(req, next);
+            returnResult(groupTaskResult, UPDATE_GROUP_TASK_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 // calculate total tasks and total tasks completed
 groupTaskRouter.get("/:id/tasks-complete", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -124,6 +124,16 @@ groupTaskRouter.put("/:id/enable", async (req: Request, res: Response, next: Nex
         returnResult(groupTaskResult, ENABLE_GROUP_TASK_FAILED, res, next);
     }
     catch (err) {
+        next(err);
+    }
+});
+
+// find group task by name
+groupTaskRouter.get("/find-by-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const groupTaskResult = await groupTaskControllerImpl.findGroupTaskByName(req, next);
+        returnResult(groupTaskResult, GROUP_TASK_NOT_FOUND, res, next);
+    } catch (err) {
         next(err);
     }
 });

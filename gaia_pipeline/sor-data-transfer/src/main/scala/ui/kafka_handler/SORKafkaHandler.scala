@@ -2,6 +2,7 @@ package kafka_handler
 
 import ujson._
 import services.SORDataTransfer
+import domains.Constants.KafkaCmd
 
 object SORKafkaHandler {
 	def handleMessage(message: String): Unit = {
@@ -9,7 +10,7 @@ object SORKafkaHandler {
 
 		val cmd = jsonObject("cmd").str
 		cmd match {
-			case "activateDataLakeSaving" => {
+			case KafkaCmd.ACTIVATE_DATA_LAKE_SAVING => {
         val isSaving = jsonObject("data")("isSaving").bool
         val saveToDB = jsonObject("data")("saveToDB").bool
         val saveToCSV = jsonObject("data")("saveToCSV").bool

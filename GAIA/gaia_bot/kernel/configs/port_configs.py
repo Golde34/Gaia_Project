@@ -108,16 +108,16 @@ PORTS = {
         "database_name": None,
         "shell_path": "gaia_bot/microservices/bash_shell/camera_cv.sh"
     },
-    "sentence_object_recognizer": {
-        "name": "Sentence Object Recognizer",
-        "port": 3004,
-        "programming_language": "Python",
-        "description": "Sentence Object Recognizer API",
-        "router": "sor",
-        "database": None,
-        "database_name": None,
-        "shell_path": ""
-    },
+    # "sentence_object_recognizer": {
+    #     "name": "Sentence Object Recognizer",
+    #     "port": 3004,
+    #     "programming_language": "Python",
+    #     "description": "Sentence Object Recognizer API",
+    #     "router": "sor",
+    #     "database": None,
+    #     "database_name": None,
+    #     "shell_path": ""
+    # },
     
     ## THIRD PARTY
     "kafka_server": {
@@ -141,8 +141,7 @@ PORT_COMPONENTS = [
     "client_gui",
     "middleware_loader",
     "kafka_server",
-    "camera_cv",
-    "sentence_object_recognizer"
+    "camera_cv"
 ]
 
 DOMAIN = "localhost"

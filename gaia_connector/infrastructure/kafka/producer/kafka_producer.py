@@ -1,7 +1,5 @@
 from aiokafka import AIOKafkaProducer
-import asyncio
 import json
-import os
 
 from kernel.configs.load_env import load_kafka_env
 

@@ -5,12 +5,13 @@ import os
 load_dotenv()
 
 def load_env_for_auth():
+    user_id = os.getenv("USER_ID")
     username = os.getenv("USERNAME")
     password = os.getenv("PASSWORD")
     name = os.getenv("NAME")
     email = os.getenv("EMAIL")
     email_password = os.getenv("EMAIL_PWD")
-    return username, password, name, email, email_password
+    return user_id, username, password, name, email, email_password
 
 def load_bert_env():
     bert_model_path = os.getenv("BERT_MODEL_PATH")
