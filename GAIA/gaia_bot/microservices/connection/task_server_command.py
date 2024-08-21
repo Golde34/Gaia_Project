@@ -15,6 +15,7 @@ class TaskManagerConnector:
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
     def execute_task_command(self, task, method, **kwargs):
+        print('Nhay vao day')
         if method == 'POST':
             return self.create_task(task)
         elif method == 'PUT':
