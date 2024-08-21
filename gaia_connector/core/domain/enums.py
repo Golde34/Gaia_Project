@@ -20,6 +20,7 @@ class AcronymsEnum(Enum):
     SP = 'schedule_plan'
     WO = 'work_optimization'
     CMC = "camera_cv"
+    GP = "gaia_pipeline"
 
 class KafkaTopic(Enum):
     OPEN_CAMERA_SPACE = 'OPEN_CAMERA_SPACE_TOPIC'
