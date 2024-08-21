@@ -39,7 +39,7 @@ class TaskServiceRequest:
    
     def _get_group_task_id(self, group_task):
         try:
-            group_task_response = requests.get(f"{self.url}/group-task/find-group-task-by-name?name={group_task}") 
+            group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}") 
             if group_task_response.status_code == 200:
                 return group_task_response.json()['id']
             else:
