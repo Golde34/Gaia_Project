@@ -1,0 +1,5 @@
+### Kafka Convention
+- Topic: Service-Producer-Shorten-Name.Function-Name.topic
+- Example: `gaia.create-task.topic` ; `wo.get-tasks.topic`
+- Message Cmd: camelCase
+- Example: `createTask` ; `getTasks`
