@@ -12,6 +12,17 @@ export const groupTaskRouter = Router();
 const groupTaskControllerImpl = groupTaskController;
 const taskControllerImpl = taskController;
 
+
+// find group task by name
+groupTaskRouter.get("/find-by-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const groupTaskResult = await groupTaskControllerImpl.findGroupTaskByName(req, next);
+        returnResult(groupTaskResult, GROUP_TASK_NOT_FOUND, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // get one group task
 groupTaskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -124,16 +135,6 @@ groupTaskRouter.put("/:id/enable", async (req: Request, res: Response, next: Nex
         returnResult(groupTaskResult, ENABLE_GROUP_TASK_FAILED, res, next);
     }
     catch (err) {
-        next(err);
-    }
-});
-
-// find group task by name
-groupTaskRouter.get("/find-by-name", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const groupTaskResult = await groupTaskControllerImpl.findGroupTaskByName(req, next);
-        returnResult(groupTaskResult, GROUP_TASK_NOT_FOUND, res, next);
-    } catch (err) {
         next(err);
     }
 });

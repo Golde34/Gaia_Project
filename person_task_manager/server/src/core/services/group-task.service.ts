@@ -275,7 +275,7 @@ class GroupTaskService {
             const userIdInt = parseInt(userId.valueOf());
             const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
             // Find the project that match with request
-            const projectIndex = userProjects.findIndex((projectItem) => projectItem.title === project);
+            const projectIndex = userProjects.findIndex((projectItem) => projectItem.name === project);
             if (projectIndex === -1) {
                 return msg400(PROJECT_NOT_FOUND);
             }
@@ -287,16 +287,25 @@ class GroupTaskService {
             });
             const groupTasksResult = await Promise.all(groupTasks);
             // Find the group task that match with request
+            console.log(groupTaskTitle)
             const groupTaskIndex = groupTasksResult.findIndex((groupTaskItem) => {
+                let count = 1;
                 if (groupTaskItem === null) {
-                    return false;
+                    return -1;
                 }
-                groupTaskItem.title === groupTaskTitle
+                if (groupTaskItem.title === groupTaskTitle) {
+                    console.log(count);
+                    return count;
+                }
+                count = count + 1;
             });
             if (groupTaskIndex === -1) {
                 return msg400(GROUP_TASK_NOT_FOUND);
             }
             const result = groupTasksResult[groupTaskIndex];
+            return msg200({
+                message: result
+            });
         } catch (error: any) {
             return msg400(error.message.toString());
         }
