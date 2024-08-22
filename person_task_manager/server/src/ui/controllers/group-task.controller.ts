@@ -128,7 +128,6 @@ class GroupTaskController {
             const groupName = req.query.name as string;
             const userId = req.query.userId as string;
             const project = req.query.project as string;
-            console.log(groupName, userId, project);
             const groupTaskResult = await groupTaskService.findGroupTaskByName(groupName, userId, project);
 
             return groupTaskResult;
