@@ -9,6 +9,7 @@ import { projectStore } from "../store/project.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
+import levenshtein from "fast-levenshtein";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
@@ -45,14 +46,14 @@ class GroupTaskService {
             return groupTask;
         }
         return groupTask;
-    } 
+    }
 
     // This fucntion does not response to client
     async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             groupTask = await this.checkDefaultGroupTask(groupTask);
 
-            const createGroupTask = await groupTaskStore.createGroupTask(groupTask); 
+            const createGroupTask = await groupTaskStore.createGroupTask(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
 
             if (await groupTaskValidationImpl.checkExistedGroupTaskInProject(groupTaskId, projectId) === false) { // not exist
@@ -71,7 +72,7 @@ class GroupTaskService {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
 
-                const updateGroupTask = await groupTaskStore.updateGroupTask(groupTaskId, groupTask); 
+                const updateGroupTask = await groupTaskStore.updateGroupTask(groupTaskId, groupTask);
 
                 return msg200({
                     message: (updateGroupTask as any)
@@ -115,7 +116,7 @@ class GroupTaskService {
             groupTask
         });
     }
-    
+
     async getGroupTaskByTaskId(taskId: string): Promise<string> {
         try {
             const groupTask = await groupTaskStore.findGroupTasksByTaskId(taskId);
@@ -250,7 +251,7 @@ class GroupTaskService {
             return msg400(error.message.toString());
         }
     }
-    
+
     async enableGroupTask(groupTaskId: string): Promise<IResponse | undefined> {
         try {
             if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
@@ -269,16 +270,68 @@ class GroupTaskService {
         }
     }
 
-    async findGroupTaskByName(name: string): Promise<IResponse | undefined> {
-        try {
-            // List all project
-            // Find the project that match with request
-            // List all group task in that project
-            // Find the group task that match with request    
-        } catch (error: any) {
-            return msg400(error.message.toString());
+    // async findGroupTaskByName(groupTaskTitle: string, userId: string, project: string): Promise<IResponse | undefined> {
+    //     try {
+    //         const userIdInt = parseInt(userId.valueOf());
+    //         const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
+
+    //         const projectItem = userProjects.find(projectItem => projectItem.name === project);
+    //         if (!projectItem) {
+    //             return msg400(PROJECT_NOT_FOUND);
+    //         }
+
+    //         const groupTasks = await Promise.all(
+    //             projectItem.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
+    //         );
+
+    //         const groupTask = groupTasks.find(task => task && task.title === groupTaskTitle);
+    //         if (!groupTask) {
+    //             return msg400(GROUP_TASK_NOT_FOUND);
+    //         }
+
+    //         return msg200({ message: groupTask });
+    //     } catch (error: any) {
+    //         return msg400(error.message.toString());
+    //     }
+    // }
+
+    async findGroupTaskByName(groupTaskTitle: string, userId: string, project: string): Promise<IResponse | undefined> {
+    try {
+        const userIdInt = parseInt(userId.valueOf());
+        const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
+
+        const projectItem = userProjects.find(projectItem => projectItem.name === project);
+        if (!projectItem) {
+            return msg400(PROJECT_NOT_FOUND);
         }
+
+        const groupTasks = await Promise.all(
+            projectItem.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
+        );
+
+        // Tìm kiếm group task có tên gần nhất
+        let closestTask = null;
+        let minDistance = Infinity;
+
+        for (const task of groupTasks) {
+            if (task) {
+                const distance = levenshtein.get(groupTaskTitle, task.title);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestTask = task;
+                }
+            }
+        }
+
+        if (!closestTask) {
+            return msg400(GROUP_TASK_NOT_FOUND);
+        }
+
+        return msg200({ message: closestTask });
+    } catch (error: any) {
+        return msg400(error.message.toString());
     }
+}
 }
 
 export const groupTaskService = new GroupTaskService();
