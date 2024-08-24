@@ -2,16 +2,15 @@ from flask import jsonify
 import requests
 
 from kernel.utils.get_auth_token import _get_token_parameters
-from infrastructure.kafka.producer.kafka_producer import send_message 
-from domain.constants import Constants
-from services.mapper.task_mapper import TaskMapper
+from core.domain.constants import Constants
+from core.services.mapper.task_mapper import TaskMapper
 
 class TaskServiceRequest:
     def __init__(self, url):
         self.url = url
 
     def create_task(self, data):
-        try:
+        # try:
             # Mapping TM task object and send to TM
             task = TaskMapper().map_create_task(data)
             group_task_id = self._get_group_task_id(data['group_task'], data['user_id'], data['project'])
@@ -20,28 +19,28 @@ class TaskServiceRequest:
             task['groupTaskId'] = group_task_id
 
             task_response = requests.post(f"{self.url}/task/create", json=task)
-            
+            print(task_response.json()) 
             if task_response.status_code == 200:
-                print('Create task successfully')
+                print('Create task in TM successfully')
 
                 # If create task in TM successfully, send message to Kafka to store task in GP
-                data = TaskMapper().map_create_task_to_sor(data, task_response.json()['_id'])
-                send_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, data)
+                # data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
+                # send_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, data)
                 
                 return jsonify({Constants.StringConstants.status: 'OK', 
                              Constants.StringConstants.response: task_response.json()})
             else:
                 print('Create task failed')
                 return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Create task failed'})
-        except:
-            print('Create task failed')
-            return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
+        # except:
+        #     print('Create task failed')
+        #     return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
    
     def _get_group_task_id(self, group_task, user_id, project):
         try:
-            group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}&userId={user_id}&projectId={project}") 
+            group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}&userId={user_id}&project={project}")
             if group_task_response.status_code == 200:
-                return group_task_response.json()['id']
+                return group_task_response.json()['data']['message']['_id']
             else:
                 return None
         except:

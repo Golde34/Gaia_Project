@@ -1,8 +1,5 @@
-from ui import app
-from pathlib import Path
+from ui import app, bus
 
-
-gaia_parent_path = Path(__file__).parent.parent
-
-if __name__ == "__main__":
-    app.run(host='localhost', port=5000, debug=True)
+if __name__ == '__main__':
+    bus.run()
+    app.run(debug=True, host='localhost', port=5000)

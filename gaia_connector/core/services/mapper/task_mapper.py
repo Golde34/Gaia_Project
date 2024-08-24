@@ -6,7 +6,7 @@ class TaskMapper:
         task = data['task']
         priority = [task['priority']]
         return {
-            'title': data['title'],
+            'title': task['title'],
             'description': None,
             'priority': priority,
             'status': task['status'],

@@ -1,5 +1,3 @@
-from pathlib import Path
-from app_router import gaia_parent_path
+from ui import gaia_parent_path
 
 gaia_resource_path = gaia_parent_path / 'GAIA' / 'gaia_bot' / 'resources'
-# gaia_resource_path = Path(__file__).parent.parent.parent / 'gaia_bot' / 'modules' / 'local' / 'resources'
