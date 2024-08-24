@@ -1,5 +1,6 @@
 import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
 import { TaskEntity } from "../../infrastructure/database/entities/task.entity";
+import { levenshteinDistanceGroupTasks, levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
@@ -270,68 +271,30 @@ class GroupTaskService {
         }
     }
 
-    // async findGroupTaskByName(groupTaskTitle: string, userId: string, project: string): Promise<IResponse | undefined> {
-    //     try {
-    //         const userIdInt = parseInt(userId.valueOf());
-    //         const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
-
-    //         const projectItem = userProjects.find(projectItem => projectItem.name === project);
-    //         if (!projectItem) {
-    //             return msg400(PROJECT_NOT_FOUND);
-    //         }
-
-    //         const groupTasks = await Promise.all(
-    //             projectItem.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
-    //         );
-
-    //         const groupTask = groupTasks.find(task => task && task.title === groupTaskTitle);
-    //         if (!groupTask) {
-    //             return msg400(GROUP_TASK_NOT_FOUND);
-    //         }
-
-    //         return msg200({ message: groupTask });
-    //     } catch (error: any) {
-    //         return msg400(error.message.toString());
-    //     }
-    // }
-
     async findGroupTaskByName(groupTaskTitle: string, userId: string, project: string): Promise<IResponse | undefined> {
-    try {
-        const userIdInt = parseInt(userId.valueOf());
-        const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
+        try {
+            const userIdInt = parseInt(userId.valueOf());
+            const userProjects = await projectStore.findAllProjectsByOwnerId(userIdInt);
 
-        const projectItem = userProjects.find(projectItem => projectItem.name === project);
-        if (!projectItem) {
-            return msg400(PROJECT_NOT_FOUND);
-        }
-
-        const groupTasks = await Promise.all(
-            projectItem.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
-        );
-
-        // Tìm kiếm group task có tên gần nhất
-        let closestTask = null;
-        let minDistance = Infinity;
-
-        for (const task of groupTasks) {
-            if (task) {
-                const distance = levenshtein.get(groupTaskTitle, task.title);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestTask = task;
-                }
+            const foundedProject = levenshteinDistanceProject(project, userProjects);
+            if (foundedProject === null) {
+                return msg400(PROJECT_NOT_FOUND);
             }
-        }
 
-        if (!closestTask) {
-            return msg400(GROUP_TASK_NOT_FOUND);
-        }
+            const groupTasks = await Promise.all(
+                foundedProject.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
+            );
 
-        return msg200({ message: closestTask });
-    } catch (error: any) {
-        return msg400(error.message.toString());
+            const foundedGroupTask = levenshteinDistanceGroupTasks(groupTaskTitle, groupTasks);
+            if (foundedGroupTask === null) {
+                return msg400(GROUP_TASK_NOT_FOUND);
+            }
+
+            return msg200({ message: foundedGroupTask });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
     }
-}
 }
 
 export const groupTaskService = new GroupTaskService();
