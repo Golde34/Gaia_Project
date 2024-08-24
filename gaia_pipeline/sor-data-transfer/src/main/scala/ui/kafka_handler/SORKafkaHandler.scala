@@ -30,3 +30,10 @@ object SORKafkaHandler {
 		}	
 	}
 }
+
+object CreateTaskHandler {
+  def handleMessage(message: String): Unit = {
+    val jsonObject = ujson.read(message)
+    println(s"Received message: ${jsonObject}")
+  }
+}

@@ -8,10 +8,10 @@ import scala.concurrent.Future
 
 import domains.TaskInput
 import services.SORDataTransfer
-import kafka_handler.SORKafkaHandler 
+import kafka_handler.{SORKafkaHandler, CreateTaskHandler} 
 
 class SORConsumerData() {
-  private val kafkaTopic = "GC.sor-training-model"
+  private val kafkaTopics = List("GC.sor-training-model", "gc.create-task.topic")
   private val bootstrapServers = "localhost:9094"
 
   private val consumerProps = new Properties()
@@ -24,7 +24,7 @@ class SORConsumerData() {
   private val consumer = new KafkaConsumer[String, String](consumerProps)
 
   def consumeMessages(): Unit = {
-    consumer.subscribe(List(kafkaTopic).asJava)
+    consumer.subscribe(kafkaTopics.asJava)
 
     while(true) {
       val records = consumer.poll(1000).asScala
@@ -32,6 +32,10 @@ class SORConsumerData() {
         println(s"Received message: ${record.value()}")
         if (record.topic() == "GC.sor-training-model") {
           SORKafkaHandler.handleMessage(record.value())
+        }
+        if (record.topic() == "gc.create-task.topic") {
+          // val taskInput = TaskInput.fromJson(record.value())
+          CreateTaskHandler.handleMessage(record.value())
         }
       }
     }
