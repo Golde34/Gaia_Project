@@ -1,10 +1,14 @@
 from ui import bus
+import time
+import json
 
-def publish_message(topic: str, message: dict):
-    key = message['key']
-    value = message['value']
+
+def publish_message(topic: str, message):
+    # key random by real time
+    key = str(time.time())
+    message_bytes = json .dumps(message).encode('utf-8')
     producer = bus.get_producer()
-    producer.produce(topic, key=key, value=value, callback=acked)
+    producer.produce(topic, key=key, value=message_bytes, callback=acked)
     producer.poll(1)
     return "Published message to topic: " + topic
 

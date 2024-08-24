@@ -4,6 +4,8 @@ import requests
 from kernel.utils.get_auth_token import _get_token_parameters
 from core.domain.constants import Constants
 from core.services.mapper.task_mapper import TaskMapper
+from infrastructure.kafka_producer.producer import publish_message 
+
 
 class TaskServiceRequest:
     def __init__(self, url):
@@ -24,8 +26,8 @@ class TaskServiceRequest:
                 print('Create task in TM successfully')
 
                 # If create task in TM successfully, send message to Kafka to store task in GP
-                # data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
-                # send_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, data)
+                data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
+                publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, data)
                 
                 return jsonify({Constants.StringConstants.status: 'OK', 
                              Constants.StringConstants.response: task_response.json()})
