@@ -10,8 +10,6 @@ object CreateTaskHandler {
     println(s"Received message: $jsonObject")
 
     val taskInput = mappingMessage(ujson.read(jsonObject("data")))
-    println(s"Received message: ${taskInput}")
-
     val cmd = jsonObject("cmd").str
     cmd match {
       case KafkaCmd.KafkaCmd.GAIA_CREATE_TASK => {
