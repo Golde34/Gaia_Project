@@ -18,9 +18,12 @@ class TaskMapper:
 
     def map_create_task_to_sor(self, data, task_id):
         return {
-            'sentence': data['sentence'],
-            'project': data['project'],
-            'groupTask': data['group_task'],
-            'task': data['task'],
-            'task_id': task_id
+            'cmd': 'gaia-create-task',
+            'data': {
+                'sentence': data['sentence'],
+                'project': data['project'],
+                'groupTask': data['group_task'],
+                'task': data['task'],
+                'task_id': task_id
+            }
         }
