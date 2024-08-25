@@ -12,7 +12,7 @@ class TaskServiceRequest:
         self.url = url
 
     def create_task(self, data):
-        # try:
+        try:
             # Mapping TM task object and send to TM
             task = TaskMapper().map_create_task(data)
             group_task_id = self._get_group_task_id(data['group_task'], data['user_id'], data['project'])
@@ -34,9 +34,9 @@ class TaskServiceRequest:
             else:
                 print('Create task failed')
                 return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Create task failed'})
-        # except:
-        #     print('Create task failed')
-        #     return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
+        except:
+            print('Create task failed')
+            return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
    
     def _get_group_task_id(self, group_task, user_id, project):
         try:
