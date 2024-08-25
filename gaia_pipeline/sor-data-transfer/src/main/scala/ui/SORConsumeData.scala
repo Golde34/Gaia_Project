@@ -9,9 +9,10 @@ import scala.concurrent.Future
 import domains.TaskInput
 import services.SORDataTransfer
 import kafka_handler.{SORKafkaHandler, CreateTaskHandler} 
+import domains.Constants.KafkaTopic
 
 class SORConsumerData() {
-  private val kafkaTopics = List("GC.sor-training-model", "gc.create-task.topic")
+  private val kafkaTopics = List(KafkaTopic.SOR_TRAINING_MODEL, KafkaTopic.CREATE_TASK)
   private val bootstrapServers = "localhost:9094"
 
   private val consumerProps = new Properties()
@@ -30,11 +31,10 @@ class SORConsumerData() {
       val records = consumer.poll(1000).asScala
       for (record <- records) {
         println(s"Received message: ${record.value()}")
-        if (record.topic() == "GC.sor-training-model") {
+        if (record.topic() == KafkaTopic.SOR_TRAINING_MODEL) {
           SORKafkaHandler.handleMessage(record.value())
         }
-        if (record.topic() == "gc.create-task.topic") {
-          // val taskInput = TaskInput.fromJson(record.value())
+        if (record.topic() == KafkaTopic.CREATE_TASK) {
           CreateTaskHandler.handleMessage(record.value())
         }
       }

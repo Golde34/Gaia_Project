@@ -1,6 +1,12 @@
 package domains
 
 object Constants {
+
+    object KafkaTopic {
+        final val SOR_TRAINING_MODEL: String = "gc.sor-training-model.topic"
+        final val CREATE_TASK: String = "gc.create-task.topic"
+    }
+
     object KafkaCmd {
         final val ACTIVATE_DATA_LAKE_SAVING: String = "activateDataLakeSaving"
     }

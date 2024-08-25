@@ -9,7 +9,8 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.{ProvenShape, Tag}
 
-class TaskData(tag: Tag) extends Table[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], Option[String], Option[String], Option[String], Option[String], Option[String])](tag, "task") {
+class TaskData(tag: Tag) extends Table[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], 
+                                        Option[String], Option[String], Option[String], Option[String], Option[String], Boolean)](tag, "task") {
   def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def sentenceId: Rep[Option[Int]] = column[Option[Int]]("sentenceId", O.Default(None))
   def sentence: Rep[String] = column[String]("sentence")
@@ -24,9 +25,11 @@ class TaskData(tag: Tag) extends Table[(Int, Option[Int], String, String, Option
   def taskId: Rep[Option[String]] = column[Option[String]]("taskId", O.Default(None))
   def scheduleTaskId: Rep[Option[String]] = column[Option[String]]("scheduleTaskId", O.Default(None))
   def taskConfigId: Rep[Option[String]] = column[Option[String]]("taskConfigId", O.Default(None))
+  def isDataLakeSync: Rep[Boolean] = column[Boolean]("isDataLakeSync", O.Default(false))
 
-  def * : ProvenShape[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], Option[String], Option[String], Option[String], Option[String], Option[String])] =
-    (id, sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration, taskId, scheduleTaskId, taskConfigId)
+  def * : ProvenShape[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], Option[String], 
+                        Option[String], Option[String], Option[String], Option[String], Boolean)] =
+    (id, sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration, taskId, scheduleTaskId, taskConfigId, isDataLakeSync)
 }
 
 
@@ -40,7 +43,7 @@ object TaskDatabaseService {
     Await.result(db.run(setup), 10.seconds)
   }
 
-  def getAll(): Seq[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], Option[String], Option[String], Option[String], Option[String], Option[String])] = {
+  def getAll(): Seq[(Int, Option[Int], String, String, Option[String], String, String, String, Option[String], Option[String], Option[String], Option[String], Option[String], Option[String], Boolean)] = {
     val entities = TableQuery[TaskData]
     val query = entities.result
     Await.result(db.run(query), 10.seconds)
@@ -48,9 +51,9 @@ object TaskDatabaseService {
 
   def insert(sentenceId: Option[Int], sentence: String, project: String, groupTask: Option[String], 
              title: String, priority: String, status: String, startDate: Option[String], deadline: Option[String], 
-             duration: Option[String], taskId: Option[String], scheduleTaskId: Option[String], taskConfigId: Option[String]): Unit = {
+             duration: Option[String], taskId: Option[String], scheduleTaskId: Option[String], taskConfigId: Option[String], isDataLakeSync: Boolean): Unit = {
     val entities = TableQuery[TaskData]
-    val insertAction = entities += (0, sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration, taskId, scheduleTaskId, taskConfigId)
+    val insertAction = entities += (0, sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration, taskId, scheduleTaskId, taskConfigId, isDataLakeSync)
     Await.result(db.run(insertAction), 10.seconds)
   }
 }

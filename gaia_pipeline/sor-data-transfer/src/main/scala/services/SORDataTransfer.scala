@@ -41,7 +41,8 @@ object SORDataTransfer {
         duration = Some(row._10),
         taskId = None,
         scheduleTaskId = None,
-        taskConfigId = None
+        taskConfigId = None,
+        isDataLakeSync = true
       )
     }
   }
