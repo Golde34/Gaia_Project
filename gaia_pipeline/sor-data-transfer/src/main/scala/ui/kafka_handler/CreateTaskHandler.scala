@@ -2,11 +2,31 @@ package kafka_handler
 
 import ujson._
 import domains.{TaskInput, TaskObject}
+import services.TaskDataStorage.{saveToDBFromGaiaRequest, saveToDBFromTMRequest}
 
 object CreateTaskHandler {
   def handleMessage(message: String): Unit = {
-    val jsonObject = ujson.read(message) 
+    val jsonObject = ujson.read(message)
+    println(s"Received message: $jsonObject")
 
+    val taskInput = mappingMessage(ujson.read(jsonObject("data")))
+    println(s"Received message: ${taskInput}")
+
+    val cmd = jsonObject("cmd").str
+    cmd match {
+      case KafkaCmd.KafkaCmd.GAIA_CREATE_TASK => {
+        saveToDBFromGaiaRequest(taskInput)
+      }
+      case KafkaCmd.KafkaCmd.TM_CREATE_TASK => {
+        saveToDBFromTMRequest(taskInput)
+      }
+      case other => {
+        println(s"Received message: $other")
+      }
+    }
+  }
+
+  def mappingMessage(jsonObject: ujson.Value): TaskInput = {
     val task = TaskObject(
       jsonObject("title").str,
       jsonObject("priority").str,
@@ -21,7 +41,6 @@ object CreateTaskHandler {
       jsonObject("groupTask").str,
       task
     )
-    println(s"Received message: ${taskInput}")
-    
+    taskInput
   }
 }

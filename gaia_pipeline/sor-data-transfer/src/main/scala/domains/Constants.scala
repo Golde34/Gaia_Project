@@ -2,13 +2,22 @@ package domains
 
 object Constants {
 
+    object StringConstants {
+        final val EMPTY_SENTENCE: String = "This task has no sentence"
+    }
+
     object KafkaTopic {
         final val SOR_TRAINING_MODEL: String = "gc.sor-training-model.topic"
         final val CREATE_TASK: String = "gc.create-task.topic"
     }
 
     object KafkaCmd {
-        final val ACTIVATE_DATA_LAKE_SAVING: String = "activateDataLakeSaving"
+        final val CSV_SAVING: String = "saveOutputToCSV"
+        final val DATABASE_SAVING: String = "saveOutputToDatabase"
+        final val ALL_SAVING: String = "saveOutputToAll"
+
+        final val GAIA_CREATE_TASK: String = "gaia-create-task"
+        final val TM_CREATE_TASK: String = "tm-create-task"
     }
 
     object TaskStatus {
