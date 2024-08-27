@@ -23,5 +23,5 @@ class AcronymsEnum(Enum):
     GP = "gaia_pipeline"
 
 class KafkaTopic(Enum):
-    OPEN_CAMERA_SPACE = 'OPEN_CAMERA_SPACE_TOPIC'
-    SHUTDOWN_CAMERA_SPACE = 'SHUTDOWN_CAMERA_SPACE_TOPIC'
+    OPEN_CAMERA_SPACE = 'gaia.open-camera-space.topic'
+    SHUTDOWN_CAMERA_SPACE = 'gaia.shutdown-camera-space.topic'

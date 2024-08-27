@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 public class TopicConstants {
     @UtilityClass
     public class OptimizeTaskCommand {
-        public static final String TOPIC = "OPTIMIZE_TASK";
+        public static final String TOPIC = "task-manager.optimize-task.topic";
 
         public static final String CREATE_TASK = "CREATE_TASK";
         public static final String SCHEDULE_TASK = "SCHEDULE_TASK";
