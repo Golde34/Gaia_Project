@@ -1,5 +1,5 @@
 export enum KafkaTopic {
-    OPTIMIZE_TASK = 'OPTIMIZE_TASK'
+    OPTIMIZE_TASK = 'task-manager.optimize-task.topic'
 }
 
 export enum KafkaCommand {
