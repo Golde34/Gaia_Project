@@ -53,7 +53,8 @@ class TaskService {
                         KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
                     ))
                 }]
-                this.kafkaConfig.produce(KafkaTopic.OPTIMIZE_TASK, messages);
+                console.log("Push kafka message: ", messages)
+                this.kafkaConfig.produce(KafkaTopic.CREATE_TASK, messages);
 
                 return msg200({
                     message: (createTask as any)
