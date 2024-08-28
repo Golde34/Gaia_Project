@@ -8,7 +8,10 @@ case class TaskInput(
   sentence: String,
   project: String,
   groupTask: String,
-  task: TaskObject
+  task: TaskObject,
+  taskId: Option[String],
+  scheduleId: Option[String],
+  taskConfig: Option[String]
   )
 
 case class TaskObject(

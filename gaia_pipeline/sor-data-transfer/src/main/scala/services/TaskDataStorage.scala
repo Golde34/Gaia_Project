@@ -6,18 +6,10 @@ import scala.collection.mutable
 import java.awt.Label
 import java.io.{PrintWriter, File}
 
-import domains.LabelEntity
-import domains.SpacyData
-import utils.TextPreprocessing.{
-  removeSpecialCharacters,
-  stem,
-  stemWithPositionMapping,
-  stemStrings
-}
+import domains.TaskInput
+import domains.Constants.KafkaCmd
+import domains.Constants.StringConstants
 import database.TaskDatabaseService
-import database.TaskData
-import utils.GAIACSVReader.readSORCSV
-import domains.Constants.{StringConstants}
 
 object TaskDataStorage {
 

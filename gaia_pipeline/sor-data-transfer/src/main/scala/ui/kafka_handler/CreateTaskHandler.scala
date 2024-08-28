@@ -2,6 +2,7 @@ package kafka_handler
 
 import ujson._
 import domains.{TaskInput, TaskObject}
+import domains.Constants.KafkaCmd
 import services.TaskDataStorage.{saveToDBFromGaiaRequest, saveToDBFromTMRequest}
 
 object CreateTaskHandler {
@@ -12,10 +13,10 @@ object CreateTaskHandler {
     val taskInput = mappingMessage(ujson.read(jsonObject("data")))
     val cmd = jsonObject("cmd").str
     cmd match {
-      case KafkaCmd.KafkaCmd.GAIA_CREATE_TASK => {
+      case KafkaCmd.GAIA_CREATE_TASK => {
         saveToDBFromGaiaRequest(taskInput)
       }
-      case KafkaCmd.KafkaCmd.TM_CREATE_TASK => {
+      case KafkaCmd.TM_CREATE_TASK => {
         saveToDBFromTMRequest(taskInput)
       }
       case other => {
@@ -27,18 +28,24 @@ object CreateTaskHandler {
   def mappingMessage(jsonObject: ujson.Value): TaskInput = {
     val task = TaskObject(
       jsonObject("title").str,
-      jsonObject("priority").str,
+      jsonObject("priority").arr.head.str,
       jsonObject("status").str,
       jsonObject("startDate").str,
       jsonObject("deadline").str,
-      jsonObject("duration").str
+      jsonObject("duration").num.toInt.toString
     )
+    val sentence = if (jsonObject.obj.contains("sentence")) jsonObject("sentence").str else ""
+
     val taskInput = TaskInput(
-      jsonObject("sentence").str,
+      sentence,
       jsonObject("project").str,
       jsonObject("groupTask").str,
-      task
+      task,
+      Option(jsonObject("taskId").str),
+      Option(jsonObject("scheduleId").str),
+      Option(jsonObject("taskConfigId").str)
     )
+
     taskInput
   }
 }
