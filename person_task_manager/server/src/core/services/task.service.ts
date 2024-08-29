@@ -15,6 +15,8 @@ import { createMessage } from "../../infrastructure/kafka/create-message";
 import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
+import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../mapper/kafka-create-task.mapper";
+import { projectStore } from "../store/project.store";
 
 class TaskService {
     constructor(
@@ -48,13 +50,8 @@ class TaskService {
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
                 // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
-                const messages = [{
-                    value: JSON.stringify(createMessage(
-                        KafkaCommand.CREATE_TASK, '00', 'Successful', createTask
-                    ))
-                }]
-                console.log("Push kafka message: ", messages)
-                this.kafkaConfig.produce(KafkaTopic.CREATE_TASK, messages);
+                const data = await this.buildCreateTaskMessage(createTask, groupTaskId);
+                this.pushCreateTaskMessage(data); 
 
                 return msg200({
                     message: (createTask as any)
@@ -66,6 +63,22 @@ class TaskService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
+
+    async buildCreateTaskMessage(createdTask: ITaskEntity, groupTaskId: string): Promise<KafkaCreateTaskMessage> {
+        const projectName = await projectStore.findOneProjectByGroupTaskId(groupTaskId).then((result) => result?.name).catch(null);
+        const groupTaskName = await groupTaskStore.findGroupTaskById(groupTaskId).then((result) => result?.title).catch(null);
+        return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName);
+    }
+
+    pushCreateTaskMessage(data: KafkaCreateTaskMessage): void {
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.CREATE_TASK, '00', 'Successful', data
+            ))
+        }]
+        console.log("Push kafka message: ", messages)
+        this.kafkaConfig.produce(KafkaTopic.CREATE_TASK, messages);
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
