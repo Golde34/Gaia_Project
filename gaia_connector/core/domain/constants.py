@@ -6,3 +6,6 @@ class Constants:
         status = "status"
         response = "response" 
         message = "message"
+
+    class KafkaCommand:
+        GAIA_CREATE_TASK = "gaiaCreateTask"

@@ -16,7 +16,7 @@ object Constants {
         final val DATABASE_SAVING: String = "saveOutputToDatabase"
         final val ALL_SAVING: String = "saveOutputToAll"
 
-        final val GAIA_CREATE_TASK: String = "gaia-create-task"
+        final val GAIA_CREATE_TASK: String = "gaiaCreateTask"
         final val TM_CREATE_TASK: String = "taskManagerCreateTask"
     }
 
