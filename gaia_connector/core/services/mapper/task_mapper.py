@@ -15,7 +15,7 @@ class TaskMapper:
             'status': task['status'],
             'startDate': task['start_date'],
             'deadline': task['deadline'],
-            'duration': task['duration'],
+            'duration': float(task['duration']),
             'activeStatus': 'ACTIVE'
         } 
 
@@ -23,10 +23,10 @@ class TaskMapper:
         return {
             'cmd': Constants.KafkaCommand.GAIA_CREATE_TASK,
             'data': {
-                'senteNce': data['sentence'],
+                'sentence': data['sentence'],
                 'project': data['project'],
                 'groupTask': data['group_task'],
-                'task': data['task'],
+                'task': self.map_create_task(data),
                 'taskId': task_id
             }
         }
