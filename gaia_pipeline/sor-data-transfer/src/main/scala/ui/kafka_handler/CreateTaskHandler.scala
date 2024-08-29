@@ -34,18 +34,20 @@ object CreateTaskHandler {
       jsonObject("deadline").str,
       jsonObject("duration").num.toInt.toString
     )
-    val sentence = if (jsonObject.obj.contains("sentence")) jsonObject("sentence").str else ""
 
-    val taskInput = TaskInput(
+    val sentence = jsonObject.obj.get("sentence").map(_.str).getOrElse("")
+    val project = jsonObject.obj.get("project").map(_.str.trim).filter(_.nonEmpty).getOrElse("Default Project")
+    val groupTask = jsonObject.obj.get("groupTask").map(_.str.trim).filter(_.nonEmpty).getOrElse("Default Group Task")
+
+    TaskInput(
       sentence,
-      jsonObject("project").str,
-      jsonObject("groupTask").str,
+      project,
+      groupTask,
       task,
-      Option(jsonObject("taskId").str),
-      Option(jsonObject("scheduleId").str),
-      Option(jsonObject("taskConfigId").str)
+      jsonObject.obj.get("taskId").map(_.str),
+      jsonObject.obj.get("scheduleId").map(_.str),
+      jsonObject.obj.get("taskConfig").map(_.str)
     )
-
     taskInput
   }
 }
