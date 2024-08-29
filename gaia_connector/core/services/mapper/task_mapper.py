@@ -1,3 +1,6 @@
+from core.domain.constants import Constants
+
+
 class TaskMapper:
     def __init__(self) -> None:
         pass
@@ -12,18 +15,18 @@ class TaskMapper:
             'status': task['status'],
             'startDate': task['start_date'],
             'deadline': task['deadline'],
-            'duration': task['duration'],
+            'duration': float(task['duration']),
             'activeStatus': 'ACTIVE'
         } 
 
     def map_create_task_to_sor(self, data, task_id):
         return {
-            'cmd': 'gaia-create-task',
+            'cmd': Constants.KafkaCommand.GAIA_CREATE_TASK,
             'data': {
                 'sentence': data['sentence'],
                 'project': data['project'],
                 'groupTask': data['group_task'],
-                'task': data['task'],
-                'task_id': task_id
+                'task': self.map_create_task(data),
+                'taskId': task_id
             }
         }

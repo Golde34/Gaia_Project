@@ -65,3 +65,8 @@ export enum BooleanStatus {
     true = 1,
     false = 0 
 }
+
+export enum IsPrivateRoute {
+    PRIVATE = BooleanStatus.true,
+    PUBLIC = BooleanStatus.false
+}

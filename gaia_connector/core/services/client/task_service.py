@@ -20,7 +20,7 @@ class TaskServiceRequest:
                 return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid group task'})
             task['groupTaskId'] = group_task_id
 
-            task_response = requests.post(f"{self.url}/task/create", json=task)
+            task_response = requests.post(f"{self.url}/task/private-create", json=task)
             print(task_response.json()) 
             if task_response.status_code == 200:
                 print('Create task in TM successfully')
