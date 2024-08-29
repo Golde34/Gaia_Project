@@ -9,7 +9,9 @@ func ReturnTaskObjectMapper(body map[string]interface{}) *response_dtos.TaskResp
 	var input response_dtos.TaskResponseDTO
 	input.ID = body["_id"].(string)
 	input.Title = body["title"].(string)
-	input.Description = body["description"].(string)
+	if (body["description"] != nil) {
+		input.Description = body["description"].(string)
+	}
 	input.Priority = utils.ConvertStringToStringArray(body["priority"].([]interface{}))
 	input.Status = body["status"].(string)
 	if body["startDate"] != nil {
