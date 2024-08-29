@@ -10,7 +10,7 @@ export enum KafkaCommand {
 
 export class KafkaMessage {
     constructor(
-        public command: KafkaCommand,
+        public cmd: KafkaCommand,
         public errorCode: string,
         public errorMessage: string,
         public displayTime: string,

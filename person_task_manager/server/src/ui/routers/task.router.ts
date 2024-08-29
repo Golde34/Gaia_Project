@@ -49,6 +49,18 @@ taskRouter.post("/create",
         }
     });
 
+taskRouter.post("/private-create",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const taskResult = await taskControllerImpl.createPrivateTask(req, next);
+            return returnResult(taskResult, CREATE_TASK_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    }
+)
+
 // update task
 taskRouter.put("/:id",
     RequestValidator.validate(TaskRequestDto),

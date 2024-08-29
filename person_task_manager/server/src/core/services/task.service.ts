@@ -17,6 +17,7 @@ import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
 import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../mapper/kafka-create-task.mapper";
 import { projectStore } from "../store/project.store";
+import { IsPrivateRoute } from "../domain/enums/enums";
 
 class TaskService {
     constructor(
@@ -24,7 +25,7 @@ class TaskService {
         public taskValidationImpl = taskValidation,
     ) { }
 
-    async createTaskInGroupTask(task: any, groupTaskId: string | undefined): Promise<IResponse> {
+    async createTaskInGroupTask(task: any, groupTaskId: string | undefined, isPrivate: IsPrivateRoute): Promise<IResponse> {
         try {
             // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
@@ -50,9 +51,10 @@ class TaskService {
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
                 // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
-                const data = await this.buildCreateTaskMessage(createTask, groupTaskId);
-                this.pushCreateTaskMessage(data); 
-
+                if (isPrivate === IsPrivateRoute.PUBLIC) {
+                    const data = await this.buildCreateTaskMessage(createTask, groupTaskId);
+                    this.pushCreateTaskMessage(data);
+                }
                 return msg200({
                     message: (createTask as any)
                 });
