@@ -21,9 +21,12 @@ import utils.GAIACSVReader.readSORCSV
 object SORDataTransfer {
 
   def saveOutputToDatabase(): Unit = {
+    // Get last record store in database
+    TaskDatabaseService.init()
+    val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Dữ liệu đầu vào
     val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
-    val data = readSORCSV(location)
+    val data = readSORCSV(location, lastRecord.getOrElse(0))
 
     // Store processed data to MySQL database
     TaskDatabaseService.init()
@@ -48,9 +51,12 @@ object SORDataTransfer {
   }
 
   def writeOutputToJSONFile(): Unit = {
+    // Get last record store in database
+    TaskDatabaseService.init()
+    val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Read data from file location
     val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
-    val data = readSORCSV(location)
+    val data = readSORCSV(location, lastRecord.getOrElse(0))
 
     // Process data with EntityFinder
     val spacyDataset = data.map(EntityFinder.processRow)

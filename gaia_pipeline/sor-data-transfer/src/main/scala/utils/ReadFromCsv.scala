@@ -6,10 +6,10 @@ import os._
 import com.github.tototoshi.csv._
 
 object GAIACSVReader {
-  def readSORCSV(filePath: os.Path): Seq[(String, String, String, String, String, String, String, String, String, String)] = {
+  def readSORCSV(filePath: os.Path, lastRecord: Int): Seq[(String, String, String, String, String, String, String, String, String, String)] = {
     val reader = CSVReader.open(filePath.toString())
 
-    val data = reader.allWithHeaders().map { row =>
+    val data = reader.allWithHeaders().drop(lastRecord).map { row =>
       val sentenceId = row.getOrElse("SentenceId", "null")
       val sentence = row.getOrElse("Sentence", "null")
       val project = row.getOrElse("Project", "null")

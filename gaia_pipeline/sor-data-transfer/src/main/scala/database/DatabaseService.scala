@@ -56,4 +56,11 @@ object TaskDatabaseService {
     val insertAction = entities += (0, sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration, taskId, scheduleTaskId, taskConfigId, isDataLakeSync)
     Await.result(db.run(insertAction), 10.seconds)
   }
+
+  def getLastSentenceId(): Option[Int] = {
+    val entities = TableQuery[TaskData]
+    val query = entities.map(_.sentenceId).max.result
+    val result = Await.result(db.run(query), 10.seconds)
+    result
+  } 
 }
