@@ -27,7 +27,7 @@ class TaskServiceRequest:
 
                 # If create task in TM successfully, send message to Kafka to store task in GP
                 data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
-                publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, data)
+                publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, Constants.KafkaCommand.GAIA_CREATE_TASK, data)
                 
                 return jsonify({Constants.StringConstants.status: 'OK', 
                              Constants.StringConstants.response: task_response.json()})
