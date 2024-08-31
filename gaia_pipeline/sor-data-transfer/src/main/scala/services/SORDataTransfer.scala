@@ -17,6 +17,8 @@ import database.TaskDatabaseService
 import database.TaskData
 import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
 import utils.SORJsonUtils.writeJsonFile
+import os.write
+import utils.SORCSVUtils.writeSORCSV2
 
 object SORDataTransfer {
 
@@ -72,7 +74,8 @@ object SORDataTransfer {
     // Write JSON output to file
     writeJsonFile("spacy_dataset.json", jsonOutput, isPrintedOutput = true)
 
-    writeSORCSV("spacy_dataset.csv", jsonOutput) 
+    // writeSORCSV("spacy_dataset_old.csv", jsonOutput) 
+    writeSORCSV2("spacy_dataset.csv", jsonOutput)
   }
 }
 

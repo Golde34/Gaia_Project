@@ -7,7 +7,20 @@ import com.github.tototoshi.csv._
 import java.io.{PrintWriter, File}
 
 object SORCSVUtils {
-  def readSORCSV(filePath: os.Path): Seq[(String, String, String, String, String, String, String, String, String, String)] = {
+  def readSORCSV(filePath: os.Path): Seq[
+    (
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String
+    )
+  ] = {
     val reader = CSVReader.open(filePath.toString())
 
     val data = reader.allWithHeaders().map { row =>
@@ -22,7 +35,18 @@ object SORCSVUtils {
       val deadline = row.getOrElse("Deadline", "null")
       val duration = row.getOrElse("Duration", "null")
 
-      (sentenceId, sentence, project, groupTask, title, priority, status, startDate, deadline, duration)
+      (
+        sentenceId,
+        sentence,
+        project,
+        groupTask,
+        title,
+        priority,
+        status,
+        startDate,
+        deadline,
+        duration
+      )
     }
 
     reader.close()
@@ -36,9 +60,36 @@ object SORCSVUtils {
     writer.println("Sentence,Start,End,Label")
     val csvOutput = jsonOutput.flatMap { spacyData =>
       spacyData("labels").arr.map { label =>
-        s""""${spacyData("sentence").str}","${label("start").num}","${label("end").num}","${label("label").str}""""
+        s""""${spacyData("sentence").str}","${label("start").num}","${label(
+            "end"
+          ).num}","${label("label").str}""""
       }
     }
+    csvOutput.foreach(writer.println)
+    writer.close()
+
+    println(s"Data written to $outputFilePathCsv")
+  }
+
+  def writeSORCSV2(filePath: String, jsonOutput: Seq[ujson.Obj]): Unit = {
+    val outputFilePathCsv = os.pwd / filePath
+    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
+    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+
+    writer.println("text,entities")
+
+    val csvOutput = jsonOutput.map { spacyData =>
+      val entities = spacyData("labels").arr
+        .map { label =>
+          s"""{"start": ${label("start").num}, "end": ${label(
+              "end"
+            ).num}, "label": "${label("label").str}"}"""
+        }
+        .mkString("[", ", ", "]")
+
+      s""""${spacyData("sentence").str}","$entities""""
+    }
+
     csvOutput.foreach(writer.println)
     writer.close()
 
