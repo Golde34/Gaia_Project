@@ -4,8 +4,9 @@ import scala.collection.immutable.ArraySeq
 import scala.io.Source
 import os._
 import com.github.tototoshi.csv._
+import java.io.{PrintWriter, File}
 
-object GAIACSVReader {
+object SORCSVUtils {
   def readSORCSV(filePath: os.Path): Seq[(String, String, String, String, String, String, String, String, String, String)] = {
     val reader = CSVReader.open(filePath.toString())
 
@@ -26,5 +27,21 @@ object GAIACSVReader {
 
     reader.close()
     data
+  }
+
+  def writeSORCSV(filePath: String, jsonOutput: Seq[ujson.Obj]): Unit = {
+    val outputFilePathCsv = os.pwd / filePath
+    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
+    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+    writer.println("Sentence,Start,End,Label")
+    val csvOutput = jsonOutput.flatMap { spacyData =>
+      spacyData("labels").arr.map { label =>
+        s""""${spacyData("sentence").str}","${label("start").num}","${label("end").num}","${label("label").str}""""
+      }
+    }
+    csvOutput.foreach(writer.println)
+    writer.close()
+
+    println(s"Data written to $outputFilePathCsv")
   }
 }

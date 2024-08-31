@@ -4,7 +4,6 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 import java.awt.Label
-import java.io.{PrintWriter, File}
 
 import domains.LabelEntity
 import domains.SpacyData
@@ -16,7 +15,8 @@ import utils.TextPreprocessing.{
 }
 import database.TaskDatabaseService
 import database.TaskData
-import utils.GAIACSVReader.readSORCSV
+import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
+import utils.SORJsonUtils.writeJsonFile
 
 object SORDataTransfer {
 
@@ -47,7 +47,7 @@ object SORDataTransfer {
     }
   }
 
-  def writeOutputToJSONFile(): Unit = {
+  def saveOutputToDataLake(): Unit = {
     // Read data from file location
     val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
     val data = readSORCSV(location)
@@ -70,30 +70,9 @@ object SORDataTransfer {
     }
 
     // Write JSON output to file
-    val outputFilePath = os.pwd / "spacy_dataset.json"
-    if (os.exists(outputFilePath)) os.remove(outputFilePath)
-    os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
+    writeJsonFile("spacy_dataset.json", jsonOutput, isPrintedOutput = true)
 
-    println(s"Data written to $outputFilePath")
-
-    // Read and beautify JSON file content
-    val jsonContent = os.read(outputFilePath)
-    val jsonParsed = ujson.read(jsonContent)
-
-    val outputFilePathCsv = os.pwd / "spacy_dataset.csv"
-
-    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
-    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
-    writer.println("Sentence,Start,End,Label")
-    val csvOutput = spacyDataset.flatMap { spacyData =>
-      spacyData.labels.map { label =>
-        s""""${spacyData.sentence}","${label.start}","${label.end}","${label.label}""""
-      }
-    }
-    csvOutput.foreach(writer.println)
-    writer.close()
-
-    println(s"Data written to $outputFilePathCsv")
+    writeSORCSV("spacy_dataset.csv", jsonOutput) 
   }
 }
 
