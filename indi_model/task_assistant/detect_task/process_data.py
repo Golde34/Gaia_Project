@@ -4,9 +4,9 @@ import json
 
 def process_data(file_path):
     df = pd.read_csv(file_path)
-    
+
     spacy_data = []
-    count = 0    
+    count = 0
 
     for _, row in df.iterrows():
         sentence = row['text']
@@ -30,7 +30,8 @@ def process_data(file_path):
             "cats": textcat_labels
         }
 
-        count += 1
+        count+=1
+        
         spacy_data.append((sentence, annotation))
 
     return spacy_data, count
