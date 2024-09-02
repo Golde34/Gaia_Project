@@ -7,20 +7,19 @@ def train():
     train_data, count = process_data(TRAIN_DATA)
     print(f"Total number of training records: {count}")
 
-    nlp = spacy.blank('en')
-    ner = nlp.create_pipe('ner')
-    textcat = nlp.add_pipe('textcat_multilabel', last=True)
+    nlp = spacy.blank("en")
+    ner = nlp.add_pipe("ner")
+    textcat = nlp.add_pipe("textcat_multilabel", last=True) 
 
     for _, annotations in train_data:
-        for ent in annotations.get('entities'):
+        for ent in annotations.get("entities"):
             ner.add_label(ent[2])
-        for label in annotations.get('cats'):
-            textcat.add_label(label)
+    for _, annotations in train_data:
+        for cat in annotations.get("cats"):
+            textcat.add_label(cat)
 
     model = SpacyModel(nlp)
     model.train(train_data, n_iter=EPOCH, drop=DROP)
-
-    # Save model
     nlp.to_disk(MODEL_NAME)
 
 
@@ -32,5 +31,8 @@ if __name__ == "__main__":
     elif input_value == "predict":
         text = str(input("Enter text: "))
         nlp = spacy.load(MODEL_NAME)
-        model = SpacyModel(nlp)
-        model.predict(text)
+        doc = nlp(text)
+        entities = [(ent.text, ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
+        categories = {cat: score for cat, score in doc.cats.items()}
+        print("Entities:", entities)
+        print("Categories:", categories)

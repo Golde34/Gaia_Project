@@ -22,16 +22,16 @@
       "TASK"
     ],
     "textcat_multilabel":[
-      "MEDIUM",
-      "UNKNOWN",
-      "STARTDATE",
-      "DEADLINE",
       "GROUPTASK",
-      "STAR",
+      "MEDIUM",
       "IN_PROGRESS",
-      "DURATION",
+      "STARTDATE",
+      "UNKNOWN",
+      "DEADLINE",
+      "LOW",
       "PENDING",
-      "LOW"
+      "DURATION",
+      "STAR"
     ]
   },
   "pipeline":[

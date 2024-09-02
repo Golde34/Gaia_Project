@@ -1,15 +1,15 @@
 {
   "labels":[
-    "MEDIUM",
-    "UNKNOWN",
-    "STARTDATE",
-    "DEADLINE",
     "GROUPTASK",
-    "STAR",
+    "MEDIUM",
     "IN_PROGRESS",
-    "DURATION",
+    "STARTDATE",
+    "UNKNOWN",
+    "DEADLINE",
+    "LOW",
     "PENDING",
-    "LOW"
+    "DURATION",
+    "STAR"
   ],
   "threshold":0.5
 }

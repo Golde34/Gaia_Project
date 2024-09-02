@@ -96,7 +96,8 @@ const routeList = [
     {
         path: '/schedule',
         key: 'schedule',
-        element: <TaskRegistration redirectPage="Schedule Plan" />,
+        element: <SchedulingTable />,
+        // element: <TaskRegistration redirectPage="Schedule Plan" />,
     },
     {
         path: '/calendar',

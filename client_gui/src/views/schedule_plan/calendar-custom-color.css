@@ -5,11 +5,24 @@
 :root {
     --fc-today-bg-color: #4cceac;
     --fc-daygrid-day-number-color: #6366f1;
-    --fc-border-color: #6366f1;
-    --fc-neutral-bg-color: #6366f1;
-    --fc-page-bg-color: #6366f1;
-    --fc-list-event-hover-bg-color: #4cceac;
-    --fc-list-event-hover-color: black;
+    --fc-border-color: #78909c;
+    --fc-neutral-bg-color: #455a64;
+    --fc-page-bg-color: #263238;
+    --fc-list-event-hover-bg-color: #455a64;
+    --fc-list-event-hover-color: #eceff1;
+    --fc-task-bg-color: #37474f; /* Darker task background color */
+    --fc-task-text-color: #eceff1; /* Lighter task text color */
+}
+
+.fc-event {
+    background-color: var(--fc-task-bg-color);
+    color: var(--fc-task-text-color);
+    border-color: var(--fc-border-color);
+}
+
+.fc-event:hover {
+    background-color: var(--fc-list-event-hover-bg-color);
+    color: var(--fc-list-event-hover-color);
 }
 
 .fc .fc-popover-body {
