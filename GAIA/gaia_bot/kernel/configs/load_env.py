@@ -23,3 +23,8 @@ def load_bert_env():
 def load_alpaca_env():
     google_colab_link = os.getenv("GOOGLE_COLAB_LINK")
     return google_colab_link
+
+def load_task_prediction_env():
+    model_name = os.getenv("TASK_MODEL_PATH")
+    train_data = os.getenv("TASK_TRAINING_DATASET")
+    return model_name, train_data
