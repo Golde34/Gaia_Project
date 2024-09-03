@@ -23,6 +23,12 @@ def train():
     model.train(train_data, n_iter=EPOCH, drop=DROP)
     nlp.to_disk(MODEL_NAME)
 
+def predict(text):
+    nlp = spacy.load(MODEL_NAME)
+    doc = nlp(text)
+    entities = [(ent.text, ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
+    categories = {cat: score for cat, score in doc.cats.items()}
+    return entities, categories
 
 if __name__ == "__main__":
     print(f"Input (train/predict): ")
@@ -31,9 +37,6 @@ if __name__ == "__main__":
         train()
     elif input_value == "predict":
         text = str(input("Enter text: "))
-        nlp = spacy.load(MODEL_NAME)
-        doc = nlp(text)
-        entities = [(ent.text, ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
-        categories = {cat: score for cat, score in doc.cats.items()}
+        entities, categories = predict(text)
         print("Entities:", entities)
         print("Categories:", categories)
