@@ -87,7 +87,8 @@ object SORCSVUtils {
         }
         .mkString("[", ", ", "]")
 
-      s""""${spacyData("sentence").str}","$entities""""
+      val sentence = spacyData("sentence").str.replace("\"", "\"\"") // Escape any quotes in the sentence
+      s""""$sentence","$entities""""
     }
 
     csvOutput.foreach(writer.println)

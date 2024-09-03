@@ -24,7 +24,7 @@ object SORDataTransfer {
 
   def saveOutputToDatabase(): Unit = {
     // Dữ liệu đầu vào
-    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
+    val location = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
     val data = readSORCSV(location)
 
     // Store processed data to MySQL database
@@ -51,7 +51,7 @@ object SORDataTransfer {
 
   def saveOutputToDataLake(): Unit = {
     // Read data from file location
-    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
+    val location = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
     val data = readSORCSV(location)
 
     // Process data with EntityFinder
