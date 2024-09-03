@@ -123,12 +123,12 @@ object EntityFinder {
     if (project != "null") {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
     }
+    if (title != "null") {
+      findEntityPositions(sentence, title, "TASK").foreach(labels += _)
+    }
     if (groupTask != "null") {
       // labels += LabelEntity(0, 0, "GROUPTASK")
       findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
-    }
-    if (title != "null") {
-      findEntityPositions(sentence, title, "TASK").foreach(labels += _)
     }
     if (priority != "null") {
       lowerCase(priority) match {

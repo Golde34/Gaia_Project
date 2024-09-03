@@ -3,7 +3,7 @@ import json
 
 
 def process_data(file_path):
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(file_path, delimiter=';', encoding='utf-8')
 
     spacy_data = []
     count = 0
