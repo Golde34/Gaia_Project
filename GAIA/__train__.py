@@ -15,8 +15,8 @@ def model_switch_case(model_name):
         # train.train()
 
         ## New version
-        from gaia_bot.models.task_detect.task_prediction import main
-        main.train()
+        from gaia_bot.models.task_detect.task_prediction import inference
+        inference.train()
         pass
     elif model_name == AIModel.ObjectDetectionModel:
         from gaia_bot.models.bert import train

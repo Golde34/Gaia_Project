@@ -71,12 +71,13 @@ object SORCSVUtils {
     println(s"Data written to $outputFilePathCsv")
   }
 
-  def writeSORCSV2(filePath: String, jsonOutput: Seq[ujson.Obj]): Unit = {
-    val outputFilePathCsv = os.pwd / filePath
-    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
-    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+  def writeSORCSV2(filePath: Path, jsonOutput: Seq[ujson.Obj]): Unit = {
 
-    writer.println("text,entities")
+    if (os.exists(filePath)) os.remove(filePath)
+    val writer = new PrintWriter(new File(filePath.toString))
+
+    // Write header with semicolon separator
+    writer.println("text;entities")
 
     val csvOutput = jsonOutput.map { spacyData =>
       val entities = spacyData("labels").arr
@@ -87,12 +88,13 @@ object SORCSVUtils {
         }
         .mkString("[", ", ", "]")
 
-      s""""${spacyData("sentence").str}","$entities""""
+      val sentence = spacyData("sentence").str.replace("\"", "\"\"")
+      s""""$sentence";$entities"""
     }
 
     csvOutput.foreach(writer.println)
     writer.close()
 
-    println(s"Data written to $outputFilePathCsv")
+    println(s"Data written to $filePath")
   }
 }

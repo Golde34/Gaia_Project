@@ -7,6 +7,7 @@ import ui.SORConsumerData
 object DataPipeline {
   def main(args: Array[String]): Unit = {
     SORDataTransfer.saveOutputToDataLake() 
+    // SORDataTransfer.saveOutputToDatabase()
 
     val sorConsumerData = new SORConsumerData()
     sorConsumerData.consumeMessages()

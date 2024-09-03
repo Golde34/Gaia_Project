@@ -73,4 +73,14 @@ object TextPreprocessing {
   def removeSpecialCharacters(text: String): String = {
     text.replaceAll("[^a-zA-Z0-9 ]", "")
   }
+
+  /**
+    * Convert a text to lowercase
+    * 
+    * @param text
+    * @return
+    */
+  def lowerCase(text: String): String = {
+    text.toLowerCase
+  }
 }
