@@ -71,10 +71,10 @@ object SORCSVUtils {
     println(s"Data written to $outputFilePathCsv")
   }
 
-  def writeSORCSV2(filePath: String, jsonOutput: Seq[ujson.Obj]): Unit = {
-    val outputFilePathCsv = os.pwd / filePath
-    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
-    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
+  def writeSORCSV2(filePath: Path, jsonOutput: Seq[ujson.Obj]): Unit = {
+
+    if (os.exists(filePath)) os.remove(filePath)
+    val writer = new PrintWriter(new File(filePath.toString))
 
     writer.println("text,entities")
 
@@ -94,6 +94,6 @@ object SORCSVUtils {
     csvOutput.foreach(writer.println)
     writer.close()
 
-    println(s"Data written to $outputFilePathCsv")
+    println(s"Data written to $filePath")
   }
 }
