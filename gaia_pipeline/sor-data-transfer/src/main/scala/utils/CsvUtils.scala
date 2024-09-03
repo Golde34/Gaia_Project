@@ -76,7 +76,8 @@ object SORCSVUtils {
     if (os.exists(filePath)) os.remove(filePath)
     val writer = new PrintWriter(new File(filePath.toString))
 
-    writer.println("text,entities")
+    // Write header with semicolon separator
+    writer.println("text;entities")
 
     val csvOutput = jsonOutput.map { spacyData =>
       val entities = spacyData("labels").arr
@@ -87,8 +88,8 @@ object SORCSVUtils {
         }
         .mkString("[", ", ", "]")
 
-      val sentence = spacyData("sentence").str.replace("\"", "\"\"") // Escape any quotes in the sentence
-      s""""$sentence","$entities""""
+      val sentence = spacyData("sentence").str.replace("\"", "\"\"")
+      s""""$sentence";$entities"""
     }
 
     csvOutput.foreach(writer.println)
