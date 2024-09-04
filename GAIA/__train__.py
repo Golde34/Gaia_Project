@@ -10,8 +10,13 @@ def model_switch_case(model_name):
         # webbrowser.open("https://colab.research.google.com/drive/1pssTvcJ6hw4GjSSyO9V-XxDr2X0e1Y1Z?usp=sharing")
         pass
     elif model_name == AIModel.SkillDetectionModel:
-        from gaia_bot.models.task_detect.prompt_to_response import train
+        ## Old version
+        # from gaia_bot.models.task_detect.prompt_to_response import train
         # train.train()
+
+        ## New version
+        from gaia_bot.models.task_detect.task_prediction import inference
+        inference.train()
         pass
     elif model_name == AIModel.ObjectDetectionModel:
         from gaia_bot.models.bert import train

@@ -4,7 +4,6 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 import java.awt.Label
-import java.io.{PrintWriter, File}
 
 import domains.LabelEntity
 import domains.SpacyData
@@ -12,11 +11,15 @@ import utils.TextPreprocessing.{
   removeSpecialCharacters,
   stem,
   stemWithPositionMapping,
-  stemStrings
+  stemStrings,
+  lowerCase
 }
 import database.TaskDatabaseService
 import database.TaskData
-import utils.GAIACSVReader.readSORCSV
+import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
+import utils.SORJsonUtils.writeJsonFile
+import os.write
+import utils.SORCSVUtils.writeSORCSV2
 
 object SORDataTransfer {
 
@@ -25,15 +28,21 @@ object SORDataTransfer {
     TaskDatabaseService.init()
     val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Dữ liệu đầu vào
+<<<<<<< HEAD
     val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
     val data = readSORCSV(location, lastRecord.getOrElse(0))
+=======
+    val location =
+      os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
+    val data = readSORCSV(location)
+>>>>>>> 2d415ac5cdde4d7adb0de8dc16d6233296911056
 
     // Store processed data to MySQL database
     TaskDatabaseService.init()
     data.foreach { row =>
       TaskDatabaseService.insert(
         sentenceId = Some(row._1.toInt),
-        sentence = row._2,
+        sentence = removeSpecialCharacters(row._2),
         project = row._3,
         groupTask = Some(row._4),
         title = row._5,
@@ -55,8 +64,8 @@ object SORDataTransfer {
     TaskDatabaseService.init()
     val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Read data from file location
-    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
-    val data = readSORCSV(location, lastRecord.getOrElse(0))
+    val location = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
+    val data = readSORCSV(location)
 
     // Process data with EntityFinder
     val spacyDataset = data.map(EntityFinder.processRow)
@@ -76,37 +85,31 @@ object SORDataTransfer {
     }
 
     // Write JSON output to file
-    val outputFilePath = os.pwd / "spacy_dataset.json"
-    if (os.exists(outputFilePath)) os.remove(outputFilePath)
-    os.write(outputFilePath, ujson.write(ujson.Arr(jsonOutput: _*), indent = 4))
+    writeJsonFile("spacy_dataset.json", jsonOutput, isPrintedOutput = true)
 
-    println(s"Data written to $outputFilePath")
-
-    // Read and beautify JSON file content
-    val jsonContent = os.read(outputFilePath)
-    val jsonParsed = ujson.read(jsonContent)
-
-    val outputFilePathCsv = os.pwd / "spacy_dataset.csv"
-
-    if (os.exists(outputFilePathCsv)) os.remove(outputFilePathCsv)
-    val writer = new PrintWriter(new File(outputFilePathCsv.toString))
-    writer.println("Sentence,Start,End,Label")
-    val csvOutput = spacyDataset.flatMap { spacyData =>
-      spacyData.labels.map { label =>
-        s""""${spacyData.sentence}","${label.start}","${label.end}","${label.label}""""
-      }
-    }
-    csvOutput.foreach(writer.println)
-    writer.close()
-
-    println(s"Data written to $outputFilePathCsv")
+    // writeSORCSV("spacy_dataset_old.csv", jsonOutput)
+    val outputLocation = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "spacy_dataset.csv"
+    writeSORCSV2(outputLocation, jsonOutput)
+    val spacyDatasetLocation = os.pwd / "spacy_dataset.csv"
+    writeSORCSV2(spacyDatasetLocation, jsonOutput)
   }
 }
 
 object EntityFinder {
 
   def processRow(
-      row: (String, String, String, String, String, String, String, String, String, String)
+      row: (
+          String,
+          String,
+          String,
+          String,
+          String,
+          String,
+          String,
+          String,
+          String,
+          String
+      )
   ): SpacyData = {
     val (
       sentenceId,
@@ -123,43 +126,53 @@ object EntityFinder {
 
     val labels = ArrayBuffer[LabelEntity]()
 
+    // Remove special " characters from start and end of the sentence
+    val modifiedSentence = removeQuotationMark(sentence)
+
     // Find positions of each entity
     if (project != "null") {
       findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
     }
-    if (groupTask != "null") {
-      labels += LabelEntity(0, 0, "GROUPTASK")
-    }
     if (title != "null") {
       findEntityPositions(sentence, title, "TASK").foreach(labels += _)
     }
+    if (groupTask != "null") {
+      // labels += LabelEntity(0, 0, "GROUPTASK")
+      findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
+    }
     if (priority != "null") {
-      priority match {
-        case "Star"   => labels += LabelEntity(0, 0, "STAR")
-        case "Medium" => labels += LabelEntity(0, 0, "MEDIUM")
-        case "Low"    => labels += LabelEntity(0, 0, "LOW")
-        case _        => labels += LabelEntity(0, 0, "UNKNOWN")
+      lowerCase(priority) match {
+        case "star"   => labels += LabelEntity(0, 0, "STAR")
+        case "high"   => labels += LabelEntity(0, 0, "HIGH")
+        case "medium" => labels += LabelEntity(0, 0, "MEDIUM")
+        case "low"    => labels += LabelEntity(0, 0, "LOW")
       }
     }
     if (status != "null") {
-      status match {
-        case "To do"       => labels += LabelEntity(0, 0, "TO_DO")
-        case "Pending"     => labels += LabelEntity(0, 0, "PENDING")
-        case "In Progress" => labels += LabelEntity(0, 0, "IN_PROGRESS")
-        case "Completed"   => labels += LabelEntity(0, 0, "COMPLETED")
-        case _             => labels += LabelEntity(0, 0, "UNKNOWN")
+      lowerCase(status) match {
+        case "to do"       => labels += LabelEntity(0, 0, "TO_DO")
+        case "pending"     => labels += LabelEntity(0, 0, "PENDING")
+        case "in progress" => labels += LabelEntity(0, 0, "IN_PROGRESS")
+        case "done"        => labels += LabelEntity(0, 0, "DONE")
       }
     }
     if (startDate != "null") {
       labels += LabelEntity(0, 0, "STARTDATE")
     }
-    if (deadline != "null") {    
+    if (deadline != "null") {
       labels += LabelEntity(0, 0, "DEADLINE")
     }
     if (duration != "null") {
-      labels += LabelEntity(0, 0, "DURATION")
+      findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
     }
-    SpacyData(sentence, labels.toSeq)
+    SpacyData(modifiedSentence, labels.toSeq)
+  }
+
+  def removeQuotationMark(sentence: String): String = {
+    if (sentence.startsWith("\"") && sentence.endsWith("\"")) {
+      return sentence.substring(1, sentence.length - 1)
+    }
+    return sentence
   }
 
   def findEntityPositions(
@@ -171,9 +184,12 @@ object EntityFinder {
       return None
     }
     val preprocessingSentence = preprocessSentence(sentence)
+    val preProcessingEntityValue = preprocessSentence(entityValue)
 
-    val (stemmedSentence, positionMapping) = stemWithPositionMapping(preprocessingSentence)
-    val stemmedEntityValue = stemStrings(entityValue)
+    val (stemmedSentence, positionMapping) = stemWithPositionMapping(
+      preprocessingSentence
+    )
+    val stemmedEntityValue = stemStrings(preProcessingEntityValue)
     val entity = findLabelInStemmedSentence(
       stemmedSentence,
       stemmedEntityValue,
@@ -186,7 +202,8 @@ object EntityFinder {
   }
 
   def preprocessSentence(sentence: String): String = {
-    val preProcessingSentence = removeSpecialCharacters(sentence)
+    var preProcessingSentence = removeSpecialCharacters(sentence)
+    preProcessingSentence = lowerCase(preProcessingSentence)
     return preProcessingSentence
   }
 

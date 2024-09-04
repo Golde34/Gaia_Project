@@ -1,0 +1,15 @@
+{
+  "labels":[
+    "LOW",
+    "PENDING",
+    "MEDIUM",
+    "TO_DO",
+    "STARTDATE",
+    "DEADLINE",
+    "HIGH",
+    "STAR",
+    "IN_PROGRESS",
+    "DONE"
+  ],
+  "threshold":0.5
+}

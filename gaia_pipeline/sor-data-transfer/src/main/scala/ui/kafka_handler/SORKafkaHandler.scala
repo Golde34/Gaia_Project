@@ -12,7 +12,7 @@ object SORKafkaHandler {
 		val cmd = jsonObject("cmd").str
 		cmd match {
       case KafkaCmd.CSV_SAVING => {
-        SORDataTransfer.writeOutputToJSONFile()
+        SORDataTransfer.saveOutputToDataLake()
       }
       case KafkaCmd.DATABASE_SAVING => {
         SORDataTransfer.saveOutputToDatabase()

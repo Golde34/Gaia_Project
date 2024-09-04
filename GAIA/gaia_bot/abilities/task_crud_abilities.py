@@ -3,6 +3,7 @@ from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
 from gaia_bot.abilities.sentence_object_recognizer import SORSkill
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
+from GAIA.gaia_bot.models.task_detect.task_prediction import inference 
 
 
 class TaskCRUDSkill():
@@ -35,9 +36,16 @@ class TaskCRUDSkill():
     
     @classmethod
     def _transfer_text_to_task(cls, text):
-        # call detect sentence api to get task object 
-        # return cls.detect_sentence.call_detect_sentence_api(text)
+        try:
+            entities, categories = inference.predict(text)
+            return entities, categories
+        except Exception as e:
+            print(f"Failed to transfer text to task: {e}")
+            return None
 
+    @classmethod
+    def _manual_create_task(cls, text):
+        print("Manual create task...")
         project = str(input("Enter project: "))
         group_task = str(input("Enter group task: "))
         title = str(input("Enter title: "))
@@ -47,6 +55,7 @@ class TaskCRUDSkill():
         deadline = str(input("Enter deadline: "))
         duration = str(input("Enter duration: "))
         user_id = USER_PROFILE.get("user_id")
+
         return {
             "sentence": text,
             "project": project,
