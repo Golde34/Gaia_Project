@@ -49,18 +49,16 @@ object TextPreprocessing {
     */
   def stemWithPositionMapping(
       sentence: String
-  ): (String, mutable.Map[Int, String]) = {
+  ): (String) = {
     val words = sentence.split(" ")
     val stemmedWords = Array.ofDim[String](words.length)
-    val positionMapping = mutable.Map[Int, String]()
 
     for (i <- words.indices) {
       val stemmed = stem(words(i))
       stemmedWords(i) = stemmed
-      positionMapping += (i -> words(i))
     }
 
-    (stemmedWords.mkString(" "), positionMapping)
+    (stemmedWords.mkString(" "))
   }
 
   /** Remove special characters from a text
