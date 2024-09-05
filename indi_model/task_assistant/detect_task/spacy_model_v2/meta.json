@@ -1,0 +1,78 @@
+{
+  "lang":"en",
+  "name":"pipeline",
+  "version":"0.0.0",
+  "spacy_version":">=3.7.6,<3.8.0",
+  "description":"",
+  "author":"",
+  "email":"",
+  "url":"",
+  "license":"",
+  "spacy_git_version":"319e025",
+  "vectors":{
+    "width":0,
+    "vectors":0,
+    "keys":0,
+    "name":null,
+    "mode":"default"
+  },
+  "labels":{
+    "ner":[
+      "DURATION",
+      "PROJECT",
+      "TASK"
+    ],
+    "textcat_multilabel":[
+      "GROUPTASK_User service",
+      "PRIORITY_MEDIUM",
+      "STATUS_PENDING",
+      "GROUPTASK_",
+      "PRIORITY_STAR",
+      "STATUS_IN_PROGRESS",
+      "GROUPTASK_Default",
+      "STATUS_TO_DO",
+      "GROUPTASK_Client GUI",
+      "PRIORITY_HIGH",
+      "PRIORITY_LOW",
+      "GROUPTASK_AI Models",
+      "GROUPTASK_Do Chores",
+      "GROUPTASK_Task Manager",
+      "GROUPTASK_Frontend",
+      "GROUPTASK_Data Processing",
+      "GROUPTASK_UI Module",
+      "GROUPTASK_GaiaBot",
+      "GROUPTASK_Deployment",
+      "GROUPTASK_Authentication Module",
+      "GROUPTASK_Middleware Loader",
+      "GROUPTASK_Auth Service",
+      "GROUPTASK_User Interaction",
+      "GROUPTASK_Security Module",
+      "GROUPTASK_Real-time Logging",
+      "PRIORITY_",
+      "GROUPTASK_Backend Management",
+      "GROUPTASK_Monitoring",
+      "GROUPTASK_Error Handling",
+      "GROUPTASK_Optimization",
+      "STATUS_DONE",
+      "GROUPTASK_Testing",
+      "GROUPTASK_Interactive Charts",
+      "GROUPTASK_Marketing",
+      "GROUPTASK_Recommendation Engine",
+      "GROUPTASK_Responsive Design",
+      "GROUPTASK_Payment Processing",
+      "GROUPTASK_Backend",
+      "GROUPTASK_Document"
+    ]
+  },
+  "pipeline":[
+    "ner",
+    "textcat_multilabel"
+  ],
+  "components":[
+    "ner",
+    "textcat_multilabel"
+  ],
+  "disabled":[
+
+  ]
+}

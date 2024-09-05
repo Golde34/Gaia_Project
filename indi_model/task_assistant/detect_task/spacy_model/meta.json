@@ -19,21 +19,13 @@
   "labels":{
     "ner":[
       "DURATION",
-      "GROUPTASK",
       "PROJECT",
       "TASK"
     ],
     "textcat_multilabel":[
-      "LOW",
-      "PENDING",
-      "MEDIUM",
-      "TO_DO",
-      "STARTDATE",
-      "DEADLINE",
-      "HIGH",
-      "STAR",
-      "IN_PROGRESS",
-      "DONE"
+      "GROUPTASK",
+      "PRIORITY",
+      "STATUS"
     ]
   },
   "pipeline":[
