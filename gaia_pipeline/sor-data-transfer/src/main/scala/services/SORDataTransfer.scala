@@ -20,6 +20,7 @@ import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
 import utils.SORJsonUtils.writeJsonFile
 import os.write
 import utils.SORCSVUtils.writeSORCSV2
+import utils.TextPreprocessing.deleteStopWords
 
 object SORDataTransfer {
 
@@ -28,14 +29,8 @@ object SORDataTransfer {
     TaskDatabaseService.init()
     val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Dữ liệu đầu vào
-<<<<<<< HEAD
-    val location = os.pwd / os.up / os.up / "data_lake" / "NER_Task_Assistant_Dataset.csv"
-    val data = readSORCSV(location, lastRecord.getOrElse(0))
-=======
-    val location =
-      os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
+    val location = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
     val data = readSORCSV(location)
->>>>>>> 2d415ac5cdde4d7adb0de8dc16d6233296911056
 
     // Store processed data to MySQL database
     TaskDatabaseService.init()
@@ -59,7 +54,7 @@ object SORDataTransfer {
     }
   }
 
-  def writeOutputToJSONFile(): Unit = {
+  def saveOutputToDataLake(): Unit = {
     // Get last record store in database
     TaskDatabaseService.init()
     val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
@@ -78,7 +73,8 @@ object SORDataTransfer {
           ujson.Obj(
             "start" -> e.start,
             "end" -> e.end,
-            "label" -> e.label
+            "label" -> e.label,
+            "value" -> e.value
           )
         }
       )
@@ -131,39 +127,39 @@ object EntityFinder {
 
     // Find positions of each entity
     if (project != "null") {
-      findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
+      findEntityPositions(sentenceId, sentence, project, "PROJECT").foreach(labels += _)
     }
     if (title != "null") {
-      findEntityPositions(sentence, title, "TASK").foreach(labels += _)
+      findEntityPositions(sentenceId, sentence, title, "TASK").foreach(labels += _)
     }
     if (groupTask != "null") {
-      // labels += LabelEntity(0, 0, "GROUPTASK")
-      findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
+      labels += LabelEntity(0, 0, "GROUPTASK", groupTask)
+      // findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
     }
     if (priority != "null") {
       lowerCase(priority) match {
-        case "star"   => labels += LabelEntity(0, 0, "STAR")
-        case "high"   => labels += LabelEntity(0, 0, "HIGH")
-        case "medium" => labels += LabelEntity(0, 0, "MEDIUM")
-        case "low"    => labels += LabelEntity(0, 0, "LOW")
+        case "star"   => labels += LabelEntity(0, 0, "PRIORITY", "STAR")
+        case "high"   => labels += LabelEntity(0, 0, "PRIORITY", "HIGH")
+        case "medium" => labels += LabelEntity(0, 0, "PRIORITY", "MEDIUM")
+        case "low"    => labels += LabelEntity(0, 0, "PRIORITY", "LOW")
       }
     }
     if (status != "null") {
       lowerCase(status) match {
-        case "to do"       => labels += LabelEntity(0, 0, "TO_DO")
-        case "pending"     => labels += LabelEntity(0, 0, "PENDING")
-        case "in progress" => labels += LabelEntity(0, 0, "IN_PROGRESS")
-        case "done"        => labels += LabelEntity(0, 0, "DONE")
+        case "to do"       => labels += LabelEntity(0, 0, "STATUS", "TO_DO")
+        case "pending"     => labels += LabelEntity(0, 0, "STATUS", "PENDING")
+        case "in progress" => labels += LabelEntity(0, 0, "STATUS", "IN_PROGRESS")
+        case "done"        => labels += LabelEntity(0, 0, "STATUS", "DONE")
       }
     }
     if (startDate != "null") {
-      labels += LabelEntity(0, 0, "STARTDATE")
+      labels += LabelEntity(0, 0, "STARTDATE", startDate)
     }
     if (deadline != "null") {
-      labels += LabelEntity(0, 0, "DEADLINE")
+      labels += LabelEntity(0, 0, "DEADLINE", deadline)
     }
     if (duration != "null") {
-      findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
+      findEntityPositions(sentenceId, sentence, duration, "DURATION").foreach(labels += _)
     }
     SpacyData(modifiedSentence, labels.toSeq)
   }
@@ -176,6 +172,7 @@ object EntityFinder {
   }
 
   def findEntityPositions(
+      sentenceId: String,
       sentence: String,
       entityValue: String,
       label: String
@@ -197,13 +194,18 @@ object EntityFinder {
       sentence,
       label
     )
-
+    if (entity.isEmpty && label == "TASK") {
+      println(
+        s"Cannot find entity: $stemmedEntityValue \nSentence: $stemmedSentence (sentenceId: $sentenceId)"
+      )
+    }
     return entity
   }
 
   def preprocessSentence(sentence: String): String = {
     var preProcessingSentence = removeSpecialCharacters(sentence)
     preProcessingSentence = lowerCase(preProcessingSentence)
+    preProcessingSentence = deleteStopWords(preProcessingSentence)
     return preProcessingSentence
   }
 
@@ -245,7 +247,7 @@ object EntityFinder {
             originalSentence
           ) + originalMapping(endPosOriginal).length
 
-          return Some(LabelEntity(originalStart, originalEnd, label))
+          return Some(LabelEntity(originalStart, originalEnd, label, stemmedLabel))
         }
       } else if (wordsMatched > 0) {
         wordsMatched = 0

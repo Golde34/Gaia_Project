@@ -3,7 +3,8 @@ package domains
 case class LabelEntity(
     start: Int,
     end: Int,
-    label: String
+    label: String,
+    value: String
 )
 
 case class SpacyData(

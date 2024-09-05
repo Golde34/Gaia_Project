@@ -84,7 +84,7 @@ object SORCSVUtils {
         .map { label =>
           s"""{"start": ${label("start").num}, "end": ${label(
               "end"
-            ).num}, "label": "${label("label").str}"}"""
+            ).num}, "label": "${label("label").str}, "value": "${label("value").str}"}"""
         }
         .mkString("[", ", ", "]")
 
