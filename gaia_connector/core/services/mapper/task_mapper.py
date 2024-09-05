@@ -21,12 +21,9 @@ class TaskMapper:
 
     def map_create_task_to_sor(self, data, task_id):
         return {
-            'cmd': Constants.KafkaCommand.GAIA_CREATE_TASK,
-            'data': {
-                'sentence': data['sentence'],
-                'project': data['project'],
-                'groupTask': data['group_task'],
-                'task': self.map_create_task(data),
-                'taskId': task_id
-            }
+            'sentence': data['sentence'],
+            'project': data['project'],
+            'groupTask': data['group_task'],
+            'task': self.map_create_task(data),
+            'taskId': task_id
         }

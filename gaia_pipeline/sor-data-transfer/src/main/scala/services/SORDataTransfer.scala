@@ -20,10 +20,14 @@ import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
 import utils.SORJsonUtils.writeJsonFile
 import os.write
 import utils.SORCSVUtils.writeSORCSV2
+import utils.TextPreprocessing.deleteStopWords
 
 object SORDataTransfer {
 
   def saveOutputToDatabase(): Unit = {
+    // Get last record store in database
+    TaskDatabaseService.init()
+    val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Dữ liệu đầu vào
     val location =
       os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
@@ -52,6 +56,9 @@ object SORDataTransfer {
   }
 
   def saveOutputToDataLake(): Unit = {
+    // Get last record store in database
+    TaskDatabaseService.init()
+    val lastRecord: Option[Int] = TaskDatabaseService.getLastSentenceId();
     // Read data from file location
     val location =
       os.pwd / os.up / os.up / "data_lake" / "task_detection" / "NER_Task_Assistant_Dataset.csv"
@@ -68,7 +75,8 @@ object SORDataTransfer {
           ujson.Obj(
             "start" -> e.start,
             "end" -> e.end,
-            "label" -> e.label
+            "label" -> e.label,
+            "value" -> e.value
           )
         }
       )
@@ -78,7 +86,8 @@ object SORDataTransfer {
     writeJsonFile("spacy_dataset.json", jsonOutput, isPrintedOutput = true)
 
     // writeSORCSV("spacy_dataset_old.csv", jsonOutput)
-    val outputLocation = os.pwd / os.up / os.up / "data_lake" / "task_detection" / "spacy_dataset.csv"
+    val outputLocation =
+      os.pwd / os.up / os.up / "data_lake" / "task_detection" / "spacy_dataset.csv"
     writeSORCSV2(outputLocation, jsonOutput)
     val spacyDatasetLocation = os.pwd / "spacy_dataset.csv"
     writeSORCSV2(spacyDatasetLocation, jsonOutput)
@@ -121,39 +130,48 @@ object EntityFinder {
 
     // Find positions of each entity
     if (project != "null") {
-      findEntityPositions(sentence, project, "PROJECT").foreach(labels += _)
+      findEntityPositions(sentenceId, modifiedSentence, project, "PROJECT")
+        .foreach(
+          labels += _
+        )
     }
     if (title != "null") {
-      findEntityPositions(sentence, title, "TASK").foreach(labels += _)
+      findEntityPositions(sentenceId, modifiedSentence, title, "TASK").foreach(
+        labels += _
+      )
     }
     if (groupTask != "null") {
-      // labels += LabelEntity(0, 0, "GROUPTASK")
-      findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
+      labels += LabelEntity(0, 0, "GROUPTASK", groupTask)
+      // findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
     }
     if (priority != "null") {
       lowerCase(priority) match {
-        case "star"   => labels += LabelEntity(0, 0, "STAR")
-        case "high"   => labels += LabelEntity(0, 0, "HIGH")
-        case "medium" => labels += LabelEntity(0, 0, "MEDIUM")
-        case "low"    => labels += LabelEntity(0, 0, "LOW")
+        case "star"   => labels += LabelEntity(0, 0, "PRIORITY", "STAR")
+        case "high"   => labels += LabelEntity(0, 0, "PRIORITY", "HIGH")
+        case "medium" => labels += LabelEntity(0, 0, "PRIORITY", "MEDIUM")
+        case "low"    => labels += LabelEntity(0, 0, "PRIORITY", "LOW")
       }
     }
     if (status != "null") {
       lowerCase(status) match {
-        case "to do"       => labels += LabelEntity(0, 0, "TO_DO")
-        case "pending"     => labels += LabelEntity(0, 0, "PENDING")
-        case "in progress" => labels += LabelEntity(0, 0, "IN_PROGRESS")
-        case "done"        => labels += LabelEntity(0, 0, "DONE")
+        case "to do"   => labels += LabelEntity(0, 0, "STATUS", "TO_DO")
+        case "pending" => labels += LabelEntity(0, 0, "STATUS", "PENDING")
+        case "in progress" =>
+          labels += LabelEntity(0, 0, "STATUS", "IN_PROGRESS")
+        case "done" => labels += LabelEntity(0, 0, "STATUS", "DONE")
       }
     }
     if (startDate != "null") {
-      labels += LabelEntity(0, 0, "STARTDATE")
+      labels += LabelEntity(0, 0, "STARTDATE", startDate)
     }
     if (deadline != "null") {
-      labels += LabelEntity(0, 0, "DEADLINE")
+      labels += LabelEntity(0, 0, "DEADLINE", deadline)
     }
     if (duration != "null") {
-      findEntityPositions(sentence, duration, "DURATION").foreach(labels += _)
+      findEntityPositions(sentenceId, modifiedSentence, duration, "DURATION")
+        .foreach(
+          labels += _
+        )
     }
     SpacyData(modifiedSentence, labels.toSeq)
   }
@@ -166,6 +184,7 @@ object EntityFinder {
   }
 
   def findEntityPositions(
+      sentenceId: String,
       sentence: String,
       entityValue: String,
       label: String
@@ -176,17 +195,22 @@ object EntityFinder {
     val preprocessingSentence = preprocessSentence(sentence)
     val preProcessingEntityValue = preprocessSentence(entityValue)
 
-    val (stemmedSentence, positionMapping) = stemWithPositionMapping(
-      preprocessingSentence
-    )
+    val stemmedSentence = stemWithPositionMapping(preprocessingSentence)
+    val positionMapping = mapStemToOriginal(stemmedSentence, sentence)
     val stemmedEntityValue = stemStrings(preProcessingEntityValue)
-    val entity = findLabelInStemmedSentence(
-      stemmedSentence,
-      stemmedEntityValue,
+
+    val entity = findLabelInSentence(
       positionMapping,
+      stemmedEntityValue,
       sentence,
       label
     )
+
+    if (entity.isEmpty && label == "TASK") {
+      println(
+        s"Cannot find entity: $stemmedEntityValue \nSentence: $stemmedSentence (sentenceId: $sentenceId)"
+      )
+    }
 
     return entity
   }
@@ -194,53 +218,72 @@ object EntityFinder {
   def preprocessSentence(sentence: String): String = {
     var preProcessingSentence = removeSpecialCharacters(sentence)
     preProcessingSentence = lowerCase(preProcessingSentence)
+    preProcessingSentence = deleteStopWords(preProcessingSentence)
     return preProcessingSentence
   }
 
-  def findLabelInStemmedSentence(
-      stemmedSentence: String,
-      stemmedLabel: String,
-      originalMapping: mutable.Map[Int, String],
-      originalSentence: String,
+  def mapStemToOriginal(
+      stemSentence: String,
+      originalSentence: String
+  ): mutable.Map[Int, String] = {
+    val stemWords = stemSentence.split(" ")
+    val originalWords = originalSentence.split(" ")
+
+    val result = mutable.Map[Int, String]()
+
+    for (index <- originalWords.indices) {
+      val originalWord = originalWords(index)
+      if (stemWords.contains(stem(preprocessSentence(originalWord)))) {
+        result(index) = preprocessSentence(
+          originalWord
+        ) 
+      }
+    }
+
+    result
+  }
+
+  def findLabelInSentence(
+      positionMapping: mutable.Map[Int, String],
+      stemmedEntityValue: String,
+      sentence: String,
       label: String
   ): Option[LabelEntity] = {
-    val wordsInSentence = stemmedSentence.split(" ")
-    val wordsInLabel = stemmedLabel.split(" ")
+    val wordsInLabel = stemmedEntityValue.split(" ")
 
-    var currentWordIndex = 0
-    var startPosOriginal = -1
-    var endPosOriginal = -1
-    var wordsMatched = 0
+    var currentWordIndex = 0;
+    var startPosOriginal = -1;
+    var endPosOriginal = -1;
+    var wordsMatched = 0;
 
-    for (i <- wordsInSentence.indices) {
+    for (word <- positionMapping) {
       if (
-        wordsMatched < wordsInLabel.length &&
-        wordsInSentence(i) == wordsInLabel(wordsMatched)
+        wordsMatched < wordsInLabel.length
+        && stem(word._2) == wordsInLabel(wordsMatched)
       ) {
         if (startPosOriginal == -1) {
-          startPosOriginal = i
+          startPosOriginal = word._1;
         }
-        wordsMatched += 1
-        endPosOriginal = i
+        wordsMatched += 1;
+        endPosOriginal = word._1;
 
         if (wordsMatched == wordsInLabel.length) {
-          val originalStart = getOriginalPosition(
-            startPosOriginal,
-            originalMapping,
-            originalSentence
-          )
-          val originalEnd = getOriginalPosition(
-            endPosOriginal,
-            originalMapping,
-            originalSentence
-          ) + originalMapping(endPosOriginal).length
-
-          return Some(LabelEntity(originalStart, originalEnd, label))
+          val originalStart =
+            getOriginalPosition(startPosOriginal, positionMapping, sentence);
+          val originalEnd =
+            getOriginalPosition(
+              endPosOriginal,
+              positionMapping,
+              sentence
+            ) + positionMapping(endPosOriginal).length;
+          return Some(
+            LabelEntity(originalStart, originalEnd, label, stemmedEntityValue)
+          );
         }
       } else if (wordsMatched > 0) {
-        wordsMatched = 0
-        startPosOriginal = -1
-        endPosOriginal = -1
+        wordsMatched = 0;
+        startPosOriginal = -1;
+        endPosOriginal = -1;
       }
     }
     None
