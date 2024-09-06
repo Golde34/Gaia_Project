@@ -38,6 +38,7 @@ class AIModel:
     ResponseModel = 'response'
     SkillDetectionModel = 'skill_detection'
     ObjectDetectionModel = 'object_detection'
+    BertObjectDetection = 'bert_object_detection'
     
 class Mode:
     RUN = 'run'

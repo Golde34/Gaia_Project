@@ -33,14 +33,14 @@ class AssistantSkill:
             cls.console_manager.console_log(error_log="Failed to detect skill tag.")
         
     @classmethod
-    def skill_process(cls, detected_skill, skills):
+    def skill_process(cls, detected_skill, skills, text):
         try:
             detected_skill = str(detected_skill).lower()
             results = search_skills(skills, detected_skill)
             if results == None:
                 cls.console_manager.console_log(error_log="Skill not found.")
             else:
-                cls.execute_skill(results[0].get('func'), detected_skill)
+                cls.execute_skill(results[0].get('func'), text)
         except:
             cls.console_manager.console_log(error_log="Failed to validate assistant response.")
             

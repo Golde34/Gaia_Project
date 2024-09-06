@@ -3,14 +3,14 @@ from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
 from gaia_bot.abilities.sentence_object_recognizer import SORSkill
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE
-from GAIA.gaia_bot.models.task_detect.task_prediction import inference 
+from gaia_bot.domain.enums import SORModel 
 
 
 class TaskCRUDSkill():
-    def __init__(self):
-        self.console_manager = ConsoleManager()
-        self.detect_sentence = SORSkill()
+    console_manager = ConsoleManager()
 
+    def __init__(self):
+        pass
     @classmethod
     def create_task(cls, text):
         print("Create task - Calling Gaia Connector...")
@@ -37,8 +37,10 @@ class TaskCRUDSkill():
     @classmethod
     def _transfer_text_to_task(cls, text):
         try:
-            entities, categories = inference.predict(text)
-            return entities, categories
+            cls.console_manager.console_log(info_log=f"Transferring text to task, model {SORModel.TASK_DETECTION}")
+            result = SORSkill().handle_input(text, SORModel.TASK_DETECTION)
+            print("Result: ", result)
+            return result
         except Exception as e:
             print(f"Failed to transfer text to task: {e}")
             return None
