@@ -18,6 +18,7 @@ def process_data(file_path):
         textcat_labels['GROUPTASK'] = ""
         textcat_labels['PRIORITY'] = ""
         textcat_labels['STATUS'] = ""
+        textcat_labels['STARTDATE'] = ""
 
         for entity in entities:
             start = int(entity['start'])
