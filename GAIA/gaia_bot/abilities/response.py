@@ -6,9 +6,9 @@ from gaia_bot.models.alpaca import inference
 class AlpacaResponse():
     
     @classmethod
-    def generate_response(cls, mode, text, model, tokenize, **kwargs):
+    def generate_response(cls, mode, text, model, tokenize, tag_skill, **kwargs):
         try:
-            response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize, mode=mode)
+            response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize, mode=mode, tag_skill=tag_skill)
             if mode == "run":
                 last_response = cls._format_response(response)
                 return last_response

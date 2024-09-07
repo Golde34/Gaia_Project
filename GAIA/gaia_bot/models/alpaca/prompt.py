@@ -46,3 +46,16 @@ greeting_prompt = """
     ### Response:
     {}
 """
+
+tag_answer_prompt = """
+    In a tone like a butler receiving an order and just finishing the job, reporting back to the master whether the job was completed or not.
+
+    ### Instruction:
+    {}
+
+    ### Input:
+    {}
+
+    ### Response:
+    {}
+"""

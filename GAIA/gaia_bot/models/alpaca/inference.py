@@ -3,7 +3,7 @@ from unsloth import FastLanguageModel
 
 import gaia_bot.kernel.configs.settings as settings
 import gaia_bot.models.alpaca.prompt as prompt
-from gaia_bot.domain.enums import Mode
+from gaia_bot.domain.enums import Mode, TagSkill
 
 
 max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
@@ -34,7 +34,7 @@ def get_model_and_tokenizer():
     FastLanguageModel.for_inference(model)
     return model, tokenizer
 
-def call_alpaca_response(inp, model, tokenizer, mode="run"): 
+def call_alpaca_response(inp, model, tokenizer, mode="run", tag_skill=TagSkill.GREETING.value): 
     if mode == Mode.DEBUG:
         inputs = tokenizer(
             [
@@ -46,7 +46,7 @@ def call_alpaca_response(inp, model, tokenizer, mode="run"):
             ],
             return_tensors="pt",
         ).to("cuda")
-    else:
+    if mode == Mode.RUN and tag_skill == TagSkill.GREETING.value:
         inputs = tokenizer(
             [
                 prompt.final_prompt.format(
@@ -57,7 +57,19 @@ def call_alpaca_response(inp, model, tokenizer, mode="run"):
             ],
             return_tensors="pt",
         ).to("cuda")
-    
+    else:
+        print('Tag skill prompt:', tag_skill)
+        inputs = tokenizer(
+            [
+                prompt.tag_answer_prompt.format(
+                    "Reply my requset",  # instruction
+                    inp,  # input
+                    "",  # output - leave this blank for generation!
+                )
+            ],
+            return_tensors="pt",
+        ).to("cuda")
+
     outputs = model.generate(**inputs, max_new_tokens=128)
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return response       

@@ -47,3 +47,7 @@ class Mode:
 class SORModel:
     BERT = 'bert'
     TASK_DETECTION = 'task-detection'
+
+class TagSkill(Enum):
+    GREETING = 'Greeting'
+    CREATE_TASK = 'Create Task'
