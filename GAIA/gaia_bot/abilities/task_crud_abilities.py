@@ -1,5 +1,5 @@
 from gaia_bot.process.console_manager import ConsoleManager
-from gaia_bot.domain.entity.enum_model import TypeTaskCRUD
+from gaia_bot.domain.mapper.model_enum import TypeTaskCRUD
 from gaia_bot.microservices.connection.task_server_command import TaskManagerConnector
 from gaia_bot.abilities.sentence_object_recognizer import SORSkill
 from gaia_bot.kernel.configs.auth_config import USER_PROFILE

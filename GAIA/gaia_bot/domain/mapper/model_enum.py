@@ -1,0 +1,20 @@
+from enum import Enum
+
+
+class TypeTaskCRUD(Enum):
+    TASK = 'TASK'
+    PROJECT = 'PROJECT'
+    GROUP_TASK = 'GROUP_TASK'
+    SUB_TASK = 'SUB_TASK'
+
+class TaskField(Enum):
+    TASK = 'TASK'
+    PROJECT = 'PROJECT'
+    GROUP_TASK = 'GROUP_TASK'
+    TITLE = 'TITLE'
+    DESCRIPTION = 'DESCRIPTION'
+    PRIORITY = 'PRIORITY'
+    STATUS = 'STATUS'
+    START_DATE = 'START_DATE'
+    DEADLINE = 'DEADLINE'
+    DURATION = 'DURATION'
