@@ -17,11 +17,12 @@ class SORSkill():
         self.deadline = ""
         self.duration = ""
         self.project = ""
+        self.group_task = ""
     
     def handle_input(self, sentence, sor_model):
         if sor_model == SORModel.TASK_DETECTION:
             return self._handle_task_detection_model(sentence)
-        elif sor_model == SORModel.BERT_MODEL:
+        elif sor_model == SORModel.BERT:
             return self._handle_bert_model(sentence)
         else:
             return None
@@ -31,11 +32,11 @@ class SORSkill():
         self.description = "Gaia detect task: " + sentence
 
         for entity, _, _, label in entities:
-            if label == TaskField.TASK:
+            if label == TaskField.TASK.value:
                 self.title = entity
-            elif label == TaskField.PROJECT:
+            elif label == TaskField.PROJECT.value:
                 self.project = entity
-            elif label == TaskField.DURATION:
+            elif label == TaskField.DURATION.value:
                 self.duration = entity
 
         sorted_categories = sorted(categories.items(), key=lambda item: item[1], reverse=True)
@@ -48,19 +49,19 @@ class SORSkill():
             if (group_task_count == 1 and priority_count == 1 and status_count == 1 and
                     start_date_count == 1 and deadline_count == 1):
                 break      
-            if element.__contains__(TaskField.GROUP_TASK) and group_task_count == 0:
+            if element.__contains__(TaskField.GROUP_TASK.value) and group_task_count == 0:
                 group_task_count += 1
                 self.group_task = element.split("GROUPTASK_")[1]
-            if element.__contains__(TaskField.PRIORITY) and priority_count == 0:
+            if element.__contains__(TaskField.PRIORITY.value) and priority_count == 0:
                 priority_count += 1
                 self.priority = element.split("PRIORITY_")[1]
-            if element.__contains__(TaskField.STATUS) and status_count == 0:
+            if element.__contains__(TaskField.STATUS.value) and status_count == 0:
                 status_count += 1
                 self.status = element.split("STATUS_")[1]
-            if element.__contains__(TaskField.START_DATE) and start_date_count == 0:
+            if element.__contains__(TaskField.START_DATE.value) and start_date_count == 0:
                 start_date_count += 1
                 self.start_date = element.split("STARTDATE_")[1]
-            if element.__contains__(TaskField.DEADLINE) and deadline_count == 0:
+            if element.__contains__(TaskField.DEADLINE.value) and deadline_count == 0:
                 deadline_count += 1
                 self.deadline = element.split("DEADLINE_")[1]
 

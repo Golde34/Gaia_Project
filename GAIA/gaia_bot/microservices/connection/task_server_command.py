@@ -15,7 +15,6 @@ class TaskManagerConnector:
         self.gaia_url = f"http://{DOMAIN}:{self.gaia_port}/{self.router}"
         
     def execute_task_command(self, task, method, **kwargs):
-        print('Nhay vao day')
         if method == 'POST':
             return self.create_task(task)
         elif method == 'PUT':
@@ -27,10 +26,10 @@ class TaskManagerConnector:
         else:
             return False
 
-    def create_task(self, task): 
+    def create_task(self, task):
+        print(f"Creating task: {task}") 
         response = requests.post(f"{self.gaia_url}" + "/create-task", 
-                                 json={'task': task})
-        print(response)
+                                 json=task)
         if response.status_code == 200:
             result = response.json()
             body = result['response']

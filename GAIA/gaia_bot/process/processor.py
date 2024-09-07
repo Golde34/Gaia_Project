@@ -35,7 +35,7 @@ class Processor:
             response_transcript, tag_skill = self._response_and_detect_skill(transcript, mode)
 
         # Skill process
-        self.assistant.skill_process(tag_skill, self.user_skills)
+        self.assistant.skill_process(tag_skill, self.user_skills, transcript)
 
         return response_transcript, tag_skill
 
@@ -113,7 +113,7 @@ class Processor:
             response = "Failed to generate response: {}".format(e)
             return response
 
-    def access_abilities_privately(self, skills):
+    def access_abilities_privately(self, skills, text):
         tag_skill = str(input("Enter the skill you want to access: "))
-        self.assistant.skill_process(tag_skill, skills)
+        self.assistant.skill_process(tag_skill, skills, text)
         pass
