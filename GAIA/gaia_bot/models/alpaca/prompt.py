@@ -48,7 +48,8 @@ greeting_prompt = """
 """
 
 tag_answer_prompt = """
-    In a tone like a butler receiving an order and just finishing the job, reporting back to the master whether the job was completed or not.
+    Reply to the subject whether the request {} has been carried out or not. Example: For you sir, always, I can {} for you.
+    Write a response that appropriately completes the request.
 
     ### Instruction:
     {}
