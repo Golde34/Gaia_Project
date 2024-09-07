@@ -22,9 +22,8 @@ class TaskServiceRequest:
 
             task_response = requests.post(f"{self.url}/task/private-create", json=task)
             print(task_response.json()) 
-            if task_response.status_code == 200:
-                print('Create task in TM successfully')
 
+            if task_response.status_code == 200:    
                 # If create task in TM successfully, send message to Kafka to store task in GP
                 data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
                 publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, Constants.KafkaCommand.GAIA_CREATE_TASK, data)

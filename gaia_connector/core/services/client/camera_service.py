@@ -9,7 +9,7 @@ class CameraServiceRequest:
     def __init__(self, url):
         self.url = url
         
-    def open_space():
+    def open_space(self):
         try:
             camera_response = requests.get(f"{self.url}/camera-cv/open-space")
             if camera_response.status_code == 200:
