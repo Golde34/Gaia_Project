@@ -37,28 +37,27 @@ class SORSkill():
                 self.duration = entity
 
         sorted_categories = sorted(categories.items(), key=lambda item: item[1], reverse=True)
-        print(sorted_categories)
-        for element, _ in sorted_categories:
-            group_task_count = 0
-            priority_count = 0
-            status_count = 0
-            start_date_count = 0
-            deadline_count = 0
+        group_task_count = 0
+        priority_count = 0
+        status_count = 0
+        start_date_count = 0
+        deadline_count = 0
+        for element, _ in sorted_categories:        
             if element.__contains__("GROUPTASK") and group_task_count == 0:
                 group_task_count += 1
-                self.group_task = element.strip("GROUPTASK_")
+                self.group_task = element.split("GROUPTASK_")[1]
             if element.__contains__("PRIORITY") and priority_count == 0:
                 priority_count += 1
-                self.priority = element.strip("PRIORITY_")
+                self.priority = element.split("PRIORITY_")[1]
             if element.__contains__("STATUS") and status_count == 0:
                 status_count += 1
-                self.status = element.strip("STATUS_")
+                self.status = element.split("STATUS_")[1]
             if element.__contains__("STARTDATE") and start_date_count == 0:
                 start_date_count += 1
-                self.start_date = element.strip("STARTDATE_")
+                self.start_date = element.split("STARTDATE_")[1]
             if element.__contains__("DEADLINE"):
                 deadline_count += 1
-                self.deadline = element.strip("DEADLINE_")
+                self.deadline = element.split("DEADLINE_")[1]
 
         return {
             'sentence': sentence,
@@ -81,19 +80,4 @@ class SORSkill():
         _tag, _pos, _token = detect_sentence.predict(token_sentence, sentence_list)
         json_output = detect_sentence.predict_output(_tag, _pos, _token)
         return json_output
-
-    def call_detect_sentence_api(self, sentence):
-        return {
-            'title': sentence,
-            'description': 'Example description',
-            'priority': 'High',
-            'status': 'To Do',
-            'startDate': '2024-08-10',
-            'deadline': '2024-08-11',
-            'duration': '8',
-            'groupTaskId': 'abc',
-            'activeStatus': 'ACTIVE'
-            # 'tag': 'Example'
-        }
-    
     
