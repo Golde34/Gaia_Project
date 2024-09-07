@@ -58,11 +58,12 @@ def call_alpaca_response(inp, model, tokenizer, mode="run", tag_skill=TagSkill.G
             return_tensors="pt",
         ).to("cuda")
     else:
-        print('Tag skill prompt:', tag_skill)
         inputs = tokenizer(
             [
                 prompt.tag_answer_prompt.format(
-                    "Reply my requset",  # instruction
+                    tag_skill, # User request
+                    tag_skill, # User request example
+                    "Reply my question",  # instruction
                     inp,  # input
                     "",  # output - leave this blank for generation!
                 )
