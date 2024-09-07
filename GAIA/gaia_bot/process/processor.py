@@ -51,7 +51,7 @@ class Processor:
         command = command_input.get_command()
         if command is None:
             self.console_manager.console_log(
-                error_log="Command is not recognized"
+                debug_log="Command is not recognized"
             )
             return None, None
         response_transcript, tag_skill = command_input.handle_command(command)
@@ -67,17 +67,16 @@ class Processor:
         detect_skill_model = self.register_models[AIModel.SkillDetectionModel]
 
         if response_model is None:
-            response_transcript, _ = self._handle_insufficient_resources(AIModel.ResponseModel)
-        else:
-            response_transcript = self._generate_response(
-                mode, transcript, response_model, response_tokenizer
-            )
-
+            return self._handle_insufficient_resources(AIModel.ResponseModel)
+        
         if detect_skill_model is None:
-            response_transcript, _ = self._handle_insufficient_resources(AIModel.SkillDetectionModel)
+            return self._handle_insufficient_resources(AIModel.SkillDetectionModel)
 
         tag_skill = self.assistant.detect_skill_tag(
             transcript, model=detect_skill_model
+        )
+        response_transcript = self._generate_response(
+            mode, transcript, response_model, response_tokenizer, tag_skill
         )
 
         return response_transcript, tag_skill
@@ -105,9 +104,9 @@ class Processor:
             
             return "Redirect to web", None
 
-    def _generate_response(self, mode, text, model, tokenizer, **kwargs):
+    def _generate_response(self, mode, text, model, tokenizer, tag_skill, **kwargs):
         try:
-            response = AlpacaResponse.generate_response(mode, text, model, tokenizer)
+            response = AlpacaResponse.generate_response(mode, text, model, tokenizer, tag_skill)
             return response
         except Exception as e:
             response = "Failed to generate response: {}".format(e)
