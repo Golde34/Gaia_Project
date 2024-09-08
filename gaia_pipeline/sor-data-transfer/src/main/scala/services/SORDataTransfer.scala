@@ -131,18 +131,22 @@ object EntityFinder {
     // Find positions of each entity
     if (project != "null") {
       findEntityPositions(sentenceId, modifiedSentence, project, "PROJECT")
-        .foreach(
-          labels += _
-        )
+        .foreach(labels += _)
     }
     if (title != "null") {
-      findEntityPositions(sentenceId, modifiedSentence, title, "TASK").foreach(
-        labels += _
-      )
+      findEntityPositions(sentenceId, modifiedSentence, title, "TASK")
+        .foreach(labels += _)
     }
     if (groupTask != "null") {
-      labels += LabelEntity(0, 0, "GROUPTASK", groupTask)
-      // findEntityPositions(sentence, groupTask, "GROUPTASK").foreach(labels += _)
+      // labels += LabelEntity(0, 0, "GROUPTASK", groupTask)
+      val groupTaskLabel = findEntityPositions(sentenceId, modifiedSentence, groupTask, "GROUPTASK")
+      if (isOverlapping(labels, groupTaskLabel)) {
+        println(
+          s"Overlapping detected: $groupTaskLabel \nSentence: $modifiedSentence (sentenceId: $sentenceId)"
+        )
+      } else {
+        groupTaskLabel.foreach(labels += _)
+      }
     }
     if (priority != "null") {
       lowerCase(priority) match {
@@ -236,7 +240,7 @@ object EntityFinder {
       if (stemWords.contains(stem(preprocessSentence(originalWord)))) {
         result(index) = preprocessSentence(
           originalWord
-        ) 
+        )
       }
     }
 
@@ -303,5 +307,29 @@ object EntityFinder {
       ).length + 1
     }
     position
+  }
+
+  def isOverlapping(
+      labels: ArrayBuffer[LabelEntity],
+      newLabel: Option[LabelEntity]
+  ): Boolean = {
+    if (newLabel.isEmpty) {
+      return false
+    }
+    for (label <- labels) {
+      if (
+        label.start <= newLabel.get.start
+        && newLabel.get.start <= label.end
+      ) {
+        return true
+      }
+      if (
+        label.start <= newLabel.get.end
+        && newLabel.get.end <= label.end
+      ) {
+        return true
+      }
+    }
+    return false
   }
 }
