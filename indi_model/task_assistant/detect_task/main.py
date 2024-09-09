@@ -14,7 +14,6 @@ def train():
     for _, annotations in train_data:
         for ent in annotations.get("entities"):
             ner.add_label(ent[2])
-    for _, annotations in train_data:
         for cat in annotations.get("cats"):
             textcat.add_label(cat)
 
