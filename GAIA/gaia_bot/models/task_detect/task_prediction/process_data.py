@@ -15,7 +15,6 @@ def process_data(file_path):
         ner_entities = []
         textcat_labels = {}
 
-        textcat_labels['GROUPTASK'] = ""
         textcat_labels['PRIORITY'] = ""
         textcat_labels['STATUS'] = ""
         textcat_labels['STARTDATE'] = ""

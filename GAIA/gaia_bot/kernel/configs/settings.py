@@ -38,3 +38,5 @@ AI_MODEL_LOCATION = {
     'skill_detection': "./gaia_bot/resources/ai_models/task_detect/TrainData.pth",
     'object_detect': "./gaia_bot/resources/ai_models/bert/model.bin",
 }
+
+CHROMADB_COLLECTION_NAME = 'collection_gaia'
