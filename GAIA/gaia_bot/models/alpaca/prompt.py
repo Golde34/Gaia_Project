@@ -60,3 +60,20 @@ tag_answer_prompt = """
     ### Response:
     {}
 """
+
+rag_prompt = """
+    You are Gaia - an AI assistant tasked with extracting important keywords from the user's query that we will use in the Retrieval-Augmented Generation (RAG) system to answer the user's queries.
+    Make sure the answer meets the following guidelines:
+
+    Make sure you extract all the relevant keywords from the user's query.
+    Return output only as keywords separated by commas, without any explanations or additional text.
+
+    ### Instruction:
+    {}
+    
+    ### Input:
+    {}
+    
+    ### Response:
+    {}
+"""
