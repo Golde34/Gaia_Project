@@ -7,4 +7,4 @@ MODEL_NAME=model_name
 TRAIN_DATA=train_data
 
 EPOCH=20
-DROP=0.5
+DROP=0.2
