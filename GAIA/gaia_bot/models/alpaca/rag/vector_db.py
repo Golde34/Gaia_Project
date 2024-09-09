@@ -3,7 +3,7 @@ from transformers import AutoModelForSequenceClassification
 import copy
 
 from gaia_bot.models.alpaca.rag import embedding
-from gaia_bot.models.alpaca.rag.split_text import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from gaia_bot.kernel.configs.settings import CHROMADB_COLLECTION_NAME
 
 CHROMA_CLIENT = chromadb.PersistentClient(path='vectordb')
@@ -63,17 +63,14 @@ def query_vectordb(query, device, n_vectordb=10, n_rerank=3):
         query_embeddings=query_embedding,
         n_results=n_vectordb
     )
-    
+
     sentence_window_documents = [t['sentence_window_document'] for t in vectordb_results['metadatas'][0]]
     file_names = [t['file_name'] for t in vectordb_results['metadatas'][0]]
     
     sim_sentences = vectordb_results['documents'][0]
-    
-    # Combine query with similar sentences for reranking
-    query_doc_pairs = [[query, s] for s in sim_sentences]
 
     # Rerank the results using cosine similarity
-    reranked_sentences = embedding.rerank(query, sim_sentences)  # Use the rerank function defined earlier
+    reranked_sentences = embedding.rerank(device,  query, sim_sentences)  # Use the rerank function defined earlier
     
     # Get the scores for reranked sentences
     rerank_scores = []

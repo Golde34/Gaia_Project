@@ -36,16 +36,17 @@ def get_model_and_tokenizer():
     return model, tokenizer
 
 def call_alpaca_response(inp, model, tokenizer, mode="run", tag_skill=TagSkill.GREETING.value): 
-    keywords = extract_keyword(inp)
-    vectordb_result = vector_db.query_vectordb(query=keyword, device="cuda", n_vectordb=10, n_rerank=3)
+    # keywords = extract_keyword(tokenizer, inp)
+    # print('This is extremely slow')
+    # vectordb_results = vector_db.query_vectordb(query=keywords, device="cuda", n_vectordb=10, n_rerank=3)
     
-    sim_sentences = vectordb_results['documents']
-    sim_scores = vectordb_results['scores']
-    source_file_names = vectordb_results['file_names']
+    # sim_sentences = vectordb_results['documents']
+    # sim_scores = vectordb_results['scores']
+    # source_file_names = vectordb_results['file_names']
     
-    print("\n===== EXTRACTED SIM SENTENCES ============")
-    for sim_sentence, score in zip(sim_sentences, sim_scores):
-        print(f"\n== Sim sentences ({score}) == :", sim_sentence)
+    # print("\n===== EXTRACTED SIM SENTENCES ============")
+    # for sim_sentence, score in zip(sim_sentences, sim_scores):
+    #     print(f"\n== Sim sentences ({score}) == :", sim_sentence)
     
     return chat_llm(inp, model, tokenizer, mode, tag_skill)
 
