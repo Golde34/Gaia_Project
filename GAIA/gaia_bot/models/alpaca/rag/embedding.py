@@ -1,10 +1,11 @@
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
 
 
 embedding_model_name = "distilbert-base-nli-stsb-mean-tokens"
 model = SentenceTransformer(embedding_model_name)
 
-def embed(texts, device='cpu'):
+def create_embeddings(texts, device='cpu'):
     """
     Create embeddings for a list of texts.
     

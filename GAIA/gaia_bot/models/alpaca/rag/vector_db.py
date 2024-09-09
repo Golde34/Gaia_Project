@@ -4,10 +4,10 @@ import copy
 
 from gaia_bot.models.alpaca.rag import embedding
 from gaia_bot.models.alpaca.rag.split_text import RecursiveCharacterTextSplitter
-
+from gaia_bot.kernel.configs.settings import CHROMADB_COLLECTION_NAME
 
 CHROMA_CLIENT = chromadb.PersistentClient(path='vectordb')
-COLLECTION = CHROMA_CLIENT.get_or_create_collection(name = CONFIG["ChromaDB"]["COLLECTION_NAME"], 
+COLLECTION = CHROMA_CLIENT.get_or_create_collection(name = CHROMADB_COLLECTION_NAME, 
                                                     metadata={"hnsw:space": "cosine"})
 
 TEXT_SPLITTER = RecursiveCharacterTextSplitter(
@@ -25,7 +25,7 @@ def add_texts_to_vectordb(texts, metadatas, device):
         ids = [file_id + "_" + str(j) for j in range(len(splited_texts))]
         
         # Get embeddings from chunks
-        embeddings = create_embeddings(splited_texts)  # Use the create_embeddings function
+        embeddings = embedding.create_embeddings(splited_texts)  # Use the create_embeddings function
         
         file_metadatas = [copy.deepcopy(metadatas[i]) for _ in range(len(splited_texts))]
         
@@ -56,7 +56,7 @@ def add_texts_to_vectordb(texts, metadatas, device):
 def query_vectordb(query, device, n_vectordb=10, n_rerank=3):
     
     # Get embedding from user's query
-    query_embedding = create_embeddings([query])  # Use the create_embeddings function
+    query_embedding = embedding.create_embeddings([query])  # Use the create_embeddings function
     
     # Query in vector DB
     vectordb_results = COLLECTION.query(
@@ -73,7 +73,7 @@ def query_vectordb(query, device, n_vectordb=10, n_rerank=3):
     query_doc_pairs = [[query, s] for s in sim_sentences]
 
     # Rerank the results using cosine similarity
-    reranked_sentences = rerank(query, sim_sentences)  # Use the rerank function defined earlier
+    reranked_sentences = embedding.rerank(query, sim_sentences)  # Use the rerank function defined earlier
     
     # Get the scores for reranked sentences
     rerank_scores = []
