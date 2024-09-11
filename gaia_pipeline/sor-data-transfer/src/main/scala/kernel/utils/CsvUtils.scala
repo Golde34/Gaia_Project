@@ -1,4 +1,4 @@
-package utils
+package kernel.utils
 
 import scala.collection.immutable.ArraySeq
 import scala.io.Source

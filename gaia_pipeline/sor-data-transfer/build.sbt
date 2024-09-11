@@ -32,6 +32,7 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.1"
 )
 libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.10"
+libraryDependencies += "com.typesafe" % "config" % "1.4.2"
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies

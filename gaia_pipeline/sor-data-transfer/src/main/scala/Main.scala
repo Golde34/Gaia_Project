@@ -3,13 +3,17 @@ import scala.collection.mutable.ArrayBuffer
 import os._
 import services.SORDataTransfer
 import ui.SORConsumerData
+import kernel.configs.{KafkaConfig, KafkaConfigLoader}
+import ui.KafkaHandler
 
 object DataPipeline {
   def main(args: Array[String]): Unit = {
-    SORDataTransfer.saveOutputToDataLake() 
+    val kafkaConfig: KafkaConfig = KafkaConfigLoader.loadKafkaConfig()
+
+    // SORDataTransfer.saveOutputToDataLake() 
     // SORDataTransfer.saveOutputToDatabase()
 
-    val sorConsumerData = new SORConsumerData()
+    val sorConsumerData = new SORConsumerData(kafkaConfig)
     sorConsumerData.consumeMessages()
   }
 }
