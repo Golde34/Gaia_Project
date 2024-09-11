@@ -4,9 +4,13 @@ import ujson._
 import domains.{TaskInput, TaskObject}
 import domains.Constants.KafkaCmd
 import services.TaskDataStorage.{saveToDBFromGaiaRequest, saveToDBFromTMRequest}
+import domains.Constants.KafkaTopic
+import ui.KafkaHandler
 
-object CreateTaskHandler {
-  def handleMessage(message: String): Unit = {
+object CreateTaskHandler extends KafkaHandler {
+  override def getTopic: String = KafkaTopic.CREATE_TASK
+
+  override def handleMessage(message: String): Unit = {
     val jsonObject = ujson.read(message)
     // Access the nested "data" object first
     val dataObject = jsonObject("data")

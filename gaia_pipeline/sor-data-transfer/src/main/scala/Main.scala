@@ -4,12 +4,13 @@ import os._
 import services.SORDataTransfer
 import ui.SORConsumerData
 import kernel.configs.{KafkaConfig, KafkaConfigLoader}
+import ui.KafkaHandler
 
 object DataPipeline {
   def main(args: Array[String]): Unit = {
     val kafkaConfig: KafkaConfig = KafkaConfigLoader.loadKafkaConfig()
 
-    SORDataTransfer.saveOutputToDataLake() 
+    // SORDataTransfer.saveOutputToDataLake() 
     // SORDataTransfer.saveOutputToDatabase()
 
     val sorConsumerData = new SORConsumerData(kafkaConfig)

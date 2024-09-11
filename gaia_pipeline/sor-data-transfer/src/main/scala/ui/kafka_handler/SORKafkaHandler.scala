@@ -3,9 +3,14 @@ package kafka_handler
 import ujson._
 import services.SORDataTransfer
 import domains.Constants.KafkaCmd
+import ui.KafkaHandler
+import domains.Constants.KafkaTopic
 
-object SORKafkaHandler {
-	def handleMessage(message: String): Unit = {
+object SORKafkaHandler extends KafkaHandler {
+
+  override def getTopic: String = KafkaTopic.SOR_TRAINING_MODEL
+
+	override def handleMessage(message: String): Unit = {
 		val jsonObject = ujson.read(message)
     println(s"Received message: $jsonObject")
 

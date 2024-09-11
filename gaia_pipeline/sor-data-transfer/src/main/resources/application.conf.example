@@ -10,3 +10,15 @@ slick.dbs.default {
     keepAliveConnection = true
   }
 }
+
+sor-data-transfer {
+  kafka {
+    bootstrap-servers = "localhost:9094"
+    group-id = "sor-data-transfer"
+    topics = [
+      "gaia.sor-training-model.topic", 
+      "task-manager.create-task.topic"
+    ],
+    auto-offset-reset = "earliest"
+  }
+}
