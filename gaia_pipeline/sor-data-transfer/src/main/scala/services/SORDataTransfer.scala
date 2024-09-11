@@ -7,7 +7,7 @@ import java.awt.Label
 
 import domains.LabelEntity
 import domains.SpacyData
-import utils.TextPreprocessing.{
+import kernel.utils.TextPreprocessing.{
   removeSpecialCharacters,
   stem,
   stemWithPositionMapping,
@@ -16,11 +16,11 @@ import utils.TextPreprocessing.{
 }
 import database.TaskDatabaseService
 import database.TaskData
-import utils.SORCSVUtils.{readSORCSV, writeSORCSV}
-import utils.SORJsonUtils.writeJsonFile
+import kernel.utils.SORCSVUtils.{readSORCSV, writeSORCSV}
+import kernel.utils.SORJsonUtils.writeJsonFile
 import os.write
-import utils.SORCSVUtils.writeSORCSV2
-import utils.TextPreprocessing.deleteStopWords
+import kernel.utils.SORCSVUtils.writeSORCSV2
+import kernel.utils.TextPreprocessing.deleteStopWords
 
 object SORDataTransfer {
 
