@@ -9,6 +9,7 @@ import auth.authentication_service.core.exceptions.BusinessException;
 import auth.authentication_service.core.port.mapper.RoleMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
+    @CacheEvict(value = "roles", allEntries = true)
     public ResponseEntity<?> createRole(RoleDto roleDto) {
         try {
             if (roleServiceValidation.checkExistRoleName(roleDto.getName())) {
@@ -98,6 +100,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @CacheEvict(value = "roles", allEntries = true)
     public ResponseEntity<?> updateRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);
@@ -118,6 +121,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
+    @CacheEvict(value = "roles", allEntries = true)
     public ResponseEntity<?> deleteRole(RoleDto roleDto) {
         try {
             Role role = modelMapperConfig._mapperDtoToEntity(roleDto);

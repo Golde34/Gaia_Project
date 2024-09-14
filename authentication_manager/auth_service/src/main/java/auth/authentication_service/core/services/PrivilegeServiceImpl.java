@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    @CacheEvict(value = "privileges", allEntries = true)
     public ResponseEntity<?> createPrivilege(String privilegeName) {
         if (_checkExistPrivilegeName(privilegeName)) {
             _logger.log("Create privilege failed", LoggerType.ERROR);
@@ -60,6 +62,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    @CacheEvict(value = "privileges", allEntries = true)
     public ResponseEntity<?> updatePrivilege(PrivilegeDto privilegeDto) {
         try {
             Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
@@ -82,6 +85,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    @CacheEvict(value = "privileges", allEntries = true)
     public ResponseEntity<?> deletePrivilege(PrivilegeDto privilegeDto) {
         try {
             Privilege privilege = modelMapperConfig._mapperDtoToEntity(privilegeDto);
