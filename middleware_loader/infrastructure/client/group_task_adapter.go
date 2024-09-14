@@ -22,7 +22,8 @@ func NewGroupTaskAdapter(adapter *GroupTaskAdapter, domain string) *GroupTaskAda
 func (adapter *GroupTaskAdapter) GetGroupTaskById(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	getGroupTaskURL := base.TaskManagerServiceURL + adapter.domain + id
 	var groupTask response_dtos.GroupTaskResponseDTO
-	result, err := utils.BaseAPIV2(getGroupTaskURL, "GET", nil, groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(getGroupTaskURL, "GET", nil, groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -32,7 +33,8 @@ func (adapter *GroupTaskAdapter) GetGroupTaskById(id string) (response_dtos.Grou
 func (adapter *GroupTaskAdapter) CreateGroupTask(input model.CreateGroupTaskInput) (response_dtos.GroupTaskResponseDTO, error) {
 	createGroupTaskURL := base.TaskManagerServiceURL + "/group-task/create"
 	var groupTask response_dtos.GroupTaskResponseDTO
-	result, err := utils.BaseAPIV2(createGroupTaskURL, "POST", input, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(createGroupTaskURL, "POST", input, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -42,8 +44,8 @@ func (adapter *GroupTaskAdapter) CreateGroupTask(input model.CreateGroupTaskInpu
 func (adapter *GroupTaskAdapter) UpdateGroupTask(input model.UpdateGroupTaskInput, id string) (response_dtos.GroupTaskResponseDTO, error) {
 	updateGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(updateGroupTaskURL, "PUT", input, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(updateGroupTaskURL, "PUT", input, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -53,8 +55,8 @@ func (adapter *GroupTaskAdapter) UpdateGroupTask(input model.UpdateGroupTaskInpu
 func (adapter *GroupTaskAdapter) DeleteGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	deleteGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(deleteGroupTaskURL, "DELETE", nil, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(deleteGroupTaskURL, "DELETE", nil, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -66,7 +68,8 @@ func (adapter *GroupTaskAdapter) GetTasksByGroupTask(id string) (response_dtos.T
 	var doneTaskList []response_dtos.TaskResponseDTO
 	var notDoneTaskList []response_dtos.TaskResponseDTO
 	var taskDashboard response_dtos.TaskDashboardResponseDTO
-	bodyResult, err := utils.BaseAPI(getTasksURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getTasksURL, "GET", nil, headers)
 	if err != nil {
 		return response_dtos.TaskDashboardResponseDTO{}, err
 	}
@@ -95,8 +98,8 @@ func (adapter *GroupTaskAdapter) GetTasksByGroupTask(id string) (response_dtos.T
 func (adapter *GroupTaskAdapter) UpdateGroupTaskName(input converter_dtos.UpdateNameConverterDTO, id string) (response_dtos.GroupTaskResponseDTO, error) {
 	updateGroupTaskNameURL := base.TaskManagerServiceURL + "/group-task/" + id + "/update-name"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(updateGroupTaskNameURL, "PUT", input, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(updateGroupTaskNameURL, "PUT", input, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -106,8 +109,8 @@ func (adapter *GroupTaskAdapter) UpdateGroupTaskName(input converter_dtos.Update
 func (adapter *GroupTaskAdapter) CalculateCompletedTasks(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	calculateCompletedTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "/tasks-complete"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	bodyResult, err := utils.BaseAPI(calculateCompletedTasksURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(calculateCompletedTasksURL, "GET", nil, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -131,8 +134,8 @@ func (adapter *GroupTaskAdapter) CalculateCompletedTasks(id string) (response_dt
 func (adapter *GroupTaskAdapter) UpdateGroupTaskOrdinal(input model.ProjectGroupTaskIDInput, id string) (response_dtos.GroupTaskResponseDTO, error) {
 	updateGroupTaskOrdinalURL := base.TaskManagerServiceURL + "/group-task/" + id + "/update-ordinal"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(updateGroupTaskOrdinalURL, "PUT", input, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(updateGroupTaskOrdinalURL, "PUT", input, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -142,8 +145,8 @@ func (adapter *GroupTaskAdapter) UpdateGroupTaskOrdinal(input model.ProjectGroup
 func (adapter *GroupTaskAdapter) ArchiveGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	archiveGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id + "/archive"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(archiveGroupTaskURL, "PUT", nil, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(archiveGroupTaskURL, "PUT", nil, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -153,8 +156,8 @@ func (adapter *GroupTaskAdapter) ArchiveGroupTask(id string) (response_dtos.Grou
 func (adapter *GroupTaskAdapter) EnableGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error) {
 	enableGroupTaskURL := base.TaskManagerServiceURL + "/group-task/" + id + "/enable"
 	var groupTask response_dtos.GroupTaskResponseDTO
-
-	result, err := utils.BaseAPIV2(enableGroupTaskURL, "PUT", nil, &groupTask)
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(enableGroupTaskURL, "PUT", nil, &groupTask, headers)
 	if err != nil {
 		return response_dtos.GroupTaskResponseDTO{}, err
 	}

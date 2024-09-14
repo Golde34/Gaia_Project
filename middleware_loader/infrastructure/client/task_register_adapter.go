@@ -23,7 +23,8 @@ func NewTaskRegisterAdapter(adapter *TaskRegisterAdapter) *TaskRegisterAdapter {
 func (adapter *TaskRegisterAdapter) RegisterTaskConfig(input model.RegisterTaskInput) (response_dtos.RegisterTaskConfigResponseDTO, error) {
 	registerTaskConfigURL := base.WorkOptimizationServiceURL + task_register_WO_domain + "/register-task-config"
 	var response response_dtos.RegisterTaskConfigResponseDTO
-	_, err := utils.BaseAPIV2(registerTaskConfigURL, enums.POST, input, &response)
+	headers := utils.BuildDefaultHeaders()
+	_, err := utils.BaseAPIV2(registerTaskConfigURL, enums.POST, input, &response, headers)
 	if err != nil {
 		return response_dtos.RegisterTaskConfigResponseDTO{}, err
 	}
@@ -34,7 +35,8 @@ func (adapter *TaskRegisterAdapter) RegisterTaskConfig(input model.RegisterTaskI
 func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.UserIDInput) (response_dtos.IsTaskExistedResponseDTO, error) {
 	isTaskExistedURL := base.TaskManagerServiceURL + task_register_TM_domain + "/check-existed-tasks"
 	var response response_dtos.IsTaskExistedResponseDTO
-	_, err := utils.BaseAPIV2(isTaskExistedURL, enums.GET, input, &response)
+	headers := utils.BuildDefaultHeaders()
+	_, err := utils.BaseAPIV2(isTaskExistedURL, enums.GET, input, &response, headers)
 	if err != nil {
 		return response_dtos.IsTaskExistedResponseDTO{}, err
 	}
@@ -44,7 +46,8 @@ func (adapter *TaskRegisterAdapter) IsTaskExisted(input model.UserIDInput) (resp
 func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.UserIDInput) (response_dtos.IsScheduleExistedResponseDTO, error) {
 	isScheduleExistedURL := base.SchedulePlanServiceURL + task_register_SP_domain + "/dashboard/check-existed-schedules"
 	var response response_dtos.IsScheduleExistedResponseDTO
-	_, err := utils.BaseAPIV2(isScheduleExistedURL, enums.GET, input, &response)
+	headers := utils.BuildDefaultHeaders()
+	_, err := utils.BaseAPIV2(isScheduleExistedURL, enums.GET, input, &response, headers)
 	if err != nil {
 		return response_dtos.IsScheduleExistedResponseDTO{}, err
 	}
@@ -54,7 +57,8 @@ func (adapter *TaskRegisterAdapter) IsScheduleExisted(input model.UserIDInput) (
 func (adapter *TaskRegisterAdapter) QueryTaskConfig(input model.UserIDInput) (response_dtos.IsTaskConfigExistedResponseDTO, error) {
 	queryTaskConfigURL := base.WorkOptimizationServiceURL + task_register_WO_domain + "/register-task-config"
 	var response response_dtos.IsTaskConfigExistedResponseDTO
-	_, err := utils.BaseAPIV2(queryTaskConfigURL, enums.GET, input, &response)
+	headers := utils.BuildDefaultHeaders()
+	_, err := utils.BaseAPIV2(queryTaskConfigURL, enums.GET, input, &response, headers)
 	if err != nil {
 		return response_dtos.IsTaskConfigExistedResponseDTO{}, err
 	}

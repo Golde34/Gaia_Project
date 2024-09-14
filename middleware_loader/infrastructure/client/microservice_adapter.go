@@ -18,8 +18,8 @@ func NewMicroserviceAdapter(adapter *MicroserviceAdapter) *MicroserviceAdapter {
 func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName string) (base_dtos.ErrorResponse, error) {
 	microserviceUrl := getMicroserviceUrlByName(microserviceName)
 	microserviceUrl = microserviceUrl + "/status"
-
-	bodyResult, err := utils.FullResponseBaseAPI(microserviceUrl, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.FullResponseBaseAPI(microserviceUrl, "GET", nil, headers)
 	if err != nil {
 		return base_dtos.ErrorResponse{}, err
 	}
@@ -35,13 +35,13 @@ func (adapter *MicroserviceAdapter) GetMicroserviceByName(microserviceName strin
 
 func getMicroserviceUrlByName(microserviceName string) string {
 	switch microserviceName {
-	case enums.AUTH_SERVICE:
-		return base.AuthServiceURL + "/auth"
-	case enums.GAIA_SERVICE:
-		return base.GaiaServiceURL + "/middleware"
-	case enums.TASK_MANAGER:
-		return base.TaskManagerServiceURL
-	default:
-		return ""
+		case enums.AUTH_SERVICE:
+			return base.AuthServiceURL + "/auth"
+		case enums.GAIA_SERVICE:
+			return base.GaiaServiceURL + "/middleware"
+		case enums.TASK_MANAGER:
+			return base.TaskManagerServiceURL
+		default:
+			return ""
 	}
 }

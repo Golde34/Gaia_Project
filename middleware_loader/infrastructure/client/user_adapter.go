@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	response_dtos "middleware_loader/core/domain/dtos/response"
+	"middleware_loader/core/domain/enums"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
@@ -21,8 +22,8 @@ func NewUserAdapter(adapter *UserAdapter) *UserAdapter {
 func (adapter *UserAdapter) ListAllUsers() ([]response_dtos.UserDTO, error) {
 	listAllUsersURL := base.AuthServiceURL + "/user/get-all-users"
 	var users []response_dtos.UserDTO
-
-	bodyResult, err := utils.BaseAPI(listAllUsersURL, "GET", nil)
+	headers := utils.BuildAuthorizationHeaders(enums.AS, "1")
+	bodyResult, err := utils.BaseAPI(listAllUsersURL, "GET", nil, headers)
 	if err != nil {
 		return []response_dtos.UserDTO{}, err
 	}
@@ -42,8 +43,8 @@ func (adapter *UserAdapter) ListAllUsers() ([]response_dtos.UserDTO, error) {
 func (adapter *UserAdapter) UpdateUser(input model.UpdateUserInput) (response_dtos.UserDTO, error) {
 	updateUserURL := base.AuthServiceURL + "/user/update-user"
 	var user response_dtos.UserDTO
-
-	bodyResult, err := utils.BaseAPI(updateUserURL, "PUT", input)
+	headers := utils.BuildAuthorizationHeaders(enums.AS, "1")
+	bodyResult, err := utils.BaseAPI(updateUserURL, "PUT", input, headers)
 	if err != nil {
 		return response_dtos.UserDTO{}, err
 	}

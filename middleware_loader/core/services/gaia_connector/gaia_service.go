@@ -20,8 +20,8 @@ func NewGaiaService() *GaiaService {
 func (s *GaiaService) GaiaConnect() (interface{}, error) {
 	log.Println("GaiaConnect")
 	gaiaURL := base.GaiaServiceURL + "/middleware/gaia-connect"
-	
-	bodyResult, err := utils.BaseAPI(gaiaURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()	
+	bodyResult, err := utils.BaseAPI(gaiaURL, "GET", nil, headers)
 	if err != nil {
 		return "", err
 	}

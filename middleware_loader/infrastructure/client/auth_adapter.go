@@ -42,8 +42,8 @@ func (adapter *AuthAdapter) Signin(input model.SigninInput) (response_dtos.AuthT
 
 func (adapter *AuthAdapter) callSigninAuthService(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
 	authServiceURL := base.AuthServiceURL + "/auth/sign-in"
-
-	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input, headers)
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
@@ -66,8 +66,9 @@ func (adapter *AuthAdapter) callSigninAuthService(input model.SigninInput) (resp
 
 func (adapter *AuthAdapter) callHealthCheckGaiaService(model response_dtos.AuthTokenResponseDTO) (string, error) {
 	gaiaServiceURL := base.GaiaServiceURL + "/middleware/health-check"
+	headers := utils.BuildDefaultHeaders()
 
-	bodyResult, err := utils.BaseAPI(gaiaServiceURL, "GET", model)
+	bodyResult, err := utils.BaseAPI(gaiaServiceURL, "GET", model, headers)
 	if err != nil {
 		return "Cannot call the API", err
 	}
@@ -82,8 +83,8 @@ func (adapter *AuthAdapter) callHealthCheckGaiaService(model response_dtos.AuthT
 
 func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dtos.AuthTokenResponseDTO, error) {
 	authServiceURL := base.AuthServiceURL + "/auth/gaia-auto-sign-in"
-
-	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input, headers)
 	if err != nil {
 		return response_dtos.AuthTokenResponseDTO{}, err
 	}
@@ -110,8 +111,8 @@ func (adapter *AuthAdapter) GaiaAutoSignin(input model.SigninInput) (response_dt
 
 func (adapter *AuthAdapter) CheckToken(input model.TokenInput) (model.TokenResponse, error) {
 	authServiceURL := base.AuthServiceURL + "/auth/check-token"
-
-	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(authServiceURL, "POST", input, headers)
 	if err != nil {
 		return model.TokenResponse{}, err
 	}
