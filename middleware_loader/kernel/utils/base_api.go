@@ -12,8 +12,8 @@ import (
 	"time"
 )
 
-func BaseAPIV2(url string, method string, input interface{}, output interface{}) (interface{}, error) {
-	bodyResult, err := BaseAPI(url, method, input)
+func BaseAPIV2(url string, method string, input interface{}, output interface{}, headers map[string]string) (interface{}, error) {
+	bodyResult, err := BaseAPI(url, method, input, headers)
 	if err != nil {
 		return nil, err
 	}
@@ -30,21 +30,32 @@ func BaseAPIV2(url string, method string, input interface{}, output interface{})
 	return output, nil
 }
 
-func BaseAPI(url string, method string, input interface{}) (interface{}, error) {
+func BaseAPI(url string, method string, input interface{}, headers map[string]string) (interface{}, error) {
 	if input == nil {
-		return baseAPINoInput(url, method, enums.OnlyData)
+		return baseAPINoInput(url, method, headers, enums.OnlyData)
 	}
-	return baseAPIWithInput(url, method, input, enums.OnlyData)
+	return baseAPIWithInput(url, method, input, headers, enums.OnlyData)
 }
 
-func baseAPIWithInput(url string, method string, input interface{}, bodyType string) (interface{}, error) {
+func baseAPINoInput(url string, method string, headers map[string]string, bodyType string) (interface{}, error) {
+	req, err := http.NewRequest(method, url, nil)
+	buildHeader(req, headers)	
+	if err != nil {
+		return errorReturnBlock("send request ", err)
+	}
+	log.Println("Request: ", req)
+
+	return returnResponse(req, bodyType)
+}
+
+func baseAPIWithInput(url string, method string, input interface{}, headers map[string]string, bodyType string) (interface{}, error) {
 	jsonData, err := json.Marshal(input)
 	if err != nil {
 		return errorReturnBlock("marshal input", err)
 	}
 
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonData))
-	req.Header.Set("Content-Type", "application/json")
+	buildHeader(req, headers)
 	if err != nil {
 		return errorReturnBlock("send request ", err)
 	}
@@ -53,14 +64,27 @@ func baseAPIWithInput(url string, method string, input interface{}, bodyType str
 	return returnResponse(req, bodyType)
 }
 
-func baseAPINoInput(url string, method string, bodyType string) (interface{}, error) {
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		return errorReturnBlock("send request ", err)
+func buildHeader(req *http.Request, headers map[string]string) {
+	for key, value := range headers {
+		req.Header.Set(key, value)
 	}
-	log.Println("Request: ", req)
+}
 
-	return returnResponse(req, bodyType)
+func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
+	if err != nil {
+		return base_dtos.ErrorResponse{
+			Status:        "Error",
+			StatusMessage: "Internal Server Error",
+			ErrorCode:     500,
+			ErrorMessage:  statusMessage,
+		}, err
+	}
+	return base_dtos.ErrorResponse{
+		Status:        "Success",
+		StatusMessage: "Success",
+		ErrorCode:     200,
+		ErrorMessage:  statusMessage,
+	}, nil
 }
 
 func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
@@ -107,28 +131,11 @@ func returnResponseType(response base_dtos.ErrorResponse, bodyMessageType string
 	}
 }
 
-func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
-	if err != nil {
-		return base_dtos.ErrorResponse{
-			Status:        "Error",
-			StatusMessage: "Internal Server Error",
-			ErrorCode:     500,
-			ErrorMessage:  statusMessage,
-		}, err
-	}
-	return base_dtos.ErrorResponse{
-		Status:        "Success",
-		StatusMessage: "Success",
-		ErrorCode:     200,
-		ErrorMessage:  statusMessage,
-	}, nil
-}
-
-func FullResponseBaseAPI(url string, method string, input interface{}) (interface{}, error) {
+func FullResponseBaseAPI(url string, method string, input interface{}, headers map[string]string) (interface{}, error) {
 	if input == nil {
-		return baseAPINoInput(url, method, enums.FullBody)
+		return baseAPINoInput(url, method, headers, enums.FullBody)
 	}
-	return baseAPIWithInput(url, method, input, enums.FullBody)
+	return baseAPIWithInput(url, method, input, headers, enums.FullBody)
 }
 
 func ConvertResponseToMap(bodyResult interface{}) ([]byte, error) {

@@ -23,8 +23,8 @@ func NewProjectAdapter(adapter *ProjectAdapter) *ProjectAdapter {
 func (adapter *ProjectAdapter) ListAll() ([]response_dtos.ProjectResponseDTO, error) {
 	listAllProjectURL := base.TaskManagerServiceURL + "/project/all"
 	var projects []response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(listAllProjectURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(listAllProjectURL, "GET", nil, headers)
 	if err != nil {
 		return []response_dtos.ProjectResponseDTO{}, err
 	}
@@ -44,8 +44,8 @@ func (adapter *ProjectAdapter) ListAll() ([]response_dtos.ProjectResponseDTO, er
 func (adapter *ProjectAdapter) GetById(id string) (response_dtos.ProjectResponseDTO, error) {
 	getProjectByIdURL := base.TaskManagerServiceURL + "/project/" + id
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(getProjectByIdURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getProjectByIdURL, "GET", nil, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -65,8 +65,8 @@ func (adapter *ProjectAdapter) GetById(id string) (response_dtos.ProjectResponse
 func (adapter *ProjectAdapter) CreateProject(input model.CreateProjectInput) (response_dtos.ProjectResponseDTO, error) {
 	createPrjectURL := base.TaskManagerServiceURL + "/project/create"
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(createPrjectURL, "POST", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(createPrjectURL, "POST", input, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -86,8 +86,8 @@ func (adapter *ProjectAdapter) CreateProject(input model.CreateProjectInput) (re
 func (adapter *ProjectAdapter) UpdateProject(input model.UpdateProjectInput, id string) (response_dtos.ProjectResponseDTO, error) {
 	updateProjectURL := base.TaskManagerServiceURL + "/project/" + id
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(updateProjectURL, "PUT", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(updateProjectURL, "PUT", input, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -107,8 +107,8 @@ func (adapter *ProjectAdapter) UpdateProject(input model.UpdateProjectInput, id 
 func (adapter *ProjectAdapter) DeleteProject(id string) (response_dtos.ProjectResponseDTO, error) {
 	deleteProjectURL := base.TaskManagerServiceURL + "/project/" + id
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(deleteProjectURL, "DELETE", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(deleteProjectURL, "DELETE", nil, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -128,8 +128,8 @@ func (adapter *ProjectAdapter) DeleteProject(id string) (response_dtos.ProjectRe
 func (adapter *ProjectAdapter) GetGroupTasksInProject(id string) ([]response_dtos.GroupTaskResponseDTO, error) {
 	getGroupTasksURL := base.TaskManagerServiceURL + "/project/" + id + "/group-tasks"
 	var groupTasks []response_dtos.GroupTaskResponseDTO
-
-	bodyResult, err := utils.BaseAPI(getGroupTasksURL, "GET", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getGroupTasksURL, "GET", nil, headers)
 	if err != nil {
 		return []response_dtos.GroupTaskResponseDTO{}, err
 	}
@@ -149,8 +149,8 @@ func (adapter *ProjectAdapter) GetGroupTasksInProject(id string) ([]response_dto
 func (adapter *ProjectAdapter) UpdateProjectName(input converter_dtos.UpdateNameConverterDTO, id string) (response_dtos.ProjectResponseDTO, error) {
 	updateNameURL := base.TaskManagerServiceURL + "/project/" + id + "/update-name"
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(updateNameURL, "PUT", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(updateNameURL, "PUT", input, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -170,8 +170,8 @@ func (adapter *ProjectAdapter) UpdateProjectName(input converter_dtos.UpdateName
 func (adapter *ProjectAdapter) UpdateProjectColor(input converter_dtos.UpdateColorConverterDTO, id string) (response_dtos.ProjectResponseDTO, error) {
 	updateColorURL := base.TaskManagerServiceURL + "/project/" + id + "/update-color"
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(updateColorURL, "PUT", input)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(updateColorURL, "PUT", input, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -191,8 +191,8 @@ func (adapter *ProjectAdapter) UpdateProjectColor(input converter_dtos.UpdateCol
 func (adapter *ProjectAdapter) ArchiveProject(id string) (response_dtos.ProjectResponseDTO, error) {
 	archiveProjectURL := base.TaskManagerServiceURL + "/project/" + id + "/archive"
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(archiveProjectURL, "PUT", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(archiveProjectURL, "PUT", nil, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
@@ -212,8 +212,8 @@ func (adapter *ProjectAdapter) ArchiveProject(id string) (response_dtos.ProjectR
 func (adapter *ProjectAdapter) EnableProject(id string) (response_dtos.ProjectResponseDTO, error) {
 	enableProjectURL := base.TaskManagerServiceURL + "/project/" + id + "/enable"
 	var project response_dtos.ProjectResponseDTO
-
-	bodyResult, err := utils.BaseAPI(enableProjectURL, "PUT", nil)
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(enableProjectURL, "PUT", nil, headers)
 	if err != nil {
 		return response_dtos.ProjectResponseDTO{}, err
 	}
