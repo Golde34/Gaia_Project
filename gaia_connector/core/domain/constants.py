@@ -1,10 +1,16 @@
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
 class Constants:
     class KafkaTopic:
-        CREATE_TASK_TOPIC = "task-manager.create-task.topic"
-        OPEN_CAMERA_SPACE = "OPEN_CAMERA_SPACE"
+        CREATE_TASK_TOPIC = os.getenv("KAFKA_TOPICS.CREATE_TASK_TOPIC")
+        OPEN_CAMERA_SPACE = os.getenv("KAFKA_TOPICS.OPEN_CAMERA_SPACE")
+        CLOSE_CAMERA_SPACE = os.getenv("KAFKA_TOPICS.CLOSE_CAMERA_SPACE")
 
     class StringConstants:
-        kafka_topic_prefix = "KAFKA_TOPICS."
         status = "status"
         response = "response" 
         message = "message"
