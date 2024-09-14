@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Template from "../../components/template/Template";
 import { useCallback, useEffect, useRef } from "react";
 import { getMicroservices } from "../../api/store/actions/middleware_loader/microservices.actions";
-import { Card, Col, Flex, Grid, Metric, Subtitle, Title } from "@tremor/react";
+import { Card, Col, Flex, Grid, Metric, Title } from "@tremor/react";
 
 function ContentArea() {
     const dispatch = useDispatch();

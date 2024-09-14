@@ -15,6 +15,7 @@ import PrivilegeAndRoleDashboard from '../../views/auth_service/RoleAndPrivilege
 import PrivilegeUrlSettings from '../../views/auth_service/PrivilegeUrlSettings';
 import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboard';
 import TaskRegistration from '../../views/task_manager/TaskRegistration';
+import GaiaHealth from '../../views/microservices_gui/GaiaHealth';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -103,6 +104,11 @@ const routeList = [
         path: '/calendar',
         key: 'calendar',
         element: <Calendar />,
+    },
+    {
+        path: '/gaia-health',
+        key: 'gaia-health',
+        element: <GaiaHealth />,
     }
 ]
 

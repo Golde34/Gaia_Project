@@ -7,6 +7,7 @@ import {
     ClipboardCheckIcon,
     DocumentSearchIcon,
     ExternalLinkIcon,
+    HeartIcon,
     HomeIcon,
     MailIcon,
     UserIcon,
@@ -73,6 +74,15 @@ const ManagerSidebar = () => {
                                 <ScaleIcon width={20} />
                             </Button>
                             <Description>Privilege Url Settings</Description>
+                        </LinkWrapper>
+                    </Col>
+                    <Col numColSpan={1}>
+                        <LinkWrapper href="/client-gui/gaia-health">
+                            <Button variant="primary" color="indigo"
+                                className="p-2 rounded-lg mb-4">
+                                <HeartIcon width={20} />
+                            </Button>
+                            <Description>Gaia Health</Description>
                         </LinkWrapper>
                     </Col>
                 </Grid>
