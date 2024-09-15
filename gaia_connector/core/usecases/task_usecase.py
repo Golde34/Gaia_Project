@@ -1,5 +1,4 @@
 from flask import jsonify
-import requests
 
 from core.domain.constants import Constants
 from core.services.client.task_service import TaskServiceRequest
@@ -27,3 +26,4 @@ class TaskUseCase(TaskServiceRequest):
         except Exception as e:
             print('Create task failed')
             return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})
+         
