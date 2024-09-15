@@ -15,6 +15,7 @@ async def main():
                         choices=["response", "skill_detection", "object_detection"], 
                         help="Train model")
     parser.add_argument("-a", "--abilities", action="store_true", help="Access to abilities")
+    parser.add_argument("-s", "--services", action="store_true", help="Access to services")
     # Utils 
     parser.add_argument("--version", "-v", action="store_true", help=f"Show Gaia version")
     parser.add_argument("--mode", type=str, choices=["run", "debug"], help="Bot mode")
@@ -50,6 +51,11 @@ async def _process_arguments(args):
         from gaia_bot.domain.skills import SKILLS
         from __access_abilities__ import access_abilities_privately
         access_abilities_privately(SKILLS)
+    if args.services:
+        from gaia_bot.abilities.microservice_connections import MicroserviceConnection
+        microservice_connection = MicroserviceConnection()
+        services = await microservice_connection.activate_microservice()
+        print("Services activated: ", services)
     if args.version:
         print(f"Gaia version: {__version__}")
     if args.mode:

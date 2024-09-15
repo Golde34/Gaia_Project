@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Template from "../../components/template/Template";
+import ManagerTemplate from "../../components/template/ManagerTemplate";
 import { useCallback, useEffect, useRef } from "react";
 import { getMicroservices } from "../../api/store/actions/middleware_loader/microservices.actions";
 import { Card, Col, Flex, Grid, Metric, Title } from "@tremor/react";
@@ -62,9 +62,9 @@ function ContentArea() {
 
 const Microservices = () => {
     return (
-        <Template>
+        <ManagerTemplate>
             <ContentArea />
-        </Template>
+        </ManagerTemplate>
     )
 }
 
