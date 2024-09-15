@@ -2,14 +2,13 @@
 import React from "react";
 import {
     ArrowUpIcon,
-    BellIcon,
     ChartBarIcon,
-    ClipboardCheckIcon,
     DocumentSearchIcon,
     ExternalLinkIcon,
     HeartIcon,
     HomeIcon,
     MailIcon,
+    ServerIcon,
     UserIcon,
 } from "@heroicons/react/solid";
 import { Button, Col, Grid } from "@tremor/react";
@@ -83,6 +82,15 @@ const ManagerSidebar = () => {
                                 <HeartIcon width={20} />
                             </Button>
                             <Description>Gaia Health</Description>
+                        </LinkWrapper>
+                    </Col>
+                    <Col numColSpan={1}>
+                        <LinkWrapper href="/client-gui/microservices">
+                            <Button variant="primary" color="indigo"
+                                className="p-2 rounded-lg mb-4">
+                                <ServerIcon width={20} />
+                            </Button>
+                            <Description>Microservices</Description>
                         </LinkWrapper>
                     </Col>
                 </Grid>

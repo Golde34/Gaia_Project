@@ -9,7 +9,6 @@ import {
 	ExternalLinkIcon,
 	HomeIcon,
 	MailIcon,
-	ServerIcon,
 	ShieldCheckIcon,
 	UserIcon,
 } from "@heroicons/react/solid";
@@ -85,16 +84,7 @@ const Sidebar = () => {
 							</Button>
 							<Description>User Profile</Description>
 						</LinkWrapper>
-					</Col>
-					<Col numColSpan={1}>
-						<LinkWrapper href="/client-gui/microservices">
-							<Button variant="primary" color="indigo"
-								className="p-2 rounded-lg mb-4">
-								<ServerIcon width={20} />
-							</Button>
-							<Description>Microservices</Description>
-						</LinkWrapper>
-					</Col>
+					</Col>	
 				</Grid>
 				<ChartBarIcon
 					width={40}

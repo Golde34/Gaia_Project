@@ -1,8 +1,6 @@
-"use client";
-
 import { useState } from 'react';
 import ManagerTemplate from '../../components/template/ManagerTemplate';
-import { Button, Card, Flex, Grid, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, TextInput, Title } from '@tremor/react';
+import { Button, Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, TextInput, Title } from '@tremor/react';
 
 function ContentArea() {
     const [selectedFile, setSelectedFile] = useState(null);
