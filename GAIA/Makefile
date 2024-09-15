@@ -10,3 +10,5 @@ gaia-train-model:
 gaia-abilities:
 	python __main__.py --abilities
 	
+gaia-services:
+	python __main__.py --services

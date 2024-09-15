@@ -20,6 +20,7 @@
 *\tmp
 
 .env
+*.sqlite3
 
 # gitignore json
 token.json
