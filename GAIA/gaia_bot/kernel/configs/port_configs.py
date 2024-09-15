@@ -121,7 +121,7 @@ PORTS = {
         "shell_path": "gaia_bot/microservices/bash_shell/kafka_server.sh",
         "process_name": "kafka"
     },
-     "sor-data-transfer": {
+     "sor_data_transfer": {
         "name": "Sentence Object Recognizer Data Pipeline",
         "port": None,
         "programming_language": "Python",
@@ -143,10 +143,10 @@ PORT_COMPONENTS = [
     "client_gui",
     "middleware_loader",
     "kafka_server",
-    "camera_cv",
+    # "camera_cv",
     "schedule_plan",
     "work_optimization",
-    "sor-data-transfer",
+    "sor_data_transfer",
 ]
 
 DOMAIN = "localhost"
