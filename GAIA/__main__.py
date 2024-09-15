@@ -54,7 +54,8 @@ async def _process_arguments(args):
     if args.services:
         from gaia_bot.abilities.microservice_connections import MicroserviceConnection
         microservice_connection = MicroserviceConnection()
-        await microservice_connection.activate_microservice()
+        services = await microservice_connection.activate_microservice()
+        print("Services activated: ", services)
     if args.version:
         print(f"Gaia version: {__version__}")
     if args.mode:

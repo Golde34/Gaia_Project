@@ -27,8 +27,15 @@ class MicroserviceConnection:
 
     async def activate_microservice_by_name(self, microservice_name):
         bash_script_path = PORTS[microservice_name]["shell_path"]
+        if PORTS[microservice_name].get("process_name") is not None:
+            process_name = PORTS[microservice_name].get("process_name")
+            return await asyncio.create_subprocess_exec(
+                "gnome-terminal", "--title", process_name, 
+                "--", "bash", "-c", f"bash {bash_script_path}"
+            )
         return await asyncio.create_subprocess_exec(
-            "gnome-terminal", "--", "bash", "-c", f"bash {bash_script_path}"
+            "gnome-terminal", "--title", PORTS[microservice_name]["name"], 
+            "--", "bash", "-c", f"bash {bash_script_path}"
         )
 
     def call_microservice_by_name(self, microservice_name):
@@ -43,15 +50,19 @@ class MicroserviceConnection:
     def check_microservice_state(self):
         microservice_state = {}
         for microservice in PORT_COMPONENTS:
-            if PORTS[microservice]["port"] is not None and self._check_port_in_used(PORTS[microservice]["port"]) == False:
-                microservice_state[microservice] = False
-            else:
-                microservice_state[microservice] = True
-        else:
-            process_name = PORTS[microservice]["process_name"]
+            process_name = PORTS[microservice].get("process_name")
             if process_name:
                 if self._check_process_running(process_name):
                     microservice_state[microservice] = True
+                else:
+                    microservice_state[microservice] = False
+            else:
+                port = PORTS[microservice].get("port")
+                if port:
+                    if self._check_port_in_used(port):
+                        microservice_state[microservice] = True
+                    else:
+                        microservice_state[microservice] = False
                 else:
                     microservice_state[microservice] = False
         return microservice_state
@@ -82,12 +93,22 @@ class MicroserviceConnection:
         return available
 
     def _check_process_running(self, process_name):
-        for proc in psutil.process_iter(['name', 'cmdline']):
-            try:
-                if process_name in proc.info['name']:
-                    return True
-                elif any(process_name in cmd for cmd in proc.info['cmdline']):
-                    return True
-            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                pass
-        return False 
+        try:
+            output = subprocess.check_output(['wmctrl', '-l', '-p']).decode('utf-8')
+            for line in output.splitlines():
+                parts = line.split(None, 4)
+                if len(parts) >= 5:
+                    window_id, desktop_id, pid, machine, window_title = parts
+                    window_title = window_title.strip()
+                    if window_title == process_name:
+                        # Kiểm tra nếu tiến trình PID thuộc về gnome-terminal
+                        proc = psutil.Process(int(pid))
+                        if 'gnome-terminal' in proc.name().lower():
+                            return True
+            return False
+        except subprocess.CalledProcessError as e:
+            print("Error checking window titles:", e)
+            return False
+        except Exception as e:
+            print("Unexpected error:", e)
+            return False
