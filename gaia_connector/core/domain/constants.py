@@ -17,3 +17,6 @@ class Constants:
 
     class KafkaCommand:
         GAIA_CREATE_TASK = "gaiaCreateTask"
+
+    class FileExtensions:
+        ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'csv', 'xlsx', 'xls', 'doc', 'docx'}
