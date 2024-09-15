@@ -84,7 +84,7 @@ PORTS = {
         "router": "schedule-plan",
         "database": "MongoDB",
         "database_name": "schedule_plan",
-        "shell_path": ""
+        "shell_path": "gaia_bot/microservices/bash_shell/schedule_plan.sh"
     },
     "work_optimization": {
         "name": "Work Optimization",
@@ -94,7 +94,7 @@ PORTS = {
         "router": "work-optimization",
         "database": "MySQL",
         "database_name": "work_optimization",
-        "shell_path": ""
+        "shell_path": "gaia_bot/microservices/bash_shell/work_optimization.sh"
     },
     
     ## AI MODELS MICROSERVICES
@@ -107,28 +107,30 @@ PORTS = {
         "database": None,
         "database_name": None,
         "shell_path": "gaia_bot/microservices/bash_shell/camera_cv.sh"
-    },
-    # "sentence_object_recognizer": {
-    #     "name": "Sentence Object Recognizer",
-    #     "port": 3004,
-    #     "programming_language": "Python",
-    #     "description": "Sentence Object Recognizer API",
-    #     "router": "sor",
-    #     "database": None,
-    #     "database_name": None,
-    #     "shell_path": ""
-    # },
+    }, 
     
-    ## THIRD PARTY
+    ## THIRD PARTY + DATA PIPELINE
     "kafka_server": {
         "name": "Kafka Server",
-        "port": 9094,
+        "port": None,
         "programming_language": "Java, Golang, TypeScript, Python, C#",
         "description": "Kafka Server",
         "router": None,
         "database": None,
         "database_name": None,
-        "shell_path": "gaia_bot/microservices/bash_shell/kafka_server.sh"
+        "shell_path": "gaia_bot/microservices/bash_shell/kafka_server.sh",
+        "process_name": "kafka"
+    },
+     "sor-data-transfer": {
+        "name": "Sentence Object Recognizer Data Pipeline",
+        "port": None,
+        "programming_language": "Python",
+        "description": "Sentence Object Recognizer API",
+        "router": "sor",
+        "database": None,
+        "database_name": None,
+        "shell_path": "gaia_bot/microservices/bash_shell/sor_data_transfer.sh",
+        "process_name": "sor-data-transfer"
     },
 }
 
@@ -141,7 +143,10 @@ PORT_COMPONENTS = [
     "client_gui",
     "middleware_loader",
     "kafka_server",
-    "camera_cv"
+    "camera_cv",
+    "schedule_plan",
+    "work_optimization",
+    "sor-data-transfer",
 ]
 
 DOMAIN = "localhost"

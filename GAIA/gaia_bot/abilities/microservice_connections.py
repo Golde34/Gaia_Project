@@ -1,6 +1,7 @@
 import socket
 import asyncio
 import subprocess
+import psutil
 
 from gaia_bot.kernel.configs.port_configs import PORTS, PORT_COMPONENTS
 
@@ -42,25 +43,32 @@ class MicroserviceConnection:
     def check_microservice_state(self):
         microservice_state = {}
         for microservice in PORT_COMPONENTS:
-            if self.check_port_in_use(PORTS[microservice]["port"]) == False:
+            if PORTS[microservice]["port"] is not None and self._check_port_in_used(PORTS[microservice]["port"]) == False:
                 microservice_state[microservice] = False
             else:
                 microservice_state[microservice] = True
+        else:
+            process_name = PORTS[microservice]["process_name"]
+            if process_name:
+                if self._check_process_running(process_name):
+                    microservice_state[microservice] = True
+                else:
+                    microservice_state[microservice] = False
         return microservice_state
 
     def check_microservice_state_by_name(self, microservice_name):
-        return self.check_port_in_use(PORTS[microservice_name]["port"])
+        return self._check_port_in_used(PORTS[microservice_name]["port"])
 
     async def wait_microservice(self, microservice_name):
         while True:
-            auth_service_ready = self.check_port_in_use(
+            auth_service_ready = self._check_port_in_used(
                 PORTS[microservice_name]["port"]
             )
             if auth_service_ready:
                 return True
             await asyncio.sleep(1)
 
-    def check_port_in_use(self, port):
+    def _check_port_in_used(self, port):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(1)
 
@@ -72,3 +80,14 @@ class MicroserviceConnection:
         sock.close()
 
         return available
+
+    def _check_process_running(self, process_name):
+        for proc in psutil.process_iter(['name', 'cmdline']):
+            try:
+                if process_name in proc.info['name']:
+                    return True
+                elif any(process_name in cmd for cmd in proc.info['cmdline']):
+                    return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+        return False 
