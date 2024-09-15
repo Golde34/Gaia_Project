@@ -13,7 +13,7 @@ scalaVersion := "2.13.12"
 
 // It's possible to define many kinds of settings, such as:
 
-name := "hello-world"
+name := "gaia-pipeline"
 organization := "ch.epfl.scala"
 version := "1.0"
 
@@ -26,6 +26,8 @@ version := "1.0"
 // You can define other libraries as dependencies in your build like this:
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.3.0"
+libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.10"
+libraryDependencies += "com.typesafe" % "config" % "1.4.2"
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies
@@ -72,6 +74,24 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 //     )),
 //     name := "hello-world"
 //   )
+
+lazy val example = project
+  .in(file("."))
+  .settings(
+    scalaVersion := "3.3.3",
+    version := "0.1.0",
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
+    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.7.0",
+    libraryDependencies += "org.apache.kafka" % "kafka-streams" % "3.7.0",
+    libraryDependencies += "org.apache.kafka" % "kafka-streams-scala_2.13" % "3.7.0",
+    // https://mvnrepository.com/artifact/io.circe/circe-core
+    libraryDependencies += "io.circe" %% "circe-core" % "0.15.0-M1",
+    libraryDependencies += "io.circe" %% "circe-generic" % "0.15.0-M1",
+    libraryDependencies += "io.circe" %% "circe-parser" % "0.15.0-M1",
+    libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "8.11.1"
+  )
 
 // To learn more about multi-project builds, head over to the official sbt
 // documentation at http://www.scala-sbt.org/documentation.html

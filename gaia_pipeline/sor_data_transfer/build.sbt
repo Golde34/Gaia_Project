@@ -12,7 +12,7 @@ scalaVersion := "2.13.12"
 
 // It's possible to define many kinds of settings, such as:
 
-name := "gaia-pipline"
+name := "gaia-pipeline"
 organization := "ch.epfl.scala"
 version := "1.0"
 
