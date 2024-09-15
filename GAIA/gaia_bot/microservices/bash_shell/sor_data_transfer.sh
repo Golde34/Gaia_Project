@@ -3,7 +3,7 @@
 # create a lock file
 touch /tmp/sor_data_transfer_lock
 
-cd ../gaia_pipeline/sor-data-transfer
+cd ../gaia_pipeline/sor_data_transfer
 
 sbt run
 
