@@ -10,7 +10,7 @@ class RAGFileUsecase:
     def __init__(self):
         pass
 
-    def create_rag_file(self, data, files):
+    def upload_rag_file(self, data, files):
         """
             Create rag file in local storage
             Push kafka to gaia pipeline to store this file

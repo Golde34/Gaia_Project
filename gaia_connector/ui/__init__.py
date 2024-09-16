@@ -22,6 +22,8 @@ app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "gaia_connector")
 mysql = MySQL(app)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
+
 bus = FlaskKafka()
 bus.init_app(app)
 gaia_parent_path = Path(__file__).parent.parent.parent
@@ -30,6 +32,7 @@ gaia_parent_path = Path(__file__).parent.parent.parent
 from ui.rest import middleware_loader_controller
 from ui.rest import auth_service_controller
 from ui.rest import task_manager_controller
+from ui.rest import rag_controller
 
 # Kafka
 from ui.kafka import open_camera_space

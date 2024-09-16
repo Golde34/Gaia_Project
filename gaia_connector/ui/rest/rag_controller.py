@@ -1,13 +1,12 @@
 from flask import request, jsonify
 
 from ui import app
-from gaia_connector.core.usecases.rag_file_usecase import RAGFileUsecase
+from core.usecases.rag_file_usecase import RAGFileUsecase
 
-@app.route('/rag-file/create', methods=['POST'])
+@app.route('/rag-file/upload', methods=['POST'])
 def create_rag_file():
     files = request.files
-    data = request.get_json()
-    return RAGFileUsecase().create_rag_file(data, files)
+    return RAGFileUsecase().upload_rag_file(files)
 
 @app.route('/rag-file/update', methods=['PUT'])
 def update_rag_file():
