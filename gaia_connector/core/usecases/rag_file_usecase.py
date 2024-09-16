@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 import os
 import uuid
 
@@ -10,7 +10,7 @@ class RAGFileUsecase:
     def __init__(self):
         pass
 
-    def upload_rag_file(self, data, files):
+    def upload_rag_file(self, file):
         """
             Create rag file in local storage
             Push kafka to gaia pipeline to store this file
@@ -20,22 +20,31 @@ class RAGFileUsecase:
         """ 
         try:
             # Kiểm tra nếu file được phép
-            if not allowed_file(files.filename):
+            if not allowed_file(file.filename):
                 return jsonify({
                     Constants.StringConstants.status: 'ERROR',
                     Constants.StringConstants.message: 'File is not allowed'
                 }), 400
 
+            # Check if the POST request contains the 'file' part
+
+            file = request.files['file']
+
+            # Check if a file is selected
+            if file.filename == '':
+                return jsonify({'status': 'ERROR', 'message': 'No selected file'}), 400
+
+            # Save the file to the UPLOAD_FOLDER
             # Tạo một ID duy nhất cho file
             file_id = str(uuid.uuid4())
             
             # Tính hash của file (ví dụ: SHA256)
-            file_hash = compute_file_hash(files)
+            file_hash = compute_file_hash(file)
             
             # Lấy thuộc tính file
-            file_name = files.filename
-            file_type = files.content_type
-            file_size = get_file_size(files)
+            file_name = file.filename
+            file_type = file.content_type
+            file_size = get_file_size(file)
             
             # Định nghĩa đường dẫn để lưu file
             file_path = os.path.join('local_storage', f"{file_id}_{file_name}")
@@ -44,7 +53,7 @@ class RAGFileUsecase:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             
             # Lưu file vào lưu trữ cục bộ
-            files.save(file_path)
+            file.save(file_path)
             
             # Tạo đối tượng RAGFile
             rag_file = RAGFile(
