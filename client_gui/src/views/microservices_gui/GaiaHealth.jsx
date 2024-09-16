@@ -30,6 +30,8 @@ function ContentArea() {
         formData.append('file', selectedFile);
         console.log('File to upload:', selectedFile);
         dispatch(uploadRagFile(formData));
+
+        
     };
 
     return (
