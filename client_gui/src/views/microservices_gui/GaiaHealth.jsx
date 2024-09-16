@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import ManagerTemplate from '../../components/template/ManagerTemplate';
 import { Button, Card, Flex, Metric, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, TextInput, Title } from '@tremor/react';
+import { useDispatch } from 'react-redux';
+import { uploadRagFile } from '../../api/store/actions/gaia/rag_file.actions';
 
 function ContentArea() {
+    const dispatch = useDispatch();
+
     const [selectedFile, setSelectedFile] = useState(null);
 
     // Function to handle file selection
@@ -24,22 +28,8 @@ function ContentArea() {
         // Create FormData object to send the file to the server
         const formData = new FormData();
         formData.append('file', selectedFile);
-
-        try {
-            // Example: sending the file to a mock server (replace with your API)
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                console.log('File uploaded successfully');
-            } else {
-                console.error('File upload failed');
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-        }
+        console.log('File to upload:', selectedFile);
+        dispatch(uploadRagFile(formData));
     };
 
     return (
