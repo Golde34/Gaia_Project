@@ -10,7 +10,7 @@ class RagFileHandlerService:
     def __init__(self) -> None:
         pass
 
-    def store_rag_file_in_local(file: FileStorage) -> RAGFile:
+    def store_rag_file_in_local(self, file: FileStorage, status) -> RAGFile:
         file_id = str(uuid.uuid4())
         file_hash = compute_file_hash(file)
         
@@ -29,7 +29,8 @@ class RagFileHandlerService:
             file_path=file_path,
             file_type=file_type,
             file_size=file_size,
-            file_hash=file_hash
+            file_hash=file_hash,
+            status=status
         )
 
         return rag_file 

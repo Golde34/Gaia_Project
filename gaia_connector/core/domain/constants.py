@@ -20,3 +20,9 @@ class Constants:
 
     class FileExtensions:
         ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'csv', 'xlsx', 'xls', 'doc', 'docx'}
+
+    class Status: 
+        INIT = "INIT"
+        SUCCESS = "SUCCESS"
+        ERROR = "ERROR"
+        TIMEOUT = "TIMEOUT"

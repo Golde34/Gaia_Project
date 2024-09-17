@@ -1,6 +1,18 @@
 import time
 
+from infrastructure.database.mysql.database_annotation import database
+
+
+@database('rag_file')
 class RAGFile:
+    file_id: str
+    file_name: str
+    file_path: str
+    file_type: str
+    file_size: int
+    file_hash: str
+    status: str
+    
     def __init__(self, file_id: str, file_name: str, file_path: str, file_type: str, file_size: int, file_hash: str, status: str):
         self.file_id = file_id
         self.file_name = file_name

@@ -30,7 +30,7 @@ class RAGFileUsecase:
             if file.filename == '':
                 return jsonify({'status': 'ERROR', 'message': 'No selected file'}), 400
             
-            rag_file = self.service.store_rag_file_in_local(file) 
+            rag_file = self.service.store_rag_file_in_local(file, Constants.Status.INIT)
             
             id = self.store.create_rag_file(rag_file)
             print(rag_file.file_id == id) 
