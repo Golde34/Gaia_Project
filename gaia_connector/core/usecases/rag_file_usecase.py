@@ -33,7 +33,6 @@ class RAGFileUsecase:
             rag_file = self.service.store_rag_file_in_local(file, Constants.Status.INIT)
             
             id = self.store.create_rag_file(rag_file)
-            print(rag_file.file_id == id) 
             print("Stored rag file in local storage and database with id:", id) 
 
             # Đẩy dữ liệu qua Kafka đến pipeline của GAIA
