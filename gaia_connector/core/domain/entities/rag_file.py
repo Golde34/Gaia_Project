@@ -25,3 +25,15 @@ class RAGFile:
 
     def __str__(self):
         return f"RAGFile({self.file_id}, {self.file_name}, {self.file_path}, {self.file_type}, {self.file_size}, {self.file_hash}, {self.created_at}, {self.status})"
+
+    def to_dict(self):
+        return {
+            "file_id": self.file_id,
+            "file_name": self.file_name,
+            "file_path": self.file_path,
+            "file_type": self.file_type,
+            "file_size": self.file_size,
+            "file_hash": self.file_hash,
+            "created_at": self.created_at,
+            "status": self.status
+        }

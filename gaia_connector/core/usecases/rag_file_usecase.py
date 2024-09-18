@@ -1,10 +1,11 @@
 from flask import jsonify, request
 
 from core.domain.constants import Constants
-from kernel.utils.file_handler import allowed_file, compute_file_hash, get_file_size
 from core.domain.entities.rag_file import RAGFile
 from core.services.receiver.rag_service import RagFileHandlerService
 from infrastructure.store.rag_file_store import RAGFileStore
+from infrastructure.kafka_producer.producer import publish_message
+
 
 class RAGFileUsecase:
     def __init__(self):
@@ -19,36 +20,35 @@ class RAGFileUsecase:
         :return: final rag file json object
         """ 
         try:
-            if not allowed_file(file.filename):
-                return jsonify({
-                    Constants.StringConstants.status: 'ERROR',
-                    Constants.StringConstants.message: 'File is not allowed'
-                }), 400
-
-
-            file = request.files['file']
-            if file.filename == '':
-                return jsonify({'status': 'ERROR', 'message': 'No selected file'}), 400
+            error_result, error_code = self.service.validate_file(file)
+            if error_code == 400: return error_result 
             
             rag_file = self.service.store_rag_file_in_local(file, Constants.Status.INIT)
             
             id = self.store.create_rag_file(rag_file)
             print("Stored rag file in local storage and database with id:", id) 
-
-            # Đẩy dữ liệu qua Kafka đến pipeline của GAIA
-            # kafka_producer.send('gaia_pipeline_topic', {'file_id': file_id, 'file_path': file_path})
             
-            # Trả về phản hồi thành công
+            try:
+                json_rag_file = rag_file.to_dict()
+                publish_message(Constants.KafkaTopic.UPLOAD_RAG_FILE, Constants.KafkaCommand.GAIA_INIT_UPLOAD_FILE, json_rag_file) 
+            except Exception as e:
+                print("Could not produce message to kafka")
+                return jsonify({
+                    Constants.StringConstants.status: 'OK',
+                    Constants.StringConstants.message: 'Init RAG file successfully in local but can upload to Data Storage',
+                })
+
             return jsonify({
                 Constants.StringConstants.status: 'OK',
-                Constants.StringConstants.message: 'Create RAG file successfully',
+                Constants.StringConstants.message: 'Init RAG file successfully',
                 'file_id': id 
             }), 200
+            
         except Exception as e:
             print('Cannot create RAG file:', e)
             return jsonify({
                 Constants.StringConstants.status: 'ERROR',
-                Constants.StringConstants.message: 'Cannot create RAG file'
+                Constants.StringConstants.message: 'Cannot init RAG file'
             }), 500
 
     def _store_rag_file_in_local(self, data): 
