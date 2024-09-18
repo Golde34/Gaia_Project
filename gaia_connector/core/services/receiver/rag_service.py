@@ -1,14 +1,33 @@
 from werkzeug.datastructures import FileStorage
 import uuid
 import os
+from flask import jsonify
 
-from kernel.utils.file_handler import compute_file_hash, get_file_size
+from kernel.utils.file_handler import compute_file_hash, get_file_size, allowed_file
 from core.domain.entities.rag_file import RAGFile 
+from core.domain.constants import Constants
 
 
 class RagFileHandlerService:
     def __init__(self) -> None:
         pass
+
+    def validate_file(self, file: FileStorage):
+        if not allowed_file(file.filename):
+            return jsonify({
+                Constants.StringConstants.status: 'ERROR',
+                Constants.StringConstants.message: 'File is not allowed'
+            }), 400
+            
+        if file.filename == '':
+            return jsonify({
+                Constants.StringConstants.status: 'ERROR',
+                Constants.StringConstants.message: 'No selected file'
+            }), 400
+        return jsonify({
+            Constants.StringConstants.status: 'OK',
+            Constants.StringConstants.message: 'Validate OK'
+        }), 200
 
     def store_rag_file_in_local(self, file: FileStorage, status) -> RAGFile:
         file_id = str(uuid.uuid4())
@@ -32,8 +51,5 @@ class RagFileHandlerService:
             file_hash=file_hash,
             status=status
         )
-
-        return rag_file 
-
-    def save_rag_file_to_db(rag_file: RAGFile):
-        pass
+        return rag_file
+         
