@@ -3,6 +3,8 @@ package ui
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import kernel.configs.KafkaConfig
 import java.util.Properties
+import domains.Constants.KafkaTopic
+import kafka_handler.UploadRAGFileHandler
 
 abstract class KafkaHandler {
   def getTopic: String
@@ -20,6 +22,10 @@ class DSConsumer(config: KafkaConfig) {
     consumerProps.put("heartbeat.interval.ms", "3000")
 
     private val consumer = new KafkaConsumer[String, String](consumerProps)
+
+    private val topicHandlers: Map[String, KafkaHandler] = Map(
+        KafkaTopic.UPLOAD_RAG_FILE -> UploadRAGFileHandler
+    )
 
     def consumeMessages(): Unit = {
         consumer.subscribe(config.topics.asJava)
