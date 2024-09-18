@@ -5,6 +5,7 @@ import kernel.configs.KafkaConfig
 import java.util.Properties
 import domains.Constants.KafkaTopic
 import kafka_handler.UploadRAGFileHandler
+import scala.collection.JavaConverters._
 
 abstract class KafkaHandler {
   def getTopic: String
@@ -21,6 +22,7 @@ class DSConsumer(config: KafkaConfig) {
     consumerProps.put("session.timeout.ms", "10000")
     consumerProps.put("heartbeat.interval.ms", "3000")
 
+    private val topics: List[String] = config.topics
     private val consumer = new KafkaConsumer[String, String](consumerProps)
 
     private val topicHandlers: Map[String, KafkaHandler] = Map(
@@ -28,7 +30,7 @@ class DSConsumer(config: KafkaConfig) {
     )
 
     def consumeMessages(): Unit = {
-        consumer.subscribe(config.topics.asJava)
+        consumer.subscribe(topics.asJava)
 
         while(true) {
             val records = consumer.poll(1000).asScala
