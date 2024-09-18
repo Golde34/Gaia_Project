@@ -38,12 +38,6 @@ def publish_message(topic: str, cmd: str, data):
         print(f"Exception when publishing message to topic: {e}")
     return "Published message to topic: " + topic
 
-def acked(err, msg):
-    if err is not None:
-        print("Failed to deliver message: %s: %s" % (str(msg), str(err)))
-    else:
-        print("Message produced: %s" % (str(msg.value())))
-
 def build_message(cmd, error_code, error_message, message):
     display_time = time.time()
     kafka_message = KafkaMessage(cmd=cmd, error_code=error_code, error_message=error_message, display_time=display_time, data=message)
@@ -51,3 +45,9 @@ def build_message(cmd, error_code, error_message, message):
     
     # Return the dictionary representation of KafkaMessage instead of the object
     return kafka_message.to_dict()
+
+def acked(err, msg):
+    if err is not None:
+        print("Failed to deliver message: %s: %s" % (str(msg), str(err)))
+    else:
+        print("Message produced: %s" % (str(msg.value())))
