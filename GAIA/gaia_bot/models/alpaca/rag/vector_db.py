@@ -25,7 +25,7 @@ def add_texts_to_vectordb(texts, metadatas, device):
         ids = [file_id + "_" + str(j) for j in range(len(splited_texts))]
         
         # Get embeddings from chunks
-        embeddings = embedding.create_embeddings(splited_texts)  # Use the create_embeddings function
+        embeddings = embedding.create_embeddings(splited_texts, device)  # Use the create_embeddings function
         
         file_metadatas = [copy.deepcopy(metadatas[i]) for _ in range(len(splited_texts))]
         

@@ -36,22 +36,22 @@ def get_model_and_tokenizer():
     return model, tokenizer
 
 def call_alpaca_response(inp, model, tokenizer, mode="run", tag_skill=TagSkill.GREETING.value): 
-    # keywords = extract_keyword(tokenizer, inp)
-    # print('This is extremely slow')
-    # vectordb_results = vector_db.query_vectordb(query=keywords, device="cuda", n_vectordb=10, n_rerank=3)
+    keywords = extract_keyword(tokenizer, inp)
+    print('This is extremely slow')
+    vectordb_results = vector_db.query_vectordb(query=keywords, device="cuda", n_vectordb=10, n_rerank=3)
     
-    # sim_sentences = vectordb_results['documents']
-    # sim_scores = vectordb_results['scores']
-    # source_file_names = vectordb_results['file_names']
+    sim_sentences = vectordb_results['documents']
+    sim_scores = vectordb_results['scores']
+    source_file_names = vectordb_results['file_names']
     
-    # print("\n===== EXTRACTED SIM SENTENCES ============")
-    # for sim_sentence, score in zip(sim_sentences, sim_scores):
-    #     print(f"\n== Sim sentences ({score}) == :", sim_sentence)
+    print("\n===== EXTRACTED SIM SENTENCES ============")
+    for sim_sentence, score in zip(sim_sentences, sim_scores):
+        print(f"\n== Sim sentences ({score}) == :", sim_sentence)
     
     return chat_llm(inp, model, tokenizer, mode, tag_skill)
 
-def extract_keyword(tokenizer, text):
-    return tokenizer(
+def extract_keyword(model, tokenizer, text):
+    inputs =  tokenizer(
             [
                 prompt.rag_prompt.format(
                     "Extract all the relevant keywords to store in vector database.",
@@ -61,7 +61,9 @@ def extract_keyword(tokenizer, text):
             ],
             return_tensors="pt"
         ).to("cuda")
-        
+    outputs = model.generate(**inputs, max_new_tokens=128)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
 
 def chat_llm(inp, model, tokenizer, mode="run", tag_skill=TagSkill.GREETING.value):
     if mode == Mode.DEBUG:
