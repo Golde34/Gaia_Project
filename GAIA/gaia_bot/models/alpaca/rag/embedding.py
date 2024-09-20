@@ -31,8 +31,8 @@ def rerank(device, query, candidates):
     model.to(device)
 
     # Create embeddings for the query and candidates
-    query_embedding = create_embeddings([query])
-    candidate_embeddings = create_embeddings(candidates)
+    query_embedding = create_embeddings([query], device)
+    candidate_embeddings = create_embeddings(candidates, device)
     
     # Calculate cosine similarity
     cosine_scores = util.pytorch_cos_sim(query_embedding, candidate_embeddings)[0]

@@ -50,8 +50,8 @@ def call_alpaca_response(inp, model, tokenizer, mode="run", tag_skill=TagSkill.G
     
     return chat_llm(inp, model, tokenizer, mode, tag_skill)
 
-def extract_keyword(tokenizer, text):
-    return tokenizer(
+def extract_keyword(model, tokenizer, text):
+    inputs =  tokenizer(
             [
                 prompt.rag_prompt.format(
                     "Extract all the relevant keywords to store in vector database.",
@@ -61,7 +61,9 @@ def extract_keyword(tokenizer, text):
             ],
             return_tensors="pt"
         ).to("cuda")
-        
+    outputs = model.generate(**inputs, max_new_tokens=128)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
 
 def chat_llm(inp, model, tokenizer, mode="run", tag_skill=TagSkill.GREETING.value):
     if mode == Mode.DEBUG:
