@@ -22,8 +22,7 @@ def create_embeddings(texts, device='cpu'):
 def rerank(device, query, candidates):
     """
     Perform reranking of candidates based on cosine similarity with the query.
-    --------------------------------------
-    Exception                                 Traceback (most recent 
+    
     :param query: The query sentence.
     :param candidates: List of sentences to rerank.
     :return: List of candidates reranked by similarity.
