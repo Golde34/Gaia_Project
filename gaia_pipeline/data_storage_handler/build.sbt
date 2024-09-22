@@ -28,6 +28,13 @@ version := "1.0"
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.3.0"
 libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.10"
 libraryDependencies += "com.typesafe" % "config" % "1.4.2"
+libraryDependencies ++= Seq(
+  "mysql" % "mysql-connector-java" % "8.0.26",
+  "com.typesafe.slick" %% "slick" % "3.3.3",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3", // Optional, for connection pooling
+  "com.typesafe" % "config" % "1.4.1"
+)
+libraryDependencies += "com.lihaoyi" %% "upickle" % "3.1.0"
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies

@@ -8,5 +8,7 @@ object Constants {
 
     object KafkaCmd {
         final val GAIA_INIT_UPLOAD_FILE: String = "gaiaInitUploadFile"
+
+        final val GAIA_UPLOAD_FILE: String = "gaiaUploadFile"
     }
 }
