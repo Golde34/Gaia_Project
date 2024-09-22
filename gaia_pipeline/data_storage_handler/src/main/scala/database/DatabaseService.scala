@@ -8,7 +8,7 @@ import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.{ProvenShape, Tag}
-import domains.entities.FileEntity
+import entity.FileEntity
 
 class FileData(tag: Tag) extends Table[FileEntity](tag, "file") {
   def fileId: Rep[String] = column[String]("fileId", O.PrimaryKey)
