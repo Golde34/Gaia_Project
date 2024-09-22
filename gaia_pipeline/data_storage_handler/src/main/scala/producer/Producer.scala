@@ -1,7 +1,8 @@
 package producer
 
 import java.util.Properties
-import kernel.configs.KafkaConfig
+import kernel.configs.{KafkaConfigLoader, KafkaConfig}
+import java.util.UUID
 
 class Producer(config: KafkaConfig) {
     private val properties = new Properties()
@@ -21,3 +22,4 @@ class Producer(config: KafkaConfig) {
         producer.send(record)
     }
 }
+

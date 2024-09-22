@@ -15,9 +15,9 @@ class KafkaMessage:
         # Converts the KafkaMessage object to a dictionary for JSON serialization
         return {
             "cmd": self.cmd,
-            "error_code": self.error_code,
-            "error_message": self.error_message,
-            "display_time": self.display_time,
+            "errorCode": self.error_code,
+            "errorMessage": self.error_message,
+            "displayTime": self.display_time,
             "data": self.data
         }
     
