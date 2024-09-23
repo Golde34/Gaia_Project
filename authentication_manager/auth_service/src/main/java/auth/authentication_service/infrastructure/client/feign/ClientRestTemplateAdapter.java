@@ -17,7 +17,7 @@ public class ClientRestTemplateAdapter implements ClientTemplate {
 
     private final RestTemplate restTemplate;
 
-    public ClientRestTemplateAdapter(@Qualifier("woRestTemplate") RestTemplate restTemplate) {
+    public ClientRestTemplateAdapter(@Qualifier("asRestTemplate") RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

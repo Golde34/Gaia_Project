@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import auth.authentication_service.core.domain.dto.GeneralResponse;
+import auth.authentication_service.core.domain.dto.request.ServiceStatusRequest;
 import auth.authentication_service.core.exceptions.BusinessException;
 import auth.authentication_service.core.port.client.MiddlewareServiceClient;
 import auth.authentication_service.infrastructure.client.ClientTemplate;
@@ -16,8 +18,8 @@ import auth.authentication_service.kernel.utils.ClientUtils;
 @Slf4j
 public class MiddlewareServiceAdapter implements MiddlewareServiceClient {
 
-    @Value("${app.service.auth-service.api.get-user}")
-    private String authServiceApiGetUser;
+    @Value("${app.service.middleware-loader.api.status-register}")
+    private String statusRegister;
 
     private final ClientTemplate clientTemplate;
     private final ClientUtils clientUtils;
@@ -27,12 +29,17 @@ public class MiddlewareServiceAdapter implements MiddlewareServiceClient {
         this.clientUtils = clientUtils;
     }
 
-    public String healthCheck() {
+    @Override
+    public String insertStatus(ServiceStatusRequest request) {
         try {
-            log.info("Calling api to middleware loader: {}", authServiceApiGetUser);
-            return "OK";
+            HttpHeaders requestHeaders = clientUtils.buildDefaultHeaders();
+            log.info("Calling API to middleware loader: {}", statusRegister);
+            ResponseEntity<GeneralResponse<String>> response = clientTemplate.post(statusRegister, requestHeaders, request,
+                    new ParameterizedTypeReference<GeneralResponse<String>>() {});
+            log.info("Response from middleware loader: {}", response);
+            return response.getBody().getErrorMessage();
         } catch (Exception e) {
-            throw new BusinessException(String.format("Error when call api to middleware loader: %s", e.getMessage()));
+            throw new BusinessException(String.format("Error when calling API to middleware loader: %s", e.getMessage()));
         }
     }
 }
