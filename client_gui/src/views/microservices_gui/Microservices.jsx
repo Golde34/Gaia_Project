@@ -36,23 +36,26 @@ function ContentArea() {
                         className="text-2xl font-bold text-gray-800"> Microservices
                     </Metric>
                     <div className="grid md:grid-cols-3 w-full h-full items-center">
-                        {microservices.map((microservice) => (
-                            <div key={microservice.id} className="m-3">
-                                <Card className="w-xs hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300"
-                                    decoration="top" decorationColor={microservice.status ? "green" : "red"}
-                                >
-                                    <Flex justifyContent="between" alignItems="center">
-                                        <Grid numItems={1} className="text-white">
-                                            <Col numColSpan={1}><Title>{microservice.microserviceName}</Title></Col>
-                                            <Col numColSpan={1}>Status: {microservice.status ? "ACTIVE" : "INACTIVE"}</Col>
-                                            <Col numColSpan={1}>Instance: 1</Col>
-                                            <Col numColSpan={1}>Port: {microservice.port}</Col>
-                                            <Col numColSpan={1}>Last edited: {microservice.createdAt}</Col>
-                                        </Grid>
-                                    </Flex>
-                                </Card>
-                            </div>
-                        ))}
+                        {microservices === null  ? (
+                            <p>No microservices available</p>
+                        ) : (
+                            microservices.map((microservice) => (
+                                <div key={microservice.id} className="m-3">
+                                    <Card className="w-xs hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300"
+                                        decoration="top" decorationColor={microservice.status ? "green" : "red"}
+                                    >
+                                        <Flex justifyContent="between" alignItems="center">
+                                            <Grid numItems={1} className="text-white">
+                                                <Col numColSpan={1}><Title>{microservice.microserviceName}</Title></Col>
+                                                <Col numColSpan={1}>Status: {microservice.status ? "ACTIVE" : "INACTIVE"}</Col>
+                                                <Col numColSpan={1}>Instance: 1</Col>
+                                                <Col numColSpan={1}>Port: {microservice.port}</Col>
+                                                <Col numColSpan={1}>Last edited: {microservice.createdAt}</Col>
+                                            </Grid>
+                                        </Flex>
+                                    </Card>
+                                </div>
+                            )))}
                     </div>
                 </>
             )}
