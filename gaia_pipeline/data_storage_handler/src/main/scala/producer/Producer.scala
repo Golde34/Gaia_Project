@@ -6,7 +6,7 @@ import java.util.UUID
 
 class Producer(config: KafkaConfig) {
     private val properties = new Properties()
-    properties.put("bootstrap.servers", "localhost:9092")
+    properties.put("bootstrap.servers", "localhost:9094")
     properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     properties.put("acks", "all")
@@ -23,3 +23,11 @@ class Producer(config: KafkaConfig) {
     }
 }
 
+object RunKafkaProducer {
+    def apply(topic: String, value: String): Unit = {
+        val config: KafkaConfig = KafkaConfigLoader.loadKafkaConfig()
+        val producer = new Producer(config)
+        val key = UUID.randomUUID().toString
+        producer.send(topic, key, value)
+    }
+}
