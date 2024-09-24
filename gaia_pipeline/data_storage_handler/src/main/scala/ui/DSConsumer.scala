@@ -35,7 +35,6 @@ class DSConsumer(config: KafkaConfig) {
         while(true) {
             val records = consumer.poll(1000).asScala
             for (record <- records) {
-                println(s"Received message: ${record.value()}")
                 val topic = record.topic()
 
                 topicHandlers.get(topic) match {

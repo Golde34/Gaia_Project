@@ -35,4 +35,5 @@ from ui.rest import task_manager_controller
 from ui.rest import rag_controller
 
 # Kafka
-from ui.kafka import open_camera_space
+from ui.kafka import open_camera_space_consumer
+from ui.kafka import file_handle_consumer
