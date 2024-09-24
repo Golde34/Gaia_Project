@@ -26,6 +26,20 @@ class RAGFileStore:
         query = db_query().delete_query('rag_file', condition)
         self.db.execute_query(query)
 
+    def check_existed_rag_file(self, file_id: str, file_name: str):
+        condition = f"file_id = '{file_id}' AND file_name = '{file_name}'"
+        query = db_query().select_query('rag_file', condition)
+        result = self.db.execute_query(query)
+        if result: return True
+        return False
+    
+    def upadate_rag_file_status(self, file_id: str, status: str):
+        fields = ['status']
+        values = [status]
+        condition = f"file_id = '{file_id}'"
+        query = db_query(fields, values).update_query('rag_file', condition)
+        self.db.execute_query(query)
+    
     def view_rag_file(self, file_id: str):
         condition = f"file_id = '{file_id}'"
         query = db_query().select_query('rag_file', condition)

@@ -3,15 +3,14 @@ from flask import jsonify, request
 from core.domain.constants import Constants
 from core.domain.entities.rag_file import RAGFile
 from core.services.receiver.rag_service import RagFileHandlerService
-from infrastructure.store.rag_file_store import RAGFileStore
 from infrastructure.kafka_producer.producer import publish_message
+from kernel.configs.load_env import load_bucket_config
 
 
 class RAGFileUsecase:
     def __init__(self):
-        self.service = RagFileHandlerService() 
-        self.store = RAGFileStore()
-
+        self.service = RagFileHandlerService()
+        
     def create_rag_file(self, file):
         """
             Create rag file in local storage
@@ -25,7 +24,7 @@ class RAGFileUsecase:
             
             rag_file = self.service.store_rag_file_in_local(file, Constants.Status.INIT)
             
-            id = self.store.create_rag_file(rag_file)
+            id = self.service.insert_file_to_database(rag_file)
             print("Stored rag file in local storage and database with id:", id) 
             
             try:
@@ -51,11 +50,26 @@ class RAGFileUsecase:
                 Constants.StringConstants.message: 'Cannot init RAG file'
             }), 500
 
-    def _store_rag_file_in_local(self, data): 
-        pass
-
     def upload_rag_file(self, data):
-        pass
+        """
+            Upload file to data storage
+        :param data: store file id and file name
+        :return: boolean status result
+        """
+        try:
+            file_id = data.get('file_id')
+            file_name = data.get('file_name')
+            bucket_name = load_bucket_config() 
+            
+            failed_case = self.service.handle_upload_file(file_id, file_name, bucket_name)
+            if failed_case is False:
+                return False
+            
+            self.service.update_rag_file_status(file_id, Constants.Status.SUCCESS)
+            return True
+        except Exception as e:
+            print("Cannot upload to storage")
+            
 
     def update_rag_file(self, data):
         pass
