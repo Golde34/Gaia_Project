@@ -1,6 +1,5 @@
 from werkzeug.datastructures import FileStorage
 import uuid
-import os
 from flask import jsonify
 
 from kernel.utils.file_handler import compute_file_hash, get_file_size, allowed_file
@@ -42,7 +41,7 @@ class RagFileHandlerService:
         file_type = file.content_type
         file_size = get_file_size(file)
        
-        self.bucket_handler.store_in_local(file, file_id, file_name)
+        file_path = self.bucket_handler.store_in_local(file, file_id, file_name)
         
         rag_file = RAGFile(
             file_id=file_id,
