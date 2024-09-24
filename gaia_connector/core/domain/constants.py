@@ -19,12 +19,15 @@ class Constants:
     class KafkaCommand:
         GAIA_CREATE_TASK = "gaiaCreateTask"
         GAIA_INIT_UPLOAD_FILE = "gaiaInitUploadFile"
+        GAIA_FAILED_UPLOAD_FILE = "gaiaFailedUploadFile"
 
     class FileExtensions:
         ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'csv', 'xlsx', 'xls', 'doc', 'docx'}
+        LOCAL_RESOURCE = "resources/local_storage"
 
     class Status: 
         INIT = "INIT"
         SUCCESS = "SUCCESS"
         ERROR = "ERROR"
         TIMEOUT = "TIMEOUT"
+        FAILED = "FAILED"
