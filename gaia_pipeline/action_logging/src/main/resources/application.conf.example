@@ -1,0 +1,24 @@
+// Add this config to application.conf file
+slick.dbs.default {
+  profile = "slick.jdbc.MySQLProfile$"
+  db {
+    driver = "com.mysql.cj.jdbc.Driver"
+    url = "jdbc:mysql://localhost:3306/"
+    user = ""
+    password = ""
+    connectionPool = "HikariCP"
+    keepAliveConnection = true
+  }
+}
+
+sor-data-transfer {
+  kafka {
+    bootstrap-servers = "localhost:9094"
+    group-id = "sor-data-transfer"
+    topics = [
+      "gaia.sor-training-model.topic", 
+      "task-manager.create-task.topic"
+    ],
+    auto-offset-reset = "earliest"
+  }
+}

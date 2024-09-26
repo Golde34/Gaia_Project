@@ -1,4 +1,4 @@
-package auth.authentication_service.kernel.utils;
+package auth.authentication_service.infrastructure.client;
 
 import auth.authentication_service.core.domain.dto.request.ServiceStatusRequest;
 import auth.authentication_service.core.domain.enums.ServiceEnum;

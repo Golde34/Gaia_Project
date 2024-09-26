@@ -1,0 +1,16 @@
+import ujson._
+import scala.collection.mutable.ArrayBuffer
+import os._
+import services.SORDataTransfer
+import ui.SORConsumerData
+import kernel.configs.{KafkaConfig, KafkaConfigLoader}
+import ui.KafkaHandler
+
+object DataPipeline {
+  def main(args: Array[String]): Unit = {
+    val kafkaConfig: KafkaConfig = KafkaConfigLoader.loadKafkaConfig()
+
+    val sorConsumerData = new SORConsumerData(kafkaConfig)
+    sorConsumerData.consumeMessages()
+  }
+}

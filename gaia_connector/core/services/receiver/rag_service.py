@@ -76,9 +76,12 @@ class RagFileHandlerService:
     def upload_rag_file_to_data_storage(self, file_id, file_name, bucket_name: str) -> bool:
         try:
             # Check file id and file name in database and local storage
-            # If not exist, return False
+            file_path = self.bucket_handler.check_existed_file_in_local(f"{file_id}_{file_name}")
+            if file_path is False:
+                print("RAG file does not exist in local storage")
+                return False
             
-            self.bucket_handler.upload(bucket_name)
+            self.bucket_handler.upload(bucket_name, f"{file_id}_{file_name}")
             return True
         except Exception as e:
             print('Cannot upload RAG file:', e)

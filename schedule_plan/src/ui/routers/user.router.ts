@@ -12,7 +12,7 @@ userRouter.get("/create",
     RequestValidator.validate(UserDTO),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-r           const userResult = await userControllerImpl.createScheduleUser(req, next);
+            const userResult = await userControllerImpl.createScheduleUser(req, next);
             return returnResult(userResult, "FAIL", res, next);
         } catch (error) {
             next(error);
