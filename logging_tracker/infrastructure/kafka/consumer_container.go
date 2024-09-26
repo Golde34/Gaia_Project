@@ -3,8 +3,8 @@ package kafka
 import (
 	"context"
 	"errors"
-	kafka_config "golang_kafka/config"
-	kafka_message "golang_kafka/kafka/message"
+	kafka_config "logging_tracker/kernel/configs"
+	kafka_message "logging_tracker/infrastructure/kafka/message"
 	"log"
 	"os"
 	"os/signal"
@@ -15,7 +15,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-func NewConsumer(serverConfig kafka_config.Config) (Consumer, *sarama.Config) {
+func NewConsumer(serverConfig kafka_config.KafkaConfig) (Consumer, *sarama.Config) {
 	if serverConfig.Verbose {
 		sarama.Logger = log.New(os.Stdout, "[sarama] ", log.LstdFlags)
 	}
@@ -57,7 +57,7 @@ func NewConsumer(serverConfig kafka_config.Config) (Consumer, *sarama.Config) {
 	return consumer, config
 }
 
-func ConsumerHandleMessage(serverConfig kafka_config.Config) {
+func ConsumerHandleMessage(serverConfig kafka_config.KafkaConfig) {
 	keepRunning := true
 	log.Println("Starting a new Sarama consumer")
 
