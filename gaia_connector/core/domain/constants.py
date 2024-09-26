@@ -24,6 +24,7 @@ class Constants:
     class FileExtensions:
         ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'csv', 'xlsx', 'xls', 'doc', 'docx'}
         LOCAL_RESOURCE = "resources/local_storage"
+        LOCAL_DATALAKE = "../data_lake/rag_files"
 
     class Status: 
         INIT = "INIT"
@@ -31,3 +32,8 @@ class Constants:
         ERROR = "ERROR"
         TIMEOUT = "TIMEOUT"
         FAILED = "FAILED"
+
+    class BucketName:
+        LOCAL = "local"
+        S3 = "s3"
+        HADOOP = "hadoop"
