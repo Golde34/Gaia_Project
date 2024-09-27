@@ -1,3 +1,4 @@
+Phase 3:
 + User: User có một lượng thời gian làm việc cố định trong ngày, tính bằng công thức sau:
 Khối lượng thời gian làm việc trong ngày = 24 - (số giờ ngủ + số giờ ăn + số giờ nghỉ + số giờ di chuyển)
 maxWorkTime = 24 - (sleepTime + eatTime + relaxTime + travelTime)
