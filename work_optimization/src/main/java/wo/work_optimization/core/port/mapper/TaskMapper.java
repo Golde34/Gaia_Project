@@ -26,14 +26,14 @@ public class TaskMapper {
     public Task toEntity(Object request) throws ParseException {
         CreateTaskRequestDTO createTaskRequestDTO = modelMapper().map(request, CreateTaskRequestDTO.class);
         return Task.builder()
-                .title(createTaskRequestDTO.getTitle())
-                .status(createTaskRequestDTO.getStatus())
-                .startDate(DateTimeUtils.convertStringDateTime(createTaskRequestDTO.getStartDate()))
-                .duration(createTaskRequestDTO.getDuration())
-                .endDate(DateTimeUtils.convertStringDateTime(createTaskRequestDTO.getDeadline()))
-                .activeStatus(createTaskRequestDTO.getActiveStatus())
-                .originalId(createTaskRequestDTO.getId())
-                .priority(calculateTaskWeight(createTaskRequestDTO.getPriority()))
+                .title(createTaskRequestDTO.getTask().getTitle())
+                .status(createTaskRequestDTO.getTask().getStatus())
+                .startDate(DateTimeUtils.convertStringDateTime(createTaskRequestDTO.getTask().getStartDate()))
+                .duration(createTaskRequestDTO.getTask().getDuration())
+                .endDate(DateTimeUtils.convertStringDateTime(createTaskRequestDTO.getTask().getDeadline()))
+                .activeStatus(createTaskRequestDTO.getTask().getActiveStatus())
+                .originalId(createTaskRequestDTO.getTask().getId())
+                .priority(calculateTaskWeight(createTaskRequestDTO.getTask().getPriority()))
                 .build();
     }
 

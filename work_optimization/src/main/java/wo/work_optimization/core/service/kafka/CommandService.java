@@ -24,7 +24,7 @@ public abstract class CommandService<R, P> implements CommandConnector {
         } catch (BusinessException e) {
             log.error(String.format("Business Error while handling command: %s", e.getMessage()), e);
         } catch (Exception ex) {
-            log.error(String.format("Error while hadling command: %s", ex.getMessage()), ex);
+            log.error(String.format("Error while handling command: %s", ex.getMessage()), ex);
         }
     }
 

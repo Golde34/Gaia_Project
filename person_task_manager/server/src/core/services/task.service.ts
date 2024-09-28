@@ -50,7 +50,6 @@ class TaskService {
                 await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
-                // add task to kafka (need to change to action: push calculate optimize schedule plan, this task must be redirect to schedule plan service, no personal task manager)
                 if (isPrivate === IsPrivateRoute.PUBLIC) {
                     const data = await this.buildCreateTaskMessage(createTask, groupTaskId);
                     this.pushCreateTaskMessage(data);
