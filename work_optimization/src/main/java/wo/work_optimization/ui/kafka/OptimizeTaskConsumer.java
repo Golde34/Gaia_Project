@@ -1,15 +1,15 @@
 package wo.work_optimization.ui.kafka;
 
-import kafka.lib.java.adapter.consumer.messagehandlers.KafkaMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import kafka.lib.java.adapter.consumer.messagehandlers.KafkaMessageHandler;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.service.kafka.CommandFactory;
 import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 
-import org.springframework.stereotype.Component;
-
 @Component
-public class TaskConsumer extends KafkaMessageHandler {
+public class OptimizeTaskConsumer extends KafkaMessageHandler {
 
     @Autowired
     private CommandFactory commandHandleFactory;
@@ -24,4 +24,5 @@ public class TaskConsumer extends KafkaMessageHandler {
         String cmd = ExtractKafkaMessage.getCommand(message);
         commandHandleFactory.getCommand(cmd).process(message, cmd);
     }
+    
 }
