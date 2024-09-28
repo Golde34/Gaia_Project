@@ -29,7 +29,7 @@ public class CreateTaskCommand extends CommandService<Task, String> {
 
     @Override
     public String command() {
-        return TopicConstants.OptimizeTaskCommand.CREATE_TASK;
+        return TopicConstants.CreateTaskCommand.CREATE_TASK;
     }
 
     @Override

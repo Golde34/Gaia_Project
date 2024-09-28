@@ -8,7 +8,7 @@ public class ExtractKafkaMessage {
     
     public static String getCommand(String messsage) {
         KafkaBaseDto kafkaBaseDto = extractMessage(messsage);
-        return kafkaBaseDto.getCommand();
+        return kafkaBaseDto.getCmd();
     }
 
     public static KafkaBaseDto getMessage(String message) {
@@ -18,7 +18,7 @@ public class ExtractKafkaMessage {
     public static CommandStatus getStatus(String message) {
         KafkaBaseDto kafkaBaseDto = extractMessage(message);
         return CommandStatus.builder()
-                .command(kafkaBaseDto.getCommand())
+                .command(kafkaBaseDto.getCmd())
                 .errorCode(kafkaBaseDto.getErrorCode())
                 .errorMessage(kafkaBaseDto.getErrorMessage())
                 .displayTime(kafkaBaseDto.getDisplayTime())

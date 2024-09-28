@@ -22,7 +22,7 @@ public class ScheduleTaskCommand extends CommandService<Task, String> {
 
     @Override
     public String command() {
-        return TopicConstants.OptimizeTaskCommand.SCHEDULE_TASK;
+        return TopicConstants.CreateTaskCommand.SCHEDULE_TASK;
     }
 
     @Override

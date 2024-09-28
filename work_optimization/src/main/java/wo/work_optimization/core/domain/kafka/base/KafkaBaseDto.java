@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class KafkaBaseDto<T> {
-    private String command;
+    private String cmd;
     private String errorCode;
     private String errorMessage;
     private String displayTime;
