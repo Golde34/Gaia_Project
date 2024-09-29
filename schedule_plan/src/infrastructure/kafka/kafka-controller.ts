@@ -6,7 +6,11 @@ import * as dotenv from "dotenv";
 dotenv.config({ path: "./src/.env" });
 
 export const kafkaController = async (kafkaHandler: KafkaHandler) => {
-    const topics = process.env.KAFKA_TOPICS?.split(",") ?? [];
+    const topics = getKafkaTopicsFromEnv();
+    if (topics.length === 0) {
+        console.log("No topics defined in environment variables");
+        return;
+    }
     console.log("Topics: ", topics);
 
     try {
@@ -25,6 +29,12 @@ export const kafkaController = async (kafkaHandler: KafkaHandler) => {
         console.log("There is no topics so we cannot subcribe consumer")
         console.error(error);
     }
+}
+
+const getKafkaTopicsFromEnv = (): string[] => {
+    const topicVars = Object.keys(process.env).filter(key => key.startsWith("KAFKA_TOPICS."));
+    const topics = topicVars.map(key => process.env[key] as string);
+    return topics.filter(Boolean);
 }
 
 const kafkaTopicHandlers: Record<string, (message: string) => void> = {
