@@ -9,9 +9,12 @@ import { msg404, sendResponse } from "./core/common/response";
 import { MSG404 } from "./core/domain/constants/string.constants";
 import { dashboardRouter } from "./ui/routers/dashboard.router";
 import { userRouter } from "./ui/routers/user.router";
+import { KafkaHandler } from "./infrastructure/kafka/kafka-handler";
+import { kafkaController } from "./infrastructure/kafka/kafka-controller";
 
 async function main(): Promise<void> {
     validateEnvironmentVars();
+    const kafkaHandler = new KafkaHandler();
     const applicationContext = "/schedule-plan";
 
     const mongoHelper = new MongoHelper(
@@ -51,8 +54,11 @@ async function main(): Promise<void> {
     });
 
     app.listen(config.server.listenPort, () => {
-        console.log(`Server is running on port ${config.server.listenPort}`);
+        console.log(`Server is running on port ${port}`);
     })
+
+    // Kafka Consumer
+    kafkaController(kafkaHandler); 
 }
 
 main();

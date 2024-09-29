@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { config } from '../../kernel/config/security-configuration';
+import { config } from '../../kernel/config/security.configuration';
 
 const PUBLIC_KEY = config.publicKey;
 
