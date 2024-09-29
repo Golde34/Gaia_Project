@@ -1,5 +1,9 @@
+import { createMessage } from "../../infrastructure/kafka/create-message";
+import { KafkaHandler } from "../../infrastructure/kafka/kafka-handler";
 import { scheduleTaskRepository } from "../../infrastructure/repository/schedule-task.repository";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
+import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enum";
+import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 
 class ScheduleTaskService {
     constructor() { }
@@ -46,6 +50,18 @@ class ScheduleTaskService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
+
+    async pushKafkaCreateScheduleTaskMessage(taskId: string, scheduleTaskId: string): Promise<void> {
+        const data = scheduleTaskMapper.buildKafkaCreateTaskMapper(taskId, scheduleTaskId);
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.CREATE_SCHEDULE_TASK, '00', 'Successful', data
+            ))
+        }]
+        console.log("Push Kafka Message: ", messages);
+        const kafkaHandler = new KafkaHandler();
+        kafkaHandler.produce(KafkaTopic.CREATE_SCHEDULE_TASK, messages);
     }
 }
 

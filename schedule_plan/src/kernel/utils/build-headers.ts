@@ -1,4 +1,4 @@
-import { config } from "../../kernel/config/security-configuration";
+import { config } from "../config/security.configuration";
 import { encrypt } from "../../infrastructure/security/encrypt-rsa";
 
 export const buildDefaultHeaders = (headers: Record<string, string>) => {

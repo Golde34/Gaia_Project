@@ -1,18 +1,18 @@
 import { Consumer, Producer, Kafka, Partitioners } from 'kafkajs';
-import { config } from '../../kernel/config/kafka-configuration';
+import { config } from '../../kernel/config/kafka.configuration';
 
-export class KafkaConfig {
+export class KafkaHandler {
     consumer: Consumer;
     producer: Producer;
     kafka: Kafka;
 
     constructor() {
         this.kafka = new Kafka({
-            clientId: config.kafka.groupId,
+            clientId: config.groupId,
             // brokers: getArrayBrokers(config.kafka.bootstrapServers)
-            brokers: ['localhost:9094']
+            brokers: config.kafkaBrokers 
         })
-        this.consumer = this.kafka.consumer({ groupId: config.kafka.groupId });
+        this.consumer = this.kafka.consumer({ groupId: config.groupId });
         this.producer = this.kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner});
     }
 
