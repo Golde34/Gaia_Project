@@ -33,3 +33,6 @@ schedule:
 
 work-optimization:
 	cd work_optimization && java -jar target/work_optimization-0.0.1.jar
+
+logging:
+	cd logging_tracker && go run cmd/main.go
