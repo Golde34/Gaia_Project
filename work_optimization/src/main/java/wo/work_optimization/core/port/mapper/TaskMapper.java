@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.enums.TaskPriorityEnum;
+import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
 import wo.work_optimization.core.domain.dto.request.CreateTaskRequestDTO;
 import wo.work_optimization.kernel.utils.DateTimeUtils;
 
@@ -52,6 +53,10 @@ public class TaskMapper {
             case STAR -> taskPriorityEnum.getWeight();
             default -> 0;
         };
+    }
+
+    public CreateScheduleTaskRequestDTO toCreateScheduleTaskRequestDTO(Object request) throws ParseException {
+        return modelMapper().map(request, CreateScheduleTaskRequestDTO.class);
     }
 }
  
