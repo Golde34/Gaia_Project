@@ -1,5 +1,7 @@
 package wo.work_optimization.core.domain.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,5 +31,5 @@ public class ParentTask {
     private String schedulePlanName;
 
     @OneToMany(mappedBy = "parentTask")
-    private Task task;
+    private List<Task> task;
 }
