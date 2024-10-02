@@ -9,7 +9,8 @@ class ScheduleTaskUsecase {
         try {
             const task = scheduleTaskMapper.kafkaCreateTaskMapper(scheduleTask);
             const result = await scheduleTaskService.createScheduleTask(task);
-            const scheduleTaskId = result.data._id;
+            console.log('Result: ', result);
+            const scheduleTaskId = result.data.message.id;
             scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId); 
         } catch (error) {
             console.error("Error on createScheduleTask: ", error);
