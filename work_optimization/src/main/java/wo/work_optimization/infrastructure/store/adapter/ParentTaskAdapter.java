@@ -37,7 +37,7 @@ public class ParentTaskAdapter implements ParentTaskStore {
     
     @Override
     public Optional<ParentTask> findByScheduleId(String scheduleId) {
-        return this.parentTaskRepository.findByScheduleId(scheduleId);
+        return this.parentTaskRepository.findBySchedulePlanId(scheduleId);
     }
 
     @Override

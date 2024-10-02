@@ -1,6 +1,5 @@
 package wo.work_optimization.infrastructure.store.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +11,6 @@ import wo.work_optimization.core.domain.entity.Task;
 public interface TaskRepository extends JpaRepository<Task, String> {
     
     Task findByOriginalId(String originalId);
-    List<Task> findByParentTaskId(String parentTaskId);
     
     @Override
     void deleteById(String id);

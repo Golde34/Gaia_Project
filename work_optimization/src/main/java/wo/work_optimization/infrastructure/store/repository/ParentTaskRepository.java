@@ -10,9 +10,10 @@ import wo.work_optimization.core.domain.entity.ParentTask;
 
 @Repository
 public interface ParentTaskRepository extends JpaRepository<ParentTask, Long> {
-    void createParentTask(ParentTask parentTask);
+    @SuppressWarnings("unchecked")
+    ParentTask save(ParentTask parentTask);
     Optional<ParentTask> findByGroupTaskId(String groupTaskId);
     Optional<List<ParentTask>> findByProjectId(String projectId);
-    Optional<ParentTask> findByScheduleId(String scheduleId);
+    Optional<ParentTask> findBySchedulePlanId(String scheduleId);
     List<ParentTask> findAll();
 }

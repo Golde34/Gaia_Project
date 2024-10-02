@@ -4,21 +4,25 @@ import java.text.ParseException;
 
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
+import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
+import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.kafka.CommandService;
+import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskRequestDTO, String> {
 
+    private final TaskStore taskStore;
     private final TaskMapper taskMapper;
-
-    public ScheduleTaskCommand(TaskMapper taskMapper) {
-        this.taskMapper = taskMapper;
-    }
+    private final DataUtils dataUtils;
 
     @Override
     public String command() {
@@ -37,16 +41,22 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
 
     @Override
     public void validateRequest(CreateScheduleTaskRequestDTO request) {
-        // check taskId = null -> return error
-        // check scheduleTaskId = null -> return error
+        if (dataUtils.isNullOrEmpty(request.getTaskId())) {
+            throw new BusinessException("Task ID is required");
+        }
+        if (dataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
+            throw new BusinessException("Schedule Task ID is required");
+        }
+        // if database has schedule task id return schedule task id is exist
         return;
     }
 
     @Override
     public String doCommand(CreateScheduleTaskRequestDTO request) {
-        log.info("test schedule task");
-        // Store in DB
-        return "OK";
+        Task task = taskStore.findTaskByOriginalId(request.getTaskId());
+        task.setScheduleTaskId(request.getScheduleTaskId());
+        taskStore.save(task);
+        return "Save schedule task success";
     }
     
 }

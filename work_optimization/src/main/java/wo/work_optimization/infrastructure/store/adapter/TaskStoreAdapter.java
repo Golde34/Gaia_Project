@@ -44,7 +44,7 @@ public class TaskStoreAdapter implements TaskStore {
 
     @Override
     public List<Task> findAllBySchedulePlan(String scheduleId) {
-        return parentTaskRepository.findByScheduleId(scheduleId).get().getTask();
+        return parentTaskRepository.findBySchedulePlanId(scheduleId).get().getTask();
     }
 
     @Override
