@@ -9,6 +9,7 @@ export const scheduleTaskMapper = {
             taskId: data.task.id,
             title: data.task.title,
             priority: convertPriority(data.task.priority),
+            status: data.task.status,
             startDate: data.task.startDate,
             deadline: data.task.deadline,
             duration: data.task.duration,
