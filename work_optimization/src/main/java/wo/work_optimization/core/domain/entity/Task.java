@@ -26,8 +26,9 @@ public class Task {
     private long endDate;
     private String activeStatus;
     private String originalId;
+    private String scheduleTaskId;
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    private SchedulePlan schedulePlan;
+    private ParentTask parentTask;
 }

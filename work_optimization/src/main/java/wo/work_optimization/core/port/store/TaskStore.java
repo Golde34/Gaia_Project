@@ -10,4 +10,6 @@ public interface TaskStore {
     Task findTaskByOriginalId(String originalId);
     List<Task> findAll();
     List<Task> findAllBySchedulePlan(String scheduleId);
+    List<Task> findAllByGroupTask(String groupTaskId);
+    List<Task> findAllByProject(String projectId);
 }

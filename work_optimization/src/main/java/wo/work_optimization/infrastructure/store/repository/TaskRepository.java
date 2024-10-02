@@ -12,7 +12,7 @@ import wo.work_optimization.core.domain.entity.Task;
 public interface TaskRepository extends JpaRepository<Task, String> {
     
     Task findByOriginalId(String originalId);
-    List<Task> findBySchedulePlanId(String scheduleId);
+    List<Task> findByParentTaskId(String parentTaskId);
     
     @Override
     void deleteById(String id);
