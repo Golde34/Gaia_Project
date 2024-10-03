@@ -17,7 +17,6 @@ import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
 import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../mapper/kafka-create-task.mapper";
 import { projectStore } from "../store/project.store";
-import { IsPrivateRoute } from "../domain/enums/enums";
 
 class TaskService {
     constructor(
@@ -25,51 +24,48 @@ class TaskService {
         public taskValidationImpl = taskValidation,
     ) { }
 
-    async createTaskInGroupTask(task: any, groupTaskId: string | undefined, isPrivate: IsPrivateRoute): Promise<IResponse> {
-        try {
-            // validate
-            if (groupTaskId === undefined) return msg400('Group task not found');
+    async createTaskInGroupTask(task: any): Promise<ITaskEntity> {
+        // check existed user tag
+        const userTag = await userTagStore.findTagByTagId(task.tag);
+        if (userTag === null) {
+            console.log("This task is no need to have tag");
+        } else {
+            task.tag = userTag._id;
+        }
+        // create new task
+        task.createdAt = new Date();
+        task.updatedAt = new Date();
+        if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
+        const createTask = await taskStore.createTask(task);
+        return createTask;
+    }
 
-            // check existed user tag
-            const userTag = await userTagStore.findTagByTagId(task.tag);
-            if (userTag === null) {
-                console.log("This task is no need to have tag");
-            } else {
-                task.tag = userTag._id;
-            }
-            // create new task
-            task.createdAt = new Date();
-            task.updatedAt = new Date();
-            if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
-            const createTask = await taskStore.createTask(task);
-            const taskId = (createTask as any)._id;
-
-            // validate new task
-            if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === NOT_EXISTED) {
-                // push task id to group task
-                await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
-                groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
-
-                if (isPrivate === IsPrivateRoute.PUBLIC) {
-                    const data = await this.buildCreateTaskMessage(createTask, groupTaskId);
-                    this.pushCreateTaskMessage(data);
-                }
-                return msg200({
-                    message: (createTask as any)
-                });
-            } else {
-                await taskStore.deleteTask(taskId);
-                return msg400(CREATE_TASK_FAILED);
-            }
-        } catch (error: any) {
-            return msg400(error.message.toString());
+    async handleAfterCreateTask(createTask: any, groupTaskId: string): Promise<IResponse> {
+        const taskId = (createTask as any)._id;
+        if (await this.taskValidationImpl.checkExistedTaskInGroupTask(taskId, groupTaskId) === NOT_EXISTED) {
+            // push task id to group task
+            await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
+            groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
+ 
+            return msg200({
+                message: (createTask as any)
+            });
+        } else {
+            await taskStore.deleteTask(taskId);
+            return msg400(CREATE_TASK_FAILED);
         }
     }
 
+    async pushKafkaToCreateTask(task: any, groupTaskId: string): Promise<void> {
+        const data = await this.buildCreateTaskMessage(task, groupTaskId);
+        this.pushCreateTaskMessage(data);
+    }
+
     async buildCreateTaskMessage(createdTask: ITaskEntity, groupTaskId: string): Promise<KafkaCreateTaskMessage> {
+        const userId = await projectStore.getOwnerIdByProjectId(groupTaskId).catch(null);
         const projectName = await projectStore.findOneProjectByGroupTaskId(groupTaskId).then((result) => result?.name).catch(null);
         const groupTaskName = await groupTaskStore.findGroupTaskById(groupTaskId).then((result) => result?.title).catch(null);
-        return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName);
+        return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName, userId);
     }
 
     pushCreateTaskMessage(data: KafkaCreateTaskMessage): void {

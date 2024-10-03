@@ -69,6 +69,10 @@ class ProjectStore {
     async checkDefaultProject(ownerId: number): Promise<IProjectEntity[]> {
         return projectRepository.findDefaultProjectByOwnerId(ownerId);
     }
+
+    async getOwnerIdByProjectId(projectId: string): Promise<number> {
+        return projectRepository.getOwnerIdByProjectId(projectId);
+    }
 }
 
 export const projectStore = new ProjectStore();
