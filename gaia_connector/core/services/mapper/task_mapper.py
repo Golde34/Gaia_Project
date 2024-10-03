@@ -1,6 +1,3 @@
-from core.domain.constants import Constants
-
-
 class TaskMapper:
     def __init__(self) -> None:
         pass
@@ -17,7 +14,6 @@ class TaskMapper:
             'deadline': task['deadline'],
             'duration': float(task['duration']),
             'activeStatus': 'ACTIVE',
-            'userId': data['user_id'],
         } 
 
     def map_create_task_to_sor(self, data, task_id):
@@ -35,7 +31,8 @@ class TaskMapper:
                     'deadline': task['deadline'],
                     'duration': float(task['duration']),
                 },
-                'taskId': task_id
+                'taskId': task_id,
+                'userId': data['user_id']
             }
             return mapped_sor_object
         except Exception as e:
