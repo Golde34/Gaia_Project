@@ -6,6 +6,7 @@ import { TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/ta
 import { groupTaskService } from "../../core/services/group-task.service";
 import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
 import { taskUsecase } from "../../core/usecases/task.usecase";
+import { IsPrivateRoute } from "../../core/domain/enums/enums";
 
 class TaskController {
     constructor() {}
@@ -49,8 +50,7 @@ class TaskController {
             const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
             const groupTaskId = bodyJson.groupTaskId;
 
-            // const taskResult = await taskService.createTaskInGroupTask(createTaskObjectDto, groupTaskId, IsPrivateRoute.PUBLIC);
-            const taskResult = await taskUsecase.createTaskInGroupTask(createTaskObjectDto, groupTaskId);
+            const taskResult = await taskUsecase.createTaskInGroupTask(createTaskObjectDto, groupTaskId, IsPrivateRoute.PUBLIC);
             return taskResult;
         } catch (err) {
             next(err);
@@ -60,12 +60,10 @@ class TaskController {
     async createPrivateTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const bodyJson = req.body;
-            const userId = req.body.userId;
             const createTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
             const groupTaskId = bodyJson.groupTaskId;
             
-            // const taskResult = await taskService.createTaskInGroupTask(createTaskObjectDto, groupTaskId, IsPrivateRoute.PRIVATE);
-            const taskResult = await taskUsecase.createPrivateTask(createTaskObjectDto, userId, groupTaskId);
+            const taskResult = await taskUsecase.createTaskInGroupTask(createTaskObjectDto, groupTaskId, IsPrivateRoute.PRIVATE);
             return taskResult;
         } catch (err) {
             next(err);
@@ -145,7 +143,7 @@ class TaskController {
             }
             
             if (groupTaskCreated !== undefined) {
-                const taskResult = await taskUsecase.createTaskInGroupTask(task, groupTaskCreated);
+                const taskResult = await taskUsecase.createTaskInGroupTask(task, groupTaskCreated, IsPrivateRoute.PUBLIC);
                 return taskResult;
             }
             return undefined;

@@ -85,6 +85,13 @@ class ProjectRepository {
         return await ProjectEntity
             .find({ ownerId: ownerId, activeStatus: ActiveStatus.active, isDefault: BooleanStatus.true});
     }
+
+    async getOwnerIdByProjectId(projectId: string): Promise<number> {
+        const project = await ProjectEntity.findOne({
+            _id: projectId
+        });
+        return project?.ownerId ?? 0;
+    }
 }
 
 export const projectRepository = new ProjectRepository();

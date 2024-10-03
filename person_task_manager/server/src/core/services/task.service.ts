@@ -62,9 +62,10 @@ class TaskService {
     }
 
     async buildCreateTaskMessage(createdTask: ITaskEntity, groupTaskId: string): Promise<KafkaCreateTaskMessage> {
+        const userId = await projectStore.getOwnerIdByProjectId(groupTaskId).catch(null);
         const projectName = await projectStore.findOneProjectByGroupTaskId(groupTaskId).then((result) => result?.name).catch(null);
         const groupTaskName = await groupTaskStore.findGroupTaskById(groupTaskId).then((result) => result?.title).catch(null);
-        return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName);
+        return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName, userId);
     }
 
     pushCreateTaskMessage(data: KafkaCreateTaskMessage): void {

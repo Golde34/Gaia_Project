@@ -12,13 +12,15 @@ export class KafkaCreateTaskMessage {
     task!: ITaskEntity;
     @IsString()
     taskId?: string;
+    userId!: number;
 }
 
-export const kafkaCreateTaskMapper = async (data: ITaskEntity, projectName: string | undefined, groupTaskName: string | undefined): Promise<KafkaCreateTaskMessage> => {
+export const kafkaCreateTaskMapper = async (data: ITaskEntity, projectName: string | undefined, groupTaskName: string | undefined, userId: number): Promise<KafkaCreateTaskMessage> => {
     const message = new KafkaCreateTaskMessage();
     message.task = data;
     message.taskId = data._id;
     message.project = projectName === undefined ? null : projectName;
     message.groupTask = groupTaskName === undefined ? null : groupTaskName;
+    message.userId = userId;
     return message;
 };
