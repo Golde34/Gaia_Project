@@ -1,4 +1,5 @@
-export const convertPriority = (priority: string): number => {
+export const convertPriority = (priorities: string[]): number => {
+    const priority = priorities[0];
     switch (priority) {
         case "Low":
             return 1;
