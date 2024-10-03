@@ -16,6 +16,6 @@ class TaskAdapter:
             print('There is an error when getting group task id')
 
     def create_task(self, data):
-        task_response = requests.post(f"{self.url}/task/create-task", json=data)
+        task_response = requests.post(f"{self.url}/task/private-create", json=data)
         print(f"Create task response: {task_response.json()}")
         return task_response
