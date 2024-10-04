@@ -25,11 +25,14 @@ class TaskMapper:
                 'groupTask': data['group_task'],
                 'task': {
                     'title': task['title'],
+                    'description': task['description'],
                     'priority': task['priority'],
                     'status': task['status'],
                     'startDate': task['start_date'],
                     'deadline': task['deadline'],
                     'duration': float(task['duration']),
+                    'activeStatus': 'ACTIVE',
+                    'id': task_id,
                 },
                 'taskId': task_id,
                 'userId': data['user_id']

@@ -10,5 +10,7 @@ public class CreateTaskRequestDTO {
     private String sentence;
     private String project;
     private String groupTask;
+    private Long userId;
     private TaskObjRequestDTO task;
+    private String taskId;
 }
