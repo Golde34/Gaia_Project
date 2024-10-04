@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
+import wo.work_optimization.core.domain.dto.request.CreateTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
@@ -15,7 +16,7 @@ import java.text.ParseException;
 
 @Service
 @Slf4j
-public class CreateTaskCommand extends CommandService<Task, String> {
+public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, String> {
 
     private final TaskMapper taskMapper;
     private final TaskStore taskStore;
@@ -33,33 +34,35 @@ public class CreateTaskCommand extends CommandService<Task, String> {
     }
 
     @Override
-    public Task mapKafkaObject(Object kafkaObjectDto) {
-        try {
-            return taskMapper.toEntity(kafkaObjectDto);
-        } catch (ParseException e) {
-            log.error(String.format("Cannot map kafka object to entity: %s", e.getMessage()), e);
-            return null;
-        }
+    public CreateTaskRequestDTO mapKafkaObject(Object kafkaObjectDto) {
+        return taskMapper.mapCreateTask(kafkaObjectDto);
     }
 
     @Override
-    public void validateRequest(Task request) {
+    public void validateRequest(CreateTaskRequestDTO request) {
         if (ValidateConstants.FAIL == taskValidation.validateCreateTask(request)) {
-            log.error(String.format("Task with originalId %s already exists", request.getOriginalId()));
+            log.error(String.format("Task with originalId %s already exists", request.getTask().getId()));
             throw new IllegalArgumentException("Validate fail by object existed!");
         }
     }
 
     @Override
-    public String doCommand(Task request) {
-        taskStore.createTask(request);
+    public String doCommand(CreateTaskRequestDTO request) {
+        try {
+            Task task = taskMapper.toEntity(request);
+            taskStore.createTask(task);
 
-        // Neu khoang thoi gian thuc hien task nam trong vung khoang thoi gian cua schedule plan thi se add task vao schedule plan
-        // schedulePlanStore.addTaskToSchedulePlan(request);
+            // Neu khoang thoi gian thuc hien task nam trong vung khoang thoi gian cua
+            // schedule plan thi se add task vao schedule plan
+            // schedulePlanStore.addTaskToSchedulePlan(request);
 
-        // Thuc hien tinh toan lai schedule plan
-        // schedulService.calculateSchedulePlan();
+            // Thuc hien tinh toan lai schedule plan
+            // schedulService.calculateSchedulePlan();
 
-        return "OK";
+            return "OK";
+        } catch (ParseException e) {
+            log.error("Error while parsing date time", e);
+            throw new IllegalArgumentException("Error while parsing date time");
+        }
     }
 }
