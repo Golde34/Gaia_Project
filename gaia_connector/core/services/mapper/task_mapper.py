@@ -16,9 +16,8 @@ class TaskMapper:
             'activeStatus': 'ACTIVE',
         } 
 
-    def map_create_task_to_sor(self, data, task_id):
+    def map_create_task_to_sor(self, data, task, task_id):
         try:
-            task = data['task']
             mapped_sor_object = {
                 'sentence': data['sentence'],
                 'project': data['project'],
@@ -28,7 +27,7 @@ class TaskMapper:
                     'description': task['description'],
                     'priority': task['priority'],
                     'status': task['status'],
-                    'startDate': task['start_date'],
+                    'startDate': task['startDate'],
                     'deadline': task['deadline'],
                     'duration': float(task['duration']),
                     'activeStatus': 'ACTIVE',
@@ -37,6 +36,7 @@ class TaskMapper:
                 'taskId': task_id,
                 'userId': data['user_id']
             }
+            print(f"mapped_sor_object: {mapped_sor_object}")
             return mapped_sor_object
         except Exception as e:
             print(f"Failed to map create task to SOR: {e}")
