@@ -24,8 +24,11 @@ public class TaskMapper {
         return modelMapper;
     }
 
-    public Task toEntity(Object request) throws ParseException {
-        CreateTaskRequestDTO createTaskRequestDTO = modelMapper().map(request, CreateTaskRequestDTO.class);
+    public CreateTaskRequestDTO mapCreateTask(Object request) {
+        return modelMapper().map(request, CreateTaskRequestDTO.class);
+    }
+
+    public Task toEntity(CreateTaskRequestDTO createTaskRequestDTO) throws ParseException {
         return Task.builder()
                 .title(createTaskRequestDTO.getTask().getTitle())
                 .status(createTaskRequestDTO.getTask().getStatus())

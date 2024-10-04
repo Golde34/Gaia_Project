@@ -23,7 +23,7 @@ class TaskUseCase(TaskServiceRequest):
             final_task_obj = self.map_group_task_in_task_object(data, task)
             if final_task_obj is None:
                 return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid group task'})
-            return self.service.create_task(final_task_obj)
+            return self.service.create_task(data, final_task_obj)
         except Exception as e:
             print('Create task failed')
             return jsonify({Constants.StringConstants.status: 'ERROR', Constants.StringConstants.message: 'Invalid data'})

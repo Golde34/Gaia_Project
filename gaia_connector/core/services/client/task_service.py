@@ -11,23 +11,22 @@ from infrastructure.client_adapter.task_adapter import TaskAdapter
 class TaskServiceRequest:
     def __init__(self, url):
         self.url = url
-        self.adapter = TaskAdapter(url) 
 
     def map_group_task_in_task_object(self, data, task):
-        group_task_id = self.adapter.get_group_task_id(data['group_task'], data['user_id'], data['project'])
+        group_task_id = TaskAdapter(self.url).get_group_task_id(data['group_task'], data['user_id'], data['project'])
         print(f"Get group_task_id: {group_task_id} by query group_task: {data['group_task']}")
         if group_task_id is None:
             return None
         task['groupTaskId'] = group_task_id
         return task
 
-    def create_task(self, data):
-        task_response = self.adapter.create_task(data)
+    def create_task(self, data, task):
+        task_response = TaskAdapter(self.url).create_task(task)
         if task_response.status_code == 200:
             print('Create task successfully in TM Service')
             try:
-                data = TaskMapper().map_create_task_to_sor(data, task_response.json()['data']['message']['_id'])
-                publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, Constants.KafkaCommand.GAIA_CREATE_TASK, data)
+                kafka_data = TaskMapper().map_create_task_to_sor(data, task, task_response.json()['data']['message']['_id'])
+                publish_message(Constants.KafkaTopic.CREATE_TASK_TOPIC, Constants.KafkaCommand.GAIA_CREATE_TASK, kafka_data)
                 return jsonify({Constants.StringConstants.status: 'OK',
                                 Constants.StringConstants.response: task_response.json()})
             except Exception as e:

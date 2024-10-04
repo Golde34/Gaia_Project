@@ -7,6 +7,7 @@ class TaskAdapter:
 
     def get_group_task_id(self, group_task, user_id, project):
         try:
+            print(f"{self.url}/group-task/find-by-name?name={group_task}&userId={user_id}&project={project}")
             group_task_response = requests.get(f"{self.url}/group-task/find-by-name?name={group_task}&userId={user_id}&project={project}")
             if group_task_response.status_code == 200:
                 return group_task_response.json()['data']['message']['_id']
