@@ -41,22 +41,7 @@ class TaskCRUDSkill():
         try:
             cls.console_manager.console_log(info_log=f"Transferring text to task, model {SORModel.TASK_DETECTION}")
             result = SORSkill().handle_input(text, SORModel.TASK_DETECTION)
-            if result['project'] is None or result['project'] == "":
-                print("Project is empty, what is project you want to add task to?")
-                project = str(input("Enter project: "))
-                result['project'] = project
-            if result['group_task'] is None or result['group_task'] == "":
-                print("Group task is empty, what is group task you want to add task to?")
-                group_task = str(input("Enter group task: "))
-                result['group_task'] = group_task
-            if result['task']['title'] is None or result['task']['title'] == "":
-                print("Title is empty, what is title you want to add task to?")
-                title = str(input("Enter title: "))
-                result['task']['title'] = title 
-            if result['task']['duration'] is None or result['task']['duration'] == "" or result['task']['duration'] == "0":
-                result['task']['duration'] = 2
-            else:
-                result['task']['duration'] = int(result['task']['duration'])
+            result = cls._handle_null_fields(result)
                 
             print("Result: ", result)
             return result
@@ -94,34 +79,36 @@ class TaskCRUDSkill():
 
     @classmethod
     def _handle_null_fields(cls, result):
-            if result['project'] is None or result['project'] == "":
-                print("Project is empty, what is project you want to add task to?")
-                project = str(input("Enter project: "))
-                result['project'] = project
+        if result['project'] is None or result['project'] == "":
+            print("Project is empty, what is project you want to add task to?")
+            project = str(input("Enter project: "))
+            result['project'] = project
 
-            if result['group_task'] is None or result['group_task'] == "":
-                print("Group task is empty, what is group task you want to add task to?")
-                group_task = str(input("Enter group task: "))
-                result['group_task'] = group_task
-            
-            if result['task']['title'] is None or result['task']['title'] == "":
-                print("Title is empty, what is title you want to add task to?")
-                title = str(input("Enter title: "))
-                result['task']['title'] = title 
-            
-            if result['task']['duration'] is None or result['task']['duration'] == "" or result['task']['duration'] == "0":
-                result['task']['duration'] = 2
-            else:
-                result['task']['duration'] = int(result['task']['duration'])
+        if result['group_task'] is None or result['group_task'] == "":
+            print("Group task is empty, what is group task you want to add task to?")
+            group_task = str(input("Enter group task: "))
+            result['group_task'] = group_task
+        
+        if result['task']['title'] is None or result['task']['title'] == "":
+            print("Title is empty, what is title you want to add task to?")
+            title = str(input("Enter title: "))
+            result['task']['title'] = title 
+        
+        if result['task']['duration'] is None or result['task']['duration'] == "" or result['task']['duration'] == "0":
+            result['task']['duration'] = 2
+        else:
+            result['task']['duration'] = int(result['task']['duration'])
 
-            if result['task']['priority'] is None or result['task']['priority'] == "":
-                result['task']['priority'] = "MEDIUM"
-            
-            if result['task']['status'] is None or result['task']['status'] == "":
-                result['task']['status'] = "TODO"
+        if result['task']['priority'] is None or result['task']['priority'] == "":
+            result['task']['priority'] = "MEDIUM"
+        
+        if result['task']['status'] is None or result['task']['status'] == "":
+            result['task']['status'] = "TODO"
 
-            if result['task']['start_date'] is None or result['task']['start_date'] == "":
-                result['task']['start_date'] = convert_time_from_float_to_str(time.time())
+        if result['task']['start_date'] is None or result['task']['start_date'] == "":
+            result['task']['start_date'] = convert_time_from_float_to_str(time.time())
 
-            if result['task']['deadline'] is None or result['task']['deadline'] == "":
-                result['task']['deadline'] = convert_time_from_float_to_str(time.time() + 86400)
+        if result['task']['deadline'] is None or result['task']['deadline'] == "":
+            result['task']['deadline'] = convert_time_from_float_to_str(time.time() + 86400)
+
+        return result
