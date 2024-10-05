@@ -40,4 +40,4 @@ class TaskMapper:
             return mapped_sor_object
         except Exception as e:
             print(f"Failed to map create task to SOR: {e}")
-            return None 
+            return None
