@@ -1,5 +1,4 @@
-import time
-
+from datetime import datetime, timezone, timedelta
 
 def convert_time_from_float_to_str(time_float: float) -> str:
     """
@@ -7,7 +6,9 @@ def convert_time_from_float_to_str(time_float: float) -> str:
     :param time_float: float
     :return: str
     """
-    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time_float))
+    dt = datetime.fromtimestamp(time_float, timezone.utc)
+    iso8601_time = dt.isoformat(timespec='seconds').replace('+00:00', 'Z')
+    return iso8601_time
 
 def convert_time_from_str_to_float(time_str: str) -> float:
     """
@@ -15,4 +16,6 @@ def convert_time_from_str_to_float(time_str: str) -> float:
     :param time_str: str
     :return: float
     """
-    return time.mktime(time.strptime(time_str, '%Y-%m-%d %H:%M:%S'))
+    dt = datetime.fromisoformat(time_str)
+    time_float = dt.timestamp()
+    return time_float
