@@ -21,6 +21,7 @@ public class TopicConstants {
         public static final String TOPIC = "task-manager.create-task.topic";
 
         public static final String CREATE_TASK = "taskManagerCreateTask";
+        public static final String GAIA_CREATE_TASK = "gaiaCreateTask";
     }
 
     @UtilityClass
