@@ -13,7 +13,7 @@ class TaskUsecase {
             if (groupTaskId === undefined) return msg400('Group task not found');
             const createdTask = await taskService.createTaskInGroupTask(task);
             const taskResult = await taskService.handleAfterCreateTask(createdTask, groupTaskId);
-            if (isPrivate === IsPrivateRoute.PRIVATE) {
+            if (isPrivate === IsPrivateRoute.PUBLIC) {
                 await taskService.pushKafkaToCreateTask(createdTask, groupTaskId);
             }
             return taskResult;
