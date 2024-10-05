@@ -5,8 +5,11 @@ export const handlerMessage = (message: string) => {
     const kafkaMessage = JSON.parse(message);
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
-        case KafkaCommand.CREATE_TASK:
+        case KafkaCommand.TM_CREATE_TASK:
             scheduleTaskUsecase.createScheduleTaskByKafka(kafkaMessage.data);        
+            break;
+        case KafkaCommand.GAIA_CREATE_TASK:
+            scheduleTaskUsecase.createScheduleTaskByKafka(kafkaMessage.data);
             break;
         default:
             console.warn("No handler for command: ", cmd);
