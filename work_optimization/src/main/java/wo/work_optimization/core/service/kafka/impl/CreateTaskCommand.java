@@ -44,7 +44,6 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
             log.error(String.format("Task with originalId %s already exists", request.getTask().getId()));
             throw new IllegalArgumentException("Validate fail by object existed!");
         }
-
     }
 
     @Override

@@ -4,7 +4,7 @@ import { Permission } from "../../core/domain/enums/enums";
 import { RequestValidator } from "../../core/common/error-handler";
 import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/task.dto";
 import { taskController } from "../controllers/task.controller";
-import { ARCHIVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
+import { ARCHIVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, GROUPTASK_AND_PROJECT_NOT_FOUND, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
 import { returnResult } from "../../kernel/util/return-result";
 
 export const taskRouter = Router();
@@ -158,6 +158,16 @@ taskRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunc
     try {
         const taskResult = await taskControllerImpl.enableTask(req, next);
         return returnResult(taskResult, ENABLE_TASK_FAILED, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// get grouptask and project of a task
+taskRouter.get("/:id/get-grouptask-project", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const result = await taskControllerImpl.getGroupTaskAndProject(req, next);
+        return returnResult(result, GROUPTASK_AND_PROJECT_NOT_FOUND, res, next);
     } catch (err) {
         next(err);
     }
