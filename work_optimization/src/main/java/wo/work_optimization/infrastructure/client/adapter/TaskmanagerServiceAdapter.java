@@ -1,6 +1,5 @@
 package wo.work_optimization.infrastructure.client.adapter;
 
-import org.apache.kafka.clients.ClientUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import wo.work_optimization.core.domain.dto.request.GetGroupTaskProjectRequestDTO;
+import wo.work_optimization.core.domain.dto.response.GroupTaskAndProjectResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
-import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.infrastructure.client.ClientTemplate;
 
 @Service
@@ -23,12 +23,12 @@ public class TaskmanagerServiceAdapter {
     private final ClientTemplate clientTemplate;
     // private final ClientUtils clientUtils;
 
-    public ParentTask getGroupTask(Long taskId) {
+    public GroupTaskAndProjectResponseDTO getGroupTaskAndProject(GetGroupTaskProjectRequestDTO request
+) {
         try {
-            String uri = String.format(getGroupTaskAPI, taskId);
-            log.info("Calling api to taskmanager service: {}", uri);
-            ResponseEntity<GeneralResponse<ParentTask>> response =  clientTemplate.get(uri, null, 
-                new ParameterizedTypeReference<GeneralResponse<ParentTask>>() {});
+            log.info("Calling api to taskmanager service: {}", getGroupTaskAPI);
+            ResponseEntity<GeneralResponse<GroupTaskAndProjectResponseDTO>> response = clientTemplate.post(getGroupTaskAPI, null, request, 
+                new ParameterizedTypeReference<GeneralResponse<GroupTaskAndProjectResponseDTO>>() {});
             log.info("Response from taskmanager service: {}", response);
             return response.getBody().getData();
         } catch (Exception e) {
