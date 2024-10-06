@@ -15,7 +15,8 @@ export class KafkaCreateTaskMessage {
     userId!: number;
 }
 
-export const kafkaCreateTaskMapper = async (data: ITaskEntity, projectName: string | undefined, groupTaskName: string | undefined, userId: number): Promise<KafkaCreateTaskMessage> => {
+export const kafkaCreateTaskMapper = async (data: ITaskEntity, projectName: string | undefined, groupTaskName: string | undefined, userId: number)
+    : Promise<KafkaCreateTaskMessage> => {
     const message = new KafkaCreateTaskMessage();
     message.task = data;
     message.taskId = data._id;

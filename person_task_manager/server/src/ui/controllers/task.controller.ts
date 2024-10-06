@@ -200,6 +200,17 @@ class TaskController {
             next(err);
         }
     }
+
+    async getGroupTaskAndProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const taskId = req.params.id;
+            const taskResult = await taskUsecase.getGroupTaskAndProject(taskId);
+
+            return taskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const taskController = new TaskController();

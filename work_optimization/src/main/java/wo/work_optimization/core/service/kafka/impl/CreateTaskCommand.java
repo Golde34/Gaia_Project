@@ -40,7 +40,7 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
 
     @Override
     public void validateRequest(CreateTaskRequestDTO request) {
-        if (ValidateConstants.FAIL == taskValidation.validateCreateTask(request)) {
+        if (ValidateConstants.FAIL == taskValidation.validateCreateTaskRequest(request)) {
             log.error(String.format("Task with originalId %s already exists", request.getTask().getId()));
             throw new IllegalArgumentException("Validate fail by object existed!");
         }

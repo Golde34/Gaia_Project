@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.infrastructure.store.repository.ParentTaskRepository;
@@ -63,5 +64,13 @@ public class TaskStoreAdapter implements TaskStore {
     public void save(Task task) {
         taskRepository.save(task);
         log.info("Task saved: {}", task);
+    }
+
+    @Override
+    public Task addParentTaskId(String taskId, ParentTask parentTask) {
+        Task task = taskRepository.findById(taskId).get();
+        task.setParentTask(parentTask);
+        taskRepository.save(task);
+        return task;
     }
 }

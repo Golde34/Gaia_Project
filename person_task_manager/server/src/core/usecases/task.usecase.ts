@@ -1,8 +1,9 @@
 import { IResponse } from "../common/response";
-import { msg400 } from "../common/response-helpers";
+import { msg200, msg400 } from "../common/response-helpers";
 import { TaskRequestDto } from "../domain/dtos/task.dto";
 import { IsPrivateRoute } from "../domain/enums/enums";
 import { taskService } from "../services/task.service";
+import { buildCommonStringValue } from "../../kernel/util/string-utils";
 
 class TaskUsecase {
     constructor() { }
@@ -11,12 +12,24 @@ class TaskUsecase {
         try {
             // validate
             if (groupTaskId === undefined) return msg400('Group task not found');
+            // convert
+            if (task.priority) {
+                task.priority = task.priority.map((item) => buildCommonStringValue(item.toString()));
+            }
             const createdTask = await taskService.createTaskInGroupTask(task);
             const taskResult = await taskService.handleAfterCreateTask(createdTask, groupTaskId);
-            if (isPrivate === IsPrivateRoute.PRIVATE) {
+            if (isPrivate === IsPrivateRoute.PUBLIC) {
                 await taskService.pushKafkaToCreateTask(createdTask, groupTaskId);
             }
             return taskResult;
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
+
+    async getGroupTaskAndProject(taskId: string): Promise<IResponse> {
+        try {
+            return msg200('OK')
         } catch (err: any) {
             return msg400(err.message.toString());
         }

@@ -2,6 +2,7 @@ package wo.work_optimization.core.port.store;
 
 import java.util.List;
 
+import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
 
 public interface TaskStore {
@@ -12,4 +13,5 @@ public interface TaskStore {
     List<Task> findAllBySchedulePlan(String scheduleId);
     List<Task> findAllByGroupTask(String groupTaskId);
     List<Task> findAllByProject(String projectId);
+    Task addParentTaskId(String taskId, ParentTask parentTask);
 }

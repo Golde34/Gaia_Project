@@ -4,7 +4,8 @@ export enum KafkaTopic {
 }
 
 export enum KafkaCommand {
-    CREATE_TASK = "taskManagerCreateTask",
+    TM_CREATE_TASK = "taskManagerCreateTask",
+    GAIA_CREATE_TASK = "gaiaCreateTask",
     CREATE_SCHEDULE_TASK = "schedulePlanCreateTask"
 }
 

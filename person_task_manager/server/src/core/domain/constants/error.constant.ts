@@ -56,3 +56,5 @@ export const UPDATE_USER_TAG_FAILED = "Update user tag failed";
 export const DELETE_USER_TAG_FAILED = "Delete user tag failed";
 export const ARCHIVE_USER_TAG_FAILED = "Archive user tag failed";
 export const ENABLE_USER_TAG_FAILED = "Enable user tag failed";
+
+export const GROUPTASK_AND_PROJECT_NOT_FOUND = "Group Task and Project not found";
