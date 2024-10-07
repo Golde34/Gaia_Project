@@ -7,6 +7,7 @@ import { groupTaskService } from "../../core/services/group-task.service";
 import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
 import { taskUsecase } from "../../core/usecases/task.usecase";
 import { IsPrivateRoute } from "../../core/domain/enums/enums";
+import { GetGroupTaskProject } from "../../core/domain/dtos/request_dtos/get-group-task-project.dto";
 
 class TaskController {
     constructor() {}
@@ -204,8 +205,10 @@ class TaskController {
     async getGroupTaskAndProject(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const taskId = req.params.id;
-            const taskResult = await taskUsecase.getGroupTaskAndProject(taskId);
+            const bodyJson = req.body;
+            const getGroupTaskProjectDto = plainToInstance(GetGroupTaskProject, bodyJson);
 
+            const taskResult = await taskUsecase.getGroupTaskAndProject(taskId, getGroupTaskProjectDto);
             return taskResult;
         } catch (err) {
             next(err);

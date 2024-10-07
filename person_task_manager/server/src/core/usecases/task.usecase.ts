@@ -4,6 +4,7 @@ import { TaskRequestDto } from "../domain/dtos/task.dto";
 import { IsPrivateRoute } from "../domain/enums/enums";
 import { taskService } from "../services/task.service";
 import { buildCommonStringValue } from "../../kernel/util/string-utils";
+import { GetGroupTaskProject } from "../domain/dtos/request_dtos/get-group-task-project.dto";
 
 class TaskUsecase {
     constructor() { }
@@ -27,8 +28,12 @@ class TaskUsecase {
         }
     }
 
-    async getGroupTaskAndProject(taskId: string): Promise<IResponse> {
+    async getGroupTaskAndProject(taskId: string, groupTaskProjectObj: GetGroupTaskProject): Promise<IResponse> {
         try {
+            // Check groupTask existed by name
+            // Check project existed by name
+            // Verify taskId in groupTask in project
+            // return groupTaskId, groupTaskName, projectId, projectName
             return msg200('OK')
         } catch (err: any) {
             return msg400(err.message.toString());
