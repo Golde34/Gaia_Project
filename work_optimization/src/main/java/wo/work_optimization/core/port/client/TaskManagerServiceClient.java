@@ -4,5 +4,5 @@ import wo.work_optimization.core.domain.dto.request.GetGroupTaskProjectRequestDT
 import wo.work_optimization.core.domain.dto.response.GroupTaskAndProjectResponseDTO;
 
 public interface TaskManagerServiceClient {
-    GroupTaskAndProjectResponseDTO getGroupTaskAndProject(GetGroupTaskProjectRequestDTO request); 
+    GroupTaskAndProjectResponseDTO getGroupTaskAndProject(String taskId, GetGroupTaskProjectRequestDTO request); 
 }

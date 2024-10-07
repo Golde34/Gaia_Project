@@ -16,19 +16,21 @@ import wo.work_optimization.infrastructure.client.ClientTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class TaskmanagerServiceAdapter {
-    
+
     @Value("${app.service.taskmanager-service.api.get-task}")
     private String getGroupTaskAPI;
 
     private final ClientTemplate clientTemplate;
     // private final ClientUtils clientUtils;
 
-    public GroupTaskAndProjectResponseDTO getGroupTaskAndProject(GetGroupTaskProjectRequestDTO request
-) {
+    public GroupTaskAndProjectResponseDTO getGroupTaskAndProject(String taskId, GetGroupTaskProjectRequestDTO request) {
         try {
+            String uri = String.format(getGroupTaskAPI, taskId);
             log.info("Calling api to taskmanager service: {}", getGroupTaskAPI);
-            ResponseEntity<GeneralResponse<GroupTaskAndProjectResponseDTO>> response = clientTemplate.post(getGroupTaskAPI, null, request, 
-                new ParameterizedTypeReference<GeneralResponse<GroupTaskAndProjectResponseDTO>>() {});
+            ResponseEntity<GeneralResponse<GroupTaskAndProjectResponseDTO>> response = clientTemplate.post(
+                    uri, null, request,
+                    new ParameterizedTypeReference<GeneralResponse<GroupTaskAndProjectResponseDTO>>() {
+                    });
             log.info("Response from taskmanager service: {}", response);
             return response.getBody().getData();
         } catch (Exception e) {

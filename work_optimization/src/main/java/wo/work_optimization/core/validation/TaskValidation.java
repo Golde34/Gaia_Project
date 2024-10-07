@@ -44,7 +44,7 @@ public class TaskValidation {
                 .project(request.getProject())
                 .build();
         if (dataUtils.isNullOrEmpty(existedParentTask)) {
-            GroupTaskAndProjectResponseDTO tmResponse = taskManagerServiceClient.getGroupTaskAndProject(tmRequest); 
+            GroupTaskAndProjectResponseDTO tmResponse = taskManagerServiceClient.getGroupTaskAndProject(request.getTaskId(), tmRequest); 
             if (dataUtils.isNullOrEmpty(tmResponse)) {
                 return ValidateConstants.FAIL;
             }
