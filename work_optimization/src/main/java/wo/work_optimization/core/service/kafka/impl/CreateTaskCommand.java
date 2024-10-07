@@ -78,24 +78,24 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
     }
 
     private ParentTask parentTaskNotExisted(CreateTaskRequestDTO request) {
-        ParentTask existedParentTask = parentTaskStore.findByGroupTaskId(request.getGroupTask()).orElse(null);
         GetGroupTaskProjectRequestDTO tmRequest = GetGroupTaskProjectRequestDTO.builder()
                 .userId(request.getUserId())
                 .groupTask(request.getGroupTask())
                 .project(request.getProject())
                 .build();
+        GroupTaskAndProjectResponseDTO tmResponse = taskManagerServiceClient.getGroupTaskAndProject(request.getTaskId(), tmRequest);
+        if (dataUtils.isNullOrEmpty(tmResponse)) {
+            return null;
+        }
+        ParentTask clientParentTask = ParentTask.builder()
+                .groupTaskId(tmResponse.getGroupTaskId())
+                .projectId(tmResponse.getProjectId())
+                .groupTaskName(tmResponse.getGroupTaskName())
+                .projectName(tmResponse.getProjectName())
+                .build();
+        ParentTask existedParentTask = parentTaskStore.findByGroupTaskId(clientParentTask.getGroupTaskId()).orElse(null);
         if (dataUtils.isNullOrEmpty(existedParentTask)) {
-            GroupTaskAndProjectResponseDTO tmResponse = taskManagerServiceClient.getGroupTaskAndProject(request.getTaskId(), tmRequest);
-            if (dataUtils.isNullOrEmpty(tmResponse)) {
-                return null;
-            }
-            ParentTask saveParentTask = ParentTask.builder()
-                    .groupTaskId(tmResponse.getGroupTaskId())
-                    .projectId(tmResponse.getProjectId())
-                    .groupTaskName(tmResponse.getGroupTaskName())
-                    .projectName(tmResponse.getProjectName())
-                    .build();
-            return parentTaskStore.createParentTask(saveParentTask);
+            return parentTaskStore.createParentTask(clientParentTask);
         }
         return existedParentTask;
     }
