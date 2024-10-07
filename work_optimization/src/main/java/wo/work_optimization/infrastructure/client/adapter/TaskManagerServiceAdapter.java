@@ -10,14 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.dto.request.GetGroupTaskProjectRequestDTO;
 import wo.work_optimization.core.domain.dto.response.GroupTaskAndProjectResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
+import wo.work_optimization.core.port.client.TaskManagerServiceClient;
 import wo.work_optimization.infrastructure.client.ClientTemplate;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class TaskmanagerServiceAdapter {
+public class TaskManagerServiceAdapter implements TaskManagerServiceClient {
 
-    @Value("${app.service.taskmanager-service.api.get-task}")
+    @Value("${app.service.task-manager-service.api.get-grouptask-project}")
     private String getGroupTaskAPI;
 
     private final ClientTemplate clientTemplate;
