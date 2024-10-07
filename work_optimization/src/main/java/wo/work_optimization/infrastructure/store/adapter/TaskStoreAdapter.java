@@ -1,18 +1,17 @@
 package wo.work_optimization.infrastructure.store.adapter;
 
 import jakarta.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.infrastructure.store.repository.ParentTaskRepository;
 import wo.work_optimization.infrastructure.store.repository.TaskRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -68,9 +67,12 @@ public class TaskStoreAdapter implements TaskStore {
 
     @Override
     public Task addParentTaskId(String taskId, ParentTask parentTask) {
-        Task task = taskRepository.findById(taskId).get();
-        task.setParentTask(parentTask);
-        taskRepository.save(task);
-        return task;
+        Optional<Task> task = taskRepository.findById(taskId);
+        if (task.isEmpty()) {
+            return null;
+        }
+        task.get().setParentTask(parentTask);
+        taskRepository.save(task.get());
+        return task.get();
     }
 }

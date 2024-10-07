@@ -1,14 +1,13 @@
 package wo.work_optimization.infrastructure.store.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.port.store.ParentTaskStore;
 import wo.work_optimization.infrastructure.store.repository.ParentTaskRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,8 +20,8 @@ public class ParentTaskAdapter implements ParentTaskStore {
     }
     
     @Override
-    public void createParentTask(ParentTask parentTask) {
-        this.parentTaskRepository.save(parentTask);
+    public ParentTask createParentTask(ParentTask parentTask) {
+        return this.parentTaskRepository.save(parentTask);
     }
 
     @Override
