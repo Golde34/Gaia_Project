@@ -62,7 +62,6 @@ public class TaskStoreAdapter implements TaskStore {
     @Override
     public void save(Task task) {
         taskRepository.save(task);
-        log.info("Task saved: {}", task);
     }
 
     @Override
