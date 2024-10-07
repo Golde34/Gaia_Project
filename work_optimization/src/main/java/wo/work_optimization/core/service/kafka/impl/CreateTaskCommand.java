@@ -1,5 +1,6 @@
 package wo.work_optimization.core.service.kafka.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +17,12 @@ import java.text.ParseException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, String> {
 
     private final TaskMapper taskMapper;
     private final TaskStore taskStore;
     private final TaskValidation taskValidation;
-
-    public CreateTaskCommand(TaskMapper taskMapper, TaskStore taskStore, TaskValidation taskValidation) {
-        this.taskMapper = taskMapper;
-        this.taskStore = taskStore;
-        this.taskValidation = taskValidation;
-    }
 
     @Override
     public String command() {
