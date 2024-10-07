@@ -49,7 +49,7 @@ class TaskUsecase {
                 } 
                 return msg200(mapGetGroupTaskProject);
             }
-            return msg400('Task existed in group task');
+            return msg400('Task not existed in group task');
         } catch (err: any) {
             console.log("Could not get group task and project: ", err);
             return msg400(err.message.toString());

@@ -235,9 +235,7 @@ class ProjectService {
     async getProjectByName(userId: number, projectName: string): Promise<IProjectEntity | undefined> {
         try {
             const projects = await projectStore.findAllProjectsByOwnerId(userId);
-            console.log(`All projects: ${projects} of userId: ${userId}`);
             const closeProject = levenshteinDistanceProject(projectName, projects);
-            console.log(`Close project: ${closeProject}`);
             if (closeProject === null) {
                 console.log(`Project ${projectName} not found`);
                 return undefined;
