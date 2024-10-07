@@ -98,6 +98,11 @@ class GroupTaskRepository {
     async findDefaultGroupTaskByProjectId(projectId: string): Promise<IGroupTaskEntity[]> {
         return await ProjectEntity.find({ projectId: projectId, activeStatus: ActiveStatus.active, isDefault: BooleanStatus.true})
     }
+
+    async checkExitedTask(taskId: string, groupTaskId: string): Promise<boolean> {
+        const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
+        return groupTask?.tasks.includes(taskId) ? true : false;
+    }
 }
 
 export const groupTaskRepository = new GroupTaskRepository();

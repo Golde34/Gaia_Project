@@ -164,7 +164,7 @@ taskRouter.put("/:id/enable", async (req: Request, res: Response, next: NextFunc
 });
 
 // get grouptask and project of a task
-taskRouter.get("/:id/get-grouptask-project", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+taskRouter.post("/:id/get-grouptask-project", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const result = await taskControllerImpl.getGroupTaskAndProject(req, next);
         return returnResult(result, GROUPTASK_AND_PROJECT_NOT_FOUND, res, next);

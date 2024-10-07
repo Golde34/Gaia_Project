@@ -17,6 +17,8 @@ import { NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../store/user-tag.store";
 import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../mapper/kafka-create-task.mapper";
 import { projectStore } from "../store/project.store";
+import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
+import mongoose from "mongoose";
 
 class TaskService {
     constructor(
@@ -270,6 +272,30 @@ class TaskService {
             }
         } catch (error: any) {
             return msg400(error.message.toString());
+        }
+    }
+
+    async checkExistedTask(taskId: string, groupTask: IGroupTaskEntity): Promise<boolean> {
+        try {
+            const taskIds = groupTask.tasks.map(task => task.toString());
+            console.log('Task ids: ', taskIds);
+            const result = taskIds.includes(taskId);
+            console.log('Result: ', result);
+            if (result) {
+                const task = await taskStore.findTaskById(taskId);
+                console.log('Task: ', task);
+                if (task === null || task === undefined) {
+                    console.log('Task does not exist');
+                    return false;
+                }
+            } else {
+                console.log('Group task does not have this task');
+                return false;
+            }
+            return true;
+        } catch (error: any) {
+            console.log('Error: ', error);
+            return false;
         }
     }
 

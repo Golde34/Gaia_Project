@@ -29,6 +29,6 @@ public class Task {
     private String scheduleTaskId;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private ParentTask parentTask;
 }

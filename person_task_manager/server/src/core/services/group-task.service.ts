@@ -1,4 +1,5 @@
 import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
+import { IProjectEntity } from "../../infrastructure/database/entities/project.entity";
 import { TaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { levenshteinDistanceGroupTasks, levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { IResponse } from "../common/response";
@@ -7,6 +8,7 @@ import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_
 import { BooleanStatus } from "../domain/enums/enums";
 import { groupTaskStore } from "../store/group-task.store";
 import { projectStore } from "../store/project.store";
+import { taskStore } from "../store/task.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
@@ -295,6 +297,23 @@ class GroupTaskService {
             return msg400(error.message.toString());
         }
     }
+
+    async getGroupTaskByName(project: IProjectEntity, groupTaskTitle: string): Promise<IGroupTaskEntity | undefined> {
+        try {
+            const groupTasks = await Promise.all(
+                project.groupTasks.map(groupTaskId => groupTaskStore.findGroupTaskById(groupTaskId))
+            );
+
+            const foundedGroupTask = levenshteinDistanceGroupTasks(groupTaskTitle, groupTasks);
+            if (foundedGroupTask === null) {
+                return undefined;
+            }
+
+            return foundedGroupTask;
+        } catch (error: any) {
+            return undefined;
+        }
+    } 
 }
 
 export const groupTaskService = new GroupTaskService();
