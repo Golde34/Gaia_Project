@@ -39,6 +39,7 @@ public class TaskValidation {
     private boolean parentTaskNotExisted(CreateTaskRequestDTO request) {
         ParentTask existedParentTask = parentTaskStore.findByGroupTaskId(request.getGroupTask()).orElse(null);
         GetGroupTaskProjectRequestDTO tmRequest = GetGroupTaskProjectRequestDTO.builder()
+                .userId(request.getUserId())
                 .groupTask(request.getGroupTask())
                 .project(request.getProject())
                 .build();

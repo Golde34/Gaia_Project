@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetGroupTaskProjectRequestDTO {
+    private Long userId;
     private String groupTask;
     private String project;
 }
