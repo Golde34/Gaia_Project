@@ -5,6 +5,8 @@ import { IsPrivateRoute } from "../domain/enums/enums";
 import { taskService } from "../services/task.service";
 import { buildCommonStringValue } from "../../kernel/util/string-utils";
 import { GetGroupTaskProject } from "../domain/dtos/request_dtos/get-group-task-project.dto";
+import { projectService } from "../services/project.service";
+import { groupTaskService } from "../services/group-task.service";
 
 class TaskUsecase {
     constructor() { }
@@ -30,12 +32,26 @@ class TaskUsecase {
 
     async getGroupTaskAndProject(taskId: string, groupTaskProjectObj: GetGroupTaskProject): Promise<IResponse> {
         try {
-            // Check groupTask existed by name
             // Check project existed by name
+            const closestProject = await projectService.getProjectByName(groupTaskProjectObj.userId, groupTaskProjectObj.project);
+            if (closestProject === undefined) return msg400('Project not found');
+            // Check project existed by name
+            const closestGroupTask = await groupTaskService.getGroupTaskByName(closestProject, groupTaskProjectObj.groupTask);
+            if (closestGroupTask === undefined) return msg400('Group task not found');
             // Verify taskId in groupTask in project
-            // return groupTaskId, groupTaskName, projectId, projectName
-            return msg200('OK')
+            const taskInGroupTask = await taskService.checkExistedTask(taskId, closestGroupTask);
+            if (taskInGroupTask === true) {
+                const mapGetGroupTaskProject = {
+                    groupTaskId: closestGroupTask._id,
+                    groupTaskName: closestGroupTask.title,
+                    projectId: closestProject._id,
+                    projectName: closestProject.name
+                } 
+                return msg200(mapGetGroupTaskProject);
+            }
+            return msg400('Task existed in group task');
         } catch (err: any) {
+            console.log("Could not get group task and project: ", err);
             return msg400(err.message.toString());
         }
     }

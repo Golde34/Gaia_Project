@@ -1,4 +1,6 @@
 import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
+import { IProjectEntity } from "../../infrastructure/database/entities/project.entity";
+import { levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { returnInternalServiceErrorResponse } from "../../kernel/util/return-result";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
@@ -230,6 +232,22 @@ class ProjectService {
         }
     }
 
+    async getProjectByName(userId: number, projectName: string): Promise<IProjectEntity | undefined> {
+        try {
+            const projects = await projectStore.findAllProjectsByOwnerId(userId);
+            console.log(`All projects: ${projects} of userId: ${userId}`);
+            const closeProject = levenshteinDistanceProject(projectName, projects);
+            console.log(`Close project: ${closeProject}`);
+            if (closeProject === null) {
+                console.log(`Project ${projectName} not found`);
+                return undefined;
+            }
+            return closeProject;
+        } catch (err: any) {
+            console.log("Could not get project by name: ", err);
+            return undefined;
+        }
+    }
 }
 
 export const projectService = new ProjectService();
