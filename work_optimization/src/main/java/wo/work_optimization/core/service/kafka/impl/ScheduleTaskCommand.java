@@ -51,7 +51,9 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
             throw new BusinessException("Schedule Task ID is required");
         }
         // if database has schedule task id return schedule task id is exist
-        if (ValidateConstants.FAIL == taskValidation.)
+        if (ValidateConstants.FAIL == taskValidation.validateCreateScheduleTaskRequest(request)) {
+            throw new BusinessException("Schedule Task ID is exist");
+        }
         return;
     }
 
