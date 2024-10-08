@@ -52,8 +52,8 @@ class ScheduleTaskService {
         }
     }
 
-    async pushKafkaCreateScheduleTaskMessage(taskId: string, scheduleTaskId: string): Promise<void> {
-        const data = scheduleTaskMapper.buildKafkaCreateTaskMapper(taskId, scheduleTaskId);
+    async pushKafkaCreateScheduleTaskMessage(taskId: string, scheduleTaskId: string, scheduleTaskName: string): Promise<void> {
+        const data = scheduleTaskMapper.buildKafkaCreateTaskMapper(taskId, scheduleTaskId, scheduleTaskName);
         const messages = [{
             value: JSON.stringify(createMessage(
                 KafkaCommand.CREATE_SCHEDULE_TASK, '00', 'Successful', data

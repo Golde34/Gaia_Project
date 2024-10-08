@@ -11,7 +11,8 @@ class ScheduleTaskUsecase {
             const result = await scheduleTaskService.createScheduleTask(task);
             console.log('Result: ', result);
             const scheduleTaskId = result.data.message.id;
-            scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId); 
+            const scheduleTaskName = result.data.message.title; 
+            scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId, scheduleTaskName); 
         } catch (error) {
             console.error("Error on createScheduleTask: ", error);
         }

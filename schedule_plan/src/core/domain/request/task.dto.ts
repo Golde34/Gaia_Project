@@ -5,4 +5,6 @@ export class KafkaCreateTaskMessage {
     taskId!: string;
     @IsString()
     scheduleTaskId!: string;
+    @IsString()
+    scheduleTaskName!: string;
 }
