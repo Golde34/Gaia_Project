@@ -20,4 +20,5 @@ public interface TaskRepository extends JpaRepository<Task, String> {
     Optional<Task> findById(String id);
     Task findByStatus(String status);
     Task findByPriority(int priority);
+    Optional<Task> findByIdAndScheduleTaskId(String id, String scheduleTaskId);
 }

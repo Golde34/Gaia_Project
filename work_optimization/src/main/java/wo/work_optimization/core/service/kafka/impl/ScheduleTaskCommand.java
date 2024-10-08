@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.TopicConstants;
+import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.kafka.CommandService;
+import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
@@ -22,6 +24,7 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
 
     private final TaskStore taskStore;
     private final TaskMapper taskMapper;
+    private final TaskValidation taskValidation;
     private final DataUtils dataUtils;
 
     @Override
@@ -48,6 +51,9 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
             throw new BusinessException("Schedule Task ID is required");
         }
         // if database has schedule task id return schedule task id is exist
+        if (ValidateConstants.FAIL == taskValidation.validateCreateScheduleTaskRequest(request)) {
+            throw new BusinessException("Schedule Task ID is exist");
+        }
         return;
     }
 

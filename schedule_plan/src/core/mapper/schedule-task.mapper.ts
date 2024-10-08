@@ -18,10 +18,11 @@ export const scheduleTaskMapper = {
         });
     },
 
-    buildKafkaCreateTaskMapper(taskId: string, scheduleTaskId: string) {
+    buildKafkaCreateTaskMapper(taskId: string, scheduleTaskId: string, scheduleTaskName: string ) {
         const message = new KafkaCreateTaskMessage()
         message.taskId = taskId
         message.scheduleTaskId = scheduleTaskId
+        message.scheduleTaskName = scheduleTaskName
         return message
     }
 }
