@@ -74,4 +74,13 @@ public class TaskStoreAdapter implements TaskStore {
         taskRepository.save(task.get());
         return task.get();
     }
+
+    @Override
+    public Task findtaskByScheduleIdAndTaskId(String scheduleTaskId, String taskId) {
+        Optional<Task> task = taskRepository.findByIdAndScheduleTaskId(taskId, scheduleTaskId);
+        if (!task.isPresent()) {
+            return null;
+        }
+        return task.get();
+    }
 }

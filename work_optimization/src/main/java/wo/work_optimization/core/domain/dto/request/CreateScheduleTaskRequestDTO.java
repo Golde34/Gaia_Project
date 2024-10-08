@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class CreateScheduleTaskRequestDTO {
     private String taskId;
     private String scheduleTaskId;
+    private String scheduleTaskName;
 }
