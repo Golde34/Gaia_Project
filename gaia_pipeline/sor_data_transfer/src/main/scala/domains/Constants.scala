@@ -9,6 +9,7 @@ object Constants {
   object KafkaTopic {
     final val SOR_TRAINING_MODEL: String = "gaia.sor-training-model.topic"
     final val CREATE_TASK: String = "task-manager.create-task.topic"
+    final val SCHEDULE_CREATE_TASK: String = "schedule-plan.create-schedule-task.topic"
   }
 
   object KafkaCmd {
@@ -18,6 +19,8 @@ object Constants {
 
     final val GAIA_CREATE_TASK: String = "gaiaCreateTask"
     final val TM_CREATE_TASK: String = "taskManagerCreateTask"
+    
+    final val CREATE_SCHEDULE_TASK: String = "schedulePlanCreateTask"
   }
 
   object TaskStatus {

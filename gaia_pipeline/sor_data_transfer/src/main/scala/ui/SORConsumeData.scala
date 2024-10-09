@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 import domains.TaskInput
 import services.SORDataTransfer
-import kafka_handler.{SORKafkaHandler, CreateTaskHandler} 
+import kafka_handler.{SORKafkaHandler, CreateTaskHandler, CreateScheduleTaskHandler} 
 import domains.Constants.KafkaTopic
 import kernel.configs.KafkaConfig
 
@@ -31,7 +31,8 @@ class SORConsumerData(config: KafkaConfig) {
   
   private val topicHandlers: Map[String, KafkaHandler] = Map(
     KafkaTopic.SOR_TRAINING_MODEL -> SORKafkaHandler,
-    KafkaTopic.CREATE_TASK -> CreateTaskHandler
+    KafkaTopic.CREATE_TASK -> CreateTaskHandler,
+    KafkaTopic.SCHEDULE_CREATE_TASK -> CreateScheduleTaskHandler
   )
 
   def consumeMessages(): Unit = {
