@@ -17,7 +17,8 @@ sor-data-transfer {
     group-id = "sor-data-transfer"
     topics = [
       "gaia.sor-training-model.topic", 
-      "task-manager.create-task.topic"
+      "task-manager.create-task.topic",
+      "schedule-plan.create-schedule-task.topic",
     ],
     auto-offset-reset = "earliest"
   }

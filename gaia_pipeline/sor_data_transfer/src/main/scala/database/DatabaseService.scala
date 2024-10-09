@@ -63,4 +63,10 @@ object TaskDatabaseService {
     val result = Await.result(db.run(query), 10.seconds)
     result
   } 
+
+  def updateTaskScheduleId(taskId: String, scheduleTaskId: String): Unit = {
+    val entities = TableQuery[TaskData]
+    val query = entities.filter(_.taskId === taskId).map(_.scheduleTaskId).update(Some(scheduleTaskId))
+    Await.result(db.run(query), 10.seconds)
+  }
 }

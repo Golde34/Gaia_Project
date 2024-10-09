@@ -52,4 +52,9 @@ object TaskDataStorage {
         isDataLakeSync = false
     )
   }
+
+  def updateTaskScheduleId(taskId: String, scheduleTaskId: String): Unit = {
+    TaskDatabaseService.init()
+    TaskDatabaseService.updateTaskScheduleId(taskId, scheduleTaskId)
+  }
 } 
