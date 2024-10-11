@@ -1,5 +1,5 @@
 sor:
-	cd sor-data-transfer && sbt run
+	cd sor_data_transfer && sbt run
 
 data-storage:
 	cd data_storage_handler && sbt run
