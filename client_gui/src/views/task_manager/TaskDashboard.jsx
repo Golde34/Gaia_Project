@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import Template from "../../components/template/Template";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getGroupTaskList } from "../../api/store/actions/task_manager/group-task.actions";
 import { useParams } from "react-router-dom";
-import { Button, Card, Col, Flex, Grid, Metric, Text } from "@tremor/react";
+import { Button, Card, Col, Flex, Grid, Metric, Switch, Text } from "@tremor/react";
 import TabGroupTask from "../../screens/groupTaskScreen/TabGroupTask";
 import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
@@ -11,8 +11,9 @@ import MessageBox from "../../components/subComponents/MessageBox";
 import { useCookies } from "react-cookie";
 
 function ContentArea() {
-    const projectId = useParams().id;
     const dispatch = useDispatch();
+
+    const projectId = useParams().id;
     const [cookies] = useCookies(['accessToken'])
     console.log("my cookie: " + cookies.accessToken)
 
@@ -30,19 +31,47 @@ function ContentArea() {
         didGroupTasksRef.current = true;
     }, [projectId]);
 
-    localStorage.setItem(projectId, JSON.stringify(groupTasks));
+    const getInititalView = () => {
+        const savedView = localStorage.getItem("isTableView");
+        return savedView ? JSON.parse(savedView) : false;
+    }
+
+    const [isTableView, setTableView] = useState(getInititalView);
+
+    useEffect(() => {
+        localStorage.setItem("isTableView", isTableView);
+    })
+
+    const handleTableViewChange = () => {
+        setTableView(!isTableView);
+    }
 
     return (
         <div>
             {loading ? (
                 <Text>Loading...</Text>
             ) : error ? (
-                <MessageBox message={error} /> 
+                <MessageBox message={error} />
             ) : (
                 <>
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Task Dashboard
                     </Metric>
+                    <Card>
+                        <div className="flex justify-end">
+                            <Switch
+                                id="table-view-switch"
+                                name="table-view-switch"
+                                checked={isTableView}
+                                className="me-2"
+                                onChange={() => {
+                                    setTableView(!isTableView);
+                                    handleTableViewChange();
+                                }} />
+                            <label htmlFor="table-view-switch" className="me-5 ms-2"
+                            ><Text>Table View</Text></label>
+                        </div>
+                    </Card>
                     {
                         groupTasks.length === 0 ? (
                             <>
@@ -69,8 +98,12 @@ function ContentArea() {
                             </>
                         ) : (
                             <>
-                                <TabGroupTask groupTasks={groupTasks} projectId={projectId} />
-                                <Flex className="mt-5" justifyContent="end">
+                            { isTableView ? (
+                               <p>Hello</p> 
+                            ) : (
+                                <TabGroupTask groupTasks={groupTasks} projectId={projectId} /> 
+                            )}
+                            <Flex className="mt-5" justifyContent="end">
                                     <a href="/client-gui/project">
                                         <Button>Back</Button>
                                     </a>
