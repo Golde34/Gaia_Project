@@ -150,7 +150,7 @@ export const taskTableReducer = (
         case TASK_TABLE_REQUEST:
             return { loading: true };
         case TASK_TABLE_SUCCESS:
-            return { loading: false, tasks: action.payload.getTasksByGroupTaskId };
+            return { loading: false, tasks: action.payload.getTaskTableByGroupTaskId };
         case TASK_TABLE_FAIL:
             return { loading: false, error: action.payload };
         default:

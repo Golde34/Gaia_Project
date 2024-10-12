@@ -199,7 +199,7 @@ export const moveTask = (taskId, oldGroupTaskId, newGroupTaskId) => async (dispa
 export const getTableTaskList = (groupTaskId) => async (dispatch) => {
     dispatch({ type: TASK_TABLE_REQUEST, payload: groupTaskId });
     try {
-        const { data } = await serverRequest(`/group-task/${groupTaskId}/tasks`, HttpMethods.GET, portName.middleware);
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/task-table`, HttpMethods.GET, portName.middleware);
         dispatch({ type: TASK_TABLE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

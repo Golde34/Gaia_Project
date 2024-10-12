@@ -10,8 +10,8 @@ const TaskTable = (props) => {
 
     // const projectId = props.projectId;
     const groupTaskId = props.groupTaskId;
-    const listTasks = useSelector((state) => state.taskList);
-    const { loading, error, tasks } = listTasks;
+    const taskTable = useSelector((state) => state.taskTable);
+    const { loading, error, tasks } = taskTable;
 
     const getTasks = useCallback(() => {
         dispatch(getTableTaskList(groupTaskId));
@@ -34,78 +34,32 @@ const TaskTable = (props) => {
                 <MessageBox message={error} />
             ) : (
                 <>
-                    {
-                        tasks.doneTaskList.length + tasks.notDoneTaskList.length === 0 ? (
-                            <p>No Tasks</p>
-                        ) : (
-                            <>
-                                {tasks.notDoneTaskList.length === 0 ? (
-                                    <p></p>
-                                ) : (
-                                    <>
-                                        <Title className="text-2xl font-bold text-gray-800">Not Done Task List</Title>
-                                        <Card className="mt-5">
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableHeaderCell>Task Name</TableHeaderCell>
-                                                        <TableHeaderCell>Task Description</TableHeaderCell>
-                                                        <TableHeaderCell>Task Status</TableHeaderCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {tasks.notDoneTaskList.map((task) => (
-                                                        <TableRow key={task.id}>
-                                                            <TableCell>{task.taskName}</TableCell>
-                                                            <TableCell>{task.taskDescription}</TableCell>
-                                                            <TableCell>
-                                                                <Badge color="red" icon={StatusOnlineIcon}>
-                                                                    {task.taskStatus}
-                                                                </Badge>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </Card>
-                                    </>
-                                )}
-                                {tasks.doneTaskList.length === 0 ? (
-                                    <p></p>
-                                ) : (
-                                    <>
-                                        <Title className="text-2xl font-bold text-gray-800">Done Task List</Title>
-                                        <Card className="mt-5">
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableHeaderCell>Task Name</TableHeaderCell>
-                                                        <TableHeaderCell>Task Description</TableHeaderCell>
-                                                        <TableHeaderCell>Task Status</TableHeaderCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {tasks.doneTaskList.map((task) => (
-                                                        <TableRow key={task.id}>
-                                                            <TableCell>{task.taskName}</TableCell>
-                                                            <TableCell>{task.taskDescription}</TableCell>
-                                                            <TableCell>
-                                                                <Badge color="green" icon={StatusOnlineIcon}>
-                                                                    {task.taskStatus}
-                                                                </Badge>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </Card>
-                                    </>
-                                )}
-                            </>
-                        )
-                    }
+                    <Card className="mt-5">
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableHeaderCell>Task Name</TableHeaderCell>
+                                    <TableHeaderCell>Task Description</TableHeaderCell>
+                                    <TableHeaderCell>Task Status</TableHeaderCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {tasks.tasks.map((task) => (
+                                    <TableRow key={task.id}>
+                                        <TableCell>{task.title}</TableCell>
+                                        <TableCell>{task.priority}</TableCell>
+                                        <TableCell>
+                                            <Badge color="red" icon={StatusOnlineIcon}>
+                                                {task.status}
+                                            </Badge>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </Card>
                 </>
-)}
+            )}
         </div>
     )
 }
