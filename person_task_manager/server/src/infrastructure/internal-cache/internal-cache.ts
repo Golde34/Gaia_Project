@@ -1,3 +1,5 @@
+import { InternalCacheConstants } from "../../core/domain/constants/constants";
+
 class InternalCache<T> {
     private cache: Map<string, { value: T, expiry: number }> = new Map();
     private maxSize: number;
@@ -17,17 +19,18 @@ class InternalCache<T> {
      * @returns 
      */
     public get(key: string): T | undefined {
-        const cacheItem = this.cache.get(key);
+        const internalKey = InternalCacheConstants.CACHE_PREFIX + key + InternalCacheConstants.CACHE_POSTFIX;        
+        const cacheItem = this.cache.get(internalKey);
 
         if (!cacheItem || Date.now() > cacheItem.expiry) {
             if (cacheItem) {
-                this.cache.delete(key);
+                this.cache.delete(internalKey);
             }
             return undefined;
         }
 
-        this.cache.delete(key);
-        this.cache.set(key, cacheItem);
+        this.cache.delete(internalKey);
+        this.cache.set(internalKey, cacheItem);
         return cacheItem.value;
     }
 
@@ -46,7 +49,7 @@ class InternalCache<T> {
             }
         }
         const expiry = Date.now() + this.ttl;
-        this.cache.set(key, { value, expiry });
+        this.cache.set(this.generateInternalCacheKey(key), { value, expiry });
     }
 
     /**
@@ -55,7 +58,8 @@ class InternalCache<T> {
      * @param key 
      */
     public clear(key: string): void {
-        this.cache.delete(key);
+        const internalKey = InternalCacheConstants.CACHE_PREFIX + key + InternalCacheConstants.CACHE_POSTFIX;
+        this.cache.delete(internalKey);
     }
     
     /**
@@ -64,4 +68,16 @@ class InternalCache<T> {
     public clearAll(): void {
         this.cache.clear();
     }
+
+    /**
+     * Generate internal cache key
+     * 
+     * @param key
+     * @returns
+     */
+    public generateInternalCacheKey(key: string): string {
+        return `${InternalCacheConstants.CACHE_PREFIX}${key}${InternalCacheConstants.CACHE_POSTFIX}`;
+    }
 }
+
+export default InternalCache;
