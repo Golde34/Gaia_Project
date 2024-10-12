@@ -11,6 +11,7 @@ export interface IScheduleTaskEntity extends Document {
     duration: Number;
     activeStatus: string;
     preferenceLevel: Number;
+    isSynchronizedWithWO: boolean;
 }
 
 export const scheduleTaskSchema = new mongoose.Schema(
@@ -51,6 +52,10 @@ export const scheduleTaskSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        isSynchronizedWithWO: {
+            type: Boolean,
+            required: true,        
+        }
     }, 
     {
         toJSON: { virtuals: true },

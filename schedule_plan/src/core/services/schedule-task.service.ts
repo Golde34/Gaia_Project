@@ -63,6 +63,48 @@ class ScheduleTaskService {
         const kafkaHandler = new KafkaHandler();
         kafkaHandler.produce(KafkaTopic.CREATE_SCHEDULE_TASK, messages);
     }
+
+    async sendRequestOptimizeTask(scheduleTask: any): Promise<void> {
+        // check database if schedule is sync with work optim
+        // send request by kafka to calculate and estimate time
+        // if not send rest request to update and optimize task
+
+        // const isSync = this.isTaskSynchronized(scheduleTask.scheduleTaskId);
+        // if (isSync) {
+        //     this.sendRequestByKafka(scheduleTask);
+        // } else {
+        //     this.sendRequestByRest(scheduleTask);
+        // }
+
+    }
+
+    async isTaskSynchronized(scheduleTaskId: string): Promise<boolean> {
+        return await scheduleTaskRepository.isTaskSynchronized(scheduleTaskId);
+    }
+
+    // async sendRequestByKafka(scheduleTask: any): Promise<void> {
+    //     const data = scheduleTaskMapper.buildKafkaOptimizeTaskMapper(scheduleTask);
+    //     const messages = [{
+    //         value: JSON.stringify(createMessage(
+    //             KafkaCommand.OPTIMIZE_SCHEDULE_TASK, '00', 'Successful', data
+    //         ))
+    //     }]
+    //     console.log("Push Kafka Message: ", messages);
+    //     const kafkaHandler = new KafkaHandler();
+    //     kafkaHandler.produce(KafkaTopic.OPTIMIZE_SCHEDULE_TASK, messages);
+    // }
+
+    // async sendRequestByRest(scheduleTask: any): Promise<void> {
+    //     const data = scheduleTaskMapper.buildKafkaOptimizeTaskMapper(scheduleTask);
+    //     const messages = [{
+    //         value: JSON.stringify(createMessage(
+    //             KafkaCommand.OPTIMIZE_SCHEDULE_TASK, '00', 'Successful', data
+    //         ))
+    //     }]
+    //     console.log("Push Kafka Message: ", messages);
+    //     const kafkaHandler = new KafkaHandler();
+    //     kafkaHandler.produce(KafkaTopic.OPTIMIZE_SCHEDULE_TASK, messages);
+    // }
 }
 
 export const scheduleTaskService = new ScheduleTaskService();

@@ -5,14 +5,16 @@ import { scheduleTaskService } from "../services/schedule-task.service";
 class ScheduleTaskUsecase {
     constructor() { }
 
-    async createScheduleTaskByKafka(scheduleTask: any): Promise<void>{
+    async createScheduleTaskByKafka(scheduleTask: any): Promise<void> {
         try {
             const task = scheduleTaskMapper.kafkaCreateTaskMapper(scheduleTask);
             const result = await scheduleTaskService.createScheduleTask(task);
             console.log('Result: ', result);
+
             const scheduleTaskId = result.data.message.id;
-            const scheduleTaskName = result.data.message.title; 
-            scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId, scheduleTaskName); 
+            const scheduleTaskName = result.data.message.title;
+            scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId, scheduleTaskName);
+            // const optimizeTask = scheduleTaskService.sendRequestOptimizeTask(result.data.message)
         } catch (error) {
             console.error("Error on createScheduleTask: ", error);
         }
