@@ -10,6 +10,9 @@ class ScheduleTaskUsecase {
             const task = scheduleTaskMapper.kafkaCreateTaskMapper(scheduleTask);
             const result = await scheduleTaskService.createScheduleTask(task);
             console.log('Result: ', result);
+
+            const optimizeTask = scheduleTaskService.sendRequestOptimizeTask(result.data.message)
+
             const scheduleTaskId = result.data.message.id;
             const scheduleTaskName = result.data.message.title; 
             scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId, scheduleTaskName); 
