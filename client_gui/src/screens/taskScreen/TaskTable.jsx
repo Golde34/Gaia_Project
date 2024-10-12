@@ -4,6 +4,7 @@ import { getTableTaskList } from "../../api/store/actions/task_manager/task.acti
 import { Badge, BadgeDelta, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
+import { convertTimestampToDate } from "../../kernels/utils/date-picker";
 
 const TaskTable = (props) => {
     const dispatch = useDispatch();
@@ -40,6 +41,9 @@ const TaskTable = (props) => {
                                     <TableHeaderCell>Task Name</TableHeaderCell>
                                     <TableHeaderCell>Task Priority</TableHeaderCell>
                                     <TableHeaderCell>Task Status</TableHeaderCell>
+                                    <TableHeaderCell>Duration</TableHeaderCell>
+                                    <TableHeaderCell>Start Date</TableHeaderCell>
+                                    <TableHeaderCell>Deadline</TableHeaderCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -59,6 +63,15 @@ const TaskTable = (props) => {
                                         </TableCell>
                                         <TableCell>
                                             <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Text className="text-sm">Duration: {task.duration} Hours</Text>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Text className="text-sm">Start Date: {convertTimestampToDate(task.startDate)}</Text>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Text className="text-sm">Deadline: {convertTimestampToDate(task.deadline)}</Text>
                                         </TableCell>
                                     </TableRow>
                                 ))}
