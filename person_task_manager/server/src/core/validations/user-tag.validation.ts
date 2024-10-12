@@ -1,5 +1,5 @@
 import { NOT_EXISTED } from "../domain/constants/constants";
-import { userTagStore } from "../store/user-tag.store";
+import { userTagStore } from "../port/store/user-tag.store";
 
 export const userTagValidation = {
     async checkExistedTagByTagId(tagId: string): Promise<boolean> {

@@ -1,8 +1,8 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { DeleteResult } from "mongodb";
-import { IUserTagEntity } from "../../infrastructure/database/entities/user-tag.entity";
-import { userTagRepository } from "../../infrastructure/database/repository/user-tag.repository";
-import { TaskTag } from "../domain/dtos/request_dtos/tag.dto";
+import { IUserTagEntity } from "../../../infrastructure/database/entities/user-tag.entity";
+import { userTagRepository } from "../../../infrastructure/database/repository/user-tag.repository";
+import { TaskTag } from "../../domain/dtos/request_dtos/tag.dto";
 
 class UserTagStore {
     constructor() {}
