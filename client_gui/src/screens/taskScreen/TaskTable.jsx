@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { getTableTaskList } from "../../api/store/actions/task_manager/task.actions";
-import { Badge, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
-import { StatusOnlineIcon } from "@heroicons/react/solid";
+import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
 
 const TaskTable = (props) => {
     const dispatch = useDispatch();
 
-    // const projectId = props.projectId;
     const groupTaskId = props.groupTaskId;
     const taskTable = useSelector((state) => state.taskTable);
     const { loading, error, tasks } = taskTable;
@@ -39,7 +38,7 @@ const TaskTable = (props) => {
                             <TableHead>
                                 <TableRow>
                                     <TableHeaderCell>Task Name</TableHeaderCell>
-                                    <TableHeaderCell>Task Description</TableHeaderCell>
+                                    <TableHeaderCell>Task Priority</TableHeaderCell>
                                     <TableHeaderCell>Task Status</TableHeaderCell>
                                 </TableRow>
                             </TableHead>
@@ -47,11 +46,19 @@ const TaskTable = (props) => {
                                 {tasks.tasks.map((task) => (
                                     <TableRow key={task.id}>
                                         <TableCell>{task.title}</TableCell>
-                                        <TableCell>{task.priority}</TableCell>
                                         <TableCell>
-                                            <Badge color="red" icon={StatusOnlineIcon}>
-                                                {task.status}
-                                            </Badge>
+                                            {
+                                                task.priority.length === 0 ? (
+                                                    <Badge color="gray">No Priority</Badge>
+                                                ) : (
+                                                    task.priority.map((priority) => (
+                                                        <Badge key={`${task.id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                                                    ))
+                                                )
+                                            }
+                                        </TableCell>
+                                        <TableCell>
+                                            <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
                                         </TableCell>
                                     </TableRow>
                                 ))}
