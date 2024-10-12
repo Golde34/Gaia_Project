@@ -17,4 +17,5 @@ type IGroupTaskAdapter interface {
 	UpdateGroupTaskOrdinal(input model.ProjectGroupTaskIDInput, id string) (response_dtos.GroupTaskResponseDTO, error)
 	ArchiveGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error)
 	EnableGroupTask(id string) (response_dtos.GroupTaskResponseDTO, error)
+	GetTaskTableByGroupTask(id string) (response_dtos.TaskTableResponseDTO, error)
 }

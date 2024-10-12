@@ -357,7 +357,8 @@ func (r *queryResolver) GetTaskByID(ctx context.Context, input model.IDInput) (*
 
 // GetTaskTableByGroupTaskID is the resolver for the getTaskTableByGroupTaskId field.
 func (r *queryResolver) GetTaskTableByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskTable, error) {
-	panic(fmt.Errorf("not implemented: GetTaskTableByGroupTaskID - getTaskTableByGroupTaskId"))
+	taskTable, err := groupTaskService.GetTaskTableByGroupTask(ctx, input)
+	return &taskTable, err
 }
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }

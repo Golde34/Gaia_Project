@@ -2,6 +2,7 @@ package client_adapter
 
 import (
 	"encoding/json"
+	"log"
 	converter_dtos "middleware_loader/core/domain/dtos/converter"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -163,3 +164,36 @@ func (adapter *GroupTaskAdapter) EnableGroupTask(id string) (response_dtos.Group
 	}
 	return result.(response_dtos.GroupTaskResponseDTO), nil
 }
+
+func (adapter *GroupTaskAdapter) GetTaskTableByGroupTask(id string) (response_dtos.TaskTableResponseDTO, error) {
+	getTasksURL := base.TaskManagerServiceURL + "/group-task/" + id + "/task-table"
+	var taskTable response_dtos.TaskTableResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(getTasksURL, "GET", nil, taskTable, headers)
+	log.Println(result.(map[string]interface{})["message"])
+	if err != nil {
+		return response_dtos.TaskTableResponseDTO{}, err
+	}
+
+	jsonData, err := json.Marshal(result.(map[string]interface{})["message"])
+	if err != nil {
+		return response_dtos.TaskTableResponseDTO{}, err
+	}
+
+	err = json.Unmarshal(jsonData, &taskTable)
+	if err != nil {
+		return response_dtos.TaskTableResponseDTO{}, err
+	}
+	return taskTable, nil
+}
+
+// func (adapter *GroupTaskAdapter) GetGroupTaskById(id string) (response_dtos.GroupTaskResponseDTO, error) {
+// 	getGroupTaskURL := base.TaskManagerServiceURL + adapter.domain + id
+// 	var groupTask response_dtos.GroupTaskResponseDTO
+// 	headers := utils.BuildDefaultHeaders()
+// 	result, err := utils.BaseAPIV2(getGroupTaskURL, "GET", nil, groupTask, headers)
+// 	if err != nil {
+// 		return response_dtos.GroupTaskResponseDTO{}, err
+// 	}
+// 	return result.(response_dtos.GroupTaskResponseDTO), nil
+// }
