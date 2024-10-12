@@ -9,6 +9,7 @@ import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { useCookies } from "react-cookie";
+import TaskTable from "../../screens/taskScreen/TaskTable";
 
 function ContentArea() {
     const dispatch = useDispatch();
@@ -98,12 +99,8 @@ function ContentArea() {
                             </>
                         ) : (
                             <>
-                            { isTableView ? (
-                               <p>Hello</p> 
-                            ) : (
-                                <TabGroupTask groupTasks={groupTasks} projectId={projectId} /> 
-                            )}
-                            <Flex className="mt-5" justifyContent="end">
+                                <TabGroupTask groupTasks={groupTasks} projectId={projectId} isTableView={isTableView} />
+                                <Flex className="mt-5" justifyContent="end">
                                     <a href="/client-gui/project">
                                         <Button>Back</Button>
                                     </a>
