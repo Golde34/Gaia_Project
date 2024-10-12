@@ -1,7 +1,7 @@
 import { ITaskEntity } from "../../../infrastructure/database/entities/task.entity";
 import { priorityOrder } from "../../../kernel/util/order-enums";
-import { groupTaskStore } from "../../store/group-task.store";
-import { taskStore } from "../../store/task.store";
+import { groupTaskStore } from "../../port/store/group-task.store";
+import { taskStore } from "../../port/store/task.store";
 
 class TaskServiceUtils {
     constructor() { }

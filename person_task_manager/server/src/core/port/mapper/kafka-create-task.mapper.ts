@@ -1,5 +1,5 @@
-import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
-import { EMPTY_SENTENCE } from "../domain/constants/constants";
+import { ITaskEntity } from "../../../infrastructure/database/entities/task.entity";
+import { EMPTY_SENTENCE } from "../../domain/constants/constants";
 import { IsString } from "class-validator";
 
 export class KafkaCreateTaskMessage {

@@ -2,8 +2,8 @@ import { IGroupTaskEntity } from "../../../infrastructure/database/entities/grou
 import { TaskEntity } from "../../../infrastructure/database/entities/task.entity";
 import { GROUP_TASK_NOT_FOUND } from "../../domain/constants/error.constant";
 import { Status } from "../../domain/enums/enums";
-import { groupTaskStore } from "../../store/group-task.store";
-import { projectStore } from "../../store/project.store";
+import { groupTaskStore } from "../../port/store/group-task.store";
+import { projectStore } from "../../port/store/project.store";
 import { groupTaskValidation } from "../../validations/group-task.validation";
 
 const groupTaskValidationImpl = groupTaskValidation;

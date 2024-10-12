@@ -7,18 +7,21 @@ import { projectService } from "./project.service";
 import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
 import { CREATE_TASK_FAILED, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../domain/constants/error.constant";
-import { taskStore } from "../store/task.store";
-import { groupTaskStore } from "../store/group-task.store";
+import { taskStore } from "../port/store/task.store";
+import { groupTaskStore } from "../port/store/group-task.store";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create-message";
 import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
-import { NOT_EXISTED } from "../domain/constants/constants";
-import { userTagStore } from "../store/user-tag.store";
-import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../mapper/kafka-create-task.mapper";
-import { projectStore } from "../store/project.store";
+import { InternalCacheConstants, NOT_EXISTED } from "../domain/constants/constants";
+import { userTagStore } from "../port/store/user-tag.store";
+import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../port/mapper/kafka-create-task.mapper";
+import { projectStore } from "../port/store/project.store";
 import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
 import mongoose from "mongoose";
+import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
+
+const taskCache = CacheSingleton.getInstance().getCache();
 
 class TaskService {
     constructor(
@@ -78,6 +81,10 @@ class TaskService {
         }]
         console.log("Push kafka message: ", messages)
         this.kafkaConfig.produce(KafkaTopic.CREATE_TASK, messages);
+    }
+
+    clearTaskCache(groupTaskId: string): void {
+        taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
@@ -300,11 +307,20 @@ class TaskService {
     }
 
     async getTaskTable(groupTaskId: string): Promise<IResponse> {
-        const taskTable = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
-        console.log(taskTable);
-        return msg200({
-            message: taskTable as any,
-        });
+        const taskTableCache = taskCache.get(InternalCacheConstants.TASK_TABLE + groupTaskId);
+        if (taskTableCache) {
+            console.log('Get task table from cache');
+            return msg200({
+                message: taskTableCache as any,
+            });
+        } else {
+            console.log('Get task table from database');
+            const taskTable = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
+            taskCache.set(InternalCacheConstants.TASK_TABLE + groupTaskId, taskTable);
+            return msg200({
+                message: taskTable as any,
+            });
+        }
     }
 
     // add subTask

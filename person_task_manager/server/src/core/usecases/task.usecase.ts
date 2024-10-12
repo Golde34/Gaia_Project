@@ -24,6 +24,7 @@ class TaskUsecase {
             if (isPrivate === IsPrivateRoute.PUBLIC) {
                 await taskService.pushKafkaToCreateTask(createdTask, groupTaskId);
             }
+            taskService.clearTaskCache(groupTaskId);
             return taskResult;
         } catch (err: any) {
             return msg400(err.message.toString());

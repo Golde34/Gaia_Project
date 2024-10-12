@@ -1,5 +1,5 @@
 import { Consumer, Producer, Kafka, Partitioners } from 'kafkajs';
-import { config } from '../../kernel/config/kafka-configuration';
+import { config } from '../../kernel/config/kafka.configuration';
 
 export class KafkaConfig {
     consumer: Consumer;

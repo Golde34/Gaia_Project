@@ -6,7 +6,7 @@ import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { ActiveStatus, BooleanStatus } from "../domain/enums/enums";
-import { projectStore } from "../store/project.store";
+import { projectStore } from "../port/store/project.store";
 import { projectValidation } from "../validations/project.validation";
 import { groupTaskService } from "./group-task.service";
 
