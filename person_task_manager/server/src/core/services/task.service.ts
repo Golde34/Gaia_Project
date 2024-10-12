@@ -300,6 +300,8 @@ class TaskService {
     }
 
     async getTaskTable(groupTaskId: string): Promise<IResponse> {
+        const cache = 
+        
         const taskTable = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
         console.log(taskTable);
         return msg200({
