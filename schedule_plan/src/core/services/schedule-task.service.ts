@@ -78,10 +78,9 @@ class ScheduleTaskService {
 
     }
 
-    // isTaskSynchronized(scheduleTaskId: string): boolean {
-    //     // check database if schedule is sync with work optim
-    //     return true;
-    // }
+    async isTaskSynchronized(scheduleTaskId: string): Promise<boolean> {
+        return await scheduleTaskRepository.isTaskSynchronized(scheduleTaskId);
+    }
 
     // async sendRequestByKafka(scheduleTask: any): Promise<void> {
     //     const data = scheduleTaskMapper.buildKafkaOptimizeTaskMapper(scheduleTask);
