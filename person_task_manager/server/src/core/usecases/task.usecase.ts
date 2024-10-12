@@ -55,6 +55,15 @@ class TaskUsecase {
             return msg400(err.message.toString());
         }
     }
+
+    async getTaskTableByGroupTaskId(groupTaskId: string): Promise<IResponse> {
+        try {
+            const tasksResult = await taskService.getTaskTable(groupTaskId);
+            return tasksResult;
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
 }
 
 export const taskUsecase = new TaskUsecase();
