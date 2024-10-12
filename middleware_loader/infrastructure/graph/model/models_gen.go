@@ -247,6 +247,14 @@ type TaskDashboard struct {
 	NotDoneTaskList []*Task `json:"notDoneTaskList"`
 }
 
+type TaskTable struct {
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Priority    []string `json:"priority"`
+	Status      string   `json:"status"`
+	Tasks       []*Task  `json:"tasks"`
+}
+
 type TokenInput struct {
 	Token string `json:"token"`
 }

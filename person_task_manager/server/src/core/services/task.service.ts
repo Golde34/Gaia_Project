@@ -48,7 +48,7 @@ class TaskService {
             // push task id to group task
             await groupTaskStore.pushTaskToGroupTask(groupTaskId, taskId);
             groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
- 
+
             return msg200({
                 message: (createTask as any)
             });
@@ -297,6 +297,14 @@ class TaskService {
             console.log('Error: ', error);
             return false;
         }
+    }
+
+    async getTaskTable(groupTaskId: string): Promise<IResponse> {
+        const taskTable = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
+        console.log(taskTable);
+        return msg200({
+            message: taskTable as any,
+        });
     }
 
     // add subTask

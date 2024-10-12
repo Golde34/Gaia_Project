@@ -6,6 +6,7 @@ import {
     TASK_DETAIL_FAIL, TASK_DETAIL_REQUEST, TASK_DETAIL_SUCCESS,
     TASK_GENERATE_FAIL, TASK_GENERATE_REQUEST, TASK_GENERATE_SUCCESS,
     TASK_LIST_FAIL, TASK_LIST_REQUEST, TASK_LIST_SUCCESS,
+    TASK_TABLE_FAIL, TASK_TABLE_REQUEST, TASK_TABLE_SUCCESS,
     TASK_UPDATE_FAIL, TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS, 
     TOP_TASK_FAIL, TOP_TASK_REQUEST, TOP_TASK_SUCCESS
 } from '../../constants/task_manager/task.constants';
@@ -135,6 +136,22 @@ export const moveTaskReducer = (
         case MOVE_TASK_SUCCESS:
             return { loading: false, message: action.payload.message };
         case MOVE_TASK_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const taskTableReducer = (
+    state = { loading: true, tasks: [] },
+    action
+) => {
+    switch (action.type) {
+        case TASK_TABLE_REQUEST:
+            return { loading: true };
+        case TASK_TABLE_SUCCESS:
+            return { loading: false, tasks: action.payload.getTaskTableByGroupTaskId };
+        case TASK_TABLE_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;

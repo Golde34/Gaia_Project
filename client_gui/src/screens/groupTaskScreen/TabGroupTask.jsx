@@ -1,13 +1,15 @@
 import { ArrowCircleRightIcon } from "@heroicons/react/solid";
-import { Card, Col, Flex, Grid, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react"
+import { Card, Col, Flex, Grid, Tab, TabGroup, TabList, TabPanels } from "@tremor/react"
 import { useState } from "react";
 import EllipsisMenu from "../../components/EllipsisMenu";
 import { CreateNewGroupTask } from "./CreateNewGroupTask";
 import { CreateTaskDialog } from "../taskScreen/CreateTaskDialog";
 import TaskList from "../taskScreen/TaskList";
 import TaskProgress from "../taskScreen/TaskProgress";
+import TaskTable from "../taskScreen/TaskTable";
 
 const TabGroupTask = (props) => {
+    const isTableView = props.isTableView;
     const groupTasks = props.groupTasks;
     const projectId = props.projectId;
 
@@ -73,7 +75,13 @@ const TabGroupTask = (props) => {
                                             </Col>
                                         </Grid>
                                     </div>
-                                    <TaskList groupTaskId={activeTab} projectId={projectId} />
+                                    <>
+                                        {isTableView ? (
+                                            <TaskTable groupTaskId={activeTab} />
+                                        ) : (
+                                            <TaskList groupTaskId={activeTab} projectId={projectId} />
+                                        )}
+                                    </>
                                 </>
                             ) : (
                                 <></>

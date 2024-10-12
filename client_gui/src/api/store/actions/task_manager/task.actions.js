@@ -7,7 +7,8 @@ import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL,
     TASK_GENERATE_REQUEST, TASK_GENERATE_FAIL, TASK_GENERATE_SUCCESS, 
     TASK_COMPLETED_REQUEST, TASK_COMPLETED_SUCCESS, TASK_COMPLETED_FAIL, 
     TOP_TASK_REQUEST, TOP_TASK_SUCCESS, TOP_TASK_FAIL, 
-    MOVE_TASK_REQUEST, MOVE_TASK_SUCCESS, MOVE_TASK_FAIL
+    MOVE_TASK_REQUEST, MOVE_TASK_SUCCESS, MOVE_TASK_FAIL,
+    TASK_TABLE_REQUEST, TASK_TABLE_SUCCESS, TASK_TABLE_FAIL
 } from '../../constants/task_manager/task.constants';
 
 const portName = {
@@ -192,5 +193,20 @@ export const moveTask = (taskId, oldGroupTaskId, newGroupTaskId) => async (dispa
                 ? error.response.data.message
                 : error.message,
         })
+    }
+}
+
+export const getTableTaskList = (groupTaskId) => async (dispatch) => {
+    dispatch({ type: TASK_TABLE_REQUEST, payload: groupTaskId });
+    try {
+        const { data } = await serverRequest(`/group-task/${groupTaskId}/task-table`, HttpMethods.GET, portName.middleware);
+        dispatch({ type: TASK_TABLE_SUCCESS, payload: data.data });
+    } catch (error) {
+        dispatch({
+            type: TASK_TABLE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
     }
 }

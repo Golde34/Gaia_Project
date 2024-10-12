@@ -70,3 +70,11 @@ type TaskDashboard {
 	doneTaskList: [Task!]!
 	notDoneTaskList: [Task!]!
 }
+
+type TaskTable {
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	tasks: [Task!]!
+}

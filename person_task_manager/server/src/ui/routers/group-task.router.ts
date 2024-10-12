@@ -82,6 +82,15 @@ groupTaskRouter.get("/:id/tasks", async (req: Request, res: Response, next: Next
     }
 });
 
+groupTaskRouter.get("/:id/task-table", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const groupTaskResult = await taskControllerImpl.getTaskTableByGroupTaskId(req, next);
+        returnResult(groupTaskResult, GROUP_TASK_NOT_FOUND, res, next);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 // update group task name
 groupTaskRouter.put("/:id/update-name",
     RequestValidator.validateV2(updateNameRequestDto),

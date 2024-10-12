@@ -48,6 +48,9 @@ func NewGroupTaskRouter(groupTaskService *services.GroupTaskService, db database
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.EnableGroupTask(w, r, groupTaskService)
 		})
+		r.Get("/{id}/task-table", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetTaskTableByGroupTask(w, r, groupTaskService)
+		})
 	})
 	return &GroupTaskRouter{
 		GroupTaskService: groupTaskService,

@@ -18,6 +18,7 @@ func NewGroupTaskService() *GroupTaskService {
 
 // var groupTaskValidation = validator.NewGroputaskDTOValidator()
 var taskDashboardResponse = response_dtos.NewTaskDashboardResponseDTO()
+var taskTableResponse = response_dtos.NewTaskTableResponseDTO()
 
 func (s *GroupTaskService) GetGroupTaskById(ctx context.Context, input model.IDInput) (model.GroupTask, error) {
 	groupTasks, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).GetGroupTaskById(input.ID)
@@ -124,4 +125,13 @@ func (s *GroupTaskService) EnableGroupTask(ctx context.Context, input model.IDIn
 	groupTaskModel := groupTaskResponse.MapperToGraphQLModel(groupTask)
 
 	return groupTaskModel, nil
+}
+
+func (s *GroupTaskService) GetTaskTableByGroupTask(ctx context.Context, input model.IDInput) (model.TaskTable, error) {
+	taskTable, err := client.IGroupTaskAdapter(&adapter.GroupTaskAdapter{}).GetTaskTableByGroupTask(input.ID)
+	if err != nil {
+		return model.TaskTable{}, err
+	}
+
+	return taskTableResponse.MapTaskTable(taskTable), nil
 }

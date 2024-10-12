@@ -149,3 +149,14 @@ func EnableGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *s
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
+
+func GetTaskTableByGroupTask(w http.ResponseWriter, r *http.Request, groupTaskService *services.GroupTaskService) {
+	groupTaskId := chi.URLParam(r, "id")
+	input := mapper.GetId(groupTaskId)
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getTaskTableByGroupTaskId", QueryInput: input, QueryOutput: model.TaskTable{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}

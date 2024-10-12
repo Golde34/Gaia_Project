@@ -19,6 +19,7 @@ type Query {
 	getTasksByGroupTaskId(input: IdInput!): TaskDashboard!
 	listAllTasks: [Task]!
 	getTaskById(input: IdInput!): Task!	
+	getTaskTableByGroupTaskId(input: IdInput!): TaskTable!
 }
 
 type Mutation {

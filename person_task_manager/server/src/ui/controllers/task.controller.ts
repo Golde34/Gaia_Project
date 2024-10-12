@@ -214,6 +214,19 @@ class TaskController {
             next(err);
         }
     }
+
+    async getTaskTableByGroupTaskId(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const groupTaskId = req.params.id;
+            const tasksResult = await taskUsecase.getTaskTableByGroupTaskId(groupTaskId);
+
+            return tasksResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+
 }
 
 export const taskController = new TaskController();
