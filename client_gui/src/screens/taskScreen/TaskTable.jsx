@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getTaskList } from "../../api/store/actions/task_manager/task.actions";
+import { getTableTaskList } from "../../api/store/actions/task_manager/task.actions";
 import { Badge, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { StatusOnlineIcon } from "@heroicons/react/solid";
@@ -14,7 +14,7 @@ const TaskTable = (props) => {
     const { loading, error, tasks } = listTasks;
 
     const getTasks = useCallback(() => {
-        dispatch(getTaskList(groupTaskId));
+        dispatch(getTableTaskList(groupTaskId));
     }, [dispatch, groupTaskId]);
 
     const debounceRef = useRef(null);
