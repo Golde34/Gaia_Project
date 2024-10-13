@@ -83,4 +83,10 @@ public class TaskStoreAdapter implements TaskStore {
         }
         return task.get();
     }
+
+    @Override
+    public Task checkSyncWithSchedulePlan(String taskId, String scheduleId) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        return task.filter(t -> t.getScheduleTaskId().equals(scheduleId)).orElse(null); 
+    }
 }

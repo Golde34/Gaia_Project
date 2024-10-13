@@ -6,6 +6,7 @@ import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enum";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 
 class ScheduleTaskService {
+    kafkaHandler: KafkaHandler = new KafkaHandler();
     constructor() { }
 
     async createScheduleTask(scheduleTask: any): Promise<IResponse> {
@@ -60,51 +61,18 @@ class ScheduleTaskService {
             ))
         }]
         console.log("Push Kafka Message: ", messages);
-        const kafkaHandler = new KafkaHandler();
-        kafkaHandler.produce(KafkaTopic.CREATE_SCHEDULE_TASK, messages);
+        this.kafkaHandler.produce(KafkaTopic.CREATE_SCHEDULE_TASK, messages);
     }
 
-    async sendRequestOptimizeTask(scheduleTask: any): Promise<void> {
-        // check database if schedule is sync with work optim
-        // send request by kafka to calculate and estimate time
-        // if not send rest request to update and optimize task
-
-        // const isSync = this.isTaskSynchronized(scheduleTask.scheduleTaskId);
-        // if (isSync) {
-        //     this.sendRequestByKafka(scheduleTask);
-        // } else {
-        //     this.sendRequestByRest(scheduleTask);
-        // }
-
-    }
-
-    async isTaskSynchronized(scheduleTaskId: string): Promise<boolean> {
-        return await scheduleTaskRepository.isTaskSynchronized(scheduleTaskId);
-    }
-
-    // async sendRequestByKafka(scheduleTask: any): Promise<void> {
-    //     const data = scheduleTaskMapper.buildKafkaOptimizeTaskMapper(scheduleTask);
-    //     const messages = [{
-    //         value: JSON.stringify(createMessage(
-    //             KafkaCommand.OPTIMIZE_SCHEDULE_TASK, '00', 'Successful', data
-    //         ))
-    //     }]
-    //     console.log("Push Kafka Message: ", messages);
-    //     const kafkaHandler = new KafkaHandler();
-    //     kafkaHandler.produce(KafkaTopic.OPTIMIZE_SCHEDULE_TASK, messages);
-    // }
-
-    // async sendRequestByRest(scheduleTask: any): Promise<void> {
-    //     const data = scheduleTaskMapper.buildKafkaOptimizeTaskMapper(scheduleTask);
-    //     const messages = [{
-    //         value: JSON.stringify(createMessage(
-    //             KafkaCommand.OPTIMIZE_SCHEDULE_TASK, '00', 'Successful', data
-    //         ))
-    //     }]
-    //     console.log("Push Kafka Message: ", messages);
-    //     const kafkaHandler = new KafkaHandler();
-    //     kafkaHandler.produce(KafkaTopic.OPTIMIZE_SCHEDULE_TASK, messages);
-    // }
+    async pushKafkaOptimizeTaskMessage(task: any): Promise<void> {
+        const message = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.OPTIMIZE_TASK, '00', 'Successful', task
+            ))
+        }] 
+        console.log("Push Kafka Message: ", message);
+        this.kafkaHandler.produce(KafkaTopic.CREATE_TASK, message);
+    }    
 }
 
 export const scheduleTaskService = new ScheduleTaskService();

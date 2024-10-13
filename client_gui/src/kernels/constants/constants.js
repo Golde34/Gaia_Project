@@ -6,10 +6,10 @@ export class TaskStatus {
 }
 
 export class TaskPriority {
-    static LOW = "LOW";
-    static MEDIUM = "MEDIUM";
-    static HIGH = "HIGH";
-    static STAR = "STAR";
+    static LOW = "Low";
+    static MEDIUM = "Medium";
+    static HIGH = "High";
+    static STAR = "Star";
 }
 
 export class BadgeDeltaType {

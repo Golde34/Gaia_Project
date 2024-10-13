@@ -9,7 +9,6 @@ import { CreateTaskDialog } from "../../screens/taskScreen/CreateTaskDialog";
 import { CreateNewGroupTask } from "../../screens/groupTaskScreen/CreateNewGroupTask";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { useCookies } from "react-cookie";
-import TaskTable from "../../screens/taskScreen/TaskTable";
 
 function ContentArea() {
     const dispatch = useDispatch();
@@ -41,6 +40,7 @@ function ContentArea() {
 
     useEffect(() => {
         localStorage.setItem("isTableView", isTableView);
+        localStorage.setItem(projectId, JSON.stringify(groupTasks));
     })
 
     const handleTableViewChange = () => {

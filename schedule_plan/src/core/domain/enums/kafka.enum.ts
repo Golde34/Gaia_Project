@@ -6,7 +6,8 @@ export enum KafkaTopic {
 export enum KafkaCommand {
     TM_CREATE_TASK = "taskManagerCreateTask",
     GAIA_CREATE_TASK = "gaiaCreateTask",
-    CREATE_SCHEDULE_TASK = "schedulePlanCreateTask"
+    CREATE_SCHEDULE_TASK = "schedulePlanCreateTask",
+    OPTIMIZE_TASK = "optimizeTask"
 }
 
 export class KafkaMessage {

@@ -14,7 +14,7 @@ class ScheduleTaskUsecase {
             const scheduleTaskId = result.data.message.id;
             const scheduleTaskName = result.data.message.title;
             scheduleTaskService.pushKafkaCreateScheduleTaskMessage(task.taskId, scheduleTaskId, scheduleTaskName);
-            // const optimizeTask = scheduleTaskService.sendRequestOptimizeTask(result.data.message)
+            // scheduleTaskService.pushKafkaOptimizeTaskMessage(result.data.message)
         } catch (error) {
             console.error("Error on createScheduleTask: ", error);
         }
