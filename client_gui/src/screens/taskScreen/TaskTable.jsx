@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { getTableTaskList } from "../../api/store/actions/task_manager/task.actions";
-import { Badge, BadgeDelta, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
 import { convertTimestampToDate } from "../../kernels/utils/date-picker";
@@ -40,10 +40,11 @@ const TaskTable = (props) => {
                                 <TableRow>
                                     <TableHeaderCell>Task Name</TableHeaderCell>
                                     <TableHeaderCell>Task Priority</TableHeaderCell>
-                                    <TableHeaderCell>Task Status</TableHeaderCell>
                                     <TableHeaderCell>Duration</TableHeaderCell>
                                     <TableHeaderCell>Start Date</TableHeaderCell>
                                     <TableHeaderCell>Deadline</TableHeaderCell>
+                                    <TableHeaderCell>Task Status</TableHeaderCell>
+                                    <TableHeaderCell>Task Action</TableHeaderCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -62,9 +63,6 @@ const TaskTable = (props) => {
                                             }
                                         </TableCell>
                                         <TableCell>
-                                            <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
-                                        </TableCell>
-                                        <TableCell>
                                             <Text className="text-sm">Duration: {task.duration} Hours</Text>
                                         </TableCell>
                                         <TableCell>
@@ -72,6 +70,13 @@ const TaskTable = (props) => {
                                         </TableCell>
                                         <TableCell>
                                             <Text className="text-sm">Deadline: {convertTimestampToDate(task.deadline)}</Text>
+                                        </TableCell>
+                                        <TableCell>
+                                            <BadgeDelta deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button color="indigo" className="text-sm me-3">Details</Button>
+                                            <Button color="rose">Deactivate</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
