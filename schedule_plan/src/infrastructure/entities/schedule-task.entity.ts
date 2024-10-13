@@ -54,7 +54,7 @@ export const scheduleTaskSchema = new mongoose.Schema(
         },
         isSynchronizedWithWO: {
             type: Boolean,
-            required: true,        
+            required: false,        
         }
     }, 
     {
