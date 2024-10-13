@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.kafka.impl;
+package wo.work_optimization.core.usecase.kafka.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import wo.work_optimization.core.port.client.TaskManagerServiceClient;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.ParentTaskStore;
 import wo.work_optimization.core.port.store.TaskStore;
-import wo.work_optimization.core.service.kafka.CommandService;
+import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
 

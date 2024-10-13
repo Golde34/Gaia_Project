@@ -1,16 +1,16 @@
-package wo.work_optimization.core.service.rest.impl.simpleschedule;
+package wo.work_optimization.core.usecase.rest.impl.tabu;
 
 import org.springframework.stereotype.Service;
+
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.service.rest.schedule.ScheduleService;
+import wo.work_optimization.core.usecase.rest.schedule.ScheduleService;
 
 @Service
-public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
-
+public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
     @Override
     public String method() {
-        return "simple";
+        return "tabu";
     }
 
     @Override
@@ -22,10 +22,7 @@ public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponse
 
     @Override
     public TaskResponseDTO doSchedule(TaskRequestDTO request) {
-//        CustomModel customModel = new CustomModel(request.getEffort(), request.getEnjoyability(), request.getDuration());
-//        double result = customModel.solveEquation();
-//        return TaskResponseDTO.builder().schedule(String.valueOf(result)).build();
-        return TaskResponseDTO.builder().schedule("OK").build();
+        return null;
     }
 
     @Override

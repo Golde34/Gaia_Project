@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import kafka.lib.java.adapter.consumer.messagehandlers.KafkaMessageHandler;
 import lombok.RequiredArgsConstructor;
 import wo.work_optimization.core.domain.constant.TopicConstants;
-import wo.work_optimization.core.service.kafka.CommandFactory;
+import wo.work_optimization.core.usecase.kafka.CommandFactory;
 import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 
 @Component

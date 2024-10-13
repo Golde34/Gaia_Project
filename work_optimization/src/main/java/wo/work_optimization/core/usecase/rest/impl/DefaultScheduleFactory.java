@@ -1,12 +1,12 @@
-package wo.work_optimization.core.service.rest.impl;
+package wo.work_optimization.core.usecase.rest.impl;
 
 import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.exception.BusinessException;
-import wo.work_optimization.core.service.rest.schedule.ScheduleConnector;
-import wo.work_optimization.core.service.rest.schedule.ScheduleFactory;
+import wo.work_optimization.core.usecase.rest.schedule.ScheduleConnector;
+import wo.work_optimization.core.usecase.rest.schedule.ScheduleFactory;
 
 import java.util.List;
 import java.util.Map;

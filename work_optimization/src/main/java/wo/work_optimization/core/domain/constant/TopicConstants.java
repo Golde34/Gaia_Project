@@ -4,10 +4,6 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TopicConstants {
-    @UtilityClass
-    public class OptimizeTaskCommand {
-        public static final String TOPIC = "task-manager.optimize-task.topic";
-    }
 
     @UtilityClass
     public class ScheduleJobCommand {
@@ -22,6 +18,7 @@ public class TopicConstants {
 
         public static final String CREATE_TASK = "taskManagerCreateTask";
         public static final String GAIA_CREATE_TASK = "gaiaCreateTask";
+        public static final String OPTIMIZE_TASK = "optimizeTask";
     }
 
     @UtilityClass

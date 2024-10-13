@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.rest.schedule;
+package wo.work_optimization.core.usecase.rest.schedule;
 
 import org.springframework.http.ResponseEntity;
 
