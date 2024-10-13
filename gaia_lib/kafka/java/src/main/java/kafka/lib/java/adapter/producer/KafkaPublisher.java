@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 @SuppressWarnings("deprecation")
 @Slf4j
 @ConditionalOnProperty(value = { "spring.kafka.producer.enabled" }, havingValue = "true")
+@Component
 public class KafkaPublisher {
     public final KafkaProducerRegistry kafkaTemplate;
 
