@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import org.springframework.stereotype.Service;
 
+import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.TopicConstants;
@@ -26,6 +27,7 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
     private final DataUtils dataUtils;
+    private final KafkaPublisher kafkaPublisher;
 
     @Override
     public String command() {
@@ -62,6 +64,8 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
         Task task = taskStore.findTaskByOriginalId(request.getTaskId());
         task.setScheduleTaskId(request.getScheduleTaskId());
         taskStore.save(task);
+
+        kafkaPublisher.pushAsync("Sync success fully", TopicConstants.CreateScheduleTaskCommand.SYNC_SCHEDULE_TASK, "wo", null);
         return "Save schedule task success";
     }
     

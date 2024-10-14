@@ -16,15 +16,13 @@ public class TaskService {
     private final TaskStore taskStore;
     private final SchedulePlanClient schedulePlanClient;
 
-    public Task synchronzedWithSchedulePlan(String taskId, String scheduleId) {
+    public void synchronzedWithSchedulePlan(String taskId, String scheduleId) {
         boolean isSync = taskStore.checkSyncWithSchedulePlan(taskId, scheduleId) != null;        
         if (!isSync) {
             Task task = schedulePlanClient.getSchedulePlanId(taskId);
             if (task != null) {
                 taskStore.createTask(task);
-                return task;
             }
         }
-        return null;
     }
 }
