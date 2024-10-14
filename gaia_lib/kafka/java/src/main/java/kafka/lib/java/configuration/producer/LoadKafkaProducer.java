@@ -1,5 +1,6 @@
 package kafka.lib.java.configuration.producer;
 
+import kafka.lib.java.configuration.KafkaProducerEventConfig;
 import kafka.lib.java.configuration.models.KafkaProducerServerConfig;
 import kafka.lib.java.properties.KafkaConfigurationProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class LoadKafkaProducer {
         try {
             Map<String, KafkaProducerServerConfig.ProducerServer> servers = getListServers.getServers();
             servers.forEach((key, value) -> {
-                log.info("Kafka Server name: " + key);
+                log.info("Kafka Producer Server name: " + key);
                 KafkaTemplate<String, String> kafkaTemplate = kafkaTemplate(value);
                 initKafkaTemplateBean(kafkaTemplate, key);
                 // Store KafkaTemplate
