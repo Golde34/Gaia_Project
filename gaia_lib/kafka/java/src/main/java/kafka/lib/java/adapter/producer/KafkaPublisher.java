@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
@@ -101,24 +102,23 @@ public class KafkaPublisher {
             log.error("Exception when parse data to json {}", exception.getMessage());
             return;
         }
-        @SuppressWarnings("unchecked")
-        ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) this.kafkaTemplate.getKafkaTemplate(kafkaServer).send(topic, message);
-        if (callback != null) {
-            future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-                public void onSuccess(@SuppressWarnings("null") SendResult<String, String> result) {
-                    log.info("===> Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset()
-                            + "] to topic: " + topic + " SUCCESS !!!");
-                    callback.onSuccess(message);
-                }
 
-                public void onFailure(@SuppressWarnings("null") Throwable ex) {
-                    log.info("xxxx> Unable to send message=[" + message + "] to topic: " + topic
-                            + " FAIL !!! \n Due to : "
-                            + ex.getMessage(), ex);
+        CompletableFuture<SendResult<String, String>> future = (CompletableFuture) this.kafkaTemplate
+                .getKafkaTemplate(kafkaServer).send(topic, message);
+
+        if (callback != null) {
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    KafkaPublisher.log.info("===> Sent message=[" + message + "] with offset=["
+                            + result.getRecordMetadata().offset() + "] to topic: " + topic + " SUCCESS !!!");
+                    callback.onSuccess(message);
+                } else {
+                    KafkaPublisher.log.info("xxxx> Unable to send message=[" + message + "] to topic: " + topic
+                            + " FAIL !!! \n Due to : " + ex.getMessage(), ex);
                     callback.onFailure(ex);
                 }
             });
-        }
+        } 
     }
 
     /**
@@ -205,7 +205,8 @@ public class KafkaPublisher {
             }
         }
         @SuppressWarnings("unchecked")
-        ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) this.kafkaTemplate.getKafkaTemplate(kafkaServer).send(producerRecord);
+        ListenableFuture<SendResult<String, String>> future = (ListenableFuture<SendResult<String, String>>) this.kafkaTemplate
+                .getKafkaTemplate(kafkaServer).send(producerRecord);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             public void onSuccess(@SuppressWarnings("null") SendResult<String, String> result) {
                 log.info("===> Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset()
