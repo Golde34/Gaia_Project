@@ -4,7 +4,6 @@ import java.text.ParseException;
 
 import org.springframework.stereotype.Service;
 
-import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.TopicConstants;
@@ -14,6 +13,7 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
+import wo.work_optimization.core.service.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
@@ -23,11 +23,11 @@ import wo.work_optimization.kernel.utils.DataUtils;
 @RequiredArgsConstructor
 public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskRequestDTO, String> {
 
+    private final TaskService taskService;
     private final TaskStore taskStore;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
     private final DataUtils dataUtils;
-    private final KafkaPublisher kafkaPublisher;
 
     @Override
     public String command() {
@@ -61,12 +61,17 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
 
     @Override
     public String doCommand(CreateScheduleTaskRequestDTO request) {
-        Task task = taskStore.findTaskByOriginalId(request.getTaskId());
-        task.setScheduleTaskId(request.getScheduleTaskId());
-        taskStore.save(task);
+        try {
+            Task task = taskStore.findTaskByOriginalId(request.getTaskId());
+            task.setScheduleTaskId(request.getScheduleTaskId());
+            taskStore.save(task);
 
-        kafkaPublisher.pushAsync("Sync success fully", TopicConstants.CreateScheduleTaskCommand.SYNC_SCHEDULE_TASK, "wo", null);
-        return "Save schedule task success";
+            taskService.sendKafkaToSyncWithSchedulePlan(task, "00", "Sync successfully");
+            return "Save schedule task success";
+        } catch (Exception e) {
+            taskService.sendKafkaToSyncWithSchedulePlan(null, "99", "Sync failed");
+            log.error(String.format("Cannot save schedule task: %s", e.getMessage()), e);
+            return "Save schedule task failed";
+        }
     }
-    
 }
