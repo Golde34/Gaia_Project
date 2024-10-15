@@ -1,5 +1,6 @@
 import { KafkaTopic } from "../../core/domain/enums/kafka.enum";
-import { handlerMessage } from "../../ui/kafka/create-task.consumer";
+import { handlerCreateTaskMessage } from "../../ui/kafka/create-task.consumer";
+import { handlerSyncTaskMessage } from "../../ui/kafka/sync-task.consumer";
 import { KafkaHandler } from "./kafka-handler";
 import * as dotenv from "dotenv";
 
@@ -38,5 +39,6 @@ const getKafkaTopicsFromEnv = (): string[] => {
 }
 
 const kafkaTopicHandlers: Record<string, (message: string) => void> = {
-    [KafkaTopic.CREATE_TASK]: (message: string) => handlerMessage(message),
+    [KafkaTopic.CREATE_TASK]: (message: string) => handlerCreateTaskMessage(message),
+    [KafkaTopic.SYNC_SCHEDULE_TASK]: (message: string) => handlerSyncTaskMessage(message)
 }
