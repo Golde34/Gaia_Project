@@ -16,7 +16,7 @@ public class CreateScheduleTaskConsumer extends KafkaMessageHandler {
 
     @Override
     public String getTopic() {
-        return TopicConstants.CreateScheduleTaskCommand.CREATE_SCHEDULE_TASK;
+        return TopicConstants.CreateScheduleTaskCommand.CREATE_TOPIC;
     }
 
     @Override

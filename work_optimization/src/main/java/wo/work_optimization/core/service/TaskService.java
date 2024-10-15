@@ -35,7 +35,7 @@ public class TaskService {
 
     public void sendKafkaToSyncWithSchedulePlan(Task task, String errorCode, String errorMessage) {
         log.info("Task before send kafka to sync with schedule plan: {}", task);
-        SchedulePlanSyncronizedMessage data = new SchedulePlanSyncronizedMessage();
+        SchedulePlanSyncronizedMessage data;
         if (dataUtils.isNullOrEmpty(task)) {
             data = SchedulePlanSyncronizedMessage.builder().taskSynchronizeStatus("Sync fail").build();
         }
