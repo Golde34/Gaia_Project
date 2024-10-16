@@ -33,7 +33,7 @@ public class OptimizeTaskCommand extends CommandService<String, String> {
     @Override
     public String doCommand(String request) {
         // Check if work optimization is synchronized with schedule plan
-        taskService.synchronzedWithSchedulePlan(request, request);
+        taskService.sendRestToSyncWithSchedulePlan(request, request);
         return "OptimizeTaskCommand doCommand";
     }
     

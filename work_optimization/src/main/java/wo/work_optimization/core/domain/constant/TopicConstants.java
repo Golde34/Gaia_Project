@@ -23,7 +23,8 @@ public class TopicConstants {
 
     @UtilityClass
     public class CreateScheduleTaskCommand {
-        public static final String TOPIC = "schedule-plan.create-schedule-task.topic";
+        public static final String CREATE_TOPIC = "schedule-plan.create-schedule-task.topic";
+        public static final String SYNC_TOPIC = "schedule-plan.sync-schedule-task.topic";
 
         public static final String CREATE_SCHEDULE_TASK = "schedulePlanCreateTask";
         public static final String SYNC_SCHEDULE_TASK = "syncScheduleTask";

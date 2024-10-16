@@ -1,7 +1,7 @@
 import { KafkaCommand } from "../../core/domain/enums/kafka.enum";
 import { scheduleTaskUsecase } from "../../core/usecase/schedule-task.usecase";
 
-export const handlerMessage = (message: string) => {
+export const handlerCreateTaskMessage = (message: string) => {
     const kafkaMessage = JSON.parse(message);
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
