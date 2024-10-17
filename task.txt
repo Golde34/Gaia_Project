@@ -37,8 +37,3 @@ health care: 3004
 finance: 3005
 search: 3006
 
-command: 3014
-optimize: 3013
-github api: 3012
-auto tool: 3011
-AI model: 3010
