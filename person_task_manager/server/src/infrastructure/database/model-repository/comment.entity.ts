@@ -1,13 +1,6 @@
 import mongoose from "mongoose";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
-
-export interface ICommentEntity extends Document {
-    _id: string;
-    content: string;
-    createdAt: Date;
-    updatedAt: Date;
-    activeStatus: ActiveStatus;
-}
+import { ICommentEntity } from "../../../core/domain/entities/comment.entity";
 
 export const commentSchema = new mongoose.Schema(
     {

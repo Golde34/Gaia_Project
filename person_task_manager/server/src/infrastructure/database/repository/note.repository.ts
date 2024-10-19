@@ -1,4 +1,5 @@
-import { INoteEntity, NoteEntity } from "../entities/note.entity";
+import { INoteEntity } from "../../../core/domain/entities/note.entity";
+import { NoteEntity } from "../model-repository/note.entity";
 
 class NoteRpository {
     constructor() { }

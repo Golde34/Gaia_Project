@@ -1,6 +1,6 @@
-import { IGroupTaskEntity } from "../../../infrastructure/database/entities/group-task.entity";
-import { TaskEntity } from "../../../infrastructure/database/entities/task.entity";
+import { TaskEntity } from "../../../infrastructure/database/model-repository/task.entity";
 import { GROUP_TASK_NOT_FOUND } from "../../domain/constants/error.constant";
+import { IGroupTaskEntity } from "../../domain/entities/group-task.entity";
 import { Status } from "../../domain/enums/enums";
 import { groupTaskStore } from "../../port/store/group-task.store";
 import { projectStore } from "../../port/store/project.store";

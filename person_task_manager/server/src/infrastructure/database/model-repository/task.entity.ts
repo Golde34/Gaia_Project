@@ -1,25 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { ISubTaskEntity } from "./sub-task.entity";
-import { ICommentEntity } from "./comment.entity";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
-import { IUserTagEntity } from "./user-tag.entity";
-
-export interface ITaskEntity extends Document {
-    _id: string;
-    title: string;
-    description: string;
-    priority: string[];
-    status: string;
-    startDate: Date;
-    deadline: Date;
-    duration: number;
-    subTasks: ISubTaskEntity["_id"][];
-    comments: ICommentEntity["_id"][];
-    createdAt: Date;
-    updatedAt: Date;
-    activeStatus: ActiveStatus;
-    tag: IUserTagEntity 
-}
+import { ITaskEntity } from "../../../core/domain/entities/task.entity";
 
 export const taskSchema = new mongoose.Schema(
     {

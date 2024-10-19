@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { taskRepository } from "../../../infrastructure/database/repository/task.repository";
 import { DeleteResult } from "mongodb";
-import { ITaskEntity } from "../../../infrastructure/database/entities/task.entity";
+import { ITaskEntity } from "../../domain/entities/task.entity";
 
 class TaskStore {
     constructor() { }

@@ -1,8 +1,9 @@
 import { DeleteResult } from "mongodb";
-import { GroupTaskEntity, IGroupTaskEntity } from "../entities/group-task.entity";
+import { GroupTaskEntity } from "../model-repository/group-task.entity";
 import { UpdateWriteOpResult } from "mongoose";
 import { ActiveStatus, BooleanStatus, Status } from "../../../core/domain/enums/enums";
-import { ProjectEntity } from "../entities/project.entity";
+import { ProjectEntity } from "../model-repository/project.entity";
+import { IGroupTaskEntity } from "../../../core/domain/entities/group-task.entity";
 
 class GroupTaskRepository {
     constructor() { }

@@ -1,28 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { ITaskEntity } from "./task.entity";
 import { ActiveStatus, BooleanStatus } from "../../../core/domain/enums/enums";
-import { IUserTagEntity } from "./user-tag.entity";
+import { IProjectEntity } from "../../../core/domain/entities/project.entity";
 
-export interface IGroupTaskEntity extends Document {
-    _id: string;
-    title: string;
-    description: string;
-    priority: string[];
-    status: string;
-    tasks: ITaskEntity["_id"][];
-    totalTasks: number;
-    completedTasks: number;
-    ordinalNumber: number;
-    createdAt: Date;
-    updatedAt: Date;
-    activeStatus: ActiveStatus;
-    isDefault: BooleanStatus;
-    tag: IUserTagEntity
-}
-
-export const groupTaskSchema = new mongoose.Schema(
+export const projectSchema = new mongoose.Schema(
     {
-        title: {
+        name: {
             type: String,
             required: true,
         },
@@ -30,30 +12,22 @@ export const groupTaskSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
-        priority: {
-            type: [String],
-            required: true,
-        },
         status: {
             type: String,
             required: true,
         },
-        tasks: {
+        color: {
+            type: String,
+            required: false,
+        },
+        groupTasks: {
             type: [Schema.Types.ObjectId],
-            ref: 'Task',
+            ref: 'GroupTask',
             required: false,
         },
-        totalTasks: {
+        ownerId: {
             type: Number,
-            required: false,
-        },
-        completedTasks: {
-            type: Number,
-            required: false,
-        },
-        ordinalNumber: {
-            type: Number,
-            required: false,
+            required: true,
         },
         createdAt: {
             type: Date,
@@ -67,6 +41,7 @@ export const groupTaskSchema = new mongoose.Schema(
             type: String,
             enum: Object.values(ActiveStatus),
             default: ActiveStatus.active,
+            required: true,
         },
         isDefault: {
             type: String,
@@ -87,10 +62,8 @@ export const groupTaskSchema = new mongoose.Schema(
     },
 );
 
-groupTaskSchema.virtual("id").get(function () {
+projectSchema.virtual("id").get(function () {
     return this._id.toString();
 });
 
-
-
-export const GroupTaskEntity = mongoose.model<IGroupTaskEntity>("GroupTask", groupTaskSchema);
+export const ProjectEntity = mongoose.model<IProjectEntity>("Project", projectSchema);

@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { subTaskRepository } from "../../../infrastructure/database/repository/sub-task.repository";
 import { DeleteResult } from "mongodb";
-import { ISubTaskEntity } from "../../../infrastructure/database/entities/sub-task.entity";
+import { ISubTaskEntity } from "../../domain/entities/sub-task.entity";
 
 class SubTaskStore {
     constructor() {}
