@@ -8,9 +8,18 @@ export const noteSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        summaryDisplayText: {
+            type: String,
+            require: false,
+        },
         fileLocation: {
             type: String,
             required: false,
+        },
+        isLock: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         tag: {
             type: Schema.Types.ObjectId,
