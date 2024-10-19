@@ -17,6 +17,7 @@ function ContentArea() {
         }
     }, [isUserValid, navigate]);
     
+    
 
     return (
         <div>
