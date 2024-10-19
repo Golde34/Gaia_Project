@@ -18,7 +18,7 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        const convertedNote: INoteEntity = createNoteMapper(note);
+        const convertedNote: INoteEntity = createNoteMapper(note, note.userId);
         return await noteStore.createNote(convertedNote);
     }
 

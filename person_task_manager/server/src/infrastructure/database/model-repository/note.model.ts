@@ -39,6 +39,10 @@ export const noteSchema = new mongoose.Schema(
             type: Date,
             required: false,
         },
+        ownerId: {
+            type: Number,
+            required: true,
+        },
     },
     {
         toJSON: { virtuals: true },

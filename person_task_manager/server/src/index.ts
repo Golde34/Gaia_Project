@@ -14,7 +14,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { msg200, msg400, msg405, sendResponse } from "./core/common/response-helpers";
 import { userTagRouter } from "./ui/routers/user-tag.router";
-import { noteRouter } from "./ui/routers/note.controller";
+import { noteRouter } from "./ui/routers/note.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()

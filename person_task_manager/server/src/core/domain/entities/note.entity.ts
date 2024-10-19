@@ -11,4 +11,5 @@ export interface INoteEntity extends Document {
     activeStatus: ActiveStatus;
     createdAt: Date;
     updatedAt: Date;
+    ownerId: number;
 }
