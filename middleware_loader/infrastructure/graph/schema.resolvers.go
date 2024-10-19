@@ -251,6 +251,11 @@ func (r *mutationResolver) EnableGroupTask(ctx context.Context, input model.IDIn
 	return &groupTask, err
 }
 
+// CreateNote is the resolver for the createNote field.
+func (r *mutationResolver) CreateNote(ctx context.Context, input model.CreateNoteInput) (*model.Note, error) {
+	panic(fmt.Errorf("not implemented: CreateNote - createNote"))
+}
+
 // ListAllUsers is the resolver for the listAllUsers field.
 func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error) {
 	users, err := userService.ListAllUsers(ctx)
@@ -360,6 +365,12 @@ func (r *queryResolver) GetTaskTableByGroupTaskID(ctx context.Context, input mod
 	taskTable, err := groupTaskService.GetTaskTableByGroupTask(ctx, input)
 	return &taskTable, err
 }
+
+// GetAllNotes is the resolver for the getAllNotes field.
+func (r *queryResolver) GetAllNotes(ctx context.Context) ([]*model.Note, error) {
+	panic(fmt.Errorf("not implemented: GetAllNotes - getAllNotes"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
@@ -368,3 +379,11 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+

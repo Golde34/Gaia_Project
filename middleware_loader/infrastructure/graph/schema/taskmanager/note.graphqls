@@ -1,0 +1,15 @@
+type Note {
+    id: ID!
+    name: String!
+    summaryDisplayText: String
+    isLock: Boolean!
+    activeStatus: String!
+    createdAt: String!
+    updatedAt: String!
+    ownerId: Float!
+}
+
+input CreateNoteInput {
+    name: String!
+    ownerId: Float!
+}
