@@ -16,7 +16,7 @@ public class UserCRUDStoreAdapter implements UserCRUDStore {
     private UserRepository userRepository;
 
     public User getUserById(Long id) {
-        return userRepository.getUserById(id);
+        return userRepository.findUserById(id);
     }
 
     public User findUserById(Long id) {

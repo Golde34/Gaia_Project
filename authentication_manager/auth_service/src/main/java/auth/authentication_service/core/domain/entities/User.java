@@ -54,6 +54,9 @@ public class User {
     @JsonIgnore
     private Collection<AuthToken> tokens;
 
+    @OneToOne(mappedBy = "user_config")
+    private UserConfig userConfig;
+
     @Override
     public String toString() {
         return "User{" +
