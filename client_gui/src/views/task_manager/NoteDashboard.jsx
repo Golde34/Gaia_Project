@@ -39,23 +39,28 @@ function ContentArea() {
     const notes = [
         {
             id: 1,
-            name: "Note 1"
+            name: "Note 1",
+            isLock: false
         },
         {
             id: 2,
-            name: "Note 2"
+            name: "Note 2",
+            isLock: true
         },
         {
             id: 3,
-            name: "Note 3"
+            name: "Note 3",
+            isLock: false
         },
         {
             id: 4,
-            name: "Note 4"
+            name: "Note 4",
+            isLock: false
         },
         {
             id: 5,
-            name: "Note 5"
+            name: "Note 5",
+            isLock: true
         },
     ]
 
@@ -66,18 +71,18 @@ function ContentArea() {
             ) : error ? (
                 <p>{error}</p>
             ) : ( */}
-                <>
+                <div className="max-w-7xl mx-auto">
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Note Dashboard
                     </Metric>
-                    <div className="grid md:grid-cols-3 w-full h-full items-center">
+                    <div className="grid md:grid-cols-4 w-full h-full items-center">
                         {
                             notes.length === 0 || notes.length === undefined ? (
                                 <p>No notes found</p>
                             ) : (
                                 notes.map((note) => (
-                                    <div key={note.id} className="m-3">
-                                        <NoteItem name={note.name} 
+                                    <div key={note.id} className="ms-5 me-5 mt-7">
+                                        <NoteItem name={note.name} isLock={note.isLock}
                                             url={`/note/${note.id}`} buttonText="View note" elementId={note.id}
                                         />
                                     </div>
@@ -86,7 +91,7 @@ function ContentArea() {
                         }
                     </div>
 
-                </>
+                </div>
             {/* )
             } */}
         </div>
