@@ -1,5 +1,5 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { CommentEntity } from "../model-repository/comment.entity";
+import { CommentEntity } from "../model-repository/comment.model";
 import { DeleteResult } from "mongodb";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
 import { ICommentEntity } from "../../../core/domain/entities/comment.entity";

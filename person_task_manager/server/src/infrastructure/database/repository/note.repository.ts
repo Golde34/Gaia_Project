@@ -1,6 +1,6 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { INoteEntity } from "../../../core/domain/entities/note.entity";
-import { NoteEntity } from "../model-repository/note.entity";
+import { NoteEntity } from "../model-repository/note.model";
 import { DeleteResult } from "mongodb";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
 

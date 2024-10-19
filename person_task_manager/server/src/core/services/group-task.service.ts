@@ -1,4 +1,4 @@
-import { TaskEntity } from "../../infrastructure/database/model-repository/task.entity";
+import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
 import { levenshteinDistanceGroupTasks, levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";

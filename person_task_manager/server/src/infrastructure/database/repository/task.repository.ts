@@ -1,5 +1,5 @@
 import { UpdateWriteOpResult } from "mongoose";
-import { TaskEntity } from "../model-repository/task.entity";
+import { TaskEntity } from "../model-repository/task.model";
 import { DeleteResult } from "mongodb";
 import { ActiveStatus, Priority, Status } from "../../../core/domain/enums/enums";
 import { ITaskEntity } from "../../../core/domain/entities/task.entity";

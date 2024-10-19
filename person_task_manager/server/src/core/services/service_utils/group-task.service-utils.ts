@@ -1,4 +1,4 @@
-import { TaskEntity } from "../../../infrastructure/database/model-repository/task.entity";
+import { TaskEntity } from "../../../infrastructure/database/model-repository/task.model";
 import { GROUP_TASK_NOT_FOUND } from "../../domain/constants/error.constant";
 import { IGroupTaskEntity } from "../../domain/entities/group-task.entity";
 import { Status } from "../../domain/enums/enums";
