@@ -30,6 +30,7 @@ const Signin = () => {
             if (userInfo['data'] !== null) {
                 if (accessToken === undefined) {
                     cookieManager.saveCookie('accessToken', JSON.parse(userInfo)['accessToken'], '/');
+                    localStorage.setItem('userInfo', JSON.parse(userInfo)['username']);
                 }
                 navigate('/dashboard');
             } else {

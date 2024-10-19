@@ -4,6 +4,7 @@ import Template from "../../components/template/Template";
 function ContentArea() {
     const dispatch = useDispatch();
 
+    
     return (
         <div>
             <h1>Note Dashboard</h1>
