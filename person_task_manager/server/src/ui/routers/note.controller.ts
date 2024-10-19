@@ -66,17 +66,6 @@ noteRouter.get("/get/:id",
         }
     });
 
-noteRouter.get("/get-by-user/:userId",
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const noteResult = await noteControllerImpl.getNotesByUserId(req, next);
-            return returnResult(noteResult, NOTE_NOT_FOUND, res, next);
-        }
-        catch (err) {
-            next(err);
-        }
-    });
-
 noteRouter.put("/archive/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
