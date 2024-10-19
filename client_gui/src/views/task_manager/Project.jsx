@@ -50,11 +50,11 @@ function ContentArea() {
                     </Metric>
                     <div className="grid md:grid-cols-3 w-full h-full items-center">
                         {projects.map((project) => (
-                            <div key={project.id} className="m-3">
+                           <div key={project.id} className="m-3">
                                 <CardButton name={project.name} description={project.description} color={project.color}
                                     url={`/project/${project.id}`} buttonText="View Project" elementId={project.id}
                                 />
-                            </div>
+                            </div> 
                         ))}
                         <div key={'create-project'} className="m-3 flex justify-center">
                             <CreateNewProject />

@@ -1,6 +1,6 @@
 import levenshtein from 'fast-levenshtein';
-import { IProjectEntity } from '../../infrastructure/database/entities/project.entity';
-import { IGroupTaskEntity } from '../../infrastructure/database/entities/group-task.entity';
+import { IProjectEntity } from '../../core/domain/entities/project.entity';
+import { IGroupTaskEntity } from '../../core/domain/entities/group-task.entity';
 
 export const levenshteinDistanceProject = (input: string, listProjects: (IProjectEntity | null)[]) => {
     let closeProject = null;

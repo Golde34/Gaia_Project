@@ -1,4 +1,4 @@
-import { CommentEntity } from "../../infrastructure/database/entities/comment.entity";
+import { CommentEntity } from "../../infrastructure/database/model-repository/comment.model";
 
 export const commentValidation = {
     async checkExistedCommentById(commentId: string): Promise<boolean> {

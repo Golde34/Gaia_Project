@@ -1,10 +1,10 @@
-import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
-import { IProjectEntity } from "../../infrastructure/database/entities/project.entity";
-import { TaskEntity } from "../../infrastructure/database/entities/task.entity";
+import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
 import { levenshteinDistanceGroupTasks, levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
+import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
+import { IProjectEntity } from "../domain/entities/project.entity";
 import { BooleanStatus } from "../domain/enums/enums";
 import { groupTaskStore } from "../port/store/group-task.store";
 import { projectStore } from "../port/store/project.store";

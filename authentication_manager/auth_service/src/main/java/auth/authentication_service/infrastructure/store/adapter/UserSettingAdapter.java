@@ -6,10 +6,13 @@ import auth.authentication_service.core.port.store.UserSettingStore;
 import auth.authentication_service.infrastructure.store.repositories.UserRepository;
 import auth.authentication_service.infrastructure.store.repositories.UserSettingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserSettingAdapter implements UserSettingStore {
 
     private final UserSettingRepository userSettingRepository;
@@ -23,6 +26,7 @@ public class UserSettingAdapter implements UserSettingStore {
 
     @Override
     public UserSetting updateUserSetting(UserSetting userSetting) {
-        return userSettingRepository.saveUserSetting(userSetting);
+        log.info("Saving user setting: {}", userSetting);   
+        return userSettingRepository.save(userSetting);
     }
 }

@@ -1,11 +1,12 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { DeleteResult } from "mongodb";
 import { TaskTag } from "../../../core/domain/dtos/request_dtos/tag.dto";
-import { IUserTagEntity, UserTagEntity } from "../entities/user-tag.entity";
+import { UserTagEntity } from "../model-repository/user-tag.model";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
-import { ProjectEntity } from "../entities/project.entity";
-import { GroupTaskEntity } from "../entities/group-task.entity";
-import { TaskEntity } from "../entities/task.entity";
+import { ProjectEntity } from "../model-repository/project.model";
+import { GroupTaskEntity } from "../model-repository/group-task.model";
+import { TaskEntity } from "../model-repository/task.model";
+import { IUserTagEntity } from "../../../core/domain/entities/user-tag.entity";
 
 class UserTagRepository {
     constructor() { }

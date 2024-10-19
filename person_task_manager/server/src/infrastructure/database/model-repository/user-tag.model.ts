@@ -1,14 +1,6 @@
 import mongoose from "mongoose";
 import { ActiveStatus } from "../../../core/domain/enums/enums";
-
-export interface IUserTagEntity extends Document {
-    _id: string;
-    name: string;
-    color: string;
-    weight: number;
-    activeStatus: ActiveStatus;
-    ownerId: number;
-}
+import { IUserTagEntity } from "../../../core/domain/entities/user-tag.entity";
 
 export const userTagSchema = new mongoose.Schema(
     {
@@ -24,14 +16,15 @@ export const userTagSchema = new mongoose.Schema(
             type: Number,
             required: true,
         }, 
-        activeStatus: {
-            type: String,
-            required: true,
-        },
         ownerId: {
             type: Number,
             required: true,
-        }
+        },
+        activeStatus: {
+            type: String,
+            enum: Object.values(ActiveStatus),
+            default: ActiveStatus.active,
+        },
     },
     {
         toJSON: { virtuals: true },

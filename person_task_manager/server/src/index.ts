@@ -14,6 +14,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { msg200, msg400, msg405, sendResponse } from "./core/common/response-helpers";
 import { userTagRouter } from "./ui/routers/user-tag.router";
+import { noteRouter } from "./ui/routers/note.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -55,6 +56,7 @@ async function main(): Promise<void> {
     app.use("/sub-task", subTaskRouter);
     app.use("/comment", commentRouter);
     app.use("/user-tag", userTagRouter);
+    app.use("/note", noteRouter);
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         sendResponse(msg405("Method Not Allowed"), res, next);

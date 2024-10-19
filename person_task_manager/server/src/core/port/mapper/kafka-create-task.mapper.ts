@@ -1,6 +1,6 @@
-import { ITaskEntity } from "../../../infrastructure/database/entities/task.entity";
 import { EMPTY_SENTENCE } from "../../domain/constants/constants";
 import { IsString } from "class-validator";
+import { ITaskEntity } from "../../domain/entities/task.entity";
 
 export class KafkaCreateTaskMessage {
     @IsString()

@@ -1,5 +1,5 @@
-import { SubTaskEntity } from "../../infrastructure/database/entities/sub-task.entity";
-import { TaskEntity } from "../../infrastructure/database/entities/task.entity";
+import { SubTaskEntity } from "../../infrastructure/database/model-repository/sub-task.model";
+import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
 
 export const subTaskValidation = {
     async checkExistedSubTaskBySubTaskId(subTaskId: string): Promise<boolean> {

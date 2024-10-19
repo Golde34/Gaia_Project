@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { groupTaskRepository } from "../../../infrastructure/database/repository/group-task.repository";
 import { DeleteResult } from "mongodb";
-import { IGroupTaskEntity } from "../../../infrastructure/database/entities/group-task.entity";
+import { IGroupTaskEntity } from "../../domain/entities/group-task.entity";
 
 class GroupTaskStore {
     constructor() { }

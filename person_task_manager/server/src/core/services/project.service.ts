@@ -1,10 +1,10 @@
 import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
-import { IProjectEntity } from "../../infrastructure/database/entities/project.entity";
 import { levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { returnInternalServiceErrorResponse } from "../../kernel/util/return-result";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
+import { IProjectEntity } from "../domain/entities/project.entity";
 import { ActiveStatus, BooleanStatus } from "../domain/enums/enums";
 import { projectStore } from "../port/store/project.store";
 import { projectValidation } from "../validations/project.validation";

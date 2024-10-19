@@ -12,14 +12,13 @@ import { groupTaskStore } from "../port/store/group-task.store";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create-message";
-import { ITaskEntity } from "../../infrastructure/database/entities/task.entity";
 import { InternalCacheConstants, NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../port/store/user-tag.store";
 import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../port/mapper/kafka-create-task.mapper";
 import { projectStore } from "../port/store/project.store";
-import { IGroupTaskEntity } from "../../infrastructure/database/entities/group-task.entity";
-import mongoose from "mongoose";
 import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
+import { ITaskEntity } from "../domain/entities/task.entity";
+import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
 
 const taskCache = CacheSingleton.getInstance().getCache();
 

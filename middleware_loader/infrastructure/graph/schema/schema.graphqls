@@ -20,6 +20,8 @@ type Query {
 	listAllTasks: [Task]!
 	getTaskById(input: IdInput!): Task!	
 	getTaskTableByGroupTaskId(input: IdInput!): TaskTable!
+
+	getAllNotes: [Note]!
 }
 
 type Mutation {
@@ -73,6 +75,8 @@ type Mutation {
 	updateOrdinalNumber(input: ProjectGroupTaskIdInput!): GroupTask!
 	archieveGroupTask(input: IdInput!): GroupTask!
 	enableGroupTask(input: IdInput!): GroupTask!
+
+	createNote(input: CreateNoteInput!): Note!
 }
 
 input IdInput {

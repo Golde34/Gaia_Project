@@ -40,6 +40,11 @@ type CreateGroupTaskInput struct {
 	Tasks       []string `json:"tasks,omitempty"`
 }
 
+type CreateNoteInput struct {
+	Name    string  `json:"name"`
+	OwnerID float64 `json:"ownerId"`
+}
+
 type CreateProjectInput struct {
 	Name         string `json:"name"`
 	Description  string `json:"description"`
@@ -136,6 +141,17 @@ type MoveTaskInput struct {
 }
 
 type Mutation struct {
+}
+
+type Note struct {
+	ID                 string  `json:"id"`
+	Name               string  `json:"name"`
+	SummaryDisplayText *string `json:"summaryDisplayText,omitempty"`
+	IsLock             bool    `json:"isLock"`
+	ActiveStatus       string  `json:"activeStatus"`
+	CreatedAt          string  `json:"createdAt"`
+	UpdatedAt          string  `json:"updatedAt"`
+	OwnerID            float64 `json:"ownerId"`
 }
 
 type Privilege struct {

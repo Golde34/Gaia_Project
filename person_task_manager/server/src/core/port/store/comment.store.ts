@@ -1,7 +1,7 @@
 import { UpdateWriteOpResult } from "mongoose";
 import { commentRepository } from "../../../infrastructure/database/repository/comment.repository";
 import { DeleteResult } from "mongodb";
-import { ICommentEntity } from "../../../infrastructure/database/entities/comment.entity";
+import { ICommentEntity } from "../../domain/entities/comment.entity";
 
 class CommentStore {
     constructor() { }

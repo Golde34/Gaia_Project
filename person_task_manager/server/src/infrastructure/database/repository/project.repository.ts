@@ -1,7 +1,8 @@
 import { DeleteResult } from "mongodb";
-import { IProjectEntity, ProjectEntity } from "../entities/project.entity";
+import { ProjectEntity } from "../model-repository/project.model";
 import { UpdateWriteOpResult } from "mongoose";
 import { ActiveStatus, BooleanStatus, Status } from "../../../core/domain/enums/enums";
+import { IProjectEntity } from "../../../core/domain/entities/project.entity";
 
 class ProjectRepository {
     constructor() { }

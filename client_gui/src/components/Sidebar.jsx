@@ -9,6 +9,7 @@ import {
 	ExternalLinkIcon,
 	HomeIcon,
 	MailIcon,
+	PencilAltIcon,
 	ShieldCheckIcon,
 	UserIcon,
 } from "@heroicons/react/solid";
@@ -46,7 +47,7 @@ const Sidebar = () => {
 								className="p-2 rounded-lg mb-4">
 								<HomeIcon width={20} />
 							</Button>
-							<Description>Schedule Calendar</Description>
+							<Description>Dashboard</Description>
 						</LinkWrapper>
 					</Col>
 					{/* <Col numColSpan={1}>
@@ -59,12 +60,12 @@ const Sidebar = () => {
 						</LinkWrapper>
 					</Col> */}
 					<Col numColSpan={1}>
-						<LinkWrapper href="/client-gui/schedule">
+						<LinkWrapper href="/client-gui/profile">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
-								<CalendarIcon width={20} />
+								<UserIcon width={20} />
 							</Button>
-							<Description>Schedule Calendar</Description>
+							<Description>User Profile</Description>
 						</LinkWrapper>
 					</Col>
 					<Col numColSpan={1}>
@@ -77,14 +78,23 @@ const Sidebar = () => {
 						</LinkWrapper>
 					</Col>
 					<Col numColSpan={1}>
-						<LinkWrapper href="/client-gui/profile">
+						<LinkWrapper href="/client-gui/schedule">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
-								<UserIcon width={20} />
+								<CalendarIcon width={20} />
 							</Button>
-							<Description>User Profile</Description>
+							<Description>Schedule Calendar</Description>
 						</LinkWrapper>
-					</Col>	
+					</Col>
+					<Col numColSpan={1}>
+						<LinkWrapper href="/client-gui/note-dashboard">
+							<Button variant="primary" color="indigo"
+								className="p-2 rounded-lg mb-4">
+									<PencilAltIcon width={20} />
+							</Button>
+							<Description>Note </Description>
+						</LinkWrapper>
+					</Col>
 				</Grid>
 				<ChartBarIcon
 					width={40}
