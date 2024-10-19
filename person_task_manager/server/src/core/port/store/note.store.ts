@@ -9,6 +9,7 @@ class NoteStore {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
+        console.log("Store createNote: ", note);
         return await noteRepository.createNote(note);
     }
 

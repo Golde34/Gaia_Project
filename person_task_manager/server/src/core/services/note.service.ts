@@ -2,6 +2,7 @@ import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { IResponse } from "../common/response";
 import { msg200 } from "../common/response-helpers";
 import { INoteEntity } from "../domain/entities/note.entity";
+import { createNoteMapper } from "../port/mapper/note.mapper";
 import { noteStore } from "../port/store/note.store";
 
 class NoteService {
@@ -17,7 +18,8 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        return await noteStore.createNote(note);
+        const convertedNote: INoteEntity = createNoteMapper(note);
+        return await noteStore.createNote(convertedNote);
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
