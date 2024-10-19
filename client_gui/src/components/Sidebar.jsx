@@ -69,15 +69,6 @@ const Sidebar = () => {
 						</LinkWrapper>
 					</Col>
 					<Col numColSpan={1}>
-						<LinkWrapper href="/client-gui/schedule">
-							<Button variant="primary" color="indigo"
-								className="p-2 rounded-lg mb-4">
-								<CalendarIcon width={20} />
-							</Button>
-							<Description>Schedule Calendar</Description>
-						</LinkWrapper>
-					</Col>
-					<Col numColSpan={1}>
 						<LinkWrapper href="/client-gui/project">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
@@ -87,14 +78,14 @@ const Sidebar = () => {
 						</LinkWrapper>
 					</Col>
 					<Col numColSpan={1}>
-						<LinkWrapper href="/client-gui/profile">
+						<LinkWrapper href="/client-gui/schedule">
 							<Button variant="primary" color="indigo"
 								className="p-2 rounded-lg mb-4">
-								<UserIcon width={20} />
+								<CalendarIcon width={20} />
 							</Button>
-							<Description>User Profile</Description>
+							<Description>Schedule Calendar</Description>
 						</LinkWrapper>
-					</Col>	
+					</Col>
 					<Col numColSpan={1}>
 						<LinkWrapper href="/client-gui/note-dashboard">
 							<Button variant="primary" color="indigo"
