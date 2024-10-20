@@ -5,8 +5,8 @@ import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { useNavigate } from "react-router-dom";
 import { getNoteList } from "../../api/store/actions/task_manager/note.actions";
 import { Metric } from "@tremor/react";
-import CardButton from "../../components/subComponents/CardButton";
 import NoteItem from "../../components/subComponents/NoteItem";
+import CreateNewNote from "../../screens/noteScreen/CreateNewNote";
 
 function ContentArea() {
     const dispatch = useDispatch();
@@ -61,6 +61,9 @@ function ContentArea() {
                                 ))
                             )
                         }
+                        <div key={'create-note'} className="m-3 flex justify-center">
+                            <CreateNewNote />
+                        </div>
                     </div>
 
                 </div>
