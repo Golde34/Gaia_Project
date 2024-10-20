@@ -21,6 +21,7 @@ var groupTaskService = task_manager.NewGroupTaskService()
 var roleService = auth_services.NewRoleService()
 var privilegeService = auth_services.NewPrivilegeService()
 var taskRegisterService = work_optim.NewTaskRegisterService()
+var noteService = task_manager.NewNoteService()
 
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
@@ -367,8 +368,14 @@ func (r *queryResolver) GetTaskTableByGroupTaskID(ctx context.Context, input mod
 }
 
 // GetAllNotes is the resolver for the getAllNotes field.
-func (r *queryResolver) GetAllNotes(ctx context.Context) ([]*model.Note, error) {
-	panic(fmt.Errorf("not implemented: GetAllNotes - getAllNotes"))
+func (r *queryResolver) GetAllNotes(ctx context.Context, input model.IDInput) ([]*model.Note, error) {
+	notes, err := noteService.GetAllNotes(ctx, input)
+	modelNote := []*model.Note{}
+	for _, note := range notes {
+		noteCopy := note
+		modelNote = append(modelNote, &noteCopy)
+	}
+	return modelNote, err
 }
 
 // Mutation returns MutationResolver implementation.

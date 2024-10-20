@@ -195,7 +195,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetAllNotes               func(childComplexity int) int
+		GetAllNotes               func(childComplexity int, input model.IDInput) int
 		GetAllPrivileges          func(childComplexity int) int
 		GetAllRoles               func(childComplexity int) int
 		GetGroupTaskByID          func(childComplexity int, input model.IDInput) int
@@ -367,7 +367,7 @@ type QueryResolver interface {
 	ListAllTasks(ctx context.Context) ([]*model.Task, error)
 	GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error)
 	GetTaskTableByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskTable, error)
-	GetAllNotes(ctx context.Context) ([]*model.Note, error)
+	GetAllNotes(ctx context.Context, input model.IDInput) ([]*model.Note, error)
 }
 
 type executableSchema struct {
@@ -1355,7 +1355,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetAllNotes(childComplexity), true
+		args, err := ec.field_Query_getAllNotes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllNotes(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Query.getAllPrivileges":
 		if e.complexity.Query.GetAllPrivileges == nil {
@@ -1965,6 +1970,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTokenInput,
 		ec.unmarshalInputUpdateColorInput,
 		ec.unmarshalInputUpdateGroupTaskInput,
+		ec.unmarshalInputUpdateNoteInput,
 		ec.unmarshalInputUpdateObjectNameInput,
 		ec.unmarshalInputUpdateProjectInput,
 		ec.unmarshalInputUpdateTaskInDialogInput,
@@ -2727,6 +2733,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAllNotes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -9933,7 +9954,7 @@ func (ec *executionContext) _Query_getAllNotes(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAllNotes(rctx)
+		return ec.resolvers.Query().GetAllNotes(rctx, fc.Args["input"].(model.IDInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9950,7 +9971,7 @@ func (ec *executionContext) _Query_getAllNotes(ctx context.Context, field graphq
 	return ec.marshalNNote2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐNote(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getAllNotes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getAllNotes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -9977,6 +9998,17 @@ func (ec *executionContext) fieldContext_Query_getAllNotes(_ context.Context, fi
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Note", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAllNotes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -15556,6 +15588,47 @@ func (ec *executionContext) unmarshalInputUpdateGroupTaskInput(ctx context.Conte
 				return it, err
 			}
 			it.Tasks = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateNoteInput(ctx context.Context, obj interface{}) (model.UpdateNoteInput, error) {
+	var it model.UpdateNoteInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name", "ownerId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
 		}
 	}
 

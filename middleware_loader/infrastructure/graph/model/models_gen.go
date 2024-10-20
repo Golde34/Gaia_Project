@@ -297,6 +297,12 @@ type UpdateGroupTaskInput struct {
 	Tasks       []string `json:"tasks,omitempty"`
 }
 
+type UpdateNoteInput struct {
+	ID      string  `json:"id"`
+	Name    string  `json:"name"`
+	OwnerID float64 `json:"ownerId"`
+}
+
 type UpdateObjectNameInput struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`

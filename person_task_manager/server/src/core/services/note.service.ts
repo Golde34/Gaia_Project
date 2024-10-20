@@ -10,11 +10,8 @@ class NoteService {
         public kafkaConfig = new KafkaConfig()
     ) { }
 
-    async getAllNotes(userId: number): Promise<IResponse> {
-        const note = await noteStore.getAllNotes(userId);
-        return msg200({
-            message: (note as any)
-        })
+    async getAllNotes(userId: number): Promise<INoteEntity[]> {
+        return await noteStore.getAllNotes(userId);
     }
 
     async createNote(note: any): Promise<INoteEntity> {

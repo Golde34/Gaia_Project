@@ -21,56 +21,28 @@ function ContentArea() {
         }
     }, [isUserValid, navigate]);
 
-    // const listNotes = useSelector(state => state.noteList);
-    // const { loading, error, notes } = listNotes;
+    const listNotes = useSelector(state => state.noteList);
+    const { loading, error, notes } = listNotes;
 
-    // const getListNotes = useCallback(() => {
-    //     dispatch(getNoteList(userId));
-    // }, [dispatch, userId]);
+    const getListNotes = useCallback(() => {
+        dispatch(getNoteList(userId));
+    }, [dispatch, userId]);
 
-    // const debounceRef = useRef(null);
-    // useEffect(() => {
-    //     clearTimeout(debounceRef.current);
-    //     debounceRef.current = setTimeout(() => {
-    //         getListNotes();
-    //     }, 200);
-    // }, [])
-
-    const notes = [
-        {
-            id: 1,
-            name: "Note 1",
-            isLock: false
-        },
-        {
-            id: 2,
-            name: "Note 2",
-            isLock: true
-        },
-        {
-            id: 3,
-            name: "Note 3",
-            isLock: false
-        },
-        {
-            id: 4,
-            name: "Note 4",
-            isLock: false
-        },
-        {
-            id: 5,
-            name: "Note 5",
-            isLock: true
-        },
-    ]
+    const debounceRef = useRef(null);
+    useEffect(() => {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            getListNotes();
+        }, 200);
+    }, [])
 
     return (
         <div>
-            {/* {loading ? (
+            {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p>{error}</p>
-            ) : ( */}
+            ) : (
                 <div className="max-w-7xl mx-auto">
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Note Dashboard
@@ -82,7 +54,7 @@ function ContentArea() {
                             ) : (
                                 notes.map((note) => (
                                     <div key={note.id} className="ms-5 me-5 mt-7">
-                                        <NoteItem name={note.name} isLock={note.isLock}
+                                        <NoteItem name={note.name} isLock={note.isLock} note={note}
                                             url={`/note/${note.id}`} buttonText="View note" elementId={note.id}
                                         />
                                     </div>
@@ -92,8 +64,8 @@ function ContentArea() {
                     </div>
 
                 </div>
-            {/* )
-            } */}
+            )
+            }
         </div>
     )
 }

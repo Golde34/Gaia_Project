@@ -6,19 +6,20 @@ import { noteService } from "../services/note.service";
 class NoteUsecase {
     constructor() { }
 
-    async getNoteById(noteId: string): Promise<IResponse> {
+    async getAllNotes(userId: number): Promise<IResponse> {
         try {
-            const note = await noteService.getNoteById(noteId);
-            if (!note) {
+            const notes = await noteService.getAllNotes(userId);
+            if (!notes) {
                 return msg400(NOTE_NOT_FOUND);
             }
             return msg200({
-                message: (note as any)
-            })
+                message: (notes as any)
+            });
         } catch (error) {
             return msg400(NOTE_NOT_FOUND);
         }
     }
+
 
     async createNote(note: any): Promise<IResponse> {
         try {
@@ -53,7 +54,21 @@ class NoteUsecase {
         } catch (error) {
             throw new Error('Note not found');
         }
-   }
+    }
+
+    async getNoteById(noteId: string): Promise<IResponse> {
+        try {
+            const note = await noteService.getNoteById(noteId);
+            if (!note) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            return msg200({
+                message: (note as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
 }
 
 export const noteUsecase = new NoteUsecase();
