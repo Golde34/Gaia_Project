@@ -1,5 +1,6 @@
-import { BadgeDelta, Card, Flex, Metric, Text } from "@tremor/react"
+import { Badge, BadgeDelta, Card, Col, Flex, Grid, Metric, Text } from "@tremor/react"
 import { useNavigate } from "react-router-dom";
+import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
 
 const CardItem = (props) => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const CardItem = (props) => {
     }
 
     const shortenTitle = (title) => {
-        if (title.length > 20) {
+        if (title.length > 30) {
             return title.substring(0, 20) + "...";
         }
         return title;
@@ -22,12 +23,24 @@ const CardItem = (props) => {
 
     return (
         <button onClick={() => { redirectToTaskDetail() }} className="m-2">
-            <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px', maxHeight: '200px' }}> 
-                <Flex justifyContent="between" alignItems="center">
-                    <Metric>{shortenTitle(task.title)}</Metric>
-                    <BadgeDelta deltaType="moderateIncrease">+12.5%</BadgeDelta>
-                </Flex>
-                <Text> {task.description} </Text>
+            <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px', maxHeight: '200px' }}>
+                <Metric>{shortenTitle(task.title)}</Metric>
+                <Grid numItems={2}>
+                    <Col numColSpan={1}>
+                    <Flex justifyContent="start">
+                        {task.priority.map((priority) => (
+                            <Badge key={`${task.id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
+                        ))}
+                        </Flex>
+                    </Col>
+                    <Col numColSpan={1}>
+                        <Flex justifyContent="end">
+                            <BadgeDelta className="m-1" deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
+                        </Flex>
+                    </Col>
+                </Grid>
+
+                <Text className="line-clamp-3"> {task.description} </Text>
             </Card>
         </button>
     );
