@@ -186,14 +186,3 @@ func (adapter *GroupTaskAdapter) GetTaskTableByGroupTask(id string) (response_dt
 	}
 	return taskTable, nil
 }
-
-// func (adapter *GroupTaskAdapter) GetGroupTaskById(id string) (response_dtos.GroupTaskResponseDTO, error) {
-// 	getGroupTaskURL := base.TaskManagerServiceURL + adapter.domain + id
-// 	var groupTask response_dtos.GroupTaskResponseDTO
-// 	headers := utils.BuildDefaultHeaders()
-// 	result, err := utils.BaseAPIV2(getGroupTaskURL, "GET", nil, groupTask, headers)
-// 	if err != nil {
-// 		return response_dtos.GroupTaskResponseDTO{}, err
-// 	}
-// 	return result.(response_dtos.GroupTaskResponseDTO), nil
-// }

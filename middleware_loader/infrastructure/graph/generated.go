@@ -1965,6 +1965,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTokenInput,
 		ec.unmarshalInputUpdateColorInput,
 		ec.unmarshalInputUpdateGroupTaskInput,
+		ec.unmarshalInputUpdateNoteInput,
 		ec.unmarshalInputUpdateObjectNameInput,
 		ec.unmarshalInputUpdateProjectInput,
 		ec.unmarshalInputUpdateTaskInDialogInput,
@@ -15556,6 +15557,47 @@ func (ec *executionContext) unmarshalInputUpdateGroupTaskInput(ctx context.Conte
 				return it, err
 			}
 			it.Tasks = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateNoteInput(ctx context.Context, obj interface{}) (model.UpdateNoteInput, error) {
+	var it model.UpdateNoteInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name", "ownerId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
 		}
 	}
 
