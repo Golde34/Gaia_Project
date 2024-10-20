@@ -11,7 +11,7 @@ class NoteController {
     async getNotes(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const userId = Number(req.params.userId);
-            const notesResult = await noteService.getAllNotes(userId);
+            const notesResult = await noteUsecase.getAllNotes(userId);
 
             return notesResult;
         } catch (err) {
