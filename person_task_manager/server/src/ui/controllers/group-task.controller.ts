@@ -5,6 +5,7 @@ import { plainToInstance } from "class-transformer";
 import { GroupTaskRequestDto } from "../../core/domain/dtos/group-task.dto";
 import { projectService } from "../../core/services/project.service";
 import { EXCEPTION_PREFIX, PROJECT_EXCEPTION, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
+import { groupTaskUsecase } from "../../core/usecases/group-task.usecase";
 
 class GroupTaskController {
 
@@ -13,7 +14,7 @@ class GroupTaskController {
     async getGrouptaskById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupTaskId = req.params.id;
-            const groupTaskResult = await groupTaskService.getGroupTask(groupTaskId);
+            const groupTaskResult = await groupTaskUsecase.getGroupTask(groupTaskId);
             
             return groupTaskResult;
         } catch (err) {
@@ -78,7 +79,7 @@ class GroupTaskController {
     async calculateCompletedTasks(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const groupTaskId = req.params.id;
-            const totalTasksResult = await groupTaskService.calculateCompletedTasks(groupTaskId);
+            const totalTasksResult = await groupTaskUsecase.calculateCompletedTasks(groupTaskId);
 
             return totalTasksResult;
         } catch (err) {

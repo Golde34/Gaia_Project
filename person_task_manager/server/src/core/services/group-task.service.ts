@@ -1,23 +1,27 @@
-import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
+import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
 import { levenshteinDistanceGroupTasks, levenshteinDistanceProject } from "../../kernel/util/levenshtein-algo";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
+import { InternalCacheConstants } from "../domain/constants/constants";
 import { ARCHIVE_GROUP_TASK_FAILED, CREATE_GROUP_TASK_FAILED, ENABLE_GROUP_TASK_FAILED, EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../domain/constants/error.constant";
 import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
 import { IProjectEntity } from "../domain/entities/project.entity";
 import { BooleanStatus } from "../domain/enums/enums";
 import { groupTaskStore } from "../port/store/group-task.store";
 import { projectStore } from "../port/store/project.store";
+import { taskStore } from "../port/store/task.store";
 import { groupTaskValidation } from "../validations/group-task.validation";
 import { projectService } from "./project.service";
 import { taskService } from "./task.service";
-import levenshtein from "fast-levenshtein";
 
 const projectServiceImpl = projectService;
 const groupTaskValidationImpl = groupTaskValidation;
 
 class GroupTaskService {
-    constructor() { }
+    constructor(
+        public taskStoreImpl = taskStore,
+        public groupTaskCache = CacheSingleton.getInstance().getCache()
+    ) { }
 
     async createGroupTaskToProject(groupTask: any, projectId: string): Promise<IResponse> {
         try {
@@ -111,12 +115,8 @@ class GroupTaskService {
         }
     }
 
-    async getGroupTask(groupTaskId: string): Promise<IResponse> {
-        const groupTask = await groupTaskStore.findGroupTaskById(groupTaskId);
-
-        return msg200({
-            groupTask
-        });
+    async getGroupTask(groupTaskId: string): Promise<IGroupTaskEntity | null> {
+        return await groupTaskStore.findGroupTaskById(groupTaskId);
     }
 
     async getGroupTaskByTaskId(taskId: string): Promise<string> {
@@ -172,39 +172,37 @@ class GroupTaskService {
         }
     }
 
-    // calculate totalTasks, completedTasks
-    async calculateCompletedTasks(groupTaskId: string): Promise<IResponse> {
-        try {
-            if (await groupTaskValidationImpl.checkExistedGroupTaskById(groupTaskId) === true) {
-                const groupTask = await groupTaskStore.findGroupTaskById(groupTaskId);
-                if (groupTask === null) {
-                    return msg400(GROUP_TASK_NOT_FOUND);
-                } else {
-                    const totalTasks = groupTask.tasks.length;
-                    let completedTasks = 0;
-                    for (let i = 0; i < groupTask.tasks.length; i++) {
-                        const taskId = groupTask.tasks[i];
-                        const task = await TaskEntity.findOne({ _id: taskId });
-                        // const task = await taskStore.findTaskById(taskId);
-                        if (task !== null) {
-                            if (task.status === 'DONE') {
-                                completedTasks++;
-                            }
-                        } else {
-                            continue;
-                        }
+    async calculateCompletedTasks(groupTask: IGroupTaskEntity): Promise<IResponse> {
+        const groupTaskCache = this.groupTaskCache.get(InternalCacheConstants.TASK_COMPLETED + groupTask._id);
+        if (!groupTaskCache) {
+            console.log("Calculate completed tasks");
+            const totalTasks = groupTask.tasks.length;
+            let completedTasks = 0;
+            for (let i = 0; i < groupTask.tasks.length; i++) {
+                const taskId = groupTask.tasks[i];
+                const task = await this.taskStoreImpl.findTaskById(taskId);
+                if (task !== null) {
+                    if (task.status === 'DONE') {
+                        completedTasks++;
                     }
-                    groupTask.totalTasks = totalTasks;
-                    groupTask.completedTasks = completedTasks;
-                    await groupTaskStore.updateGroupTask(groupTaskId, groupTask);
-                    return msg200({
-                        groupTask,
-                    });
+                } else {
+                    continue;
                 }
             }
-            return msg400(GROUP_TASK_NOT_FOUND);
-        } catch (error: any) {
-            return msg400(error.message.toString());
+            groupTask.totalTasks = totalTasks;
+            groupTask.completedTasks = completedTasks;
+            await groupTaskStore.updateGroupTask(groupTask._id, groupTask);
+            this.groupTaskCache.set(InternalCacheConstants.TASK_COMPLETED + groupTask._id, groupTask);
+            console.log(this.groupTaskCache.get(InternalCacheConstants.TASK_COMPLETED + groupTask._id));
+            return msg200({
+                groupTask,
+            });
+        } else {
+            console.log("Get list completed tasks from cache");
+            groupTask = this.groupTaskCache.get(InternalCacheConstants.TASK_COMPLETED + groupTask._id);
+            return msg200({
+                groupTask,
+            });
         }
     }
 
@@ -312,7 +310,7 @@ class GroupTaskService {
         } catch (error: any) {
             return undefined;
         }
-    } 
+    }
 }
 
 export const groupTaskService = new GroupTaskService();

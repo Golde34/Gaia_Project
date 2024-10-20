@@ -84,6 +84,7 @@ class TaskService {
 
     clearTaskCache(groupTaskId: string): void {
         this.taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
+        this.taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
