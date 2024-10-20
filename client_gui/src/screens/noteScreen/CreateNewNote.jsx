@@ -1,7 +1,8 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Input } from "@material-tailwind/react";
-import { Card, Title } from "@tremor/react";
-import { Fragment, useState } from "react";
+import React, { useState, Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { Card, Title } from '@tremor/react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 
 export const CreateNewNote = () => {
     let [isOpen, setIsOpen] = useState(false);
@@ -14,12 +15,8 @@ export const CreateNewNote = () => {
         setIsOpen(true);
     }
 
-    const [note] = useState({})
     const [newName, setNewName] = useState('');
-    const [newFile, setNewFile] = useState('');
-
-
-    // const createNewNote = useCreateNoteDispatch();
+    const [newContent, setNewContent] = useState('');
 
     return (
         <>
@@ -60,9 +57,9 @@ export const CreateNewNote = () => {
                                     >
                                         Create New Note
                                     </Dialog.Title>
-                                    {/* Task Title Input */}
+                                    {/* Note Title Input */}
                                     <div className="mt-2">
-                                        <Input
+                                        <input
                                             id="note-title"
                                             type="text"
                                             value={newName}
@@ -71,15 +68,27 @@ export const CreateNewNote = () => {
                                             placeholder="Note Name"
                                         />
                                     </div>
+
+                                    {/* Quill Editor */}
                                     <div className="mt-4 mb-4">
-                                        <textarea
-                                            value={newFile}
-                                            onChange={(e) => setNewFile(e.target.value)}
-                                            placeholder="Write your note here..."
-                                            className="w-full h-72 p-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-600 rounded-lg text-lg resize-none"
-                                        ></textarea>
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={newContent}
+                                            onChange={setNewContent}
+                                            modules={modules}
+                                            formats={formats}
+                                            className="h-72"
+                                        />
                                     </div>
 
+                                    <div className="mt-4 flex justify-end">
+                                        <button
+                                            onClick={closeModal}
+                                            className="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300 ease-in-out"
+                                        >
+                                            Save Note
+                                        </button>
+                                    </div>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -89,5 +98,21 @@ export const CreateNewNote = () => {
         </>
     )
 }
+
+// Quill modules configuration
+const modules = {
+    toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image'],
+        ['clean'], // remove formatting button
+    ]
+};
+
+// Supported formats for Quill editor
+const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike', 'list', 'bullet', 'link', 'image'
+];
 
 export default CreateNewNote;
