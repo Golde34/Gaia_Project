@@ -30,6 +30,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	projectService := task_manager.NewProjectService()
 	groupTaskService := task_manager.NewGroupTaskService()
 	taskRegisterService := work_optim.NewTaskRegisterService()
+	noteService := task_manager.NewNoteService()
 
 	// GRAPHQL FEDERATION
 	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
@@ -45,6 +46,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 					ProjectGraphQLService: projectService,
 					GroupTaskGraphQLService: groupTaskService,
 					TaskRegisterGraphQLService: taskRegisterService,
+					NoteGraphQLService: noteService,
 				},
 			},
 		),
@@ -69,6 +71,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 		task_router.NewProjectRouter(projectService, db, router)
 		task_router.NewTaskRouter(taskService, db, router)
 		task_router.NewGroupTaskRouter(groupTaskService, db, router)
+		task_router.NewNoteRouter(noteService, db, router)
 	})
 
 	router.Group(func(r chi.Router) {
