@@ -12,4 +12,6 @@ export class InternalCacheConstants {
     public static readonly CACHE_POSTFIX = ".cache";
 
     public static TASK_TABLE = `task-table.`;
+    public static NOTE_LIST = `note-list.`;
+    public static TASK_COMPLETED = `task-completed.`;
 }

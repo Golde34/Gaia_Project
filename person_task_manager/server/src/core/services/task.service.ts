@@ -20,12 +20,11 @@ import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton"
 import { ITaskEntity } from "../domain/entities/task.entity";
 import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
 
-const taskCache = CacheSingleton.getInstance().getCache();
-
 class TaskService {
     constructor(
         public kafkaConfig = new KafkaConfig(),
         public taskValidationImpl = taskValidation,
+        public taskCache = CacheSingleton.getInstance().getCache()
     ) { }
 
     async createTaskInGroupTask(task: any): Promise<ITaskEntity> {
@@ -41,6 +40,7 @@ class TaskService {
         task.updatedAt = new Date();
         if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
         const createTask = await taskStore.createTask(task);
+        this.clearTaskCache(task.groupTaskId);
         return createTask;
     }
 
@@ -83,7 +83,8 @@ class TaskService {
     }
 
     clearTaskCache(groupTaskId: string): void {
-        taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
+        this.taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
+        this.taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);
     }
 
     async updateTask(taskId: string, task: any): Promise<IResponse> {
@@ -306,7 +307,7 @@ class TaskService {
     }
 
     async getTaskTable(groupTaskId: string): Promise<IResponse> {
-        const taskTableCache = taskCache.get(InternalCacheConstants.TASK_TABLE + groupTaskId);
+        const taskTableCache = this.taskCache.get(InternalCacheConstants.TASK_TABLE + groupTaskId);
         if (taskTableCache) {
             console.log('Get task table from cache');
             return msg200({
@@ -315,7 +316,7 @@ class TaskService {
         } else {
             console.log('Get task table from database');
             const taskTable = await groupTaskStore.findActiveTasksInActiveGroupTask(groupTaskId);
-            taskCache.set(InternalCacheConstants.TASK_TABLE + groupTaskId, taskTable);
+            this.taskCache.set(InternalCacheConstants.TASK_TABLE + groupTaskId, taskTable);
             return msg200({
                 message: taskTable as any,
             });
