@@ -1,8 +1,10 @@
 package client_adapter
 
 import (
+	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
+	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/infrastructure/graph/model"
 	"middleware_loader/kernel/utils"
@@ -17,14 +19,26 @@ func NewNoteAdapter() *NoteAdapter {
 }
 
 func (adapter *NoteAdapter) GetAllNotes(userId string) ([]response_dtos.NoteResponseDTO, error) {
-	listAllNotesURL := base.TaskManagerServiceURL + "/note" + userId
+	listAllNotesURL := base.TaskManagerServiceURL + "/note/" + userId
 	var notes []response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(listAllNotesURL, "GET", nil, &notes, headers)
+	result, err := utils.BaseAPI(listAllNotesURL, "GET", nil, headers)
+	log.Println("result", result)
 	if err != nil {
 		return []response_dtos.NoteResponseDTO{}, err
 	}
-	return result.([]response_dtos.NoteResponseDTO), nil
+
+	bodyResultMap, ok := result.(map[string]interface{})
+	if !ok {
+		return []response_dtos.NoteResponseDTO{}, nil
+	}
+	for _, noteElement := range bodyResultMap["message"].([]interface{}) {
+		log.Println("noteElement", noteElement)
+		note := mapper_response.ReturnNoteObjectMapper(noteElement.(map[string]interface{}))
+		notes = append(notes, *note)
+	}
+	
+	return notes, nil
 }
 
 func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dtos.NoteResponseDTO, error) {
