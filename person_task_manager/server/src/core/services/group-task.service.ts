@@ -193,7 +193,6 @@ class GroupTaskService {
             groupTask.completedTasks = completedTasks;
             await groupTaskStore.updateGroupTask(groupTask._id, groupTask);
             this.groupTaskCache.set(InternalCacheConstants.TASK_COMPLETED + groupTask._id, groupTask);
-            console.log(this.groupTaskCache.get(InternalCacheConstants.TASK_COMPLETED + groupTask._id));
             return msg200({
                 groupTask,
             });
