@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { useCreateNoteDispatch } from '../../kernels/utils/write-dialog-api-requests';
 
 export const CreateNewNote = () => {
+    const userId = props.userId;
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -24,6 +25,7 @@ export const CreateNewNote = () => {
     const setObjectNote = (name, contentFile) => {
         note.name = name;
         note.contentFile = contentFile;
+        note.userId = userId;
         createNewNote(note);
         window.location.reload();
     };
