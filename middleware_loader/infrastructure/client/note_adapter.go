@@ -1,6 +1,7 @@
 package client_adapter
 
 import (
+	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -40,6 +41,7 @@ func (adapter *NoteAdapter) GetAllNotes(userId string) ([]response_dtos.NoteResp
 }
 
 func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dtos.NoteResponseDTO, error) {
+	log.Println("Creating note in adapter...")
 	createNoteURL := base.TaskManagerServiceURL + "/note/create"
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()

@@ -1,9 +1,13 @@
 package data_storage
 
-import ("os")
+import (
+	"io/ioutil"
+	"log"
+	"os"
+)
 
-func findTempFile(fileName string) {
-	return nil
+func findTempFile(fileName string) (string){
+	return "./resources/" + fileName
 }
 
 

@@ -7,8 +7,8 @@ import (
 )
 
 type CreateNoteRequestDTO struct {
-	Name   string  `json:"name"`
-	UserId float64 `json:"userId"`
+	Name    string  `json:"name"`
+	OwnerId float64 `json:"ownerId"`
 }
 
 func NewCreateNoteRequestDTO() *CreateNoteRequestDTO {
@@ -20,9 +20,9 @@ func (in *CreateNoteRequestDTO) MapperToModel(input model.CreateNoteInput) {
 }
 
 type UpdateNoteRequestDTO struct {
-	Id string  `json:"noteId"`
-	Name   string  `json:"name"`
-	UserId float64 `json:"userId"`
+	Id      string  `json:"noteId"`
+	Name    string  `json:"name"`
+	OwnerId float64 `json:"ownerId"`
 }
 
 func NewUpdateNoteRequestDTO() *UpdateNoteRequestDTO {
