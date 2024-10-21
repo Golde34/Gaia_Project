@@ -14,6 +14,6 @@ func ReturnNoteObjectMapper(body map[string]interface{}) *response_dtos.NoteResp
 	input.ActiveStatus = body["activeStatus"].(string)
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)
-	input.OwnerID = body["ownerId"].(float64)
+	input.OwnerId = body["ownerId"].(float64)
 	return &input	
 }

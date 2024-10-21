@@ -254,7 +254,8 @@ func (r *mutationResolver) EnableGroupTask(ctx context.Context, input model.IDIn
 
 // CreateNote is the resolver for the createNote field.
 func (r *mutationResolver) CreateNote(ctx context.Context, input model.CreateNoteInput) (*model.Note, error) {
-	panic(fmt.Errorf("not implemented: CreateNote - createNote"))
+	note, err := noteService.CreateNote(ctx, input)
+	return &note, err
 }
 
 // ListAllUsers is the resolver for the listAllUsers field.

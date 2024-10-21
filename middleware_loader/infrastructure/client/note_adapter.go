@@ -1,7 +1,7 @@
 package client_adapter
 
 import (
-	"log"
+	"fmt"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -36,12 +36,11 @@ func (adapter *NoteAdapter) GetAllNotes(userId string) ([]response_dtos.NoteResp
 		note := mapper_response.ReturnNoteObjectMapper(noteElement.(map[string]interface{}))
 		notes = append(notes, *note)
 	}
-	
+
 	return notes, nil
 }
 
 func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dtos.NoteResponseDTO, error) {
-	log.Println("Creating note in adapter...")
 	createNoteURL := base.TaskManagerServiceURL + "/note/create"
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
@@ -49,11 +48,17 @@ func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dt
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}
-	return result.(response_dtos.NoteResponseDTO), nil
+
+	// Type assert result to *response_dtos.NoteResponseDTO
+	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+	}
+	return *noteResponse, nil
 }
 
 func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (response_dtos.NoteResponseDTO, error) {
-	updateNoteURL := base.TaskManagerServiceURL + "/note/" + id 
+	updateNoteURL := base.TaskManagerServiceURL + "/note/" + id
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
 	result, err := utils.BaseAPIV2(updateNoteURL, "PUT", input, &note, headers)

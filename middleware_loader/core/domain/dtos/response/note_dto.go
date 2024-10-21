@@ -9,12 +9,12 @@ import (
 type NoteResponseDTO struct {
 	ID                 string  `json:"id"`
 	Name               string  `json:"name"`
-	SummaryDisplayText *string  `json:"summaryDisplayText"`
+	SummaryDisplayText *string `json:"summaryDisplayText"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
 	CreatedAt          string  `json:"createdAt"`
 	UpdatedAt          string  `json:"updatedAt"`
-	OwnerID            float64 `json:"ownerID"`
+	OwnerId            float64 `json:"ownerId"`
 }
 
 func NewNoteResponseDTO() *NoteResponseDTO {
