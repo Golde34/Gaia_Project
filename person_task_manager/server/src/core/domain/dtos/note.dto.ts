@@ -4,5 +4,5 @@ export class NoteRequestDto {
     @IsString()
     @IsOptional()
     name?: string;
-    userId!: number;
+    ownerId!: number;
 }

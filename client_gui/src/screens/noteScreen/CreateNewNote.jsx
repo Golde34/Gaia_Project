@@ -27,7 +27,7 @@ export const CreateNewNote = (props) => {
         note.contentFile = contentFile;
         note.userId = userId;
         createNewNote(note);
-        // window.location.reload();
+        window.location.reload();
     };
 
     const saveContentAsFile = (content) => {
