@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Card, Title } from '@tremor/react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import { useCreateNoteDispatch } from '../../kernels/utils/write-dialog-api-requests';
 
 export const CreateNewNote = () => {
     let [isOpen, setIsOpen] = useState(false);
@@ -15,8 +16,26 @@ export const CreateNewNote = () => {
         setIsOpen(true);
     }
 
+    const [note] = useState({});
     const [newName, setNewName] = useState('');
     const [newContent, setNewContent] = useState('');
+
+    const createNewNote = useCreateNoteDispatch();
+    const setObjectNote = (name, contentFile) => {
+        note.name = name;
+        note.contentFile = contentFile;
+        createNewNote(note);
+        window.location.reload();
+    };
+
+    const saveContentAsFile = (content) => {
+        const plainTextContent = content.replace(/<[^>]+>/g, ''); // Remove HTML tags
+
+        const blob = new Blob([plainTextContent], { type: 'text/plain' });
+        const file = new File([blob], `${newName}.txt`, { type: 'text/plain' });
+
+        return file;
+    };
 
     return (
         <>
@@ -83,7 +102,11 @@ export const CreateNewNote = () => {
 
                                     <div className="mt-4 flex justify-end">
                                         <button
-                                            onClick={closeModal}
+                                            onClick={() => {
+                                                const file = saveContentAsFile(newContent);
+                                                setObjectNote(newName, file); 
+                                                closeModal();
+                                            }}
                                             className="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300 ease-in-out"
                                         >
                                             Save Note
@@ -96,8 +119,8 @@ export const CreateNewNote = () => {
                 </Dialog>
             </Transition>
         </>
-    )
-}
+    );
+};
 
 // Quill modules configuration
 const modules = {
