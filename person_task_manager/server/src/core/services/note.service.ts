@@ -25,7 +25,7 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        const convertedNote: INoteEntity = createNoteMapper(note, note.userId);
+        const convertedNote: INoteEntity = createNoteMapper(note);
         const createdNote = await noteStore.createNote(convertedNote);
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + createdNote.ownerId);
         return createdNote;
