@@ -31,7 +31,11 @@ func CreateNote(w http.ResponseWriter, r *http.Request, noteService *services.No
 		return
 	}
 
-	input := mapper.CreateNoteRequestDTOMapper(body)
+	input, tempFile, ok := mapper.CreateNoteRequestDTOMapper(body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "createNote", QueryInput: input, QueryOutput: model.Note{}})
