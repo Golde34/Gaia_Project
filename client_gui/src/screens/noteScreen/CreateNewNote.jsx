@@ -27,15 +27,22 @@ export const CreateNewNote = (props) => {
         note.contentFile = contentFile;
         note.userId = userId;
         createNewNote(note);
-        window.location.reload();
+        // window.location.reload();
     };
 
     const saveContentAsFile = (content) => {
-        const plainTextContent = content.replace(/<[^>]+>/g, ''); // Remove HTML tags
+        console.log("Raw Content from Quill:", content);
+
+        const plainTextContent = content
+            .replace(/<br>/g, '\n') // Replace <br> with line breaks
+            .replace(/<\/?p[^>]*>/g, '\n'); // Replace <p> tags with line breaks
+
+        console.log("Plain Text Content:", plainTextContent);
 
         const blob = new Blob([plainTextContent], { type: 'text/plain' });
         const file = new File([blob], `${newName}.txt`, { type: 'text/plain' });
 
+        console.log("Created File:", file);
         return file;
     };
 

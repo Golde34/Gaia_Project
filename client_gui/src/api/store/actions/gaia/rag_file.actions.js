@@ -10,7 +10,7 @@ export const uploadRagFile = (formData) => async (dispatch) => {
     try {
         const api = '/rag-file/upload';
         const url = `http://${config.serverHost}:${config[portName['gaiaPort']]}${api}`;
-        console.log(url);
+        
         const response = await fetch(url, {
             method: 'POST',
             body: formData,
@@ -32,5 +32,5 @@ export const uploadRagFile = (formData) => async (dispatch) => {
                 ? error.response.data.message
                 : error.message,
         });
-    }87
+    }
 }
