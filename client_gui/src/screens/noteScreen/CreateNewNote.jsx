@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { useCreateNoteDispatch } from '../../kernels/utils/write-dialog-api-requests';
 
-export const CreateNewNote = () => {
+export const CreateNewNote = (props) => {
     const userId = props.userId;
     let [isOpen, setIsOpen] = useState(false);
 
