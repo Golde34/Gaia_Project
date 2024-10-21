@@ -6,6 +6,7 @@ import { updateUser } from '../../api/store/actions/auth_service/user.actions';
 import { createRole } from '../../api/store/actions/auth_service/role.actions';
 import { registerTaskConfig } from '../../api/store/actions/task_manager/task-registration.actions';
 import { uploadRagFile } from '../../api/store/actions/gaia/rag_file.actions';
+import { createNote } from '../../api/store/actions/task_manager/note.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -77,4 +78,14 @@ export const useCreateTaskRegistrationDispatch = () => {
     }
     
     return registerTaskConfigDispatch;
+}
+
+export const useCreateNoteDispatch = () => {
+    const dispatch = useDispatch();
+
+    const createNoteDispatch = (note) => {
+        dispatch(createNote(note));
+    }
+
+    return createNoteDispatch;
 }

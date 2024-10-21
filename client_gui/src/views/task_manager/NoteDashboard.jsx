@@ -62,7 +62,7 @@ function ContentArea() {
                             )
                         }
                         <div key={'create-note'} className="m-3 flex justify-center">
-                            <CreateNewNote />
+                            <CreateNewNote userId={userId}/>
                         </div>
                     </div>
 

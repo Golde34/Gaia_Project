@@ -1,9 +1,12 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Input } from "@material-tailwind/react";
-import { Card, Title } from "@tremor/react";
-import { Fragment, useState } from "react";
+import React, { useState, Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { Card, Title } from '@tremor/react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import { useCreateNoteDispatch } from '../../kernels/utils/write-dialog-api-requests';
 
-export const CreateNewNote = () => {
+export const CreateNewNote = (props) => {
+    const userId = props.userId;
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -14,12 +17,34 @@ export const CreateNewNote = () => {
         setIsOpen(true);
     }
 
-    const [note] = useState({})
+    const [note] = useState({});
     const [newName, setNewName] = useState('');
-    const [newFile, setNewFile] = useState('');
+    const [newContent, setNewContent] = useState('');
 
+    const createNewNote = useCreateNoteDispatch();
+    const setObjectNote = (name, contentFile) => {
+        note.name = name;
+        note.contentFile = contentFile;
+        note.userId = userId;
+        createNewNote(note);
+        // window.location.reload();
+    };
 
-    // const createNewNote = useCreateNoteDispatch();
+    const saveContentAsFile = (content) => {
+        console.log("Raw Content from Quill:", content);
+
+        const plainTextContent = content
+            .replace(/<br>/g, '\n') // Replace <br> with line breaks
+            .replace(/<\/?p[^>]*>/g, '\n'); // Replace <p> tags with line breaks
+
+        console.log("Plain Text Content:", plainTextContent);
+
+        const blob = new Blob([plainTextContent], { type: 'text/plain' });
+        const file = new File([blob], `${newName}.txt`, { type: 'text/plain' });
+
+        console.log("Created File:", file);
+        return file;
+    };
 
     return (
         <>
@@ -60,9 +85,9 @@ export const CreateNewNote = () => {
                                     >
                                         Create New Note
                                     </Dialog.Title>
-                                    {/* Task Title Input */}
+                                    {/* Note Title Input */}
                                     <div className="mt-2">
-                                        <Input
+                                        <input
                                             id="note-title"
                                             type="text"
                                             value={newName}
@@ -71,15 +96,31 @@ export const CreateNewNote = () => {
                                             placeholder="Note Name"
                                         />
                                     </div>
+
+                                    {/* Quill Editor */}
                                     <div className="mt-4 mb-4">
-                                        <textarea
-                                            value={newFile}
-                                            onChange={(e) => setNewFile(e.target.value)}
-                                            placeholder="Write your note here..."
-                                            className="w-full h-72 p-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-600 rounded-lg text-lg resize-none"
-                                        ></textarea>
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={newContent}
+                                            onChange={setNewContent}
+                                            modules={modules}
+                                            formats={formats}
+                                            className="h-72"
+                                        />
                                     </div>
 
+                                    <div className="mt-4 flex justify-end">
+                                        <button
+                                            onClick={() => {
+                                                const file = saveContentAsFile(newContent);
+                                                setObjectNote(newName, file); 
+                                                closeModal();
+                                            }}
+                                            className="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300 ease-in-out"
+                                        >
+                                            Save Note
+                                        </button>
+                                    </div>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -87,7 +128,23 @@ export const CreateNewNote = () => {
                 </Dialog>
             </Transition>
         </>
-    )
-}
+    );
+};
+
+// Quill modules configuration
+const modules = {
+    toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image'],
+        ['clean'], // remove formatting button
+    ]
+};
+
+// Supported formats for Quill editor
+const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike', 'list', 'bullet', 'link', 'image'
+];
 
 export default CreateNewNote;

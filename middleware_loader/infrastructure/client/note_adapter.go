@@ -1,7 +1,6 @@
 package client_adapter
 
 import (
-	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -23,7 +22,7 @@ func (adapter *NoteAdapter) GetAllNotes(userId string) ([]response_dtos.NoteResp
 	var notes []response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
 	result, err := utils.BaseAPI(listAllNotesURL, "GET", nil, headers)
-	log.Println("result", result)
+
 	if err != nil {
 		return []response_dtos.NoteResponseDTO{}, err
 	}
@@ -33,7 +32,6 @@ func (adapter *NoteAdapter) GetAllNotes(userId string) ([]response_dtos.NoteResp
 		return []response_dtos.NoteResponseDTO{}, nil
 	}
 	for _, noteElement := range bodyResultMap["message"].([]interface{}) {
-		log.Println("noteElement", noteElement)
 		note := mapper_response.ReturnNoteObjectMapper(noteElement.(map[string]interface{}))
 		notes = append(notes, *note)
 	}
