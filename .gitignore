@@ -35,3 +35,4 @@ application.conf
 *.xml
 !pom.xml
 *\auth_service.log
+*\middleware_loader\resources
