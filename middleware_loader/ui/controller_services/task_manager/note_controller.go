@@ -31,11 +31,26 @@ func CreateNote(w http.ResponseWriter, r *http.Request, noteService *services.No
 		return
 	}
 
-	input, tempFile, ok := mapper.CreateNoteRequestDTOMapper(body)
+	input, file, ok := mapper.CreateNoteRequestDTOMapper(body)
+	if ok != nil {
+		http.Error(w, "Invalid request body, cannot read file", http.StatusBadRequest)
+		return
+	}
+
+	// Convert the base64 string back to binary data
+	decodedFile, err := utils.DecodeBase64File(file)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	// Save the decoded content to a temporary file
+	tempFile, err := utils.SaveToTempFile(decodedFile, input.Name+".txt")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer tempFile.Close()
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "createNote", QueryInput: input, QueryOutput: model.Note{}})
