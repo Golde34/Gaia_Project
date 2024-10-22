@@ -7,8 +7,10 @@ import (
 )
 
 type CreateNoteRequestDTO struct {
-	Name    string  `json:"name"`
-	OwnerId float64 `json:"ownerId"`
+	Name     string  `json:"name"`
+	OwnerId  float64 `json:"ownerId"`
+	FileId   string  `json:"fileId"`
+	FileName string  `json:"fileName"`
 }
 
 func NewCreateNoteRequestDTO() *CreateNoteRequestDTO {

@@ -10,6 +10,10 @@ type NoteResponseDTO struct {
 	ID                 string  `json:"id"`
 	Name               string  `json:"name"`
 	SummaryDisplayText *string `json:"summaryDisplayText"`
+	FileId             string  `json:"fileId"`
+	FileName           string  `json:"fileName"`
+	FileLocation       *string `json:"fileLocation"`
+	FileStatus         string  `json:"fileStatus"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
 	CreatedAt          string  `json:"createdAt"`

@@ -41,8 +41,10 @@ type CreateGroupTaskInput struct {
 }
 
 type CreateNoteInput struct {
-	Name    string  `json:"name"`
-	OwnerID float64 `json:"ownerId"`
+	Name     string  `json:"name"`
+	OwnerID  float64 `json:"ownerId"`
+	FileID   string  `json:"fileId"`
+	FileName string  `json:"fileName"`
 }
 
 type CreateProjectInput struct {
@@ -147,6 +149,10 @@ type Note struct {
 	ID                 string  `json:"id"`
 	Name               string  `json:"name"`
 	SummaryDisplayText *string `json:"summaryDisplayText,omitempty"`
+	FileID             string  `json:"fileId"`
+	FileName           string  `json:"fileName"`
+	FileLocation       *string `json:"fileLocation,omitempty"`
+	FileStatus         string  `json:"fileStatus"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
 	CreatedAt          string  `json:"createdAt"`

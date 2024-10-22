@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func CreateNoteRequestDTOMapper(r *http.Request) (*request_dtos.CreateNoteRequestDTO, error) {
+func CreateNoteRequestDTOMapper(r *http.Request, fileId string, fileName string) (*request_dtos.CreateNoteRequestDTO, error) {
 	var input request_dtos.CreateNoteRequestDTO
 	// Extract "name" from the form data
 	name := r.FormValue("name")
@@ -24,6 +24,9 @@ func CreateNoteRequestDTOMapper(r *http.Request) (*request_dtos.CreateNoteReques
 		return nil, fmt.Errorf("userId is required")
 	}
 	input.OwnerId = float64(userId) 
+
+	input.FileId = fileId
+	input.FileName = fileName
 	return &input, nil
 }
 
