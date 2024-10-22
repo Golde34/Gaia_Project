@@ -2,52 +2,79 @@ package controller_utils
 
 import (
 	"io"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
 
 const uploadPath = "./resources"
 
-func ReceiveMultipartFile(r *http.Request, w http.ResponseWriter) (string, string, string, error) {
+func ReceiveMultipartFile(r *http.Request, w http.ResponseWriter) (string, base_dtos.FileObject, error) {
 	err := r.ParseMultipartForm(10 << 20) // 10 MB limit
 	if err != nil {
-		return "Unable to parse form", "", "", err 
+		return "Unable to parse form", base_dtos.FileObject{}, err 
 	}	
 
 	// Extract the file from the form data
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		return "Error retrieving the file", "", "", err 
+		return "Error retrieving the file", base_dtos.FileObject{}, err 
 	}
 	defer file.Close()
 
 	return SaveToTempFile(file, handler)	
 }
 
-func SaveToTempFile(file multipart.File, handler *multipart.FileHeader) (string, string, string, error) {
+func SaveToTempFile(file multipart.File, handler *multipart.FileHeader) (string, base_dtos.FileObject, error) {
 	if _, err := os.Stat(uploadPath); os.IsNotExist(err) {
 		err := os.MkdirAll(uploadPath, os.ModePerm)
 		if err != nil {
-			return "", "", "", err 
+			return "", base_dtos.FileObject{}, err 
 		}
 	}
 
-	fileID := uuid.New().String()
-	fileName := fileID + "_" + handler.Filename
+	fileObject, fileName, err:= createFileObject(file, handler)
+	if err != nil {
+		return "", base_dtos.FileObject{}, err
+	}
+	
 	filePath := filepath.Join(uploadPath, fileName)
 	dst, err := os.Create(filePath)
 	if err != nil {
-		return "", "", "", err 
+		return "", base_dtos.FileObject{}, err 
 	}
 	defer dst.Close()
 
 	if _, err := io.Copy(dst, file); err != nil {
-		return "", "", "", err 
+		return "", base_dtos.FileObject{}, err 
 	}
 
-	return filePath, fileID, fileName, err 
+	return filePath, fileObject, err 
+}
+
+func createFileObject(file multipart.File, handler *multipart.FileHeader) (base_dtos.FileObject, string, error) {
+	fileID := uuid.New().String()
+	fileName := fileID + "_" + handler.Filename
+	fileContent, err := io.ReadAll(file)
+	if err != nil {
+		return base_dtos.FileObject{}, "", err
+	}
+	contentString := string(fileContent)
+	words := strings.Fields(contentString)
+	limitedWords := words
+	if len(words) > 50 {
+		limitedWords = words[:50]
+	}
+	first100Words := strings.Join(limitedWords, " ")
+
+	return base_dtos.FileObject{
+		FileId:   fileID,
+		FileName: fileName,
+		FileContent:  first100Words,
+	}, fileName, nil
 }

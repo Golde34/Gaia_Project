@@ -25,14 +25,14 @@ func GetAllNotes(w http.ResponseWriter, r *http.Request, noteService *services.N
 }
 
 func CreateNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
-	filePath, fileID, fileName, err := controller_utils.ReceiveMultipartFile(r, w)
+	filePath, fileObject, err := controller_utils.ReceiveMultipartFile(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	log.Println("File path:", filePath)
 
-	input, err := mapper.CreateNoteRequestDTOMapper(r, fileID, fileName)
+	input, err := mapper.CreateNoteRequestDTOMapper(r, fileObject)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

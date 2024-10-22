@@ -18,6 +18,7 @@ input CreateNoteInput {
     ownerId: Float!
     fileId: String !
     fileName: String!
+    summaryDisplayText: String
 }
 
 input UpdateNoteInput {

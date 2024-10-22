@@ -15081,7 +15081,7 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "ownerId", "fileId", "fileName"}
+	fieldsInOrder := [...]string{"name", "ownerId", "fileId", "fileName", "summaryDisplayText"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -15116,6 +15116,13 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 				return it, err
 			}
 			it.FileName = data
+		case "summaryDisplayText":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("summaryDisplayText"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SummaryDisplayText = data
 		}
 	}
 
