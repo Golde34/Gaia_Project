@@ -5,7 +5,10 @@ export interface INoteEntity extends Document {
     _id: string;
     name: string;
     summaryDisplayText: string;
+    fileId: string;
+    fileName: string;
     fileLocation: string;
+    fileStatus: string;
     isLock: boolean;
     tag: IUserTagEntity;
     activeStatus: ActiveStatus;

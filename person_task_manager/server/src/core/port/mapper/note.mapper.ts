@@ -1,12 +1,14 @@
+import { isStringEmpty } from "../../../kernel/util/string-utils";
 import { INoteEntity } from "../../domain/entities/note.entity";
-import { ActiveStatus } from "../../domain/enums/enums";
+import { ActiveStatus, EventStatus } from "../../domain/enums/enums";
 
 export const createNoteMapper = (note: INoteEntity) => {
-    note.name === null ? note.name = convertNewDateToName() : note.name;
+    isStringEmpty(note.name) ? note.name = convertNewDateToName() : note.name;
     note.isLock === null ? note.isLock = false : note.isLock;
-    note.activeStatus === null ? note.activeStatus = ActiveStatus.active : note.activeStatus;
+    isStringEmpty(note.activeStatus) ? note.activeStatus = ActiveStatus.active : note.activeStatus;
     note.createdAt = new Date();
     note.updatedAt = new Date();
+    isStringEmpty(note.fileStatus) ? note.fileStatus = EventStatus.INIT : note.fileStatus;
     return note;
 }
 

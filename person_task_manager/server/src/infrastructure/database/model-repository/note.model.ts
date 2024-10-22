@@ -12,9 +12,21 @@ export const noteSchema = new mongoose.Schema(
             type: String,
             require: false,
         },
+        fileId: {
+            type: String,
+            required: true,
+        },
+        fileName: {
+            type: String,
+            required: true,
+        },
         fileLocation: {
             type: String,
             required: false,
+        },
+        fileStatus: {
+            type: String,
+            required: true,
         },
         isLock: {
             type: Boolean,

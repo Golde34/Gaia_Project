@@ -5,4 +5,8 @@ export class NoteRequestDto {
     @IsOptional()
     name?: string;
     ownerId!: number;
+    @IsString()
+    fileId!: string;
+    @IsString()
+    fileName!: string;
 }
