@@ -167,6 +167,10 @@ type ComplexityRoot struct {
 	Note struct {
 		ActiveStatus       func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
+		FileID             func(childComplexity int) int
+		FileLocation       func(childComplexity int) int
+		FileName           func(childComplexity int) int
+		FileStatus         func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		IsLock             func(childComplexity int) int
 		Name               func(childComplexity int) int
@@ -1216,6 +1220,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Note.CreatedAt(childComplexity), true
+
+	case "Note.fileId":
+		if e.complexity.Note.FileID == nil {
+			break
+		}
+
+		return e.complexity.Note.FileID(childComplexity), true
+
+	case "Note.fileLocation":
+		if e.complexity.Note.FileLocation == nil {
+			break
+		}
+
+		return e.complexity.Note.FileLocation(childComplexity), true
+
+	case "Note.fileName":
+		if e.complexity.Note.FileName == nil {
+			break
+		}
+
+		return e.complexity.Note.FileName(childComplexity), true
+
+	case "Note.fileStatus":
+		if e.complexity.Note.FileStatus == nil {
+			break
+		}
+
+		return e.complexity.Note.FileStatus(childComplexity), true
 
 	case "Note.id":
 		if e.complexity.Note.ID == nil {
@@ -8023,6 +8055,14 @@ func (ec *executionContext) fieldContext_Mutation_createNote(ctx context.Context
 				return ec.fieldContext_Note_name(ctx, field)
 			case "summaryDisplayText":
 				return ec.fieldContext_Note_summaryDisplayText(ctx, field)
+			case "fileId":
+				return ec.fieldContext_Note_fileId(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Note_fileName(ctx, field)
+			case "fileLocation":
+				return ec.fieldContext_Note_fileLocation(ctx, field)
+			case "fileStatus":
+				return ec.fieldContext_Note_fileStatus(ctx, field)
 			case "isLock":
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
@@ -8168,6 +8208,179 @@ func (ec *executionContext) _Note_summaryDisplayText(ctx context.Context, field 
 }
 
 func (ec *executionContext) fieldContext_Note_summaryDisplayText(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_fileId(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_fileId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_fileId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_fileName(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_fileName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_fileName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_fileLocation(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_fileLocation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileLocation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_fileLocation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_fileStatus(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_fileStatus(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileStatus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_fileStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Note",
 		Field:      field,
@@ -9985,6 +10198,14 @@ func (ec *executionContext) fieldContext_Query_getAllNotes(ctx context.Context, 
 				return ec.fieldContext_Note_name(ctx, field)
 			case "summaryDisplayText":
 				return ec.fieldContext_Note_summaryDisplayText(ctx, field)
+			case "fileId":
+				return ec.fieldContext_Note_fileId(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Note_fileName(ctx, field)
+			case "fileLocation":
+				return ec.fieldContext_Note_fileLocation(ctx, field)
+			case "fileStatus":
+				return ec.fieldContext_Note_fileStatus(ctx, field)
 			case "isLock":
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
@@ -14860,7 +15081,7 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "ownerId"}
+	fieldsInOrder := [...]string{"name", "ownerId", "fileId", "fileName", "summaryDisplayText"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -14881,6 +15102,27 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 				return it, err
 			}
 			it.OwnerID = data
+		case "fileId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileID = data
+		case "fileName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileName"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileName = data
+		case "summaryDisplayText":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("summaryDisplayText"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SummaryDisplayText = data
 		}
 	}
 
@@ -16917,6 +17159,23 @@ func (ec *executionContext) _Note(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "summaryDisplayText":
 			out.Values[i] = ec._Note_summaryDisplayText(ctx, field, obj)
+		case "fileId":
+			out.Values[i] = ec._Note_fileId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "fileName":
+			out.Values[i] = ec._Note_fileName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "fileLocation":
+			out.Values[i] = ec._Note_fileLocation(ctx, field, obj)
+		case "fileStatus":
+			out.Values[i] = ec._Note_fileStatus(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "isLock":
 			out.Values[i] = ec._Note_isLock(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

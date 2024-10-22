@@ -2,6 +2,10 @@ type Note {
     id: ID!
     name: String!
     summaryDisplayText: String
+    fileId: String!
+    fileName: String!
+    fileLocation: String
+    fileStatus: String!   
     isLock: Boolean!
     activeStatus: String!
     createdAt: String!
@@ -12,6 +16,9 @@ type Note {
 input CreateNoteInput {
     name: String!
     ownerId: Float!
+    fileId: String !
+    fileName: String!
+    summaryDisplayText: String
 }
 
 input UpdateNoteInput {

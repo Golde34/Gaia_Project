@@ -70,3 +70,10 @@ export enum IsPrivateRoute {
     PRIVATE = BooleanStatus.true,
     PUBLIC = BooleanStatus.false
 }
+
+export enum EventStatus {
+    INIT = "INIT",
+    TIMEOUT = "TIMEOUT",
+    SUCCESS = "SUCCESS",
+    FAILED = "FAILED",
+}

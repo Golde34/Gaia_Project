@@ -49,7 +49,6 @@ func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dt
 		return response_dtos.NoteResponseDTO{}, err
 	}
 
-	// Type assert result to *response_dtos.NoteResponseDTO
 	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
 	if !ok {
 		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
