@@ -9,4 +9,7 @@ export class NoteRequestDto {
     fileId!: string;
     @IsString()
     fileName!: string;
+    @IsString()
+    @IsOptional()
+    summaryDisplayText?: string;
 }
