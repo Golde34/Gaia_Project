@@ -1,0 +1,80 @@
+type Task {
+	id: ID!
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	startDate: String!
+	deadline: String!
+	duration: Float!
+	activeStatus: String!
+
+	createdAt: String!
+	updatedAt: String!
+
+	groupTask: String!
+	subTasks: [String!]!
+	comments: [String!]!
+}
+
+input CreateTaskInput {
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	startDate: String!
+	deadline: String!
+	duration: String!
+	activeStatus: String!
+	groupTaskId: String!
+}
+
+input UpdateTaskInput {
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	startDate: String!
+	deadline: String!
+	duration: String!
+	activeStatus: String!
+	taskId: String!
+}
+
+input GenerateTaskWithoutGroupTaskInput {
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	startDate: String!
+	deadline: String!
+	duration: String!
+	activeStatus: String!
+	projectId: String!
+}
+
+input UpdateTaskInDialogInput {
+	title: String!
+	description: String!
+	status: String!
+	taskId: String!
+}
+
+input MoveTaskInput {
+	oldGroupTaskId: String!
+	newGroupTaskId: String!
+	taskId: String!
+}
+
+type TaskDashboard {
+	doneTaskList: [Task!]!
+	notDoneTaskList: [Task!]!
+}
+
+type TaskTable {
+	title: String!
+	description: String!
+	priority: [String!]!
+	status: String!
+	tasks: [Task!]!
+}
