@@ -49,20 +49,16 @@ function ContentArea() {
                     </Metric>
                     <div className="grid md:grid-cols-4 w-full h-full items-center">
                         {
-                            notes.length === 0 || notes.length === undefined ? (
-                                <p>No notes found</p>
-                            ) : (
-                                notes.map((note) => (
-                                    <div key={note.id} className="ms-5 me-5 mt-7">
-                                        <NoteItem name={note.name} isLock={note.isLock} note={note}
-                                            url={`/note/${note.id}`} buttonText="View note" elementId={note.id}
-                                        />
-                                    </div>
-                                ))
-                            )
+                            notes.map((note) => (
+                                <div key={note.id} className="ms-5 me-5 mt-7">
+                                    <NoteItem name={note.name} isLock={note.isLock} note={note}
+                                        url={`/note/${note.id}`} buttonText="View note" elementId={note.id}
+                                    />
+                                </div>
+                            ))
                         }
-                        <div key={'create-note'} className="m-3 flex justify-center">
-                            <CreateNewNote userId={userId}/>
+                        <div key={'create-note'} className="ms-5 me-5 mt-7 flex justify-center">
+                            <CreateNewNote userId={userId} />
                         </div>
                     </div>
 
