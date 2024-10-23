@@ -3,6 +3,7 @@ package controller_utils
 import (
 	"io"
 	base_dtos "middleware_loader/core/domain/dtos/base"
+	"middleware_loader/kernel/configs"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -13,6 +14,8 @@ import (
 )
 
 const uploadPath = "./resources"
+var config = configs.Config{}
+
 
 func ReceiveMultipartFile(r *http.Request, w http.ResponseWriter) (string, base_dtos.FileObject, error) {
 	err := r.ParseMultipartForm(10 << 20) // 10 MB limit
@@ -64,17 +67,24 @@ func createFileObject(file multipart.File, handler *multipart.FileHeader) (base_
 	if err != nil {
 		return base_dtos.FileObject{}, "", err
 	}
-	contentString := string(fileContent)
-	words := strings.Fields(contentString)
-	limitedWords := words
-	if len(words) > 50 {
-		limitedWords = words[:50]
-	}
-	first100Words := strings.Join(limitedWords, " ")
+	summaryDisplayText := getSummaryDislayText(fileContent)
 
 	return base_dtos.FileObject{
 		FileId:   fileID,
 		FileName: fileName,
-		FileContent:  first100Words,
+		FileContent:  summaryDisplayText,
 	}, fileName, nil
+}
+
+func getSummaryDislayText(fileContent byte[]) string {
+	contentString := string(fileContent)
+	words := strings.Fields(contentString)
+	limitedWords := words
+	var env, _ = configs.Config{}.LoadEnv()
+	fileDisplayWord := env.FileDisplayWord
+	if len(words) > fileDisplayWord {
+		limitedWords = words[:fileDisplayWord]
+	}
+	first100Words := strings.Join(limitedWords, " ")
+	return first100Words
 }
