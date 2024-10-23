@@ -33,7 +33,7 @@ func (in *Config) LoadEnv() (Config, error) {
 	clientCORSAllowedUrl := os.Getenv("CLIENT_CORS_ALLOWED_URL")
 	workOptimServicePort := os.Getenv("WORK_OPTIM_SERVICE_PORT")
 	schedulePlanServicePort := os.Getenv("SCHEDULE_PLAN_SERVICE_PORT")
-	fileDisplayWord := os.GetEnv("FILE_DISPLAY_WORD")
+	fileDisplayWord := os.Getenv("FILE_DISPLAY_WORD")
 
 	config := Config{
 		Url:                  url,
@@ -44,7 +44,7 @@ func (in *Config) LoadEnv() (Config, error) {
 		ClientCORSAllowedUrl: clientCORSAllowedUrl,
 		WorkOptimServicePort: workOptimServicePort,
 		SchedulePlanServicePort: schedulePlanServicePort,
-		FileDisplayWord: fileDisplayWord
+		FileDisplayWord: fileDisplayWord,
 	}
 	return config, nil
 }

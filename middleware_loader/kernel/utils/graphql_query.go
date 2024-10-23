@@ -219,6 +219,30 @@ func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
 	io.Copy(w, resp.Body)
 }
 
+func GraphQLResponse(w http.ResponseWriter, query string) (io.ReadCloser){
+	log.Println(query)
+	jsonQuery := map[string]string {
+		"query": query,
+	}
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(jsonQuery); err != nil {
+		log.Printf("err: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return nil
+	}
+
+	resp, err := http.Post("http://localhost:4000/query", "application/json", &buf)
+	if err != nil {
+		log.Printf("err: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return nil
+	}
+	defer resp.Body.Close()
+
+	return resp.Body
+}
+
 // func main() {
 // 	action := "mutation"
 // 	function := "signin"

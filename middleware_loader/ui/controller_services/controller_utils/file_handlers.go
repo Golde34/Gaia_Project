@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
@@ -67,7 +68,7 @@ func createFileObject(file multipart.File, handler *multipart.FileHeader) (base_
 	if err != nil {
 		return base_dtos.FileObject{}, "", err
 	}
-	summaryDisplayText := getSummaryDislayText(fileContent)
+	summaryDisplayText := getSummaryDisplayText(fileContent)
 
 	return base_dtos.FileObject{
 		FileId:   fileID,
@@ -76,15 +77,19 @@ func createFileObject(file multipart.File, handler *multipart.FileHeader) (base_
 	}, fileName, nil
 }
 
-func getSummaryDislayText(fileContent byte[]) string {
+func getSummaryDisplayText(fileContent []byte) string {
 	contentString := string(fileContent)
 	words := strings.Fields(contentString)
 	limitedWords := words
-	var env, _ = configs.Config{}.LoadEnv()
-	fileDisplayWord := env.FileDisplayWord
-	if len(words) > fileDisplayWord {
+	var config = configs.Config{}
+	var env, _ = config.LoadEnv()
+	fileDisplayWord, ok := strconv.Atoi(env.FileDisplayWord)
+	if ok != nil {
+		fileDisplayWord = 50
+	}
+	if (len(words) > fileDisplayWord) {
 		limitedWords = words[:fileDisplayWord]
 	}
-	first100Words := strings.Join(limitedWords, " ")
-	return first100Words
+	summaryDisplayText := strings.Join(limitedWords, " ")
+	return summaryDisplayText
 }
