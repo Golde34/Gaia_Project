@@ -1,8 +1,10 @@
 import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
+import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { InternalCacheConstants } from "../domain/constants/constants";
 import { INoteEntity } from "../domain/entities/note.entity";
-import { createNoteMapper } from "../port/mapper/note.mapper";
+import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
+import { noteMapper } from "../port/mapper/note.mapper";
 import { noteStore } from "../port/store/note.store";
 
 class NoteService {
@@ -25,10 +27,21 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        const convertedNote: INoteEntity = createNoteMapper(note);
+        const convertedNote: INoteEntity = noteMapper.createNoteMapper(note);
         const createdNote = await noteStore.createNote(convertedNote);
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + createdNote.ownerId);
         return createdNote;
+    }
+
+    async pushKafkaUploadFileToDataStorage(fileId: string, fileName: string): Promise<void> {
+        const data = noteMapper.buildUploadFileKafkaMessage(fileId, fileName);
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.UPLOAD_FILE, '00', 'Successful', data
+            ))
+        }]
+        console.log("Push Kafka message: ", messages);
+        // this.kafkaHandler.pushAsync(messages, KafkaTopic.UPLOAD_FILE); 
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
