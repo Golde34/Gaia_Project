@@ -1,7 +1,7 @@
 export enum KafkaTopic {
     OPTIMIZE_TASK = 'task-manager.optimize-task.topic',
     CREATE_TASK = 'task-manager.create-task.topic',
-    UPLOAD_FILE = 'data-storage.upload-file-otopic'
+    UPLOAD_FILE = 'task-manager.upload-note-file.topic'
 }
 
 export enum KafkaCommand {
