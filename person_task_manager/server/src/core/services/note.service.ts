@@ -41,7 +41,7 @@ class NoteService {
             ))
         }]
         console.log("Push Kafka message: ", messages);
-        // this.kafkaHandler.pushAsync(messages, KafkaTopic.UPLOAD_FILE); 
+        this.kafkaConfig.produce(KafkaTopic.UPLOAD_FILE, messages);
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
