@@ -7,15 +7,6 @@ const NoteText = (props) => {
     return (
         <Metric>
             <p className="text-sm text-gray-600">{props.displayText}</p>
-            <p className="text-sm text-gray-500 line-clamp-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
-                Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.
-                Praesent mauris. Fusce nec tellus sed augue semper porta.
-                Mauris massa. Vestibulum lacinia arcu eget nulla.
-                Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                per inceptos himenaeos. Curabitur sodales ligula in libero.
-            </p>
             <Button variant="primary" className="p-2" color="indigo"
                 type="button" onClick={() => navigate(props.url)}
             > {props.buttonText}
