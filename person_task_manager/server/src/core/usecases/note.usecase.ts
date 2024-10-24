@@ -28,6 +28,7 @@ class NoteUsecase {
                 return msg400(NOTE_EXISTED);
             }
             const newNote = await noteService.createNote(note);
+            await noteService.pushKafkaUploadFileToDataStorage(note.fileId, note.fileName);
             return msg200({
                 message: (newNote as any)
             })

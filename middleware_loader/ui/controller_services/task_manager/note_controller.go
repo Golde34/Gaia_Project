@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"encoding/json"
 	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
@@ -21,7 +22,7 @@ func GetAllNotes(w http.ResponseWriter, r *http.Request, noteService *services.N
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getAllNotes", QueryInput: input, QueryOutput: model.Note{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
-	utils.ConnectToGraphQLServer(w, graphQuery)
+	utils.ConnectToGraphQLServer(w, graphQuery)	
 }
 
 func CreateNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
@@ -62,4 +63,23 @@ func UpdateNote(w http.ResponseWriter, r *http.Request, noteService *services.No
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
+}
+
+func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	noteId := chi.URLParam(r, "id")
+	input := mapper.GetId(noteId)
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getNote", QueryInput: input, QueryOutput: model.Note{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	tmResponse := utils.GraphQLResponse(w, graphQuery)
+
+	// handle UploadFile 
+	finalResponse := noteService.GetNoteFiles(noteId, tmResponse)
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(finalResponse); err != nil {
+		log.Printf("Error encoding final response: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
