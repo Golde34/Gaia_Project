@@ -9,14 +9,22 @@ const HttpMethods = {
     CREDENTIAL_POST: 'CREDENTIAL_POST'
 };
 
-const getDefaultHeaders = () => {
-    const headers = new Headers();
+const serverRequest = async (api, method, portName, body, headers) => {
+    const apiHost = config[portName];
 
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
- 
-    return headers;
-};
+    if (apiHost == null) {
+        console.log(`No port config for ${portName}`);
+        return null;
+    }
+
+    let timeOut = config.serverTimeout;
+    if (isNaN(timeOut)) {
+        console.log(`Invalid timeout config for ${portName}`);
+        timeOut = 10000;
+    }
+
+    return await baseRequest(api, method, { portName, timeOut }, body, headers);
+}
 
 const baseRequest = async (api, method, portConfig, body, headers) => {
     const { portName, timeout } = portConfig;
@@ -50,22 +58,14 @@ const baseRequest = async (api, method, portConfig, body, headers) => {
     }
 }
 
-const serverRequest = async (api, method, portName, body, headers) => {
-    const apiHost = config[portName];
+const getDefaultHeaders = () => {
+    const headers = new Headers();
 
-    if (apiHost == null) {
-        console.log(`No port config for ${portName}`);
-        return null;
-    }
-
-    let timeOut = config.serverTimeout;
-    if (isNaN(timeOut)) {
-        console.log(`Invalid timeout config for ${portName}`);
-        timeOut = 10000;
-    }
-
-    return await baseRequest(api, method, { portName, timeOut }, body, headers);
-}
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+ 
+    return headers;
+};
 
 const _fetchData = async (url, method, body, headers) => {
     switch (method) {
@@ -131,9 +131,35 @@ const _fetchData = async (url, method, body, headers) => {
     }
 }
 
+const postFile = async (api, portName, formData) => {
+    const apiHost = config[portName];
+
+    if (apiHost == null) {
+        console.log(`No port config for ${portName}`);
+        return null;
+    }
+
+    let timeOut = config.serverTimeout;
+    if (isNaN(timeOut)) {
+        console.log(`Invalid timeout config for ${portName}`);
+        timeOut = 10000;
+    }
+
+    const url = `http://${config.serverHost}:${config[portName]}${api}`;
+    console.log(`Posting file to ${url}`);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+    });
+
+    return response;
+} 
+
 export {
     HttpMethods,
     getDefaultHeaders,
     baseRequest,
     serverRequest,
+    postFile
 }

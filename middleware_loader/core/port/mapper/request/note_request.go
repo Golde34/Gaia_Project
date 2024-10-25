@@ -14,7 +14,7 @@ func CreateNoteRequestDTOMapper(r *http.Request, fileObject base_dtos.FileObject
 	// Extract "name" from the form data
 	name := r.FormValue("name")
 	if name == "" {
-		return nil, fmt.Errorf("name is required")	
+		input.Name = ""	
 	}
 	input.Name = name
 	

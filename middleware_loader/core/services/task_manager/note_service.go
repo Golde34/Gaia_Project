@@ -115,14 +115,21 @@ func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
 	
 	switch datalakeConfig {
 	case "local":
-		return storages.UploadToLocal(fileName, filePath)
+		storages.UploadToLocal(fileName, filePath)
 	case "Hadoop":
-		return storages.UploadToHadoop(fileName, filePath)
+		storages.UploadToHadoop(fileName, filePath)
 	case "Minio":
-		return storages.UploadToMinio(fileName, filePath)
+		storages.UploadToMinio(fileName, filePath)
 	case "S3":
-		return storages.UploadToS3(fileName, filePath)
+		storages.UploadToS3(fileName, filePath)
 	default:
 		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
 	}
+
+	//delete tempFile
+	if err := os.Remove(filePath); err != nil {
+		log.Println("Error deleting temp file: ", err)
+	}
+
+	return fileName, nil
 }
