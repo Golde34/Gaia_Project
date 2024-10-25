@@ -11,15 +11,25 @@ import (
 
 	"middleware_loader/cmd/bootstrap"
 	"middleware_loader/cmd/route"
+	"middleware_loader/infrastructure/kafka"
 	"middleware_loader/kernel/configs"
-	"middleware_loader/ui/kafka"
+	consumer "middleware_loader/ui/kafka"
 )
 
 func main() {
 	// Kafka Initialization
+	kafkaConfig := configs.KafkaConfig{}
+	kafkaCfg, _ := kafkaConfig.LoadEnv()
+	log.Println("Kafka configuration loaded: ", kafkaCfg.GroupID)
+
+	handlers := map[string]kafka.MessageHandler {
+        "task-manager.upload-note-file.topic": &consumer.UploadNoteFileHandler{},
+    }
+
+    consumerGroupHandler := kafka.NewConsumerGroupHandler(kafkaCfg.Name, handlers)
+
 	go func() {
-		topics := []string{"task-manager.upload-note-file.topic", "test"}
-		kafka.ConsumerGroup(topics, "conf.ConsumerGroupID3", "C3")
+		kafka.ConsumerGroup(kafkaCfg.BootstrapServers, kafkaCfg.Topics, kafkaCfg.GroupID, consumerGroupHandler)
 	}()
 
 	// Server Initialization
