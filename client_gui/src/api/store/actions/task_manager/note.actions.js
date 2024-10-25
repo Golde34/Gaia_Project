@@ -1,5 +1,5 @@
 import { config } from "../../../../kernels/configs/configuration";
-import { serverRequest } from "../../../baseAPI";
+import { postFile, serverRequest } from "../../../baseAPI";
 import { NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS, NOTE_UPDATE_FAIL, NOTE_UPDATE_REQUEST, NOTE_UPDATE_SUCCESS } from "../../constants/task_manager/note.constants"
 
 const portName = {
@@ -25,20 +25,15 @@ export const createNote = (note) => async (dispatch) => {
     dispatch({ type: NOTE_CREATE_REQUEST });
     try {
         const api = '/note/create';
-        const url = `http://${config.serverHost}:${config[portName['middleware']]}${api}`;
-        console.log('URL:', url);
 
         const formData = new FormData();
         formData.append('name', note.name);
         formData.append('userId', note.userId);
         formData.append('file', note.contentFile);
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formData, 
-        });
 
+        const response = await postFile(api, portName.middleware, formData);
         const data = await response.json();
+        
         if (response.ok) {
             dispatch({ type: NOTE_CREATE_SUCCESS, payload: data });
             console.log('Note created successfully:', data);
