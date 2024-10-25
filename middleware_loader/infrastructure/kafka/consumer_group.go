@@ -45,10 +45,7 @@ func (h MyConsumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, c
                 log.Printf("No handler found for topic %s\n", topic)
                 continue 
             }
-
-            if err := handler.HandleMessage(topic, msg.Key, msg.Value); err != nil {
-                log.Printf("Error handling message for topic %s: %v\n", topic, err)
-            }
+            handler.HandleMessage(topic, msg.Key, msg.Value);
 
             h.count++
             if h.count%10000 == 0 {

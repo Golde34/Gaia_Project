@@ -1,5 +1,5 @@
 package kafka 
 
 type MessageHandler interface {
-	HandleMessage(topic string, key, value []byte) error
+	HandleMessage(topic string, key, value []byte) 
 }
