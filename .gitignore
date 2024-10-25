@@ -36,3 +36,4 @@ application.conf
 !pom.xml
 *\auth_service.log
 *\middleware_loader\resources
+*\data_lake

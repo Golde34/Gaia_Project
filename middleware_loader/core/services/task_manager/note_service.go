@@ -3,12 +3,15 @@ package services
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
 	adapter "middleware_loader/infrastructure/client"
+	storages "middleware_loader/infrastructure/data_storage"
 	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/configs"
 	"os"
 	"path/filepath"
 )
@@ -97,4 +100,29 @@ func (s *NoteService) UpdateNote(ctx context.Context, input model.UpdateNoteInpu
 	noteModel := noteResponse.MapperToGraphQLModel(note)
 
 	return noteModel, nil
+}
+
+func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
+	filePath := filepath.Join("./resources/", fileName)
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		log.Println("File does not exist")
+		return "", err
+	}
+
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+	datalakeConfig := cfg.Datalake
+	
+	switch datalakeConfig {
+	case "local":
+		return storages.UploadToLocal(fileName, filePath)
+	case "Hadoop":
+		return storages.UploadToHadoop(fileName, filePath)
+	case "Minio":
+		return storages.UploadToMinio(fileName, filePath)
+	case "S3":
+		return storages.UploadToS3(fileName, filePath)
+	default:
+		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
+	}
 }

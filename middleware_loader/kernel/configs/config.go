@@ -16,7 +16,9 @@ type Config struct {
 	ClientCORSAllowedUrl    string
 	WorkOptimServicePort    string
 	SchedulePlanServicePort string
+	
 	FileDisplayWord         string 
+	Datalake 			    string
 }
 
 func (in *Config) LoadEnv() (Config, error) {
@@ -34,6 +36,7 @@ func (in *Config) LoadEnv() (Config, error) {
 	workOptimServicePort := os.Getenv("WORK_OPTIM_SERVICE_PORT")
 	schedulePlanServicePort := os.Getenv("SCHEDULE_PLAN_SERVICE_PORT")
 	fileDisplayWord := os.Getenv("FILE_DISPLAY_WORD")
+	dataLake := os.Getenv("DATALAKE")
 
 	config := Config{
 		Url:                  url,
@@ -45,6 +48,7 @@ func (in *Config) LoadEnv() (Config, error) {
 		WorkOptimServicePort: workOptimServicePort,
 		SchedulePlanServicePort: schedulePlanServicePort,
 		FileDisplayWord: fileDisplayWord,
+		Datalake: dataLake,
 	}
 	return config, nil
 }
