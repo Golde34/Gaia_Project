@@ -26,4 +26,3 @@ __config__.py
 token.json
 commits.json
 *\resources
-*\data_lake
