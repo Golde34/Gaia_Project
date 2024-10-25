@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const task = {
   title: 'Meeting 1 is very long text that\'s good',
   description: '10:00 AM - 11:00 AM',
-  location: 'Zoom'
+  location: 'Zoom',
+  priority: ['Low'],
 }
 
 function ContentArea() {
