@@ -12,9 +12,17 @@ import (
 	"middleware_loader/cmd/bootstrap"
 	"middleware_loader/cmd/route"
 	"middleware_loader/kernel/configs"
+	"middleware_loader/ui/kafka"
 )
 
 func main() {
+	// Kafka Initialization
+	go func() {
+		topics := []string{"task-manager.upload-note-file.topic", "test"}
+		kafka.ConsumerGroup(topics, "conf.ConsumerGroupID3", "C3")
+	}()
+
+	// Server Initialization
 	config := configs.Config{}
 	cfg, _ := config.LoadEnv()
 	clientUrl := cfg.ClientCORSAllowedUrl
