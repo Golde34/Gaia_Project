@@ -15,32 +15,32 @@ const CardItem = (props) => {
     }
 
     const shortenTitle = (title) => {
-        if (title.length > 30) {
+        if (title.length > 25) {
             return title.substring(0, 20) + "...";
         }
         return title;
     }
 
     return (
-        <button onClick={() => { redirectToTaskDetail() }} className="m-2">
+        <button onClick={() => { redirectToTaskDetail() }} className="mt-2 me-2">
             <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px', maxHeight: '200px' }}>
                 <Metric>{shortenTitle(task.title)}</Metric>
                 <Grid numItems={2}>
                     <Col numColSpan={1}>
-                    <Flex justifyContent="start">
-                        {task.priority.map((priority) => (
-                            <Badge key={`${task.id}-${priority}`} className="m-1" color={priorityColor(priority)}>{priority}</Badge>
-                        ))}
+                        <Flex justifyContent="start">
+                            {task.priority.map((priority) => (
+                                <Badge key={`${task.id}-${priority}`} className="me-1 mt-1" color={priorityColor(priority)}>{priority}</Badge>
+                            ))}
                         </Flex>
                     </Col>
                     <Col numColSpan={1}>
                         <Flex justifyContent="end">
-                            <BadgeDelta className="m-1" deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
+                            <BadgeDelta className="ms-1 mt-1" deltaType={statusColor(task.status)}>{task.status}</BadgeDelta>
                         </Flex>
                     </Col>
                 </Grid>
 
-                <Text className="line-clamp-3"> {task.description} </Text>
+                <Text className="line-clamp-3 mt-1"> {task.description} </Text>
             </Card>
         </button>
     );

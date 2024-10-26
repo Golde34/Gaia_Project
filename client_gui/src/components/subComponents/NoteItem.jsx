@@ -3,18 +3,6 @@ import { useNavigate } from "react-router-dom"
 import EllipsisMenu from "../EllipsisMenu";
 import { LockClosedIcon } from "@heroicons/react/solid";
 
-const NoteText = (props) => {
-    return (
-        <Metric>
-            <p className="text-sm text-gray-600">{props.displayText}</p>
-            <Button variant="primary" className="p-2" color="indigo"
-                type="button" onClick={() => navigate(props.url)}
-            > {props.buttonText}
-            </Button>
-        </Metric>
-    )
-}
-
 const NoteItem = (props) => {
     // const navigate = useNavigate();
     const click = () => {
@@ -41,7 +29,7 @@ const NoteItem = (props) => {
                 ) : (
                     <>
                         <div className="flex flex-col justify-start">
-                            <Subtitle className="text-sm text-gray-900 line-clamp-6">{props.note.summaryDisplayText}</Subtitle>
+                            <Subtitle className="line-clamp-6"><span className="text-gray-500">{props.note.summaryDisplayText}</span></Subtitle>
                         </div>
 
                         <div className="absolute bottom-2 right-2">
