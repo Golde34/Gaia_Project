@@ -1,11 +1,11 @@
 import { postFile, serverRequest } from "../../../baseAPI";
-import { NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, 
+import { 
+    NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, 
+    NOTE_DELETE_FAIL, NOTE_DELETE_REQUEST, NOTE_DELETE_SUCCESS, 
     NOTE_DETAIL_FAIL, NOTE_DETAIL_REQUEST, NOTE_DETAIL_SUCCESS, 
     NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS, 
     NOTE_LOCK_FAIL, NOTE_LOCK_REQUEST, NOTE_LOCK_SUCCESS, 
-    NOTE_UNLOCK_FAIL, 
-    NOTE_UNLOCK_REQUEST, 
-    NOTE_UNLOCK_SUCCESS, 
+    NOTE_UNLOCK_FAIL, NOTE_UNLOCK_REQUEST, NOTE_UNLOCK_SUCCESS, 
     NOTE_UPDATE_FAIL, NOTE_UPDATE_REQUEST, NOTE_UPDATE_SUCCESS 
 } from "../../constants/task_manager/note.constants"
 
@@ -121,6 +121,21 @@ export const unlockNote = (noteId, notePassword) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NOTE_UNLOCK_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
+
+export const deleteNote = (noteId) => async (dispatch) => {
+    dispatch({ type: NOTE_DELETE_REQUEST, payload: noteId });
+    try {
+        const { data } = await serverRequest(`/note/delete/${noteId}`, 'DELETE', portName.middleware);
+        dispatch({ type: NOTE_DELETE_SUCCESS, payload: data.data });
+    } catch (error) {
+        dispatch({
+            type: NOTE_DELETE_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,

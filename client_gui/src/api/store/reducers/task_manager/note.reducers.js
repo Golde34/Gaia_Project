@@ -1,5 +1,8 @@
 import {
     NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS,
+    NOTE_DELETE_FAIL,
+    NOTE_DELETE_REQUEST,
+    NOTE_DELETE_SUCCESS,
     NOTE_DETAIL_FAIL, NOTE_DETAIL_REQUEST, NOTE_DETAIL_SUCCESS,
     NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS,
     NOTE_LOCK_FAIL, NOTE_LOCK_REQUEST, NOTE_LOCK_SUCCESS,
@@ -97,6 +100,22 @@ export const noteUnlockReducer = (
         case NOTE_UNLOCK_SUCCESS:
             return { loading: false, note: action.payload.note };
         case NOTE_UNLOCK_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const noteDeleteReducer = (
+    state = { loading: true},
+    action
+) => {
+    switch (action.type) {
+        case NOTE_DELETE_REQUEST:
+            return { loading: true };
+        case NOTE_DELETE_SUCCESS:
+            return { loading: false, note: action.payload.note };
+        case NOTE_DELETE_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;

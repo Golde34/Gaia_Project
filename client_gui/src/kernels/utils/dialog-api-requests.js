@@ -38,8 +38,8 @@ export const useDeleteComponentDispatch = () => {
             case "Task":
                 dispatch(deleteTask(id));
                 break;
-            // case "Note":
-            //     dispatch(deleteNote(id));
+            case "Note":
+                dispatch(deleteNote(id));
             case "Ordinal":
                 dispatch(updateOrdinalNumber(id));
                 break;
