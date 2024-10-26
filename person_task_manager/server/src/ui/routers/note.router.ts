@@ -66,6 +66,17 @@ noteRouter.get("/get/:id",
         }
     });
 
+noteRouter.put("/lock/:id",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const noteResult = await noteControllerImpl.lockNoteById(req, next);
+            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
 noteRouter.put("/archive/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {

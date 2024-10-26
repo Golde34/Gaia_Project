@@ -70,6 +70,22 @@ class NoteUsecase {
             return msg400(NOTE_NOT_FOUND);
         }
     }
+
+    async lockNoteById(noteId: string): Promise<IResponse> {
+        try {
+            const note = await noteService.getNoteById(noteId);
+            if (!note) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            note.isLock = true;
+            await noteService.updateNote(note);
+            return msg200({
+                message: (note as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
 }
 
 export const noteUsecase = new NoteUsecase();

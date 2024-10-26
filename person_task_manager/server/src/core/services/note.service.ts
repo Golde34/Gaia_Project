@@ -21,6 +21,11 @@ class NoteService {
         } else {
             console.log("Get notes from database");
             const notes = await noteStore.getAllNotes(userId);
+            notes.forEach(note => {
+                if (note.isLock) {
+                    note.summaryDisplayText = "This note is locked";
+                }
+            })
             this.noteCache.set(InternalCacheConstants.NOTE_LIST + userId, notes);
             return notes;
         }
@@ -45,6 +50,7 @@ class NoteService {
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         return await noteStore.updateNoteById(note._id, note);
     }
 
