@@ -13,7 +13,8 @@ const NoteItem = (props) => {
         <>
             <Card
                 className="w-xs h-72 hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300 relative"
-                decoration="left" decorationColor="indigo">
+                decoration="left" decorationColor="indigo"
+                onClick={click}>
 
                 <Flex justifyContent="between" alignItems="center" className="w-xs h-24">
                     <Metric>{props.note.name}</Metric>
@@ -32,11 +33,11 @@ const NoteItem = (props) => {
                             <Subtitle className="line-clamp-6"><span className="text-gray-500">{props.note.summaryDisplayText}</span></Subtitle>
                         </div>
 
-                        <div className="absolute bottom-2 right-2">
+                        {/* <div className="absolute bottom-2 right-2">
                             <Button variant="primary" className="p-2" color="indigo" type="button" onClick={click}>
                                 OK
                             </Button>
-                        </div>
+                        </div> */}
                     </>
                 )}
             </Card>
