@@ -1,6 +1,8 @@
-import { config } from "../../../../kernels/configs/configuration";
 import { postFile, serverRequest } from "../../../baseAPI";
-import { NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS, NOTE_UPDATE_FAIL, NOTE_UPDATE_REQUEST, NOTE_UPDATE_SUCCESS } from "../../constants/task_manager/note.constants"
+import { NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, 
+    NOTE_DETAIL_FAIL, NOTE_DETAIL_REQUEST, NOTE_DETAIL_SUCCESS, 
+    NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS, 
+    NOTE_UPDATE_FAIL, NOTE_UPDATE_REQUEST, NOTE_UPDATE_SUCCESS } from "../../constants/task_manager/note.constants"
 
 const portName = {
     middleware: 'middlewarePort',
@@ -60,6 +62,21 @@ export const updateNote = (note) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NOTE_UPDATE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
+
+export const getNoteById = (noteId) => async (dispatch) => {
+    dispatch({ type: NOTE_DETAIL_REQUEST, payload: noteId });
+    try {
+        const { data } = await serverRequest(`/note/${noteId}`, 'GET', portName.middleware);
+        dispatch({ type: NOTE_DETAIL_SUCCESS, payload: data.data });
+    } catch (error) {
+        dispatch({
+            type: NOTE_DETAIL_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,
