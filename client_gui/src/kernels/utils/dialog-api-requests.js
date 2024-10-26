@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { updateGroupTaskName, deleteGroupTask, updateOrdinalNumber } from "../../api/store/actions/task_manager/group-task.actions";
 import { deleteProject, updateProjectColor, updateProjectName } from "../../api/store/actions/task_manager/project.actions";
 import { deleteTask, moveTask, updateTaskInDialog } from "../../api/store/actions/task_manager/task.actions";
-import { lockNote, unlockNote } from "../../api/store/actions/task_manager/note.actions";
+import { deleteNote, lockNote, unlockNote } from "../../api/store/actions/task_manager/note.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -40,6 +40,7 @@ export const useDeleteComponentDispatch = () => {
                 break;
             case "Note":
                 dispatch(deleteNote(id));
+                break;
             case "Ordinal":
                 dispatch(updateOrdinalNumber(id));
                 break;

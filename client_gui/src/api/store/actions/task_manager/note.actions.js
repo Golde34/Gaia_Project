@@ -131,7 +131,7 @@ export const unlockNote = (noteId, notePassword) => async (dispatch) => {
 export const deleteNote = (noteId) => async (dispatch) => {
     dispatch({ type: NOTE_DELETE_REQUEST, payload: noteId });
     try {
-        const { data } = await serverRequest(`/note/delete/${noteId}`, 'DELETE', portName.middleware);
+        const { data } = await serverRequest(`/note/${noteId}`, 'DELETE', portName.middleware);
         dispatch({ type: NOTE_DELETE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
