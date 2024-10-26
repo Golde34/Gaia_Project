@@ -127,3 +127,15 @@ func UnlockNote(w http.ResponseWriter, r *http.Request, noteService *services.No
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
+
+func DeleteNoteById(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	noteId := chi.URLParam(r, "id")
+	noteService.DeleteNoteById(noteId)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode("Note deleted successfully"); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

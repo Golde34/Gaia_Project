@@ -98,3 +98,19 @@ func (adapter *NoteAdapter) UnlockNote(input model.UnlockNoteInput) (response_dt
 	}
 	return *noteResponse, nil
 }
+
+func (adapter *NoteAdapter) DeleteNote(id string) (response_dtos.NoteResponseDTO, error) {
+	deleteNoteURL := base.TaskManagerServiceURL + "/note/" + id
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(deleteNoteURL, "DELETE", nil, &note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, err
+	}
+
+	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+	}
+	return *noteResponse, nil
+}

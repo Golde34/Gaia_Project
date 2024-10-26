@@ -153,3 +153,13 @@ func (s *NoteService) UnlockNote(ctx context.Context, input model.UnlockNoteInpu
 
 	return noteModel, nil
 }
+
+func (s *NoteService) DeleteNoteById(id string) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).DeleteNote(id)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}
