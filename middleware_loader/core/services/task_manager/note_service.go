@@ -133,3 +133,33 @@ func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
 
 	return fileName, nil
 }
+
+func (s *NoteService) LockNote(ctx context.Context, input model.LockNoteInput) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).LockNote(input)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}
+
+func (s *NoteService) UnlockNote(ctx context.Context, input model.UnlockNoteInput) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).UnlockNote(input)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}
+
+func (s *NoteService) DeleteNoteById(id string) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).DeleteNote(id)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}

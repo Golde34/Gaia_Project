@@ -3,7 +3,7 @@ import { Input } from '@material-tailwind/react';
 import { Fragment, useState } from 'react'
 import { useUpdateComponentNameDispatch } from '../../kernels/utils/dialog-api-requests';
 
-export const InputDialog = (props) => {
+export const InputNameDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
     let [newName, setNewName] = useState("");
 

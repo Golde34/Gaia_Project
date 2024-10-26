@@ -137,6 +137,12 @@ type ListPrivilegeResponse struct {
 	Roles       []*RoleOnlyResponse `json:"roles"`
 }
 
+type LockNoteInput struct {
+	NoteID             string `json:"noteId"`
+	NotePassword       string `json:"notePassword"`
+	PasswordSuggestion string `json:"passwordSuggestion"`
+}
+
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
@@ -156,6 +162,7 @@ type Note struct {
 	FileStatus         string  `json:"fileStatus"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
+	PasswordSuggestion *string `json:"passwordSuggestion,omitempty"`
 	CreatedAt          string  `json:"createdAt"`
 	UpdatedAt          string  `json:"updatedAt"`
 	OwnerID            float64 `json:"ownerId"`
@@ -287,6 +294,11 @@ type TokenResponse struct {
 	Username    string `json:"username"`
 	AccessToken string `json:"accessToken"`
 	ExpiryDate  string `json:"expiryDate"`
+}
+
+type UnlockNoteInput struct {
+	NoteID       string `json:"noteId"`
+	NotePassword string `json:"notePassword"`
 }
 
 type UpdateColorInput struct {

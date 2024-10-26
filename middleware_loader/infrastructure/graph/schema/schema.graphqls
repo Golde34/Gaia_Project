@@ -77,6 +77,8 @@ type Mutation {
 	enableGroupTask(input: IdInput!): GroupTask!
 
 	createNote(input: CreateNoteInput!): Note!
+	lockNote(input: LockNoteInput!): Note!
+	unlockNote(input: UnlockNoteInput!): Note!
 }
 
 input IdInput {

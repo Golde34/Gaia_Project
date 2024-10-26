@@ -8,6 +8,7 @@ type Note {
     fileStatus: String!   
     isLock: Boolean!
     activeStatus: String!
+    passwordSuggestion: String
     createdAt: String!
     updatedAt: String!
     ownerId: Float!
@@ -25,4 +26,15 @@ input UpdateNoteInput {
     id: ID!
     name: String!
     ownerId: Float!
+}
+
+input LockNoteInput {
+    noteId: ID!
+    notePassword: String!
+    passwordSuggestion: String!
+}
+
+input UnlockNoteInput {
+    noteId: ID!
+    notePassword: String!
 }

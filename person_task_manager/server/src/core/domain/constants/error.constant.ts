@@ -68,3 +68,4 @@ export const DELETE_NOTE_FAILED = "Delete note failed";
 export const ARCHIVE_NOTE_FAILED = "Archive note failed";
 export const ENABLE_NOTE_FAILED = "Enable note failed";
 export const NOTE_EXISTED = "Note existed";
+export const NOTE_PASSWORD_INCORRECT = "Note password incorrect";

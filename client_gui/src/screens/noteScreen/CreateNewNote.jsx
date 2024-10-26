@@ -78,7 +78,7 @@ export const CreateNewNote = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-[50%] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
@@ -98,7 +98,7 @@ export const CreateNewNote = (props) => {
                                     </div>
 
                                     {/* Quill Editor */}
-                                    <div className="mt-4 mb-4">
+                                    <div className="mt-4 mb-12">
                                         <ReactQuill
                                             theme="snow"
                                             value={newContent}
@@ -109,14 +109,23 @@ export const CreateNewNote = (props) => {
                                         />
                                     </div>
 
-                                    <div className="mt-4 flex justify-end">
+                                    <div className="mt-12 flex justify-end">
+                                        <button onClick={() => {
+                                            setNewName('');
+                                            setNewContent(''); 
+                                            closeModal();
+                                        }}
+                                            className="bg-yellow-200 text-gray-700 font-semibold px-6 py-2 rounded-lg hover:text-gray-700 transition duration-300 ease-in-out me-2">
+                                            Discard
+                                        </button>
+
                                         <button
                                             onClick={() => {
                                                 const file = saveContentAsFile(newContent);
-                                                setObjectNote(newName, file); 
+                                                setObjectNote(newName, file);
                                                 closeModal();
                                             }}
-                                            className="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300 ease-in-out"
+                                            className="ms-2 bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-500 transition duration-300 ease-in-out"
                                         >
                                             Save Note
                                         </button>

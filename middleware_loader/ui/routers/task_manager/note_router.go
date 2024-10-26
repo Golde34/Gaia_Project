@@ -27,6 +27,15 @@ func NewNoteRouter(noteService *services.NoteService, db database_mongo.Database
 		r.Put("/{id}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.UpdateNote(w, r, noteService)
 		})
+		r.Put("/lock/{id}", func (w http.ResponseWriter, r *http.Request) {
+			controller_services.LockNote(w, r, noteService)
+		})
+		r.Put("/unlock/{id}", func (w http.ResponseWriter, r *http.Request) {
+			controller_services.UnlockNote(w, r, noteService)
+		})
+		r.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.DeleteNoteById(w, r, noteService)
+		})
 	})
 	return &NoteRouter{
 		NoteService: noteService,

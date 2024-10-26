@@ -3,18 +3,6 @@ import { useNavigate } from "react-router-dom"
 import EllipsisMenu from "../EllipsisMenu";
 import { LockClosedIcon } from "@heroicons/react/solid";
 
-const NoteText = (props) => {
-    return (
-        <Metric>
-            <p className="text-sm text-gray-600">{props.displayText}</p>
-            <Button variant="primary" className="p-2" color="indigo"
-                type="button" onClick={() => navigate(props.url)}
-            > {props.buttonText}
-            </Button>
-        </Metric>
-    )
-}
-
 const NoteItem = (props) => {
     // const navigate = useNavigate();
     const click = () => {
@@ -25,15 +13,17 @@ const NoteItem = (props) => {
         <>
             <Card
                 className="w-xs h-72 hover:cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300 relative"
-                decoration="left" decorationColor="indigo">
+                decoration="left" decorationColor="indigo"
+                onClick={click}>
 
                 <Flex justifyContent="between" alignItems="center" className="w-xs h-24">
                     <Metric>{props.note.name}</Metric>
-                    <EllipsisMenu elementName="Note" elementId={props.note.id} />
+                    <EllipsisMenu elementName="Note" elementId={props.note.id} 
+                        isLock={props.note.isLock} suggestion={props.note.passwordSuggestion}/>
                 </Flex>
 
                 {props.note.isLock ? (
-                    <Flex justifyContent="center" alignItems="center" className="w-full h-48">
+                    <Flex justifyContent="center" alignItems="center" className="w-full h-36">
                         <button className="border-none bg-transparent focus:outline-none" onClick={click}>
                             <LockClosedIcon className="h-6 w-12 text-gray-500" />
                         </button>
@@ -41,14 +31,14 @@ const NoteItem = (props) => {
                 ) : (
                     <>
                         <div className="flex flex-col justify-start">
-                            <Subtitle className="text-sm text-gray-900 line-clamp-6">{props.note.summaryDisplayText}</Subtitle>
+                            <Subtitle className="line-clamp-6"><span className="text-gray-500">{props.note.summaryDisplayText}</span></Subtitle>
                         </div>
 
-                        <div className="absolute bottom-2 right-2">
+                        {/* <div className="absolute bottom-2 right-2">
                             <Button variant="primary" className="p-2" color="indigo" type="button" onClick={click}>
                                 OK
                             </Button>
-                        </div>
+                        </div> */}
                     </>
                 )}
             </Card>

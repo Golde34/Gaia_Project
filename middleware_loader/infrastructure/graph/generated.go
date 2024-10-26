@@ -147,10 +147,12 @@ type ComplexityRoot struct {
 		GenerateTaskWithoutGroupTask func(childComplexity int, input model.GenerateTaskWithoutGroupTaskInput) int
 		IsScheduleExisted            func(childComplexity int, input model.UserIDInput) int
 		IsTaskExisted                func(childComplexity int, input model.UserIDInput) int
+		LockNote                     func(childComplexity int, input model.LockNoteInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
 		QueryTaskConfig              func(childComplexity int, input model.UserIDInput) int
 		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
 		Signin                       func(childComplexity int, input model.SigninInput) int
+		UnlockNote                   func(childComplexity int, input model.UnlockNoteInput) int
 		UpdateGroupTask              func(childComplexity int, input model.UpdateGroupTaskInput) int
 		UpdateGroupTaskName          func(childComplexity int, input model.UpdateObjectNameInput) int
 		UpdateOrdinalNumber          func(childComplexity int, input model.ProjectGroupTaskIDInput) int
@@ -175,6 +177,7 @@ type ComplexityRoot struct {
 		IsLock             func(childComplexity int) int
 		Name               func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		PasswordSuggestion func(childComplexity int) int
 		SummaryDisplayText func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 	}
@@ -355,6 +358,8 @@ type MutationResolver interface {
 	ArchieveGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	EnableGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	CreateNote(ctx context.Context, input model.CreateNoteInput) (*model.Note, error)
+	LockNote(ctx context.Context, input model.LockNoteInput) (*model.Note, error)
+	UnlockNote(ctx context.Context, input model.UnlockNoteInput) (*model.Note, error)
 }
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
@@ -1027,6 +1032,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.IsTaskExisted(childComplexity, args["input"].(model.UserIDInput)), true
 
+	case "Mutation.lockNote":
+		if e.complexity.Mutation.LockNote == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_lockNote_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.LockNote(childComplexity, args["input"].(model.LockNoteInput)), true
+
 	case "Mutation.moveTask":
 		if e.complexity.Mutation.MoveTask == nil {
 			break
@@ -1074,6 +1091,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Signin(childComplexity, args["input"].(model.SigninInput)), true
+
+	case "Mutation.unlockNote":
+		if e.complexity.Mutation.UnlockNote == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_unlockNote_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UnlockNote(childComplexity, args["input"].(model.UnlockNoteInput)), true
 
 	case "Mutation.updateGroupTask":
 		if e.complexity.Mutation.UpdateGroupTask == nil {
@@ -1276,6 +1305,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.passwordSuggestion":
+		if e.complexity.Note.PasswordSuggestion == nil {
+			break
+		}
+
+		return e.complexity.Note.PasswordSuggestion(childComplexity), true
 
 	case "Note.summaryDisplayText":
 		if e.complexity.Note.SummaryDisplayText == nil {
@@ -1993,6 +2029,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputGenerateTaskWithoutGroupTaskInput,
 		ec.unmarshalInputIdInput,
+		ec.unmarshalInputLockNoteInput,
 		ec.unmarshalInputMoveTaskInput,
 		ec.unmarshalInputPrivilegeInput,
 		ec.unmarshalInputProjectGroupTaskIdInput,
@@ -2000,6 +2037,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputRoleInput,
 		ec.unmarshalInputSigninInput,
 		ec.unmarshalInputTokenInput,
+		ec.unmarshalInputUnlockNoteInput,
 		ec.unmarshalInputUpdateColorInput,
 		ec.unmarshalInputUpdateGroupTaskInput,
 		ec.unmarshalInputUpdateNoteInput,
@@ -2528,6 +2566,21 @@ func (ec *executionContext) field_Mutation_isTaskExisted_args(ctx context.Contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_lockNote_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.LockNoteInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNLockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐLockNoteInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_moveTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2580,6 +2633,21 @@ func (ec *executionContext) field_Mutation_signin_args(ctx context.Context, rawA
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNSigninInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐSigninInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_unlockNote_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UnlockNoteInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUnlockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUnlockNoteInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8067,6 +8135,8 @@ func (ec *executionContext) fieldContext_Mutation_createNote(ctx context.Context
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
 				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Note_createdAt(ctx, field)
 			case "updatedAt":
@@ -8085,6 +8155,172 @@ func (ec *executionContext) fieldContext_Mutation_createNote(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createNote_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_lockNote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_lockNote(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().LockNote(rctx, fc.Args["input"].(model.LockNoteInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Note)
+	fc.Result = res
+	return ec.marshalNNote2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐNote(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_lockNote(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Note_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Note_name(ctx, field)
+			case "summaryDisplayText":
+				return ec.fieldContext_Note_summaryDisplayText(ctx, field)
+			case "fileId":
+				return ec.fieldContext_Note_fileId(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Note_fileName(ctx, field)
+			case "fileLocation":
+				return ec.fieldContext_Note_fileLocation(ctx, field)
+			case "fileStatus":
+				return ec.fieldContext_Note_fileStatus(ctx, field)
+			case "isLock":
+				return ec.fieldContext_Note_isLock(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Note_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Note_updatedAt(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Note_ownerId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Note", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_lockNote_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_unlockNote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_unlockNote(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UnlockNote(rctx, fc.Args["input"].(model.UnlockNoteInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Note)
+	fc.Result = res
+	return ec.marshalNNote2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐNote(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_unlockNote(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Note_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Note_name(ctx, field)
+			case "summaryDisplayText":
+				return ec.fieldContext_Note_summaryDisplayText(ctx, field)
+			case "fileId":
+				return ec.fieldContext_Note_fileId(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Note_fileName(ctx, field)
+			case "fileLocation":
+				return ec.fieldContext_Note_fileLocation(ctx, field)
+			case "fileStatus":
+				return ec.fieldContext_Note_fileStatus(ctx, field)
+			case "isLock":
+				return ec.fieldContext_Note_isLock(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Note_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Note_updatedAt(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Note_ownerId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Note", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_unlockNote_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8469,6 +8705,47 @@ func (ec *executionContext) _Note_activeStatus(ctx context.Context, field graphq
 }
 
 func (ec *executionContext) fieldContext_Note_activeStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_passwordSuggestion(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_passwordSuggestion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PasswordSuggestion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_passwordSuggestion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Note",
 		Field:      field,
@@ -10210,6 +10487,8 @@ func (ec *executionContext) fieldContext_Query_getAllNotes(ctx context.Context, 
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
 				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Note_createdAt(ctx, field)
 			case "updatedAt":
@@ -15439,6 +15718,47 @@ func (ec *executionContext) unmarshalInputIdInput(ctx context.Context, obj inter
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputLockNoteInput(ctx context.Context, obj interface{}) (model.LockNoteInput, error) {
+	var it model.LockNoteInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"noteId", "notePassword", "passwordSuggestion"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "noteId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoteID = data
+		case "notePassword":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notePassword"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NotePassword = data
+		case "passwordSuggestion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("passwordSuggestion"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PasswordSuggestion = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputMoveTaskInput(ctx context.Context, obj interface{}) (model.MoveTaskInput, error) {
 	var it model.MoveTaskInput
 	asMap := map[string]interface{}{}
@@ -15727,6 +16047,40 @@ func (ec *executionContext) unmarshalInputTokenInput(ctx context.Context, obj in
 				return it, err
 			}
 			it.Token = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUnlockNoteInput(ctx context.Context, obj interface{}) (model.UnlockNoteInput, error) {
+	var it model.UnlockNoteInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"noteId", "notePassword"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "noteId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoteID = data
+		case "notePassword":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notePassword"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NotePassword = data
 		}
 	}
 
@@ -17113,6 +17467,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "lockNote":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_lockNote(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "unlockNote":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_unlockNote(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -17186,6 +17554,8 @@ func (ec *executionContext) _Note(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "passwordSuggestion":
+			out.Values[i] = ec._Note_passwordSuggestion(ctx, field, obj)
 		case "createdAt":
 			out.Values[i] = ec._Note_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -19007,6 +19377,11 @@ func (ec *executionContext) marshalNListPrivilegeResponse2ᚕᚖmiddleware_loade
 	return ret
 }
 
+func (ec *executionContext) unmarshalNLockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐLockNoteInput(ctx context.Context, v interface{}) (model.LockNoteInput, error) {
+	res, err := ec.unmarshalInputLockNoteInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNMoveTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐMoveTaskInput(ctx context.Context, v interface{}) (model.MoveTaskInput, error) {
 	res, err := ec.unmarshalInputMoveTaskInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -19491,6 +19866,11 @@ func (ec *executionContext) marshalNTokenResponse2ᚖmiddleware_loaderᚋinfrast
 		return graphql.Null
 	}
 	return ec._TokenResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUnlockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUnlockNoteInput(ctx context.Context, v interface{}) (model.UnlockNoteInput, error) {
+	res, err := ec.unmarshalInputUnlockNoteInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUpdateColorInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateColorInput(ctx context.Context, v interface{}) (model.UpdateColorInput, error) {

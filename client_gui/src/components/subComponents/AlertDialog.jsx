@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { useDeleteComponentDispatch, useUpdateOrdinalNumberDispatch } from "../../kernels/utils/dialog-api-requests";
+import { useDeleteComponentDispatch, useLockNoteDispatch, useUpdateOrdinalNumberDispatch } from "../../kernels/utils/dialog-api-requests";
 
 export const AlertDialog = (props) => {
     let [isOpen, setIsOpen] = useState(false);
@@ -15,6 +15,7 @@ export const AlertDialog = (props) => {
 
     const deleteComponentDispatch = useDeleteComponentDispatch();
     const updateOrdinalDispatch = useUpdateOrdinalNumberDispatch();
+    const lockDispatch = useLockNoteDispatch();
     const actionComponent = (action, elementName) => {
         if (action === "Delete") {
             deleteComponentDispatch(props.elementId, elementName);
@@ -23,7 +24,9 @@ export const AlertDialog = (props) => {
             console.log("This Archive function is not implemented yet.");
         } else if (action === "push" ) {
             updateOrdinalDispatch(props.elementId, props.projectId);
-        }
+        } else if (action === "Lock" ) {
+            lockDispatch(props.elementId);
+        } 
         
         window.location.reload();
     }

@@ -21,6 +21,11 @@ class NoteService {
         } else {
             console.log("Get notes from database");
             const notes = await noteStore.getAllNotes(userId);
+            notes.forEach(note => {
+                if (note.isLock) {
+                    note.summaryDisplayText = "This note is locked";
+                }
+            })
             this.noteCache.set(InternalCacheConstants.NOTE_LIST + userId, notes);
             return notes;
         }
@@ -45,15 +50,34 @@ class NoteService {
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         return await noteStore.updateNoteById(note._id, note);
     }
 
-    async deleteNoteById(noteId: string): Promise<any> {
+    async lockNote(note: INoteEntity, notePassword: string, passwordSuggestion: string): Promise<INoteEntity> {
+        const lockedNote = noteMapper.lockNoteMapper(note, notePassword, passwordSuggestion);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + lockedNote.ownerId);
+        return await noteStore.updateNoteById(lockedNote._id, lockedNote);
+    }
+
+    async unlockNote(note: INoteEntity): Promise<INoteEntity> {
+        const unlockedNote = noteMapper.unlockNoteMapper(note);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + unlockedNote.ownerId);
+        return await noteStore.updateNoteById(unlockedNote._id, unlockedNote);
+    }
+
+    async deleteNoteById(note: INoteEntity, noteId: string): Promise<any> {
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         return await noteStore.deleteNoteById(noteId);
     }
 
     async getNoteById(noteId: string): Promise<INoteEntity | null> {
         return await noteStore.getNoteById(noteId);
+    }
+
+    async getNoteByIdAndPassword(note: any): Promise<INoteEntity | null> {
+        console.log("Get note by id and password: ", note);
+        return await noteStore.getNoteByIdAndPassword(note.noteId, note.notePassword);
     }
 
     async archiveNoteById(noteId: string): Promise<any> {

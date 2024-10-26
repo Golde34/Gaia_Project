@@ -13,16 +13,6 @@ import (
 	"middleware_loader/infrastructure/graph/model"
 )
 
-var authService = auth_services.NewAuthService()
-var taskService = task_manager.NewTaskService()
-var projectService = task_manager.NewProjectService()
-var userService = auth_services.NewUserService()
-var groupTaskService = task_manager.NewGroupTaskService()
-var roleService = auth_services.NewRoleService()
-var privilegeService = auth_services.NewPrivilegeService()
-var taskRegisterService = work_optim.NewTaskRegisterService()
-var noteService = task_manager.NewNoteService()
-
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
 	result, err := taskRegisterService.RegisterTaskConfig(ctx, input)
@@ -258,6 +248,18 @@ func (r *mutationResolver) CreateNote(ctx context.Context, input model.CreateNot
 	return &note, err
 }
 
+// LockNote is the resolver for the lockNote field.
+func (r *mutationResolver) LockNote(ctx context.Context, input model.LockNoteInput) (*model.Note, error) {
+	note, err := noteService.LockNote(ctx, input)
+	return &note, err
+}
+
+// UnlockNote is the resolver for the unlockNote field.
+func (r *mutationResolver) UnlockNote(ctx context.Context, input model.UnlockNoteInput) (*model.Note, error) {
+	note, err := noteService.UnlockNote(ctx, input)
+	return &note, err
+}
+
 // ListAllUsers is the resolver for the listAllUsers field.
 func (r *queryResolver) ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error) {
 	users, err := userService.ListAllUsers(ctx)
@@ -387,3 +389,19 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+var authService = auth_services.NewAuthService()
+var taskService = task_manager.NewTaskService()
+var projectService = task_manager.NewProjectService()
+var userService = auth_services.NewUserService()
+var groupTaskService = task_manager.NewGroupTaskService()
+var roleService = auth_services.NewRoleService()
+var privilegeService = auth_services.NewPrivilegeService()
+var taskRegisterService = work_optim.NewTaskRegisterService()
+var noteService = task_manager.NewNoteService()

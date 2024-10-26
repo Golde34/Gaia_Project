@@ -42,10 +42,10 @@ class NoteController {
         }
     }
 
-    async deleteNote(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async getNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const noteId = req.params.id;
-            const noteResult = await noteService.deleteNoteById(noteId);
+            const noteResult = await noteUsecase.getNoteById(noteId);
 
             return noteResult;
         } catch (err) {
@@ -53,10 +53,32 @@ class NoteController {
         }
     }
 
-    async getNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async lockNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const body = req.body
+            const noteResult = await noteUsecase.lockNoteById(body);
+
+            return noteResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async unlockNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const body = req.body
+            const noteResult = await noteUsecase.unlockNoteById(body);
+
+            return noteResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async deleteNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const noteId = req.params.id;
-            const noteResult = await noteUsecase.getNoteById(noteId);
+            const noteResult = await noteUsecase.deleteNoteById(noteId);
 
             return noteResult;
         } catch (err) {

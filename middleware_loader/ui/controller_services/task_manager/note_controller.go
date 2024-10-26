@@ -83,3 +83,59 @@ func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.N
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func LockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	noteId := chi.URLParam(r, "id")
+
+	input := mapper.LockNoteRequestDTOMapper(body, noteId)
+	if input == nil {
+		http.Error(w, "Note ID does not match", http.StatusBadRequest)
+		return
+	}
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "lockNote", QueryInput: input, QueryOutput: model.Note{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}
+
+func UnlockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	noteId := chi.URLParam(r, "id")
+
+	input := mapper.UnlockNoteRequestDTOMapper(body, noteId)
+	if input == nil {
+		http.Error(w, "Note ID does not match", http.StatusBadRequest)
+		return
+	}
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "unlockNote", QueryInput: input, QueryOutput: model.Note{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}
+
+func DeleteNoteById(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	noteId := chi.URLParam(r, "id")
+	noteService.DeleteNoteById(noteId)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode("Note deleted successfully"); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

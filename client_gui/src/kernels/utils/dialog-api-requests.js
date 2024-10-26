@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { updateGroupTaskName, deleteGroupTask, updateOrdinalNumber } from "../../api/store/actions/task_manager/group-task.actions";
 import { deleteProject, updateProjectColor, updateProjectName } from "../../api/store/actions/task_manager/project.actions";
 import { deleteTask, moveTask, updateTaskInDialog } from "../../api/store/actions/task_manager/task.actions";
+import { deleteNote, lockNote, unlockNote } from "../../api/store/actions/task_manager/note.actions";
 
 export const useUpdateComponentNameDispatch = () => {
     const dispatch = useDispatch();
@@ -14,6 +15,9 @@ export const useUpdateComponentNameDispatch = () => {
             case "Group Task":
                 dispatch(updateGroupTaskName(id, newName));
                 break;
+            // case "Note":
+            //     dispatch(updateNoteName(id, newName));
+            //     break;
         }
     }
 
@@ -33,6 +37,9 @@ export const useDeleteComponentDispatch = () => {
                 break;
             case "Task":
                 dispatch(deleteTask(id));
+                break;
+            case "Note":
+                dispatch(deleteNote(id));
                 break;
             case "Ordinal":
                 dispatch(updateOrdinalNumber(id));
@@ -91,4 +98,24 @@ export const useMoveTaskDispatch = () => {
     }
 
     return moveTaskDispatch;
+}
+
+export const useLockNoteDispatch = () => {
+    const dispatch = useDispatch();
+
+    const lockDispatch = (noteId, notePassword, passwordSuggestion) => {
+        dispatch(lockNote(noteId, notePassword, passwordSuggestion));
+    }
+
+    return lockDispatch;
+}
+
+export const useUnlockNoteDispatch = () => {
+    const dispatch = useDispatch();
+
+    const unlockDispatch = (noteId, notePassword) => {
+        dispatch(unlockNote(noteId, notePassword));
+    }
+
+    return unlockDispatch;
 }

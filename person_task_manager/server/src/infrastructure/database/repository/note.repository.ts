@@ -27,6 +27,10 @@ class NoteRpository {
         return await NoteEntity.findOne({ _id: noteId, activeStatus: ActiveStatus.active });
     }
 
+    async findOneNoteByIdAndPassword(noteId: string, notePassword: string): Promise<INoteEntity | null> {
+        return await NoteEntity.findOne({ _id: noteId, notePassword: notePassword, activeStatus: ActiveStatus.active });
+    }
+
     async archiveNoteById(noteId: string): Promise<UpdateWriteOpResult> {
         return await NoteEntity.updateOne({ _id: noteId }, { activeStatus: ActiveStatus.inactive });
     }
