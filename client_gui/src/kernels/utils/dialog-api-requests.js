@@ -108,3 +108,13 @@ export const useLockNoteDispatch = () => {
 
     return lockDispatch;
 }
+
+export const useUnlockNoteDispatch = () => {
+    const dispatch = useDispatch();
+
+    const unlockDispatch = (noteId, notePassword) => {
+        dispatch(unlockNote(noteId, notePassword));
+    }
+
+    return unlockDispatch;
+}

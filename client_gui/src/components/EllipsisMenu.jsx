@@ -8,13 +8,19 @@ import { LockDialog } from "./subComponents/LockDialog";
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
     const elementId = props.elementId;
+    const isLock = props.isLock;
 
     const updateTag = "Update " + elementName;
     const deleteTag = "Delete " + elementName;
     const archiveTag = "Archive " + elementName;
     const ordinalTag = "Push " + elementName + " to the top";
-    const lockTag = "Lock " + elementName;
     const changeColorTag = "Change color";
+    let lockTag = "";
+    if (isLock) {
+        lockTag = "Unlock " + elementName;
+    } else {
+        lockTag = "Lock " + elementName;
+    }
 
     return (
         <div className="flex gap-3">
@@ -46,7 +52,7 @@ const EllipsisMenu = (props) => {
                         (
                             <LockDialog
                                 className="col-span-1" component={lockTag} elementName={elementName}
-                                elementId={elementId}>
+                                elementId={elementId} isLock={isLock} suggestion={props.suggestion}>
                             </LockDialog>
                         ) : (<></>)
                     }

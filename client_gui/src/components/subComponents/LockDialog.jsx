@@ -4,28 +4,35 @@ import { Fragment, useState } from "react";
 import { Input } from "@material-tailwind/react";
 
 export const LockDialog = (props) => {
+    const isLock = props.isLock;
+
     let [isOpen, setIsOpen] = useState(false);
     function closeModal() {
-        setIsOpen(false)
+        setIsOpen(false);
     }
     function openModal() {
-        setIsOpen(true)
+        setIsOpen(true);
     }
 
     let [notePassword, setNotePassword] = useState("");
     let [passwordSuggestion, setPasswordSuggestion] = useState("");
 
     const lockDispatch = useLockNoteDispatch();
-    const lockNote = (notePassword, passwordSuggestion) => {
-        lockDispatch(props.elementId, notePassword, passwordSuggestion);
-        window.location.reload();
-    }
+    const unlockDispatch = useLockNoteDispatch();
+    const lockNote = (notePassword, passwordSuggestion, isLock) => {
+        if (isLock) {
+            unlockDispatch(props.elementId, notePassword);
+            window.location.reload();
+            return;
+        } else {
+            lockDispatch(props.elementId, notePassword, passwordSuggestion);
+            window.location.reload();
+        }
+    };
 
     return (
         <>
-            <button className="text-black px-6 py-3"
-                type="button"
-                onClick={openModal}>
+            <button className="text-black px-6 py-3" type="button" onClick={openModal}>
                 {props.component}
             </button>
 
@@ -62,41 +69,71 @@ export const LockDialog = (props) => {
                                         {props.component}
                                     </Dialog.Title>
                                     <div className="mt-2">
-                                        <p className="text-sm text-red-700">
-                                            Are you sure you want to {props.action} this {props.elementName}? You must set password for your note to lock it.
-                                        </p>
-                                        <Input
-                                            id="space-bug"
-                                            type="text"
-                                            outline={true}
-                                            placeholder={props.elementName + " Password"}
-                                            value={notePassword}
-                                            onChange={(e) => setNotePassword(e.target.value)}
-                                            className="mt-2 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                                        />
-                                        <Input
-                                            id="space-bug"
-                                            type="text"
-                                            outline={true}
-                                            placeholder="Password Suggestion in case you forget"
-                                            value={passwordSuggestion}
-                                            onChange={(e) => setPasswordSuggestion(e.target.value)}
-                                            className="mt-4 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                                        />
+                                        {isLock ? (
+                                            <>
+                                                <p className="text-sm text-red-700">
+                                                    Are you sure you want to unlock this {props.elementName}?
+                                                </p>
+                                                <p className="text-md text-black-800">
+                                                    Your password suggestion is: {props.suggestion}
+                                                </p>
+                                                <Input
+                                                    type="text"
+                                                    outline={true}
+                                                    placeholder="Password"
+                                                    value={notePassword}
+                                                    onChange={(e) => setNotePassword(e.target.value)}
+                                                    className="mt-2 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="text-sm text-red-700">
+                                                    Are you sure you want to {props.action} this {props.elementName}? You must set a password for your note to lock it.
+                                                </p>
+                                                <Input
+                                                    id="space-bug"
+                                                    type="text"
+                                                    outline={true}
+                                                    placeholder={props.elementName + " Password"}
+                                                    value={notePassword}
+                                                    onChange={(e) => setNotePassword(e.target.value)}
+                                                    className="mt-2 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                                                />
+                                                <Input
+                                                    id="space-bug"
+                                                    type="text"
+                                                    outline={true}
+                                                    placeholder="Password Suggestion in case you forget"
+                                                    value={passwordSuggestion}
+                                                    onChange={(e) => setPasswordSuggestion(e.target.value)}
+                                                    className="mt-4 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                                                />
+                                            </>
+                                        )}
                                     </div>
 
                                     <div className="mt-4">
                                         <button
                                             type="button"
-                                            disabled={notePassword === "" || passwordSuggestion === ""}
-                                            className={`bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg ${!notePassword || !passwordSuggestion ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-500"
+                                            disabled={isLock ? notePassword === "" : (notePassword === "" || passwordSuggestion === "")}
+                                            className={`bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg ${isLock ? (notePassword === "" ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-500") : (!notePassword || !passwordSuggestion ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-500")
                                                 } transition duration-300 ease-in-out`}
                                             onClick={() => {
-                                                if (notePassword === "" || passwordSuggestion === "") {
-                                                    alert("Please fill in the password and password suggestion fields");
-                                                    return;
+                                                if (isLock) {
+                                                    // Unlocking only requires notePassword
+                                                    if (notePassword === "") {
+                                                        alert("Please fill in the password field to unlock.");
+                                                        return;
+                                                    }
+                                                } else {
+                                                    // Locking requires both fields
+                                                    if (notePassword === "" || passwordSuggestion === "") {
+                                                        alert("Please fill in the password and password suggestion fields to lock.");
+                                                        return;
+                                                    }
                                                 }
-                                                lockNote(notePassword, passwordSuggestion);
+                                                lockNote(notePassword, passwordSuggestion, isLock);
                                                 closeModal();
                                             }}
                                         >
@@ -117,5 +154,5 @@ export const LockDialog = (props) => {
                 </Dialog>
             </Transition>
         </>
-    )
-}
+    );
+};

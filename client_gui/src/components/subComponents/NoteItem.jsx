@@ -18,7 +18,8 @@ const NoteItem = (props) => {
 
                 <Flex justifyContent="between" alignItems="center" className="w-xs h-24">
                     <Metric>{props.note.name}</Metric>
-                    <EllipsisMenu elementName="Note" elementId={props.note.id} />
+                    <EllipsisMenu elementName="Note" elementId={props.note.id} 
+                        isLock={props.note.isLock} suggestion={props.note.passwordSuggestion}/>
                 </Flex>
 
                 {props.note.isLock ? (
