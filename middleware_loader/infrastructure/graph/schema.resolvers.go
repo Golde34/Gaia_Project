@@ -259,7 +259,7 @@ func (r *mutationResolver) CreateNote(ctx context.Context, input model.CreateNot
 }
 
 // LockNote is the resolver for the lockNote field.
-func (r *mutationResolver) LockNote(ctx context.Context, input model.IDInput) (*model.Note, error) {
+func (r *mutationResolver) LockNote(ctx context.Context, input model.LockNoteInput) (*model.Note, error) {
 	note, err := noteService.LockNote(ctx, input)
 	return &note, err
 }

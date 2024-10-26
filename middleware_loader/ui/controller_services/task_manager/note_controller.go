@@ -85,8 +85,19 @@ func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.N
 }
 
 func LockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	noteId := chi.URLParam(r, "id")
-	input := mapper.GetId(noteId)
+
+	input := mapper.LockNoteRequestDTOMapper(body, noteId)
+	if input == nil {
+		http.Error(w, "Note ID does not match", http.StatusBadRequest)
+		return
+	}
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "lockNote", QueryInput: input, QueryOutput: model.Note{}})

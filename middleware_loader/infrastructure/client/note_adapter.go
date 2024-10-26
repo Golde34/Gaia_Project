@@ -67,11 +67,11 @@ func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (
 	return result.(response_dtos.NoteResponseDTO), nil
 }
 
-func (adapter *NoteAdapter) LockNote(id string) (response_dtos.NoteResponseDTO, error) {
-	lockNoteURL := base.TaskManagerServiceURL + "/note/lock/" + id
+func (adapter *NoteAdapter) LockNote(input model.LockNoteInput) (response_dtos.NoteResponseDTO, error) {
+	lockNoteURL := base.TaskManagerServiceURL + "/note/lock/" + input.NoteID
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(lockNoteURL, "PUT", nil, &note, headers)
+	result, err := utils.BaseAPIV2(lockNoteURL, "PUT", input, &note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}

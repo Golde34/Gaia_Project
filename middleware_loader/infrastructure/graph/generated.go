@@ -147,7 +147,7 @@ type ComplexityRoot struct {
 		GenerateTaskWithoutGroupTask func(childComplexity int, input model.GenerateTaskWithoutGroupTaskInput) int
 		IsScheduleExisted            func(childComplexity int, input model.UserIDInput) int
 		IsTaskExisted                func(childComplexity int, input model.UserIDInput) int
-		LockNote                     func(childComplexity int, input model.IDInput) int
+		LockNote                     func(childComplexity int, input model.LockNoteInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
 		QueryTaskConfig              func(childComplexity int, input model.UserIDInput) int
 		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
@@ -356,7 +356,7 @@ type MutationResolver interface {
 	ArchieveGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	EnableGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	CreateNote(ctx context.Context, input model.CreateNoteInput) (*model.Note, error)
-	LockNote(ctx context.Context, input model.IDInput) (*model.Note, error)
+	LockNote(ctx context.Context, input model.LockNoteInput) (*model.Note, error)
 }
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
@@ -1039,7 +1039,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.LockNote(childComplexity, args["input"].(model.IDInput)), true
+		return e.complexity.Mutation.LockNote(childComplexity, args["input"].(model.LockNoteInput)), true
 
 	case "Mutation.moveTask":
 		if e.complexity.Mutation.MoveTask == nil {
@@ -2007,6 +2007,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputGenerateTaskWithoutGroupTaskInput,
 		ec.unmarshalInputIdInput,
+		ec.unmarshalInputLockNoteInput,
 		ec.unmarshalInputMoveTaskInput,
 		ec.unmarshalInputPrivilegeInput,
 		ec.unmarshalInputProjectGroupTaskIdInput,
@@ -2545,10 +2546,10 @@ func (ec *executionContext) field_Mutation_isTaskExisted_args(ctx context.Contex
 func (ec *executionContext) field_Mutation_lockNote_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.IDInput
+	var arg0 model.LockNoteInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		arg0, err = ec.unmarshalNLockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐLockNoteInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8134,7 +8135,7 @@ func (ec *executionContext) _Mutation_lockNote(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().LockNote(rctx, fc.Args["input"].(model.IDInput))
+		return ec.resolvers.Mutation().LockNote(rctx, fc.Args["input"].(model.LockNoteInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15549,6 +15550,47 @@ func (ec *executionContext) unmarshalInputIdInput(ctx context.Context, obj inter
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputLockNoteInput(ctx context.Context, obj interface{}) (model.LockNoteInput, error) {
+	var it model.LockNoteInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"noteId", "notePassword", "passwordSuggestion"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "noteId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoteID = data
+		case "notePassword":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notePassword"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NotePassword = data
+		case "passwordSuggestion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("passwordSuggestion"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PasswordSuggestion = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputMoveTaskInput(ctx context.Context, obj interface{}) (model.MoveTaskInput, error) {
 	var it model.MoveTaskInput
 	asMap := map[string]interface{}{}
@@ -19122,6 +19164,11 @@ func (ec *executionContext) marshalNListPrivilegeResponse2ᚕᚖmiddleware_loade
 	wg.Wait()
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalNLockNoteInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐLockNoteInput(ctx context.Context, v interface{}) (model.LockNoteInput, error) {
+	res, err := ec.unmarshalInputLockNoteInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNMoveTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐMoveTaskInput(ctx context.Context, v interface{}) (model.MoveTaskInput, error) {

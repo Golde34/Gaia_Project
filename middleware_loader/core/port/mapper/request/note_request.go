@@ -40,3 +40,15 @@ func UpdateNoteRequestDTOMapper(body map[string]interface{}, id string) *request
 	input.OwnerId = utils.GetFloatValue(bodyMap, "userId", 0)
 	return &input
 }
+
+func LockNoteRequestDTOMapper(body map[string]interface{}, noteId string) *request_dtos.LockNoteRequestDTO {
+	var input request_dtos.LockNoteRequestDTO
+	bodyMap := body["body"].(map[string]interface{})
+	input.NoteId = utils.GetStringValue(bodyMap, "noteId", "")
+	if noteId != input.NoteId {
+		return nil
+	}
+	input.NotePassword = utils.GetStringValue(bodyMap, "notePassword", "")
+	input.PasswordSuggestion = utils.GetStringValue(bodyMap, "passwordSuggestion", "")
+	return &input
+}

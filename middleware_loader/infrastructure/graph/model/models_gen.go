@@ -137,6 +137,12 @@ type ListPrivilegeResponse struct {
 	Roles       []*RoleOnlyResponse `json:"roles"`
 }
 
+type LockNoteInput struct {
+	NoteID             string `json:"noteId"`
+	NotePassword       string `json:"notePassword"`
+	PasswordSuggestion string `json:"passwordSuggestion"`
+}
+
 type MoveTaskInput struct {
 	OldGroupTaskID string `json:"oldGroupTaskId"`
 	NewGroupTaskID string `json:"newGroupTaskId"`
