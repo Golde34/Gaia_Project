@@ -22,7 +22,7 @@ const NoteItem = (props) => {
                 </Flex>
 
                 {props.note.isLock ? (
-                    <Flex justifyContent="center" alignItems="center" className="w-full h-48">
+                    <Flex justifyContent="center" alignItems="center" className="w-full h-36">
                         <button className="border-none bg-transparent focus:outline-none" onClick={click}>
                             <LockClosedIcon className="h-6 w-12 text-gray-500" />
                         </button>
