@@ -3,8 +3,10 @@ import { INoteEntity } from "../../domain/entities/note.entity";
 import { ActiveStatus, EventStatus } from "../../domain/enums/enums";
 
 export const noteMapper = {
-    buildUploadFileKafkaMessage(fileId: string, fileName: string) {
+    buildUploadFileKafkaMessage(noteId: string, fileId: string, fileName: string) {
+        console.log("Build Kafka message: ", noteId, fileId, fileName);
         return {
+            "noteId": noteId,
             "fileId": fileId,
             "fileName": fileName
         }

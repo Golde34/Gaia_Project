@@ -28,13 +28,28 @@ class NoteUsecase {
                 return msg400(NOTE_EXISTED);
             }
             const newNote = await noteService.createNote(note);
-            await noteService.pushKafkaUploadFileToDataStorage(note.fileId, note.fileName);
+            await noteService.pushKafkaUploadFileToDataStorage(newNote._id.toString(), note.fileId, note.fileName);
             return msg200({
                 message: (newNote as any)
             })
         } catch (error) {
             console.log(error);
             return msg400(CREATE_NOTE_FAILED);
+        }
+    }
+
+    async updateNoteFileStatus(fileLocation: string, noteId: string): Promise<IResponse> {
+        try {
+            const note = await noteService.getNoteById(noteId);
+            if (!note) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            const updatedNote = await noteService.updateNoteFileStatus(note, fileLocation);
+            return msg200({
+                message: (updatedNote as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
         }
     }
 

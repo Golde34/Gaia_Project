@@ -38,8 +38,8 @@ class NoteService {
         return createdNote;
     }
 
-    async pushKafkaUploadFileToDataStorage(fileId: string, fileName: string): Promise<void> {
-        const data = noteMapper.buildUploadFileKafkaMessage(fileId, fileName);
+    async pushKafkaUploadFileToDataStorage(noteId: string, fileId: string, fileName: string): Promise<void> {
+        const data = noteMapper.buildUploadFileKafkaMessage(noteId, fileId, fileName);
         const messages = [{
             value: JSON.stringify(createMessage(
                 KafkaCommand.UPLOAD_FILE, '00', 'Successful', data
@@ -47,6 +47,12 @@ class NoteService {
         }]
         console.log("Push Kafka message: ", messages);
         this.kafkaConfig.produce(KafkaTopic.UPLOAD_FILE, messages);
+    }
+
+    async updateNoteFileStatus(note: INoteEntity, fileLocation: string): Promise<INoteEntity> {
+        note.fileStatus = fileLocation;
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
+        return await noteStore.updateNoteById(note._id, note);
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {

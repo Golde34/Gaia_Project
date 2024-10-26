@@ -18,7 +18,7 @@ noteRouter.get("/:userId/",
         catch (err) {
             next(err);
         }
-    }); 
+    });
 
 noteRouter.post("/create",
     RequestValidator.validateV2(NoteRequestDto),
@@ -26,6 +26,17 @@ noteRouter.post("/create",
         try {
             const noteResult = await noteControllerImpl.createNote(req, next);
             return returnResult(noteResult, CREATE_NOTE_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+noteRouter.put("/update-file-status/:id",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const noteResult = await noteControllerImpl.updateNoteFileStatus(req, next);
+            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
         }
         catch (err) {
             next(err);
