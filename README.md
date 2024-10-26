@@ -16,6 +16,7 @@ The Golde AI Assistant System version 2.0.0 is a cutting-edge AI solution design
 ### 3. Todo App Integration
 - Feature include:
   - Integrated with a todo app to help users efficiently organize and manage their tasks.
+  - Save user action in day like a work note.
 - Incoming features:
   - **Video Action Extraction**: Automatically extract actions from video content.
   - **Automatic Task Scheduling**: Smart scheduling to optimize task prioritization and deadlines.
