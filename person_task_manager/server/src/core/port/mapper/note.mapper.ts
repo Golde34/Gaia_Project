@@ -25,6 +25,13 @@ export const noteMapper = {
         note.notePassword = notePassword;
         note.passwordSuggestion = passwordSuggestion; 
         return note;
+    },
+
+    unlockNoteMapper(note: INoteEntity): INoteEntity {
+        note.isLock = false;
+        note.notePassword = '';
+        note.passwordSuggestion = '';
+        return note;
     }
 }
 

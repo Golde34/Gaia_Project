@@ -25,6 +25,13 @@ class NoteStore {
         return await noteRepository.findOneNoteById(noteId);
     }
 
+    async getNoteByIdAndPassword(noteId: string, notePassword: string): Promise<INoteEntity | null> {
+        console.log("Store getNoteByIdAndPassword: ", noteId, notePassword);
+        const note = await noteRepository.findOneNoteByIdAndPassword(noteId, notePassword);
+        console.log("Store getNoteByIdAndPassword result: ", note);
+        return await noteRepository.findOneNoteByIdAndPassword(noteId, notePassword);
+    }
+
     async archiveNoteById(noteId: string): Promise<any> {
         return await noteRepository.archiveNoteById(noteId);
     }

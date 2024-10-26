@@ -60,12 +60,23 @@ class NoteService {
         return await noteStore.updateNoteById(lockedNote._id, lockedNote);
     }
 
+    async unlockNote(note: INoteEntity): Promise<INoteEntity> {
+        const unlockedNote = noteMapper.unlockNoteMapper(note);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + unlockedNote.ownerId);
+        return await noteStore.updateNoteById(unlockedNote._id, unlockedNote);
+    }
+
     async deleteNoteById(noteId: string): Promise<any> {
         return await noteStore.deleteNoteById(noteId);
     }
 
     async getNoteById(noteId: string): Promise<INoteEntity | null> {
         return await noteStore.getNoteById(noteId);
+    }
+
+    async getNoteByIdAndPassword(note: any): Promise<INoteEntity | null> {
+        console.log("Get note by id and password: ", note);
+        return await noteStore.getNoteByIdAndPassword(note.noteId, note.notePassword);
     }
 
     async archiveNoteById(noteId: string): Promise<any> {

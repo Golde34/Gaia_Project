@@ -1,6 +1,6 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
-import { CREATE_NOTE_FAILED, NOTE_EXISTED, NOTE_NOT_FOUND } from "../domain/constants/error.constant";
+import { CREATE_NOTE_FAILED, NOTE_EXISTED, NOTE_NOT_FOUND, NOTE_PASSWORD_INCORRECT } from "../domain/constants/error.constant";
 import { noteService } from "../services/note.service";
 
 class NoteUsecase {
@@ -78,6 +78,22 @@ class NoteUsecase {
                 return msg400(NOTE_NOT_FOUND);
             }
             await noteService.lockNote(note, lockNoteRequest.notePassword, lockNoteRequest.passwordSuggestion);
+            return msg200({
+                message: (note as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
+
+    async unlockNoteById(unlockNoteRequest: any): Promise<IResponse> {
+        try {
+            console.log(unlockNoteRequest);
+            const note = await noteService.getNoteByIdAndPassword(unlockNoteRequest);
+            if (!note) {
+                return msg400(NOTE_PASSWORD_INCORRECT);
+            }
+            await noteService.unlockNote(note);
             return msg200({
                 message: (note as any)
             })
