@@ -20,7 +20,7 @@ import { userListReducer, userUpdateReducer } from "./auth_service/user.reducer"
 import { roleCreateReducer, roleListReducer } from "./auth_service/role.reducer";
 import { privilegeListReducer } from "./auth_service/privilege.reducer";
 import { queryTaskConfigReducer, registerTaskConfigReducer } from "./task_manager/task-registration.reducers";
-import { noteCreateReducer, noteDetailReducer, noteListReducer, noteLockReducer, noteUpdateReducer } from "./task_manager/note.reducers"; 
+import { noteCreateReducer, noteDetailReducer, noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer } from "./task_manager/note.reducers"; 
 
 export const reducer = combineReducers({
     // auth service
@@ -67,6 +67,7 @@ export const reducer = combineReducers({
     noteCreate: noteCreateReducer,
     noteUpdate: noteUpdateReducer,
     noteLock: noteLockReducer,
+    noteUnlock: noteUnlockReducer,
     noteDetail: noteDetailReducer,  
     // middleware loader
     microserviceList: microserviceListReducer,

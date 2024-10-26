@@ -2,9 +2,8 @@ import {
     NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS,
     NOTE_DETAIL_FAIL, NOTE_DETAIL_REQUEST, NOTE_DETAIL_SUCCESS,
     NOTE_LIST_FAIL, NOTE_LIST_REQUEST, NOTE_LIST_SUCCESS,
-    NOTE_LOCK_FAIL,
-    NOTE_LOCK_REQUEST,
-    NOTE_LOCK_SUCCESS,
+    NOTE_LOCK_FAIL, NOTE_LOCK_REQUEST, NOTE_LOCK_SUCCESS,
+    NOTE_UNLOCK_FAIL, NOTE_UNLOCK_REQUEST, NOTE_UNLOCK_SUCCESS,
     NOTE_UPDATE_FAIL, NOTE_UPDATE_REQUEST, NOTE_UPDATE_SUCCESS
 } from '../../constants/task_manager/note.constants';
 
@@ -82,6 +81,22 @@ export const noteLockReducer = (
         case NOTE_LOCK_SUCCESS:
             return { loading: false, note: action.payload.note };
         case NOTE_LOCK_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const noteUnlockReducer = (
+    state = { loading: true},
+    action
+) => {
+    switch (action.type) {
+        case NOTE_UNLOCK_REQUEST:
+            return { loading: true };
+        case NOTE_UNLOCK_SUCCESS:
+            return { loading: false, note: action.payload.note };
+        case NOTE_UNLOCK_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;
