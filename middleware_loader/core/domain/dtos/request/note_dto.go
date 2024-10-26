@@ -62,3 +62,11 @@ func NewUnlockNoteRequestDTO() *UnlockNoteRequestDTO {
 func (in *UnlockNoteRequestDTO) MapperToModel(input model.UnlockNoteInput) {
 	mapper.AutoMapper(&input, in)
 }
+
+type UpdateNoteFileStatusRequestDTO struct {
+	FileName string `json:"fileName"`
+}
+
+func NewUpdateNoteFileStatusRequestDTO() *UpdateNoteFileStatusRequestDTO {
+	return &UpdateNoteFileStatusRequestDTO{}
+}

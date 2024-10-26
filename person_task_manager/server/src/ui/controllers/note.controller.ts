@@ -31,6 +31,18 @@ class NoteController {
         }
     }
 
+    async updateNoteFileStatus(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const body = req.body.fileName;
+            const noteId = req.params.id;
+            const noteResult = await noteUsecase.updateNoteFileStatus(body, noteId);
+
+            return noteResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
     async updateNote(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const noteName = req.body.name;

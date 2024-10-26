@@ -3,6 +3,7 @@ import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { InternalCacheConstants } from "../domain/constants/constants";
 import { INoteEntity } from "../domain/entities/note.entity";
+import { EventStatus } from "../domain/enums/enums";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { noteMapper } from "../port/mapper/note.mapper";
 import { noteStore } from "../port/store/note.store";
@@ -38,8 +39,8 @@ class NoteService {
         return createdNote;
     }
 
-    async pushKafkaUploadFileToDataStorage(fileId: string, fileName: string): Promise<void> {
-        const data = noteMapper.buildUploadFileKafkaMessage(fileId, fileName);
+    async pushKafkaUploadFileToDataStorage(noteId: string, fileId: string, fileName: string): Promise<void> {
+        const data = noteMapper.buildUploadFileKafkaMessage(noteId, fileId, fileName);
         const messages = [{
             value: JSON.stringify(createMessage(
                 KafkaCommand.UPLOAD_FILE, '00', 'Successful', data
@@ -47,6 +48,13 @@ class NoteService {
         }]
         console.log("Push Kafka message: ", messages);
         this.kafkaConfig.produce(KafkaTopic.UPLOAD_FILE, messages);
+    }
+
+    async updateNoteFileStatus(note: INoteEntity, fileLocation: string): Promise<INoteEntity> {
+        note.fileLocation = fileLocation;
+        note.fileStatus = EventStatus.SUCCESS;
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
+        return await noteStore.updateNoteById(note._id, note);
     }
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {

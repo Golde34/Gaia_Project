@@ -27,6 +27,11 @@ func (h *UploadNoteFileHandler) HandleMessage(topic string, key, value []byte) {
             return
         }
 
+        noteId, ok := data["noteId"].(string)
+        if !ok {
+            fmt.Printf("Error: noteId is not a string\n")
+            return
+        }
         fileId, ok := data["fileId"].(string)
         if !ok {
             fmt.Printf("Error: fileId is not a string\n")
@@ -44,7 +49,7 @@ func (h *UploadNoteFileHandler) HandleMessage(topic string, key, value []byte) {
 		}
 
         noteService := services.NewNoteService()
-        result, err := noteService.UploadNoteFile(fileName)
+        result, err := noteService.UploadNoteFile(noteId, fileName)
         if err != nil {
             fmt.Printf("Error uploading note file: %v\n", err)
         }
