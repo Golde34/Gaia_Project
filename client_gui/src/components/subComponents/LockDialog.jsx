@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { useLockNoteDispatch } from "../../kernels/utils/dialog-api-requests";
+import { useLockNoteDispatch, useUnlockNoteDispatch } from "../../kernels/utils/dialog-api-requests";
 import { Fragment, useState } from "react";
 import { Input } from "@material-tailwind/react";
 
@@ -18,7 +18,7 @@ export const LockDialog = (props) => {
     let [passwordSuggestion, setPasswordSuggestion] = useState("");
 
     const lockDispatch = useLockNoteDispatch();
-    const unlockDispatch = useLockNoteDispatch();
+    const unlockDispatch = useUnlockNoteDispatch();
     const lockNote = (notePassword, passwordSuggestion, isLock) => {
         if (isLock) {
             unlockDispatch(props.elementId, notePassword);
