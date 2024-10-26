@@ -66,7 +66,8 @@ class NoteService {
         return await noteStore.updateNoteById(unlockedNote._id, unlockedNote);
     }
 
-    async deleteNoteById(noteId: string): Promise<any> {
+    async deleteNoteById(note: INoteEntity, noteId: string): Promise<any> {
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         return await noteStore.deleteNoteById(noteId);
     }
 

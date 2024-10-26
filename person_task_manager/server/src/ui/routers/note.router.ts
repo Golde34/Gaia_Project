@@ -44,17 +44,6 @@ noteRouter.put("/update",
         }
     });
 
-noteRouter.delete("/delete/:id",
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const noteResult = await noteControllerImpl.deleteNote(req, next);
-            return returnResult(noteResult, NOTE_NOT_FOUND, res, next);
-        }
-        catch (err) {
-            next(err);
-        }
-    });
-
 noteRouter.get("/get/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -81,6 +70,17 @@ noteRouter.put("/unlock/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const noteResult = await noteControllerImpl.unlockNoteById(req, next);
+            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+noteRouter.delete("/:id",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const noteResult = await noteControllerImpl.deleteNoteById(req, next);
             return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
         }
         catch (err) {

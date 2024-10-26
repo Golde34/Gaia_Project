@@ -101,6 +101,21 @@ class NoteUsecase {
             return msg400(NOTE_NOT_FOUND);
         }
     }
+
+    async deleteNoteById(noteId: string): Promise<IResponse> {
+        try {
+            const note = await noteService.getNoteById(noteId);
+            if (!note) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            await noteService.deleteNoteById(note, noteId);
+            return msg200({
+                message: "Note deleted"
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
 }
 
 export const noteUsecase = new NoteUsecase();
