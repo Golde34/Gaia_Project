@@ -12,6 +12,8 @@ export interface INoteEntity extends Document {
     isLock: boolean;
     tag: IUserTagEntity;
     activeStatus: ActiveStatus;
+    notePassword: string;
+    passwordSuggestion: string;
     createdAt: Date;
     updatedAt: Date;
     ownerId: number;

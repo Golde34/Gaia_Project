@@ -66,8 +66,8 @@ class NoteController {
 
     async lockNoteById(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const noteId = req.params.id;
-            const noteResult = await noteUsecase.lockNoteById(noteId);
+            const body = req.body
+            const noteResult = await noteUsecase.lockNoteById(body);
 
             return noteResult;
         } catch (err) {

@@ -71,14 +71,13 @@ class NoteUsecase {
         }
     }
 
-    async lockNoteById(noteId: string): Promise<IResponse> {
+    async lockNoteById(lockNoteRequest: any): Promise<IResponse> {
         try {
-            const note = await noteService.getNoteById(noteId);
+            const note = await noteService.getNoteById(lockNoteRequest.noteId);
             if (!note) {
                 return msg400(NOTE_NOT_FOUND);
             }
-            note.isLock = true;
-            await noteService.updateNote(note);
+            await noteService.lockNote(note, lockNoteRequest.notePassword, lockNoteRequest.passwordSuggestion);
             return msg200({
                 message: (note as any)
             })

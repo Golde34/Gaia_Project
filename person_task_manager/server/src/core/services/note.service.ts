@@ -54,6 +54,12 @@ class NoteService {
         return await noteStore.updateNoteById(note._id, note);
     }
 
+    async lockNote(note: INoteEntity, notePassword: string, passwordSuggestion: string): Promise<INoteEntity> {
+        const lockedNote = noteMapper.lockNoteMapper(note, notePassword, passwordSuggestion);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + lockedNote.ownerId);
+        return await noteStore.updateNoteById(lockedNote._id, lockedNote);
+    }
+
     async deleteNoteById(noteId: string): Promise<any> {
         return await noteStore.deleteNoteById(noteId);
     }

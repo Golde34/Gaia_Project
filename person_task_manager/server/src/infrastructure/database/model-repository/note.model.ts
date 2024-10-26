@@ -43,6 +43,14 @@ export const noteSchema = new mongoose.Schema(
             enum: Object.values(ActiveStatus),
             default: ActiveStatus.active,
         },
+        notePassword: {
+            type: String,
+            required: false,
+        },
+        passwordSuggestion: {
+            type: String,
+            required: false,
+        },
         createdAt: {
             type: Date,
             required: true,
