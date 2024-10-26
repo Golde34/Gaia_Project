@@ -34,7 +34,7 @@ func UploadToLocal(fileName, filePath string) (string, error) {
 	}
 
 	log.Printf("File uploaded to local storage at %s", targetPath)
-	return fileName, nil
+	return targetPath, nil
 }
 
 // UploadToHadoop uploads a file to Hadoop

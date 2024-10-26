@@ -56,6 +56,24 @@ func (adapter *NoteAdapter) CreateNote(input model.CreateNoteInput) (response_dt
 	return *noteResponse, nil
 }
 
+func (adapter *NoteAdapter) UpdateNoteFileStatus(noteId string, fileName string) (response_dtos.NoteResponseDTO, error) {
+	updateNoteFileStatusURL := base.TaskManagerServiceURL + "/note/update-file-status/" + noteId
+	var request request_dtos.UpdateNoteFileStatusRequestDTO
+	request.FileName = fileName
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(updateNoteFileStatusURL, "PUT", request, &note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, err
+	}
+
+	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+	}
+	return *noteResponse, nil
+}
+
 func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (response_dtos.NoteResponseDTO, error) {
 	updateNoteURL := base.TaskManagerServiceURL + "/note/" + id
 	var note response_dtos.NoteResponseDTO

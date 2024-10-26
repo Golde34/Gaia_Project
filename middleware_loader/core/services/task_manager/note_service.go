@@ -46,7 +46,7 @@ func (s *NoteService) GetNoteFiles(noteId string, noteInfo io.ReadCloser) map[st
 	}
 
 	note := graphqlResponse.Data.Note
-	if (noteId != note.ID) {
+	if noteId != note.ID {
 		log.Printf("Note ID does not match")
 		return nil
 	}
@@ -63,7 +63,7 @@ func (s *NoteService) GetNoteFiles(noteId string, noteInfo io.ReadCloser) map[st
 		"fileId":      note.FileID,
 		"fileContent": fileContent,
 	}
-	return noteResponse 
+	return noteResponse
 }
 
 func fetchFileFromDataStorage(tempFileName string) (string, error) {
@@ -102,7 +102,7 @@ func (s *NoteService) UpdateNote(ctx context.Context, input model.UpdateNoteInpu
 	return noteModel, nil
 }
 
-func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
+func (s *NoteService) UploadNoteFile(noteId string, fileName string) (string, error) {
 	filePath := filepath.Join("./resources/", fileName)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		log.Println("File does not exist")
@@ -112,26 +112,42 @@ func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
 	config := configs.Config{}
 	cfg, _ := config.LoadEnv()
 	datalakeConfig := cfg.Datalake
-	
+
+	var storagePath string
+	var err error
+
 	switch datalakeConfig {
 	case "local":
-		storages.UploadToLocal(fileName, filePath)
+		storagePath, err = storages.UploadToLocal(fileName, filePath)
 	case "Hadoop":
-		storages.UploadToHadoop(fileName, filePath)
+		storagePath, err = storages.UploadToHadoop(fileName, filePath)
 	case "Minio":
-		storages.UploadToMinio(fileName, filePath)
+		storagePath, err = storages.UploadToMinio(fileName, filePath)
 	case "S3":
-		storages.UploadToS3(fileName, filePath)
+		storagePath, err = storages.UploadToS3(fileName, filePath)
 	default:
 		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
 	}
 
-	//delete tempFile
-	if err := os.Remove(filePath); err != nil {
-		log.Println("Error deleting temp file: ", err)
+	if err != nil {
+		return "", fmt.Errorf("failed to upload file: %v", err)
 	}
 
-	return fileName, nil
+	// delete temp file
+	if err := os.Remove(filePath); err != nil {
+		log.Println("Error deleting temp file:", err)
+	}
+
+	// update file status in TM
+	fmt.Println("Updating file status in TM")
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).UpdateNoteFileStatus(noteId, storagePath)
+	if err != nil {
+		return "", err
+	} else {
+		fmt.Println("File status updated successfully: ", note)
+	}
+
+	return storagePath, nil
 }
 
 func (s *NoteService) LockNote(ctx context.Context, input model.LockNoteInput) (model.Note, error) {
