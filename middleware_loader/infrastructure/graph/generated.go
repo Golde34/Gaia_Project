@@ -176,6 +176,7 @@ type ComplexityRoot struct {
 		IsLock             func(childComplexity int) int
 		Name               func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		PasswordSuggestion func(childComplexity int) int
 		SummaryDisplayText func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 	}
@@ -1290,6 +1291,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.passwordSuggestion":
+		if e.complexity.Note.PasswordSuggestion == nil {
+			break
+		}
+
+		return e.complexity.Note.PasswordSuggestion(childComplexity), true
 
 	case "Note.summaryDisplayText":
 		if e.complexity.Note.SummaryDisplayText == nil {
@@ -8097,6 +8105,8 @@ func (ec *executionContext) fieldContext_Mutation_createNote(ctx context.Context
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
 				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Note_createdAt(ctx, field)
 			case "updatedAt":
@@ -8178,6 +8188,8 @@ func (ec *executionContext) fieldContext_Mutation_lockNote(ctx context.Context, 
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
 				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Note_createdAt(ctx, field)
 			case "updatedAt":
@@ -8580,6 +8592,47 @@ func (ec *executionContext) _Note_activeStatus(ctx context.Context, field graphq
 }
 
 func (ec *executionContext) fieldContext_Note_activeStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_passwordSuggestion(ctx context.Context, field graphql.CollectedField, obj *model.Note) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Note_passwordSuggestion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PasswordSuggestion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Note_passwordSuggestion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Note",
 		Field:      field,
@@ -10321,6 +10374,8 @@ func (ec *executionContext) fieldContext_Query_getAllNotes(ctx context.Context, 
 				return ec.fieldContext_Note_isLock(ctx, field)
 			case "activeStatus":
 				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "passwordSuggestion":
+				return ec.fieldContext_Note_passwordSuggestion(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Note_createdAt(ctx, field)
 			case "updatedAt":
@@ -17345,6 +17400,8 @@ func (ec *executionContext) _Note(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "passwordSuggestion":
+			out.Values[i] = ec._Note_passwordSuggestion(ctx, field, obj)
 		case "createdAt":
 			out.Values[i] = ec._Note_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

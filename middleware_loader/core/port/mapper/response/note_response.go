@@ -15,5 +15,15 @@ func ReturnNoteObjectMapper(body map[string]interface{}) *response_dtos.NoteResp
 	input.CreatedAt = body["createdAt"].(string)
 	input.UpdatedAt = body["updatedAt"].(string)
 	input.OwnerId = body["ownerId"].(float64)
+	input.FileId = body["fileId"].(string)
+	input.FileName = body["fileName"].(string)
+	if body["fileLocation"] != nil {
+		fileLocation := body["fileLocation"].(string)
+		input.FileLocation = &fileLocation
+	}
+	if body["passwordSuggestion"] != nil {
+		passwordSuggestion := body["passwordSuggestion"].(string)
+		input.PasswordSuggestion = &passwordSuggestion
+	}
 	return &input	
 }

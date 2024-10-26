@@ -16,6 +16,7 @@ type NoteResponseDTO struct {
 	FileStatus         string  `json:"fileStatus"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
+	PasswordSuggestion *string `json:"passwordSuggestion"`
 	CreatedAt          string  `json:"createdAt"`
 	UpdatedAt          string  `json:"updatedAt"`
 	OwnerId            float64 `json:"ownerId"`

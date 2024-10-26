@@ -162,6 +162,7 @@ type Note struct {
 	FileStatus         string  `json:"fileStatus"`
 	IsLock             bool    `json:"isLock"`
 	ActiveStatus       string  `json:"activeStatus"`
+	PasswordSuggestion *string `json:"passwordSuggestion,omitempty"`
 	CreatedAt          string  `json:"createdAt"`
 	UpdatedAt          string  `json:"updatedAt"`
 	OwnerID            float64 `json:"ownerId"`
