@@ -296,6 +296,11 @@ type TokenResponse struct {
 	ExpiryDate  string `json:"expiryDate"`
 }
 
+type UnlockNoteInput struct {
+	NoteID       string `json:"noteId"`
+	NotePassword string `json:"notePassword"`
+}
+
 type UpdateColorInput struct {
 	ID    string `json:"id"`
 	Color string `json:"color"`

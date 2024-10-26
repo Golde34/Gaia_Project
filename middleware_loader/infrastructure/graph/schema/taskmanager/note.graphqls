@@ -33,3 +33,8 @@ input LockNoteInput {
     notePassword: String!
     passwordSuggestion: String!
 }
+
+input UnlockNoteInput {
+    noteId: ID!
+    notePassword: String!
+}

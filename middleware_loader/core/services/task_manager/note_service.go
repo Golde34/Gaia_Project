@@ -143,3 +143,13 @@ func (s *NoteService) LockNote(ctx context.Context, input model.LockNoteInput) (
 
 	return noteModel, nil
 }
+
+func (s *NoteService) UnlockNote(ctx context.Context, input model.UnlockNoteInput) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).UnlockNote(input)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}

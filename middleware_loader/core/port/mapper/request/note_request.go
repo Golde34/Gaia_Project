@@ -52,3 +52,14 @@ func LockNoteRequestDTOMapper(body map[string]interface{}, noteId string) *reque
 	input.PasswordSuggestion = utils.GetStringValue(bodyMap, "passwordSuggestion", "")
 	return &input
 }
+
+func UnlockNoteRequestDTOMapper(body map[string]interface{}, noteId string) *request_dtos.UnlockNoteRequestDTO {
+	var input request_dtos.UnlockNoteRequestDTO
+	bodyMap := body["body"].(map[string]interface{})
+	input.NoteId = utils.GetStringValue(bodyMap, "noteId", "")
+	if noteId != input.NoteId {
+		return nil
+	}
+	input.NotePassword = utils.GetStringValue(bodyMap, "notePassword", "")
+	return &input
+}

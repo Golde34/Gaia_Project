@@ -78,6 +78,7 @@ type Mutation {
 
 	createNote(input: CreateNoteInput!): Note!
 	lockNote(input: LockNoteInput!): Note!
+	unlockNote(input: UnlockNoteInput!): Note!
 }
 
 input IdInput {

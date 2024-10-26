@@ -49,3 +49,16 @@ func NewLockNoteRequestDTO() *LockNoteRequestDTO {
 func (in *LockNoteRequestDTO) MapperToModel(input model.LockNoteInput) {
 	mapper.AutoMapper(&input, in)
 }
+
+type UnlockNoteRequestDTO struct {
+	NoteId       string `json:"noteId"`
+	NotePassword string `json:"notePassword"`
+}
+
+func NewUnlockNoteRequestDTO() *UnlockNoteRequestDTO {
+	return &UnlockNoteRequestDTO{}
+}
+
+func (in *UnlockNoteRequestDTO) MapperToModel(input model.UnlockNoteInput) {
+	mapper.AutoMapper(&input, in)
+}

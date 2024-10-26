@@ -82,3 +82,19 @@ func (adapter *NoteAdapter) LockNote(input model.LockNoteInput) (response_dtos.N
 	}
 	return *noteResponse, nil
 }
+
+func (adapter *NoteAdapter) UnlockNote(input model.UnlockNoteInput) (response_dtos.NoteResponseDTO, error) {
+	unlockNoteURL := base.TaskManagerServiceURL + "/note/unlock/" + input.NoteID
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(unlockNoteURL, "PUT", input, &note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, err
+	}
+
+	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+	}
+	return *noteResponse, nil
+}

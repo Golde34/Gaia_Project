@@ -105,3 +105,25 @@ func LockNote(w http.ResponseWriter, r *http.Request, noteService *services.Note
 
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
+
+func UnlockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	noteId := chi.URLParam(r, "id")
+
+	input := mapper.UnlockNoteRequestDTOMapper(body, noteId)
+	if input == nil {
+		http.Error(w, "Note ID does not match", http.StatusBadRequest)
+		return
+	}
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "unlockNote", QueryInput: input, QueryOutput: model.Note{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}
