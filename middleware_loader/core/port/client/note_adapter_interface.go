@@ -8,5 +8,6 @@ import (
 type INoteAdapter interface {
 	GetAllNotes(userId string) ([]response_dtos.NoteResponseDTO, error)
 	CreateNote(input model.CreateNoteInput) (response_dtos.NoteResponseDTO, error)
-	UpdateNote(input model.UpdateNoteInput, id string) (response_dtos.NoteResponseDTO, error )
+	UpdateNote(input model.UpdateNoteInput, id string) (response_dtos.NoteResponseDTO, error)
+	LockNote(id string) (response_dtos.NoteResponseDTO, error)
 }

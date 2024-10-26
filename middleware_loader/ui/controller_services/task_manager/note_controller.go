@@ -83,3 +83,14 @@ func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.N
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func LockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	noteId := chi.URLParam(r, "id")
+	input := mapper.GetId(noteId)
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "lockNote", QueryInput: input, QueryOutput: model.Note{}})
+	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphQuery)
+}

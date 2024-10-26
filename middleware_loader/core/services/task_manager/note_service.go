@@ -133,3 +133,13 @@ func (s *NoteService) UploadNoteFile(fileName string) (string, error) {
 
 	return fileName, nil
 }
+
+func (s *NoteService) LockNote(ctx context.Context, input model.IDInput) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).LockNote(input.ID)
+	if err != nil {
+		return model.Note{}, err
+	}
+	noteModel := noteResponse.MapperToGraphQLModel(note)
+
+	return noteModel, nil
+}

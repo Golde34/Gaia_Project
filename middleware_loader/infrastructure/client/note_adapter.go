@@ -66,3 +66,19 @@ func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (
 	}
 	return result.(response_dtos.NoteResponseDTO), nil
 }
+
+func (adapter *NoteAdapter) LockNote(id string) (response_dtos.NoteResponseDTO, error) {
+	lockNoteURL := base.TaskManagerServiceURL + "/note/lock/" + id
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(lockNoteURL, "PUT", nil, &note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, err
+	}
+
+	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+	}
+	return *noteResponse, nil
+}

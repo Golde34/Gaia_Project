@@ -147,6 +147,7 @@ type ComplexityRoot struct {
 		GenerateTaskWithoutGroupTask func(childComplexity int, input model.GenerateTaskWithoutGroupTaskInput) int
 		IsScheduleExisted            func(childComplexity int, input model.UserIDInput) int
 		IsTaskExisted                func(childComplexity int, input model.UserIDInput) int
+		LockNote                     func(childComplexity int, input model.IDInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
 		QueryTaskConfig              func(childComplexity int, input model.UserIDInput) int
 		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
@@ -355,6 +356,7 @@ type MutationResolver interface {
 	ArchieveGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	EnableGroupTask(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
 	CreateNote(ctx context.Context, input model.CreateNoteInput) (*model.Note, error)
+	LockNote(ctx context.Context, input model.IDInput) (*model.Note, error)
 }
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
@@ -1026,6 +1028,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.IsTaskExisted(childComplexity, args["input"].(model.UserIDInput)), true
+
+	case "Mutation.lockNote":
+		if e.complexity.Mutation.LockNote == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_lockNote_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.LockNote(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Mutation.moveTask":
 		if e.complexity.Mutation.MoveTask == nil {
@@ -2520,6 +2534,21 @@ func (ec *executionContext) field_Mutation_isTaskExisted_args(ctx context.Contex
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_lockNote_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8085,6 +8114,87 @@ func (ec *executionContext) fieldContext_Mutation_createNote(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createNote_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_lockNote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_lockNote(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().LockNote(rctx, fc.Args["input"].(model.IDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Note)
+	fc.Result = res
+	return ec.marshalNNote2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐNote(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_lockNote(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Note_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Note_name(ctx, field)
+			case "summaryDisplayText":
+				return ec.fieldContext_Note_summaryDisplayText(ctx, field)
+			case "fileId":
+				return ec.fieldContext_Note_fileId(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Note_fileName(ctx, field)
+			case "fileLocation":
+				return ec.fieldContext_Note_fileLocation(ctx, field)
+			case "fileStatus":
+				return ec.fieldContext_Note_fileStatus(ctx, field)
+			case "isLock":
+				return ec.fieldContext_Note_isLock(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Note_activeStatus(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Note_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Note_updatedAt(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Note_ownerId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Note", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_lockNote_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -17109,6 +17219,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createNote":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createNote(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lockNote":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_lockNote(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
