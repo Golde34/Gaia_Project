@@ -86,10 +86,15 @@ export const getNoteById = (noteId) => async (dispatch) => {
     }
 }
 
-export const lockNote = (noteId) => async (dispatch) => {
+export const lockNote = (noteId, notePassword, passwordSuggestion) => async (dispatch) => {
     dispatch({ type: NOTE_LOCK_REQUEST, payload: noteId });
     try {
-        const { data } = await serverRequest(`/note/lock/${noteId}`, 'PUT', portName.middleware);
+        const request = {
+            noteId,
+            notePassword,
+            passwordSuggestion,
+        };
+        const { data } = await serverRequest(`/note/lock/${noteId}`, 'PUT', portName.middleware, request);
         dispatch({ type: NOTE_LOCK_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

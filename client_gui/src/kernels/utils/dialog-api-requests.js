@@ -102,8 +102,8 @@ export const useMoveTaskDispatch = () => {
 export const useLockNoteDispatch = () => {
     const dispatch = useDispatch();
 
-    const lockDispatch = (noteId) => {
-        dispatch(lockNote(noteId));
+    const lockDispatch = (noteId, notePassword, passwordSuggestion) => {
+        dispatch(lockNote(noteId, notePassword, passwordSuggestion));
     }
 
     return lockDispatch;

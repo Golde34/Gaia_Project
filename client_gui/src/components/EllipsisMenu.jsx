@@ -3,6 +3,7 @@ import EllipsisIcon from "./icons/EllipsisIcon"
 import { InputNameDialog } from "./subComponents/InputNameDialog";
 import { AlertDialog } from "../components/subComponents/AlertDialog";
 import { ColorDialog } from "../components/subComponents/ColorDialog";
+import { LockDialog } from "./subComponents/LockDialog";
 
 const EllipsisMenu = (props) => {
     const elementName = props.elementName;
@@ -43,10 +44,10 @@ const EllipsisMenu = (props) => {
                     }
                     {elementName === "Note" ?
                         (
-                            <AlertDialog
+                            <LockDialog
                                 className="col-span-1" component={lockTag} elementName={elementName}
-                                action="Lock" elementId={elementId}>
-                            </AlertDialog>
+                                elementId={elementId}>
+                            </LockDialog>
                         ) : (<></>)
                     }
                     <AlertDialog
