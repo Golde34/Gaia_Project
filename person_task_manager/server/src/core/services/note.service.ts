@@ -3,6 +3,7 @@ import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { InternalCacheConstants } from "../domain/constants/constants";
 import { INoteEntity } from "../domain/entities/note.entity";
+import { EventStatus } from "../domain/enums/enums";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { noteMapper } from "../port/mapper/note.mapper";
 import { noteStore } from "../port/store/note.store";
@@ -50,7 +51,8 @@ class NoteService {
     }
 
     async updateNoteFileStatus(note: INoteEntity, fileLocation: string): Promise<INoteEntity> {
-        note.fileStatus = fileLocation;
+        note.fileLocation = fileLocation;
+        note.fileStatus = EventStatus.SUCCESS;
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         return await noteStore.updateNoteById(note._id, note);
     }
