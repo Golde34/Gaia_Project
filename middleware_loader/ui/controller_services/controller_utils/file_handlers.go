@@ -34,8 +34,7 @@ func ReceiveMultipartFile(r *http.Request, w http.ResponseWriter) (string, base_
 
 func SaveToTempFile(file multipart.File, handler *multipart.FileHeader) (string, base_dtos.FileObject, error) {
 	if _, err := os.Stat(uploadPath); os.IsNotExist(err) {
-		err := os.MkdirAll(uploadPath, os.ModePerm)
-		if err != nil {
+		if err := os.MkdirAll(uploadPath, os.ModePerm); err != nil {
 			return "", base_dtos.FileObject{}, err
 		}
 	}
@@ -68,7 +67,9 @@ func createFileObject(fileContent []byte, handler *multipart.FileHeader) (base_d
 	fileID := uuid.New().String()
 	fileName := fileID + "_" + handler.Filename
 
-	summaryDisplayText := getSummaryDisplayText(fileContent)
+	contentString := strings.ReplaceAll(string(fileContent), "\r\n", "\n")
+
+	summaryDisplayText := getSummaryDisplayText([]byte(contentString))
 
 	return base_dtos.FileObject{
 		FileId:      fileID,
@@ -83,11 +84,11 @@ func getSummaryDisplayText(fileContent []byte) string {
 	limitedWords := words
 	var config = configs.Config{}
 	var env, _ = config.LoadEnv()
-	fileDisplayWord, ok := strconv.Atoi(env.FileDisplayWord)
-	if ok != nil {
+	fileDisplayWord, err := strconv.Atoi(env.FileDisplayWord)
+	if err != nil {
 		fileDisplayWord = 50
 	}
-	if (len(words) > fileDisplayWord) {
+	if len(words) > fileDisplayWord {
 		limitedWords = words[:fileDisplayWord]
 	}
 	summaryDisplayText := strings.Join(limitedWords, " ")
