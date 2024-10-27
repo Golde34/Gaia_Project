@@ -65,7 +65,7 @@ func (adapter *NoteAdapter) UpdateNoteFileStatus(noteId string, fileName string)
 	result, err := utils.BaseAPIV2(updateNoteFileStatusURL, "PUT", request, &note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
-	
+	}
 
 	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
 	if !ok {
