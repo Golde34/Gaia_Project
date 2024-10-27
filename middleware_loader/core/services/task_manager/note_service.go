@@ -177,5 +177,48 @@ func (s *NoteService) DeleteNoteById(id string) (model.Note, error) {
 	}
 	noteModel := noteResponse.MapperToGraphQLModel(note)
 
+	storagePath, err := s.deleteNoteFile(noteModel)
+	if err != nil {
+		// Neu khong xoa duoc file thi luu log
+		fmt.Println("Error deleting file: ", err)
+	} else {
+		fmt.Println("File deleted successfully: ", storagePath)
+	}
+
 	return noteModel, nil
+}
+
+func (s *NoteService) deleteNoteFile(note model.Note) (string, error) {
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+	datalakeConfig := cfg.Datalake
+	fileName := note.FileName
+	var fileLocation string
+	if note.FileLocation != nil {
+		fileLocation = *note.FileLocation
+	} else {
+		return "", fmt.Errorf("file location is nil")
+	}
+
+	var storagePath string
+	var err error
+
+	switch datalakeConfig {
+	case "local":
+		storagePath, err = storages.DeleteLocal(fileName, fileLocation)
+	case "Hadoop":
+		storagePath, err = storages.DeleteHadoop(fileName, fileLocation)
+	case "Minio":
+		storagePath, err = storages.DeleteMinio(fileName, fileLocation)
+	case "S3":
+		storagePath, err = storages.DeleteS3(fileName, fileLocation)
+	default:
+		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("failed to delete file: %v", err)
+	}
+
+	return storagePath, nil
 }

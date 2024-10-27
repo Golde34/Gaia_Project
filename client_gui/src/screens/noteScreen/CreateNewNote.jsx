@@ -33,9 +33,17 @@ export const CreateNewNote = (props) => {
     const saveContentAsFile = (content) => {
         console.log("Raw Content from Quill:", content);
 
-        const plainTextContent = content
-            .replace(/<br>/g, '\n') // Replace <br> with line breaks
-            .replace(/<\/?p[^>]*>/g, '\n'); // Replace <p> tags with line breaks
+        let plainTextContent = content
+            .replace(/^<p>/, '')
+            .replace(/<\/p>$/, '')
+            .replace(/<p><br><\/p>/g, '')
+            .replace(/<\/p>\s*<p>/g, '\n')
+            .replace(/<br>/g, '\n');
+
+        // Decode HTML entities
+        const textarea = document.createElement("textarea");
+        textarea.innerHTML = plainTextContent;
+        plainTextContent = textarea.value;
 
         console.log("Plain Text Content:", plainTextContent);
 
@@ -112,7 +120,7 @@ export const CreateNewNote = (props) => {
                                     <div className="mt-12 flex justify-end">
                                         <button onClick={() => {
                                             setNewName('');
-                                            setNewContent(''); 
+                                            setNewContent('');
                                             closeModal();
                                         }}
                                             className="bg-yellow-200 text-gray-700 font-semibold px-6 py-2 rounded-lg hover:text-gray-700 transition duration-300 ease-in-out me-2">

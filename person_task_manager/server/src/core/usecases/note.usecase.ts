@@ -125,7 +125,7 @@ class NoteUsecase {
             }
             await noteService.deleteNoteById(note, noteId);
             return msg200({
-                message: "Note deleted"
+                message: (note as any)
             })
         } catch (error) {
             return msg400(NOTE_NOT_FOUND);

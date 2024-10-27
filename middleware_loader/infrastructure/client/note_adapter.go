@@ -65,7 +65,7 @@ func (adapter *NoteAdapter) UpdateNoteFileStatus(noteId string, fileName string)
 	result, err := utils.BaseAPIV2(updateNoteFileStatusURL, "PUT", request, &note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
-	
+	}
 
 	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
 	if !ok {
@@ -78,7 +78,7 @@ func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (
 	updateNoteURL := base.TaskManagerServiceURL + "/note/" + id
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(updateNoteURL, "PUT", input, &note, headers)
+	result, err := utils.BaseAPIV2(updateNoteURL, "PUT", input, note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}
@@ -89,7 +89,7 @@ func (adapter *NoteAdapter) LockNote(input model.LockNoteInput) (response_dtos.N
 	lockNoteURL := base.TaskManagerServiceURL + "/note/lock/" + input.NoteID
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(lockNoteURL, "PUT", input, &note, headers)
+	result, err := utils.BaseAPIV2(lockNoteURL, "PUT", input, note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}
@@ -105,7 +105,7 @@ func (adapter *NoteAdapter) UnlockNote(input model.UnlockNoteInput) (response_dt
 	unlockNoteURL := base.TaskManagerServiceURL + "/note/unlock/" + input.NoteID
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(unlockNoteURL, "PUT", input, &note, headers)
+	result, err := utils.BaseAPIV2(unlockNoteURL, "PUT", input, note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}
@@ -121,14 +121,14 @@ func (adapter *NoteAdapter) DeleteNote(id string) (response_dtos.NoteResponseDTO
 	deleteNoteURL := base.TaskManagerServiceURL + "/note/" + id
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(deleteNoteURL, "DELETE", nil, &note, headers)
+	result, err := utils.BaseAPIV2(deleteNoteURL, "DELETE", nil, note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, err
 	}
-
-	noteResponse, ok := result.(*response_dtos.NoteResponseDTO)
+	bodyResultMap, ok := result.(map[string]interface{})
 	if !ok {
-		return response_dtos.NoteResponseDTO{}, fmt.Errorf("unexpected response type")
+		return response_dtos.NoteResponseDTO{}, nil
 	}
+	noteResponse := mapper_response.ReturnNoteObjectMapper(bodyResultMap["message"].(map[string]interface{}))
 	return *noteResponse, nil
 }
