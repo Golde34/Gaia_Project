@@ -6,16 +6,13 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
-
-func findTempFile(fileName string) (string){
-	return "./resources/" + fileName
-}
 
 func UploadToLocal(fileName, filePath string) (string, error) {
 	log.Printf("Uploading file %s to local storage", fileName)
 	targetPath := filepath.Join("../data_lake/middleware_loader/", fileName)
-	
+
 	inputFile, err := os.Open(filePath)
 	if err != nil {
 		return "", err
@@ -75,5 +72,51 @@ func UploadToS3(fileName, filePath string) (string, error) {
 		return "", fmt.Errorf("error uploading to S3: %v", err)
 	}
 	log.Printf("File uploaded to S3 with file name %s", fileName)
+	return fileName, nil
+}
+
+func DeleteLocal(fileName string, fileLocation string) (string, error) {
+	log.Printf("Deleting file %s from local storage", fileName)
+	targetPath := filepath.Join("../data_lake/middleware_loader/", fileName)
+
+	if !strings.EqualFold(targetPath, fileLocation) {
+		return "", fmt.Errorf("file location does not match target path")
+	}
+	err := os.Remove(targetPath)
+	if err != nil {
+		return "", err
+	}
+
+	log.Printf("File deleted from local storage at %s", targetPath)
+	return targetPath, nil
+}
+
+func DeleteHadoop(fileName, filePath string) (string, error) {
+	hadoopClient := NewHadoopAdapter() // Assuming you have an adapter for Hadoop
+	err := hadoopClient.DeleteFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error deleting from Hadoop: %v", err)
+	}
+	log.Printf("File deleted from Hadoop with file name %s", fileName)
+	return fileName, nil
+}
+
+func DeleteMinio(fileName, filePath string) (string, error) {
+	minioClient := NewMinioAdapter() // Assuming you have an adapter for Minio
+	err := minioClient.DeleteFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error deleting from Minio: %v", err)
+	}
+	log.Printf("File deleted from Minio with file name %s", fileName)
+	return fileName, nil
+}
+
+func DeleteS3(fileName, filePath string) (string, error) {
+	s3Client := NewS3Adapter() // Assuming you have an adapter for S3
+	err := s3Client.DeleteFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error deleting from S3: %v", err)
+	}
+	log.Printf("File deleted from S3 with file name %s", fileName)
 	return fileName, nil
 }
