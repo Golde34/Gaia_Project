@@ -13,4 +13,5 @@ type INoteAdapter interface {
 	UnlockNote(input model.UnlockNoteInput) (response_dtos.NoteResponseDTO, error)
 	DeleteNote(id string) (response_dtos.NoteResponseDTO, error)
 	UpdateNoteFileStatus(noteId string, fileName string) (response_dtos.NoteResponseDTO, error)
+	GetNoteById(id string) (response_dtos.NoteResponseDTO, error)
 }

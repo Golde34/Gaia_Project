@@ -55,7 +55,7 @@ noteRouter.put("/update",
         }
     });
 
-noteRouter.get("/get/:id",
+noteRouter.get("/detail/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const noteResult = await noteControllerImpl.getNoteById(req, next);

@@ -1,13 +1,15 @@
 import { Button, Card, Flex, Metric, Subtitle } from "@tremor/react"
-import { useNavigate } from "react-router-dom"
 import EllipsisMenu from "../EllipsisMenu";
 import { LockClosedIcon } from "@heroicons/react/solid";
+import { useNavigate } from "react-router-dom";
 
 const NoteItem = (props) => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+
     const click = () => {
         console.log("Note clicked");
         console.log("isLock: ", props.isLock);
+        navigate(`/note-detail/${props.note.id}`);
     }
     return (
         <>

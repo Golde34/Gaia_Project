@@ -17,6 +17,7 @@ import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboa
 import TaskRegistration from '../../views/task_manager/TaskRegistration';
 import GaiaHealth from '../../views/microservices_gui/GaiaHealth';
 import NoteDashboard from '../../views/task_manager/NoteDashboard';
+import NoteDetail from '../../screens/noteScreen/NoteDetail';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -115,6 +116,11 @@ const routeList = [
         path: '/note-dashboard',
         key: 'note-dashboard',
         element: <NoteDashboard />,
+    },
+    {
+        path: '/note-detail/:id',
+        key: 'note-detail',
+        element: <NoteDetail />,
     }
 ]
 
