@@ -132,3 +132,19 @@ func (adapter *NoteAdapter) DeleteNote(id string) (response_dtos.NoteResponseDTO
 	noteResponse := mapper_response.ReturnNoteObjectMapper(bodyResultMap["message"].(map[string]interface{}))
 	return *noteResponse, nil
 }
+
+func (adapter *NoteAdapter) GetNoteById(id string) (response_dtos.NoteResponseDTO, error) {
+	getNoteURL := base.TaskManagerServiceURL + "/note/detail/" + id
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(getNoteURL, "GET", nil, note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, nil
+	}
+	bodyResultMap, ok := result.(map[string]interface{})
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, nil
+	}
+	noteResponse := mapper_response.ReturnNoteObjectMapper(bodyResultMap["message"].(map[string]interface{}))
+	return *noteResponse, nil
+}

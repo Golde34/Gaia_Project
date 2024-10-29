@@ -122,20 +122,17 @@ func DeleteNoteById(w http.ResponseWriter, r *http.Request, noteService *service
 }
 
 func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
-	noteId := chi.URLParam(r, "id")
-	input := mapper.GetId(noteId)
+    noteId := chi.URLParam(r, "id")
+    note, err := noteService.GetNoteById(noteId)
+    if err != nil {
+        log.Printf("Error getting note: %v", err)
+        http.Error(w, "Failed to get note", http.StatusInternalServerError)
+        return
+    }
 
-	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getNote", QueryInput: input, QueryOutput: model.Note{}})
-	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
-
-	tmResponse := utils.GraphQLResponse(w, graphQuery)
-
-	// handle UploadFile 
-	finalResponse := noteService.GetNoteFiles(noteId, tmResponse)
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(finalResponse); err != nil {
-		log.Printf("Error encoding final response: %v", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+    w.Header().Set("Content-Type", "application/json")
+    if err := json.NewEncoder(w).Encode(note); err != nil {
+        log.Printf("Error encoding final response: %v", err)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
 }
