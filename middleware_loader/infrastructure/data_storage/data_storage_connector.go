@@ -120,3 +120,64 @@ func DeleteS3(fileName, filePath string) (string, error) {
 	log.Printf("File deleted from S3 with file name %s", fileName)
 	return fileName, nil
 }
+
+func GetFileFromTempFile(fileName string) (string, error) {
+	log.Println("Fetching file from local storage")
+	filePath := filepath.Join("./resources/", fileName)
+	
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	contentBytes, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	return string(contentBytes), nil
+}
+
+func GetFileFromLocal(fileName string) (string, error) {
+	log.Println("Fetching file from local storage")
+	filePath := filepath.Join("../data_lake/middleware_loader/", fileName)
+
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	contentBytes, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	return string(contentBytes), nil
+}
+
+func GetFileFromHadoop(fileName string) (string, error) {
+	hadoopClient := NewHadoopAdapter() // Assuming you have an adapter for Hadoop
+	contentBytes, err := hadoopClient.DownloadFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error downloading from Hadoop: %v", err)
+	}
+	return string(contentBytes), nil
+}
+
+func GetFileFromMinio(fileName string) (string, error) {
+	minioClient := NewMinioAdapter() // Assuming you have an adapter for Minio
+	contentBytes, err := minioClient.DownloadFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error downloading from Minio: %v", err)
+	}
+	return string(contentBytes), nil
+}
+
+func GetFileFromS3(fileName string) (string, error) {
+	s3Client := NewS3Adapter() // Assuming you have an adapter for S3
+	contentBytes, err := s3Client.DownloadFile(fileName)
+	if err != nil {
+		return "", fmt.Errorf("error downloading from S3: %v", err)
+	}
+	return string(contentBytes), nil
+}
