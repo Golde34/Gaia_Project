@@ -17,6 +17,11 @@ func (m *MinioAdapter) DeleteFile(fileName string) error {
 	return nil
 }
 
+func (m *MinioAdapter) DownloadFile(fileName string) ([]byte, error) {
+	// Code download file từ Minio
+	return nil, nil
+}
+
 // Adapter Hadoop
 type HadoopAdapter struct{}
 
@@ -34,6 +39,11 @@ func (h *HadoopAdapter) DeleteFile(fileName string) error {
 	return nil
 }
 
+func (h *HadoopAdapter) DownloadFile(fileName string) ([]byte, error) {
+	// Code download file từ Hadoop
+	return nil, nil
+}
+
 // Adapter S3
 type S3Adapter struct{}
 
@@ -49,4 +59,9 @@ func (s *S3Adapter) UploadFile(fileName string, content []byte) error {
 func (s *S3Adapter) DeleteFile(fileName string) error {
 	// Code delete file trên S3
 	return nil
+}
+
+func (s *S3Adapter) DownloadFile(fileName string) ([]byte, error) {
+	// Code download file từ S3
+	return nil, nil
 }
