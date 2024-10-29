@@ -77,7 +77,7 @@ export const updateNote = (note) => async (dispatch) => {
 export const getNoteById = (noteId) => async (dispatch) => {
     dispatch({ type: NOTE_DETAIL_REQUEST, payload: noteId });
     try {
-        const { data } = await serverRequest(`/note/${noteId}`, 'GET', portName.middleware);
+        const { data } = await serverRequest(`/note/detail/${noteId}`, 'GET', portName.middleware);
         dispatch({ type: NOTE_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
