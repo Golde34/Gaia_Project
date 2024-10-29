@@ -34,54 +34,6 @@ func (s *NoteService) GetAllNotes(ctx context.Context, input model.IDInput) ([]m
 	return noteModel, nil
 }
 
-func (s *NoteService) GetNoteFiles(noteId string, noteInfo io.ReadCloser) map[string]interface{} {
-	var graphqlResponse struct {
-		Data struct {
-			Note model.Note `json:"getNote"`
-		} `json:"data"`
-	}
-	if err := json.NewDecoder(noteInfo).Decode(&graphqlResponse); err != nil {
-		log.Printf("Error decoding GraphQL response: %v", err)
-		return nil
-	}
-
-	note := graphqlResponse.Data.Note
-	if noteId != note.ID {
-		log.Printf("Note ID does not match")
-		return nil
-	}
-
-	fileContent, err := fetchFileFromDataStorage(note.FileID + "_" + note.FileName)
-	if err != nil {
-		log.Printf("Error fetching file for note %s: %v", note.Name, err)
-	}
-
-	noteResponse := map[string]interface{}{
-		"noteId":      note.ID,
-		"name":        note.Name,
-		"ownerId":     note.OwnerID,
-		"fileId":      note.FileID,
-		"fileContent": fileContent,
-	}
-	return noteResponse
-}
-
-func fetchFileFromDataStorage(tempFileName string) (string, error) {
-	filePath := filepath.Join("./resources/", tempFileName)
-
-	file, err := os.Open(filePath)
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-	contentBytes, err := io.ReadAll(file)
-	if err != nil {
-		return "", err
-	}
-
-	return string(contentBytes), nil
-}
-
 func (s *NoteService) CreateNote(ctx context.Context, input model.CreateNoteInput) (model.Note, error) {
 	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).CreateNote(input)
 	if err != nil {
@@ -221,4 +173,59 @@ func (s *NoteService) deleteNoteFile(note model.Note) (string, error) {
 	}
 
 	return storagePath, nil
+}
+
+func (s *NoteService) GetNoteFiles(noteId string, noteInfo io.ReadCloser) map[string]interface{} {
+	var graphqlResponse struct {
+		Data struct {
+			Note model.Note `json:"getNote"`
+		} `json:"data"`
+	}
+	if err := json.NewDecoder(noteInfo).Decode(&graphqlResponse); err != nil {
+		log.Printf("Error decoding GraphQL response: %v", err)
+		return nil
+	}
+
+	note := graphqlResponse.Data.Note
+	if noteId != note.ID {
+		log.Printf("Note ID does not match")
+		return nil
+	}
+
+	fileContent, err := fetchFileFromDataStorage(note.FileName)
+	if err != nil {
+		log.Printf("Error fetching file for note %s: %v", note.Name, err)
+	}
+
+	noteResponse := map[string]interface{}{
+		"noteId":      note.ID,
+		"name":        note.Name,
+		"ownerId":     note.OwnerID,
+		"fileId":      note.FileID,
+		"fileContent": fileContent,
+	}
+	return noteResponse
+}
+
+func fetchFileFromDataStorage(tempFileName string) (string, error) {
+	// Check file in data storage first, if it is not exist then fetch from local
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+	datalakeConfig := cfg.Datalake
+	var fileContent string
+
+	switch datalakeConfig {
+	case "local":
+		fileContent, _ = storages.GetFileFromLocal(tempFileName)
+	case "Hadoop":
+		fileContent, _ = storages.GetFileFromHadoop(tempFileName)
+	case "Minio":
+		fileContent, _ = storages.GetFileFromMinio(tempFileName)
+	case "S3":
+		fileContent, _ = storages.GetFileFromS3(tempFileName)
+	default:
+		return "", fmt.Errorf("unsupported download method: %s", datalakeConfig)
+	}
+	
+	return fileContent, nil	
 }
