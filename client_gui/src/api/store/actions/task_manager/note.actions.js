@@ -78,7 +78,8 @@ export const getNoteById = (noteId) => async (dispatch) => {
     dispatch({ type: NOTE_DETAIL_REQUEST, payload: noteId });
     try {
         const { data } = await serverRequest(`/note/detail/${noteId}`, 'GET', portName.middleware);
-        dispatch({ type: NOTE_DETAIL_SUCCESS, payload: data.data });
+        data.decodedFileContent = data.decodedFileContent.replace(/\n/g, '<br />');
+        dispatch({ type: NOTE_DETAIL_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
             type: NOTE_DETAIL_FAIL,

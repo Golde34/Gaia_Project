@@ -201,6 +201,7 @@ func (s *NoteService) GetNoteById(noteId string) (map[string]interface{}, error)
 		"createdAt":        note.CreatedAt,
 		"updatedAt":        note.UpdatedAt,
 		"fileContent":      encodedFileContent, 
+		"decodedFileContent": fileContent,
 	}
 	return noteResponse, nil
 }
