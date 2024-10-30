@@ -66,7 +66,7 @@ export const noteDetailReducer = (
         case NOTE_DETAIL_REQUEST:
             return { loading: true };
         case NOTE_DETAIL_SUCCESS:
-            return { loading: false, note: action.payload.note };
+            return { loading: false, note: action.payload };
         case NOTE_DETAIL_FAIL:
             return { loading: false, error: action.payload };
         default:
