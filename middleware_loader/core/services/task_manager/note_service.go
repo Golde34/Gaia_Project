@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 	"log"
 	response_dtos "middleware_loader/core/domain/dtos/response"
@@ -185,8 +184,6 @@ func (s *NoteService) GetNoteById(noteId string) (map[string]interface{}, error)
 		log.Printf("Error fetching file for note %s: %v", note.Name, err)
 	}
 
-	encodedFileContent := base64.StdEncoding.EncodeToString([]byte(fileContent))
-
 	noteResponse := map[string]interface{}{
 		"noteId":           note.ID,
 		"name":             note.Name,
@@ -200,8 +197,7 @@ func (s *NoteService) GetNoteById(noteId string) (map[string]interface{}, error)
 		"passwordSuggestion": note.PasswordSuggestion,
 		"createdAt":        note.CreatedAt,
 		"updatedAt":        note.UpdatedAt,
-		"fileContent":      encodedFileContent, 
-		"decodedFileContent": fileContent,
+		"fileContent":      fileContent, 
 	}
 	return noteResponse, nil
 }

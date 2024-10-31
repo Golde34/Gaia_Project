@@ -43,18 +43,9 @@ function ContentArea() {
                   flex flex-col justify-center items-center text-center cursor-pointer`}
                     >
                         <Title className="text-lg font-bold mb-2">{note.name}</Title>
-                        {/* <div className="w-full mt-4">
-                            <ReactQuill
-                                value={atob(note.fileContent)}
-                                theme="snow"
-                                modules={modules}
-                                formats={formats}
-                                className="bg-gray-100 p-4 rounded-lg h-auto"
-                            />
-                        </div> */}
                         <div className="w-full mt-4">
                             <ReactQuill
-                                value={note.decodedFileContent}
+                                value={note.fileContent}
                                 theme="snow"
                                 modules={modules}
                                 formats={formats}
@@ -82,11 +73,10 @@ const modules = {
         ['bold', 'italic', 'underline', 'strike'],
         [{ list: 'ordered' }, { list: 'bullet' }],
         ['link', 'image'],
-        ['clean'], // remove formatting button
+        ['clean'], 
     ]
 };
 
-// Supported formats for Quill editor
 const formats = [
     'header', 'bold', 'italic', 'underline', 'strike', 'list', 'bullet', 'link', 'image'
 ];
