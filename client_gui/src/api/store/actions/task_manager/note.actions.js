@@ -1,3 +1,4 @@
+import { handleFileContent } from "../../../../kernels/utils/display-file-handler";
 import { postFile, serverRequest } from "../../../baseAPI";
 import { 
     NOTE_CREATE_FAIL, NOTE_CREATE_REQUEST, NOTE_CREATE_SUCCESS, 
@@ -78,7 +79,7 @@ export const getNoteById = (noteId) => async (dispatch) => {
     dispatch({ type: NOTE_DETAIL_REQUEST, payload: noteId });
     try {
         const { data } = await serverRequest(`/note/detail/${noteId}`, 'GET', portName.middleware);
-        data.decodedFileContent = data.decodedFileContent.replace(/\n/g, '<br />');
+        data.fileContent = handleFileContent(data.fileContent);
         dispatch({ type: NOTE_DETAIL_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
