@@ -77,7 +77,7 @@ class NoteUsecase {
             if (!note) {
                 return msg400(NOTE_NOT_FOUND);
             }
-            if (note._id !== noteId) {
+            if (note._id.toString() !== noteId) {
                 return msg400(NOTE_NOT_FOUND);
             }
             note.name = noteName;
@@ -96,13 +96,13 @@ class NoteUsecase {
             if (!existedNote) {
                 return msg400(NOTE_NOT_FOUND);
             }
-            if (existedNote._id !== noteId) {
+            if (existedNote._id.toString() !== noteId) {
                 return msg400(NOTE_NOT_FOUND);
             }
             const convertedNote = this.noteMapperImpl.updateNoteMapper(note, existedNote);
             const updatedNote = await noteService.updateNote(convertedNote);
             return msg200({
-                message: (updatedNote as any)
+                message: convertedNote
             })
         } catch (error) {
             return msg400(NOTE_NOT_FOUND);

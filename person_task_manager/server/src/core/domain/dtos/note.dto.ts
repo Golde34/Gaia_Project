@@ -16,8 +16,14 @@ export class NoteRequestDto {
 
 export class UpdateNoteRequestDto {
     @IsString()
+    noteId!: string;
+    @IsString()
     @IsOptional()
     name?: string;
+    @IsString()
+    fileId!: string;
+    @IsString()
+    fileName!: string;
     @IsString()
     @IsOptional()
     summaryDisplayText?: string;

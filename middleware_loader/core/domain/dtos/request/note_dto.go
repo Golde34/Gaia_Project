@@ -23,9 +23,11 @@ func (in *CreateNoteRequestDTO) MapperToModel(input model.CreateNoteInput) {
 }
 
 type UpdateNoteRequestDTO struct {
-	Id      string  `json:"noteId"`
-	Name    string  `json:"name"`
-	OwnerId float64 `json:"ownerId"`
+	NoteId             string `json:"noteId"`
+	Name               string `json:"name"`
+	FileId             string `json:"fileId"`
+	FileName           string `json:"fileName"`
+	SummaryDisplayText string `json:"summaryDisplayText"`
 }
 
 func NewUpdateNoteRequestDTO() *UpdateNoteRequestDTO {

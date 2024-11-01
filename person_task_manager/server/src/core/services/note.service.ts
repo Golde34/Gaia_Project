@@ -59,7 +59,12 @@ class NoteService {
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
         this.noteCache.clear(InternalCacheConstants.NOTE_DETAIL + note._id);
-        return await noteStore.updateNoteById(note._id, note);
+        await noteStore.updateNoteById(note._id, note);
+        const updatedNote = await noteStore.getNoteById(note._id);
+        if (!updatedNote) {
+            throw new Error(`Note with id ${note._id} not found`);
+        }
+        return updatedNote;
     }
 
     async lockNote(note: INoteEntity, notePassword: string, passwordSuggestion: string): Promise<INoteEntity> {
@@ -93,7 +98,6 @@ class NoteService {
     }
 
     async getNoteByIdAndPassword(note: any): Promise<INoteEntity | null> {
-        console.log("Get note by id and password: ", note);
         return await noteStore.getNoteByIdAndPassword(note.noteId, note.notePassword);
     }
 

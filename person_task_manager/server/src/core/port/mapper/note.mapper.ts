@@ -38,12 +38,13 @@ export const noteMapper = {
     },
 
     updateNoteMapper(note: UpdateNoteRequestDto, oldNote: INoteEntity): INoteEntity {
-        return {
-            ...oldNote,
-            name: !isStringEmpty(note.name) ? note.name! : oldNote.name,
-            summaryDisplayText: !isStringEmpty(note.summaryDisplayText) ? note.summaryDisplayText! : oldNote.summaryDisplayText,
-            updatedAt: new Date()
-        };
+        oldNote.updatedAt = new Date();
+        oldNote.name = !isStringEmpty(note.name) ? note.name! : oldNote.name;
+        oldNote.summaryDisplayText = !isStringEmpty(note.summaryDisplayText) ? note.summaryDisplayText! : oldNote.summaryDisplayText;
+        oldNote.fileId = note.fileId;
+        oldNote.fileName = note.fileName;
+        oldNote.fileStatus = EventStatus.INIT
+        return oldNote;
     }
 }
 
