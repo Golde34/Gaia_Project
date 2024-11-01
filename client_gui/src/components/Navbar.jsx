@@ -20,7 +20,10 @@ const Navbar = () => {
         <div id="top"
             className="relative w-full sm:flex justify-between item-center p-2"
         >
-            <h1 className="font-bold text-gray-300"> Dashboard </h1>
+            <h1 className="font-bold text-gray-300 flex items-center space-x-2">
+                <img src="../public/gaia_logo.png" alt="logo" className="h-10 w-10 inline-block" />
+                <span>Dashboard</span>
+            </h1>
             <Flex justifyContent="end">
                 <div className="py-2 me-3">
                     <TextInput icon={SearchIcon} placeholder="Search" />
