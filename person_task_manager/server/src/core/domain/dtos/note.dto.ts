@@ -13,3 +13,12 @@ export class NoteRequestDto {
     @IsOptional()
     summaryDisplayText?: string;
 }
+
+export class UpdateNoteRequestDto {
+    @IsString()
+    @IsOptional()
+    name?: string;
+    @IsString()
+    @IsOptional()
+    summaryDisplayText?: string;
+}

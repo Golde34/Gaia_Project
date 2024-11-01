@@ -1,10 +1,46 @@
+import e from "express";
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { CREATE_NOTE_FAILED, NOTE_EXISTED, NOTE_NOT_FOUND, NOTE_PASSWORD_INCORRECT } from "../domain/constants/error.constant";
+import { noteMapper } from "../port/mapper/note.mapper";
 import { noteService } from "../services/note.service";
 
 class NoteUsecase {
-    constructor() { }
+    constructor(
+        public noteMapperImpl = noteMapper
+    ) { }
+
+    async createNote(note: any): Promise<IResponse> {
+        try {
+            const existedNote = await noteService.getNoteById(note._id);
+            if (existedNote) {
+                return msg400(NOTE_EXISTED);
+            }
+            const convertedNote = this.noteMapperImpl.createNoteMapper(note);
+            const newNote = await noteService.createNote(convertedNote);
+            await noteService.pushKafkaUploadFileToDataStorage(newNote._id.toString(), note.fileId, note.fileName);
+            return msg200({
+                message: (newNote as any)
+            })
+        } catch (error) {
+            console.log(error);
+            return msg400(CREATE_NOTE_FAILED);
+        }
+    }
+
+    async getNoteById(noteId: string): Promise<IResponse> {
+        try {
+            const note = await noteService.getNoteById(noteId);
+            if (!note) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            return msg200({
+                message: (note as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
 
     async getAllNotes(userId: number): Promise<IResponse> {
         try {
@@ -17,24 +53,6 @@ class NoteUsecase {
             });
         } catch (error) {
             return msg400(NOTE_NOT_FOUND);
-        }
-    }
-
-
-    async createNote(note: any): Promise<IResponse> {
-        try {
-            const existedNote = await noteService.getNoteById(note._id);
-            if (existedNote) {
-                return msg400(NOTE_EXISTED);
-            }
-            const newNote = await noteService.createNote(note);
-            await noteService.pushKafkaUploadFileToDataStorage(newNote._id.toString(), note.fileId, note.fileName);
-            return msg200({
-                message: (newNote as any)
-            })
-        } catch (error) {
-            console.log(error);
-            return msg400(CREATE_NOTE_FAILED);
         }
     }
 
@@ -53,7 +71,7 @@ class NoteUsecase {
         }
     }
 
-    async updateNoteById(noteId: string, noteName: any): Promise<IResponse> {
+    async updateNoteNameById(noteId: string, noteName: any): Promise<IResponse> {
         try {
             const note = await noteService.getNoteById(noteId);
             if (!note) {
@@ -68,16 +86,36 @@ class NoteUsecase {
                 message: (updatedNote as any)
             })
         } catch (error) {
-            throw new Error('Note not found');
+            return msg400(NOTE_NOT_FOUND);
         }
     }
 
-    async getNoteById(noteId: string): Promise<IResponse> {
+    async updateNote(noteId: string, note: any): Promise<IResponse> {
+        try {
+            const existedNote = await noteService.getNoteById(noteId);
+            if (!existedNote) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            if (existedNote._id !== noteId) {
+                return msg400(NOTE_NOT_FOUND);
+            }
+            const convertedNote = this.noteMapperImpl.updateNoteMapper(note, existedNote);
+            const updatedNote = await noteService.updateNote(convertedNote);
+            return msg200({
+                message: (updatedNote as any)
+            })
+        } catch (error) {
+            return msg400(NOTE_NOT_FOUND);
+        }
+    }
+
+    async deleteNoteById(noteId: string): Promise<IResponse> {
         try {
             const note = await noteService.getNoteById(noteId);
             if (!note) {
                 return msg400(NOTE_NOT_FOUND);
             }
+            await noteService.deleteNoteById(note, noteId);
             return msg200({
                 message: (note as any)
             })
@@ -109,21 +147,6 @@ class NoteUsecase {
                 return msg400(NOTE_PASSWORD_INCORRECT);
             }
             await noteService.unlockNote(note);
-            return msg200({
-                message: (note as any)
-            })
-        } catch (error) {
-            return msg400(NOTE_NOT_FOUND);
-        }
-    }
-
-    async deleteNoteById(noteId: string): Promise<IResponse> {
-        try {
-            const note = await noteService.getNoteById(noteId);
-            if (!note) {
-                return msg400(NOTE_NOT_FOUND);
-            }
-            await noteService.deleteNoteById(note, noteId);
             return msg200({
                 message: (note as any)
             })

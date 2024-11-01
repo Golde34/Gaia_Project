@@ -33,10 +33,9 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        const convertedNote: INoteEntity = noteMapper.createNoteMapper(note);
-        const createdNote = await noteStore.createNote(convertedNote);
-        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + createdNote.ownerId);
-        return createdNote;
+        const newNote = await noteStore.createNote(note);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + newNote.ownerId);
+        return newNote;
     }
 
     async pushKafkaUploadFileToDataStorage(noteId: string, fileId: string, fileName: string): Promise<void> {

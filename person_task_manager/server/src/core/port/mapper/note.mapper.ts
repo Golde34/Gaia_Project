@@ -1,4 +1,5 @@
 import { isStringEmpty } from "../../../kernel/util/string-utils";
+import { UpdateNoteRequestDto } from "../../domain/dtos/note.dto";
 import { INoteEntity } from "../../domain/entities/note.entity";
 import { ActiveStatus, EventStatus } from "../../domain/enums/enums";
 
@@ -25,7 +26,7 @@ export const noteMapper = {
     lockNoteMapper(note: INoteEntity, notePassword: string, passwordSuggestion: string): INoteEntity {
         note.isLock = true;
         note.notePassword = notePassword;
-        note.passwordSuggestion = passwordSuggestion; 
+        note.passwordSuggestion = passwordSuggestion;
         return note;
     },
 
@@ -34,6 +35,15 @@ export const noteMapper = {
         note.notePassword = '';
         note.passwordSuggestion = '';
         return note;
+    },
+
+    updateNoteMapper(note: UpdateNoteRequestDto, oldNote: INoteEntity): INoteEntity {
+        return {
+            ...oldNote,
+            name: !isStringEmpty(note.name) ? note.name! : oldNote.name,
+            summaryDisplayText: !isStringEmpty(note.summaryDisplayText) ? note.summaryDisplayText! : oldNote.summaryDisplayText,
+            updatedAt: new Date()
+        };
     }
 }
 
