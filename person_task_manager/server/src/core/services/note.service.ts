@@ -59,6 +59,7 @@ class NoteService {
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
+        this.noteCache.clear(InternalCacheConstants.NOTE_DETAIL + note._id);
         return await noteStore.updateNoteById(note._id, note);
     }
 
