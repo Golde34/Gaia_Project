@@ -3,11 +3,23 @@ import { returnResult } from "../../kernel/util/return-result";
 import { CREATE_NOTE_FAILED, NOTE_NOT_FOUND, UPDATE_NOTE_FAILED } from "../../core/domain/constants/error.constant";
 import { RequestValidator } from "../../core/common/error-handler";
 import { noteController } from "../controllers/note.controller";
-import { NoteRequestDto } from "../../core/domain/dtos/note.dto";
+import { NoteRequestDto, UpdateNoteRequestDto } from "../../core/domain/dtos/note.dto";
 
 export const noteRouter = Router();
 
 const noteControllerImpl = noteController;
+
+noteRouter.post("/create",
+    RequestValidator.validateV2(NoteRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const noteResult = await noteControllerImpl.createNote(req, next);
+            return returnResult(noteResult, CREATE_NOTE_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
 
 noteRouter.get("/:userId/",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -20,12 +32,11 @@ noteRouter.get("/:userId/",
         }
     });
 
-noteRouter.post("/create",
-    RequestValidator.validateV2(NoteRequestDto),
+noteRouter.get("/detail/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const noteResult = await noteControllerImpl.createNote(req, next);
-            return returnResult(noteResult, CREATE_NOTE_FAILED, res, next);
+            const noteResult = await noteControllerImpl.getNoteById(req, next);
+            return returnResult(noteResult, NOTE_NOT_FOUND, res, next);
         }
         catch (err) {
             next(err);
@@ -43,8 +54,20 @@ noteRouter.put("/update-file-status/:id",
         }
     });
 
-noteRouter.put("/update",
+noteRouter.put("/update-name/:id",
     RequestValidator.validateV2(NoteRequestDto),
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const noteResult = await noteControllerImpl.updateNoteName(req, next);
+            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+noteRouter.put("/update/:id",
+    RequestValidator.validateV2(UpdateNoteRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const noteResult = await noteControllerImpl.updateNote(req, next);
@@ -55,11 +78,11 @@ noteRouter.put("/update",
         }
     });
 
-noteRouter.get("/detail/:id",
+noteRouter.delete("/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const noteResult = await noteControllerImpl.getNoteById(req, next);
-            return returnResult(noteResult, NOTE_NOT_FOUND, res, next);
+            const noteResult = await noteControllerImpl.deleteNoteById(req, next);
+            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
         }
         catch (err) {
             next(err);
@@ -81,17 +104,6 @@ noteRouter.put("/unlock/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const noteResult = await noteControllerImpl.unlockNoteById(req, next);
-            return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
-        }
-        catch (err) {
-            next(err);
-        }
-    });
-
-noteRouter.delete("/:id",
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const noteResult = await noteControllerImpl.deleteNoteById(req, next);
             return returnResult(noteResult, UPDATE_NOTE_FAILED, res, next);
         }
         catch (err) {

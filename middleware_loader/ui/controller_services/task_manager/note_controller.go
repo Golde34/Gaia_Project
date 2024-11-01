@@ -47,24 +47,6 @@ func CreateNote(w http.ResponseWriter, r *http.Request, noteService *services.No
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
 
-func UpdateNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
-	var body map[string]interface{}
-	body, err := controller_utils.MappingBody(w, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	noteId := chi.URLParam(r, "id")
-	input := mapper.UpdateNoteRequestDTOMapper(body, noteId)
-
-	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateNote", QueryInput: input, QueryOutput: model.Note{}})
-	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
-
-	utils.ConnectToGraphQLServer(w, graphQuery)
-}
-
 func LockNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
 	var body map[string]interface{}
 	body, err := controller_utils.MappingBody(w, r)
@@ -135,4 +117,30 @@ func GetNoteById(w http.ResponseWriter, r *http.Request, noteService *services.N
         log.Printf("Error encoding final response: %v", err)
         http.Error(w, err.Error(), http.StatusInternalServerError)
     }
+}
+
+func UpdateNote(w http.ResponseWriter, r *http.Request, noteService *services.NoteService) {
+	filePath, fileObject, err := controller_utils.ReceiveMultipartFile(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	log.Println("File path:", filePath)	
+
+	noteId := chi.URLParam(r, "id")
+	input := mapper.UpdateNoteRequestDTOMapper(r, fileObject, noteId)
+	log.Println("Input:", input)
+
+	note, err := noteService.UpdateNote(*input)
+	if err != nil {
+		log.Printf("Error updating note: %v", err)
+		http.Error(w, "Failed to update note", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(note); err != nil {
+		log.Printf("Error encoding final response: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

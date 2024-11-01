@@ -181,3 +181,20 @@ func GetFileFromS3(fileName string) (string, error) {
 	}
 	return string(contentBytes), nil
 }
+
+func GetFileFromTemp(fileName string) (string, error) {
+	log.Println("Fetching file from local storage")
+	filePath := filepath.Join("./resources/", fileName)
+	
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	contentBytes, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	return string(contentBytes), nil
+}

@@ -32,14 +32,19 @@ func CreateNoteRequestDTOMapper(r *http.Request, fileObject base_dtos.FileObject
 	return &input, nil
 }
 
-func UpdateNoteRequestDTOMapper(body map[string]interface{}, id string) *request_dtos.UpdateNoteRequestDTO {
+func UpdateNoteRequestDTOMapper(r *http.Request, fileObject base_dtos.FileObject, noteId string) *request_dtos.UpdateNoteRequestDTO {
 	var input request_dtos.UpdateNoteRequestDTO
-	bodyMap := body["body"].(map[string]interface{})
-	input.Id= id
-	input.Name = utils.GetStringValue(bodyMap, "name", "")
-	input.OwnerId = utils.GetFloatValue(bodyMap, "userId", 0)
+	name := r.FormValue("name")
+	if name == "" {
+		input.Name = ""	
+	}
+	input.Name = name
+	input.NoteId = noteId
+	input.FileId = fileObject.FileId
+	input.FileName = fileObject.FileName
+	input.SummaryDisplayText = fileObject.FileContent
 	return &input
-}
+}	
 
 func LockNoteRequestDTOMapper(body map[string]interface{}, noteId string) *request_dtos.LockNoteRequestDTO {
 	var input request_dtos.LockNoteRequestDTO

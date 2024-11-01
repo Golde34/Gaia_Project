@@ -43,11 +43,23 @@ class NoteController {
         }
     }
 
-    async updateNote(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+    async updateNoteName(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const noteName = req.body.name;
             const noteId = req.params.id;
-            const noteResult = await noteUsecase.updateNoteById(noteId, noteName);
+            const noteResult = await noteUsecase.updateNoteNameById(noteId, noteName);
+            return noteResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async updateNote(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const body = req.body;
+            const noteId = req.params.id;
+            const noteResult = await noteUsecase.updateNote(noteId, body);
+
             return noteResult;
         } catch (err) {
             next(err);

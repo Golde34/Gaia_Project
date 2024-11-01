@@ -39,6 +39,9 @@ func NewNoteRouter(noteService *services.NoteService, db database_mongo.Database
 		r.Get("/detail/{id}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetNoteById(w, r, noteService)
 		})
+		r.Post("/update/{id}", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.UpdateNote(w, r, noteService)
+		})
 	})
 	return &NoteRouter{
 		NoteService: noteService,

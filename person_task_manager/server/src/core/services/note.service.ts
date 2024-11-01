@@ -33,10 +33,9 @@ class NoteService {
     }
 
     async createNote(note: any): Promise<INoteEntity> {
-        const convertedNote: INoteEntity = noteMapper.createNoteMapper(note);
-        const createdNote = await noteStore.createNote(convertedNote);
-        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + createdNote.ownerId);
-        return createdNote;
+        const newNote = await noteStore.createNote(note);
+        this.noteCache.clear(InternalCacheConstants.NOTE_LIST + newNote.ownerId);
+        return newNote;
     }
 
     async pushKafkaUploadFileToDataStorage(noteId: string, fileId: string, fileName: string): Promise<void> {
@@ -59,7 +58,24 @@ class NoteService {
 
     async updateNote(note: INoteEntity): Promise<INoteEntity> {
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + note.ownerId);
-        return await noteStore.updateNoteById(note._id, note);
+        this.noteCache.clear(InternalCacheConstants.NOTE_DETAIL + note._id);
+        await noteStore.updateNoteById(note._id, note);
+        const updatedNote = await noteStore.getNoteById(note._id);
+        if (!updatedNote) {
+            throw new Error(`Note with id ${note._id} not found`);
+        }
+        return updatedNote;
+    }
+
+    async pushKafkaUploadUpdatedFileToDataStorage(noteId: string, oldFileName: string, existedFile: INoteEntity, updatedFile: INoteEntity): Promise<void> {
+        const data = noteMapper.buildUploadUpdatedFileKafkaMessage(noteId, oldFileName, existedFile, updatedFile);
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.UPLOAD_UPDATED_FILE, '00', 'Successful', data
+            ))
+        }]
+        console.log("Push Kafka message: ", messages);
+        this.kafkaConfig.produce(KafkaTopic.UPLOAD_FILE, messages);
     }
 
     async lockNote(note: INoteEntity, notePassword: string, passwordSuggestion: string): Promise<INoteEntity> {
@@ -80,11 +96,19 @@ class NoteService {
     }
 
     async getNoteById(noteId: string): Promise<INoteEntity | null> {
-        return await noteStore.getNoteById(noteId);
+        const notesCache = this.noteCache.get(InternalCacheConstants.NOTE_LIST + noteId);
+        if (notesCache) {
+            console.log("Get note from cache");
+            return notesCache;
+        } else {
+            console.log("Get note from database");
+            const note = await noteStore.getNoteById(noteId);
+            this.noteCache.set(InternalCacheConstants.NOTE_LIST + noteId, note);
+            return note;
+        }
     }
 
     async getNoteByIdAndPassword(note: any): Promise<INoteEntity | null> {
-        console.log("Get note by id and password: ", note);
         return await noteStore.getNoteByIdAndPassword(note.noteId, note.notePassword);
     }
 

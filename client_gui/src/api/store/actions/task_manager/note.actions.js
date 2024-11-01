@@ -61,10 +61,22 @@ export const createNote = (note) => async (dispatch) => {
 };
 
 export const updateNote = (note) => async (dispatch) => {
-    dispatch({ type: NOTE_UPDATE_REQUEST, payload: note });
+    dispatch({ type: NOTE_UPDATE_REQUEST });
     try {
-        const { data } = await serverRequest('/note/update', 'PUT', portName.middleware, note);
-        dispatch({ type: NOTE_UPDATE_SUCCESS, payload: data.data });
+        const api = `/note/update/${note.noteId}`;
+
+        const formData = new FormData();
+        formData.append('name', note.name);
+        formData.append('file', note.contentFile);
+
+        const response = await postFile(api, portName.middleware, formData);
+        const data = await response.json();
+
+        if (response.ok) {
+            dispatch({ type: NOTE_UPDATE_SUCCESS, payload: data });
+        } else {
+            dispatch({ type: NOTE_UPDATE_FAIL, payload: data.message || 'Failed to update note' });
+        }
     } catch (error) {
         dispatch({
             type: NOTE_UPDATE_FAIL,

@@ -13,3 +13,18 @@ export class NoteRequestDto {
     @IsOptional()
     summaryDisplayText?: string;
 }
+
+export class UpdateNoteRequestDto {
+    @IsString()
+    noteId!: string;
+    @IsString()
+    @IsOptional()
+    name?: string;
+    @IsString()
+    fileId!: string;
+    @IsString()
+    fileName!: string;
+    @IsString()
+    @IsOptional()
+    summaryDisplayText?: string;
+}

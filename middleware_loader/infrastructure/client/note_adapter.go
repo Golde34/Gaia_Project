@@ -74,17 +74,6 @@ func (adapter *NoteAdapter) UpdateNoteFileStatus(noteId string, fileName string)
 	return *noteResponse, nil
 }
 
-func (adapter *NoteAdapter) UpdateNote(input model.UpdateNoteInput, id string) (response_dtos.NoteResponseDTO, error) {
-	updateNoteURL := base.TaskManagerServiceURL + "/note/" + id
-	var note response_dtos.NoteResponseDTO
-	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(updateNoteURL, "PUT", input, note, headers)
-	if err != nil {
-		return response_dtos.NoteResponseDTO{}, err
-	}
-	return result.(response_dtos.NoteResponseDTO), nil
-}
-
 func (adapter *NoteAdapter) LockNote(input model.LockNoteInput) (response_dtos.NoteResponseDTO, error) {
 	lockNoteURL := base.TaskManagerServiceURL + "/note/lock/" + input.NoteID
 	var note response_dtos.NoteResponseDTO
@@ -138,6 +127,22 @@ func (adapter *NoteAdapter) GetNoteById(id string) (response_dtos.NoteResponseDT
 	var note response_dtos.NoteResponseDTO
 	headers := utils.BuildDefaultHeaders()
 	result, err := utils.BaseAPIV2(getNoteURL, "GET", nil, note, headers)
+	if err != nil {
+		return response_dtos.NoteResponseDTO{}, nil
+	}
+	bodyResultMap, ok := result.(map[string]interface{})
+	if !ok {
+		return response_dtos.NoteResponseDTO{}, nil
+	}
+	noteResponse := mapper_response.ReturnNoteObjectMapper(bodyResultMap["message"].(map[string]interface{}))
+	return *noteResponse, nil
+}
+
+func (adapter *NoteAdapter) UpdateNote(request request_dtos.UpdateNoteRequestDTO) (response_dtos.NoteResponseDTO, error) {
+	updateNoteURL := base.TaskManagerServiceURL + "/note/update/" + request.NoteId
+	var note response_dtos.NoteResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	result, err := utils.BaseAPIV2(updateNoteURL, "PUT", request, note, headers)
 	if err != nil {
 		return response_dtos.NoteResponseDTO{}, nil
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
 	adapter "middleware_loader/infrastructure/client"
@@ -42,8 +43,8 @@ func (s *NoteService) CreateNote(ctx context.Context, input model.CreateNoteInpu
 	return noteModel, nil
 }
 
-func (s *NoteService) UpdateNote(ctx context.Context, input model.UpdateNoteInput) (model.Note, error) {
-	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).UpdateNote(input, input.ID)
+func (s *NoteService) UpdateNote(input request_dtos.UpdateNoteRequestDTO) (model.Note, error) {
+	note, err := client.INoteAdapter(&adapter.NoteAdapter{}).UpdateNote(input)
 	if err != nil {
 		return model.Note{}, err
 	}
@@ -53,6 +54,7 @@ func (s *NoteService) UpdateNote(ctx context.Context, input model.UpdateNoteInpu
 }
 
 func (s *NoteService) UploadNoteFile(noteId string, fileName string) (string, error) {
+	log.Println("Uploading file: ", fileName)
 	filePath := filepath.Join("./resources/", fileName)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		log.Println("File does not exist")
@@ -208,19 +210,55 @@ func fetchFileFromDataStorage(tempFileName string) (string, error) {
 	cfg, _ := config.LoadEnv()
 	datalakeConfig := cfg.Datalake
 	var fileContent string
+	var err error
 
 	switch datalakeConfig {
 	case "local":
-		fileContent, _ = storages.GetFileFromLocal(tempFileName)
+		fileContent, err = storages.GetFileFromLocal(tempFileName)
 	case "Hadoop":
-		fileContent, _ = storages.GetFileFromHadoop(tempFileName)
+		fileContent, err = storages.GetFileFromHadoop(tempFileName)
 	case "Minio":
-		fileContent, _ = storages.GetFileFromMinio(tempFileName)
+		fileContent, err = storages.GetFileFromMinio(tempFileName)
 	case "S3":
-		fileContent, _ = storages.GetFileFromS3(tempFileName)
+		fileContent, err = storages.GetFileFromS3(tempFileName)
 	default:
 		return "", fmt.Errorf("unsupported download method: %s", datalakeConfig)
 	}
+
+	if err != nil {
+		fileContent, err = storages.GetFileFromTemp(tempFileName)
+		if err != nil {
+			return "", fmt.Errorf("failed to fetch file: %v", err)
+		}
+	}
 	
 	return fileContent, nil	
+}
+
+func (s *NoteService) DeleteExistedFile(existedFileLocation string, existedFileName string) (string, error) {
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+	datalakeConfig := cfg.Datalake
+
+	var storagePath string
+	var err error
+
+	switch datalakeConfig {
+	case "local":
+		storagePath, err = storages.DeleteLocal(existedFileName, existedFileLocation)
+	case "Hadoop":	
+		storagePath, err = storages.DeleteHadoop(existedFileName, existedFileLocation)
+	case "Minio":
+		storagePath, err = storages.DeleteMinio(existedFileName, existedFileLocation)
+	case "S3":
+		storagePath, err = storages.DeleteS3(existedFileName, existedFileLocation)
+	default:
+		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("failed to upload file: %v", err)
+	}
+	
+	return storagePath, nil
 }
