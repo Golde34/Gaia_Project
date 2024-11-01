@@ -45,6 +45,16 @@ export const noteMapper = {
         oldNote.fileName = note.fileName;
         oldNote.fileStatus = EventStatus.INIT
         return oldNote;
+    },
+
+    buildUploadUpdatedFileKafkaMessage(noteId: string, oldFileName: string, existedFile: INoteEntity, updatedFile: INoteEntity) {
+        return {
+            "noteId": noteId,
+            "existedFileLocation": existedFile.fileLocation,
+            "existedFileName": oldFileName,
+            "fileId": updatedFile.fileId,
+            "fileName": updatedFile.fileName
+        }
     }
 }
 

@@ -99,10 +99,12 @@ class NoteUsecase {
             if (existedNote._id.toString() !== noteId) {
                 return msg400(NOTE_NOT_FOUND);
             }
+            const oldFileName = existedNote.fileName;
             const convertedNote = this.noteMapperImpl.updateNoteMapper(note, existedNote);
             const updatedNote = await noteService.updateNote(convertedNote);
+            await noteService.pushKafkaUploadUpdatedFileToDataStorage(noteId, oldFileName, existedNote, updatedNote);
             return msg200({
-                message: convertedNote
+                message: (updatedNote as any) 
             })
         } catch (error) {
             return msg400(NOTE_NOT_FOUND);

@@ -67,6 +67,17 @@ class NoteService {
         return updatedNote;
     }
 
+    async pushKafkaUploadUpdatedFileToDataStorage(noteId: string, oldFileName: string, existedFile: INoteEntity, updatedFile: INoteEntity): Promise<void> {
+        const data = noteMapper.buildUploadUpdatedFileKafkaMessage(noteId, oldFileName, existedFile, updatedFile);
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.UPLOAD_UPDATED_FILE, '00', 'Successful', data
+            ))
+        }]
+        console.log("Push Kafka message: ", messages);
+        this.kafkaConfig.produce(KafkaTopic.UPLOAD_FILE, messages);
+    }
+
     async lockNote(note: INoteEntity, notePassword: string, passwordSuggestion: string): Promise<INoteEntity> {
         const lockedNote = noteMapper.lockNoteMapper(note, notePassword, passwordSuggestion);
         this.noteCache.clear(InternalCacheConstants.NOTE_LIST + lockedNote.ownerId);

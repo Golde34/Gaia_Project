@@ -54,6 +54,7 @@ func (s *NoteService) UpdateNote(input request_dtos.UpdateNoteRequestDTO) (model
 }
 
 func (s *NoteService) UploadNoteFile(noteId string, fileName string) (string, error) {
+	log.Println("Uploading file: ", fileName)
 	filePath := filepath.Join("./resources/", fileName)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		log.Println("File does not exist")
@@ -232,4 +233,32 @@ func fetchFileFromDataStorage(tempFileName string) (string, error) {
 	}
 	
 	return fileContent, nil	
+}
+
+func (s *NoteService) DeleteExistedFile(existedFileLocation string, existedFileName string) (string, error) {
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+	datalakeConfig := cfg.Datalake
+
+	var storagePath string
+	var err error
+
+	switch datalakeConfig {
+	case "local":
+		storagePath, err = storages.DeleteLocal(existedFileName, existedFileLocation)
+	case "Hadoop":	
+		storagePath, err = storages.DeleteHadoop(existedFileName, existedFileLocation)
+	case "Minio":
+		storagePath, err = storages.DeleteMinio(existedFileName, existedFileLocation)
+	case "S3":
+		storagePath, err = storages.DeleteS3(existedFileName, existedFileLocation)
+	default:
+		return "", fmt.Errorf("unsupported upload method: %s", datalakeConfig)
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("failed to upload file: %v", err)
+	}
+	
+	return storagePath, nil
 }
