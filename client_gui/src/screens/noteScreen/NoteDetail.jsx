@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from "react-redux"
 import Template from "../../components/template/Template"
 import { useParams } from "react-router-dom";
 import { getNoteById } from "../../api/store/actions/task_manager/note.actions";
-import { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Card, Flex, Metric, Text, Title } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
 import ReactQuill from 'react-quill';
+import { Input } from "@material-tailwind/react";
+import { useUpdateNoteDispatch } from "../../kernels/utils/dialog-api-requests";
 
 function ContentArea() {
     const dispatch = useDispatch();
@@ -27,6 +29,25 @@ function ContentArea() {
         }, 200);
     }, [noteId]);
 
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [noteName, setNoteName] = useState('');
+    const [noteContent, setNoteContent] = useState('');
+    const [noteForm] = useState({});
+
+    const updateNote = useUpdateNoteDispatch();
+    const setObjectNote = (name, content) => {
+        console.log("name: " + name + " content: " + content);
+        noteForm.name = name;
+        noteForm.contentFile = contentFile;
+        updateNote(noteForm);
+        // window.location.reload();
+    }
+
+    const setObjectNoteNone = () => {
+        setNoteName('');
+        setNoteContent('');
+    }
+
     return (
         <div>
             {loading ? (
@@ -42,19 +63,53 @@ function ContentArea() {
                         className={`transition-all duration-300 ease-in-out border-2 border-blue-500 "h-72 p-6"
                   flex flex-col justify-center items-center text-center cursor-pointer`}
                     >
-                        <Title className="text-lg font-bold mb-2">{note.name}</Title>
-                        <div className="w-full mt-4">
+                        {isEditingTitle ? (
+                            <Input
+                                type="text"
+                                className="p-2 w-full text-lg font-bold text-white"
+                                value={noteName}
+                                onChange={(e) => { setNoteName(e.target.value) }}
+                                onBlur={() => { setIsEditingTitle(!isEditingTitle) }}
+                                autoFocus
+                            />
+                        ) : (
+                            <Title
+                                className="text-lg cursor-pointer font-bold mb-2 text-white"
+                                onClick={() => { setIsEditingTitle(!isEditingTitle) }}
+                            >
+                                {noteName ? noteName : note.name}
+                            </Title>
+                        )}
+
+                        <div className="w-full max-w-7xl mt-4">
                             <ReactQuill
-                                value={note.fileContent}
+                                value={noteContent ? noteContent : note.fileContent}
                                 theme="snow"
                                 modules={modules}
                                 formats={formats}
-                                className="bg-gray-100 p-4 rounded-lg h-auto"
+                                className="bg-gray-100 p-4 rounded-lg h-auto w-90"
+                                onChange={(value) => { setNoteContent(value) }}
                             />
                         </div>
                         <Flex className="mt-4" justifyContent="end">
-                            <Button className="mr-2">Edit</Button>
-                            <Button>Save</Button>
+                            <button
+                                type="button"
+                                className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                onClick={() => {
+                                    setObjectNoteNone()
+                                }}
+                            >
+                                Discard
+                            </button>
+                            <button
+                                type="button"
+                                className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                onClick={() => {
+                                    setObjectNote(noteName, noteContent)
+                                }}
+                            >
+                                Save
+                            </button>
                         </Flex>
                     </Card>
                     <a href="/client-gui/note-dashboard" className="flex justify-end">
@@ -73,7 +128,7 @@ const modules = {
         ['bold', 'italic', 'underline', 'strike'],
         [{ list: 'ordered' }, { list: 'bullet' }],
         ['link', 'image'],
-        ['clean'], 
+        ['clean'],
     ]
 };
 
