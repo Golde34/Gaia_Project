@@ -123,8 +123,8 @@ export const useUnlockNoteDispatch = () => {
 export const useUpdateNoteDispatch = () => {
     const dispatch = useDispatch();
 
-    const updateNoteDispatch = (task) => {
-        dispatch(updateNote(task));
+    const updateNoteDispatch = (note) => {
+        dispatch(updateNote(note));
     }
 
     return updateNoteDispatch;
