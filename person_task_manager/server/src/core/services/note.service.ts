@@ -80,7 +80,16 @@ class NoteService {
     }
 
     async getNoteById(noteId: string): Promise<INoteEntity | null> {
-        return await noteStore.getNoteById(noteId);
+        const notesCache = this.noteCache.get(InternalCacheConstants.NOTE_LIST + noteId);
+        if (notesCache) {
+            console.log("Get note from cache");
+            return notesCache;
+        } else {
+            console.log("Get note from database");
+            const note = await noteStore.getNoteById(noteId);
+            this.noteCache.set(InternalCacheConstants.NOTE_LIST + noteId, note);
+            return note;
+        }
     }
 
     async getNoteByIdAndPassword(note: any): Promise<INoteEntity | null> {
