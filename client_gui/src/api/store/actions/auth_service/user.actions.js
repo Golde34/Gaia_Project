@@ -1,5 +1,5 @@
 import { HttpMethods, serverRequest } from "../../../baseAPI";
-import { USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS, 
+import { USER_DETAIL_REQUEST, USER_DETAIL_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS, 
     USER_UPDATE_FAIL, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS 
 } from "../../constants/auth_service/user.constants";
 
@@ -32,6 +32,21 @@ export const updateUser = (user) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_UPDATE_FAIL,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
+
+export const userProfile= (userId) => async (dispatch) => {
+    dispatch({ type: USER_DETAIL_REQUEST });
+    try {
+        const { data } = await serverRequest(`/user/detail/${userId}`, HttpMethods.GET, portName.middlewarePort, null);
+        dispatch({ type: USER_DETAIL_SUCCESS, payload: data.data });
+    } catch (error) {
+        dispatch({
+            type: USER_LIST_FAIL,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,
