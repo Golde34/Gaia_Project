@@ -54,3 +54,13 @@ func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInpu
 		return userModel, nil
 	}
 }
+
+func (s *UserService) GetUserDetail(ctx context.Context, input model.IDInput) (model.User, error) {
+	user, err := client.IUserAdapter(&adapter.UserAdapter{}).GetUserDetail(input)
+	if err != nil {
+		return model.User{}, err
+	}
+	userModel := userResponse.MapperToGraphQLModelDetail(user)
+	log.Println("User Detail: ", userModel)
+	return userModel, nil
+}

@@ -21,6 +21,9 @@ func NewUserRouter(userService *services.UserService, db database_mongo.Database
 		r.Get("/get-all-users", func(w http.ResponseWriter, r *http.Request) {
 			controller.GetAllUsers(w, r, userService)
 		})
+		r.Get("/detail/{id}", func(w http.ResponseWriter, r *http.Request) {
+			controller.GetUserDetail(w, r, userService)
+		})
 		// r.Post("/create-user", func(w http.ResponseWriter, r *http.Request) {
 		// 	controller_services.CreateUser(w, r, userService)
 		// })
@@ -33,6 +36,7 @@ func NewUserRouter(userService *services.UserService, db database_mongo.Database
 		// r.Get("/get-user", func(w http.ResponseWriter, r *http.Request) {
 		// 	controller_services.GetUserByUsername(w, r, userService)
 		// })
+
 	})
 	return &UserRouter{
 		UserService: userService,

@@ -34,7 +34,17 @@ func (in *UserDTO) MapperToGraphQLModel(input UserDTO) model.ListAllUsers {
 	out.Username = input.Username
 	out.Email = input.Email
 	out.LastLogin = input.LastLogin
-	out.Roles = convertRoleName(input.Roles) // Convert []interface{} to []string
+	out.Roles = convertRoleName(input.Roles) // Convert []interface{} to []*model.Role
+	return out
+}
+
+func convertRoleNameToModelRoles(roles []interface{}) []*model.Role {
+	var out []*model.Role
+	for _, role := range roles {
+		roleMap := role.(map[string]interface{})
+		roleName := roleMap["name"].(string)
+		out = append(out, &model.Role{Name: roleName})
+	}
 	return out
 }
 
@@ -53,5 +63,16 @@ func (in *UserDTO) MapperListToGraphQLModel(input []UserDTO) []model.ListAllUser
 	for _, item := range input {
 		out = append(out, in.MapperToGraphQLModel(item))
 	}
+	return out
+}
+
+func (in *UserDTO) MapperToGraphQLModelDetail(input UserDTO) model.User {
+	var out model.User
+	out.ID = input.ID
+	out.Name = input.Name
+	out.Username = input.Username
+	out.Email = input.Email
+	out.LastLogin = input.LastLogin
+	out.Roles = convertRoleNameToModelRoles(input.Roles) // Convert []interface{} to []string
 	return out
 }
