@@ -3,6 +3,7 @@ package client_adapter
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/domain/enums"
 	mapper_response "middleware_loader/core/port/mapper/response"
@@ -59,4 +60,22 @@ func (adapter *UserAdapter) UpdateUser(input model.UpdateUserInput) (response_dt
 	}
 
 	return user, nil
+}
+
+func (adapter *UserAdapter) GetUserDetail(input model.IDInput) (response_dtos.UserDTO, error) {
+	getUserDetailURL := base.AuthServiceURL + "/user/get-user-by-id?id=" + input.ID
+	var user response_dtos.UserDTO
+	headers := utils.BuildAuthorizationHeaders(enums.AS, "1")
+	log.Println("headers", headers)
+	bodyResult, err := utils.BaseAPIV2(getUserDetailURL, "GET", input, user, headers)
+	if err != nil {
+		return response_dtos.UserDTO{}, err
+	}
+	log.Println("bodyResult", bodyResult)
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return *response_dtos.NewUserDTO(), nil
+	}
+	userResponse := mapper_response.ReturnUserObjectMapper(bodyResultMap["message"].(map[string]interface{}))
+	return *userResponse, nil
 }

@@ -9,6 +9,8 @@ import (
 	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
@@ -47,5 +49,14 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.Us
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateUser", QueryInput: input, QueryOutput: model.UpdateUser{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func GetUserDetail(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
+	id := chi.URLParam(r, "id")
+
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getUserDetail", QueryInput: model.IDInput{ID: id}, QueryOutput: model.User{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }

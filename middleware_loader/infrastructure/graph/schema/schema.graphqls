@@ -2,6 +2,7 @@ type Query {
 	# Authentication Service
 	listAllUsers: [ListAllUsers]!
 	getUserByUsername(input: UserInput!): User!
+	getUserDetail(input: IdInput!): User!
 
 	getAllRoles: [Role]!
 	getRoleByName(input: RoleInput!): Role!
