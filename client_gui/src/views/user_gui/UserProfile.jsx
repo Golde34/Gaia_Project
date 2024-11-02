@@ -21,7 +21,7 @@ function ContentArea() {
         }
     }, [isUserValid, navigate]);
 
-    const profile = useSelector(state => state.userProfile);
+    const profile = useSelector(state => state.userDetail);
     const { loading, error, user } = profile;
     const getUserProfile = useCallback(() => {
         dispatch(userProfile(userId));
@@ -61,21 +61,21 @@ function ContentArea() {
 
                                             </Col>
                                             <Col numColSpan={4}>
-                                                <Text className="text-white text-md">Dong Viet </Text>
+                                                <Text className="text-white text-md">{user.name}</Text>
                                             </Col>
 
                                             <Col numColSpan={1}>
                                                 <Subtitle>Email</Subtitle>
                                             </Col>
                                             <Col numColSpan={4}>
-                                                <Text className="text-white text-md">nguyendongducviet2001@gmail.com</Text>
+                                                <Text className="text-white text-md">{user.email}</Text>
                                             </Col>
 
                                             <Col numColSpan={1}>
-                                                <Subtitle>Password</Subtitle>
+                                                <Subtitle>Last Login</Subtitle>
                                             </Col>
                                             <Col numColSpan={4}>
-                                                <Text className="text-white text-md">Mtfk i wont let you see my pass easily</Text>
+                                                <Text className="text-white text-md">{user.lastLogin}</Text>
                                             </Col>
 
                                             <Col numColSpan={1}>
@@ -89,7 +89,7 @@ function ContentArea() {
                                                 <Subtitle>Role</Subtitle>
                                             </Col>
                                             <Col numColSpan={4}>
-                                                <Text>Boss</Text>
+                                                <Text>{user.roles[0].name}</Text>
                                             </Col>
 
                                         </Grid>

@@ -39,10 +39,10 @@ export const updateUser = (user) => async (dispatch) => {
     }
 }
 
-export const userProfile= (userId) => async (dispatch) => {
-    dispatch({ type: USER_DETAIL_REQUEST });
+export const userProfile = (userId) => async (dispatch) => {
+    dispatch({ type: USER_DETAIL_REQUEST , payload: userId });
     try {
-        const { data } = await serverRequest(`/user/detail/${userId}`, HttpMethods.GET, portName.middlewarePort, null);
+        const { data } = await serverRequest(`/user/detail/${userId}`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: USER_DETAIL_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

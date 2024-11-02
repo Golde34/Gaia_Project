@@ -31,12 +31,12 @@ export const userUpdateReducer = (
 }
 
 export const userDetailReducer = (
-    state = { user: {} }, action) => {
+    state = { loading: true }, action) => {
     switch (action.type) {
         case USER_DETAIL_REQUEST:
             return { loading: true };
         case USER_DETAIL_SUCCESS:
-            return { loading: false, user: action.payload.user };
+            return { loading: false, user: action.payload.getUserDetail };
         case USER_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
