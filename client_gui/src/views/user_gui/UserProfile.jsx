@@ -37,6 +37,14 @@ function ContentArea() {
     const [optimizeTaskConfig, setOptimizeTaskConfig] = useState('1');
     const [privateProfileConfig, setPrivateProfileConfig] = useState('1');
 
+    // Update state based on user data once user is loaded
+    useEffect(() => {
+        if (user && user.userSetting) {
+            setOptimizeTaskConfig(user.userSetting.optimizeTaskConfig?.toString() || '1');
+            setPrivateProfileConfig(user.userSetting.privateProfileConfig?.toString() || '1');
+        }
+    }, [user]);
+
     return (
         <div>
             {loading ? (

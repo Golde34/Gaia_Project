@@ -227,11 +227,13 @@ type ComplexityRoot struct {
 	}
 
 	Role struct {
-		Description func(childComplexity int) int
-		GrantedRank func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Privileges  func(childComplexity int) int
+		Description        func(childComplexity int) int
+		GrantedRank        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		NumberOfUsers      func(childComplexity int) int
+		Privileges         func(childComplexity int) int
+		TotalNumberOfUsers func(childComplexity int) int
 	}
 
 	RoleOnlyResponse struct {
@@ -290,12 +292,16 @@ type ComplexityRoot struct {
 	}
 
 	UpdateUser struct {
-		Email     func(childComplexity int) int
-		ID        func(childComplexity int) int
-		LastLogin func(childComplexity int) int
-		Name      func(childComplexity int) int
-		Roles     func(childComplexity int) int
-		Username  func(childComplexity int) int
+		Email       func(childComplexity int) int
+		Enabled     func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IsUsing2fa  func(childComplexity int) int
+		LastLogin   func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Roles       func(childComplexity int) int
+		Secret      func(childComplexity int) int
+		UserSetting func(childComplexity int) int
+		Username    func(childComplexity int) int
 	}
 
 	User struct {
@@ -314,6 +320,12 @@ type ComplexityRoot struct {
 	UserPermissionResponse struct {
 		ID   func(childComplexity int) int
 		Name func(childComplexity int) int
+	}
+
+	UserSetting struct {
+		ID                   func(childComplexity int) int
+		OptimizedTaskConfig  func(childComplexity int) int
+		PrivateProfileConfig func(childComplexity int) int
 	}
 }
 
@@ -365,7 +377,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	ListAllUsers(ctx context.Context) ([]*model.ListAllUsers, error)
 	GetUserByUsername(ctx context.Context, input model.UserInput) (*model.User, error)
-	GetUserDetail(ctx context.Context, input model.IDInput) (*model.User, error)
+	GetUserDetail(ctx context.Context, input model.IDInput) (*model.UpdateUser, error)
 	GetAllRoles(ctx context.Context) ([]*model.Role, error)
 	GetRoleByName(ctx context.Context, input model.RoleInput) (*model.Role, error)
 	GetAllPrivileges(ctx context.Context) ([]*model.ListPrivilegeResponse, error)
@@ -1636,12 +1648,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Role.Name(childComplexity), true
 
+	case "Role.numberOfUsers":
+		if e.complexity.Role.NumberOfUsers == nil {
+			break
+		}
+
+		return e.complexity.Role.NumberOfUsers(childComplexity), true
+
 	case "Role.privileges":
 		if e.complexity.Role.Privileges == nil {
 			break
 		}
 
 		return e.complexity.Role.Privileges(childComplexity), true
+
+	case "Role.totalNumberOfUsers":
+		if e.complexity.Role.TotalNumberOfUsers == nil {
+			break
+		}
+
+		return e.complexity.Role.TotalNumberOfUsers(childComplexity), true
 
 	case "RoleOnlyResponse.description":
 		if e.complexity.RoleOnlyResponse.Description == nil {
@@ -1909,12 +1935,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UpdateUser.Email(childComplexity), true
 
+	case "UpdateUser.enabled":
+		if e.complexity.UpdateUser.Enabled == nil {
+			break
+		}
+
+		return e.complexity.UpdateUser.Enabled(childComplexity), true
+
 	case "UpdateUser.id":
 		if e.complexity.UpdateUser.ID == nil {
 			break
 		}
 
 		return e.complexity.UpdateUser.ID(childComplexity), true
+
+	case "UpdateUser.isUsing2FA":
+		if e.complexity.UpdateUser.IsUsing2fa == nil {
+			break
+		}
+
+		return e.complexity.UpdateUser.IsUsing2fa(childComplexity), true
 
 	case "UpdateUser.lastLogin":
 		if e.complexity.UpdateUser.LastLogin == nil {
@@ -1936,6 +1976,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UpdateUser.Roles(childComplexity), true
+
+	case "UpdateUser.secret":
+		if e.complexity.UpdateUser.Secret == nil {
+			break
+		}
+
+		return e.complexity.UpdateUser.Secret(childComplexity), true
+
+	case "UpdateUser.userSetting":
+		if e.complexity.UpdateUser.UserSetting == nil {
+			break
+		}
+
+		return e.complexity.UpdateUser.UserSetting(childComplexity), true
 
 	case "UpdateUser.username":
 		if e.complexity.UpdateUser.Username == nil {
@@ -2027,6 +2081,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserPermissionResponse.Name(childComplexity), true
+
+	case "UserSetting.id":
+		if e.complexity.UserSetting.ID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.ID(childComplexity), true
+
+	case "UserSetting.optimizedTaskConfig":
+		if e.complexity.UserSetting.OptimizedTaskConfig == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.OptimizedTaskConfig(childComplexity), true
+
+	case "UserSetting.privateProfileConfig":
+		if e.complexity.UserSetting.PrivateProfileConfig == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.PrivateProfileConfig(childComplexity), true
 
 	}
 	return 0, false
@@ -5737,8 +5812,16 @@ func (ec *executionContext) fieldContext_Mutation_updateUser(ctx context.Context
 				return ec.fieldContext_UpdateUser_email(ctx, field)
 			case "lastLogin":
 				return ec.fieldContext_UpdateUser_lastLogin(ctx, field)
+			case "enabled":
+				return ec.fieldContext_UpdateUser_enabled(ctx, field)
+			case "isUsing2FA":
+				return ec.fieldContext_UpdateUser_isUsing2FA(ctx, field)
+			case "secret":
+				return ec.fieldContext_UpdateUser_secret(ctx, field)
 			case "roles":
 				return ec.fieldContext_UpdateUser_roles(ctx, field)
+			case "userSetting":
+				return ec.fieldContext_UpdateUser_userSetting(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UpdateUser", field.Name)
 		},
@@ -5883,6 +5966,10 @@ func (ec *executionContext) fieldContext_Mutation_createRole(ctx context.Context
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -5950,6 +6037,10 @@ func (ec *executionContext) fieldContext_Mutation_updateRole(ctx context.Context
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -6017,6 +6108,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteRole(ctx context.Context
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -9649,9 +9744,9 @@ func (ec *executionContext) _Query_getUserDetail(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(*model.UpdateUser)
 	fc.Result = res
-	return ec.marshalNUser2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUpdateUser2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getUserDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9663,27 +9758,27 @@ func (ec *executionContext) fieldContext_Query_getUserDetail(ctx context.Context
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_User_id(ctx, field)
+				return ec.fieldContext_UpdateUser_id(ctx, field)
 			case "name":
-				return ec.fieldContext_User_name(ctx, field)
+				return ec.fieldContext_UpdateUser_name(ctx, field)
 			case "username":
-				return ec.fieldContext_User_username(ctx, field)
+				return ec.fieldContext_UpdateUser_username(ctx, field)
 			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "password":
-				return ec.fieldContext_User_password(ctx, field)
+				return ec.fieldContext_UpdateUser_email(ctx, field)
 			case "lastLogin":
-				return ec.fieldContext_User_lastLogin(ctx, field)
+				return ec.fieldContext_UpdateUser_lastLogin(ctx, field)
 			case "enabled":
-				return ec.fieldContext_User_enabled(ctx, field)
+				return ec.fieldContext_UpdateUser_enabled(ctx, field)
 			case "isUsing2FA":
-				return ec.fieldContext_User_isUsing2FA(ctx, field)
+				return ec.fieldContext_UpdateUser_isUsing2FA(ctx, field)
 			case "secret":
-				return ec.fieldContext_User_secret(ctx, field)
+				return ec.fieldContext_UpdateUser_secret(ctx, field)
 			case "roles":
-				return ec.fieldContext_User_roles(ctx, field)
+				return ec.fieldContext_UpdateUser_roles(ctx, field)
+			case "userSetting":
+				return ec.fieldContext_UpdateUser_userSetting(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type UpdateUser", field.Name)
 		},
 	}
 	defer func() {
@@ -9749,6 +9844,10 @@ func (ec *executionContext) fieldContext_Query_getAllRoles(_ context.Context, fi
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -9805,6 +9904,10 @@ func (ec *executionContext) fieldContext_Query_getRoleByName(ctx context.Context
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -11100,6 +11203,94 @@ func (ec *executionContext) fieldContext_Role_privileges(_ context.Context, fiel
 				return ec.fieldContext_Privilege_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Privilege", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Role_numberOfUsers(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Role_numberOfUsers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumberOfUsers, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Role_numberOfUsers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Role",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Role_totalNumberOfUsers(ctx context.Context, field graphql.CollectedField, obj *model.Role) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalNumberOfUsers, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Role_totalNumberOfUsers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Role",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -13040,6 +13231,138 @@ func (ec *executionContext) fieldContext_UpdateUser_lastLogin(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _UpdateUser_enabled(ctx context.Context, field graphql.CollectedField, obj *model.UpdateUser) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateUser_enabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Enabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateUser_enabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateUser",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateUser_isUsing2FA(ctx context.Context, field graphql.CollectedField, obj *model.UpdateUser) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateUser_isUsing2FA(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsUsing2fa, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateUser_isUsing2FA(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateUser",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateUser_secret(ctx context.Context, field graphql.CollectedField, obj *model.UpdateUser) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateUser_secret(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Secret, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateUser_secret(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateUser",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _UpdateUser_roles(ctx context.Context, field graphql.CollectedField, obj *model.UpdateUser) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_UpdateUser_roles(ctx, field)
 	if err != nil {
@@ -13066,9 +13389,9 @@ func (ec *executionContext) _UpdateUser_roles(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.([]*model.Role)
 	fc.Result = res
-	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalNRole2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UpdateUser_roles(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13078,7 +13401,75 @@ func (ec *executionContext) fieldContext_UpdateUser_roles(_ context.Context, fie
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Role_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Role_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Role_description(ctx, field)
+			case "grantedRank":
+				return ec.fieldContext_Role_grantedRank(ctx, field)
+			case "privileges":
+				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateUser_userSetting(ctx context.Context, field graphql.CollectedField, obj *model.UpdateUser) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateUser_userSetting(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UserSetting, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UserSetting)
+	fc.Result = res
+	return ec.marshalNUserSetting2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserSetting(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateUser_userSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateUser",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_UserSetting_id(ctx, field)
+			case "optimizedTaskConfig":
+				return ec.fieldContext_UserSetting_optimizedTaskConfig(ctx, field)
+			case "privateProfileConfig":
+				return ec.fieldContext_UserSetting_privateProfileConfig(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},
 	}
 	return fc, nil
@@ -13529,6 +13920,10 @@ func (ec *executionContext) fieldContext_User_roles(_ context.Context, field gra
 				return ec.fieldContext_Role_grantedRank(ctx, field)
 			case "privileges":
 				return ec.fieldContext_Role_privileges(ctx, field)
+			case "numberOfUsers":
+				return ec.fieldContext_Role_numberOfUsers(ctx, field)
+			case "totalNumberOfUsers":
+				return ec.fieldContext_Role_totalNumberOfUsers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 		},
@@ -13619,6 +14014,138 @@ func (ec *executionContext) fieldContext_UserPermissionResponse_name(_ context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserSetting_id(ctx context.Context, field graphql.CollectedField, obj *model.UserSetting) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSetting_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserSetting_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserSetting",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserSetting_optimizedTaskConfig(ctx context.Context, field graphql.CollectedField, obj *model.UserSetting) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSetting_optimizedTaskConfig(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OptimizedTaskConfig, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserSetting_optimizedTaskConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserSetting",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserSetting_privateProfileConfig(ctx context.Context, field graphql.CollectedField, obj *model.UserSetting) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSetting_privateProfileConfig(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrivateProfileConfig, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserSetting_privateProfileConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserSetting",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -18314,6 +18841,16 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "numberOfUsers":
+			out.Values[i] = ec._Role_numberOfUsers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalNumberOfUsers":
+			out.Values[i] = ec._Role_totalNumberOfUsers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -18759,8 +19296,28 @@ func (ec *executionContext) _UpdateUser(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "enabled":
+			out.Values[i] = ec._UpdateUser_enabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isUsing2FA":
+			out.Values[i] = ec._UpdateUser_isUsing2FA(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "secret":
+			out.Values[i] = ec._UpdateUser_secret(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "roles":
 			out.Values[i] = ec._UpdateUser_roles(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userSetting":
+			out.Values[i] = ec._UpdateUser_userSetting(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -18889,6 +19446,55 @@ func (ec *executionContext) _UserPermissionResponse(ctx context.Context, sel ast
 			}
 		case "name":
 			out.Values[i] = ec._UserPermissionResponse_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var userSettingImplementors = []string{"UserSetting"}
+
+func (ec *executionContext) _UserSetting(ctx context.Context, sel ast.SelectionSet, obj *model.UserSetting) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userSettingImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserSetting")
+		case "id":
+			out.Values[i] = ec._UserSetting_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "optimizedTaskConfig":
+			out.Values[i] = ec._UserSetting_optimizedTaskConfig(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "privateProfileConfig":
+			out.Values[i] = ec._UserSetting_privateProfileConfig(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -20091,6 +20697,16 @@ func (ec *executionContext) marshalNUserPermissionResponse2ᚖmiddleware_loader�
 		return graphql.Null
 	}
 	return ec._UserPermissionResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserSetting2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *model.UserSetting) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UserSetting(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

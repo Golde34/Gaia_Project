@@ -6,11 +6,13 @@ import (
 )
 
 type RoleDTO struct {
-	ID          float64       `json:"id"`
-	Name        string        `json:"name"`
-	Description *string       `json:"description"`
-	GrantedRank float64       `json:"granted_rank"`
-	Privileges  []interface{} `json:"privileges"`
+	ID                 float64       `json:"id"`
+	Name               string        `json:"name"`
+	Description        *string       `json:"description"`
+	GrantedRank        float64       `json:"granted_rank"`
+	Privileges         []interface{} `json:"privileges"`
+	NumberOfUsers      float64       `json:"number_of_users"`
+	TotalNumberOfUsers float64       `json:"total_number_of_users"`
 }
 
 func NewRoleDTO() *RoleDTO {
@@ -24,6 +26,8 @@ func (in RoleDTO) MapperToGraphQLModel(input RoleDTO) model.Role {
 	out.Description = input.Description
 	out.GrantedRank = input.GrantedRank
 	out.Privileges = convertPrivileges(input.Privileges)
+	out.NumberOfUsers = input.NumberOfUsers
+	out.TotalNumberOfUsers = input.TotalNumberOfUsers
 	return out
 }
 

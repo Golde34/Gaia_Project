@@ -19,6 +19,7 @@ func NewUserService() *UserService {
 
 var userValidation = validator.NewUserDTOValidator()
 var userResponse = response_dtos.NewUserDTO()
+var userDetailResponse = response_dtos.NewUserDetailDTO()
 
 func (s *UserService) ListAllUsers(ctx context.Context) ([]model.ListAllUsers, error) {
 	users, err := client.IUserAdapter(&adapter.UserAdapter{}).ListAllUsers()
@@ -55,12 +56,13 @@ func (s *UserService) UpdateUser(ctx context.Context, input model.UpdateUserInpu
 	}
 }
 
-func (s *UserService) GetUserDetail(ctx context.Context, input model.IDInput) (model.User, error) {
+func (s *UserService) GetUserDetail(ctx context.Context, input model.IDInput) (model.UpdateUser, error) {
 	user, err := client.IUserAdapter(&adapter.UserAdapter{}).GetUserDetail(input)
 	if err != nil {
-		return model.User{}, err
+		return model.UpdateUser{}, err
 	}
-	userModel := userResponse.MapperToGraphQLModelDetail(user)
+	
+	userModel := userDetailResponse.MapperToGraphQLModelDetail(user)
 	log.Println("User Detail: ", userModel)
 	return userModel, nil
 }

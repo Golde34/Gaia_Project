@@ -8,5 +8,5 @@ import (
 type IUserAdapter interface {
 	ListAllUsers() ([]response_dtos.UserDTO, error)
 	UpdateUser(user model.UpdateUserInput) (response_dtos.UserDTO, error)
-	GetUserDetail(input model.IDInput) (response_dtos.UserDTO, error)
+	GetUserDetail(input model.IDInput) (response_dtos.UserDetailDTO, error)
 }

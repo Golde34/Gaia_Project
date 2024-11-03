@@ -56,7 +56,7 @@ func GetUserDetail(w http.ResponseWriter, r *http.Request, userService *services
 	id := chi.URLParam(r, "id")
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getUserDetail", QueryInput: model.IDInput{ID: id}, QueryOutput: model.User{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getUserDetail", QueryInput: model.IDInput{ID: id}, QueryOutput: model.UpdateUser{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }

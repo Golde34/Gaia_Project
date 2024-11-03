@@ -166,10 +166,11 @@ func ConvertOutput(output interface{}) string {
 
 func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
 	outputKey := ""
+	fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
+
 	switch fieldValue.Kind() {
 	case reflect.Struct, reflect.Interface:
 		subFields := ConvertOutput(fieldValue.Interface())
-		fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
 		outputKey = fmt.Sprintf("%s { %s }", fieldName, subFields)
 	case reflect.Slice:
 		sliceOutput := make([]string, 0)
@@ -179,15 +180,21 @@ func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value)
 		}
 		newElement := reflect.New(sliceElementType).Elem()
 		if newElement.Kind() == reflect.Struct || newElement.Kind() == reflect.Interface {
-			// Convert the struct fields to a string
 			sliceOutput = append(sliceOutput, ConvertOutput(newElement.Interface()))
-			fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
 			outputKey = fmt.Sprintf("%s { %s }", fieldName, strings.Join(sliceOutput, ", "))
 		} else {
-			outputKey = strings.Split(field.Tag.Get("json"), ",")[0]
+			outputKey = fieldName
+		}
+	case reflect.Ptr:
+		newElement := reflect.New(fieldValue.Type().Elem()).Elem()
+		if newElement.Kind() == reflect.Struct || newElement.Kind() == reflect.Interface {
+			subFields := ConvertOutput(newElement.Interface())
+			outputKey = fmt.Sprintf("%s { %s }", fieldName, subFields)
+		} else {
+			outputKey = fieldName
 		}
 	default:
-		outputKey = strings.Split(field.Tag.Get("json"), ",")[0]
+		outputKey = fieldName
 	}
 	return outputKey
 }
@@ -219,9 +226,9 @@ func ConnectToGraphQLServer(w http.ResponseWriter, query string) {
 	io.Copy(w, resp.Body)
 }
 
-func GraphQLResponse(w http.ResponseWriter, query string) (io.ReadCloser){
+func GraphQLResponse(w http.ResponseWriter, query string) io.ReadCloser {
 	log.Println(query)
-	jsonQuery := map[string]string {
+	jsonQuery := map[string]string{
 		"query": query,
 	}
 

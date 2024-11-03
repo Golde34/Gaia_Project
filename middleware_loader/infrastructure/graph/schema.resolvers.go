@@ -287,7 +287,7 @@ func (r *queryResolver) GetUserByUsername(ctx context.Context, input model.UserI
 }
 
 // GetUserDetail is the resolver for the getUserDetail field.
-func (r *queryResolver) GetUserDetail(ctx context.Context, input model.IDInput) (*model.User, error) {
+func (r *queryResolver) GetUserDetail(ctx context.Context, input model.IDInput) (*model.UpdateUser, error) {
 	user, err := userService.GetUserDetail(ctx, input)
 	return &user, err
 }
