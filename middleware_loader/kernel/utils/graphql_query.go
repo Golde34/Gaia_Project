@@ -167,7 +167,7 @@ func ConvertOutput(output interface{}) string {
 func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value) string {
 	outputKey := ""
 	fieldName := strings.Split(field.Tag.Get("json"), ",")[0]
-	
+
 	switch fieldValue.Kind() {
 	case reflect.Struct, reflect.Interface:
 		subFields := ConvertOutput(fieldValue.Interface())
@@ -185,9 +185,7 @@ func convertSubFieldsOutput(field reflect.StructField, fieldValue reflect.Value)
 		} else {
 			outputKey = fieldName
 		}
-
 	case reflect.Ptr:
-		log.Println("Field is nil")
 		newElement := reflect.New(fieldValue.Type().Elem()).Elem()
 		if newElement.Kind() == reflect.Struct || newElement.Kind() == reflect.Interface {
 			subFields := ConvertOutput(newElement.Interface())
