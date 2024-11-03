@@ -36,7 +36,7 @@ export const userDetailReducer = (
         case USER_DETAIL_REQUEST:
             return { loading: true };
         case USER_DETAIL_SUCCESS:
-            return { loading: false, user: action.payload };
+            return { loading: false, user: action.payload.getUserDetail };
         case USER_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
