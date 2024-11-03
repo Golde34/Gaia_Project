@@ -5,6 +5,8 @@ type Role {
     grantedRank: Float!
 
     privileges: [Privilege!]!
+    numberOfUsers: Float!
+    totalNumberOfUsers: Float!
 }
 
 input RoleInput {

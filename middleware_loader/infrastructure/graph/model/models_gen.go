@@ -218,11 +218,13 @@ type RegisterTaskInput struct {
 }
 
 type Role struct {
-	ID          float64      `json:"id"`
-	Name        string       `json:"name"`
-	Description *string      `json:"description,omitempty"`
-	GrantedRank float64      `json:"grantedRank"`
-	Privileges  []*Privilege `json:"privileges"`
+	ID                 float64      `json:"id"`
+	Name               string       `json:"name"`
+	Description        *string      `json:"description,omitempty"`
+	GrantedRank        float64      `json:"grantedRank"`
+	Privileges         []*Privilege `json:"privileges"`
+	NumberOfUsers      float64      `json:"numberOfUsers"`
+	TotalNumberOfUsers float64      `json:"totalNumberOfUsers"`
 }
 
 type RoleInput struct {
