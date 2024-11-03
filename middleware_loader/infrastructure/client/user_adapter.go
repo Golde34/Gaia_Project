@@ -62,20 +62,19 @@ func (adapter *UserAdapter) UpdateUser(input model.UpdateUserInput) (response_dt
 	return user, nil
 }
 
-func (adapter *UserAdapter) GetUserDetail(input model.IDInput) (response_dtos.UserDTO, error) {
+func (adapter *UserAdapter) GetUserDetail(input model.IDInput) (response_dtos.UserDetailDTO, error) {
 	getUserDetailURL := base.AuthServiceURL + "/user/get-user-by-id?id=" + input.ID
-	var user response_dtos.UserDTO
+	var user response_dtos.UserDetailDTO
 	headers := utils.BuildAuthorizationHeaders(enums.AS, "1")
-	log.Println("headers", headers)
 	bodyResult, err := utils.BaseAPIV2(getUserDetailURL, "GET", input, user, headers)
 	if err != nil {
-		return response_dtos.UserDTO{}, err
+		return response_dtos.UserDetailDTO{}, err
 	}
-	log.Println("bodyResult", bodyResult)
 	bodyResultMap, ok := bodyResult.(map[string]interface{})
 	if !ok {
-		return *response_dtos.NewUserDTO(), nil
+		return *response_dtos.NewUserDetailDTO(), nil
 	}
 	userResponse := mapper_response.ReturnUserObjectMapper(bodyResultMap["message"].(map[string]interface{}))
+	log.Println("userResponse", userResponse)
 	return *userResponse, nil
 }

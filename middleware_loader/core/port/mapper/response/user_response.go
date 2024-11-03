@@ -1,6 +1,9 @@
 package mapper
 
-import response_dtos "middleware_loader/core/domain/dtos/response"
+import (
+	"log"
+	response_dtos "middleware_loader/core/domain/dtos/response"
+)
 
 func ReturnListAllUsersObjectMapper(body map[string]interface{}) *response_dtos.UserDTO {
 	var input response_dtos.UserDTO
@@ -13,7 +16,7 @@ func ReturnListAllUsersObjectMapper(body map[string]interface{}) *response_dtos.
 	input.Enabled = body["enabled"].(bool)
 	input.IsUsing2fa = checkBool(body["isUsing2FA"])
 	input.Secret = checkNull(body["secret"])
-	input.Roles = body["roles"].([]interface{})	
+	input.Roles = body["roles"].([]interface{})
 	return &input
 }
 
@@ -31,8 +34,8 @@ func checkBool(value interface{}) bool {
 	return value.(bool)
 }
 
-func ReturnUserObjectMapper(body map[string]interface{}) *response_dtos.UserDTO {
-	var input response_dtos.UserDTO
+func ReturnUserObjectMapper(body map[string]interface{}) *response_dtos.UserDetailDTO {
+	var input response_dtos.UserDetailDTO
 	input.ID = body["id"].(float64)
 	input.Name = body["name"].(string)
 	input.Username = body["username"].(string)
@@ -42,6 +45,12 @@ func ReturnUserObjectMapper(body map[string]interface{}) *response_dtos.UserDTO 
 	input.Enabled = body["enabled"].(bool)
 	input.IsUsing2fa = checkBool(body["isUsing2FA"])
 	input.Secret = checkNull(body["secret"])
-	input.Roles = body["roles"].([]interface{})	
+	input.Roles = body["roles"].([]interface{})
+	userSettingMap := body["userSetting"].(map[string]interface{})
+	input.UserSetting = &response_dtos.UserSettingDTO{
+		OptimizedTaskConfig: userSettingMap["optimizedTaskConfig"].(float64),
+		PrivateProfileConfig: userSettingMap["privateProfileConfig"].(float64),
+	}
+	log.Println(input)
 	return &input
 }

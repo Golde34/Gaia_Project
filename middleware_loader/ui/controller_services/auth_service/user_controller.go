@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"encoding/json"
 	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
@@ -55,8 +56,16 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, userService *services.Us
 func GetUserDetail(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
 	id := chi.URLParam(r, "id")
 
-	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getUserDetail", QueryInput: model.IDInput{ID: id}, QueryOutput: model.User{}})
-	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
-	utils.ConnectToGraphQLServer(w, graphqlQuery)
+	ctx := r.Context()
+	user, err := userService.GetUserDetail(ctx, model.IDInput{ID: id})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 }

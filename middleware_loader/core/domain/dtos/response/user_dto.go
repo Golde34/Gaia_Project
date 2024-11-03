@@ -66,13 +66,40 @@ func (in *UserDTO) MapperListToGraphQLModel(input []UserDTO) []model.ListAllUser
 	return out
 }
 
-func (in *UserDTO) MapperToGraphQLModelDetail(input UserDTO) model.User {
-	var out model.User
+type UserDetailDTO struct {
+	ID         float64       `json:"id"`
+	Name       string        `json:"name"`
+	Username   string        `json:"username"`
+	Email      string        `json:"email"`
+	Password   string        `json:"password"`
+	LastLogin  string        `json:"lastLogin"`
+	Enabled    bool          `json:"enabled"`
+	IsUsing2fa bool          `json:"isUsing2FA"`
+	Secret     string        `json:"secret"`
+	Roles      []interface{} `json:"roles"`
+
+	UserSetting *UserSettingDTO `json:"userSetting"`
+}
+type UserSettingDTO struct {
+	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
+	PrivateProfileConfig float64 `json:"privateProfileConfig"`
+}
+
+func NewUserDetailDTO() *UserDetailDTO {
+	return &UserDetailDTO{}
+}
+
+func (in *UserDetailDTO) MapperToGraphQLModelDetail(input UserDetailDTO) model.UpdateUser {
+	var out model.UpdateUser
 	out.ID = input.ID
 	out.Name = input.Name
 	out.Username = input.Username
 	out.Email = input.Email
 	out.LastLogin = input.LastLogin
 	out.Roles = convertRoleNameToModelRoles(input.Roles) // Convert []interface{} to []string
+	out.UserSetting = &model.UserSetting{
+		OptimizedTaskConfig:  input.UserSetting.OptimizedTaskConfig,
+		PrivateProfileConfig: input.UserSetting.PrivateProfileConfig,
+	}
 	return out
 }

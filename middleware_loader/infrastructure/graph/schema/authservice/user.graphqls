@@ -46,9 +46,20 @@ input UpdateUserInput {
 
 type UpdateUser {
 	id: Float!
-	name: String!
-	username: String!
-	email: String!
-	lastLogin: String!
-	roles: [String!]!
+    name: String!
+    username: String!
+    email: String!
+    lastLogin: String!
+    enabled: Boolean!
+    isUsing2FA: Boolean!
+    secret: String!
+
+    roles: [Role]!
+	userSetting: UserSetting!
+}
+
+type UserSetting {
+	id: Float!
+	optimizedTaskConfig: Float!
+	privateProfileConfig: Float!
 }

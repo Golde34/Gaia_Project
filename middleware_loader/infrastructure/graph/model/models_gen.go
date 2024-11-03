@@ -357,12 +357,16 @@ type UpdateTaskInput struct {
 }
 
 type UpdateUser struct {
-	ID        float64  `json:"id"`
-	Name      string   `json:"name"`
-	Username  string   `json:"username"`
-	Email     string   `json:"email"`
-	LastLogin string   `json:"lastLogin"`
-	Roles     []string `json:"roles"`
+	ID          float64      `json:"id"`
+	Name        string       `json:"name"`
+	Username    string       `json:"username"`
+	Email       string       `json:"email"`
+	LastLogin   string       `json:"lastLogin"`
+	Enabled     bool         `json:"enabled"`
+	IsUsing2fa  bool         `json:"isUsing2FA"`
+	Secret      string       `json:"secret"`
+	Roles       []*Role      `json:"roles"`
+	UserSetting *UserSetting `json:"userSetting"`
 }
 
 type UpdateUserInput struct {
@@ -405,4 +409,10 @@ type UserPermissionInput struct {
 type UserPermissionResponse struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type UserSetting struct {
+	ID                   float64 `json:"id"`
+	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
+	PrivateProfileConfig float64 `json:"privateProfileConfig"`
 }
