@@ -37,6 +37,8 @@ class ScheduleTaskUsecase {
                 // Push to logging tracker to handle error case
             }
             await scheduleTaskService.optimizeTask(schedulePlanSyncMessage.id ) 
+        } catch (error) {
+            console.error("Error on syncScheduleTask: ", error);
         } 
     }
 }
