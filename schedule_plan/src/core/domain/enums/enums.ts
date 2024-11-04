@@ -41,3 +41,10 @@ export enum HttpCodeMessage {
     NOT_FOUND = 404,
     INTERNAL_SERVER_ERROR = 500
 }
+
+export enum ErrorStatus {
+    INIT = "INIT",
+    SUCCESS = "SUCCESS",
+    FAIL = "FAIL",
+    TIMEOUT = "TIMEOUT",
+}

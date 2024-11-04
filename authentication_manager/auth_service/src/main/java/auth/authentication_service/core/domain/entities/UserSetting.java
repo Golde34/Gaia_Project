@@ -11,30 +11,34 @@ import java.util.Date;
 @Entity
 @Data
 @Builder
-@Table(name="user_setting")
+@Table(name = "user_setting")
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSetting {
 
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Long id;
+	@Id
+	@Column(unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "optimized_task_config",
-            columnDefinition = "INT(11) COMMENT '1: Auto optimize, 2: Optimize at creation, \n" + 
-                                "3: Optimize at creation and after 4 hours, 4: Disable optimization'")
-    private Integer optimizedTaskConfig;
+	@Column(name = "optimized_task_config", columnDefinition = "INT(11) COMMENT '1: First in Last out, 2: Optimize all tasks, \n"
+			+
+			"3: Calculate time and optimize, 4: Register tasks by day'")
+	private Integer optimizedTaskConfig;
 
-    @Column(name = "private_profile_config",
-            columnDefinition = "TINYINT(4) COMMENT '1: Private, 2: Public'")
-    private Integer privateProfileConfig;
+	@Column(name = "private_profile_config", columnDefinition = "TINYINT(4) COMMENT '1: Private, 2: Public'")
+	private Integer privateProfileConfig;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
-    private User user;
+	@Column(name = "task_sorting_algorithm", columnDefinition = "INT(11) COMMENT '1: Priority, 2: Time, \n" +
+			"3: Time and Priority, 4: Tabu Search'")
+	private Integer taskSortingAlgorithm;
 
-    private Date createdDate;
-    private Date updatedDate;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
+	private User user;
+
+	private Date createdDate;
+	private Date updatedDate;
+
 }
