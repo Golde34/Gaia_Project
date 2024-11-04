@@ -49,6 +49,14 @@ public class Constants {
     }
 
     @UtilityClass
+    public static class ErrorStatus {
+        public static String SUCCESS = "SUCCESS";
+        public static String FAIL = "FAIL";
+        public static String TIMEOUT = "TIMEOUT";
+        public static String INIT = "INIT";
+    }
+
+    @UtilityClass
     public static class Status {
         public static final int ACTIVE = 1;
         public static final int INACTIVE = 0;
