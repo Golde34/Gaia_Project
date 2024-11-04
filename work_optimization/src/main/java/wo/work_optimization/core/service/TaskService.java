@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.kafka.SchedulePlanSyncronizedMessage;
@@ -40,9 +41,10 @@ public class TaskService {
             data = SchedulePlanSyncronizedMessage.builder().taskSynchronizeStatus("Sync fail").build();
         }
         data = SchedulePlanSyncronizedMessage.builder()
-                .taskSynchronizeStatus("Sync successfully")
+                .taskSynchronizeStatus(Constants.ErrorStatus.SUCCESS)
                 .scheduleTaskId(task.getScheduleTaskId())
                 .taskId(task.getOriginalId())
+                .workOptimTaskId(task.getId())
                 .build();
 
         KafkaBaseDto<SchedulePlanSyncronizedMessage> message = data.toKafkaBaseSto(errorCode, errorMessage);

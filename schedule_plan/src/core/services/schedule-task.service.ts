@@ -2,6 +2,7 @@ import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaHandler } from "../../infrastructure/kafka/kafka-handler";
 import { scheduleTaskRepository } from "../../infrastructure/repository/schedule-task.repository";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
+import { ErrorStatus } from "../domain/enums/enums";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enum";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 
@@ -72,7 +73,20 @@ class ScheduleTaskService {
         }] 
         console.log("Push Kafka Message: ", message);
         this.kafkaHandler.produce(KafkaTopic.CREATE_TASK, message);
-    }    
+    }
+
+    async validateSyncSchedulePlan(schedulePlanSyncMessage: any): Promise<boolean> {
+        if (!schedulePlanSyncMessage.taskSynchronizeStatus.equals(ErrorStatus.SUCCESS)) return false;
+        const scheduleTask = await scheduleTaskRepository.findByScheduleTaskIdAndTaskId(schedulePlanSyncMessage.scheduleTaskId, schedulePlanSyncMessage.taskId);
+        return scheduleTask !== null || scheduleTask !== undefined;
+    }  
+
+    async optimizeTask(workOptimTaskId: string) {
+        // call to auth service to get user settings
+        // from user setting call work optiomization to get the order of display schedule task
+        // call to task manager to get the task => Copilot told me so I can delete this idea
+        // return the order of display schedule task 
+    }
 }
 
 export const scheduleTaskService = new ScheduleTaskService();

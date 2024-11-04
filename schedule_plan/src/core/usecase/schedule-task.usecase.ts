@@ -28,6 +28,19 @@ class ScheduleTaskUsecase {
             return msg400("Cannot create schedule task!");
         }
     }
+
+    async syncScheduleTask(schedulePlanSyncMessage: any): Promise<void> {
+        try {
+            const scheduleTaskValidation = await scheduleTaskService.validateSyncSchedulePlan(schedulePlanSyncMessage)
+            if (!scheduleTaskValidation) {
+                console.log('Push this error to logging tracker, i dont know what is goin on if we cant sync schedule task yet.')
+                // Push to logging tracker to handle error case
+            }
+            await scheduleTaskService.optimizeTask(schedulePlanSyncMessage.id ) 
+        } catch (error) {
+            console.error("Error on syncScheduleTask: ", error);
+        } 
+    }
 }
 
 export const scheduleTaskUsecase = new ScheduleTaskUsecase();

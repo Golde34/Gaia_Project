@@ -36,12 +36,14 @@ function ContentArea() {
 
     const [optimizeTaskConfig, setOptimizeTaskConfig] = useState('1');
     const [privateProfileConfig, setPrivateProfileConfig] = useState('1');
+    const [taskSortingAlgorithm, setTaskSortingAlgorithm] = useState('1');
 
     // Update state based on user data once user is loaded
     useEffect(() => {
         if (user && user.userSetting) {
             setOptimizeTaskConfig(user.userSetting.optimizeTaskConfig?.toString() || '1');
             setPrivateProfileConfig(user.userSetting.privateProfileConfig?.toString() || '1');
+            setTaskSortingAlgorithm(user.userSetting.taskSortingAlgorithm?.toString() || '1');
         }
     }, [user]);
 
@@ -124,88 +126,6 @@ function ContentArea() {
                                     </Flex>
                                     <Grid numItems={1} className="mt-4">
                                         <Col numColSpan={1}>
-                                            <Subtitle>Optimize Task Config</Subtitle>
-                                        </Col>
-
-                                        <div className="grid grid-cols-4 m-1">
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="optimize-task-radio-1" data-ripple-dark="true">
-                                                    <input
-                                                        id="optimize-task-radio-1"
-                                                        type="radio"
-                                                        value="1"
-                                                        checked={optimizeTaskConfig === '1'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-400 me-4" htmlFor="optimize-task-radio-1">
-                                                    Auto Optimize
-                                                </label>
-                                            </div>
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="optimize-task-radio-2" data-ripple-dark="true">
-                                                    <input
-                                                        id="optimize-task-radio-2"
-                                                        type="radio"
-                                                        value="2"
-                                                        checked={optimizeTaskConfig === '2'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-2">
-                                                    Optimize when create task
-                                                </label>
-                                            </div>
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="optimize-task-radio-3" data-ripple-dark="true">
-                                                    <input
-                                                        id="optimize-task-radio-3"
-                                                        type="radio"
-                                                        value="3"
-                                                        checked={optimizeTaskConfig === '3'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-3">
-                                                    Optimize by Processor
-                                                </label>
-                                            </div>
-                                            <div className="inline-flex items-center">
-                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
-                                                    htmlFor="optimize-task-radio-4" data-ripple-dark="true">
-                                                    <input
-                                                        id="optimize-task-radio-4"
-                                                        type="radio"
-                                                        value="4"
-                                                        checked={optimizeTaskConfig === '4'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
-                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
-                                                    />
-                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
-                                                        <RadioButtonIcon />
-                                                    </div>
-                                                </label>
-                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-4">
-                                                    Disable Task Optimization
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <Col numColSpan={1}>
                                             <Subtitle>Private Profile</Subtitle>
                                         </Col>
                                         <Col numColSpan={1}>
@@ -246,6 +166,172 @@ function ContentArea() {
                                                     </label>
                                                     <label className="text-sm text-gray-400" htmlFor="profile-radio-private">
                                                         Private
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </Col>
+
+                                        <Col numColSpan={1}>
+                                            <Subtitle>Optimize Task Config</Subtitle>
+                                        </Col>
+                                        <div className="grid grid-cols-4 m-1">
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="optimize-task-radio-1" data-ripple-dark="true">
+                                                    <input
+                                                        id="optimize-task-radio-1"
+                                                        type="radio"
+                                                        value="1"
+                                                        checked={optimizeTaskConfig === '1'}
+                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
+                                                    />
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label className="text-sm text-gray-400 me-4" htmlFor="optimize-task-radio-1">
+                                                    First in Last out
+                                                </label>
+                                            </div>
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="optimize-task-radio-2" data-ripple-dark="true">
+                                                    <input
+                                                        id="optimize-task-radio-2"
+                                                        type="radio"
+                                                        value="2"
+                                                        checked={optimizeTaskConfig === '2'}
+                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
+                                                    />
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-2">
+                                                    Optimize all tasks
+                                                </label>
+                                            </div>
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="optimize-task-radio-3" data-ripple-dark="true">
+                                                    <input
+                                                        id="optimize-task-radio-3"
+                                                        type="radio"
+                                                        value="3"
+                                                        checked={optimizeTaskConfig === '3'}
+                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
+                                                    />
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-3">
+                                                    Calculate time and optimize
+                                                </label>
+                                            </div>
+                                            <div className="inline-flex items-center">
+                                                <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                    htmlFor="optimize-task-radio-4" data-ripple-dark="true">
+                                                    <input
+                                                        id="optimize-task-radio-4"
+                                                        type="radio"
+                                                        value="4"
+                                                        checked={optimizeTaskConfig === '4'}
+                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
+                                                    />
+                                                    <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                        <RadioButtonIcon />
+                                                    </div>
+                                                </label>
+                                                <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-4">
+                                                    Disable Task Optimization
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <Col numColSpan={1}>
+                                            <Subtitle>Task Sorting Algorithm</Subtitle>
+                                        </Col>
+                                        <Col numColSpan={1}>
+                                            <div className="grid grid-cols-4 m-1">
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="tsa-radio-1" data-ripple-dark="true">
+                                                        <input
+                                                            id="tsa-radio-1"
+                                                            type="radio"
+                                                            value="1"
+                                                            checked={taskSortingAlgorithm === '1'}
+                                                            onChange={(e) => setTaskSortingAlgorithm(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-green-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-green-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-green-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400 me-4" htmlFor="tsa-radio-1">
+                                                        Priority
+                                                    </label>
+                                                </div>
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="tsa-radio-2" data-ripple-dark="true">
+                                                        <input
+                                                            id="tsa-radio-2"
+                                                            type="radio"
+                                                            value="2"
+                                                            checked={taskSortingAlgorithm === '2'}
+                                                            onChange={(e) => setTaskSortingAlgorithm(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-green-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-green-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-green-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400 me-4" htmlFor="tsa-radio-2">
+                                                        Time
+                                                    </label>
+                                                </div>
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="tsa-radio-3" data-ripple-dark="true">
+                                                        <input
+                                                            id="tsa-radio-3"
+                                                            type="radio"
+                                                            value="3"
+                                                            checked={taskSortingAlgorithm === '3'}
+                                                            onChange={(e) => setTaskSortingAlgorithm(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-green-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-green-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-green-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400 me-4" htmlFor="tsa-radio-3">
+                                                        Time and Priority
+                                                    </label>
+                                                </div>
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="tsa-radio-4" data-ripple-dark="true">
+                                                        <input
+                                                            id="tsa-radio-4"
+                                                            type="radio"
+                                                            value="4"
+                                                            checked={taskSortingAlgorithm === '4'}
+                                                            onChange={(e) => setTaskSortingAlgorithm(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-green-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-green-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:before:bg-green-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-green-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400" htmlFor="tsa-radio-4">
+                                                        Tabu Search
                                                     </label>
                                                 </div>
                                             </div>

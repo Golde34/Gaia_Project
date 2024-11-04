@@ -22,8 +22,6 @@ Trong đó:
     User sẽ đánh giá mức độ thích thú của mình với Task đó trong range [1, 10] (PreferenceLevel)
     Enjoyability = priorityTask * weightTag * (taskDuration / maxTagTime) * PreferenceLevel * (0.1 * 2)
 
-
-
 Example tính effort và enjoyability của các task:
 Tính effort và enjoyability của các task sau:
 Tag Work: maxTime=8, priority = 0.9
@@ -50,3 +48,15 @@ Task 3.1	Learn	0.5	                1	            3	                0.015	0.058
 - Khi Note bi xoa, se co thong bao cho User
 - Them mot truong cap nhat trang thai cua Note khi file bi thay doi
 - Note Privacy: Neu khong muon ai vao xem Note thi co the chuyen sang che do Private, voi mat khau cap 2 duoi dang PIN cho note do va cau hoi bao mat
+
+#### Cac usecase khi thuc hien optimize task #####
+- User co the lua chon cac method sau moi khi them task moi:
++ Method 1: Them cac task moi nhat vao queue moi nhat, cac task moi nhat se duoc lam sau khi cac task cu duoc hoan thanh
++ Method 2: Moi khi co mot task moi nhat, tinh toan lai toan bo queue cua cac task cu va sap xep lai theo thu tu uu tien
++ Method 3: Moi khi co mot task moi nhat, tinh toan them thoi gian thuc hien task do trong ngay va giam thieu thoi gian thuc hien cac task con lai
++ Method 4: Dang ky cac task theo ngay va thuc hien hoan thanh trong mot khoang thoi gian nhat dinh, sau do se thuc hien sap xep cac task tiep theo
+- User co the lua chon cac thuat toan sau de sap xep cac loai task:
++ Algorithm 1: Sap xep theo thu tu uu tien cua task
++ Algorithm 2: Sap xep theo thoi gian thuc hien task
++ Algorithm 3: Sap xep theo thoi gian thuc hien task va uu tien cua task
++ Algorithm 4: Tabu Search

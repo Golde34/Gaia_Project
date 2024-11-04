@@ -83,6 +83,7 @@ type UserDetailDTO struct {
 type UserSettingDTO struct {
 	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
 	PrivateProfileConfig float64 `json:"privateProfileConfig"`
+	TaskSortingAlgorithm float64 `json:"taskSortingAlgorithm"`
 }
 
 func NewUserDetailDTO() *UserDetailDTO {
@@ -96,10 +97,11 @@ func (in *UserDetailDTO) MapperToGraphQLModelDetail(input UserDetailDTO) model.U
 	out.Username = input.Username
 	out.Email = input.Email
 	out.LastLogin = input.LastLogin
-	out.Roles = convertRoleNameToModelRoles(input.Roles) // Convert []interface{} to []string
+	out.Roles = convertRoleNameToModelRoles(input.Roles) 
 	out.UserSetting = &model.UserSetting{
 		OptimizedTaskConfig:  input.UserSetting.OptimizedTaskConfig,
 		PrivateProfileConfig: input.UserSetting.PrivateProfileConfig,
+		TaskSortingAlgorithm: input.UserSetting.TaskSortingAlgorithm,
 	}
 	return out
 }
