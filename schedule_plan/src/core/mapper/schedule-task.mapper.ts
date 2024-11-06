@@ -1,6 +1,6 @@
 import { IScheduleTaskEntity, ScheduleTaskEntity } from "../../infrastructure/entities/schedule-task.entity"
-import { convertPriority } from "../../kernel/utils/convert-priority";
-import { KafkaCreateTaskMessage } from "../domain/request/task.dto";
+import { convertPriority } from "../../kernel/utils/convert-fields";
+import { KafkaCreateTaskMessage, KafkaOptimizeTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 
 export const scheduleTaskMapper = {
 
@@ -23,6 +23,15 @@ export const scheduleTaskMapper = {
         message.taskId = taskId
         message.scheduleTaskId = scheduleTaskId
         message.scheduleTaskName = scheduleTaskName
+        return message
+    },
+
+    buildOptimizeTaskMapper(syncScheduleTaskRequest: SyncScheduleTaskRequest, isSync: boolean): KafkaOptimizeTaskMessage {
+        const message = new KafkaOptimizeTaskMessage()
+        message.taskId = syncScheduleTaskRequest.taskId
+        message.scheduleTaskId = syncScheduleTaskRequest.scheduleTaskId
+        message.workOptimTaskid = syncScheduleTaskRequest.workOptimTaskId
+        message.isSync = isSync.toString()
         return message
     }
 }

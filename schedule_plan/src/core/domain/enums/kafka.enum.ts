@@ -1,7 +1,8 @@
 export enum KafkaTopic {
     CREATE_TASK = "task-manager.create-task.topic",
     CREATE_SCHEDULE_TASK = "schedule-plan.create-schedule-task.topic",
-    SYNC_SCHEDULE_TASK = "schedule-plan.sync-schedule-task.topic"
+    SYNC_SCHEDULE_TASK = "schedule-plan.sync-schedule-task.topic",
+    // OPTIMIZE_TASK = "task-manager.optimize-task.topic"
 }
 
 export enum KafkaCommand {

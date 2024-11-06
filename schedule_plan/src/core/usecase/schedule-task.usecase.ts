@@ -1,4 +1,5 @@
 import { IResponse, msg400 } from "../common/response";
+import { SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 import { scheduleTaskService } from "../services/schedule-task.service";
 
@@ -29,14 +30,15 @@ class ScheduleTaskUsecase {
         }
     }
 
-    async syncScheduleTask(schedulePlanSyncMessage: any): Promise<void> {
+    async syncScheduleTask(schedulePlanSyncMessage: SyncScheduleTaskRequest): Promise<void> {
         try {
-            const scheduleTaskValidation = await scheduleTaskService.validateSyncSchedulePlan(schedulePlanSyncMessage)
+            const scheduleTaskValidation = await scheduleTaskService.syncScheduleTask(schedulePlanSyncMessage)
+            console.log('Schedule task is synchronized!: ', scheduleTaskValidation);
             if (!scheduleTaskValidation) {
                 console.log('Push this error to logging tracker, i dont know what is goin on if we cant sync schedule task yet.')
                 // Push to logging tracker to handle error case
-            }
-            await scheduleTaskService.optimizeTask(schedulePlanSyncMessage.id ) 
+            } 
+            scheduleTaskService.pushKafkaOptimizeTask(schedulePlanSyncMessage, scheduleTaskValidation);
         } catch (error) {
             console.error("Error on syncScheduleTask: ", error);
         } 

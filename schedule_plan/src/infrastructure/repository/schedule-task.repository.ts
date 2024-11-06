@@ -29,6 +29,10 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     async findByScheduleTaskIdAndTaskId(scheduleTaskId: string, taskId: string): Promise<IScheduleTaskEntity | null> {
         return await ScheduleTaskEntity.findOne({ _id: scheduleTaskId, taskId: taskId });
     }
+
+    async syncScheduleTask(scheduleTaskId: string, isSync: boolean): Promise<UpdateWriteOpResult> {
+        return await ScheduleTaskEntity.updateOne({ _id: scheduleTaskId, isSynchronizedWithWO: isSync});
+    }
 }
 
 export const scheduleTaskRepository = new ScheduleTaskRepository();
