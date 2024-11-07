@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.TopicConstants;
-import wo.work_optimization.core.service.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 
 @Service
@@ -13,8 +12,6 @@ import wo.work_optimization.core.usecase.kafka.CommandService;
 @RequiredArgsConstructor
 public class OptimizeTaskCommand extends CommandService<String, String> {
     
-    private final TaskService taskService;
-
     @Override
     public String command() {
         return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK; 
@@ -32,8 +29,10 @@ public class OptimizeTaskCommand extends CommandService<String, String> {
 
     @Override
     public String doCommand(String request) {
-        // Check if work optimization is synchronized with schedule plan
-        taskService.sendRestToSyncWithSchedulePlan(request, request);
+        // Get task by task id, workoptim id, scheduletask id from database
+        // Call auth service to get user settings
+        // Get task config from database
+        // Optimize task
         return "OptimizeTaskCommand doCommand";
     }
     

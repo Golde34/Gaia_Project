@@ -8,6 +8,7 @@ class AlpacaResponse():
     @classmethod
     def generate_response(cls, mode, text, model, tokenize, tag_skill, **kwargs):
         try:
+            # Check config that use alpaca, claude or chatgpt ...
             response = inference.call_alpaca_response(inp=text, model=model, tokenizer=tokenize, mode=mode, tag_skill=tag_skill)
             if mode == "run":
                 last_response = cls._format_response(response)
