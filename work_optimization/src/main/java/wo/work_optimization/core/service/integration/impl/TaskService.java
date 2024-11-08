@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service;
+package wo.work_optimization.core.service.integration.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -39,14 +39,14 @@ public class TaskService {
         SchedulePlanSyncronizedMessage data;
         if (dataUtils.isNullOrEmpty(task)) {
             data = SchedulePlanSyncronizedMessage.builder().taskSynchronizeStatus(Constants.ErrorStatus.FAIL).build();
+        } else {
+            data = SchedulePlanSyncronizedMessage.builder()
+                    .taskSynchronizeStatus(Constants.ErrorStatus.SUCCESS)
+                    .scheduleTaskId(task.getScheduleTaskId())
+                    .taskId(task.getOriginalId())
+                    .workOptimTaskId(task.getId())
+                    .build();
         }
-        data = SchedulePlanSyncronizedMessage.builder()
-                .taskSynchronizeStatus(Constants.ErrorStatus.SUCCESS)
-                .scheduleTaskId(task.getScheduleTaskId())
-                .taskId(task.getOriginalId())
-                .workOptimTaskId(task.getId())
-                .build();
-
         KafkaBaseDto<SchedulePlanSyncronizedMessage> message = data.toKafkaBaseSto(errorCode, errorMessage);
         kafkaPublisher.pushAsync(message, TopicConstants.CreateScheduleTaskCommand.SYNC_TOPIC, "wo", null);
         log.info("Sent kafka to sync with schedule plan");

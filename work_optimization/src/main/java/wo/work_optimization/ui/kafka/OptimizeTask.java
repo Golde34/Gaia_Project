@@ -16,7 +16,7 @@ public class OptimizeTask extends KafkaMessageHandler {
 
     @Override
     public String getTopic() {
-        return TopicConstants.OptimizeTaskCommand.TOPIC;
+        return TopicConstants.CreateTaskCommand.TOPIC;
     }
 
     @Override

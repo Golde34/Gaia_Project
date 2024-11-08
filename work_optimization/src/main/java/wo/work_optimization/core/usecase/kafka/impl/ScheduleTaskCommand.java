@@ -1,11 +1,8 @@
 package wo.work_optimization.core.usecase.kafka.impl;
 
-import java.text.ParseException;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
@@ -13,10 +10,12 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
-import wo.work_optimization.core.service.TaskService;
+import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
+
+import java.text.ParseException;
 
 @Service
 @Slf4j

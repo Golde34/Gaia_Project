@@ -8,7 +8,7 @@ import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.dto.response.base.ResponseFactory;
-import wo.work_optimization.core.usecase.rest.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.TaskRegistrationService;
 import wo.work_optimization.ui.restful.router.TaskRegistrationRouter;
 
 @RestController

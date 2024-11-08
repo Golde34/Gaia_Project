@@ -1,4 +1,4 @@
-package wo.work_optimization.core.usecase.rest;
+package wo.work_optimization.core.service.integration;
 
 import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;

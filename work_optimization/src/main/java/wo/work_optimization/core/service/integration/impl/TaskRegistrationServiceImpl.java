@@ -1,4 +1,4 @@
-package wo.work_optimization.core.usecase.rest.impl.mono_services;
+package wo.work_optimization.core.service.integration.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
-import wo.work_optimization.core.usecase.rest.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.TaskRegistrationService;
 import wo.work_optimization.kernel.utils.DataUtils;
 import wo.work_optimization.kernel.utils.GenericResponse;
 
