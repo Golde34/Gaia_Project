@@ -26,7 +26,6 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     private final TaskStore taskStore;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
-    private final DataUtils dataUtils;
 
     @Override
     public String command() {
@@ -45,10 +44,10 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
 
     @Override
     public void validateRequest(CreateScheduleTaskRequestDTO request) {
-        if (dataUtils.isNullOrEmpty(request.getTaskId())) {
+        if (DataUtils.isNullOrEmpty(request.getTaskId())) {
             throw new BusinessException("Task ID is required");
         }
-        if (dataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
+        if (DataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
             throw new BusinessException("Schedule Task ID is required");
         }
         // if database has schedule task id return schedule task id is exist
