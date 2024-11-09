@@ -22,6 +22,15 @@ public class TaskService {
     // private final SchedulePlanClient schedulePlanClient;
     private final KafkaPublisher kafkaPublisher;
 
+    public Task getTaskByOriginalId(String originalTaskId) {
+        Task task = taskStore.findTaskByOriginalId(originalTaskId);
+        if (DataUtils.isNullOrEmpty(task)) {
+            // Call Task Manager service to get task by original id
+            return null;
+        }
+        return task;
+    }
+
     public void sendKafkaToSyncWithSchedulePlan(Task task, String errorCode, String errorMessage) {
         log.info("Task before send kafka to sync with schedule plan: {}", task);
         SchedulePlanSyncronizedMessage data;

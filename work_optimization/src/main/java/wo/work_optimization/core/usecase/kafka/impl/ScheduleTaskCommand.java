@@ -60,7 +60,7 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     @Override
     public String doCommand(CreateScheduleTaskRequestDTO request) {
         try {
-            Task task = taskStore.findTaskByOriginalId(request.getTaskId());
+            Task task = taskService.getTaskByOriginalId(request.getTaskId());
             task.setScheduleTaskId(request.getScheduleTaskId());
             taskStore.save(task);
 

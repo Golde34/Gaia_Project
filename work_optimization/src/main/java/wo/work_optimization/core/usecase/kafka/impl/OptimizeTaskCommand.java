@@ -7,6 +7,7 @@ import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
@@ -62,10 +63,9 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
         if (DataUtils.isNullOrEmpty(task)) {
             log.error("Task with id {} not found", request.getTaskId());
         }
-        
+        // Get Task Registration Config
         // Call auth service to get user settings
-        
-        // Get task config from database
+        // UserSettingResponseDTO userSetting = authServiceClient.getUserSetting(task.parentId) 
         // Optimize task
         return "OptimizeTaskCommand doCommand";
     }
