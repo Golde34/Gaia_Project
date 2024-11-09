@@ -30,7 +30,6 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
     private final ParentTaskStore parentTaskStore;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
-    private final DataUtils dataUtils;
 
     @Override
     public String command() {
@@ -54,7 +53,7 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
     public String doCommand(CreateTaskRequestDTO request) {
         try {
             ParentTask parentTask = parentTaskNotExisted(request);
-            if (dataUtils.isNullOrEmpty(parentTask)) {
+            if (DataUtils.isNullOrEmpty(parentTask)) {
                 log.error("Parent task not existed");
                 throw new IllegalArgumentException("Parent task not existed");
             }
@@ -62,13 +61,6 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
             task.setParentTask(parentTask);
             log.info("Add parent task id to task: {}", task);
             taskStore.createTask(task);
-
-            // Neu khoang thoi gian thuc hien task nam trong vung khoang thoi gian cua
-            // schedule plan thi se add task vao schedule plan
-            // schedulePlanStore.addTaskToSchedulePlan(request);
-
-            // Thuc hien tinh toan lai schedule plan
-            // schedulService.calculateSchedulePlan();
 
             return "OK";
         } catch (ParseException e) {
@@ -84,7 +76,7 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
                 .project(request.getProject())
                 .build();
         GroupTaskAndProjectResponseDTO tmResponse = taskManagerServiceClient.getGroupTaskAndProject(request.getTaskId(), tmRequest);
-        if (dataUtils.isNullOrEmpty(tmResponse)) {
+        if (DataUtils.isNullOrEmpty(tmResponse)) {
             return null;
         }
         ParentTask clientParentTask = ParentTask.builder()
@@ -94,7 +86,7 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
                 .projectName(tmResponse.getProjectName())
                 .build();
         ParentTask existedParentTask = parentTaskStore.findByGroupTaskId(clientParentTask.getGroupTaskId()).orElse(null);
-        if (dataUtils.isNullOrEmpty(existedParentTask)) {
+        if (DataUtils.isNullOrEmpty(existedParentTask)) {
             return parentTaskStore.createParentTask(clientParentTask);
         }
         return existedParentTask;

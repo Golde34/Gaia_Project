@@ -14,7 +14,8 @@ public interface TaskStore {
     List<Task> findAllByGroupTask(String groupTaskId);
     List<Task> findAllByProject(String projectId);
     Task addParentTaskId(String taskId, ParentTask parentTask);
-    Task findtaskByScheduleIdAndTaskId(String scheduleTaskId, String taskId);
+    Task findTaskByScheduleIdAndTaskId(String scheduleTaskId, String taskId);
     Task checkSyncWithSchedulePlan(String taskId, String scheduleId); 
     Task checkSyncTask(String taskId, String scheduleTaskId, String workOptimTaskId);
+    Task findTaskById(String workOptimTaskId);
 }

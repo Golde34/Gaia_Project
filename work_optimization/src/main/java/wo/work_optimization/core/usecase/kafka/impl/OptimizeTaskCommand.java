@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
+import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
+import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
@@ -18,11 +20,11 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
-    private final DataUtils dataUtils;
+    private final TaskValidation taskValidation;
 
     @Override
     public String command() {
-        return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK; 
+        return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK;
     }
 
     @Override
@@ -34,7 +36,22 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
 
     @Override
     public void validateRequest(OptimizeTaskRequestDTO request) {
-//        if (dataUtils)
+        if (DataUtils.isNullOrEmpty(request.getTaskId())) {
+            log.error("Original Task Id is null. Check why?");
+            throw new IllegalArgumentException("Original Task Id is null.");
+        }
+        if (DataUtils.isNullOrEmpty(request.getWorkOptimTaskId())) {
+            log.error("WorkOptim Task Id is null. Check why?");
+            throw new IllegalArgumentException("Workoptim Id is null.");
+        }
+        if (DataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
+            log.error("Schedule Task Id is null. Check why?");
+            throw new IllegalArgumentException("Schedule Task Id is null.");
+        }
+        if (ValidateConstants.FAIL == taskValidation.validateOptimTaskRequest(request)) {
+            log.error("Validate fail by object existed!");
+            throw new IllegalArgumentException("Validate fail by object existed!");
+        }
         log.info("OptimizeTaskCommand validateRequest: {}", request.toString());
     }
 
@@ -42,12 +59,14 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
     public String doCommand(OptimizeTaskRequestDTO request) {
         // Get task by task id, workoptim id, scheduletask id from database
         Task task = taskService.getTask(request);
-        log.info("OptimizeTaskCommand doCommand: {}", task.toString());
+        if (DataUtils.isNullOrEmpty(task)) {
+            log.error("Task with id {} not found", request.getTaskId());
+        }
+        
         // Call auth service to get user settings
+        
         // Get task config from database
         // Optimize task
         return "OptimizeTaskCommand doCommand";
     }
-    
-
 }

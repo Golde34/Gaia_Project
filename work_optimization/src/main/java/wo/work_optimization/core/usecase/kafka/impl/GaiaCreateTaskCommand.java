@@ -8,14 +8,13 @@ import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.ParentTaskStore;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.validation.TaskValidation;
-import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
 @Slf4j
 public class GaiaCreateTaskCommand extends CreateTaskCommand {
 
-    public GaiaCreateTaskCommand(TaskManagerServiceClient taskManagerServiceClient, TaskStore taskStore, ParentTaskStore parentTaskStore, TaskMapper taskMapper, TaskValidation taskValidation, DataUtils dataUtils) {
-        super(taskManagerServiceClient, taskStore, parentTaskStore, taskMapper, taskValidation, dataUtils);
+    public GaiaCreateTaskCommand(TaskManagerServiceClient taskManagerServiceClient, TaskStore taskStore, ParentTaskStore parentTaskStore, TaskMapper taskMapper, TaskValidation taskValidation) {
+        super(taskManagerServiceClient, taskStore, parentTaskStore, taskMapper, taskValidation);
     }
 
     @Override

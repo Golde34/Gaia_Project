@@ -11,6 +11,6 @@ import lombok.*;
 public class OptimizeTaskRequestDTO {
     private String taskId;
     private String scheduleTaskId;
-    private String workOptimTaskid;
+    private String workOptimTaskId;
     private String isSync;
 }
