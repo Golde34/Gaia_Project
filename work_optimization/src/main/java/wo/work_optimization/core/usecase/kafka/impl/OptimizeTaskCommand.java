@@ -1,40 +1,72 @@
 package wo.work_optimization.core.usecase.kafka.impl;
 
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
+import wo.work_optimization.core.domain.constant.ValidateConstants;
+import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
+import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.port.client.AuthServiceClient;
+import wo.work_optimization.core.port.mapper.TaskMapper;
+import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
+import wo.work_optimization.core.validation.TaskValidation;
+import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OptimizeTaskCommand extends CommandService<String, String> {
-    
+public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, String> {
+
+    private final TaskService taskService;
+    private final TaskMapper taskMapper;
+    private final TaskValidation taskValidation;
+
     @Override
     public String command() {
-        return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK; 
+        return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK;
     }
 
     @Override
-    public String mapKafkaObject(Object kafkaObjectDto) {
-        return kafkaObjectDto.toString();
+    public OptimizeTaskRequestDTO mapKafkaObject(Object kafkaObjectDto) {
+        OptimizeTaskRequestDTO optimizeTask = taskMapper.toOptimizeTaskRequestDTO(kafkaObjectDto);
+        log.info("OptimizeTaskCommand mapKafkaObject: {}", optimizeTask.toString());
+        return optimizeTask;
     }
 
     @Override
-    public void validateRequest(String request) {
-        log.info("OptimizeTaskCommand validateRequest");
+    public void validateRequest(OptimizeTaskRequestDTO request) {
+        if (DataUtils.isNullOrEmpty(request.getTaskId())) {
+            log.error("Original Task Id is null. Check why?");
+            throw new IllegalArgumentException("Original Task Id is null.");
+        }
+        if (DataUtils.isNullOrEmpty(request.getWorkOptimTaskId())) {
+            log.error("WorkOptim Task Id is null. Check why?");
+            throw new IllegalArgumentException("Workoptim Id is null.");
+        }
+        if (DataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
+            log.error("Schedule Task Id is null. Check why?");
+            throw new IllegalArgumentException("Schedule Task Id is null.");
+        }
+        if (ValidateConstants.FAIL == taskValidation.validateOptimTaskRequest(request)) {
+            log.error("Validate fail by object existed!");
+            throw new IllegalArgumentException("Validate fail by object existed!");
+        }
+        log.info("OptimizeTaskCommand validateRequest: {}", request.toString());
     }
 
     @Override
-    public String doCommand(String request) {
+    public String doCommand(OptimizeTaskRequestDTO request) {
         // Get task by task id, workoptim id, scheduletask id from database
+        Task task = taskService.getTask(request);
+        if (DataUtils.isNullOrEmpty(task)) {
+            log.error("Task with id {} not found", request.getTaskId());
+        }
+        // Get Task Registration Config
         // Call auth service to get user settings
-        // Get task config from database
+        // UserSettingResponseDTO userSetting = authServiceClient.getUserSetting(task.parentId) 
         // Optimize task
         return "OptimizeTaskCommand doCommand";
     }
-    
-
 }

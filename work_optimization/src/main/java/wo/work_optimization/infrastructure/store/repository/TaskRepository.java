@@ -1,11 +1,10 @@
 package wo.work_optimization.infrastructure.store.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import wo.work_optimization.core.domain.entity.Task;
+
+import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, String> {
@@ -21,4 +20,5 @@ public interface TaskRepository extends JpaRepository<Task, String> {
     Task findByStatus(String status);
     Task findByPriority(int priority);
     Optional<Task> findByIdAndScheduleTaskId(String id, String scheduleTaskId);
+    Optional<Task> findByIdAndScheduleTaskIdAndOriginalId(String taskId, String scheduleTaskId, String id);
 }

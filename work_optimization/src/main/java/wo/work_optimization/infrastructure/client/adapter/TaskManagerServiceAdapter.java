@@ -39,4 +39,20 @@ public class TaskManagerServiceAdapter implements TaskManagerServiceClient {
         }
         return null;
     }
+
+    public OriginalTaskResponseDTO getOriginalTask(String taskId) {
+        try {
+            String uri = String.format(getOriginalTaskAPI, taskId);
+            log.info("Calling api to taskmanager service: {}", getOriginalTaskAPI);
+            ResponseEntity<GeneralResponse<OriginalTaskResponseDTO>> response = clientTemplate.get(
+                    uri, null,
+                    new ParameterizedTypeReference<GeneralResponse<OriginalTaskResponseDTO>>() {
+                    });
+            log.info("Response from taskmanager service: {}", response);
+            return response.getBody().getData();
+        } catch (Exception e) {
+            log.error("Error when call api to taskmanager service: {}", e.getMessage());
+        }
+        return null;
+    }
 }

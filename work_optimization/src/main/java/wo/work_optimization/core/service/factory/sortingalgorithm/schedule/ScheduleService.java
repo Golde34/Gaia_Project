@@ -1,4 +1,4 @@
-package wo.work_optimization.core.usecase.rest.schedule;
+package wo.work_optimization.core.service.factory.sortingalgorithm.schedule;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

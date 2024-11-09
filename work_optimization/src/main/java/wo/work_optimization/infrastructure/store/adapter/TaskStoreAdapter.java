@@ -2,6 +2,8 @@ package wo.work_optimization.infrastructure.store.adapter;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
@@ -76,17 +78,26 @@ public class TaskStoreAdapter implements TaskStore {
     }
 
     @Override
-    public Task findtaskByScheduleIdAndTaskId(String scheduleTaskId, String taskId) {
+    public Task findTaskByScheduleIdAndTaskId(String scheduleTaskId, String taskId) {
         Optional<Task> task = taskRepository.findByIdAndScheduleTaskId(taskId, scheduleTaskId);
-        if (!task.isPresent()) {
-            return null;
-        }
-        return task.get();
+        return task.orElse(null);
     }
 
     @Override
     public Task checkSyncWithSchedulePlan(String taskId, String scheduleId) {
         Optional<Task> task = taskRepository.findById(taskId);
         return task.filter(t -> t.getScheduleTaskId().equals(scheduleId)).orElse(null); 
+    }
+
+    @Override
+    @Cacheable(value = "task", key = "#taskId")
+    public Task checkSyncTask(String taskId, String scheduleTaskId, String workOptimId) {
+        Optional<Task> task = taskRepository.findByIdAndScheduleTaskIdAndOriginalId(taskId, scheduleTaskId, workOptimId);
+        return task.orElse(null);
+    }
+
+    @Override
+    public Task findTaskById(String workOptimTaskId) {
+        return taskRepository.findById(workOptimTaskId).orElse(null);
     }
 }

@@ -1,11 +1,8 @@
 package wo.work_optimization.core.usecase.kafka.impl;
 
-import java.text.ParseException;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
@@ -13,10 +10,12 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
-import wo.work_optimization.core.service.TaskService;
+import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
+
+import java.text.ParseException;
 
 @Service
 @Slf4j
@@ -27,7 +26,6 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     private final TaskStore taskStore;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
-    private final DataUtils dataUtils;
 
     @Override
     public String command() {
@@ -46,10 +44,10 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
 
     @Override
     public void validateRequest(CreateScheduleTaskRequestDTO request) {
-        if (dataUtils.isNullOrEmpty(request.getTaskId())) {
+        if (DataUtils.isNullOrEmpty(request.getTaskId())) {
             throw new BusinessException("Task ID is required");
         }
-        if (dataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
+        if (DataUtils.isNullOrEmpty(request.getScheduleTaskId())) {
             throw new BusinessException("Schedule Task ID is required");
         }
         // if database has schedule task id return schedule task id is exist
@@ -62,7 +60,7 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     @Override
     public String doCommand(CreateScheduleTaskRequestDTO request) {
         try {
-            Task task = taskStore.findTaskByOriginalId(request.getTaskId());
+            Task task = taskService.getTaskByOriginalId(request.getTaskId());
             task.setScheduleTaskId(request.getScheduleTaskId());
             taskStore.save(task);
 

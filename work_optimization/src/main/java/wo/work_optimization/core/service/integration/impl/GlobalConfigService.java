@@ -1,4 +1,4 @@
-package wo.work_optimization.core.usecase.rest;
+package wo.work_optimization.core.service.integration.impl;
 
 import java.util.Arrays;
 import java.util.List;

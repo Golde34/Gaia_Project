@@ -1,4 +1,4 @@
-package wo.work_optimization.core.usecase.rest.impl.mono_services;
+package wo.work_optimization.core.service.integration.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
-import wo.work_optimization.core.usecase.rest.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.TaskRegistrationService;
 import wo.work_optimization.kernel.utils.DataUtils;
 import wo.work_optimization.kernel.utils.GenericResponse;
 
@@ -30,8 +30,6 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     @Autowired
     private TaskRegistrationStore taskRegistrationStore;
 
-    @Autowired
-    private DataUtils dataUtils;
     @Autowired
     private GenericResponse<TaskResponseDTO> genericResponse;
 
@@ -55,16 +53,15 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     }
 
     private Pair<String, Boolean> validateRequest(TaskRegistrationRequestDTO request) {
-        if (dataUtils.isNullOrEmpty(request)
-                || dataUtils.isNullOrEmpty(request.getUserId())
-                || dataUtils.isNullOrEmpty(request.getWorkTime())
-                || request.getWorkTime() <= 0) {
+        if (DataUtils.isNullOrEmpty(request)
+                || request.getWorkTime() <= 0
+                || request.getUserId() <= 0) {
             return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
         }
 
         Pair<String, Boolean> isUserExisted = checkExistedUser(request.getUserId());
         if (!isUserExisted.getSecond()) {
-            return Pair.of(isUserExisted.getFirst(), isUserExisted.getSecond());
+            return Pair.of(isUserExisted.getFirst(), false);
         }
 
         if (!validateCalculatedTimeInDay(request)) {
@@ -78,7 +75,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         // check existed user in auth service
         UserResponseDTO response = authServiceClient.getExistedUser(userId);
         log.info("Check existed user in auth service: [{}] ", response.toString());
-        if (dataUtils.isNullOrEmpty(response) || dataUtils.isNullOrEmpty(response.getId())) {
+        if (DataUtils.isNullOrEmpty(response.getId())) {
             log.error("There is no information of user: {} in auth service", userId);
             return Pair.of(Constants.ErrorMessage.USER_NOT_FOUND, false);
         }
@@ -140,8 +137,8 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     }
 
     private Pair<String, Boolean> validateQueryRequest(QueryTaskConfigRequestDTO request) {
-        if (dataUtils.isNullOrEmpty(request)
-                || dataUtils.isNullOrEmpty(request.getUserId())) {
+        if (DataUtils.isNullOrEmpty(request)
+                || DataUtils.isNullOrEmpty(request.getUserId())) {
             return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
         }
 
