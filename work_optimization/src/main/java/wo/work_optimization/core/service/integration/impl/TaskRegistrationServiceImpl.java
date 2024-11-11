@@ -34,13 +34,6 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     private GenericResponse<TaskResponseDTO> genericResponse;
 
     public GeneralResponse<?> registerWorkOptimization(TaskRegistrationRequestDTO request) {
-        log.info("Validate request: {}", request);
-        Pair<String, Boolean> requestValidation = validateRequest(request);
-        if (!requestValidation.getSecond()) {
-            return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
-        }
-
         boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
         if (isUserRegisteredTask) {
             return genericResponse.matchingResponseMessage(
@@ -52,26 +45,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         return genericResponse.matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
     }
 
-    private Pair<String, Boolean> validateRequest(TaskRegistrationRequestDTO request) {
-        if (DataUtils.isNullOrEmpty(request)
-                || request.getWorkTime() <= 0
-                || request.getUserId() <= 0) {
-            return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
-        }
-
-        Pair<String, Boolean> isUserExisted = checkExistedUser(request.getUserId());
-        if (!isUserExisted.getSecond()) {
-            return Pair.of(isUserExisted.getFirst(), false);
-        }
-
-        if (!validateCalculatedTimeInDay(request)) {
-            return Pair.of(Constants.ErrorMessage.TOTAL_TIME_IN_DAY_ERROR, false);
-        }
-
-        return Pair.of(Constants.ErrorMessage.SUCCESS, true);
-    }
-
-    private Pair<String, Boolean> checkExistedUser(Long userId) {
+    public Pair<String, Boolean> checkExistedUser(Long userId) {
         // check existed user in auth service
         UserResponseDTO response = authServiceClient.getExistedUser(userId);
         log.info("Check existed user in auth service: [{}] ", response.toString());
@@ -81,12 +55,6 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
         }
 
         return Pair.of(Constants.ErrorMessage.SUCCESS, true);
-    }
-
-    private boolean validateCalculatedTimeInDay(TaskRegistrationRequestDTO request) {
-        double sum = request.getEatTime() + request.getRelaxTime() + request.getTravelTime() +
-                request.getWorkTime() + request.getSleepDuration();
-        return !(sum > 24) && !(sum < 24);
     }
 
     private boolean checkExistedTaskRegistration(Long userId) {
@@ -116,37 +84,10 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
 
     @Override
     public GeneralResponse<?> userRegisterTaskInformation(QueryTaskConfigRequestDTO request) {
-        try {
-            log.info("validate request: {}", request);
-            Pair<String, Boolean> requestValidation = validateQueryRequest(request);
-            if (!requestValidation.getSecond()) {
-                return genericResponse.matchingResponseMessage(
-                        new GenericResponse<>(requestValidation.getFirst(), ResponseMessage.msg400));
-            }
-
-            boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
-            RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
-                    .isTaskConfigExist(isUserRegisteredTask).build();
-            return genericResponse
-                    .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
-        } catch (Exception e) {
-            log.error("Error while getting user task information", e);
-            return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(Constants.ErrorMessage.INTERNAL_SERVER_ERROR, ResponseMessage.msg500));
-        }
-    }
-
-    private Pair<String, Boolean> validateQueryRequest(QueryTaskConfigRequestDTO request) {
-        if (DataUtils.isNullOrEmpty(request)
-                || DataUtils.isNullOrEmpty(request.getUserId())) {
-            return Pair.of(Constants.ErrorMessage.INVALID_REQUEST, false);
-        }
-
-        Pair<String, Boolean> isUserExisted = checkExistedUser(request.getUserId());
-        if (!isUserExisted.getSecond()) {
-            return Pair.of(isUserExisted.getFirst(), isUserExisted.getSecond());
-        }
-
-        return Pair.of(Constants.ErrorMessage.SUCCESS, true);
+        boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
+        RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
+                .isTaskConfigExist(isUserRegisteredTask).build();
+        return genericResponse
+                .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
     }
 }
