@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.factory.sortingalgorithm.simpleschedule;
+package wo.work_optimization.core.service.factory.schedule.simpleschedule;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
-package wo.work_optimization.core.service.factory.sortingalgorithm.tabu;
+package wo.work_optimization.core.service.factory.schedule.tabu;
 
 import org.springframework.stereotype.Service;
 
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.service.factory.sortingalgorithm.schedule.ScheduleService;
+import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleService;
 
 @Service
 public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
