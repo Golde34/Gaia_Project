@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateScheduleTaskRequestDTO {
+    private long userId;
     private String taskId;
     private String scheduleTaskId;
     private String scheduleTaskName;

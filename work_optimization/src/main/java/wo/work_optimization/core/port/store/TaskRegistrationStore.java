@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface TaskRegistrationStore {
     void userRegisterTaskOperation(TaskRegistration taskRegistration);
     Optional<TaskRegistration> getTaskRegistrationByUserId(Long id);
+    Optional<TaskRegistration> getTaskRegistrationByTaskId(String taskId);
 }

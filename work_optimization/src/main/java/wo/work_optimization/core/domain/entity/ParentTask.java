@@ -23,6 +23,7 @@ public class ParentTask {
     private String projectName;
     private String schedulePlanId;
     private String schedulePlanName;
+    private long userId;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL, orphanRemoval = true)
