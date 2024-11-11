@@ -18,7 +18,7 @@ public class TaskValidation {
     private final TaskStore taskStore;
 
     public boolean validateCreateTaskRequest(CreateTaskRequestDTO request) {
-        if (request.getTask().getId().equals(request.getTaskId())) {
+        if (!request.getTask().getId().equals(request.getTaskId())) {
             log.error("Validate create task command failed with task id: {}, userId: {}, project: {}, groupTask: {}",
                     request.getTaskId(), request.getUserId(), request.getProject(), request.getGroupTask());
             return ValidateConstants.FAIL;

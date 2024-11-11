@@ -7,7 +7,6 @@ export class KafkaCreateTaskMessage {
     scheduleTaskId!: string;
     @IsString()
     scheduleTaskName!: string;
-    userId!: number;
 }
 
 export class SyncScheduleTaskRequest {
