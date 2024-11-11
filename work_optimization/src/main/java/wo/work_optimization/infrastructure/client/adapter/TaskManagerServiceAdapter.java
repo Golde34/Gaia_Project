@@ -9,9 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.dto.request.GetGroupTaskProjectRequestDTO;
 import wo.work_optimization.core.domain.dto.response.GroupTaskAndProjectResponseDTO;
+import wo.work_optimization.core.domain.dto.response.OriginalTaskResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.port.client.TaskManagerServiceClient;
 import wo.work_optimization.infrastructure.client.ClientTemplate;
+
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -21,8 +24,10 @@ public class TaskManagerServiceAdapter implements TaskManagerServiceClient {
     @Value("${app.service.task-manager-service.api.get-grouptask-project}")
     private String getGroupTaskAPI;
 
+    @Value("${app.service.task-manager-service.api.get-original-task}")
+    private String getOriginalTaskAPI;
+
     private final ClientTemplate clientTemplate;
-    // private final ClientUtils clientUtils;
 
     public GroupTaskAndProjectResponseDTO getGroupTaskAndProject(String taskId, GetGroupTaskProjectRequestDTO request) {
         try {
@@ -33,7 +38,7 @@ public class TaskManagerServiceAdapter implements TaskManagerServiceClient {
                     new ParameterizedTypeReference<GeneralResponse<GroupTaskAndProjectResponseDTO>>() {
                     });
             log.info("Response from taskmanager service: {}", response);
-            return response.getBody().getData();
+            return Objects.requireNonNull(response.getBody()).getData();
         } catch (Exception e) {
             log.error("Error when call api to taskmanager service: {}", e.getMessage());
         }
@@ -49,10 +54,10 @@ public class TaskManagerServiceAdapter implements TaskManagerServiceClient {
                     new ParameterizedTypeReference<GeneralResponse<OriginalTaskResponseDTO>>() {
                     });
             log.info("Response from taskmanager service: {}", response);
-            return response.getBody().getData();
+            return Objects.requireNonNull(response.getBody()).getData();
         } catch (Exception e) {
             log.error("Error when call api to taskmanager service: {}", e.getMessage());
+            return null;
         }
-        return null;
     }
 }

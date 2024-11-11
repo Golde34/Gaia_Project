@@ -2,13 +2,17 @@ package wo.work_optimization.core.usecase.kafka.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
-import wo.work_optimization.core.port.client.AuthServiceClient;
+import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.port.mapper.TaskMapper;
+import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
@@ -22,6 +26,8 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
+
+    private final TaskRegistrationStore taskRegistrationStore;
 
     @Override
     public String command() {
@@ -64,6 +70,10 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
             log.error("Task with id {} not found", request.getTaskId());
         }
         // Get Task Registration Config
+        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByTaskId(request.getWorkOptimTaskId());
+        if (DataUtils.isNullOrEmpty(taskRegistration)) {
+            log.error("Task Registration with id {} not found", request.getWorkOptimTaskId());
+        }
         // Call auth service to get user settings
         // UserSettingResponseDTO userSetting = authServiceClient.getUserSetting(task.parentId) 
         // Optimize task

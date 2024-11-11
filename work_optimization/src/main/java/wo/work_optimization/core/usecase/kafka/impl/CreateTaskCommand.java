@@ -84,6 +84,7 @@ public class CreateTaskCommand extends CommandService<CreateTaskRequestDTO, Stri
                 .projectId(tmResponse.getProjectId())
                 .groupTaskName(tmResponse.getGroupTaskName())
                 .projectName(tmResponse.getProjectName())
+                .userId(request.getUserId())
                 .build();
         ParentTask existedParentTask = parentTaskStore.findByGroupTaskId(clientParentTask.getGroupTaskId()).orElse(null);
         if (DataUtils.isNullOrEmpty(existedParentTask)) {

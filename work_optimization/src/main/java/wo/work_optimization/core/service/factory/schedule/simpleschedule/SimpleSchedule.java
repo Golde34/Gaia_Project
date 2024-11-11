@@ -1,9 +1,9 @@
-package wo.work_optimization.core.service.factory.sortingalgorithm.simpleschedule;
+package wo.work_optimization.core.service.factory.schedule.simpleschedule;
 
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.service.factory.sortingalgorithm.schedule.ScheduleService;
+import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleService;
 
 @Service
 public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
