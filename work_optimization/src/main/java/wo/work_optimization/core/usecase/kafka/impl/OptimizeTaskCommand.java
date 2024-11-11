@@ -7,7 +7,6 @@ import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
-import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.service.integration.impl.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;

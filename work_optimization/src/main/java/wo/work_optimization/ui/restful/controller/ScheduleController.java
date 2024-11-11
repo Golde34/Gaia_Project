@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
-import wo.work_optimization.core.service.factory.sortingalgorithm.schedule.ScheduleConnector;
-import wo.work_optimization.core.service.factory.sortingalgorithm.schedule.ScheduleFactory;
+import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleConnector;
+import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleFactory;
 import wo.work_optimization.ui.restful.router.ScheduleRouter;
 
 @RestController

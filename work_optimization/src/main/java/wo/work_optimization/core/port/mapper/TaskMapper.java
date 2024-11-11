@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
+import wo.work_optimization.core.domain.dto.response.OriginalTaskResponseDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.enums.TaskPriorityEnum;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
@@ -65,6 +66,13 @@ public class TaskMapper {
 
     public OptimizeTaskRequestDTO toOptimizeTaskRequestDTO(Object request) {
         return modelMapper().map(request, OptimizeTaskRequestDTO.class);
+    }
+
+    public Task toEntity(OriginalTaskResponseDTO originalTask) throws ParseException {
+        modelMapper().typeMap(OriginalTaskResponseDTO.class, CreateTaskRequestDTO.class)
+                .addMappings(mapper -> mapper.map(OriginalTaskResponseDTO::getTask, CreateTaskRequestDTO::setTask));
+        CreateTaskRequestDTO createTaskRequestDTO = modelMapper().map(originalTask, CreateTaskRequestDTO.class);
+        return toEntity(createTaskRequestDTO);
     }
 }
  

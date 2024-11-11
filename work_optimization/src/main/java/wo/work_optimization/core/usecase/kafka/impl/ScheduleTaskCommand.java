@@ -61,6 +61,10 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
     public String doCommand(CreateScheduleTaskRequestDTO request) {
         try {
             Task task = taskService.getTaskByOriginalId(request.getTaskId());
+            if (DataUtils.isNullOrEmpty(task)) {
+                taskService.sendKafkaToSyncWithSchedulePlan(null, "99", "Sync failed because cannot find task by original id");
+                return "Cannot find task by original id";
+            }
             task.setScheduleTaskId(request.getScheduleTaskId());
             taskStore.save(task);
 
