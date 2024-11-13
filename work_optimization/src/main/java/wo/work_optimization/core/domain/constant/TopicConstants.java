@@ -18,7 +18,6 @@ public class TopicConstants {
 
         public static final String CREATE_TASK = "taskManagerCreateTask";
         public static final String GAIA_CREATE_TASK = "gaiaCreateTask";
-        public static final String OPTIMIZE_TASK = "optimizeTask";
     }
 
     @UtilityClass
@@ -28,5 +27,12 @@ public class TopicConstants {
 
         public static final String CREATE_SCHEDULE_TASK = "schedulePlanCreateTask";
         public static final String SYNC_SCHEDULE_TASK = "syncScheduleTask";
+    }
+
+    @UtilityClass
+    public class OptimizeCommand {
+        public static final String TOPIC = "work-optimization.optimize-task.topic";
+
+        public static final String OPTIMIZE_CREATING_TASK = "optimizeCreatingTask";
     }
 }
