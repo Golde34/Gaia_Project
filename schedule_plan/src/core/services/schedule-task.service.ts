@@ -75,6 +75,7 @@ class ScheduleTaskService {
             schedulePlanSyncMessage.taskId
         );
 
+        console.log('Schedule task before synchronized: ', scheduleTask)
         if (scheduleTask) {
             await scheduleTaskRepository.syncScheduleTask(
                 schedulePlanSyncMessage.scheduleTaskId,
@@ -83,7 +84,6 @@ class ScheduleTaskService {
             return true;
         }
 
-        console.log('Schedule task after synchronized: ', scheduleTask)
         return false;
     }
 
