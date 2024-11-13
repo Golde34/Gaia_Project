@@ -83,6 +83,7 @@ class ScheduleTaskService {
             return true;
         }
 
+        console.log('Schedule task after synchronized: ', scheduleTask)
         return false;
     }
 

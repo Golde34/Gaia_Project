@@ -6,7 +6,7 @@ export const handlerCreateTaskMessage = (message: string) => {
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
         case KafkaCommand.TM_CREATE_TASK:
-            scheduleTaskUsecase.createScheduleTaskByKafka(kafkaMessage.data);        
+            scheduleTaskUsecase.createScheduleTaskByKafka(kafkaMessage.data);
             break;
         case KafkaCommand.GAIA_CREATE_TASK:
             scheduleTaskUsecase.createScheduleTaskByKafka(kafkaMessage.data);

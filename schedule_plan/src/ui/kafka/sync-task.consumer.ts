@@ -9,6 +9,6 @@ export const handlerSyncTaskMessage = (message: string) => {
             scheduleTaskUsecase.syncScheduleTask(kafkaMessage.data);
             break;
         default:
-            console.warn("No handler for command: ", cmd);
+            console.warn("No handler for command in sync schedule task topic: ", cmd);
     }
 }
