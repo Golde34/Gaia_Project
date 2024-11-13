@@ -1,6 +1,9 @@
 import KafkaConfig from "./config";
+import { kafkaController } from "./kafka-controller";
 
 const kafkaConfig = new KafkaConfig();
+
+kafkaController(kafkaHandler); 
 
 // Consumer
 // kafkaConfig.consume("test", (value) => {

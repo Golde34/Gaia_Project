@@ -31,7 +31,7 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     }
 
     async syncScheduleTask(scheduleTaskId: string, isSync: boolean): Promise<UpdateWriteOpResult> {
-        return await ScheduleTaskEntity.updateOne({ _id: scheduleTaskId, isSynchronizedWithWO: isSync});
+        return await ScheduleTaskEntity.updateOne({ _id: scheduleTaskId}, {isSynchronizedWithWO: isSync});
     }
 }
 

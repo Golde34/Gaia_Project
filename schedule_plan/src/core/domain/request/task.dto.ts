@@ -7,7 +7,6 @@ export class KafkaCreateTaskMessage {
     scheduleTaskId!: string;
     @IsString()
     scheduleTaskName!: string;
-    userId!: number;
 }
 
 export class SyncScheduleTaskRequest {
@@ -26,7 +25,7 @@ export class KafkaOptimizeTaskMessage {
     @IsString()
     scheduleTaskId!: string;
     @IsString()
-    workOptimTaskid!: string;
+    workOptimTaskId!: string;
     @IsString()
     isSync!: string;
 }

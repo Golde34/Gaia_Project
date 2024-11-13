@@ -31,7 +31,7 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
 
     @Override
     public String command() {
-        return TopicConstants.CreateTaskCommand.OPTIMIZE_TASK;
+        return TopicConstants.OptimizeCommand.OPTIMIZE_CREATING_TASK;
     }
 
     @Override

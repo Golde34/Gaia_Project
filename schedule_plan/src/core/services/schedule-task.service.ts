@@ -56,8 +56,8 @@ class ScheduleTaskService {
         }
     }
 
-    async pushKafkaCreateScheduleTaskMessage(userId: number, taskId: string, scheduleTaskId: string, scheduleTaskName: string): Promise<void> {
-        const data = scheduleTaskMapper.buildKafkaCreateTaskMapper(userId, taskId, scheduleTaskId, scheduleTaskName);
+    async pushKafkaCreateScheduleTaskMessage(taskId: string, scheduleTaskId: string, scheduleTaskName: string): Promise<void> {
+        const data = scheduleTaskMapper.buildKafkaCreateTaskMapper(taskId, scheduleTaskId, scheduleTaskName);
         const messages = [{
             value: JSON.stringify(createMessage(
                 KafkaCommand.CREATE_SCHEDULE_TASK, '00', 'Successful', data
@@ -75,6 +75,7 @@ class ScheduleTaskService {
             schedulePlanSyncMessage.taskId
         );
 
+        console.log('Schedule task before synchronized: ', scheduleTask)
         if (scheduleTask) {
             await scheduleTaskRepository.syncScheduleTask(
                 schedulePlanSyncMessage.scheduleTaskId,
@@ -90,11 +91,11 @@ class ScheduleTaskService {
         const data = scheduleTaskMapper.buildOptimizeTaskMapper(schedulePlanSyncMessage, isSyncScheduleTask);
         const messages = [{
             value: JSON.stringify(createMessage(
-                KafkaCommand.OPTIMIZE_TASK, '00', 'Successful', data
+                KafkaCommand.OPTIMIZE_CREATING_TASK, '00', 'Successful', data
             ))
         }]
         console.log("Push Kafka Message: ", messages);
-        this.kafkaHandler.produce(KafkaTopic.CREATE_TASK, messages);
+        this.kafkaHandler.produce(KafkaTopic.OPTIMIZE_TASK, messages);
     }
 }
 

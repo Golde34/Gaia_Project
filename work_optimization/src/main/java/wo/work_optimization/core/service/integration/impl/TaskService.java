@@ -65,6 +65,8 @@ public class TaskService {
 
     public Task getTask(OptimizeTaskRequestDTO request) {
         log.info("Get task by taskId: {}, optimTaskId: {}, scheduleTaskId: {}", request.getTaskId(), request.getWorkOptimTaskId(), request.getScheduleTaskId());
-        return taskStore.checkSyncTask(request.getTaskId(), request.getScheduleTaskId(), request.getWorkOptimTaskId());
+        Task task =  taskStore.checkSyncTask(request.getTaskId(), request.getScheduleTaskId(), request.getWorkOptimTaskId());
+        log.info("Task: {}", task);
+        return task;
     }
 }

@@ -1,6 +1,4 @@
 import { KafkaTopic } from "../../core/domain/enums/kafka.enum";
-import { handlerCreateTaskMessage } from "../../ui/kafka/create-task.consumer";
-import { handlerSyncTaskMessage } from "../../ui/kafka/sync-task.consumer";
 import { KafkaHandler } from "./kafka-handler";
 import * as dotenv from "dotenv";
 
@@ -41,3 +39,13 @@ const kafkaTopicHandlers: Record<string, (message: string) => void> = {
     [KafkaTopic.CREATE_TASK]: (message: string) => handlerCreateTaskMessage(message),
     [KafkaTopic.SYNC_SCHEDULE_TASK]: (message: string) => handlerSyncTaskMessage(message),
 };
+
+function handlerSyncTaskMessage(message: string) {
+    console.log("Processing sync schedule task:", message);
+    // Thêm logic xử lý message của sync schedule task ở đây
+}
+
+function handlerCreateTaskMessage(message: string) {
+    console.log("Processing create task:", message);
+    // Thêm logic xử lý message của create task ở đây
+}

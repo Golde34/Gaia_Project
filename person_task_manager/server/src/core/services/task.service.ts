@@ -111,6 +111,8 @@ class TaskService {
                 groupTaskServiceUtils.calculateTotalTasks(groupTaskId);
 
                 const deleteTask = await taskStore.deleteTask(taskId);
+                this.taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);
+
                 return msg200({
                     message: (deleteTask as any)
                 });

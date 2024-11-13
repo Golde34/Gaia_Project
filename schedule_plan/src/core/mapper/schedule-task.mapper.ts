@@ -18,9 +18,8 @@ export const scheduleTaskMapper = {
         });
     },
 
-    buildKafkaCreateTaskMapper(userId: number, taskId: string, scheduleTaskId: string, scheduleTaskName: string ) {
+    buildKafkaCreateTaskMapper(taskId: string, scheduleTaskId: string, scheduleTaskName: string ) {
         const message = new KafkaCreateTaskMessage()
-        message.userId = userId
         message.taskId = taskId
         message.scheduleTaskId = scheduleTaskId
         message.scheduleTaskName = scheduleTaskName
@@ -31,7 +30,7 @@ export const scheduleTaskMapper = {
         const message = new KafkaOptimizeTaskMessage()
         message.taskId = syncScheduleTaskRequest.taskId
         message.scheduleTaskId = syncScheduleTaskRequest.scheduleTaskId
-        message.workOptimTaskid = syncScheduleTaskRequest.workOptimTaskId
+        message.workOptimTaskId = syncScheduleTaskRequest.workOptimTaskId
         message.isSync = isSync.toString()
         return message
     }

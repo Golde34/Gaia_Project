@@ -3,7 +3,6 @@ package wo.work_optimization.infrastructure.store.adapter;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
@@ -90,9 +89,8 @@ public class TaskStoreAdapter implements TaskStore {
     }
 
     @Override
-    @Cacheable(value = "task", key = "#taskId")
     public Task checkSyncTask(String taskId, String scheduleTaskId, String workOptimId) {
-        Optional<Task> task = taskRepository.findByIdAndScheduleTaskIdAndOriginalId(taskId, scheduleTaskId, workOptimId);
+        Optional<Task> task = taskRepository.findByOriginalIdAndScheduleTaskIdAndId(taskId, scheduleTaskId, workOptimId);
         return task.orElse(null);
     }
 
