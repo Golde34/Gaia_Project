@@ -25,7 +25,7 @@ export class KafkaOptimizeTaskMessage {
     @IsString()
     scheduleTaskId!: string;
     @IsString()
-    workOptimTaskid!: string;
+    workOptimTaskId!: string;
     @IsString()
     isSync!: string;
 }

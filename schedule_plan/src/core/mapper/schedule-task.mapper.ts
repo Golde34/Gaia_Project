@@ -30,7 +30,7 @@ export const scheduleTaskMapper = {
         const message = new KafkaOptimizeTaskMessage()
         message.taskId = syncScheduleTaskRequest.taskId
         message.scheduleTaskId = syncScheduleTaskRequest.scheduleTaskId
-        message.workOptimTaskid = syncScheduleTaskRequest.workOptimTaskId
+        message.workOptimTaskId = syncScheduleTaskRequest.workOptimTaskId
         message.isSync = isSync.toString()
         return message
     }
