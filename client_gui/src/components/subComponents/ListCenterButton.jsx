@@ -2,11 +2,14 @@ import { Button } from "@tremor/react";
 
 const CenterButton = (props) => {
     const button = props.button;
-
+    console.log(button);
     return (
         <>
             <div className="col-span-1"></div>
-            <Button className="col-span-5 mt-5" color={button.color}>{button.name}</Button>
+            <Button type='button' className="col-span-5 mt-5" 
+                    color={button.color} onClick={button.onClick}>
+                        {button.name}    
+            </Button>
             <div className="col-span-1"></div>
         </>
     )
