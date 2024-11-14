@@ -7,6 +7,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { Button, Card, Metric, Title } from '@tremor/react';
 import CardItem from '../../components/subComponents/CardItem';
 import { useNavigate } from 'react-router-dom';
+import ListCenterButton from '../../components/subComponents/ListCenterButton';
 
 const task = {
   title: 'Meeting 1 is very long text that\'s good',
@@ -22,6 +23,12 @@ function ContentArea() {
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
+
+  const listCenterButton = [
+    { name: 'Add Event', color: 'rose' },
+    { name: 'Optimize task list', color: 'green' },
+    { name: 'Full calendar', color: 'indigo' },
+  ]
   return (
     <>
       <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
@@ -106,18 +113,13 @@ function ContentArea() {
               )}
             </div>
 
-            <div className=' grid grid-cols-7'>
-              <Button className='col-span-7 mt-5' color='indigo'>Add Event</Button>
-              <Button className='col-span-7 mt-5' color='indigo' type='button'
-                onClick={() => navigate('/calendar')}
-              >Full calendar</Button>
-            </div>
+            <ListCenterButton listNameButton={listCenterButton} />
           </div>
           <div className="w-full sm:px-5">
             <h1 className=" font-semibold text-white mb-10">
               Schedule for {selectDate.toDate().toDateString()}
             </h1>
-            
+
             <CardItem task={task} ></CardItem>
             <CardItem task={task} ></CardItem>
             <CardItem task={task} ></CardItem>
