@@ -70,7 +70,13 @@ function ContentArea() {
                                     handleTableViewChange();
                                 }} />
                             <label htmlFor="table-view-switch" className="me-5 ms-2"
-                            ><Text>Table View</Text></label>
+                            ><Text className="mt-2 me-4">Table View</Text></label>
+                            <button
+                                type="button"
+                                className="mr-2 inline-flex justify-center rounded-md border border-transparent bg-yellow-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+                            >
+                                <a href="/client-gui/schedule">Schedule Plan</a> 
+                            </button>
                         </div>
                     </Card>
                     {
