@@ -4,9 +4,9 @@ import { createProject } from '../../api/store/actions/task_manager/project.acti
 import { createTask, generateTaskFromScratch } from '../../api/store/actions/task_manager/task.actions';
 import { updateUser } from '../../api/store/actions/auth_service/user.actions';
 import { createRole } from '../../api/store/actions/auth_service/role.actions';
-import { registerTaskConfig } from '../../api/store/actions/task_manager/task-registration.actions';
-import { uploadRagFile } from '../../api/store/actions/gaia/rag_file.actions';
+import { registerTaskConfig } from '../../api/store/actions/work_optimization/task-registration.actions';
 import { createNote } from '../../api/store/actions/task_manager/note.actions';
+import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -60,11 +60,9 @@ export const useUpdateUserDispatch = () => {
 
 export const useCreateRoleDispatch = () => {
     const dispatch = useDispatch();
-    console.log("useCreateRoleDispatch called")
+
     const createRoleDispatch = (role) => {
-        console.log("createRoleDispatch called with role: ", role)
         dispatch(createRole(role));
-        console.log("createRoleDispatch called failed.")
     }
 
     return createRoleDispatch;
@@ -88,4 +86,17 @@ export const useCreateNoteDispatch = () => {
     }
 
     return createNoteDispatch;
+}
+
+export const useOptimizeTaskByUserDispatch = () => {
+    const dispatch = useDispatch();
+
+    console.log('fuuuuu')
+    const optimizeTaskByUserDispatch = (userId) => {
+        console.log('yeah')
+        dispatch(optimizeTaskByUserId(userId));
+        console.log('ok')
+    }
+
+    return optimizeTaskByUserDispatch;
 }

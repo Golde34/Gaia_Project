@@ -15,7 +15,7 @@ type TaskRegisterRouter struct {
 	TaskRegisterService *services.TaskRegisterService
 }
 
-func NewWorkOptimizationRouter(taskRegisterService *services.TaskRegisterService, db database_mongo.Database, r *chi.Mux) *TaskRegisterRouter {
+func NewTaskRegistrationRouter(taskRegisterService *services.TaskRegisterService, db database_mongo.Database, r *chi.Mux) *TaskRegisterRouter {
 	r.Route("/work-optimization", func(r chi.Router) {
 		// r.Use(middleware.CheckMicroserviceStatus(db, enums.WORK_OPTIMIZATION))	
 		r.Post("/register-task-config", func(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +23,7 @@ func NewWorkOptimizationRouter(taskRegisterService *services.TaskRegisterService
 		})
 		r.Get("/query-task-config/{userId}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.QueryTaskConfig(w, r, taskRegisterService)
-		})		
+		})
 	})
 	return &TaskRegisterRouter{
 		TaskRegisterService: taskRegisterService,

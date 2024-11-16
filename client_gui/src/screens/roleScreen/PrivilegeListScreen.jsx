@@ -5,7 +5,6 @@ import AddPrivilegeModal from "./AddPrivilegeModal";
 const PrivilegeListScreen = ({ selectedPrivilege, privileges}) => {
     function loadPrivilege(privilege) {
         selectedPrivilege(privilege);
-        console.log(privilege);
     }
 
     let [isPrivilegeOpen, setPrivilegeOpen] = useState(false);

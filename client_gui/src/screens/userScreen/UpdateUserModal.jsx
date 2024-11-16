@@ -45,7 +45,6 @@ const UpdateUserModal = (props) => {
 
     const [roleList, setRoleList] = useState([]);
     useEffect(() => {
-        console.log(roleList);
         if (currentUser && currentUser.roles) {
             setRoleList(currentUser.roles);
         }
@@ -69,7 +68,6 @@ const UpdateUserModal = (props) => {
         updatedUser.roles = roleList;
         updatedUser.userId = currentUser.id;
         updateUser(updatedUser);
-        console.log(updatedUser);
         window.location.reload();
     }
 
