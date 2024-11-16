@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import Template from "../../components/template/Template";
 import { Button, Card, CategoryBar, Col, Flex, Grid, Legend, Metric, NumberInput, Subtitle, Text, TextInput, Title } from "@tremor/react";
 import { formatHourNumber } from "../../kernels/utils/date-picker";
-import { queryTaskConfig, registerTaskConfig } from "../../api/store/actions/task_manager/task-registration.actions";
+import { queryTaskConfig, registerTaskConfig } from "../../api/store/actions/work_optimization/task-registration.actions";
 import Project from "./Project";
 import SchedulingTable from "../schedule_plan/SchedulingTable";
 import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";

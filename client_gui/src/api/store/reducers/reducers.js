@@ -19,7 +19,7 @@ import { microserviceListReducer } from "./middleware_loader/microservices.reduc
 import { userDetailReducer, userListReducer, userUpdateReducer } from "./auth_service/user.reducer";
 import { roleCreateReducer, roleListReducer } from "./auth_service/role.reducer";
 import { privilegeListReducer } from "./auth_service/privilege.reducer";
-import { queryTaskConfigReducer, registerTaskConfigReducer } from "./task_manager/task-registration.reducers";
+import { queryTaskConfigReducer, registerTaskConfigReducer } from "./work_optimization/task-registration.reducers";
 import { noteCreateReducer, noteDeleteReducer, noteDetailReducer, noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer } from "./task_manager/note.reducers"; 
 
 export const reducer = combineReducers({

@@ -71,6 +71,7 @@ const CalendarChart = (props) => {
         { name: 'Full calendar', color: 'indigo', onClick: () => navigate('/calendar') },
     ]
 
+    // const use
     return (
         <div className="w-full sm:px-5">
             <div className="flex justify-between items-center">
