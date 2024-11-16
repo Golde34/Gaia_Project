@@ -2,7 +2,6 @@ import { Button } from "@tremor/react";
 
 const CenterButton = (props) => {
     const button = props.button;
-    
     return (
         <>
             <div className="col-span-1"></div>
@@ -21,7 +20,7 @@ const ListCenterButton = (props) => {
     return (
         <div className='grid grid-cols-7'>
             {listNameButton.map((button) => (
-                <CenterButton button={button} />
+                <CenterButton key={button.name} button={button} />
             ))}
         </div>
     )

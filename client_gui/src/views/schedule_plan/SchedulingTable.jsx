@@ -8,6 +8,9 @@ import { Button, Card, Metric, Title } from '@tremor/react';
 import CardItem from '../../components/subComponents/CardItem';
 import { useNavigate } from 'react-router-dom';
 import ListCenterButton from '../../components/subComponents/ListCenterButton';
+import { useOptimizeTaskByUserDispatch } from '../../kernels/utils/write-dialog-api-requests';
+import { useDispatch } from 'react-redux';
+import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 
 const task = {
     title: 'Meeting 1 is very long text that\'s good',
@@ -59,19 +62,24 @@ const SchedulingTable = () => {
 }
 
 const CalendarChart = (props) => {
+    const userId = "1";
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const days = ["S", "M", "T", "W", "T", "F", "S"];
     const [today, setToday] = useState(props.currentDate);
     const [selectDate, setSelectDate] = useState(props.selectDate);
 
+    const handleOptimizeClick = (userId) => {
+        dispatch(optimizeTaskByUserId(userId))
+    }
+
     const listCenterButton = [
         { name: 'Add Event', color: 'rose' },
-        { name: 'Optimize task list', color: 'green', onClick: () => navigate('/project') },
+        { name: 'Optimize task list', color: 'green', onClick: () => handleOptimizeClick(userId) },
         { name: 'Full calendar', color: 'indigo', onClick: () => navigate('/calendar') },
     ]
 
-    // const use
     return (
         <div className="w-full sm:px-5">
             <div className="flex justify-between items-center">

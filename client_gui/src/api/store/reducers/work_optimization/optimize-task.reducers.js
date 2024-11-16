@@ -6,7 +6,7 @@ export const optimizeTaskByUserReducer = (
         case OPTIMZE_TASK_BY_USER_REQUEST:
             return { loading: true };
         case OPTIMZE_TASK_BY_USER_SUCCESS:
-            return { loading: false, taskRegistry: action.payload.data };
+            return { loading: false, data: action.payload };
         case OPTIMZE_TASK_BY_USER_FAILURE:
             return { loading: false, error: action.payload };
         default:

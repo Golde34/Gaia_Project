@@ -5,8 +5,8 @@ import { createTask, generateTaskFromScratch } from '../../api/store/actions/tas
 import { updateUser } from '../../api/store/actions/auth_service/user.actions';
 import { createRole } from '../../api/store/actions/auth_service/role.actions';
 import { registerTaskConfig } from '../../api/store/actions/work_optimization/task-registration.actions';
-import { uploadRagFile } from '../../api/store/actions/gaia/rag_file.actions';
 import { createNote } from '../../api/store/actions/task_manager/note.actions';
+import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -60,7 +60,7 @@ export const useUpdateUserDispatch = () => {
 
 export const useCreateRoleDispatch = () => {
     const dispatch = useDispatch();
-    
+
     const createRoleDispatch = (role) => {
         dispatch(createRole(role));
     }
@@ -91,8 +91,11 @@ export const useCreateNoteDispatch = () => {
 export const useOptimizeTaskByUserDispatch = () => {
     const dispatch = useDispatch();
 
-    const optimizeTaskByUserDispatch = (task) => {
-        dispatch(optimizeTaskByUser(task));
+    console.log('fuuuuu')
+    const optimizeTaskByUserDispatch = (userId) => {
+        console.log('yeah')
+        dispatch(optimizeTaskByUserId(userId));
+        console.log('ok')
     }
 
     return optimizeTaskByUserDispatch;
