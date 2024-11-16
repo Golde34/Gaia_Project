@@ -37,7 +37,6 @@ function ContentArea() {
 
     const updateNote = useUpdateNoteDispatch();
     const setObjectNote = (name, content) => {
-        console.log("name: " + name + " content: " + content);
         noteForm.noteId = noteId;
         noteForm.name = name;
         noteForm.contentFile = content;

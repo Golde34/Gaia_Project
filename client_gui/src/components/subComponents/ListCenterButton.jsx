@@ -2,7 +2,7 @@ import { Button } from "@tremor/react";
 
 const CenterButton = (props) => {
     const button = props.button;
-    console.log(button);
+    
     return (
         <>
             <div className="col-span-1"></div>

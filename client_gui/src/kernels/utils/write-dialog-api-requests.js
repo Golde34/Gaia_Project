@@ -60,11 +60,9 @@ export const useUpdateUserDispatch = () => {
 
 export const useCreateRoleDispatch = () => {
     const dispatch = useDispatch();
-    console.log("useCreateRoleDispatch called")
+    
     const createRoleDispatch = (role) => {
-        console.log("createRoleDispatch called with role: ", role)
         dispatch(createRole(role));
-        console.log("createRoleDispatch called failed.")
     }
 
     return createRoleDispatch;

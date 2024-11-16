@@ -11,7 +11,6 @@ export const getMicroservices = () => async (dispatch) => {
     try {
         // const headers = addAuthHeaders();
         const { data } = await serverRequest('/microservice/all', HttpMethods.GET, portName.middlewarePort, null);
-        console.log(data);
         dispatch({ type: MICROSERVICE_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
