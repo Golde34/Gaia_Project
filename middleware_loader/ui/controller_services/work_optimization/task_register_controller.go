@@ -12,7 +12,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService * services.TaskRegisterService) {
+func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService *services.TaskRegisterService) {
 	var body map[string]interface{}
 	body, err := controller_utils.MappingBody(w, r)
 	if err != nil {
@@ -23,7 +23,7 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 	userInput := mapper.GetUserIdInBody(body)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})	
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})
 	// Check if task and schedule existed for introduction purpose
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isTaskExisted", QueryInput: userInput, QueryOutput: model.IsTaskExisted{}})
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isScheduleExisted", QueryInput: userInput, QueryOutput: model.IsScheduleExisted{}})
@@ -32,8 +32,8 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 	utils.ConnectToGraphQLServer(w, graphQuery)
 }
 
-func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService * services.TaskRegisterService) {
-	userId := chi.URLParam(r, "userId")	
+func QueryTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterService *services.TaskRegisterService) {
+	userId := chi.URLParam(r, "userId")
 	input := mapper.GetUserId(userId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
