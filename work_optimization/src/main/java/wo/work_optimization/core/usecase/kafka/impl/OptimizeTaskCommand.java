@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
+import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
+import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.service.integration.TaskService;
@@ -26,8 +28,9 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
     private final TaskValidation taskValidation;
-
     private final TaskRegistrationStore taskRegistrationStore;
+
+    private final AuthServiceClient authServiceClient;
 
     @Override
     public String command() {
@@ -75,7 +78,10 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
             log.error("Task Registration with id {} not found", request.getWorkOptimTaskId());
         }
         // Call auth service to get user settings
-        // UserSettingResponseDTO userSetting = authServiceClient.getUserSetting(task.parentId) 
+        UserSettingResponseDTO userSetting = authServiceClient.getUserSetting(taskRegistration.get().getUserId()); 
+        if (DataUtils.isNullOrEmpty(userSetting)) {
+            log.error("User Setting with id {} not found", taskRegistration.get().getUserId());
+        }
         // Optimize task
         return "OptimizeTaskCommand doCommand";
     }
