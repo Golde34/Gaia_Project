@@ -11,5 +11,5 @@ import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 public interface TaskOptimizationRouter {
 
     @GetMapping("/optimize-task-by-user")
-    ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(@RequestParam String userId);
+    ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(@RequestParam Long userId);
 }

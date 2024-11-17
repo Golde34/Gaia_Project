@@ -2,17 +2,24 @@ package wo.work_optimization.core.validation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
+import wo.work_optimization.core.domain.entity.TaskRegistration;
+import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TaskRegistrationValidation {
+
+    private final TaskRegistrationStore taskRegistrationStore;
 
     public Pair<String, Boolean> validateRequest(TaskRegistrationRequestDTO request) {
         if (DataUtils.isNullOrEmpty(request)
@@ -41,5 +48,16 @@ public class TaskRegistrationValidation {
         }
 
         return Pair.of(Constants.ErrorMessage.SUCCESS, true);
+    }
+
+    public boolean checkExistedTaskRegistration(Long userId) {
+        log.info("Check existed user in task registration: [{}] ", userId);
+        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
+        if (taskRegistration.isPresent()) {
+            log.info("User has already registered task scheduling: [{}] ", userId);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -15,10 +15,10 @@ import wo.work_optimization.ui.restful.router.TaskOptimizationRouter;
 @Slf4j
 public class TaskOptimizationController implements TaskOptimizationRouter {
 
-     private final TaskOptimizationUseCase taskOptimizationUseCase;
+    private final TaskOptimizationUseCase taskOptimizationUseCase;
 
-     @Override
-     public ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(String userId) {
-         return taskOptimizationUseCase.optimizeTaskByUser(userId);
-     }
+    @Override
+    public ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(Long userId) {
+        return taskOptimizationUseCase.optimizeTaskByUser(userId);
+    }
 }
