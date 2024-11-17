@@ -10,7 +10,7 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.exception.BusinessException;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskStore;
-import wo.work_optimization.core.service.integration.impl.TaskService;
+import wo.work_optimization.core.service.integration.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;

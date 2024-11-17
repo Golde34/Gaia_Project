@@ -8,16 +8,12 @@ import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.RegisteredTaskConfigStatus;
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.dto.response.UserResponseDTO;
-import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
-import wo.work_optimization.core.domain.enums.ResponseMessage;
 import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.service.integration.TaskRegistrationService;
 import wo.work_optimization.kernel.utils.DataUtils;
-import wo.work_optimization.kernel.utils.GenericResponse;
 
 import java.util.Optional;
 
@@ -30,19 +26,10 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     @Autowired
     private TaskRegistrationStore taskRegistrationStore;
 
-    @Autowired
-    private GenericResponse<TaskResponseDTO> genericResponse;
-
-    public GeneralResponse<?> registerWorkOptimization(TaskRegistrationRequestDTO request) {
-        boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
-        if (isUserRegisteredTask) {
-            return genericResponse.matchingResponseMessage(
-                    new GenericResponse<>(Constants.ErrorMessage.EXISTED_USER, ResponseMessage.msg400));
-        }
-
+    public TaskRegistration registerWorkOptimization(TaskRegistrationRequestDTO request) {
         TaskRegistration taskRegistration = createRequest(request);
         taskRegistrationStore.userRegisterTaskOperation(taskRegistration);
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
+        return taskRegistration;
     }
 
     public Pair<String, Boolean> checkExistedUser(Long userId) {
@@ -83,11 +70,21 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
     }
 
     @Override
-    public GeneralResponse<?> userRegisterTaskInformation(QueryTaskConfigRequestDTO request) {
+    public RegisteredTaskConfigStatus userRegisterTaskInformation(QueryTaskConfigRequestDTO request) {
         boolean isUserRegisteredTask = checkExistedTaskRegistration(request.getUserId());
         RegisteredTaskConfigStatus taskRegistration = RegisteredTaskConfigStatus.builder()
                 .isTaskConfigExist(isUserRegisteredTask).build();
-        return genericResponse
-                .matchingResponseMessage(new GenericResponse<>(taskRegistration, ResponseMessage.msg200));
+
+        return taskRegistration;
+    }
+
+    @Override
+    public TaskRegistration getTaskRegistrationByUserId(Long userId) {
+        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByUserId(userId);
+        if (taskRegistration.isPresent()) {
+            return taskRegistration.get();
+        }
+
+        return null;
     }
 }

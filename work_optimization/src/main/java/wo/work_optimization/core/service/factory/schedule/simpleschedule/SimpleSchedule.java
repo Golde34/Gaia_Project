@@ -10,7 +10,7 @@ public class SimpleSchedule extends ScheduleService<TaskRequestDTO, TaskResponse
 
     @Override
     public String method() {
-        return "simple";
+        return "gaia";
     }
 
     @Override

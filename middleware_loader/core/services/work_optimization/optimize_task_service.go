@@ -1,6 +1,9 @@
 package services
 
-// import "middleware_loader/core/port/client"
+import (
+	"middleware_loader/core/port/client"
+	adapter "middleware_loader/infrastructure/client"
+)
 
 type TaskOptimizationService struct{}
 
@@ -9,11 +12,9 @@ func NewTaskOptimizationService() *TaskOptimizationService {
 }
 
 func (s *TaskOptimizationService) OptimizeTaskByUser(userId string) (string, error) {
-	// response, err := client.ITaskOptimizationAdapter(&adapter.TaskOptimizationAdapter{}).OptimizeTaskByUser(input)
-	// if err != nil {
-	// 	return model.OptimizeTaskByUser{}, err
-	// }
-	// taskOptimizationModel := response_dtos.NewOptimizeTaskByUserResponseDTO().MapperToGraphQLModel(response)
-	// return nil
-	return "OK", nil
+	response, err := client.ITaskOptimizationAdapter(&adapter.TaskOptimizationAdapter{}).OptimizeTaskByUser(userId)
+	if err != nil {
+		return "", err
+	}
+	return response, nil
 }
