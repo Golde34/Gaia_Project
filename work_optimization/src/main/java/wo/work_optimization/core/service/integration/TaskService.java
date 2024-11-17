@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.integration.impl;
+package wo.work_optimization.core.service.integration;
 
 import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class TaskService {
 
     public Task getTask(OptimizeTaskRequestDTO request) {
         log.info("Get task by taskId: {}, optimTaskId: {}, scheduleTaskId: {}", request.getTaskId(), request.getWorkOptimTaskId(), request.getScheduleTaskId());
-        Task task =  taskStore.checkSyncTask(request.getTaskId(), request.getScheduleTaskId(), request.getWorkOptimTaskId());
+        Task task = taskStore.checkSyncTask(request.getTaskId(), request.getScheduleTaskId(), request.getWorkOptimTaskId());
         log.info("Task: {}", task);
         return task;
     }

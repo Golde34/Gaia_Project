@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.integration.impl;
+package wo.work_optimization.core.service.integration;
 
 import java.util.Arrays;
 import java.util.List;

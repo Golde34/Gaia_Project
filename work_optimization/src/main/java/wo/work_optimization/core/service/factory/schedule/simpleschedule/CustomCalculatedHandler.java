@@ -11,7 +11,7 @@ import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.CustomScheduleTask;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskStore;
-import wo.work_optimization.core.service.integration.impl.GlobalConfigService;
+import wo.work_optimization.core.service.integration.GlobalConfigService;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomConstantUpdating;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomModel;
 import wo.work_optimization.infrastructure.mapper.CustomScheduleModelMapper;
