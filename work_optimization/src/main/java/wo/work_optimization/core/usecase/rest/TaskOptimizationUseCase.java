@@ -10,9 +10,8 @@ import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.TaskSortingAlgorithmEnum;
-import wo.work_optimization.core.port.client.AuthServiceClient;
-import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleConnector;
-import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleFactory;
+import wo.work_optimization.core.service.factory.schedule.connector.ScheduleConnector;
+import wo.work_optimization.core.service.factory.schedule.connector.ScheduleFactory;
 import wo.work_optimization.core.service.integration.AuthService;
 import wo.work_optimization.core.service.integration.TaskRegistrationService;
 

@@ -22,8 +22,7 @@ public class UserSetting {
 	private Long id;
 
 	@Column(name = "optimized_task_config", columnDefinition = "INT(11) COMMENT '1: First in Last out, 2: Optimize all tasks, \n"
-			+
-			"3: Calculate time and optimize, 4: Register tasks by day'")
+			+ "3: Calculate time and optimize, 4: Register tasks by day'")
 	private Integer optimizedTaskConfig;
 
 	@Column(name = "private_profile_config", columnDefinition = "TINYINT(4) COMMENT '1: Private, 2: Public'")
