@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public enum OptimizedTaskConfigEnum {
-    FIRST_IN_LAST_OUT(1, "stack"),
-    OPTIMIZE_ALL_TASKS(2, "all"),
-    CALCULATE_TIME_AND_OPTIMIZE(3, "in_day"),
-    REGISTER_TASKS_BY_DAY(4, "insert");
+    OPTIMIZE_ALL_TASKS(1, "all"),
+    REGISTERED_TASKS_IN_DAY(2, "in_day"),
+    OPTIMIZE_TASKS_BY_TYPE(3, "by_type"),
+    DISABLE_TASK_OPTIMIZATION(4, "disable");
 
     private final int option;
     private final String mode;

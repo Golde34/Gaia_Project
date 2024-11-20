@@ -11,4 +11,5 @@ public interface ParentTaskStore {
     Optional<List<ParentTask>> findByProjectId(String projectId);
     Optional<ParentTask> findByScheduleId(String scheduleId);
     List<ParentTask> findAll();
+    List<ParentTask> findByUserId(long userid);
 }

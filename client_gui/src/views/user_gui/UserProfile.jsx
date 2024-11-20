@@ -111,7 +111,7 @@ function ContentArea() {
                                                 onClick={() => {
                                                     navigate('/privilege-role-dashboard');
                                                 }}
-                                            > Privile ge And Role Dashboard</Button>
+                                            > Privilege And Role Dashboard</Button>
                                         </div>
                                     </Card>
                                 </div>
@@ -191,7 +191,7 @@ function ContentArea() {
                                                     </div>
                                                 </label>
                                                 <label className="text-sm text-gray-400 me-4" htmlFor="optimize-task-radio-1">
-                                                    First in Last out
+                                                    Optimize all tasks
                                                 </label>
                                             </div>
                                             <div className="inline-flex items-center">
@@ -210,7 +210,7 @@ function ContentArea() {
                                                     </div>
                                                 </label>
                                                 <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-2">
-                                                    Optimize all tasks
+                                                    Optimize registered tasks in day
                                                 </label>
                                             </div>
                                             <div className="inline-flex items-center">
@@ -229,7 +229,7 @@ function ContentArea() {
                                                     </div>
                                                 </label>
                                                 <label className="text-sm text-gray-400" htmlFor="optimize-task-radio-3">
-                                                    Calculate time and optimize
+                                                    Optimize tasks by type
                                                 </label>
                                             </div>
                                             <div className="inline-flex items-center">

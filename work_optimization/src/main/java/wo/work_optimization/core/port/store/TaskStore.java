@@ -18,4 +18,5 @@ public interface TaskStore {
     Task checkSyncWithSchedulePlan(String taskId, String scheduleId); 
     Task checkSyncTask(String taskId, String scheduleTaskId, String workOptimTaskId);
     Task findTaskById(String workOptimTaskId);
+    List<Task> findAllByParentId(Long parentId);
 }

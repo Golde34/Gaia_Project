@@ -16,4 +16,5 @@ public interface ParentTaskRepository extends JpaRepository<ParentTask, Long> {
     Optional<List<ParentTask>> findByProjectId(String projectId);
     Optional<ParentTask> findBySchedulePlanId(String scheduleId);
     List<ParentTask> findAll();
+    List<ParentTask> findByUserId(long userId);
 }

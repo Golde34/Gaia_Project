@@ -57,8 +57,19 @@ public class Constants {
     }
 
     @UtilityClass
-    public static class Status {
+    public static class ActiveStatus {
         public static final int ACTIVE = 1;
         public static final int INACTIVE = 0;
+        public static final String ACTIVE_STR = "ACTIVE";
+        public static final String INACTIVE_STR = "INACTIVE";
     }
+
+    @UtilityClass
+    public static class TaskStatus {
+        public static final String DONE = "DONE";
+        public static final String IN_PROGRESS = "IN_PROGRESS";
+        public static final String PENDING = "PENDING";
+        public static final String TODO = "TODO";
+    }
+
 }

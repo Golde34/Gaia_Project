@@ -1,11 +1,10 @@
 package wo.work_optimization.core.service.factory.strategy.connector;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
+import wo.work_optimization.core.domain.entity.Task;
 
 public interface StrategyConnector {
     String strategy();
-    ResponseEntity<GeneralResponse<TaskResponseDTO>> handleStrategy(String strategyMode); 
+    List<Task> handleStrategy(Long userId); 
 }
