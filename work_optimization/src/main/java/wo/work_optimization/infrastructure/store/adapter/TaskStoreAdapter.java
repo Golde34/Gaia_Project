@@ -98,4 +98,9 @@ public class TaskStoreAdapter implements TaskStore {
     public Task findTaskById(String workOptimTaskId) {
         return taskRepository.findById(workOptimTaskId).orElse(null);
     }
+
+    @Override
+    public List<Task> findAllByParentId(Long parentId) {
+        return taskRepository.findByParentTaskId(parentId);
+    }
 }

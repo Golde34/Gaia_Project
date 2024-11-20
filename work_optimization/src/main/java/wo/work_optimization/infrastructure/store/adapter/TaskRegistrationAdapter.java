@@ -31,7 +31,7 @@ public class TaskRegistrationAdapter implements TaskRegistrationStore {
     @Override
     @Transactional
     public Optional<TaskRegistration> getTaskRegistrationByUserId(Long id) {
-        return taskRegistrationRepository.findByUserIdAndStatus(id, Constants.Status.ACTIVE);
+        return taskRegistrationRepository.findByUserIdAndStatus(id, Constants.ActiveStatus.ACTIVE);
     }
 
     @Override

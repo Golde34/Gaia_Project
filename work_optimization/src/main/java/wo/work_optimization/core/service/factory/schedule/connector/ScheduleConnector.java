@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.factory.schedule.schedule;
+package wo.work_optimization.core.service.factory.schedule.connector;
 
 import org.springframework.http.ResponseEntity;
 

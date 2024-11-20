@@ -43,4 +43,9 @@ public class ParentTaskAdapter implements ParentTaskStore {
     public List<ParentTask> findAll() {
         return this.parentTaskRepository.findAll();
     }
+
+    @Override
+    public List<ParentTask> findByUserId(long userId) {
+        return this.parentTaskRepository.findByUserId(userId);
+    }
 }

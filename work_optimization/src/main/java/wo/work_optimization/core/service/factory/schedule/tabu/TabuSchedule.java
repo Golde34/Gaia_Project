@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.service.factory.schedule.schedule.ScheduleService;
+import wo.work_optimization.core.service.factory.schedule.connector.ScheduleService;
 
 @Service
 public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {

@@ -65,7 +65,7 @@ public class TaskRegistrationServiceImpl implements TaskRegistrationService {
                 .travelTime(request.getTravelTime())
                 .eatTime(request.getEatTime())
                 .workTime(request.getWorkTime())
-                .status(Constants.Status.ACTIVE)
+                .status(Constants.ActiveStatus.ACTIVE)
                 .build();
     }
 
