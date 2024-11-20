@@ -30,7 +30,7 @@ public class DefaultStrategyFactory implements StrategyFactory {
     }
     
     @Override
-    public StrategyConnector get(@NonNull String strategy) {
+    public StrategyConnector get(String strategy) {
         StrategyConnector strategyConnector = strategyServiceMap.get(strategy);
         if (Objects.isNull(strategyConnector)) {
             throw new BusinessException("Strategy not found");

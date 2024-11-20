@@ -21,15 +21,15 @@ public abstract class StrategyService<R, P> implements StrategyConnector {
     private GenericResponse<TaskResponseDTO> genericResponse;
 
     @Override
-    public ResponseEntity<GeneralResponse<TaskResponseDTO>> handleStrategy(Long userId) {
+    public ResponseEntity<GeneralResponse<TaskResponseDTO>> handleStrategy(String strategyMode) {
         try {
-            validateRequest(userId);
-            R req = createRequest(userId);
+            validateRequest(strategyMode);
+            R req = createRequest(strategyMode);
             P resp = doStrategy(req);
-            return responseFactory.success(readResponse(mapResponse(userId, resp), ResponseMessage.msg200));
+            return responseFactory.success(readResponse(mapResponse(strategyMode, resp), ResponseMessage.msg200));
         } catch (Exception e) {
             log.error("Error while handling strategy", e);
-            return responseFactory.internalServerError(readResponse(mapResponse(userId, (P) e), ResponseMessage.msg400));
+            return responseFactory.internalServerError(readResponse(mapResponse(strategyMode, (P) e), ResponseMessage.msg400));
         }
     }
 
@@ -37,8 +37,8 @@ public abstract class StrategyService<R, P> implements StrategyConnector {
         return (GeneralResponse<TaskResponseDTO>) genericResponse.matchingResponseMessage(new GenericResponse<>(response, responseMessage));
     }
 
-    public void validateRequest(Long userId) {
-        if (userId == null) {
+    public void validateRequest(String strategyMode) {
+        if (strategyMode == null) {
             throw new IllegalArgumentException("User Id is required");
         }
     }
@@ -47,11 +47,11 @@ public abstract class StrategyService<R, P> implements StrategyConnector {
         return null;
     }
 
-    public R createRequest(Long userId) {
+    public R createRequest(String strategyMode) {
         return null;
     }
 
-    public TaskResponseDTO mapResponse(Long userId, P response) {
+    public TaskResponseDTO mapResponse(String strategyMode, P response) {
         return null;
     }
 }
