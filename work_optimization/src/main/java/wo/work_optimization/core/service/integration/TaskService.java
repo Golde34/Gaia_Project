@@ -13,7 +13,6 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.kafka.SchedulePlanSyncronizedMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 import wo.work_optimization.core.port.mapper.TaskMapper;
-import wo.work_optimization.core.port.store.ParentTaskStore;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.infrastructure.client.adapter.TaskManagerServiceAdapter;
 import wo.work_optimization.kernel.utils.DataUtils;
@@ -30,8 +29,6 @@ public class TaskService {
     private final TaskStore taskStore;
     private final TaskManagerServiceAdapter taskManagerServiceAdapter;
     private final TaskMapper taskMapper;
-
-    private final ParentTaskStore parentTaskStore;
 
     // private final SchedulePlanClient schedulePlanClient;
     private final KafkaPublisher kafkaPublisher;
@@ -79,10 +76,15 @@ public class TaskService {
         return task;
     }
 
-    public List<Task> getAllTasks(Long userId) {
-        List<ParentTask> parentTasks = parentTaskStore.findByUserId(userId);
+    public List<Task> getAllTasks(List<ParentTask> parentTasks) {
         return parentTasks.stream()
                 .flatMap(parentTask -> taskStore.findAllByParentId(parentTask.getId()).stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getTasksInDay(List<ParentTask> parentTasks, String date) {
+        return parentTasks.stream()
+                .flatMap(parentTask -> taskStore.findAllByParentIdAndDate(parentTask.getId(), date).stream())
                 .collect(Collectors.toList());
     }
 }

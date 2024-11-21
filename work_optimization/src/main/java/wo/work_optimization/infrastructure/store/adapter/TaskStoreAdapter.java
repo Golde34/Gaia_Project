@@ -103,4 +103,9 @@ public class TaskStoreAdapter implements TaskStore {
     public List<Task> findAllByParentId(Long parentId) {
         return taskRepository.findByParentTaskId(parentId);
     }
+
+    @Override
+    public List<Task> findAllByParentIdAndDate(Long parentId, String optimizedDate) {
+        return taskRepository.findByParentTaskIdAndStartDate(parentId, optimizedDate);
+    }
 }

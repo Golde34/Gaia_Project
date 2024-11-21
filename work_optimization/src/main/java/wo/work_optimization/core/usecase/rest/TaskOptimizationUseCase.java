@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.Task;
@@ -28,15 +30,15 @@ public class TaskOptimizationUseCase {
     private final TaskRegistrationService taskRegistrationService;
     private final AuthService authService;
 
-    public ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(Long userId) {
+    public ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(OptimizeTaskRestRequestDTO request) {
         // Get Task Registration By User Id
-        TaskRegistration taskRegistration = taskRegistrationService.getTaskRegistrationByUserId(userId);
+        TaskRegistration taskRegistration = taskRegistrationService.getTaskRegistrationByUserId(request.getUserId());
         // Call auth service to get user settings
-        UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(userId);
+        UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
         // Get Task Strategy
         String strategy = OptimizedTaskConfigEnum.of(userSettingResponseDTO.getOptimizedTaskConfig()).getMode();
         StrategyConnector strategyConnector = strategyFactory.get(strategy);
-        List<Task> listTasks = strategyConnector.handleStrategy(userId);
+        List<Task> listTasks = strategyConnector.handleStrategy(request);
 
         // Optimize Task by Schedule Factory
         // String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
