@@ -3,6 +3,7 @@ package wo.work_optimization.core.port.store;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface TaskStore {
@@ -19,5 +20,6 @@ public interface TaskStore {
     Task checkSyncTask(String taskId, String scheduleTaskId, String workOptimTaskId);
     Task findTaskById(String workOptimTaskId);
     List<Task> findAllByParentId(Long parentId);
-    List<Task> findAllByParentIdAndDate(Long parentId, String optimizedDate);
+    List<Task> findAllByParentIdAndStartDate(Long parentId, String startedDate) throws ParseException;
+    List<Task> findAllByParentIdAndEndDate(Long parentId, String endDate) throws ParseException;
 }

@@ -20,6 +20,7 @@ import wo.work_optimization.kernel.utils.DataUtils;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -83,8 +84,16 @@ public class TaskService {
     }
 
     public List<Task> getTasksInDay(List<ParentTask> parentTasks, String date) {
-        return parentTasks.stream()
-                .flatMap(parentTask -> taskStore.findAllByParentIdAndDate(parentTask.getId(), date).stream())
+        List<Task> tasksStartInDay = parentTasks.stream()
+                .flatMap(parentTask -> taskStore.findAllByParentIdAndStartDate(parentTask.getId(), date).stream()
+                    .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
+                    .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE)))
+                .collect(Collectors.toList());
+        // all task that endDate must smaller than today
+        List<Task> tasksNotDoneTilDay = parentTasks.stream()
+                .flatMap(parentTask -> taskStore.findAllByParentIdAndEndDate(parentTask.getId(), date).stream())
+                .collect(Collectors.toList());
+        return Stream.concat(tasksStartInDay.stream(), tasksNotDoneTilDay.stream())
                 .collect(Collectors.toList());
     }
 }
