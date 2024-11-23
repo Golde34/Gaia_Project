@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.AuthServiceResponse;
 import wo.work_optimization.core.domain.dto.response.UserResponseDTO;
+import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.infrastructure.security.SecurityEncryption;
 
@@ -42,5 +43,9 @@ public class ClientUtils {
         return objectMapper.convertValue(userResponse.getData().getMessage(), UserResponseDTO.class);
     }
 
-
+    public UserSettingResponseDTO buildUserSettingResponse(ResponseEntity<GeneralResponse<Object>> responseClient) {
+        GeneralResponse<AuthServiceResponse<UserSettingResponseDTO>> userResponse = objectMapper.convertValue(responseClient.getBody(),
+                new TypeReference<GeneralResponse<AuthServiceResponse<UserSettingResponseDTO>>>() {});
+        return objectMapper.convertValue(userResponse.getData().getMessage(), UserSettingResponseDTO.class);
+    }
 }

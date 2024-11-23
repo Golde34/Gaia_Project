@@ -12,7 +12,6 @@ import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.Task;
-import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.OptimizedTaskConfigEnum;
 import wo.work_optimization.core.domain.enums.TaskSortingAlgorithmEnum;
 import wo.work_optimization.core.service.factory.schedule.connector.ScheduleConnector;

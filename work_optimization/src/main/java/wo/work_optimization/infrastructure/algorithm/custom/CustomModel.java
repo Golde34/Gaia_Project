@@ -10,7 +10,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
@@ -129,7 +129,9 @@ public class CustomModel {
      * Optimize the time allocation for each task
      * Using Zenith gradient algorithm
      */
-    public void optimize() {
+    public Map<String, List<Double>> optimize() {
+        List<Double> weights = new ArrayList<>();
+        List<Double> averageStopTime = new ArrayList<>();
         double[] initialT = new double[taskLength];
         for (int i = 0; i < taskLength; i++) {
             initialT[i] = maximumWorkTime / taskLength;
@@ -155,8 +157,14 @@ public class CustomModel {
                     System.out.println("Average stop time: " + getMaximumDeepWorkTimePerTask(alpha[index], phi[index]));
                     System.out.println("Final T: " + optimizedT[index]);
                     sum.updateAndGet(v -> v + optimizedT[index]);
+                    weights.add(optimizedT[index]);
+                    averageStopTime.add(getMaximumDeepWorkTimePerTask(alpha[index], phi[index]));
                 });
         System.out.println("Sum: " + sum);
+        return new HashMap<>() {{
+            put("weights", weights);
+            put("averageStopTime", averageStopTime);
+        }};
     }
 
     private double lagrangeFunction(double p0, double alpha, double k, double t) {
@@ -165,7 +173,7 @@ public class CustomModel {
 
     class ProductivityFunction implements MultivariateFunction {
         double[] p0, a, k;
-        double T = 13; // Tổng thời gian sẵn có
+        double T = 13; // Con người không thể làm việc quá 13 tiếng một ngày
 
         public ProductivityFunction(double[] p0, double[] a, double[] k) {
             this.p0 = p0;

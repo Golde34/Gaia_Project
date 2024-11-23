@@ -8,5 +8,5 @@ public interface TaskRegistrationStore {
     void userRegisterTaskOperation(TaskRegistration taskRegistration);
     Optional<TaskRegistration> getTaskRegistrationByUserId(Long id);
     Optional<TaskRegistration> getTaskRegistrationByTaskId(String taskId);
-    Optional<TaskRegistration> updateUserConstant(long userId, double c1, double c2, double c3);
+    int updateUserConstant(long userId, double c1, double c2, double c3);
 }
