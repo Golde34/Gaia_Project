@@ -34,15 +34,13 @@ public class CustomCalculatedHandler {
         // Get optimizing variables
         List<CustomScheduleTask> tasks = getListTasksToOptimize(request.getTasks());
         List<String> taskIds = tasks.stream().map(CustomScheduleTask::getId).toList();
-        Map<String, Double> taskEfforts = tasks.stream().collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEffort));
-        Map<String, Double> taskEnjoyability = tasks.stream().collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEnjoyability));
-        double[] effort = taskIds.stream().map(taskEfforts::get).mapToDouble(Double::doubleValue).toArray();
-        double[] enjoyability = taskIds.stream().map(taskEnjoyability::get).mapToDouble(Double::doubleValue).toArray();
-        int daySize = (int) Math.ceil((double) taskIds.size() / 10);
-        int deepWorkTime = daySize * (int)request.getTaskRegistration().getWorkTime();
-        // Create customModel Object to optimize
+        double[] effort = takeEffortList(tasks, taskIds);
+        double[] enjoyability = takeEnjoyabilityList(tasks, taskIds);
+        double deepWorkTime = request.getTaskRegistration().getWorkTime();
+        // Optimize Task
         CustomModel customModel = mapper.map(c1, c2, c3, effort, enjoyability, deepWorkTime, tasks.size());
         Map<String, List<Double>> optimizedWeightsAndAvgStopTime = customModel.optimize();
+        // Map Result
         List<Double> weights = optimizedWeightsAndAvgStopTime.get("weights");
         List<Double> avgStopTime = optimizedWeightsAndAvgStopTime.get("averageStopTime");
         for (int i = 0; i < taskIds.size(); i++) {
@@ -53,25 +51,6 @@ public class CustomCalculatedHandler {
         }
         // Store result to database
         return null;
-    }
-
-    public void updateConstant(long userId, double c1, double c2, double c3, List<Task> taskList) {
-        // get constant vector from c1, c2, c3
-        RealVector constantVector = constantUpdating.getConstantVector(c1, c2, c3);
-
-        List<CustomScheduleTask> tasks = getListTasksToOptimize(taskList);
-        // convert list task to array of effort and enjoyability
-        double[] E = tasks.stream().mapToDouble(CustomScheduleTask::getEffort).toArray();
-        double[] B = tasks.stream().mapToDouble(CustomScheduleTask::getEnjoyability).toArray();
-        // calculate the elements of the coefficient matrix
-        RealVector result = constantUpdating.solve(E, B, constantVector);
-        // save Constant params
-        int isSaved = saveCustomConstantResult(userId, result);
-        if (isSaved == 1) {
-            log.info("Update constant success");
-        } else {
-            log.error("Update constant failed");
-        }
     }
 
     private List<CustomScheduleTask> getListTasksToOptimize(List<Task> tasks) {
@@ -91,6 +70,37 @@ public class CustomCalculatedHandler {
 
     private double convertEnjoyability(double priority) {
         return priority * 2;
+    }
+
+    private double[] takeEffortList(List<CustomScheduleTask> tasks, List<String> taskIds) {
+        Map<String, Double> taskEfforts = tasks.stream()
+                .collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEffort));
+        return taskIds.stream().map(taskEfforts::get).mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private double[] takeEnjoyabilityList(List<CustomScheduleTask> tasks, List<String> taskIds) {
+        Map<String, Double> taskEnjoyability = tasks.stream()
+                .collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEnjoyability));
+        return taskIds.stream().map(taskEnjoyability::get).mapToDouble(Double::doubleValue).toArray();
+    }
+
+    public void updateConstant(long userId, double c1, double c2, double c3, List<Task> taskList) {
+        // get constant vector from c1, c2, c3
+        RealVector constantVector = constantUpdating.getConstantVector(c1, c2, c3);
+
+        List<CustomScheduleTask> tasks = getListTasksToOptimize(taskList);
+        // convert list task to array of effort and enjoyability
+        double[] E = tasks.stream().mapToDouble(CustomScheduleTask::getEffort).toArray();
+        double[] B = tasks.stream().mapToDouble(CustomScheduleTask::getEnjoyability).toArray();
+        // calculate the elements of the coefficient matrix
+        RealVector result = constantUpdating.solve(E, B, constantVector);
+        // save Constant params
+        int isSaved = saveCustomConstantResult(userId, result);
+        if (isSaved == 1) {
+            log.info("Update constant success");
+        } else {
+            log.error("Update constant failed");
+        }
     }
 
     private int saveCustomConstantResult(long userId, RealVector result) {

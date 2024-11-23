@@ -19,7 +19,7 @@ func NewTaskOptimizationAdapter(adapter *TaskOptimizationAdapter) *TaskOptimizat
 func (adapter *TaskOptimizationAdapter) OptimizeTaskByUser(userId string) (string, error) {
 	optimizeTaskURL := base.WorkOptimizationServiceURL + task_optimization_domain + "/optimize-task-by-user?userId=" + userId 
 	var response string
-	_, err := utils.BaseAPIV2(optimizeTaskURL, enums.GET, nil, &response, nil)
+	_, err := utils.BaseAPIV2(optimizeTaskURL, enums.POST, nil, &response, nil)
 	if err != nil {
 		return "", err
 	}
