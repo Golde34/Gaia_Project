@@ -13,7 +13,6 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.kafka.SchedulePlanSyncronizedMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 import wo.work_optimization.core.port.mapper.TaskMapper;
-import wo.work_optimization.core.port.store.ParentTaskStore;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.infrastructure.client.adapter.TaskManagerServiceAdapter;
 import wo.work_optimization.kernel.utils.DataUtils;
@@ -21,6 +20,7 @@ import wo.work_optimization.kernel.utils.DataUtils;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -30,8 +30,6 @@ public class TaskService {
     private final TaskStore taskStore;
     private final TaskManagerServiceAdapter taskManagerServiceAdapter;
     private final TaskMapper taskMapper;
-
-    private final ParentTaskStore parentTaskStore;
 
     // private final SchedulePlanClient schedulePlanClient;
     private final KafkaPublisher kafkaPublisher;
@@ -79,10 +77,23 @@ public class TaskService {
         return task;
     }
 
-    public List<Task> getAllTasks(Long userId) {
-        List<ParentTask> parentTasks = parentTaskStore.findByUserId(userId);
+    public List<Task> getAllTasks(List<ParentTask> parentTasks) {
         return parentTasks.stream()
                 .flatMap(parentTask -> taskStore.findAllByParentId(parentTask.getId()).stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getTasksInDay(List<ParentTask> parentTasks, String date) {
+        List<Task> tasksStartInDay = parentTasks.stream()
+                .flatMap(parentTask -> taskStore.findAllByParentIdAndStartDate(parentTask.getId(), date).stream()
+                    .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
+                    .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE)))
+                .collect(Collectors.toList());
+        // all task that endDate must smaller than today
+        List<Task> tasksNotDoneTilDay = parentTasks.stream()
+                .flatMap(parentTask -> taskStore.findAllByParentIdAndEndDate(parentTask.getId(), date).stream())
+                .collect(Collectors.toList());
+        return Stream.concat(tasksStartInDay.stream(), tasksNotDoneTilDay.stream())
                 .collect(Collectors.toList());
     }
 }

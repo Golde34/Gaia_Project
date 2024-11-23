@@ -20,11 +20,14 @@ public class Task {
     private int priority;
     private String status;
     private long startDate;
-    private double duration;
     private long endDate;
     private String activeStatus;
     private String originalId;
     private String scheduleTaskId;
+    private int taskOrder;
+    private double effort;
+    private double enjoyability;
+    private double duration;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

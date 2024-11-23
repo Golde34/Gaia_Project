@@ -9,7 +9,9 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.infrastructure.store.repository.ParentTaskRepository;
 import wo.work_optimization.infrastructure.store.repository.TaskRepository;
+import wo.work_optimization.kernel.utils.DateTimeUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -102,5 +104,17 @@ public class TaskStoreAdapter implements TaskStore {
     @Override
     public List<Task> findAllByParentId(Long parentId) {
         return taskRepository.findByParentTaskId(parentId);
+    }
+
+    @Override
+    public List<Task> findAllByParentIdAndStartDate(Long parentId, String optimizedDate) throws ParseException {
+        long startDate = DateTimeUtils.convertStringDateTime(optimizedDate);
+        return taskRepository.findByParentTaskIdAndStartDate(parentId, startDate);
+    }
+
+    @Override
+    public List<Task> findAllByParentIdAndEndDate(Long parentId, String optimizedDate) throws ParseException {
+        long endDate = DateTimeUtils.convertStringDateTime(optimizedDate);
+        return taskRepository.findByParentTaskIdAndEndDate(parentId, endDate);
     }
 }
