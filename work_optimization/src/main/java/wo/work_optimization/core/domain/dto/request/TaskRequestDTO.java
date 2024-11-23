@@ -1,18 +1,20 @@
 package wo.work_optimization.core.domain.dto.request;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.domain.entity.TaskRegistration;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDTO {
-    private String method;
-    private String originalTaskId;
-    private double effort;
-    private double enjoyability;
-    private double duration;
+    private long userId;
+    private List<Task> tasks;
+    private TaskRegistration taskRegistration;
 }

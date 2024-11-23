@@ -1,12 +1,10 @@
 package wo.work_optimization.core.service.factory.schedule.connector;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
-import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
+import wo.work_optimization.core.domain.entity.Task;
 
 public interface ScheduleConnector {
     String method();
-    ResponseEntity<GeneralResponse<TaskResponseDTO>> schedule(TaskRequestDTO request);
+    List<Task> schedule(List<Task> tasks, Long userId);
 }

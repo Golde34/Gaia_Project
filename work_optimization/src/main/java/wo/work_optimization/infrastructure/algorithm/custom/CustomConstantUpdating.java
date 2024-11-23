@@ -47,4 +47,8 @@ public class CustomConstantUpdating {
         return IntStream.range(0, E.length)
                 .mapToDouble(i -> c1*E[i] + c2*B[i] + c3).toArray();
     } 
+
+    public RealVector getConstantVector(double c1, double c2, double c3) {
+        return new ArrayRealVector(new double[] {c1, c2, c3});
+    }
 }

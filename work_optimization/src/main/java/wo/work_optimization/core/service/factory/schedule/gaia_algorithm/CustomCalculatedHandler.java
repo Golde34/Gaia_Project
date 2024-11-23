@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.factory.schedule.simpleschedule;
+package wo.work_optimization.core.service.factory.schedule.gaia_algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,15 @@ import java.util.stream.IntStream;
 import org.apache.commons.math3.linear.RealVector;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.CustomScheduleTask;
+import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.domain.entity.TaskRegistration;
+import wo.work_optimization.core.exception.BusinessException;
+import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.integration.GlobalConfigService;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomConstantUpdating;
@@ -17,19 +23,24 @@ import wo.work_optimization.infrastructure.algorithm.custom.CustomModel;
 import wo.work_optimization.infrastructure.mapper.CustomScheduleModelMapper;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CustomCalculatedHandler {
     private final CustomScheduleModelMapper mapper;
     private final CustomConstantUpdating constantUpdating;
 
     private final GlobalConfigService globalConfigService;
     private final TaskStore taskStore;
+    private final TaskRegistrationStore taskRegistrationStore;
 
-    public CustomCalculatedHandler(CustomScheduleModelMapper mapper, CustomConstantUpdating constantUpdating,
-            GlobalConfigService globalConfigService, TaskStore taskStore) {
-        this.mapper = mapper;
-        this.constantUpdating = constantUpdating;
-        this.globalConfigService = globalConfigService;
-        this.taskStore = taskStore;
+    public List<Task> optimize(TaskRequestDTO request) {
+        // Get Flow State Constants
+        double c1 = request.getTaskRegistration().getConstant1();
+        double c2 = request.getTaskRegistration().getConstant2();
+        double c3 = request.getTaskRegistration().getConstant3();
+        if (c1 == 0 || c2 == 0 || c3 == 0) {
+            updateConstant(request.getUserId(), c1, c2, c3, request.getTasks());
+        }
     }
 
     public void calculate() {
@@ -54,7 +65,7 @@ public class CustomCalculatedHandler {
         for (CustomScheduleTask task : tasks) {
             // convert customScheduleTask to Task
             Task taskEntity = Task.builder()
-                    .priority(((int)task.getEffort()))
+                    .priority(((int) task.getEffort()))
                     .duration(task.getEnjoyability())
                     .build();
             // save taskEntity to database
@@ -65,29 +76,26 @@ public class CustomCalculatedHandler {
         // double[] enjoyability = { 2, 5, 4, 3, 3 };
         // double maximumWorkTime = 8;
         // int taskLenght = effort.length;
-        // CustomModel customModel = mapper.map(0.56, -0.24, 0, effort, enjoyability, maximumWorkTime, taskLenght);
+        // CustomModel customModel = mapper.map(0.56, -0.24, 0, effort, enjoyability,
+        // maximumWorkTime, taskLenght);
         // customModel.optimize();
     }
 
-    public void updateConstant(String scheduleId) {
-        // get constant store in config param
-        RealVector constantVector = globalConfigService.getGlobalParamAsRealVector(
-            Constants.WOConfiguration.CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS
-        );
-        // get list task with effort and enjoyability
-        List<CustomScheduleTask> tasks = getListTaskOfSchedulePlan(scheduleId);
+    public void updateConstant(long userId, double c1, double c2, double c3, List<Task> taskList) {
+        // get constant vector from c1, c2, c3
+        RealVector constantVector = constantUpdating.getConstantVector(c1, c2, c3);
+
+        List<CustomScheduleTask> tasks = getListTasksToOptimize(taskList);
         // convert list task to array of effort and enjoyability
         double[] E = tasks.stream().mapToDouble(CustomScheduleTask::getEffort).toArray();
         double[] B = tasks.stream().mapToDouble(CustomScheduleTask::getEnjoyability).toArray();
         // calculate the elements of the coefficient matrix
         RealVector result = constantUpdating.solve(E, B, constantVector);
         // save Constant params
-        saveCustomConstantResult(result);
+        saveCustomConstantResult(userId, result);
     }
 
-    private List<CustomScheduleTask> getListTaskOfSchedulePlan(String scheduleId) {
-        // get list task cua user trong mot schedule plan
-        List<Task> tasks = taskStore.findAllBySchedulePlan(scheduleId);
+    private List<CustomScheduleTask> getListTasksToOptimize(List<Task> tasks) {
         // convert task to array wrap effort value and enjoyability value
         List<CustomScheduleTask> convertedTask = new ArrayList<>();
         tasks.forEach(i -> convertedTask.add(CustomScheduleTask.builder()
@@ -105,11 +113,20 @@ public class CustomCalculatedHandler {
         return priority * 2;
     }
 
-    private void saveCustomConstantResult(RealVector result) {
+    private void saveCustomConstantResult(long userId, RealVector result) {
         // convert real vector to list double
-        String resultConstantList = IntStream.range(0, result.getDimension())
-                .mapToObj(result::getEntry).toList().toString();
-        globalConfigService.setParamConfig(Constants.WOConfiguration.CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS,
-                resultConstantList);
+        double c1 = result.getEntry(0);
+        double c2 = result.getEntry(1);
+        double c3 = result.getEntry(2);
+        TaskRegistration taskRegistration = taskRegistrationStore.updateUserConstant(userId, c1, c2, c3)
+                .orElse(null);
+        if (taskRegistration == null) {
+        }
+        log.info("Update user constant to optimize task: {}", taskRegistration);
+
+        // String resultConstantList = IntStream.range(0, result.getDimension())
+        // .mapToObj(result::getEntry).toList().toString();
+        // globalConfigService.setParamConfig(Constants.WOConfiguration.CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS,
+        // resultConstantList);
     }
 }

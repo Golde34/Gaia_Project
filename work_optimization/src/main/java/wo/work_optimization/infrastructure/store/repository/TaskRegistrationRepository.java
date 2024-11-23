@@ -15,4 +15,7 @@ public interface TaskRegistrationRepository extends JpaRepository<TaskRegistrati
 
     @Query("select tr from TaskRegistration tr join ParentTask pt on pt.userId = tr.userId join Task t on t.parentTask.id = pt.id where t.id = :taskId")
     Optional<TaskRegistration> findByTaskId(@Param("taskId") String taskId);
+
+    @Query("update TaskRegistration tr set tr.constant1 = :c1, tr.constant2 = :c2, tr.constant3 = :c3 where tr.userId = :userId")
+    Optional<TaskRegistration> updateUserConstant(@Param("userId") long userId, @Param("c1") double c1, @Param("c2") double c2, @Param("c3") double c3);
 }

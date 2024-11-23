@@ -1,62 +1,45 @@
 package wo.work_optimization.core.service.factory.schedule.connector;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
-import wo.work_optimization.core.domain.enums.ResponseMessage;
-import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
-import wo.work_optimization.core.domain.dto.response.base.ResponseFactory;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.exception.BusinessException;
-import wo.work_optimization.kernel.utils.GenericResponse;
+import wo.work_optimization.core.service.integration.TaskRegistrationService;
 import wo.work_optimization.kernel.utils.JsonUtils;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
-@SuppressWarnings("unchecked")
 public abstract class ScheduleService<R, P> implements ScheduleConnector {
+
     @Autowired
-    private ResponseFactory responseFactory;
-    @Autowired
-    private GenericResponse<TaskResponseDTO> genericResponse;
+    private TaskRegistrationService taskRegistrationService;
 
     @Override
-    public ResponseEntity<GeneralResponse<TaskResponseDTO>> schedule(TaskRequestDTO request) {
+    public List<Task> schedule(List<Task> tasks, Long userId) {
         try {
-            checkOriginalId(request);
-            validateRequest(request);
-            R req = createRequest(request);
-            P resp = doSchedule(req);
-            return responseFactory.success(readResponse(mapResponse(request, resp), ResponseMessage.msg200));
+            TaskRegistration taskRegistration = taskRegistrationService.getTaskRegistrationByUserId(userId);
+            R request = createRequest(tasks, taskRegistration);
+            P resp = doSchedule(request);
+            return mapResponse(resp);
         } catch (BusinessException e) {
             log.error("Error while scheduling", e);
-            return responseFactory.badRequest(readResponse(mapResponse(request, (P) e), ResponseMessage.msg400));
+            return Collections.emptyList(); 
         } catch (Exception e) {
-            log.error("Error while scheduling", e);
-            return responseFactory.internalServerError(readResponse(mapResponse(request, (P) e), ResponseMessage.msg500));
+            log.error("Error while scheduling, system error:", e);
+            return Collections.emptyList();
         }
     }
 
-    private void checkOriginalId(TaskRequestDTO request) {
-        if (!StringUtils.hasText(request.getOriginalTaskId())) {
-            throw new BusinessException("OriginalId is required");
-        }
-    }
-
-    private GeneralResponse<TaskResponseDTO> readResponse(TaskResponseDTO response, ResponseMessage responseMessage) {
-        return (GeneralResponse<TaskResponseDTO>) genericResponse.matchingResponseMessage(new GenericResponse<>(response, responseMessage));
-    }
-
-    public abstract void validateRequest(TaskRequestDTO request);
     public abstract P doSchedule(R request);
-    public abstract R createRequest(TaskRequestDTO request);
-    public abstract TaskResponseDTO mapResponse(TaskRequestDTO request, P response);
+    public abstract R createRequest(List<Task> tasks, TaskRegistration taskRegistration);
+    public abstract List<Task> mapResponse(P response);
 
     public String requestToString(R request) {
         return JsonUtils.toJson(request);

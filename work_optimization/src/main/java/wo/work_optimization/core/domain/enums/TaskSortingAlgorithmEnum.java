@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum TaskSortingAlgorithmEnum {
     PRIORITY(1, "Priority"),
     TIME(2, "Time"),
-    PRIORITY_AND_TIME(3, "gaia"),
-    TABU_SEARCH(4, "tabu");
+    PRIORITY_AND_TIME(3, "GaiaAlgorithm"),
+    TABU_SEARCH(4, "TabuSearch");
 
     private final int option;
     private final String method;
