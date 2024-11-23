@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user-setting")
 @RequiredArgsConstructor
 public class UserSettingController {
-    private UserSettingService userSettingService;
+    private final UserSettingService userSettingService;
 
     @PostMapping("/add-user-setting")
     public ResponseEntity<?> createUserSetting(@RequestBody UserSetting userSetting) {

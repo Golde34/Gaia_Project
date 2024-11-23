@@ -39,4 +39,9 @@ public class TaskRegistrationAdapter implements TaskRegistrationStore {
     public Optional<TaskRegistration> getTaskRegistrationByTaskId(String taskId) {
         return taskRegistrationRepository.findByTaskId(taskId);
     }
+
+    @Override
+    public int updateUserConstant(long userId, double c1, double c2, double c3) {
+        return taskRegistrationRepository.updateUserConstant(userId, c1, c2, c3);
+    }
 }

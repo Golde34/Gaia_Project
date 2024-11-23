@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomScheduleTask {
+    private String id;
     private double effort;
     private double enjoyability;
 }

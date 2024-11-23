@@ -51,10 +51,10 @@ public class AuthServiceAdapter implements AuthServiceClient {
             HttpHeaders requestHeaders = clientUtils.buildAuthorizationHeader(ServiceEnum.AS.getServiceName(), userId);
             String uri = String.format(authServiceApiGetUserSetting, userId);
             log.info("Calling api to auth service: {}", uri);
-            ResponseEntity<GeneralResponse<UserSettingResponseDTO>> response =
-                clientTemplate.get(uri, requestHeaders, new ParameterizedTypeReference<GeneralResponse<UserSettingResponseDTO>>() {});
+            ResponseEntity<GeneralResponse<Object>> response =
+                clientTemplate.get(uri, requestHeaders, new ParameterizedTypeReference<GeneralResponse<Object>>() {});
             log.info("Response from auth service: {}", response);
-            return response.getBody().getData();    
+            return clientUtils.buildUserSettingResponse(response);
         } catch (Exception e) {
             throw new BusinessException(String.format("Error when call api to auth service: %s", e.getMessage()));
         }

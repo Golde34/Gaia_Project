@@ -85,13 +85,29 @@ public class TaskService {
 
     public List<Task> getTasksInDay(List<ParentTask> parentTasks, String date) {
         List<Task> tasksStartInDay = parentTasks.stream()
-                .flatMap(parentTask -> taskStore.findAllByParentIdAndStartDate(parentTask.getId(), date).stream()
-                    .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
-                    .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE)))
+                .flatMap(parentTask -> {
+                    try {
+                        return taskStore.findAllByParentIdAndStartDate(parentTask.getId(), date).stream()
+                            .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
+                            .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE));
+                    } catch (ParseException e) {
+                        log.error("Error when get tasks start in day: {}", e.getMessage()); 
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
                 .collect(Collectors.toList());
         // all task that endDate must smaller than today
         List<Task> tasksNotDoneTilDay = parentTasks.stream()
-                .flatMap(parentTask -> taskStore.findAllByParentIdAndEndDate(parentTask.getId(), date).stream())
+                .flatMap(parentTask -> {
+                    try {
+                        return taskStore.findAllByParentIdAndEndDate(parentTask.getId(), date).stream();
+                    } catch (ParseException e) {
+                        log.error("Error when get tasks end in day: {}", e.getMessage());
+                        e.printStackTrace();
+                        return Stream.empty();
+                    }
+                })
                 .collect(Collectors.toList());
         return Stream.concat(tasksStartInDay.stream(), tasksNotDoneTilDay.stream())
                 .collect(Collectors.toList());
