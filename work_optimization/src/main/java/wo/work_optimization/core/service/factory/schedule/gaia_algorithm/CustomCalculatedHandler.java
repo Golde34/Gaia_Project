@@ -64,19 +64,26 @@ public class CustomCalculatedHandler {
         // convert task to array wrap effort value and enjoyability value
         List<CustomScheduleTask> convertedTask = new ArrayList<>();
         tasks.forEach(i -> convertedTask.add(CustomScheduleTask.builder()
-                .effort(convertEffort(i.getPriority(), i.getDuration()))
-                .enjoyability(convertEnjoyability(i.getPriority()))
+                .effort(convertEffort(i.getPriority(), getTheDeadline(i.getEndDate())))
+                .enjoyability(convertEnjoyability(i.getPriority(), i.getDuration()))
                 .id(i.getId())
                 .build()));
         return convertedTask;
     }
 
-    private double convertEffort(double priority, double duration) {
-        return (double) priority * duration;
+    private double getTheDeadline(long endDate) {
+        double deadline = (double) (endDate - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
+        return deadline / 24;
     }
 
-    private double convertEnjoyability(double priority) {
-        return priority * 2;
+    private double convertEffort(double priority, double deadline) {
+        return 1 + ((priority -1 ) / 7 + (8 - deadline) / 7) * 2;
+        // return (double) priority * duration;
+    }
+
+    private double convertEnjoyability(double priority, double duration) {
+        return 1 + (0.15 * (priority - 1) / 7 + 0.85 * (duration - 1) / 15) ;
+        // return priority * 2;
     }
 
     private OptimizingVariables buildOptimizingVariables(GaiaAlgorithmDTO request, List<CustomScheduleTask> tasks,
