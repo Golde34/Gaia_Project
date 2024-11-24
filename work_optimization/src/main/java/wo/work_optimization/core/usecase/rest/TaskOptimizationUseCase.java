@@ -3,11 +3,14 @@ package wo.work_optimization.core.usecase.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
@@ -24,12 +27,12 @@ import wo.work_optimization.core.service.integration.AuthService;
 @RequiredArgsConstructor
 @Slf4j
 public class TaskOptimizationUseCase {
-    
+
     private final ScheduleFactory scheduleFactory;
     private final StrategyFactory strategyFactory;
     private final AuthService authService;
 
-    public ResponseEntity<GeneralResponse<String>> optimizeTaskByUser(OptimizeTaskRestRequestDTO request) {
+    public ResponseEntity<GeneralResponse<List<Task>>> optimizeTaskByUser(OptimizeTaskRestRequestDTO request) {
         // Call auth service to get user settings
         UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
         // Get Task Strategy
@@ -39,22 +42,35 @@ public class TaskOptimizationUseCase {
 
         // Optimize Task by Schedule Factory
         if (listTasks.isEmpty()) {
-            return ResponseEntity.ok(GeneralResponse.<String>builder()
-                .status("SUCCESS")
-                .statusMessage("No Task to Optimize")
-                .data("No Task to Optimize")
-                .build());
+            return ResponseEntity.ok(GeneralResponse.<List<Task>>builder()
+                    .status(Constants.ErrorStatus.FAIL)
+                    .statusMessage("No task found")
+                    .data(Collections.emptyList())
+                    .build());
         }
         String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
         ScheduleConnector scheduleConnector = scheduleFactory.get(method);
-        List<Task> result = scheduleConnector.schedule(listTasks, request.getUserId());
+        Map<Integer, String> result = scheduleConnector.schedule(listTasks, request.getUserId());
+        if (result.isEmpty()) {
+            return ResponseEntity.ok(GeneralResponse.<List<Task>>builder()
+                    .status(Constants.ErrorStatus.FAIL)
+                    .statusMessage("No Task to Optimize")
+                    .data(Collections.emptyList())
+                    .build());
+        }
+        result.entrySet().stream().forEach(r -> {
+            if (Constants.ErrorStatus.FAIL.equals(r.getValue())) {
+                log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
+                        r.getKey());
+            }
+        });
         log.info("Optimize Task By User: {}", result);
-        return ResponseEntity.ok(GeneralResponse.<String>builder()
-            .status("SUCCESS")
-            .statusMessage("Optimize Task By User")
-            .data("Optimize Task By User")
-            .build());
+        List<Task> savedTasks = strategyConnector.returnTasks(request);
+        return ResponseEntity.ok(GeneralResponse.<List<Task>>builder()
+                .status("SUCCESS")
+                .statusMessage("Optimize Task By User")
+                .data(savedTasks)
+                .build());
     }
-
 
 }

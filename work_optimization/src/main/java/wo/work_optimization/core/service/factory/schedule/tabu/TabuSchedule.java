@@ -1,5 +1,6 @@
 package wo.work_optimization.core.service.factory.schedule.tabu;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import wo.work_optimization.core.service.factory.schedule.connector.ScheduleServ
 public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
     @Override
     public String method() {
-        return "tabu";
+        return "TabuSearch";
     }
 
     @Override
@@ -29,7 +30,12 @@ public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDT
     }
 
     @Override
-    public List<Task> mapResponse(TaskResponseDTO response) {
+    public List<List<Task>> sortTaskToBatches(List<Task> tasks) {
+        return Collections.singletonList(tasks);
+    }
+
+    @Override
+    public String mapResponse(TaskResponseDTO response) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mapResponse'");
     }
