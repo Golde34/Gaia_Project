@@ -31,6 +31,13 @@ public abstract class StrategyService implements StrategyConnector {
         }
     }
 
+    @Override
+    public List<Task> returnTasks(OptimizeTaskRestRequestDTO request) {
+        List<ParentTask> parentTasks = parentTaskService.getParentTasksByUserId(request.getUserId());
+        return queryTasks(request, parentTasks); 
+    }
+
     protected abstract void validateRequest(OptimizeTaskRestRequestDTO request);
     protected abstract List<Task> doStrategy(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks);
+    protected abstract List<Task> queryTasks(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks);
 }

@@ -60,9 +60,9 @@ public class CustomCalculatedHandler {
             optimizedTasks.add(OptimizeTaskInfo.builder()
                     .taskId(taskIds.get(i))
                     .weight(weights.get(i))
-                    .stopTime(avgStopTime.get(i))
                     .effort(effort[i])
                     .enjoyability(enjoyability[i])
+                            .stopTime(avgStopTime.get(i))
                     .build());
         }
         optimizedTasks.sort(Comparator.comparingDouble(OptimizeTaskInfo::getWeight).reversed());
@@ -70,7 +70,7 @@ public class CustomCalculatedHandler {
             OptimizeTaskInfo task = optimizedTasks.get(i);
             log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
                     task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
-            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getStopTime(), task.getEffort(), i + 1);
+            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getEffort(), task.getEnjoyability(), i + 1);
         }
 
         return request.getTasks();
