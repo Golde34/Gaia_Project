@@ -61,7 +61,7 @@ public class GaiaAlgorithm extends ScheduleService<GaiaAlgorithmDTO, List<Task>>
         });
 
         List<List<Task>> taskBatches = new ArrayList<>();
-        int batchSize = 5;
+        int batchSize = Constants.OptimizeVariables.BATCH_SIZE;
         for (int i = 0; i < tasks.size(); i += batchSize) {
             int end = Math.min(i + batchSize, tasks.size());
             List<Task> batch = tasks.subList(i, end);

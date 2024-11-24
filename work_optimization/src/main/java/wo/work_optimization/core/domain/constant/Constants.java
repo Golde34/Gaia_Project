@@ -74,6 +74,10 @@ public class Constants {
 
     @UtilityClass
     public static class OptimizeVariables {
+        public static final double EFFORT_BIAS = 0.09;
+        public static final double ENJOYABILITY_BIAS = 0.5;
+        public static final int BATCH_SIZE = 5;
+
         public static final int ERROR = -1;
         public static final double ERROR_DOUBLE = -1.0;
     }
