@@ -49,13 +49,13 @@ public class CustomModel {
     }
 
     private double[] convertEffortValues(double[] effort) {
-        double[] result = Arrays.copyOf(effort, effort.length + 1);
+        double[] result = Arrays.copyOf(Arrays.stream(effort).map(v -> v * 4 / 9 + 5f / 9).toArray(), effort.length + 1);
         result[effort.length] = Constants.OptimizeVariables.EFFORT_BIAS;
         return result;
     }
 
     private double[] convertEnjoyabilityValues(double[] enjoyability) {
-        double[] result = Arrays.copyOf(enjoyability, enjoyability.length + 1);
+        double[] result = Arrays.copyOf(Arrays.stream(enjoyability).map(v -> v / 9 + 8f / 9).toArray(), enjoyability.length + 1);
         result[enjoyability.length] = Constants.OptimizeVariables.ENJOYABILITY_BIAS;
         return result;
     }

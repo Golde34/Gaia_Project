@@ -52,7 +52,7 @@ public class CustomCalculatedHandler {
             log.error("Error while optimizing task: {}", e.getMessage());
             request.getTasks().forEach(i -> {
                 log.error("Task ID: {}, Priority: {}, Duration: {}", i.getId(), i.getPriority(), i.getDuration());
-                taskStore.optimizeTask(i.getId(), ERROR_DOUBLE, ERROR_DOUBLE, ERROR_DOUBLE, 0, ERROR); 
+                taskStore.optimizeTask(i.getId(), ERROR_DOUBLE, ERROR_DOUBLE, ERROR_DOUBLE, ERROR_DOUBLE, 0, ERROR);
             });
             return Collections.emptyList();
         }
@@ -67,15 +67,18 @@ public class CustomCalculatedHandler {
                     .weight(weights.get(i))
                     .effort(effort[i])
                     .enjoyability(enjoyability[i])
-                            .stopTime(avgStopTime.get(i))
+                    .stopTime(avgStopTime.get(i))
                     .build());
         }
         optimizedTasks.sort(Comparator.comparingDouble(OptimizeTaskInfo::getWeight).reversed());
         for (int i = 0; i < optimizedTasks.size(); i++) {
             OptimizeTaskInfo task = optimizedTasks.get(i);
+            if (Double.isNaN(task.getStopTime())) {
+                task.setStopTime(ERROR_DOUBLE);
+            }
             log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
                     task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
-            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getEffort(), task.getEnjoyability(), i + 1, request.getBatchIndex());
+            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability(), i + 1, request.getBatchIndex());
         }
 
         return request.getTasks();
