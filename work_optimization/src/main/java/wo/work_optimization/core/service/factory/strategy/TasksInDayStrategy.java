@@ -39,5 +39,10 @@ public class TasksInDayStrategy extends StrategyService {
             throw new IllegalArgumentException("Date is required");
         }
     }
+
+    @Override
+    public List<Task> queryTasks(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks) {    
+        return taskService.getTasksInDay(parentTasks, request.getOptimizedDate());
+    }
     
 }

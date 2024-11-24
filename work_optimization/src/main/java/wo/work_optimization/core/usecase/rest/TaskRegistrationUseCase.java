@@ -8,7 +8,6 @@ import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;
 import wo.work_optimization.core.domain.dto.request.TaskRegistrationRequestDTO;
 import wo.work_optimization.core.domain.dto.response.RegisteredTaskConfigStatus;
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
@@ -23,7 +22,7 @@ public class TaskRegistrationUseCase {
 
     private final TaskRegistrationService taskRegistrationService;
     private final TaskRegistrationValidation taskRegistrationValidation;
-    private final GenericResponse<TaskResponseDTO> genericResponse;
+    private final GenericResponse<?> genericResponse;
 
     public GeneralResponse<?> registerTaskConfig(TaskRegistrationRequestDTO request) {
         try {

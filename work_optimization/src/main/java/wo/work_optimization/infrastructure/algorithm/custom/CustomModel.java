@@ -2,6 +2,8 @@ package wo.work_optimization.infrastructure.algorithm.custom;
 
 import lombok.Getter;
 import lombok.Setter;
+import wo.work_optimization.core.domain.constant.Constants;
+
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
@@ -39,7 +41,7 @@ public class CustomModel {
         this.effort = convertEffortValues(effort);
         this.enjoyability = convertEnjoyabilityValues(enjoyability);
         this.maximumWorkTime = maximumWorkTime;
-        this.taskLength = taskLength;
+        this.taskLength = taskLength+1;
         this.p0 = this.calculateInitialProductivity(this.effort, this.enjoyability);
         this.k = this.calculateK(this.effort, this.enjoyability);
         this.alpha = this.calculateAlpha(this.effort, this.enjoyability);
@@ -47,11 +49,15 @@ public class CustomModel {
     }
 
     private double[] convertEffortValues(double[] effort) {
-        return Arrays.stream(effort).map(v -> v * 4 / 9 + 5f / 9).toArray();
+        double[] result = Arrays.copyOf(Arrays.stream(effort).map(v -> v * 4 / 9 + 5f / 9).toArray(), effort.length + 1);
+        result[effort.length] = Constants.OptimizeVariables.EFFORT_BIAS;
+        return result;
     }
 
     private double[] convertEnjoyabilityValues(double[] enjoyability) {
-        return Arrays.stream(enjoyability).map(v -> v / 9 + 8f / 9).toArray();
+        double[] result = Arrays.copyOf(Arrays.stream(enjoyability).map(v -> v / 9 + 8f / 9).toArray(), enjoyability.length + 1);
+        result[enjoyability.length] = Constants.OptimizeVariables.ENJOYABILITY_BIAS;
+        return result;
     }
 
     /**
@@ -162,8 +168,8 @@ public class CustomModel {
                 });
         System.out.println("Sum: " + sum);
         return new HashMap<>() {{
-            put("weights", weights);
-            put("averageStopTime", averageStopTime);
+            put("weights", weights.subList(0, weights.size() - 1));
+            put("averageStopTime", averageStopTime.subList(0, averageStopTime.size() - 1));
         }};
     }
 

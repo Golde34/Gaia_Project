@@ -3,7 +3,9 @@ package wo.work_optimization.core.service.factory.schedule.connector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,24 +24,38 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
     private TaskRegistrationService taskRegistrationService;
 
     @Override
-    public List<Task> schedule(List<Task> tasks, Long userId) {
+    public Map<Integer, String> schedule(List<Task> tasks, Long userId) {
         try {
+            Map<Integer, String> scheduleResult = new HashMap<>();
+
             TaskRegistration taskRegistration = taskRegistrationService.getTaskRegistrationByUserId(userId);
-            R request = createRequest(tasks, taskRegistration);
-            P resp = doSchedule(request);
-            return mapResponse(resp);
+            List<List<Task>> taskBatches = sortTaskToBatches(tasks);
+
+            for (int i = 0; i < taskBatches.size(); i++) {
+                List<Task> taskBatch = taskBatches.get(i);
+
+                R request = createRequest(taskBatch, taskRegistration, i);
+                P resp = doSchedule(request);
+                String result = mapResponse(resp);
+
+                scheduleResult.put(i, result);
+            }
+
+            return scheduleResult;
         } catch (BusinessException e) {
             log.error("Error while scheduling", e);
-            return Collections.emptyList(); 
+            return Collections.emptyMap();
         } catch (Exception e) {
             log.error("Error while scheduling, system error:", e);
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
     }
 
+    public abstract List<List<Task>> sortTaskToBatches(List<Task> tasks);
     public abstract P doSchedule(R request);
-    public abstract R createRequest(List<Task> tasks, TaskRegistration taskRegistration);
-    public abstract List<Task> mapResponse(P response);
+    public abstract R createRequest(List<Task> tasks, TaskRegistration taskRegistration, int batchIndex);
+
+    public abstract String mapResponse(P response);
 
     public String requestToString(R request) {
         return JsonUtils.toJson(request);
@@ -49,4 +65,3 @@ public abstract class ScheduleService<R, P> implements ScheduleConnector {
         return JsonUtils.toJson(response);
     }
 }
-

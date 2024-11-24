@@ -13,8 +13,9 @@ import wo.work_optimization.core.domain.entity.TaskRegistration;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskRequestDTO {
+public class GaiaAlgorithmDTO {
     private long userId;
     private List<Task> tasks;
     private TaskRegistration taskRegistration;
+    private int batchIndex;
 }

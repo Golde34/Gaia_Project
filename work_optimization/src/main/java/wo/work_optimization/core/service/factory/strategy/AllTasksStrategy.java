@@ -41,4 +41,9 @@ public class AllTasksStrategy extends StrategyService {
             throw new IllegalArgumentException("User id is required");
         }
     }
+
+    @Override
+    public List<Task> queryTasks(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks) {
+        return taskService.getAllTasks(parentTasks);
+    }
 }
