@@ -117,4 +117,17 @@ public class TaskStoreAdapter implements TaskStore {
         long endDate = DateTimeUtils.convertStringDateTime(optimizedDate);
         return taskRepository.findByParentTaskIdAndEndDate(parentId, endDate);
     }
+
+    @Override
+    public void optimizeTask(String taskId, double weight, double effort, double enjoyability, int orderTask) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        if (task.isEmpty()) {
+            return;
+        }
+        task.get().setTaskOrder(orderTask);
+        task.get().setEffort(effort);
+        task.get().setEnjoyability(enjoyability);
+        task.get().setWeight(weight);
+        taskRepository.save(task.get());
+    }
 }

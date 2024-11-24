@@ -8,13 +8,13 @@ import wo.work_optimization.core.domain.dto.CustomScheduleTask;
 import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
+import wo.work_optimization.core.port.store.TaskStore;
+import wo.work_optimization.core.service.factory.schedule.gaia_algorithm.dto.OptimizeTaskInfo;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomConstantUpdating;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomModel;
 import wo.work_optimization.infrastructure.mapper.CustomScheduleModelMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +25,7 @@ public class CustomCalculatedHandler {
     private final CustomConstantUpdating constantUpdating;
 
     private final TaskRegistrationStore taskRegistrationStore;
+    private final TaskStore taskStore;
 
     public List<Task> optimize(TaskRequestDTO request) {
         // Get Flow State Constants
@@ -39,18 +40,40 @@ public class CustomCalculatedHandler {
         double deepWorkTime = request.getTaskRegistration().getWorkTime();
         // Optimize Task
         CustomModel customModel = mapper.map(c1, c2, c3, effort, enjoyability, deepWorkTime, tasks.size());
-        Map<String, List<Double>> optimizedWeightsAndAvgStopTime = customModel.optimize();
+        Map<String, List<Double>> optimizedWeightsAndAvgStopTime = new HashMap<>();
+        try {
+            optimizedWeightsAndAvgStopTime = customModel.optimize();
+        } catch (Exception e) {
+            log.error("Error while optimizing task: {}", e.getMessage());
+            request.getTasks().forEach(i -> {
+                log.error("Task ID: {}, Priority: {}, Duration: {}", i.getId(), i.getPriority(), i.getDuration());
+                taskStore.optimizeTask(i.getId(), -1.0f, -1.0f, -1.0f, 0);
+            });
+            return Collections.emptyList();
+        }
         // Map Result
         List<Double> weights = optimizedWeightsAndAvgStopTime.get("weights");
         List<Double> avgStopTime = optimizedWeightsAndAvgStopTime.get("averageStopTime");
-        for (int i = 0; i < taskIds.size(); i++) {
-            String taskId = taskIds.get(i);
-            Double weight = weights.get(i);
-            Double stopTime = avgStopTime.get(i);
-            System.out.printf("Task ID: %s, Weight: %.2f, Avg Stop Time: %.2f%n", taskId, weight, stopTime);
-        }
         // Store result to database
-        return null;
+        List<OptimizeTaskInfo> optimizedTasks = new ArrayList<>();
+        for (int i = 0; i < taskIds.size(); i++) {
+            optimizedTasks.add(OptimizeTaskInfo.builder()
+                    .taskId(taskIds.get(i))
+                    .weight(weights.get(i))
+                    .stopTime(avgStopTime.get(i))
+                    .effort(effort[i])
+                    .enjoyability(enjoyability[i])
+                    .build());
+        }
+        optimizedTasks.sort(Comparator.comparingDouble(OptimizeTaskInfo::getWeight).reversed());
+        for (int i = 0; i < optimizedTasks.size(); i++) {
+            OptimizeTaskInfo task = optimizedTasks.get(i);
+            log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
+                    task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
+            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getStopTime(), task.getEffort(), i + 1);
+        }
+
+        return request.getTasks();
     }
 
     private List<CustomScheduleTask> getListTasksToOptimize(List<Task> tasks) {

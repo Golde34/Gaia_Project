@@ -9,6 +9,7 @@ import java.util.List;
 public interface TaskStore {
     void save(Task task);
     void createTask(Task task);
+    void optimizeTask(String taskId, double weight, double effort, double enjoyability, int orderTask);
     Task findTaskByOriginalId(String originalId);
     List<Task> findAll();
     List<Task> findAllBySchedulePlan(String scheduleId);
