@@ -12,6 +12,8 @@ import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.port.store.TaskStore;
 import wo.work_optimization.core.service.factory.schedule.gaia_algorithm.dto.OptimizeTaskInfo;
+import wo.work_optimization.core.service.factory.schedule.gaia_algorithm.dto.OptimizingTaskResult;
+import wo.work_optimization.core.service.factory.schedule.gaia_algorithm.dto.OptimizingVariables;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomConstantUpdating;
 import wo.work_optimization.infrastructure.algorithm.custom.CustomModel;
 import wo.work_optimization.infrastructure.mapper.CustomScheduleModelMapper;
@@ -33,18 +35,11 @@ public class CustomCalculatedHandler {
     private final static double ERROR_DOUBLE = Constants.OptimizeVariables.ERROR_DOUBLE;
 
     public List<Task> optimize(GaiaAlgorithmDTO request) {
-        // Get Flow State Constants
-        double c1 = request.getTaskRegistration().getConstant1();
-        double c2 = request.getTaskRegistration().getConstant2();
-        double c3 = request.getTaskRegistration().getConstant3();
-        // Get optimizing variables
         List<CustomScheduleTask> tasks = getListTasksToOptimize(request.getTasks());
         List<String> taskIds = tasks.stream().map(CustomScheduleTask::getId).toList();
-        double[] effort = takeEffortList(tasks, taskIds);
-        double[] enjoyability = takeEnjoyabilityList(tasks, taskIds);
-        double deepWorkTime = request.getTaskRegistration().getWorkTime();
+        OptimizingVariables optimizingVariables = buildOptimizingVariables(request, tasks, taskIds);
         // Optimize Task
-        CustomModel customModel = mapper.map(c1, c2, c3, effort, enjoyability, deepWorkTime, tasks.size());
+        CustomModel customModel = mapper.map(optimizingVariables);
         Map<String, List<Double>> optimizedWeightsAndAvgStopTime = new HashMap<>();
         try {
             optimizedWeightsAndAvgStopTime = customModel.optimize();
@@ -59,27 +54,8 @@ public class CustomCalculatedHandler {
         // Map Result
         List<Double> weights = optimizedWeightsAndAvgStopTime.get("weights");
         List<Double> avgStopTime = optimizedWeightsAndAvgStopTime.get("averageStopTime");
-        // Store result to database
-        List<OptimizeTaskInfo> optimizedTasks = new ArrayList<>();
-        for (int i = 0; i < taskIds.size(); i++) {
-            optimizedTasks.add(OptimizeTaskInfo.builder()
-                    .taskId(taskIds.get(i))
-                    .weight(weights.get(i))
-                    .effort(effort[i])
-                    .enjoyability(enjoyability[i])
-                    .stopTime(avgStopTime.get(i))
-                    .build());
-        }
-        optimizedTasks.sort(Comparator.comparingDouble(OptimizeTaskInfo::getWeight).reversed());
-        for (int i = 0; i < optimizedTasks.size(); i++) {
-            OptimizeTaskInfo task = optimizedTasks.get(i);
-            if (Double.isNaN(task.getStopTime())) {
-                task.setStopTime(ERROR_DOUBLE);
-            }
-            log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
-                    task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
-            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability(), i + 1, request.getBatchIndex());
-        }
+        OptimizingTaskResult result = mapper.map(weights, avgStopTime, taskIds);
+        mapResult(result, optimizingVariables, request.getBatchIndex());
 
         return request.getTasks();
     }
@@ -103,6 +79,19 @@ public class CustomCalculatedHandler {
         return priority * 2;
     }
 
+    private OptimizingVariables buildOptimizingVariables(GaiaAlgorithmDTO request, List<CustomScheduleTask> tasks,
+            List<String> taskIds) {
+        // Get Flow State Constants
+        double c1 = request.getTaskRegistration().getConstant1();
+        double c2 = request.getTaskRegistration().getConstant2();
+        double c3 = request.getTaskRegistration().getConstant3();
+        // Get optimizing variables
+        double[] effort = takeEffortList(tasks, taskIds);
+        double[] enjoyability = takeEnjoyabilityList(tasks, taskIds);
+        double deepWorkTime = request.getTaskRegistration().getWorkTime();
+        return mapper.map(c1, c2, c3, effort, enjoyability, deepWorkTime, taskIds.size()); 
+    }
+
     private double[] takeEffortList(List<CustomScheduleTask> tasks, List<String> taskIds) {
         Map<String, Double> taskEfforts = tasks.stream()
                 .collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEffort));
@@ -113,6 +102,31 @@ public class CustomCalculatedHandler {
         Map<String, Double> taskEnjoyability = tasks.stream()
                 .collect(Collectors.toMap(CustomScheduleTask::getId, CustomScheduleTask::getEnjoyability));
         return taskIds.stream().map(taskEnjoyability::get).mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private void mapResult(OptimizingTaskResult result, OptimizingVariables optimizingVariables, int batchIndex) {
+        List<OptimizeTaskInfo> optimizedTasks = new ArrayList<>();
+        for (int i = 0; i < result.getTaskIds().size(); i++) {
+            optimizedTasks.add(OptimizeTaskInfo.builder()
+                    .taskId(result.getTaskIds().get(i))
+                    .weight(result.getWeights().get(i))
+                    .effort(optimizingVariables.getEffort()[i])
+                    .enjoyability(optimizingVariables.getEnjoyability()[i])
+                    .stopTime(result.getAvgStopTime().get(i))
+                    .build());
+        }
+        optimizedTasks.sort(Comparator.comparingDouble(OptimizeTaskInfo::getWeight).reversed());
+        // Store result to database
+        for (int i = 0; i < optimizedTasks.size(); i++) {
+            OptimizeTaskInfo task = optimizedTasks.get(i);
+            if (Double.isNaN(task.getStopTime())) {
+                task.setStopTime(ERROR_DOUBLE);
+            }
+            log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
+                    task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
+            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getStopTime(), task.getEffort(),
+                    task.getEnjoyability(), i + 1, batchIndex);
+        }
     }
 
     public void updateConstant(long userId, double c1, double c2, double c3, List<Task> taskList) {
