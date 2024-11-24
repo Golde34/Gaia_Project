@@ -72,4 +72,9 @@ public class Constants {
         public static final String TODO = "TODO";
     }
 
+    @UtilityClass
+    public static class OptimizeVariables {
+        public static final int ERROR = -1;
+        public static final double ERROR_DOUBLE = -1.0;
+    }
 }

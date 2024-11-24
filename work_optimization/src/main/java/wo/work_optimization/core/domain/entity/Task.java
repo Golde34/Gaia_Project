@@ -29,6 +29,7 @@ public class Task {
     private double enjoyability;
     private double duration;
     private double weight;
+    private int taskBatch;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
