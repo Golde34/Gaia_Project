@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.Constants;
-import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.dto.request.GaiaAlgorithmDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.service.factory.schedule.connector.ScheduleService;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GaiaAlgorithm extends ScheduleService<TaskRequestDTO, List<Task>> {
+public class GaiaAlgorithm extends ScheduleService<GaiaAlgorithmDTO, List<Task>> {
 
     private final CustomCalculatedHandler algorithm;
 
@@ -28,16 +28,17 @@ public class GaiaAlgorithm extends ScheduleService<TaskRequestDTO, List<Task>> {
     }
 
     @Override
-    public List<Task> doSchedule(TaskRequestDTO request) {
+    public List<Task> doSchedule(GaiaAlgorithmDTO request) {
         return algorithm.optimize(request);
     }
 
     @Override
-    public TaskRequestDTO createRequest(List<Task> tasks, TaskRegistration taskRegistration) {
-        return TaskRequestDTO.builder()
+    public GaiaAlgorithmDTO createRequest(List<Task> tasks, TaskRegistration taskRegistration, int batchIndex) {
+        return GaiaAlgorithmDTO.builder()
                 .userId(taskRegistration.getUserId())
                 .tasks(tasks)
                 .taskRegistration(taskRegistration)
+                .batchIndex(batchIndex)
                 .build();
     }
 

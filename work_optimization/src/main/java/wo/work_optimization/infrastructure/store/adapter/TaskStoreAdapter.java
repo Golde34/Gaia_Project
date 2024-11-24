@@ -119,7 +119,7 @@ public class TaskStoreAdapter implements TaskStore {
     }
 
     @Override
-    public void optimizeTask(String taskId, double weight, double effort, double enjoyability, int orderTask) {
+    public void optimizeTask(String taskId, double weight, double effort, double enjoyability, int orderTask, int batchIndex) {
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isEmpty()) {
             return;
@@ -128,6 +128,7 @@ public class TaskStoreAdapter implements TaskStore {
         task.get().setEffort(effort);
         task.get().setEnjoyability(enjoyability);
         task.get().setWeight(weight);
+        task.get().setTaskBatch(batchIndex);
         taskRepository.save(task.get());
     }
 }

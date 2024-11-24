@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.linear.RealVector;
 import org.springframework.stereotype.Service;
+
+import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.dto.CustomScheduleTask;
-import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
+import wo.work_optimization.core.domain.dto.request.GaiaAlgorithmDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.port.store.TaskStore;
@@ -27,7 +29,10 @@ public class CustomCalculatedHandler {
     private final TaskRegistrationStore taskRegistrationStore;
     private final TaskStore taskStore;
 
-    public List<Task> optimize(TaskRequestDTO request) {
+    private final static int ERROR = Constants.OptimizeVariables.ERROR;
+    private final static double ERROR_DOUBLE = Constants.OptimizeVariables.ERROR_DOUBLE;
+
+    public List<Task> optimize(GaiaAlgorithmDTO request) {
         // Get Flow State Constants
         double c1 = request.getTaskRegistration().getConstant1();
         double c2 = request.getTaskRegistration().getConstant2();
@@ -47,7 +52,7 @@ public class CustomCalculatedHandler {
             log.error("Error while optimizing task: {}", e.getMessage());
             request.getTasks().forEach(i -> {
                 log.error("Task ID: {}, Priority: {}, Duration: {}", i.getId(), i.getPriority(), i.getDuration());
-                taskStore.optimizeTask(i.getId(), -1.0f, -1.0f, -1.0f, 0);
+                taskStore.optimizeTask(i.getId(), ERROR_DOUBLE, ERROR_DOUBLE, ERROR_DOUBLE, 0, ERROR); 
             });
             return Collections.emptyList();
         }
@@ -70,7 +75,7 @@ public class CustomCalculatedHandler {
             OptimizeTaskInfo task = optimizedTasks.get(i);
             log.info("Task ID: {}, Weight: {}, Avg Stop Time: {}, Effort: {}, Enjoyability: {}", task.getTaskId(),
                     task.getWeight(), task.getStopTime(), task.getEffort(), task.getEnjoyability());
-            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getEffort(), task.getEnjoyability(), i + 1);
+            taskStore.optimizeTask(task.getTaskId(), task.getWeight(), task.getEffort(), task.getEnjoyability(), i + 1, request.getBatchIndex());
         }
 
         return request.getTasks();

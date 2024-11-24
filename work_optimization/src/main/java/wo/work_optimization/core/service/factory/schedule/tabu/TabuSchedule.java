@@ -5,26 +5,25 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import wo.work_optimization.core.domain.dto.request.TaskRequestDTO;
-import wo.work_optimization.core.domain.dto.response.TaskResponseDTO;
+import wo.work_optimization.core.domain.dto.request.GaiaAlgorithmDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.service.factory.schedule.connector.ScheduleService;
 
 @Service
-public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDTO> {
+public class TabuSchedule extends ScheduleService<GaiaAlgorithmDTO, List<Task>> {
     @Override
     public String method() {
         return "TabuSearch";
     }
 
     @Override
-    public TaskResponseDTO doSchedule(TaskRequestDTO request) {
+    public List<Task> doSchedule(GaiaAlgorithmDTO request) {
         return null;
     }
 
     @Override
-    public TaskRequestDTO createRequest(List<Task> tasks, TaskRegistration taskRegistration) {
+    public GaiaAlgorithmDTO createRequest(List<Task> tasks, TaskRegistration taskRegistration, int batchIndex) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createRequest'");
     }
@@ -35,7 +34,7 @@ public class TabuSchedule extends ScheduleService<TaskRequestDTO, TaskResponseDT
     }
 
     @Override
-    public String mapResponse(TaskResponseDTO response) {
+    public String mapResponse(List<Task> response) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mapResponse'");
     }
