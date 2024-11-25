@@ -1,7 +1,10 @@
 package client_adapter
 
 import (
+	request_dtos "middleware_loader/core/domain/dtos/request"
+	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/domain/enums"
+	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/kernel/utils"
 )
@@ -16,13 +19,19 @@ func NewTaskOptimizationAdapter(adapter *TaskOptimizationAdapter) *TaskOptimizat
 	return &TaskOptimizationAdapter{adapter: adapter}
 }
 
-func (adapter *TaskOptimizationAdapter) OptimizeTaskByUser(userId string) (string, error) {
-	optimizeTaskURL := base.WorkOptimizationServiceURL + task_optimization_domain + "/optimize-task-by-user?userId=" + userId 
-	var response string
-	_, err := utils.BaseAPIV2(optimizeTaskURL, enums.POST, nil, &response, nil)
+func (adapter *TaskOptimizationAdapter) OptimizeTaskByUser(input request_dtos.OptimizeTaskByUser) ([]response_dtos.OptimizedTaskByUser, error) {
+	optimizeTaskURL := base.WorkOptimizationServiceURL + task_optimization_domain + "/optimize-task-by-user"
+	var tasks []response_dtos.OptimizedTaskByUser
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(optimizeTaskURL, enums.POST, input, headers)
 	if err != nil {
-		return "", err
+		return []response_dtos.OptimizedTaskByUser{}, err
 	}
-	return response, nil
-}
 
+	for _, taskElement := range bodyResult.([]interface{}) {
+		task := mapper_response.ReturnOptimizedTaskListMapper(taskElement.(map[string]interface{}))
+		tasks = append(tasks, *task)
+	}
+
+	return tasks, nil
+}
