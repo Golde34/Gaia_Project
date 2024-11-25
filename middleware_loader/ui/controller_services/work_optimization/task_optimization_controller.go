@@ -2,6 +2,7 @@ package controller_services
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/work_optimization"
@@ -13,23 +14,24 @@ func OptimizeTaskByUser(w http.ResponseWriter, r *http.Request, taskOptimization
 	var body map[string]interface{}
 	body, err := controller_utils.MappingBody(w, r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("Invalid request body: %v", err), http.StatusBadRequest)
 		return
 	}
 	input := mapper.OptimizeTaskByUserRequestDTOMapper(body)
 
 	result, err := taskOptimizationService.OptimizeTaskByUser(input)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error optimizing task: %v", err)
+		http.Error(w, fmt.Sprintf("Failed to optimize tasks: %v", err), http.StatusInternalServerError)
 		return
 	}
 	response := map[string]interface{}{
 		"data": result,
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error encoding final response: %v", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Error generating response: %v", err), http.StatusInternalServerError)
 	}
 }
