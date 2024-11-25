@@ -1,7 +1,6 @@
 package services
 
 import (
-	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
@@ -16,7 +15,6 @@ func NewTaskOptimizationService() *TaskOptimizationService {
 
 func (s *TaskOptimizationService) OptimizeTaskByUser(input request_dtos.OptimizeTaskByUser) ([]response_dtos.OptimizedTaskByUser, error) {
 	response, err := client.ITaskOptimizationAdapter(&adapter.TaskOptimizationAdapter{}).OptimizeTaskByUser(input)
-	log.Println("OptimizeTaskByUser response: ", response)
 	if err != nil {
 		return []response_dtos.OptimizedTaskByUser{}, err 
 	}

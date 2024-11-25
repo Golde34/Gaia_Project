@@ -88,8 +88,6 @@ func errorReturnBlock(statusMessage string, err error) (interface{}, error) {
 }
 
 func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
-	log.Println("Request: ", req)
-	log.Println("Start return response")
 	client := &http.Client{
 		Timeout: 5 * time.Second,
 	}
@@ -98,7 +96,7 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 		return errorReturnBlock("send request ", err)
 	}
 	defer resp.Body.Close()
-	log.Println("Response: ", resp)
+
 	if (resp.StatusCode != 200) && (resp.StatusCode != 201) {
 		return errorReturnBlock("response status code", fmt.Errorf("response status code: %d", resp.StatusCode))
 	}
@@ -108,7 +106,6 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 		return nil, fmt.Errorf("read response body: %v", err)
 	}
 
-	log.Println("Response: ", string(body))
 	// map body to Error Response
 	var response base_dtos.ErrorResponse
 

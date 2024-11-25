@@ -1,7 +1,6 @@
 package client_adapter
 
 import (
-	"log"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/domain/enums"
@@ -25,7 +24,6 @@ func (adapter *TaskOptimizationAdapter) OptimizeTaskByUser(input request_dtos.Op
 	var tasks []response_dtos.OptimizedTaskByUser
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(optimizeTaskURL, enums.POST, input, headers)
-	log.Println("OptimizeTaskByUser response: ", bodyResult)
 	if err != nil {
 		return []response_dtos.OptimizedTaskByUser{}, err
 	}

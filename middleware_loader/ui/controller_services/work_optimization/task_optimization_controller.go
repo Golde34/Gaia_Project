@@ -23,9 +23,12 @@ func OptimizeTaskByUser(w http.ResponseWriter, r *http.Request, taskOptimization
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	response := map[string]interface{}{
+		"data": result,
+	}
 	
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(result); err != nil {
+	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error encoding final response: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
