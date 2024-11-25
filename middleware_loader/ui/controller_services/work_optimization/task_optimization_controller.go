@@ -3,15 +3,22 @@ package controller_services
 import (
 	"encoding/json"
 	"log"
+	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/work_optimization"
+	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
-
-	"github.com/go-chi/chi"
 )
 
 func OptimizeTaskByUser(w http.ResponseWriter, r *http.Request, taskOptimizationService *services.TaskOptimizationService) {
-	userId := chi.URLParam(r, "userId")
-	result, err := taskOptimizationService.OptimizeTaskByUser(userId)
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	input := mapper.OptimizeTaskByUserRequestDTOMapper(body)
+
+	result, err := taskOptimizationService.OptimizeTaskByUser(input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
