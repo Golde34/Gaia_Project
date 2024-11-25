@@ -16,7 +16,7 @@ type TaskOptimizationRouter struct {
 func NewTaskOptimizationRouter(taskOptimizationService *services.TaskOptimizationService, db database_mongo.Database, r *chi.Mux) *TaskOptimizationRouter {
 	r.Route("/task-optimization", func(r chi.Router) {
 		// r.Use(middleware.CheckMicroserviceStatus(db, enums.WORK_OPTIMIZATION))
-		r.Post("/optimize-task-by-user/{userId}", func(w http.ResponseWriter, r *http.Request) {
+		r.Post("/optimize-task-by-user", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.OptimizeTaskByUser(w, r, taskOptimizationService)
 		})
 	})
