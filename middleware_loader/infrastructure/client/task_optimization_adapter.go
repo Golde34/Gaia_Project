@@ -1,6 +1,8 @@
 package client_adapter
 
 import (
+	"fmt"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/domain/enums"
@@ -23,12 +25,20 @@ func (adapter *TaskOptimizationAdapter) OptimizeTaskByUser(input request_dtos.Op
 	optimizeTaskURL := base.WorkOptimizationServiceURL + task_optimization_domain + "/optimize-task-by-user"
 	var tasks []response_dtos.OptimizedTaskByUser
 	headers := utils.BuildDefaultHeaders()
-	bodyResult, err := utils.BaseAPI(optimizeTaskURL, enums.POST, input, headers)
+	bodyResult, err := utils.FullResponseBaseAPI(optimizeTaskURL, enums.POST, input, headers)
 	if err != nil {
-		return []response_dtos.OptimizedTaskByUser{}, err
+		return nil, fmt.Errorf("failed to call optimization API: %w", err)
 	}
 
-	for _, taskElement := range bodyResult.([]interface{}) {
+	bodyResultMap, ok := bodyResult.(base_dtos.ErrorResponse)
+	if !ok {
+		return nil, fmt.Errorf("failed to convert object: %w", err) 
+	}
+	if bodyResultMap.ErrorCode != 200 {
+		return nil, fmt.Errorf("failed because WO has exception")
+	}
+
+	for _, taskElement := range bodyResultMap.Data.([]interface{}) {
 		task := mapper_response.ReturnOptimizedTaskListMapper(taskElement.(map[string]interface{}))
 		tasks = append(tasks, *task)
 	}

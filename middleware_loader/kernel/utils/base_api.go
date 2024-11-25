@@ -113,9 +113,6 @@ func returnResponse(req *http.Request, bodyType string) (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unmarshal response: %v", err)
 	}
-	if response.ErrorCode != 200 {
-		return response, fmt.Errorf(response.Data.(string))
-	}
 
 	return returnResponseType(response, bodyType)
 }
