@@ -1,47 +1,74 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const WebSocketContext = createContext(null);
 
 export const useWebSocket = () => useContext(WebSocketContext);
 
 export const WebSocketProvider = ({ children }) => {
-    const [messages, setMessages] = useState([]);
-    const clientRef = useRef(null);
+  const [messages, setMessages] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const clientRef = useRef(null);
+  const reconnectTimeoutRef = useRef(null);
 
-    useEffect(() => {
-        const client = new W3CWebSocket('ws://localhost:8080/ws');
-        clientRef.current = client;
+  const connectWebSocket = () => {
+    console.log("Attempting to connect...");
+    const client = new W3CWebSocket("ws://localhost:4003/ws");
 
-        client.onopen = () => {
-            console.log('WebSocket Client Connected');
-        };
-
-        client.onmessage = (message) => {
-            console.log("Receive message: ", message);
-            setMessages((prev) => [...prev, message.data]);
-        };
-
-        client.onclose = () => {
-            console.log('WebSocket Client Disconnected');
-        };
-
-        return () => {
-            client.close();
-        };
-    }, []);
-
-    const sendMessage = (message) => {
-        if (clientRef.current && clientRef.current.readyState === 1) {
-            clientRef.current.send(message);
-        } else {
-            console.error('WebSocket is not connected');
-        }
+    client.onopen = () => {
+      console.log("WebSocket connected");
+      setIsConnected(true);
+      clearTimeout(reconnectTimeoutRef.current);
     };
 
-    return (
-        <WebSocketContext.Provider value={{ messages, sendMessage }}>
-            {children}
-        </WebSocketContext.Provider>
-    )
-}
+    client.onmessage = (message) => {
+      console.log("Received message:", message.data);
+      setMessages((prev) => [...prev, message.data]);
+    };
+
+    client.onclose = () => {
+      console.log("WebSocket disconnected");
+      setIsConnected(false);
+      attemptReconnect(); 
+    };
+
+    client.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      client.close();
+    };
+
+    clientRef.current = client;
+  };
+
+  const attemptReconnect = () => {
+    console.log("Attempting to reconnect...");
+    reconnectTimeoutRef.current = setTimeout(() => {
+      connectWebSocket();
+    }, 5000);
+  };
+
+  const sendMessage = (msg) => {
+    if (clientRef.current && clientRef.current.readyState === WebSocket.OPEN) {
+      clientRef.current.send(msg);
+    } else {
+      console.error("WebSocket not connected, message not sent");
+    }
+  };
+
+  useEffect(() => {
+    connectWebSocket();
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.close();
+      }
+      clearTimeout(reconnectTimeoutRef.current);
+    };
+  }, []);
+
+  return (
+    <WebSocketContext.Provider value={{ messages, sendMessage, isConnected }}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};
