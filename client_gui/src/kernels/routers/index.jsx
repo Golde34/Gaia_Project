@@ -18,6 +18,7 @@ import TaskRegistration from '../../views/task_manager/TaskRegistration';
 import GaiaHealth from '../../views/microservices_gui/GaiaHealth';
 import NoteDashboard from '../../views/task_manager/NoteDashboard';
 import NoteDetail from '../../screens/noteScreen/NoteDetail';
+import ChatComponent from '../../views/user_gui/TestChat';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -121,6 +122,11 @@ const routeList = [
         path: '/note-detail/:id',
         key: 'note-detail',
         element: <NoteDetail />,
+    },
+    {
+        path: '/chat',
+        key: 'chat',
+        element: <ChatComponent />,
     }
 ]
 
