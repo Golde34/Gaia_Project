@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"notify-agent/kernel/configs"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -20,21 +21,21 @@ var userConnections = struct {
 	connections map[string]*websocket.Conn
 }{connections: make(map[string]*websocket.Conn)}
 
-func sendToUser(userId string, message []byte) {
-	userConnections.Lock()
-	defer userConnections.Unlock()
+// func sendToUser(userId string, message []byte) {
+// 	userConnections.Lock()
+// 	defer userConnections.Unlock()
 
-	if conn, ok := userConnections.connections[userId]; ok {
-		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
-		if err != nil {
-			log.Println("Error sending message to user:", err)
-			conn.Close()
-			delete(userConnections.connections, userId)
-		}
-	} else {
-		log.Println("No active connection for userId:", userId)
-	}
-}
+// 	if conn, ok := userConnections.connections[userId]; ok {
+// 		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
+// 		if err != nil {
+// 			log.Println("Error sending message to user:", err)
+// 			conn.Close()
+// 			delete(userConnections.connections, userId)
+// 		}
+// 	} else {
+// 		log.Println("No active connection for userId:", userId)
+// 	}
+// }
 
 // WebSocket xử lý kết nối
 func handleWebSocket(w http.ResponseWriter, r *http.Request) {
@@ -83,12 +84,15 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Server Initialization
+	config := configs.Config{}
+	cfg, _ := config.LoadEnv()
+
+	// Register WebSocket handler
 	http.HandleFunc("/ws", handleWebSocket)
 
-	port := "4003"
-	log.Println("Server listening on port", port)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe error:", err)
-	}
+	// Rest Router
+	
+	log.Printf("connect to http://localhost:%s/", cfg.Port)
+	log.Fatal(http.ListenAndServe(":"+cfg.Port, nil))
 }
