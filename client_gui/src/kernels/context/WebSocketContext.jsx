@@ -12,8 +12,9 @@ export const WebSocketProvider = ({ children }) => {
   const reconnectTimeoutRef = useRef(null);
 
   const connectWebSocket = () => {
+    const userId = "1";
     console.log("Attempting to connect...");
-    const client = new W3CWebSocket("ws://localhost:4003/ws");
+    const client = new W3CWebSocket(`ws://localhost:4003/ws?userId=${userId}`);
 
     client.onopen = () => {
       console.log("WebSocket connected");
