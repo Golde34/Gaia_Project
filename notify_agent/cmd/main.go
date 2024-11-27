@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"notify_agent/cmd/route"
 	services "notify_agent/core/services/websocket"
+	"notify_agent/infrastructure/kafka"
 	"notify_agent/kernel/configs"
+	consumer "notify_agent/ui/kafka"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -15,6 +17,21 @@ import (
 
 
 func main() {
+	// Kafka Initialization
+	kafkaConfig := configs.KafkaConfig{}
+	kafkaCfg, _ := kafkaConfig.LoadEnv()
+	log.Println("Kafka Config: ", kafkaCfg.GroupId)
+
+	handlers := map[string] kafka.MessageHandler {
+		"notify-agent.optimize-task-notify.topic": &consumer.OptimizeTaskNotifyHandler{},
+	}
+
+	consumerGroupHandler := kafka.NewConsumerGroupHandler(kafkaCfg.Name, handlers)
+
+	go func () {
+		kafka.ConsumerGroup(kafkaCfg.BootstrapServers, kafkaCfg.Topics, kafkaCfg.GroupId, consumerGroupHandler)
+	}()
+
 	// Server Initialization
 	config := configs.Config{}
 	cfg, _ := config.LoadEnv()
