@@ -6,16 +6,18 @@ import auth.authentication_service.core.domain.dto.UserDto;
 import auth.authentication_service.core.domain.dto.request.UpdateUserRequest;
 import auth.authentication_service.core.domain.entities.Role;
 import auth.authentication_service.core.domain.entities.User;
+import auth.authentication_service.core.domain.entities.UserSetting;
 import auth.authentication_service.core.domain.enums.BossType;
-import auth.authentication_service.core.domain.enums.LoggerType;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.port.mapper.UserMapper;
 import auth.authentication_service.core.port.store.RoleStore;
 import auth.authentication_service.core.port.store.UserCRUDStore;
+import auth.authentication_service.core.port.store.UserSettingStore;
 import auth.authentication_service.core.services.interfaces.UserService;
 import auth.authentication_service.core.validations.service_validations.UserServiceValidation;
 import auth.authentication_service.kernel.utils.*;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,19 +26,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
 @Primary
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private LoggerUtils _logger;
 
     private final UserCRUDStore userStore;
     private final RoleStore roleStore;
+    private final UserSettingStore userSettingStore;
 
     @Autowired
     private ModelMapperConfig modelMapperConfig;
@@ -50,11 +52,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    public UserServiceImpl(UserCRUDStore userStore, RoleStore roleStore) {
-        this.userStore = userStore;
-        this.roleStore = roleStore;
-    }
-
     @Override
     public ResponseEntity<?> createUser(RegisterDto userDto) {
         User user = modelMapperConfig._mapperDtoToEntity(userDto);
@@ -67,7 +64,19 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         user.setRoles(Collections.singletonList(_isBoss(userDto.isBoss())));
         userStore.save(user);
-        _logger.log("Create user: " + user.getUsername(), LoggerType.INFO);
+        log.info("User created: {}", user.getName().toString());
+        
+        UserSetting userSetting = UserSetting.builder()
+            .autoOptimizeConfig(1)
+            .optimizedTaskConfig(2)
+            .privateProfileConfig(1)
+            .taskSortingAlgorithm(3)
+            .createdDate(new Date())
+            .updatedDate(new Date())
+            .user(user)
+            .build();
+        userSettingStore.save(userSetting);
+        log.info("Create default setting for user: {}", user.getName().toString());
 
         return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
     }
@@ -90,7 +99,7 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = userStore.getUserById(userDto.getUserId());
-            _logger.log("Update user: " + user.getUsername() + " to: " + userDto.getUsername(), LoggerType.INFO);
+            log.info("Update user: {} to: {}", user.getUsername(), userDto.getUsername());
             updateUserRoles(userDto, user);
             user = userMapper.updateUserMapper(userDto, user);
             userStore.save(user);
@@ -123,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
             User deleteUser = userStore.getUserById(user.getId());
             userStore.delete(deleteUser);
-            _logger.log("Delete user: " + userDto.getUsername(), LoggerType.INFO);
+            log.info("Delete user: {}", deleteUser.getUsername());
             return genericResponse.matchingResponseMessage(new GenericResponse<>(deleteUser, ResponseEnum.msg200));
         } catch (Exception e) {
             GenericResponse<String> response = responseUtils.returnMessage(
@@ -139,7 +148,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = userStore.findAll();
             // List<UserResponse> userResponses =
             // modelMapperConfig._mapperEntityToDto(users);
-            _logger.log("Get all users", LoggerType.INFO);
+            log.info("Get all users: {}", users.toString());
             return genericResponse.matchingResponseMessage(new GenericResponse<>(users, ResponseEnum.msg200));
         } catch (Exception e) {
             GenericResponse<String> response = responseUtils.returnMessage(
@@ -157,7 +166,7 @@ public class UserServiceImpl implements UserService {
             log.info("Get user: {} from: {}", user.getUsername(), usedClass);
             return user;
         } catch (Exception e) {
-            _logger.log("Get user: " + id + " failed", LoggerType.ERROR);
+            log.info("Get user: {} failed", id);
             return null;
         }
     }
@@ -167,7 +176,7 @@ public class UserServiceImpl implements UserService {
         try {
             String username = userDto.getUsername();
             User user = userStore.findByUsername(username);
-            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
+            log.info("Get user: {}", user.getUsername());
             return genericResponse.matchingResponseMessage(new GenericResponse<>(user, ResponseEnum.msg200));
         } catch (Exception e) {
             GenericResponse<String> response = responseUtils.returnMessage(
@@ -181,10 +190,10 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         try {
             User user = userStore.findByEmail(email);
-            _logger.log("Get user: " + user.getUsername(), LoggerType.INFO);
+            log.info("Get user: {}", user.getUsername());
             return user;
         } catch (Exception e) {
-            _logger.log("Get user: " + email + " failed", LoggerType.ERROR);
+            log.info("Get user: {} failed", email);
             return null;
         }
     }

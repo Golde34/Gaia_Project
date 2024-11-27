@@ -37,6 +37,7 @@ function ContentArea() {
     const [optimizeTaskConfig, setOptimizeTaskConfig] = useState('1');
     const [privateProfileConfig, setPrivateProfileConfig] = useState('1');
     const [taskSortingAlgorithm, setTaskSortingAlgorithm] = useState('1');
+    const [autoOptimizeConfig, setAutoOptimizeConfig] = useState('1');
 
     // Update state based on user data once user is loaded
     useEffect(() => {
@@ -44,6 +45,7 @@ function ContentArea() {
             setOptimizeTaskConfig(user.userSetting.optimizeTaskConfig?.toString() || '1');
             setPrivateProfileConfig(user.userSetting.privateProfileConfig?.toString() || '1');
             setTaskSortingAlgorithm(user.userSetting.taskSortingAlgorithm?.toString() || '1');
+            setAutoOptimizeConfig(user.userSetting.autoOptimizeConfig?.toString() || '1');
         }
     }, [user]);
 
@@ -332,6 +334,71 @@ function ContentArea() {
                                                     </label>
                                                     <label className="text-sm text-gray-400" htmlFor="tsa-radio-4">
                                                         Tabu Search
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </Col>
+                                        <Col numColSpan={1}>
+                                            <Subtitle>Auto Optimize Config</Subtitle>
+                                        </Col>
+                                        <Col numColSpan={1}>
+                                            <div className="grid grid-cols-3 m-1">
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="apc-radio-1" data-ripple-dark="true">
+
+                                                        <input
+                                                            id="apc-radio-1"
+                                                            type="radio"
+                                                            value="1"
+                                                            checked={autoOptimizeConfig === '1'}
+                                                            onChange={(e) => setAutoOptimizeConfig(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-yellow-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-yellow-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-yellow-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400 me-4" htmlFor="tsa-radio-1">
+                                                        Optimize when creating task
+                                                    </label>
+                                                </div>
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="apc-radio-2" data-ripple-dark="true">
+                                                        <input
+                                                            id="apc-radio-2"
+                                                            type="radio"
+                                                            value="2"
+                                                            checked={autoOptimizeConfig === '2'}
+                                                            onChange={(e) => setAutoOptimizeConfig(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-yellow-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-yellow-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-yellow-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400" htmlFor="apc-radio-2">
+                                                        Optimize in fixed time
+                                                    </label>
+                                                </div>
+                                                <div className="inline-flex items-center">
+                                                    <label className="relative flex cursor-pointer items-center rounded-full p-3"
+                                                        htmlFor="apc-radio-3" data-ripple-dark="true">
+                                                        <input
+                                                            id="apc-radio-3"
+                                                            type="radio"
+                                                            value="3"
+                                                            checked={autoOptimizeConfig === '3'}
+                                                            onChange={(e) => setAutoOptimizeConfig(e.target.value)}
+                                                            className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-yellow-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-yellow-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
+                                                        />
+                                                        <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-yellow-500 opacity-0 transition-opacity peer-checked:opacity-100">
+                                                            <RadioButtonIcon />
+                                                        </div>
+                                                    </label>
+                                                    <label className="text-sm text-gray-400" htmlFor="apc-radio-3">
+                                                        Disable Auto Optimize
                                                     </label>
                                                 </div>
                                             </div>

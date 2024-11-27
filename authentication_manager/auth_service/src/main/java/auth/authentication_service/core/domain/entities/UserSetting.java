@@ -32,6 +32,10 @@ public class UserSetting {
 			"3: Time and Priority, 4: Tabu Search'")
 	private Integer taskSortingAlgorithm;
 
+	@Column(name = "auto_optimize_config", columnDefinition = "TINYINT(4) COMMENT '1: Optimize when creating task, " + 
+			"2: Optimize in fixed time, 3: Disable auto optimize'")
+	private Integer autoOptimizeConfig;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnore

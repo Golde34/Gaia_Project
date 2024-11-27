@@ -32,35 +32,42 @@ public class TaskOptimizationUseCase {
     private final StrategyFactory strategyFactory;
     private final AuthService authService;
 
-    private final GenericResponse<?> genericResponse; 
+    private final GenericResponse<?> genericResponse;
 
     public GeneralResponse<?> optimizeTaskByUser(OptimizeTaskRestRequestDTO request) {
-        // Call auth service to get user settings
-        UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
-        // Get Task Strategy
-        String strategy = OptimizedTaskConfigEnum.of(userSettingResponseDTO.getOptimizedTaskConfig()).getMode();
-        StrategyConnector strategyConnector = strategyFactory.get(strategy);
-        List<Task> listTasks = strategyConnector.handleStrategy(request);
+        try {
+            // Call auth service to get user settings
+            UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
+            // Get Task Strategy
+            String strategy = OptimizedTaskConfigEnum.of(userSettingResponseDTO.getOptimizedTaskConfig()).getMode();
+            StrategyConnector strategyConnector = strategyFactory.get(strategy);
+            List<Task> listTasks = strategyConnector.handleStrategy(request);
 
-        // Optimize Task by Schedule Factory
-        if (listTasks.isEmpty()) {
-            return genericResponse.matchingResponseMessage(new GenericResponse<>("No task found", ResponseMessage.msg400));
-        }
-        String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
-        ScheduleConnector scheduleConnector = scheduleFactory.get(method);
-        Map<Integer, String> result = scheduleConnector.schedule(listTasks, request.getUserId());
-        if (result.isEmpty()) {
-            return genericResponse.matchingResponseMessage(new GenericResponse<>("No task to optimize", ResponseMessage.msg400));
-        }
-        result.entrySet().stream().forEach(r -> {
-            if (Constants.ErrorStatus.FAIL.equals(r.getValue())) {
-                log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
-                        r.getKey());
+            // Optimize Task by Schedule Factory
+            if (listTasks.isEmpty()) {
+                return genericResponse
+                        .matchingResponseMessage(new GenericResponse<>("No task found", ResponseMessage.msg400));
             }
-        });
-        log.info("Optimize Task By User: {}", result);
-        List<Task> savedTasks = strategyConnector.returnTasks(request);
-        return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
+            String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
+            ScheduleConnector scheduleConnector = scheduleFactory.get(method);
+            Map<Integer, String> result = scheduleConnector.schedule(listTasks, request.getUserId());
+            if (result.isEmpty()) {
+                return genericResponse
+                        .matchingResponseMessage(new GenericResponse<>("No task to optimize", ResponseMessage.msg400));
+            }
+            result.entrySet().stream().forEach(r -> {
+                if (Constants.ErrorStatus.FAIL.equals(r.getValue())) {
+                    log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
+                            r.getKey());
+                }
+            });
+            log.info("Optimize Task By User: {}", result);
+            List<Task> savedTasks = strategyConnector.returnTasks(request);
+            return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
+        } catch (Exception e) {
+            log.error("Error when optimize task by user: {}", e.getMessage());
+            return genericResponse
+                    .matchingResponseMessage(new GenericResponse<>(e.getMessage(), ResponseMessage.msg500));
+        }
     }
-
 }

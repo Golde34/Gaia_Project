@@ -418,4 +418,5 @@ type UserSetting struct {
 	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
 	PrivateProfileConfig float64 `json:"privateProfileConfig"`
 	TaskSortingAlgorithm float64 `json:"taskSortingAlgorithm"`
+	AutoOptimizeConfig   float64 `json:"autoOptimizeConfig"`
 }

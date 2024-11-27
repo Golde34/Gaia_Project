@@ -1,13 +1,18 @@
-package main
+package services
 
 import (
 	"log"
 	"net/http"
-	"notify-agent/kernel/configs"
 	"sync"
 
 	"github.com/gorilla/websocket"
 )
+
+type WebSocketService struct {}
+
+func NewWebSocketService() *WebSocketService {
+	return &WebSocketService{}
+}
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
@@ -15,30 +20,12 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// Quản lý các kết nối WebSocket theo userId
 var userConnections = struct {
 	sync.Mutex
 	connections map[string]*websocket.Conn
 }{connections: make(map[string]*websocket.Conn)}
 
-// func sendToUser(userId string, message []byte) {
-// 	userConnections.Lock()
-// 	defer userConnections.Unlock()
-
-// 	if conn, ok := userConnections.connections[userId]; ok {
-// 		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
-// 		if err != nil {
-// 			log.Println("Error sending message to user:", err)
-// 			conn.Close()
-// 			delete(userConnections.connections, userId)
-// 		}
-// 	} else {
-// 		log.Println("No active connection for userId:", userId)
-// 	}
-// }
-
-// WebSocket xử lý kết nối
-func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	// Nâng cấp kết nối HTTP lên WebSocket
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -83,16 +70,18 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
-	// Server Initialization
-	config := configs.Config{}
-	cfg, _ := config.LoadEnv()
+// func sendToUser(userId string, message []byte) {
+// 	userConnections.Lock()
+// 	defer userConnections.Unlock()
 
-	// Register WebSocket handler
-	http.HandleFunc("/ws", handleWebSocket)
-
-	// Rest Router
-	
-	log.Printf("connect to http://localhost:%s/", cfg.Port)
-	log.Fatal(http.ListenAndServe(":"+cfg.Port, nil))
-}
+// 	if conn, ok := userConnections.connections[userId]; ok {
+// 		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
+// 		if err != nil {
+// 			log.Println("Error sending message to user:", err)
+// 			conn.Close()
+// 			delete(userConnections.connections, userId)
+// 		}
+// 	} else {
+// 		log.Println("No active connection for userId:", userId)
+// 	}
+// }

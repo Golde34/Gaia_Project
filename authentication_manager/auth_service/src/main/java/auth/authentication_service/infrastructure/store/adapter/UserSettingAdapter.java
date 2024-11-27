@@ -19,6 +19,12 @@ public class UserSettingAdapter implements UserSettingStore {
     private final UserRepository userRepository;
 
     @Override
+    public void save(UserSetting userSetting) {
+        log.info("Saving user setting: {}", userSetting);
+        userSettingRepository.save(userSetting);
+    }
+
+    @Override
     public UserSetting getUserSetting(Long userId) {
         User user = userRepository.findUserById(userId);
         return userSettingRepository.findUserSettingByUser(user);

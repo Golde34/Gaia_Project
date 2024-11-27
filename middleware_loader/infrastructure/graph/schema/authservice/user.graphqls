@@ -63,4 +63,5 @@ type UserSetting {
 	optimizedTaskConfig: Float!
 	privateProfileConfig: Float!
     taskSortingAlgorithm: Float!
+    autoOptimizeConfig: Float!
 }
