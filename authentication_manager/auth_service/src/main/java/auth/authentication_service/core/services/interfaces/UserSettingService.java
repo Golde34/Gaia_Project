@@ -5,6 +5,6 @@ import auth.authentication_service.core.domain.entities.UserSetting;
 import org.springframework.http.ResponseEntity;
 
 public interface UserSettingService {
-    ResponseEntity<?> updateUserSettings(UserSetting userSetting);
+    ResponseEntity<?> updateUserSettings(long userId, UserSetting userSetting);
     ResponseEntity<?> getUserSettings(Long userId); 
 }

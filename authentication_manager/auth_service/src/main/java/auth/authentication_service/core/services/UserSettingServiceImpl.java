@@ -5,6 +5,8 @@ import auth.authentication_service.core.domain.enums.ResponseEnum;
 import auth.authentication_service.core.port.store.UserSettingStore;
 import auth.authentication_service.core.services.interfaces.UserSettingService;
 import auth.authentication_service.kernel.utils.GenericResponse;
+
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,8 @@ public class UserSettingServiceImpl implements UserSettingService {
     private final GenericResponse<?> genericResponse;
 
     @Override
-    public ResponseEntity<?> updateUserSettings(UserSetting userSetting) {
+    @CacheEvict(value = "userResponseById", key = "#userId", cacheManager = "cacheManager")
+    public ResponseEntity<?> updateUserSettings(long userId, UserSetting userSetting) {
         UserSetting result = userSettingStore.updateUserSetting(userSetting);
         return genericResponse.matchingResponseMessage(new GenericResponse<>(result, ResponseEnum.msg200));
     }
