@@ -63,6 +63,6 @@ func (s *UserService) GetUserDetail(ctx context.Context, input model.IDInput) (m
 	}
 	
 	userModel := userDetailResponse.MapperToGraphQLModelDetail(user)
-	log.Println("User Detail: ", userModel)
+	log.Println("User Detail: ", userModel.UserSetting.AutoOptimizeConfig)
 	return userModel, nil
 }

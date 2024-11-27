@@ -323,6 +323,7 @@ type ComplexityRoot struct {
 	}
 
 	UserSetting struct {
+		AutoOptimizeConfig   func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		OptimizedTaskConfig  func(childComplexity int) int
 		PrivateProfileConfig func(childComplexity int) int
@@ -2082,6 +2083,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserPermissionResponse.Name(childComplexity), true
+
+	case "UserSetting.autoOptimizeConfig":
+		if e.complexity.UserSetting.AutoOptimizeConfig == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.AutoOptimizeConfig(childComplexity), true
 
 	case "UserSetting.id":
 		if e.complexity.UserSetting.ID == nil {
@@ -13478,6 +13486,8 @@ func (ec *executionContext) fieldContext_UpdateUser_userSetting(_ context.Contex
 				return ec.fieldContext_UserSetting_privateProfileConfig(ctx, field)
 			case "taskSortingAlgorithm":
 				return ec.fieldContext_UserSetting_taskSortingAlgorithm(ctx, field)
+			case "autoOptimizeConfig":
+				return ec.fieldContext_UserSetting_autoOptimizeConfig(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},
@@ -14193,6 +14203,50 @@ func (ec *executionContext) _UserSetting_taskSortingAlgorithm(ctx context.Contex
 }
 
 func (ec *executionContext) fieldContext_UserSetting_taskSortingAlgorithm(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserSetting",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserSetting_autoOptimizeConfig(ctx context.Context, field graphql.CollectedField, obj *model.UserSetting) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSetting_autoOptimizeConfig(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AutoOptimizeConfig, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserSetting_autoOptimizeConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSetting",
 		Field:      field,
@@ -19554,6 +19608,11 @@ func (ec *executionContext) _UserSetting(ctx context.Context, sel ast.SelectionS
 			}
 		case "taskSortingAlgorithm":
 			out.Values[i] = ec._UserSetting_taskSortingAlgorithm(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "autoOptimizeConfig":
+			out.Values[i] = ec._UserSetting_autoOptimizeConfig(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
