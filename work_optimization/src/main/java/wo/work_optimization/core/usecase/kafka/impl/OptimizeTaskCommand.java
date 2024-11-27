@@ -3,27 +3,38 @@ package wo.work_optimization.core.usecase.kafka.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
+import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
+import wo.work_optimization.core.domain.enums.OptimizedTaskConfigEnum;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
+import wo.work_optimization.core.service.factory.schedule.connector.ScheduleConnector;
+import wo.work_optimization.core.service.factory.schedule.connector.ScheduleFactory;
+import wo.work_optimization.core.service.factory.strategy.connector.StrategyConnector;
+import wo.work_optimization.core.service.factory.strategy.connector.StrategyFactory;
 import wo.work_optimization.core.service.integration.AuthService;
 import wo.work_optimization.core.service.integration.TaskService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;
+import wo.work_optimization.kernel.utils.DateTimeUtils;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, String> {
+
+    private final ScheduleFactory scheduleFactory;
+    private final StrategyFactory strategyFactory;
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
@@ -78,11 +89,27 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
             log.error("Task Registration with id {} not found", request.getWorkOptimTaskId());
         }
         // Call auth service to get user settings
-        UserSettingResponseDTO userSetting = authService.getUserSetting(taskRegistration.get().getUserId()); 
+        Long userId = taskRegistration.get().getUserId();
+        UserSettingResponseDTO userSetting = authService.getUserSetting(userId); 
         if (DataUtils.isNullOrEmpty(userSetting)) {
-            log.error("User Setting with id {} not found", taskRegistration.get().getUserId());
+            log.error("User Setting with id {} not found", userId); 
         }
         // Optimize task
+        OptimizeTaskRestRequestDTO req = OptimizeTaskRestRequestDTO.builder().userId(userId).optimizedDate(DateTimeUtils.currentDateTime()).build(); 
+                String strategy = OptimizedTaskConfigEnum.of(userSetting.getTaskSortingAlgorithm()).getMode();
+        StrategyConnector strategyConnector = strategyFactory.get(strategy); 
+        List<Task> listTasks = strategyConnector.handleStrategy(req);
+
+        // Optimize Task by Schedule Factory
+        if (listTasks.isEmpty()) {
+            log.error("No task found");
+            return "No task found";
+        }
+        String method = OptimizedTaskConfigEnum.of(userSetting.getOptimizedTaskConfig()).getMode();
+        ScheduleConnector scheduleConnector = scheduleFactory.get(method);
+        scheduleConnector.schedule(listTasks, userId);
+        log.info("Optimize Task By User: {}", listTasks);
+        
         return "OptimizeTaskCommand doCommand";
     }
 }
