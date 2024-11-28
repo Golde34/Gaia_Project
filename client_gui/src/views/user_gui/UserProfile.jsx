@@ -35,7 +35,7 @@ function ContentArea() {
         }, 200);
     }, [])
 
-    const [optimizeTaskConfig, setOptimizeTaskConfig] = useState('1');
+    const [optimizedTaskConfig, setOptimizedTaskConfig] = useState('1');
     const [privateProfileConfig, setPrivateProfileConfig] = useState('1');
     const [taskSortingAlgorithm, setTaskSortingAlgorithm] = useState('1');
     const [autoOptimizeConfig, setAutoOptimizeConfig] = useState('1');
@@ -43,7 +43,7 @@ function ContentArea() {
     // Update state based on user data once user is loaded
     useEffect(() => {
         if (user && user.userSetting) {
-            setOptimizeTaskConfig(user.userSetting.optimizeTaskConfig?.toString() || '1');
+            setOptimizedTaskConfig(user.userSetting.optimizedTaskConfig?.toString() || '1');
             setPrivateProfileConfig(user.userSetting.privateProfileConfig?.toString() || '1');
             setTaskSortingAlgorithm(user.userSetting.taskSortingAlgorithm?.toString() || '1');
             setAutoOptimizeConfig(user.userSetting.autoOptimizeConfig?.toString() || '1');
@@ -52,12 +52,13 @@ function ContentArea() {
 
     const [userSetting, setUserSetting] = useState({});
     const updateUserSetting = useUpdateUserSettingDispatch();
-    const setUserSettingObject = (optimizeTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig) => {
+    const setUserSettingObject = (optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig) => {
         userSetting.userId = user.id;
-        userSetting.optimizeTaskConfig = optimizeTaskConfig;
-        userSetting.privateProfileConfig = privateProfileConfig;
-        userSetting.taskSortingAlgorithm = taskSortingAlgorithm;
-        userSetting.autoOptimizeConfig = autoOptimizeConfig;
+        userSetting.optimizedTaskConfig = Number(optimizedTaskConfig);
+        userSetting.privateProfileConfig = Number(privateProfileConfig);
+        userSetting.taskSortingAlgorithm = Number(taskSortingAlgorithm);
+        userSetting.autoOptimizeConfig = Number(autoOptimizeConfig);
+        console.log(userSetting);
         updateUserSetting(userSetting);
         window.location.reload();
     }
@@ -197,8 +198,8 @@ function ContentArea() {
                                                         id="optimize-task-radio-1"
                                                         type="radio"
                                                         value="1"
-                                                        checked={optimizeTaskConfig === '1'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        checked={optimizedTaskConfig === '1'}
+                                                        onChange={(e) => setOptimizedTaskConfig(e.target.value)}
                                                         className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
                                                     />
                                                     <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
@@ -216,8 +217,8 @@ function ContentArea() {
                                                         id="optimize-task-radio-2"
                                                         type="radio"
                                                         value="2"
-                                                        checked={optimizeTaskConfig === '2'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        checked={optimizedTaskConfig === '2'}
+                                                        onChange={(e) => setOptimizedTaskConfig(e.target.value)}
                                                         className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
                                                     />
                                                     <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
@@ -235,8 +236,8 @@ function ContentArea() {
                                                         id="optimize-task-radio-3"
                                                         type="radio"
                                                         value="3"
-                                                        checked={optimizeTaskConfig === '3'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        checked={optimizedTaskConfig === '3'}
+                                                        onChange={(e) => setOptimizedTaskConfig(e.target.value)}
                                                         className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
                                                     />
                                                     <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
@@ -254,8 +255,8 @@ function ContentArea() {
                                                         id="optimize-task-radio-4"
                                                         type="radio"
                                                         value="4"
-                                                        checked={optimizeTaskConfig === '4'}
-                                                        onChange={(e) => setOptimizeTaskConfig(e.target.value)}
+                                                        checked={optimizedTaskConfig === '4'}
+                                                        onChange={(e) => setOptimizedTaskConfig(e.target.value)}
                                                         className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-indigo-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-indigo-gray-500 before:opacity-0 before:transition-opacity checked:border-indigo-500 checked:before:bg-indigo-500 hover:before:opacity-10"
                                                     />
                                                     <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-indigo-500 opacity-0 transition-opacity peer-checked:opacity-100">
@@ -423,7 +424,7 @@ function ContentArea() {
                                                     variant="primary"
                                                     color="indigo"
                                                     onClick={() => {
-                                                        setUserSettingObject(optimizeTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig);                                                        
+                                                        setUserSettingObject(optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig);                                                        
                                                     }}
                                                 > Save Settings</Button>
                                             </div></Col>
