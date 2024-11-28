@@ -41,8 +41,7 @@ function ContentArea() {
     const [autoOptimizeConfig, setAutoOptimizeConfig] = useState('1');
 
     const [initialSettings, setInitialSettings] = useState(null);
-    const [isChanged, setIsChanged] = useState(false)
-    ;
+    const [isChanged, setIsChanged] = useState(false);
     // Update state based on user data once user is loaded
     useEffect(() => {
         if (user && user.userSetting) {
