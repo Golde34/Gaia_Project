@@ -60,7 +60,7 @@ export const userProfile = (userId) => async (dispatch) => {
 export const updateUserSetting = (updateUserSettingRequest) => async (dispatch) => {
     dispatch({ type: USER_SETTING_UPDATE_REQUEST,  payload: updateUserSettingRequest });
     try {
-        const { data } = await serverRequest('/user-setting/update', HttpMethods.PUT, portName.middlewarePort, updateUserSettingRequest);
+        const { data } = await serverRequest('/user/update-user-setting', HttpMethods.PUT, portName.middlewarePort, updateUserSettingRequest);
         dispatch({ type: USER_SETTING_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
