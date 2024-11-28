@@ -6,6 +6,9 @@ import auth.authentication_service.core.port.store.UserSettingStore;
 import auth.authentication_service.core.services.interfaces.UserSettingService;
 import auth.authentication_service.kernel.utils.GenericResponse;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ public class UserSettingServiceImpl implements UserSettingService {
     @Override
     @CacheEvict(value = "userResponseById", key = "#userId", cacheManager = "cacheManager")
     public ResponseEntity<?> updateUserSettings(long userId, UserSetting userSetting) {
+        userSetting.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
         UserSetting result = userSettingStore.updateUserSetting(userSetting);
         return genericResponse.matchingResponseMessage(new GenericResponse<>(result, ResponseEnum.msg200));
     }

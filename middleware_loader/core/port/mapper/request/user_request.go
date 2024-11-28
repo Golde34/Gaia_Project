@@ -30,3 +30,5 @@ func GetUserIdInBody(body map[string]interface{}) *request_dtos.UserIdInputDTO {
 	input.UserId = utils.GetFloatValue(bodyMap, "userId", 0)
 	return &input
 }
+
+func UpdateUserSettingRequestDTOMapper(body[string]interface{}) *request_dtos

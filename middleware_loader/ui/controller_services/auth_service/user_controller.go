@@ -60,3 +60,20 @@ func GetUserDetail(w http.ResponseWriter, r *http.Request, userService *services
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 }
+
+func UpdateUserSetting(w http.ResponseWriter, r *http.Request, userService *services.UserService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	input := mapper.UpdateUserSettingRequestDTOMapper(body)
+	log.Println(input)
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateUserSetting", QueryInput: input, QueryOutput: model.UpdateUserSetting{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
