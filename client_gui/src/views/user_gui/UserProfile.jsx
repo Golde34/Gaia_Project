@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { userProfile } from "../../api/store/actions/auth_service/user.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
+import { useUpdateUserSettingDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 function ContentArea() {
     const navigate = useNavigate();
@@ -48,6 +49,17 @@ function ContentArea() {
             setAutoOptimizeConfig(user.userSetting.autoOptimizeConfig?.toString() || '1');
         }
     }, [user]);
+
+    const [userSetting, setUserSetting] = useState({});
+    const updateUserSetting = useUpdateUserSettingDispatch();
+    const setUserSettingObject = (optimizeTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig) => {
+        userSetting.optimizeTaskConfig = optimizeTaskConfig;
+        userSetting.privateProfileConfig = privateProfileConfig;
+        userSetting.taskSortingAlgorithm = taskSortingAlgorithm;
+        userSetting.autoOptimizeConfig = autoOptimizeConfig;
+        updateUserSetting(userSetting);
+        window.location.reload();
+    }
 
     return (
         <div>
@@ -410,7 +422,7 @@ function ContentArea() {
                                                     variant="primary"
                                                     color="indigo"
                                                     onClick={() => {
-                                                        navigate('/privilege-role-dashboard');
+                                                        setUserSettingObject(optimizeTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig);                                                        
                                                     }}
                                                 > Save Settings</Button>
                                             </div></Col>
