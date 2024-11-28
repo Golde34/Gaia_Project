@@ -53,6 +53,7 @@ function ContentArea() {
     const [userSetting, setUserSetting] = useState({});
     const updateUserSetting = useUpdateUserSettingDispatch();
     const setUserSettingObject = (optimizeTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig) => {
+        userSetting.userId = user.id;
         userSetting.optimizeTaskConfig = optimizeTaskConfig;
         userSetting.privateProfileConfig = privateProfileConfig;
         userSetting.taskSortingAlgorithm = taskSortingAlgorithm;
