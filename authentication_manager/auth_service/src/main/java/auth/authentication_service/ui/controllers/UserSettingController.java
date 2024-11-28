@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserSettingController {
     private final UserSettingService userSettingService;
 
-    @PostMapping("/add-user-setting")
-    public ResponseEntity<?> createUserSetting(@RequestBody UpdateUserSetting updateUserSetting) {
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUserSetting(@RequestBody UpdateUserSetting updateUserSetting) {
         return userSettingService.updateUserSettings(updateUserSetting.getUserId(), updateUserSetting.getUserSetting());
-    }
+    }    
 
-    @GetMapping("/get-user-setting")
+    @GetMapping("/get-by-user")
     public ResponseEntity<?> getUserSetting(@RequestParam Long userId) {
         return userSettingService.getUserSettings(userId);
     }
