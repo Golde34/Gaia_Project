@@ -40,19 +40,44 @@ function ContentArea() {
     const [taskSortingAlgorithm, setTaskSortingAlgorithm] = useState('1');
     const [autoOptimizeConfig, setAutoOptimizeConfig] = useState('1');
 
+    const [initialSettings, setInitialSettings] = useState(null);
+    const [isChanged, setIsChanged] = useState(false)
+    ;
     // Update state based on user data once user is loaded
     useEffect(() => {
         if (user && user.userSetting) {
-            setOptimizedTaskConfig(user.userSetting.optimizedTaskConfig?.toString() || '1');
-            setPrivateProfileConfig(user.userSetting.privateProfileConfig?.toString() || '1');
-            setTaskSortingAlgorithm(user.userSetting.taskSortingAlgorithm?.toString() || '1');
-            setAutoOptimizeConfig(user.userSetting.autoOptimizeConfig?.toString() || '1');
+            const initial = {
+                optimizedTaskConfig: user.userSetting.optimizedTaskConfig?.toString() || '1',
+                privateProfileConfig: user.userSetting.privateProfileConfig?.toString() || '1',
+                taskSortingAlgorithm: user.userSetting.taskSortingAlgorithm?.toString() || '1',
+                autoOptimizeConfig: user.userSetting.autoOptimizeConfig?.toString() || '1',
+            };
+            setOptimizedTaskConfig(initial.optimizedTaskConfig);
+            setPrivateProfileConfig(initial.privateProfileConfig);
+            setTaskSortingAlgorithm(initial.taskSortingAlgorithm);
+            setAutoOptimizeConfig(initial.autoOptimizeConfig);
+
+            setInitialSettings(initial);
         }
     }, [user]);
+    useEffect(() => {
+        if (initialSettings) {
+            const hasChanged =
+                optimizedTaskConfig !== initialSettings.optimizedTaskConfig ||
+                privateProfileConfig !== initialSettings.privateProfileConfig ||
+                taskSortingAlgorithm !== initialSettings.taskSortingAlgorithm ||
+                autoOptimizeConfig !== initialSettings.autoOptimizeConfig;
+            setIsChanged(hasChanged);
+        }
+    }, [optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig, initialSettings]);
+
 
     const [userSetting, setUserSetting] = useState({});
     const updateUserSetting = useUpdateUserSettingDispatch();
     const setUserSettingObject = (optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig) => {
+        if (!isChanged) {
+            return;
+        }
         userSetting.userId = user.id;
         userSetting.optimizedTaskConfig = Number(optimizedTaskConfig);
         userSetting.privateProfileConfig = Number(privateProfileConfig);
@@ -424,7 +449,7 @@ function ContentArea() {
                                                     variant="primary"
                                                     color="indigo"
                                                     onClick={() => {
-                                                        setUserSettingObject(optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig);                                                        
+                                                        setUserSettingObject(optimizedTaskConfig, privateProfileConfig, taskSortingAlgorithm, autoOptimizeConfig);
                                                     }}
                                                 > Save Settings</Button>
                                             </div></Col>
