@@ -107,3 +107,16 @@ func (in *UserDetailDTO) MapperToGraphQLModelDetail(input UserDetailDTO) model.U
 	}
 	return out
 }
+
+func NewUserSettingDTO() *UserSettingDTO {
+	return &UserSettingDTO{}
+}
+
+func (in *UserSettingDTO) MapperToGraphQLModelSetting(input UserSettingDTO) model.UserSetting {
+	var out model.UserSetting
+	out.OptimizedTaskConfig = input.OptimizedTaskConfig
+	out.PrivateProfileConfig = input.PrivateProfileConfig
+	out.TaskSortingAlgorithm = input.TaskSortingAlgorithm
+	out.AutoOptimizeConfig = input.AutoOptimizeConfig
+	return out
+}

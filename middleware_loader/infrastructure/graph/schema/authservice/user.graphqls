@@ -68,5 +68,8 @@ type UserSetting {
 
 input UpdateUserSettingInput {
     userId: Float!
-    userSetting: UserSetting!
+    optimizedTaskConfig: Float!
+    privateProfileConfig: Float!
+    taskSortingAlgorithm: Float!
+    autoOptimizeConfig: Float!
 }

@@ -70,9 +70,8 @@ func UpdateUserSetting(w http.ResponseWriter, r *http.Request, userService *serv
 	}
 
 	input := mapper.UpdateUserSettingRequestDTOMapper(body)
-	log.Println(input)
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateUserSetting", QueryInput: input, QueryOutput: model.UpdateUserSetting{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "updateUserSetting", QueryInput: input, QueryOutput: model.UserSetting{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)

@@ -35,14 +35,14 @@ func NewUserIdInputDTO() *UserIdInputDTO {
 
 type UpdateUserSettingRequestDTO struct {
 	UserId float64 `json:"userId"`
-	UserSetting UserSetting `json:"userSetting"`	
-}
-type UserSetting struct {
-	ID                   float64 `json:"id"`
-	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
+	OptimizedTaskConfig float64 `json:"optimizedTaskConfig"`
 	PrivateProfileConfig float64 `json:"privateProfileConfig"`
 	TaskSortingAlgorithm float64 `json:"taskSortingAlgorithm"`
-	AutoOptimizeConfig   float64 `json:"autoOptimizeConfig"`
+	AutoOptimizeConfig float64 `json:"autoOptimizeConfig"`
+}
+
+func NewUpdateUserSettingRequestDTO() *UpdateUserSettingRequestDTO {
+	return &UpdateUserSettingRequestDTO{}
 }
 
 func (in *UpdateUserSettingRequestDTO) MapperToModel(input model.UpdateUserSettingInput) {
