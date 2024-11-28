@@ -1,6 +1,6 @@
 package auth.authentication_service.ui.controllers;
 
-import auth.authentication_service.core.domain.dto.request.UpdateUserSetting;
+import auth.authentication_service.core.domain.dto.request.UpdateUserSettingRequest;
 import auth.authentication_service.core.services.interfaces.UserSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserSettingController {
     private final UserSettingService userSettingService;
 
-    @PostMapping("/add-user-setting")
-    public ResponseEntity<?> createUserSetting(@RequestBody UpdateUserSetting updateUserSetting) {
-        return userSettingService.updateUserSettings(updateUserSetting.getUserId(), updateUserSetting.getUserSetting());
-    }
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUserSetting(@RequestBody UpdateUserSettingRequest updateUserSettingRequest) {
+        return userSettingService.updateUserSettings(updateUserSettingRequest);
+    }    
 
-    @GetMapping("/get-user-setting")
+    @GetMapping("/get-by-user")
     public ResponseEntity<?> getUserSetting(@RequestParam Long userId) {
         return userSettingService.getUserSettings(userId);
     }

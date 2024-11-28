@@ -21,10 +21,10 @@ func (in *KafkaConfig) LoadEnv() (KafkaConfig, error) {
 		fmt.Println("Error loading .env file: ", err)
 	}
 
-	bootstrapServers := os.Getenv("BOOTSTRAP_SERVERS")
-	groupId := os.Getenv("GROUP_ID")
-	topics := os.Getenv("TOPICS")
-	name := os.Getenv("NAME")
+	bootstrapServers := os.Getenv("KAFKA_BOOTSTRAP_SERVERS")
+	groupId := os.Getenv("KAFKA_GROUP_ID")
+	topics := os.Getenv("KAFKA_TOPICS")
+	name := os.Getenv("KAFKA_NAME")
 
 	return KafkaConfig{
 		BootstrapServers: bootstrapServers,

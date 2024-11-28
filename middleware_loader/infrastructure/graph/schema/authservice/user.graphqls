@@ -65,3 +65,11 @@ type UserSetting {
     taskSortingAlgorithm: Float!
     autoOptimizeConfig: Float!
 }
+
+input UpdateUserSettingInput {
+    userId: Float!
+    optimizedTaskConfig: Float!
+    privateProfileConfig: Float!
+    taskSortingAlgorithm: Float!
+    autoOptimizeConfig: Float!
+}

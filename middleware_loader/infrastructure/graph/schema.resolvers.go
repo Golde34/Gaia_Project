@@ -117,6 +117,12 @@ func (r *mutationResolver) DeletePrivilege(ctx context.Context, input model.Priv
 	panic(fmt.Errorf("not implemented: DeletePrivilege - deletePrivilege"))
 }
 
+// UpdateUserSetting is the resolver for the updateUserSetting field.
+func (r *mutationResolver) UpdateUserSetting(ctx context.Context, input model.UpdateUserSettingInput) (*model.UserSetting, error) {
+	userSetting, err := userService.UpdateUserSetting(ctx, input)
+	return &userSetting, err
+}
+
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
 	project, err := projectService.CreateProject(ctx, input)

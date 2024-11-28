@@ -78,3 +78,19 @@ func (adapter *UserAdapter) GetUserDetail(input model.IDInput) (response_dtos.Us
 	log.Println("userResponse", userResponse)
 	return *userResponse, nil
 }
+
+func (adapter *UserAdapter) UpdateUserSetting(input model.UpdateUserSettingInput) (response_dtos.UserSettingDTO, error) {
+	updateUserSettingURL := base.AuthServiceURL + "/user-setting/update"
+	var userSetting response_dtos.UserSettingDTO
+	headers := utils.BuildAuthorizationHeaders(enums.AS, "1")
+	bodyResult, err := utils.BaseAPIV2(updateUserSettingURL, "PUT", input, userSetting, headers)
+	if err != nil {
+		return response_dtos.UserSettingDTO{}, err
+	}
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return *response_dtos.NewUserSettingDTO(), nil
+	}
+	userSettingResponse := mapper_response.ReturnUserSettingObjectMapper(bodyResultMap["message"].(map[string]interface{}))
+	return *userSettingResponse, nil
+}

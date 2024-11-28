@@ -56,3 +56,12 @@ func ReturnUserObjectMapper(body map[string]interface{}) *response_dtos.UserDeta
 	log.Println(input)
 	return &input
 }
+
+func ReturnUserSettingObjectMapper(body map[string]interface{}) *response_dtos.UserSettingDTO {
+	var input response_dtos.UserSettingDTO
+	input.OptimizedTaskConfig = body["optimizedTaskConfig"].(float64)
+	input.PrivateProfileConfig = body["privateProfileConfig"].(float64)
+	input.TaskSortingAlgorithm = body["taskSortingAlgorithm"].(float64)
+	input.AutoOptimizeConfig = body["autoOptimizeConfig"].(float64)
+	return &input
+}

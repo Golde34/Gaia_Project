@@ -30,3 +30,14 @@ func GetUserIdInBody(body map[string]interface{}) *request_dtos.UserIdInputDTO {
 	input.UserId = utils.GetFloatValue(bodyMap, "userId", 0)
 	return &input
 }
+
+func UpdateUserSettingRequestDTOMapper(body map[string]interface{}) *request_dtos.UpdateUserSettingRequestDTO {
+	var input request_dtos.UpdateUserSettingRequestDTO
+	bodyMap := body["body"].(map[string]interface{})
+	input.UserId = utils.GetFloatValue(bodyMap, "userId", 0)
+	input.OptimizedTaskConfig = utils.GetFloatValue(bodyMap, "optimizedTaskConfig", 0) 
+	input.PrivateProfileConfig = utils.GetFloatValue(bodyMap, "privateProfileConfig", 0)
+	input.TaskSortingAlgorithm = utils.GetFloatValue(bodyMap, "taskSortingAlgorithm", 0)
+	input.AutoOptimizeConfig = utils.GetFloatValue(bodyMap, "autoOptimizeConfig", 0)
+	return &input
+}

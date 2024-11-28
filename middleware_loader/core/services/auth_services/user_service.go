@@ -20,6 +20,7 @@ func NewUserService() *UserService {
 var userValidation = validator.NewUserDTOValidator()
 var userResponse = response_dtos.NewUserDTO()
 var userDetailResponse = response_dtos.NewUserDetailDTO()
+var userSettingResponse = response_dtos.NewUserSettingDTO()
 
 func (s *UserService) ListAllUsers(ctx context.Context) ([]model.ListAllUsers, error) {
 	users, err := client.IUserAdapter(&adapter.UserAdapter{}).ListAllUsers()
@@ -65,4 +66,14 @@ func (s *UserService) GetUserDetail(ctx context.Context, input model.IDInput) (m
 	userModel := userDetailResponse.MapperToGraphQLModelDetail(user)
 	log.Println("User Detail: ", userModel.UserSetting.AutoOptimizeConfig)
 	return userModel, nil
+}
+
+func (s *UserService) UpdateUserSetting(ctx context.Context, input model.UpdateUserSettingInput) (model.UserSetting, error) {
+	userSetting, err := client.IUserAdapter(&adapter.UserAdapter{}).UpdateUserSetting(input)
+	if err != nil {
+		return model.UserSetting{}, err
+	}
+	
+	userSettingModel := userSettingResponse.MapperToGraphQLModelSetting(userSetting)
+	return userSettingModel, nil
 }

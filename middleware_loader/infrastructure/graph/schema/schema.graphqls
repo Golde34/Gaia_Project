@@ -49,7 +49,8 @@ type Mutation {
 	createPrivilege(input: PrivilegeInput!): Privilege!
 	updatePrivilege(input: PrivilegeInput!): Privilege!
 	deletePrivilege(input: PrivilegeInput!): Privilege!
-	
+
+	updateUserSetting(input: UpdateUserSettingInput!): UserSetting!	
 	# Task Manager
 	createProject(input: CreateProjectInput!): Project!
 	updateProject(input: UpdateProjectInput!): Project!

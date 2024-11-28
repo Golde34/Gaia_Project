@@ -379,6 +379,14 @@ type UpdateUserInput struct {
 	Roles    []string `json:"roles"`
 }
 
+type UpdateUserSettingInput struct {
+	UserID               float64 `json:"userId"`
+	OptimizedTaskConfig  float64 `json:"optimizedTaskConfig"`
+	PrivateProfileConfig float64 `json:"privateProfileConfig"`
+	TaskSortingAlgorithm float64 `json:"taskSortingAlgorithm"`
+	AutoOptimizeConfig   float64 `json:"autoOptimizeConfig"`
+}
+
 type User struct {
 	ID         float64 `json:"id"`
 	Name       string  `json:"name"`

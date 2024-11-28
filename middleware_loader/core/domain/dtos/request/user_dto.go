@@ -32,3 +32,19 @@ func (in *UserIdInputDTO) MapperToModel(input model.RegisterTaskInput) {
 func NewUserIdInputDTO() *UserIdInputDTO {
 	return &UserIdInputDTO{}
 }
+
+type UpdateUserSettingRequestDTO struct {
+	UserId float64 `json:"userId"`
+	OptimizedTaskConfig float64 `json:"optimizedTaskConfig"`
+	PrivateProfileConfig float64 `json:"privateProfileConfig"`
+	TaskSortingAlgorithm float64 `json:"taskSortingAlgorithm"`
+	AutoOptimizeConfig float64 `json:"autoOptimizeConfig"`
+}
+
+func NewUpdateUserSettingRequestDTO() *UpdateUserSettingRequestDTO {
+	return &UpdateUserSettingRequestDTO{}
+}
+
+func (in *UpdateUserSettingRequestDTO) MapperToModel(input model.UpdateUserSettingInput) {
+	mapper.AutoMapper(&input, in)
+}

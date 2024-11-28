@@ -14,11 +14,12 @@ import Calendar from '../../views/schedule_plan/Calendar';
 import PrivilegeAndRoleDashboard from '../../views/auth_service/RoleAndPrivilegeDashboard';
 import PrivilegeUrlSettings from '../../views/auth_service/PrivilegeUrlSettings';
 import GaiaManagerDashboard from '../../views/gaia_management/GaiaManagerDashboard';
-import TaskRegistration from '../../views/task_manager/TaskRegistration';
 import GaiaHealth from '../../views/microservices_gui/GaiaHealth';
 import NoteDashboard from '../../views/task_manager/NoteDashboard';
 import NoteDetail from '../../screens/noteScreen/NoteDetail';
 import ChatComponent from '../../views/user_gui/TestChat';
+import TaskIntroduction from '../../views/introduction/TaskIntroduction';
+import TaskRegistration from '../../views/task_manager/TaskRegistration';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -54,6 +55,7 @@ const routeList = [
     {
         path: '/user-task-connector',
         key: 'user-task-connector',
+        // element: <TaskIntroduction />,
         element: <TaskRegistration />,
     },
     {

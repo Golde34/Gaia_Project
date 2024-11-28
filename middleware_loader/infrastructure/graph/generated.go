@@ -164,6 +164,7 @@ type ComplexityRoot struct {
 		UpdateTask                   func(childComplexity int, input model.UpdateTaskInput) int
 		UpdateTaskInDialog           func(childComplexity int, input model.UpdateTaskInDialogInput) int
 		UpdateUser                   func(childComplexity int, input model.UpdateUserInput) int
+		UpdateUserSetting            func(childComplexity int, input model.UpdateUserSettingInput) int
 	}
 
 	Note struct {
@@ -349,6 +350,7 @@ type MutationResolver interface {
 	CreatePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
 	UpdatePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
 	DeletePrivilege(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
+	UpdateUserSetting(ctx context.Context, input model.UpdateUserSettingInput) (*model.UserSetting, error)
 	CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error)
 	UpdateProject(ctx context.Context, input model.UpdateProjectInput) (*model.Project, error)
 	DeleteProject(ctx context.Context, input model.IDInput) (*model.Project, error)
@@ -1252,6 +1254,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(model.UpdateUserInput)), true
 
+	case "Mutation.updateUserSetting":
+		if e.complexity.Mutation.UpdateUserSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateUserSetting_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateUserSetting(childComplexity, args["input"].(model.UpdateUserSettingInput)), true
+
 	case "Note.activeStatus":
 		if e.complexity.Note.ActiveStatus == nil {
 			break
@@ -2151,6 +2165,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTaskInDialogInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateUserInput,
+		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUserIdInput,
 		ec.unmarshalInputUserInput,
 		ec.unmarshalInputUserPermissionInput,
@@ -2903,6 +2918,21 @@ func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, 
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUpdateTaskInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateTaskInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateUserSettingInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUpdateUserSettingInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateUserSettingInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6329,6 +6359,73 @@ func (ec *executionContext) fieldContext_Mutation_deletePrivilege(ctx context.Co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deletePrivilege_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateUserSetting(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateUserSetting(rctx, fc.Args["input"].(model.UpdateUserSettingInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UserSetting)
+	fc.Result = res
+	return ec.marshalNUserSetting2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserSetting(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_UserSetting_id(ctx, field)
+			case "optimizedTaskConfig":
+				return ec.fieldContext_UserSetting_optimizedTaskConfig(ctx, field)
+			case "privateProfileConfig":
+				return ec.fieldContext_UserSetting_privateProfileConfig(ctx, field)
+			case "taskSortingAlgorithm":
+				return ec.fieldContext_UserSetting_taskSortingAlgorithm(ctx, field)
+			case "autoOptimizeConfig":
+				return ec.fieldContext_UserSetting_autoOptimizeConfig(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateUserSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -17261,6 +17358,61 @@ func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateUserSettingInput(ctx context.Context, obj interface{}) (model.UpdateUserSettingInput, error) {
+	var it model.UpdateUserSettingInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"userId", "optimizedTaskConfig", "privateProfileConfig", "taskSortingAlgorithm", "autoOptimizeConfig"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "optimizedTaskConfig":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("optimizedTaskConfig"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OptimizedTaskConfig = data
+		case "privateProfileConfig":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("privateProfileConfig"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrivateProfileConfig = data
+		case "taskSortingAlgorithm":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taskSortingAlgorithm"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TaskSortingAlgorithm = data
+		case "autoOptimizeConfig":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoOptimizeConfig"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoOptimizeConfig = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserIdInput(ctx context.Context, obj interface{}) (model.UserIDInput, error) {
 	var it model.UserIDInput
 	asMap := map[string]interface{}{}
@@ -18036,6 +18188,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deletePrivilege":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deletePrivilege(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateUserSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateUserSetting(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -20774,6 +20933,11 @@ func (ec *executionContext) unmarshalNUpdateUserInput2middleware_loaderᚋinfras
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNUpdateUserSettingInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUpdateUserSettingInput(ctx context.Context, v interface{}) (model.UpdateUserSettingInput, error) {
+	res, err := ec.unmarshalInputUpdateUserSettingInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNUser2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
@@ -20815,6 +20979,10 @@ func (ec *executionContext) marshalNUserPermissionResponse2ᚖmiddleware_loader�
 		return graphql.Null
 	}
 	return ec._UserPermissionResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserSetting2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v model.UserSetting) graphql.Marshaler {
+	return ec._UserSetting(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserSetting2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *model.UserSetting) graphql.Marshaler {
