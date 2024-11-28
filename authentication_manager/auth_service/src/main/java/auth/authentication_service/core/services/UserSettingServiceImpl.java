@@ -1,15 +1,13 @@
 package auth.authentication_service.core.services;
 
+import auth.authentication_service.core.domain.dto.request.UpdateUserSettingRequest;
 import auth.authentication_service.core.domain.entities.UserSetting;
 import auth.authentication_service.core.domain.enums.ResponseEnum;
+import auth.authentication_service.core.port.mapper.UserSettingMapper;
 import auth.authentication_service.core.port.store.UserSettingStore;
 import auth.authentication_service.core.services.interfaces.UserSettingService;
 import auth.authentication_service.kernel.utils.GenericResponse;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 public class UserSettingServiceImpl implements UserSettingService {
 
     private final UserSettingStore userSettingStore;
+    private final UserSettingMapper userSettingMapper;
     private final GenericResponse<?> genericResponse;
 
     @Override
-    @CacheEvict(value = "userResponseById", key = "#userId", cacheManager = "cacheManager")
-    public ResponseEntity<?> updateUserSettings(long userId, UserSetting userSetting) {
-        userSetting.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
+    // @CacheEvict(value = "userResponseById", key = "#userId", cacheManager = "cacheManager") ??? TODO: Replace by Redis
+    public ResponseEntity<?> updateUserSettings(UpdateUserSettingRequest updateUserSettingRequest) {
+        UserSetting userSetting = userSettingStore.getUserSetting(updateUserSettingRequest.getUserId());
+        userSetting = userSettingMapper.updateUserSettingMapper(updateUserSettingRequest, userSetting);
+        
         UserSetting result = userSettingStore.updateUserSetting(userSetting);
         return genericResponse.matchingResponseMessage(new GenericResponse<>(result, ResponseEnum.msg200));
     }

@@ -1,6 +1,5 @@
 package auth.authentication_service.core.domain.dto.request;
 
-import auth.authentication_service.core.domain.entities.UserSetting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,10 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserSetting {
+public class UpdateUserSettingRequest {
     private long userId;
-    private UserSetting userSetting;
+    private Integer optimizedTaskConfig;
+	private Integer privateProfileConfig;
+	private Integer taskSortingAlgorithm;
+	private Integer autoOptimizeConfig;
 }

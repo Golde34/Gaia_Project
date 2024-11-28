@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "userResponseById", key = "#id", cacheManager = "cacheManager")
+    // @Cacheable(value = "userResponseById", key = "#id", cacheManager = "cacheManager") ??? TODO: Replace by Redis
     public ResponseEntity<?> getUserResponseById(Long id) {
         try {
             User user = getUserById(id, "Get User Response");
