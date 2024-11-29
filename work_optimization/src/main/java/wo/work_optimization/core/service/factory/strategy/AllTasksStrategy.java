@@ -28,7 +28,7 @@ public class AllTasksStrategy extends StrategyService {
     }
 
     @Override
-    protected List<Task> doStrategy(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks) {
+    public List<Task> doStrategy(OptimizeTaskRestRequestDTO request, List<ParentTask> parentTasks) {
         return taskService.getAllTasks(parentTasks).stream()
                 .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
                 .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE))
