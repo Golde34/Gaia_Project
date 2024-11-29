@@ -14,6 +14,7 @@ import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
+import wo.work_optimization.core.domain.enums.AutoOptimizeConfigEnum;
 import wo.work_optimization.core.domain.enums.OptimizedTaskConfigEnum;
 import wo.work_optimization.core.port.mapper.TaskMapper;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
@@ -78,26 +79,32 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
 
     @Override
     public String doCommand(OptimizeTaskRequestDTO request) {
-        // Get task by task id, workoptim id, scheduletask id from database
-        Task task = taskService.getTask(request);
-        if (DataUtils.isNullOrEmpty(task)) {
-            log.error("Task with id {} not found", request.getTaskId());
+        if (!validateExistedTask(request)) {
+            return "Task not found";
         }
-        // Get Task Registration Config
-        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByTaskId(request.getWorkOptimTaskId());
+        
+        TaskRegistration taskRegistration = getTaskRegistration(request.getWorkOptimTaskId());
         if (DataUtils.isNullOrEmpty(taskRegistration)) {
-            log.error("Task Registration with id {} not found", request.getWorkOptimTaskId());
+            return "Task Registration not found";
         }
-        // Call auth service to get user settings
-        Long userId = taskRegistration.get().getUserId();
-        UserSettingResponseDTO userSetting = authService.getUserSetting(userId); 
+        long userId = taskRegistration.getUserId(); 
+        
+        UserSettingResponseDTO userSetting = authService.getUserSetting(userId);
         if (DataUtils.isNullOrEmpty(userSetting)) {
-            log.error("User Setting with id {} not found", userId); 
+            log.error("User Setting with id {} not found", userId);
+            return "User Setting not found";
         }
+
+        if (AutoOptimizeConfigEnum.DISABLE_AUTO_OPTIMIZE.getValue().equals(userSetting.getAutoOptimizeConfig())) {
+            log.warn("For user {} auto optimize is disabled", userId);
+            return "Auto optimize is disabled";
+        }
+
         // Optimize task
-        OptimizeTaskRestRequestDTO req = OptimizeTaskRestRequestDTO.builder().userId(userId).optimizedDate(DateTimeUtils.currentDateTime()).build(); 
-                String strategy = OptimizedTaskConfigEnum.of(userSetting.getTaskSortingAlgorithm()).getMode();
-        StrategyConnector strategyConnector = strategyFactory.get(strategy); 
+        OptimizeTaskRestRequestDTO req = OptimizeTaskRestRequestDTO.builder().userId(userId)
+                .optimizedDate(DateTimeUtils.currentDateTime()).build();
+        String strategy = OptimizedTaskConfigEnum.of(userSetting.getTaskSortingAlgorithm()).getMode();
+        StrategyConnector strategyConnector = strategyFactory.get(strategy);
         List<Task> listTasks = strategyConnector.handleStrategy(req);
 
         // Optimize Task by Schedule Factory
@@ -109,7 +116,26 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
         ScheduleConnector scheduleConnector = scheduleFactory.get(method);
         scheduleConnector.schedule(listTasks, userId);
         log.info("Optimize Task By User: {}", listTasks);
-        
+
         return "OptimizeTaskCommand doCommand";
     }
+
+    private boolean validateExistedTask(OptimizeTaskRequestDTO request) {
+        Task task = taskService.getTask(request);
+        if (DataUtils.isNullOrEmpty(task)) {
+            log.error("There is no need to optimize task which is not existed - Task Id: {}", request.getTaskId());
+            return false;
+        }
+        return true;
+    }
+
+    private TaskRegistration getTaskRegistration(String optimizedTaskId) {
+        Optional<TaskRegistration> taskRegistration = taskRegistrationStore.getTaskRegistrationByTaskId(optimizedTaskId);
+        if (DataUtils.isNullOrEmpty(taskRegistration)) {
+            log.error("Task Registration with id {} not found", optimizedTaskId);
+            return null;
+        }
+        return taskRegistration.get();
+    }
+
 }

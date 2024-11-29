@@ -21,6 +21,7 @@ public abstract class CommandService<R, P> implements CommandConnector {
             validateRequest(request);
             P resp = doCommand(request);
             log.info("Response: {}", resp);
+            // push to logging tracker by Kafka 
         } catch (BusinessException e) {
             log.error(String.format("Business Error while handling command: %s", e.getMessage()), e);
             return;

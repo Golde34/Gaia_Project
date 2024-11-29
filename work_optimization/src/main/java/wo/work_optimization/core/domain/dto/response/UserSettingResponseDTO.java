@@ -15,4 +15,5 @@ public class UserSettingResponseDTO {
     private Integer optimizedTaskConfig;
     private Integer privateProfileConfig;
     private Integer taskSortingAlgorithm;
+    private int autoOptimizeConfig;
 }
