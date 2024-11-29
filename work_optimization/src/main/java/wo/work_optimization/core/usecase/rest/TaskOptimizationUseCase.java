@@ -21,6 +21,7 @@ import wo.work_optimization.core.service.factory.schedule.connector.ScheduleFact
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyConnector;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyFactory;
 import wo.work_optimization.core.service.integration.AuthService;
+import wo.work_optimization.core.service.integration.NotificationService;
 import wo.work_optimization.kernel.utils.GenericResponse;
 
 @Service
@@ -31,6 +32,7 @@ public class TaskOptimizationUseCase {
     private final ScheduleFactory scheduleFactory;
     private final StrategyFactory strategyFactory;
     private final AuthService authService;
+    private final NotificationService notificationService;
 
     private final GenericResponse<?> genericResponse;
 
@@ -62,6 +64,10 @@ public class TaskOptimizationUseCase {
                 }
             });
             log.info("Optimize Task By User: {}", result);
+
+            // Push to notification service
+            String statusPush = notificationService.sendOptimizeNotification(request.getUserId(), result);
+            log.info("Notification status: {}", statusPush);
             List<Task> savedTasks = strategyConnector.returnTasks(request);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
         } catch (Exception e) {

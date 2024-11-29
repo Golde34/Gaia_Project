@@ -35,4 +35,11 @@ public class TopicConstants {
 
         public static final String OPTIMIZE_CREATING_TASK = "optimizeCreatingTask";
     }
+
+    @UtilityClass
+    public class NotificationCommand {
+        public static final String TOPIC = "notification";
+
+        public static final String OPTIMIZE_NOTIFICATION = "optimizeNotification";
+    }
 }
