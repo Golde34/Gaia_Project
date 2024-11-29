@@ -8,6 +8,7 @@ import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.Constants;
+import wo.work_optimization.core.domain.constant.ErrorConstants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.kafka.OptimizeTaskNotiMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
@@ -22,19 +23,19 @@ public class NotificationService {
     public String sendOptimizeNotification(long userId, Map<Integer, String> result) {
         try {
             log.info("Sending optimize notification to user: {}", userId);
-            final String[] optimizeStatus = { "SUCCESS" };
-            result.entrySet().stream().forEach(r -> {
-                if (Constants.ErrorStatus.FAIL.equals(r.getValue())) {
-                    optimizeStatus[0] = Constants.ErrorStatus.FAIL;
-                    return;
-                }
-            });
+
+            String optimizeStatus = result.values().stream()
+                    .anyMatch(Constants.ErrorStatus.FAIL::equals) ? Constants.ErrorStatus.FAIL
+                            : Constants.ErrorStatus.SUCCESS;
             OptimizeTaskNotiMessage data = OptimizeTaskNotiMessage.builder()
                     .userId(userId)
-                    .optimizeStatus(optimizeStatus[0])
+                    .optimizeStatus(optimizeStatus)
                     .build();
-            KafkaBaseDto<OptimizeTaskNotiMessage> message = data.toKafkaBaseDto("00", "SUCCESS");
-            kafkaPublisher.pushAsync(message, TopicConstants.NotificationCommand.OPTIMIZE_NOTIFICATION, "wo", null);
+
+            KafkaBaseDto<OptimizeTaskNotiMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS,
+                    ErrorConstants.ErrorMessage.SUCCESS);
+            kafkaPublisher.pushAsync(message, TopicConstants.NotificationCommand.OPTIMIZE_NOTIFICATION,
+                    Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
         } catch (Exception e) {
             log.error("Error sending optimize notification to user: {}", userId);
             // Send notification by rest

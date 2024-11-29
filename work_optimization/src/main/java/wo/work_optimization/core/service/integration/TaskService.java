@@ -63,8 +63,9 @@ public class TaskService {
                     .workOptimTaskId(task.getId())
                     .build();
         }
-        KafkaBaseDto<SchedulePlanSyncronizedMessage> message = data.toKafkaBaseSto(errorCode, errorMessage);
-        kafkaPublisher.pushAsync(message, TopicConstants.CreateScheduleTaskCommand.SYNC_TOPIC, "wo", null);
+        KafkaBaseDto<SchedulePlanSyncronizedMessage> message = data.toKafkaBaseDto(errorCode, errorMessage);
+        kafkaPublisher.pushAsync(message, TopicConstants.CreateScheduleTaskCommand.SYNC_TOPIC,
+                Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
         log.info("Sent kafka to sync with schedule plan");
     }
 
@@ -88,10 +89,10 @@ public class TaskService {
                 .flatMap(parentTask -> {
                     try {
                         return taskStore.findAllByParentIdAndStartDate(parentTask.getId(), date).stream()
-                            .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
-                            .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE));
+                                .filter(task -> task.getActiveStatus().equals(Constants.ActiveStatus.ACTIVE_STR))
+                                .filter(task -> !task.getStatus().equals(Constants.TaskStatus.DONE));
                     } catch (ParseException e) {
-                        log.error("Error when get tasks start in day: {}", e.getMessage()); 
+                        log.error("Error when get tasks start in day: {}", e.getMessage());
                         e.printStackTrace();
                         return null;
                     }

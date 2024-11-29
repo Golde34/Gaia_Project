@@ -3,6 +3,8 @@ package wo.work_optimization.core.usecase.kafka.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import wo.work_optimization.core.domain.constant.ErrorConstants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.constant.ValidateConstants;
 import wo.work_optimization.core.domain.dto.request.CreateScheduleTaskRequestDTO;
@@ -62,16 +64,17 @@ public class ScheduleTaskCommand extends CommandService<CreateScheduleTaskReques
         try {
             Task task = taskService.getTaskByOriginalId(request.getTaskId());
             if (DataUtils.isNullOrEmpty(task)) {
-                taskService.sendKafkaToSyncWithSchedulePlan(null, "99", "Sync failed because cannot find task by original id");
+                taskService.sendKafkaToSyncWithSchedulePlan(null, ErrorConstants.ErrorCode.FAIL,
+                        "Sync failed because cannot fund task by original id");
                 return "Cannot find task by original id";
             }
             task.setScheduleTaskId(request.getScheduleTaskId());
             taskStore.save(task);
 
-            taskService.sendKafkaToSyncWithSchedulePlan(task, "00", "Sync successfully");
+            taskService.sendKafkaToSyncWithSchedulePlan(task, ErrorConstants.ErrorCode.SUCCESS, "Sync successfully");
             return "Save schedule task success";
         } catch (Exception e) {
-            taskService.sendKafkaToSyncWithSchedulePlan(null, "99", "Sync failed");
+            taskService.sendKafkaToSyncWithSchedulePlan(null, ErrorConstants.ErrorCode.FAIL, "Sync failed");
             log.error(String.format("Cannot save schedule task: %s", e.getMessage()), e);
             return "Save schedule task failed";
         }

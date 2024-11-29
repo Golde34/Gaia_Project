@@ -17,7 +17,7 @@ public class SchedulePlanSyncronizedMessage {
     private String taskId;
     private String workOptimTaskId;
     
-    public KafkaBaseDto<SchedulePlanSyncronizedMessage> toKafkaBaseSto(String errorCode, String errorMessage) {
+    public KafkaBaseDto<SchedulePlanSyncronizedMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<SchedulePlanSyncronizedMessage>builder()
                 .cmd(TopicConstants.CreateScheduleTaskCommand.SYNC_SCHEDULE_TASK)
                 .errorCode(errorCode)
