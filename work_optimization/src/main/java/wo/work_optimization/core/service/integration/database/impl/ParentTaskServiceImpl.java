@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.integration.impl;
+package wo.work_optimization.core.service.integration.database.impl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.port.store.ParentTaskStore;
-import wo.work_optimization.core.service.integration.ParentTaskService;
+import wo.work_optimization.core.service.integration.database.ParentTaskService;
 
 @Service
 @RequiredArgsConstructor

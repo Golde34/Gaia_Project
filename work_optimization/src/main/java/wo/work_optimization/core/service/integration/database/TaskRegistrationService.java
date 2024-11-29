@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.integration;
+package wo.work_optimization.core.service.integration.database;
 
 import org.springframework.data.util.Pair;
 import wo.work_optimization.core.domain.dto.request.QueryTaskConfigRequestDTO;

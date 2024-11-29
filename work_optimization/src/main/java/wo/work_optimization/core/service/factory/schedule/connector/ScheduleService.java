@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.exception.BusinessException;
-import wo.work_optimization.core.service.integration.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.database.TaskRegistrationService;
 import wo.work_optimization.kernel.utils.JsonUtils;
 
 @Slf4j

@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.dto.response.UserSettingResponseDTO;
 import wo.work_optimization.core.domain.enums.AutoOptimizeConfigEnum;
 import wo.work_optimization.core.service.factory.option.connector.OptionService;
-import wo.work_optimization.core.service.integration.AuthService;
+import wo.work_optimization.core.service.integration.port.AuthService;
 
 @Service
 @RequiredArgsConstructor

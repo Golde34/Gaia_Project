@@ -38,7 +38,7 @@ public class TopicConstants {
 
     @UtilityClass
     public class NotificationCommand {
-        public static final String TOPIC = "notification";
+        public static final String TOPIC = "notify-agent.optimize-task-notify.topic";
 
         public static final String OPTIMIZE_NOTIFICATION = "optimizeNotification";
     }

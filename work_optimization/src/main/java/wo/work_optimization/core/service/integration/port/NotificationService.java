@@ -1,6 +1,4 @@
-package wo.work_optimization.core.service.integration;
-
-import java.util.Map;
+package wo.work_optimization.core.service.integration.port;
 
 import org.springframework.stereotype.Service;
 
@@ -20,13 +18,9 @@ public class NotificationService {
 
     private final KafkaPublisher kafkaPublisher;
 
-    public String sendOptimizeNotification(long userId, Map<Integer, String> result) {
+    public String sendOptimizeNotification(long userId, String optimizeStatus) {
         try {
             log.info("Sending optimize notification to user: {}", userId);
-
-            String optimizeStatus = result.values().stream()
-                    .anyMatch(Constants.ErrorStatus.FAIL::equals) ? Constants.ErrorStatus.FAIL
-                            : Constants.ErrorStatus.SUCCESS;
             OptimizeTaskNotiMessage data = OptimizeTaskNotiMessage.builder()
                     .userId(userId)
                     .optimizeStatus(optimizeStatus)

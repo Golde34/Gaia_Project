@@ -1,4 +1,4 @@
-package wo.work_optimization.core.service.integration;
+package wo.work_optimization.core.service.integration.port;
 
 import org.springframework.stereotype.Service;
 

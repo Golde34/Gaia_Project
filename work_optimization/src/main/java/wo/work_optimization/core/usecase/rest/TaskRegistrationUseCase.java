@@ -11,7 +11,7 @@ import wo.work_optimization.core.domain.dto.response.RegisteredTaskConfigStatus;
 import wo.work_optimization.core.domain.dto.response.base.GeneralResponse;
 import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.domain.enums.ResponseMessage;
-import wo.work_optimization.core.service.integration.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.database.TaskRegistrationService;
 import wo.work_optimization.core.validation.TaskRegistrationValidation;
 import wo.work_optimization.kernel.utils.GenericResponse;
 

@@ -10,7 +10,7 @@ import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyService;
-import wo.work_optimization.core.service.integration.TaskService;
+import wo.work_optimization.core.service.integration.database.TaskService;
 import wo.work_optimization.kernel.utils.DataUtils;
 
 @Service
