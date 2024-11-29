@@ -95,7 +95,7 @@ public class OptimizeTaskCommand extends CommandService<OptimizeTaskRequestDTO, 
             return "User Setting not found";
         }
 
-        if (AutoOptimizeConfigEnum.DISABLE_AUTO_OPTIMIZE.getValue().equals(userSetting.getAutoOptimizeConfig())) {
+        if (AutoOptimizeConfigEnum.DISABLE_AUTO_OPTIMIZE.getValue() == userSetting.getAutoOptimizeConfig()) {
             log.warn("For user {} auto optimize is disabled", userId);
             return "Auto optimize is disabled";
         }

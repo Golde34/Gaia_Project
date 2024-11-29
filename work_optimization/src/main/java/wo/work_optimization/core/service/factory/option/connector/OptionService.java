@@ -9,14 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class OptionService implements OptionConnector {
 
     @Override
-    public boolean handleOption() {
+    public boolean handleOption(long userId) {
         try {
-            return doOption();
+            return doOption(userId);
         } catch (Exception e) {
             log.error("Error while handling option", e);
             return false;
         }
     }
 
-    protected abstract boolean doOption();
+    protected abstract boolean doOption(long userId);
 }
