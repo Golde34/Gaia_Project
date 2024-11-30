@@ -23,8 +23,8 @@ import wo.work_optimization.core.service.factory.schedule.connector.ScheduleConn
 import wo.work_optimization.core.service.factory.schedule.connector.ScheduleFactory;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyConnector;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyFactory;
-import wo.work_optimization.core.service.integration.AuthService;
-import wo.work_optimization.core.service.integration.TaskService;
+import wo.work_optimization.core.service.integration.database.TaskService;
+import wo.work_optimization.core.service.integration.port.AuthService;
 import wo.work_optimization.core.usecase.kafka.CommandService;
 import wo.work_optimization.core.validation.TaskValidation;
 import wo.work_optimization.kernel.utils.DataUtils;

@@ -20,8 +20,9 @@ import wo.work_optimization.core.service.factory.schedule.connector.ScheduleConn
 import wo.work_optimization.core.service.factory.schedule.connector.ScheduleFactory;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyConnector;
 import wo.work_optimization.core.service.factory.strategy.connector.StrategyFactory;
-import wo.work_optimization.core.service.integration.AuthService;
-import wo.work_optimization.core.service.integration.NotificationService;
+import wo.work_optimization.core.service.integration.port.AuthService;
+import wo.work_optimization.core.service.integration.port.NotificationService;
+import wo.work_optimization.core.service.integration.port.SchedulePlanService;
 import wo.work_optimization.kernel.utils.GenericResponse;
 
 @Service
@@ -31,8 +32,10 @@ public class TaskOptimizationUseCase {
 
     private final ScheduleFactory scheduleFactory;
     private final StrategyFactory strategyFactory;
+
     private final AuthService authService;
     private final NotificationService notificationService;
+    private final SchedulePlanService schedulePlanService;
 
     private final GenericResponse<?> genericResponse;
 
@@ -40,16 +43,17 @@ public class TaskOptimizationUseCase {
         try {
             // Call auth service to get user settings
             UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
+
             // Get Task Strategy
             String strategy = OptimizedTaskConfigEnum.of(userSettingResponseDTO.getOptimizedTaskConfig()).getMode();
             StrategyConnector strategyConnector = strategyFactory.get(strategy);
             List<Task> listTasks = strategyConnector.handleStrategy(request);
-
-            // Optimize Task by Schedule Factory
             if (listTasks.isEmpty()) {
                 return genericResponse
                         .matchingResponseMessage(new GenericResponse<>("No task found", ResponseMessage.msg400));
             }
+
+            // Optimize Task by Schedule Factory
             String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
             ScheduleConnector scheduleConnector = scheduleFactory.get(method);
             Map<Integer, String> result = scheduleConnector.schedule(listTasks, request.getUserId());
@@ -57,17 +61,17 @@ public class TaskOptimizationUseCase {
                 return genericResponse
                         .matchingResponseMessage(new GenericResponse<>("No task to optimize", ResponseMessage.msg400));
             }
-            result.entrySet().stream().forEach(r -> {
-                if (Constants.ErrorStatus.FAIL.equals(r.getValue())) {
-                    log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
-                            r.getKey());
-                }
-            });
             log.info("Optimize Task By User: {}", result);
 
+            String optimizeStatus = getFinalOptimizeTaskStatus(result);            
+            
             // Push to notification service
-            String statusPush = notificationService.sendOptimizeNotification(request.getUserId(), result);
+            String statusPush = notificationService.sendOptimizeNotification(request.getUserId(), optimizeStatus);
             log.info("Notification status: {}", statusPush);
+
+            // Push to schedule plan
+            schedulePlanService.pushOptimizeResult(request.getUserId(), result);
+
             List<Task> savedTasks = strategyConnector.returnTasks(request);
             return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
         } catch (Exception e) {
@@ -75,5 +79,18 @@ public class TaskOptimizationUseCase {
             return genericResponse
                     .matchingResponseMessage(new GenericResponse<>(e.getMessage(), ResponseMessage.msg500));
         }
+    }
+
+    private String getFinalOptimizeTaskStatus(Map<Integer, String> results) {
+        String optimizeStatus = Constants.ErrorStatus.SUCCESS;
+        for (Map.Entry<Integer, String> entry : results.entrySet()) {
+            if (Constants.ErrorStatus.FAIL.equals(entry.getValue())) {
+                log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
+                        entry.getKey());
+                optimizeStatus = Constants.ErrorStatus.FAIL;
+                break;
+            }
+        }
+        return optimizeStatus;
     }
 }

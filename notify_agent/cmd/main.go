@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"notify_agent/cmd/bootstrap"
 	"notify_agent/cmd/route"
 	services "notify_agent/core/services/websocket"
 	"notify_agent/infrastructure/kafka"
@@ -17,13 +18,24 @@ import (
 
 
 func main() {
+	// Database
+	app := bootstrap.App()
+	databaseEnv := app.Env
+	db := app.Mongo.Database(databaseEnv.DBName)
+	log.Println("Database connected")
+	defer func() {
+		log.Println("Closing MongoDB connection")
+		app.CloseDBConnection()
+		log.Println("Database connection closed")
+	}()
+
 	// Kafka Initialization
 	kafkaConfig := configs.KafkaConfig{}
 	kafkaCfg, _ := kafkaConfig.LoadEnv()
 	log.Println("Kafka Config: ", kafkaCfg.GroupId)
 
 	handlers := map[string] kafka.MessageHandler {
-		"notify-agent.optimize-task-notify.topic": &consumer.OptimizeTaskNotifyHandler{},
+		"notify-agent.optimize-task-notify.topic": &consumer.OptimizeTaskNotifyHandler{Database: db},
 	}
 
 	consumerGroupHandler := kafka.NewConsumerGroupHandler(kafkaCfg.Name, handlers)

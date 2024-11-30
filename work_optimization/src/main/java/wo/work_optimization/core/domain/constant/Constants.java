@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Constants {
+
     @UtilityClass
     public static class HttpStatus {
         public static final String ERROR = "error";
@@ -25,8 +26,8 @@ public class Constants {
     @UtilityClass
     public static class WOConfiguration {
         public static String SYSTEM_CACHE_RELOAD_MINUTE = "global.config.minute";
-        public static String CUSTOM_SCHEDULE_FLOW_STATE_CONSTANTS = "schedule.custom-algorithm.constant";
-        public static String DEEP_WORK_TIME = "schedule.custom-algorithm.deep-work-time.%s";
+
+        public static String KAFKA_CONTAINER_NAME = "wo";
     }
 
     @UtilityClass

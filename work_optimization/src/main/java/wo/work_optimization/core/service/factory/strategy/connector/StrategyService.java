@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRestRequestDTO;
 import wo.work_optimization.core.domain.entity.ParentTask;
 import wo.work_optimization.core.domain.entity.Task;
-import wo.work_optimization.core.service.integration.ParentTaskService;
+import wo.work_optimization.core.service.integration.database.ParentTaskService;
 
 @Service
 @Slf4j
