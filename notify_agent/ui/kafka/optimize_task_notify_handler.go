@@ -6,10 +6,20 @@ import (
 	"log"
 	"notify_agent/core/domain/constants"
 	base_dtos "notify_agent/core/domain/dtos/base"
+	"notify_agent/core/port/store"
 	services "notify_agent/core/services/work_optimization"
+	database_mongo "notify_agent/kernel/database/mongo"
 )
 
-type OptimizeTaskNotifyHandler struct {}
+type OptimizeTaskNotifyHandler struct {
+	Database database_mongo.Database
+}
+
+func NewOptimizeTaskNotifyHandler(db database_mongo.Database) *OptimizeTaskNotifyHandler {
+	return &OptimizeTaskNotifyHandler{
+		Database: db,
+	}
+}
 
 func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value []byte) {
 	fmt.Printf("Handling message for topic %s: %s\n", topic, string(value))
@@ -28,7 +38,7 @@ func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value
 
 	switch message.Cmd {
 	case constants.InitOptimizeTaskCmd:
-		fmt.Printf("Optimize task notification received: %v\n", data)
+		InitOptimizeTaskCmd(data, handler.Database)
 	case constants.FinalizeOptimizeTaskCmd:
 		fmt.Printf("Optimize task finalization notification received: %v\n", data)
 	default:
@@ -36,7 +46,7 @@ func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value
 	}
 }
 
-func InitOptimizeTaskCmd(data map[string]interface{}) {
+func InitOptimizeTaskCmd(data map[string]interface{}, db database_mongo.Database) {
 	userId, ok := data["userId"].(string)
 	if !ok {
 		fmt.Println("Error casting userId")
@@ -47,12 +57,13 @@ func InitOptimizeTaskCmd(data map[string]interface{}) {
 		fmt.Println("Error casting optimizeStatus")
 		return
 	}
-	optimNotify := services.NewOptimizeTaskNotifyService()
+	notifyStore := store.NewNotificationStore(db)
+	optimNotify := services.NewOptimizeTaskNotifyService(notifyStore)
 	result, err := optimNotify.InitOptimizeTask(userId, optimizeStatus)
 	if err != nil {
 		fmt.Println("Error initializing optimize task")
 		return
 	}
 	fmt.Printf("Optimize task initialized successfully: %v\n", result)
-	
+
 }

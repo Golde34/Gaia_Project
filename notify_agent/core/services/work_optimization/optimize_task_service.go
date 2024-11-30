@@ -1,9 +1,15 @@
 package services
 
-type OptimizeTaskNotifyService struct {}
+import "notify_agent/core/port/store"
 
-func NewOptimizeTaskNotifyService() *OptimizeTaskNotifyService {
-	return &OptimizeTaskNotifyService{}
+type OptimizeTaskNotifyService struct {
+	Store store.NotificationStore
+}
+
+func NewOptimizeTaskNotifyService(store *store.NotificationStore) *OptimizeTaskNotifyService {
+	return &OptimizeTaskNotifyService{
+		Store: *store,
+	}
 }
 
 func (service *OptimizeTaskNotifyService) InitOptimizeTask(userId string, optimizeStatus string) (bool, error) {
