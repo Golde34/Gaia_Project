@@ -4,6 +4,7 @@ go 1.22.3
 
 require (
 	github.com/IBM/sarama v1.43.3
+	github.com/devfeel/mapper v0.7.14
 	github.com/go-chi/chi v1.5.5
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1

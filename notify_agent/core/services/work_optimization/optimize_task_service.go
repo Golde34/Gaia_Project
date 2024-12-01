@@ -1,6 +1,11 @@
 package services
 
-import "notify_agent/core/port/store"
+import (
+	"context"
+	"log"
+	"notify_agent/core/port/store"
+	"time"
+)
 
 type OptimizeTaskNotifyService struct {
 	Store store.NotificationStore
@@ -13,6 +18,10 @@ func NewOptimizeTaskNotifyService(store *store.NotificationStore) *OptimizeTaskN
 }
 
 func (service *OptimizeTaskNotifyService) InitOptimizeTask(userId string, optimizeStatus string) (bool, error) {
-	// Save the status that user optimize task success or not
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	log.Println("InitOptimizeTask ", ctx)
+
+	// savedTask, err := service.Store.
 	return true, nil
 }

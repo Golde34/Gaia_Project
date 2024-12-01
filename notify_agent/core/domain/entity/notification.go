@@ -16,9 +16,10 @@ type Notification struct {
 	Status     string `json:"status" bson:"status"`
 	CreatedAt  int64  `json:"created_at" bson:"created_at"`
 	UpdatedAt  int64  `json:"updated_at" bson:"updated_at"`
+	UserId     string `json:"user_id" bson:"user_id"`
 }
 
-func NewNotification(id, messageID, notificationType, content, receiverID, status string, isRead bool, createdAt, updatedAt int64) *Notification {
+func NewNotification(id, messageID, notificationType, content, receiverID, status string, isRead bool, createdAt, updatedAt int64, userId string) *Notification {
 	return &Notification{
 		ID:         id,
 		MessageID:  messageID,
@@ -29,6 +30,7 @@ func NewNotification(id, messageID, notificationType, content, receiverID, statu
 		Status:     status,
 		CreatedAt:  createdAt,
 		UpdatedAt:  updatedAt,
+		UserId:     userId,
 	}
 }
 
@@ -68,6 +70,10 @@ func (n *Notification) SetUpdatedAt(updatedAt int64) {
 	n.UpdatedAt = updatedAt
 }
 
+func (n *Notification) SetUserId(userId string) {
+	n.UserId = userId
+}
+
 func (n *Notification) GetID() string {
 	return n.ID
 }
@@ -102,4 +108,8 @@ func (n *Notification) GetCreatedAt() int64 {
 
 func (n *Notification) GetUpdatedAt() int64 {
 	return n.UpdatedAt
+}
+
+func (n *Notification) GetUserId() string {
+	return n.UserId
 }
