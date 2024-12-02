@@ -88,16 +88,6 @@ export const useCreateNoteDispatch = () => {
     return createNoteDispatch;
 }
 
-export const useOptimizeTaskByUserDispatch = () => {
-    const dispatch = useDispatch();
-
-    const optimizeTaskByUserDispatch = (userId) => {
-        dispatch(optimizeTaskByUserId(userId));
-    }
-
-    return optimizeTaskByUserDispatch;
-}
-
 export const useUpdateUserSettingDispatch = () => {
     const dispatch = useDispatch();
 

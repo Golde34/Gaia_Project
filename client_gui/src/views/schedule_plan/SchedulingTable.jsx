@@ -8,9 +8,9 @@ import { Button, Card, Metric, Title } from '@tremor/react';
 import CardItem from '../../components/subComponents/CardItem';
 import { useNavigate } from 'react-router-dom';
 import ListCenterButton from '../../components/subComponents/ListCenterButton';
-import { useOptimizeTaskByUserDispatch } from '../../kernels/utils/write-dialog-api-requests';
 import { useDispatch } from 'react-redux';
 import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
+import { useWebSocket } from '../../kernels/context/WebSocketContext';
 
 const task = {
     title: 'Meeting 1 is very long text that\'s good',
@@ -65,12 +65,14 @@ const CalendarChart = (props) => {
     const userId = "1";
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    // const { sendMessage } = useWebSocket();
 
     const days = ["S", "M", "T", "W", "T", "F", "S"];
     const [today, setToday] = useState(props.currentDate);
     const [selectDate, setSelectDate] = useState(props.selectDate);
 
     const handleOptimizeClick = (userId) => {
+        // dispatch(optimizeTaskByUserId(userId, sendMessage))
         dispatch(optimizeTaskByUserId(userId))
     }
 
