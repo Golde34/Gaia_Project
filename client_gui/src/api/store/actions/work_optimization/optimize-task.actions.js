@@ -6,6 +6,7 @@ const portName = {
     middlewarePort: 'middlewarePort'
 }
 
+// export const optimizeTaskByUserId = (userId, sendMessage) => async (dispatch) => {
 export const optimizeTaskByUserId = (userId) => async (dispatch) => {
     dispatch({ type: OPTIMZE_TASK_BY_USER_REQUEST, payload: userId });
     try {
@@ -20,6 +21,11 @@ export const optimizeTaskByUserId = (userId) => async (dispatch) => {
         );
         console.log(data);
         dispatch({ type: OPTIMZE_TASK_BY_USER_SUCCESS, payload: data });
+
+        // sendMessage(JSON.stringify({
+        //     userId: userId,
+        //     message: 'Init task optimization success',
+        // }));
     } catch (error) {
         dispatch({
             type: OPTIMZE_TASK_BY_USER_FAILURE,
