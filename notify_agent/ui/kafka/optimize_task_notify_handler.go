@@ -38,7 +38,7 @@ func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value
 
 	switch message.Cmd {
 	case constants.InitOptimizeTaskCmd:
-		InitOptimizeTaskCmd(data, handler.Database)
+		InitOptimizeTaskCmd(key, data, handler.Database)
 	case constants.FinalizeOptimizeTaskCmd:
 		fmt.Printf("Optimize task finalization notification received: %v\n", data)
 	default:
@@ -46,7 +46,8 @@ func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value
 	}
 }
 
-func InitOptimizeTaskCmd(data map[string]interface{}, db database_mongo.Database) {
+func InitOptimizeTaskCmd(key []byte, data map[string]interface{}, db database_mongo.Database) {
+	messageId := string(key)
 	userId, ok := data["userId"].(string)
 	if !ok {
 		fmt.Println("Error casting userId")
@@ -59,7 +60,7 @@ func InitOptimizeTaskCmd(data map[string]interface{}, db database_mongo.Database
 	}
 	notifyStore := store.NewNotificationStore(db)
 	optimNotify := services.NewOptimizeTaskNotifyService(notifyStore)
-	result, err := optimNotify.InitOptimizeTask(userId, optimizeStatus)
+	result, err := optimNotify.InitOptimizeTask(messageId, userId, optimizeStatus)
 	if err != nil {
 		fmt.Println("Error initializing optimize task")
 		return

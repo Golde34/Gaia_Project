@@ -40,6 +40,6 @@ public class TopicConstants {
     public class NotificationCommand {
         public static final String TOPIC = "notify-agent.optimize-task-notify.topic";
 
-        public static final String OPTIMIZE_NOTIFICATION = "optimizeNotification";
+        public static final String INIT_OPTIMIZE_TASK_NOTIFY_CMD= "initOptimizeTask";
     }
 }
