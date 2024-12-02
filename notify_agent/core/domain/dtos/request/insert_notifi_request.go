@@ -12,14 +12,3 @@ type InsertNotificationRequestDTO struct {
 func NewInsertNotificationRequestDTO() *InsertNotificationRequestDTO {
 	return &InsertNotificationRequestDTO{}
 }
-
-func (r *InsertNotificationRequestDTO) InsertOptimizeTaskRequestMapper() map[string]interface{} {
-	return map[string]interface{}{
-		"message_id": r.MessageID,
-		"type":       r.Type,
-		"content":    r.Content,
-		"status":     r.Status,
-		"is_read":    r.IsRead,
-		"user_id":    r.UserId,
-	}
-}
