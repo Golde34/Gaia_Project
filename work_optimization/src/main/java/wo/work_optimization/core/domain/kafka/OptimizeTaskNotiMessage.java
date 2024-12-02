@@ -19,7 +19,7 @@ public class OptimizeTaskNotiMessage {
 
     public KafkaBaseDto<OptimizeTaskNotiMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<OptimizeTaskNotiMessage>builder()
-                .cmd(TopicConstants.NotificationCommand.OPTIMIZE_NOTIFICATION)
+                .cmd(TopicConstants.NotificationCommand.INIT_OPTIMIZE_TASK_NOTIFY_CMD)
                 .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .data(this)
