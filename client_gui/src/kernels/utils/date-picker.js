@@ -4,11 +4,16 @@ export const convertTimestampToDate = (timestamp) => {
 };
 
 export const formatHourNumber = (value) => {
-        if (value <=0) {
-            return true;
-        }
-        if (value > 24) {
-            return true;
-        }
-        return false;
+    if (value <= 0) {
+        return true;
     }
+    if (value > 24) {
+        return true;
+    }
+    return false;
+}
+
+export const convertDateToString = (date) => {
+    // Format date to string dd/MM/yyyy HH:mm:ss
+    return date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
