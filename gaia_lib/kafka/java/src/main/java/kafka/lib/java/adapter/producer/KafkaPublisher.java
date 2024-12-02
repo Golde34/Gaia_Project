@@ -38,6 +38,23 @@ public class KafkaPublisher {
      * Send message to kafka with non-blocking in specific kafka server which
      * defined in application.properties.
      * Add the callback to handle success/failure after.
+     * Each message will have its own key
+     * 
+     * @param <T>
+     * @param payload
+     * @param key
+     * @param topic
+     * @param kafkaServer
+     * @param callback
+     */
+    public <T> void pushAsync(T payload, String key, String topic, String kafkaServer,
+            ListenableFutureCallback<String> callback) {
+        sendMessageAsync(payload, key, topic, kafkaServer, callback);
+    }
+    /**
+     * Send message to kafka with non-blocking in specific kafka server which
+     * defined in application.properties.
+     * Add the callback to handle success/failure after.
      * 
      * @param payload     Message Object to push
      * @param topic       Target topic
@@ -118,7 +135,34 @@ public class KafkaPublisher {
                     callback.onFailure(ex);
                 }
             });
-        } 
+        }
+    }
+
+    private <T> void sendMessageAsync(T data, String key, String topic, String kafkaServer, ListenableFutureCallback<String> callback) {
+        String message;
+        try {
+            message = this.objectMapper.writeValueAsString(data);
+        } catch (JsonProcessingException exception) {
+            log.error("Exception when parse data to json {}", exception.getMessage());
+            return;
+        }
+
+        CompletableFuture<SendResult<String, String>> future = (CompletableFuture) this.kafkaTemplate
+                .getKafkaTemplate(kafkaServer).send(topic, key, message);
+
+        if (callback != null) {
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    KafkaPublisher.log.info("===> Sent message=[" + message + "] with offset=["
+                            + result.getRecordMetadata().offset() + "] to topic: " + topic + " SUCCESS !!!");
+                    callback.onSuccess(message);
+                } else {
+                    KafkaPublisher.log.info("xxxx> Unable to send message=[" + message + "] to topic: " + topic
+                            + " FAIL !!! \n Due to : " + ex.getMessage(), ex);
+                    callback.onFailure(ex);
+                }
+            });
+        }
     }
 
     /**
