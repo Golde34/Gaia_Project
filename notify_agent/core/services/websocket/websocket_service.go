@@ -26,7 +26,6 @@ var userConnections = struct {
 }{connections: make(map[string]*websocket.Conn)}
 
 func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	// Nâng cấp kết nối HTTP lên WebSocket
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("WebSocket upgrade error:", err)
@@ -70,18 +69,18 @@ func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request
 	}
 }
 
-// func sendToUser(userId string, message []byte) {
-// 	userConnections.Lock()
-// 	defer userConnections.Unlock()
+func SendToUser(userId string, message []byte) {
+	userConnections.Lock()
+	defer userConnections.Unlock()
 
-// 	if conn, ok := userConnections.connections[userId]; ok {
-// 		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
-// 		if err != nil {
-// 			log.Println("Error sending message to user:", err)
-// 			conn.Close()
-// 			delete(userConnections.connections, userId)
-// 		}
-// 	} else {
-// 		log.Println("No active connection for userId:", userId)
-// 	}
-// }
+	if conn, ok := userConnections.connections[userId]; ok {
+		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
+		if err != nil {
+			log.Println("Error sending message to user:", err)
+			conn.Close()
+			delete(userConnections.connections, userId)
+		}
+	} else {
+		log.Println("No active connection for userId:", userId)
+	}
+}

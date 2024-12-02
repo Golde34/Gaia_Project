@@ -5,6 +5,7 @@ import (
 	"log"
 	"notify_agent/core/port/mapper"
 	"notify_agent/core/port/store"
+	services "notify_agent/core/services/websocket"
 	"time"
 )
 
@@ -30,6 +31,10 @@ func (service *OptimizeTaskNotifyService) InitOptimizeTask(messageId, userId str
 		return false, err
 	}
 	log.Println("Optimize task saved successfully: ", savedTask)
+
+	var notiMessage []byte
+	notiMessage = append(notiMessage, []byte("Optimize task saved successfully")...)
+	services.SendToUser(userId, notiMessage)
 
 	return true, nil
 }
