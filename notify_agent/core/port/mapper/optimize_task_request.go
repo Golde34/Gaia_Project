@@ -1,13 +1,15 @@
 package mapper
 
-import request_dtos "notify_agent/core/domain/dtos/request/insert_notifi_request.go"
+import request_dtos "notify_agent/core/domain/dtos/request"
 
-func InsertOptimizeTaskRequestMapper(userId, optimizeStatus string) request_dtos.InsertNotificationRequestDTO {
+
+func InsertOptimizeTaskRequestMapper(messageId, userId, optimizeStatus string) request_dtos.InsertNotificationRequestDTO {
 	var input request_dtos.InsertNotificationRequestDTO
 	input.UserId = userId
 	input.Status = optimizeStatus
 	input.Content = "Optimize Task " + optimizeStatus
 	input.Type = "OPTIMIZE"
 	input.IsRead = false
+	input.MessageID = messageId
 	return input 
 }
