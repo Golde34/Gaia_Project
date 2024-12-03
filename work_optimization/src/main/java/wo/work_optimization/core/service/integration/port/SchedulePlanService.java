@@ -1,5 +1,6 @@
 package wo.work_optimization.core.service.integration.port;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -8,9 +9,11 @@ import kafka.lib.java.adapter.producer.KafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wo.work_optimization.core.domain.constant.Constants;
+import wo.work_optimization.core.domain.constant.ErrorConstants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.kafka.SchedulePlanSyncronizedMessage;
+import wo.work_optimization.core.domain.kafka.SchedulePlanTaskOrderMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 import wo.work_optimization.kernel.utils.DataUtils;
 
@@ -40,12 +43,18 @@ public class SchedulePlanService {
         log.info("Sent kafka to sync with schedule plan");
     }
 
-    public void pushOptimizeResult(long userId, Map<Integer, String> result) {
-        log.info("Push optimize result to kafka: {}", result);
-        // KafkaBaseDto<Map<Integer, String>> message = new KafkaBaseDto<>(result);
-        // kafkaPublisher.pushAsync(message, TopicConstants.CreateScheduleTaskCommand.OPTIMIZE_RESULT_TOPIC,
-        //         Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
-        // log.info("Sent optimize result to kafka");
+    public void pushOptimizeResult(long userId, List<Task> tasks) {
+        log.info("Push optimize result to kafka: {}", tasks);
+        SchedulePlanTaskOrderMessage data;
+        if (tasks.isEmpty()) {
+            data = SchedulePlanTaskOrderMessage.builder().userId(userId).build();
+        } else {
+            data = SchedulePlanTaskOrderMessage.builder().userId(userId).tasks(tasks).build();
+        }
+        KafkaBaseDto<SchedulePlanTaskOrderMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS, ErrorConstants.ErrorMessage.SUCCESS);
+        kafkaPublisher.pushAsync(message, TopicConstants.SchedulePlanCommand.TOPIC,
+                Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
+        log.info("Sent optimize result to kafka");
 
     }
 }

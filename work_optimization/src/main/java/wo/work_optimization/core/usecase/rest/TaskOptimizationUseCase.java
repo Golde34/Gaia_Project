@@ -63,16 +63,17 @@ public class TaskOptimizationUseCase {
             }
             log.info("Optimize Task By User: {}", result);
 
-            String optimizeStatus = getFinalOptimizeTaskStatus(result);            
-            
+            String optimizeStatus = getFinalOptimizeTaskStatus(result);
+
             // Push to notification service
             String statusPush = notificationService.sendOptimizeNotification(request.getUserId(), optimizeStatus);
-            log.info("Notification status: {}", statusPush);
-
-            // Push to schedule plan
-            schedulePlanService.pushOptimizeResult(request.getUserId(), result);
+            log.info(statusPush);
 
             List<Task> savedTasks = strategyConnector.returnTasks(request);
+
+            // Push to schedule plan
+            schedulePlanService.pushOptimizeResult(request.getUserId(), savedTasks);
+
             return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
         } catch (Exception e) {
             log.error("Error when optimize task by user: {}", e.getMessage());

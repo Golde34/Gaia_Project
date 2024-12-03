@@ -6,10 +6,10 @@ import lombok.experimental.UtilityClass;
 public class TopicConstants {
 
     @UtilityClass
-    public class ScheduleJobCommand {
-        public static final String TOPIC = "SCHEDULE_JOB";
+    public class SchedulePlanCommand {
+        public static final String TOPIC = "schedule-plan.optimize-task.topic";
 
-        public static final String SCHEDULE_BY_TIME = "SCHEDULE_BY_TIME";
+        public static final String OPTIMIZE_TASK = "optimizeTask";
     }
 
     @UtilityClass
