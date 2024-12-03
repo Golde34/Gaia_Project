@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-	request_dtos "notify_agent/core/domain/dtos/request"
+	"notify_agent/core/domain/entity"
 	"notify_agent/core/domain/enums"
 	store_adapter "notify_agent/infrastructure/store/adapter"
 	"notify_agent/infrastructure/store/repository"
@@ -21,14 +21,29 @@ func NewNotificationStore(db database_mongo.Database) *NotificationStore {
 	}
 }
 
-func (store *NotificationStore) CreateNotification(context context.Context, request request_dtos.InsertNotificationRequestDTO) (interface{}, error) {
+func (store *NotificationStore) CreateNotification(context context.Context, notification entity.Notification) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
+
 	result, err := store_adapter.INotificationRepository(
 		&repository.NotificationRepository{Database: db, Collection: collection},
-	).CreateNotification(context, request) 
+	).CreateNotification(context, notification) 
 	if err != nil {
 		return nil, err
 	}
+	return result, nil
+}
+
+func (store *NotificationStore) GetNotificationByNotificationFLowId(context context.Context, notificationStringId string) (interface{}, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+
+	result, err := store_adapter.INotificationRepository(
+		&repository.NotificationRepository{Database: db, Collection: collection},
+	).GetNotificationByNotificationFLowId(context, notificationStringId)
+	if err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }

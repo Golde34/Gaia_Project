@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	request_dtos "notify_agent/core/domain/dtos/request"
+	"notify_agent/core/domain/entity"
 	database_mongo "notify_agent/kernel/database/mongo"
 )
 
@@ -18,8 +18,17 @@ func NewNotificationRepository(db database_mongo.Database, collection database_m
 	}
 }
 
-func (repo *NotificationRepository) CreateNotification(context context.Context, notification request_dtos.InsertNotificationRequestDTO) (interface{}, error) {
+func (repo *NotificationRepository) CreateNotification(context context.Context, notification entity.Notification) (interface{}, error) {
 	result, err := repo.Collection.InsertOne(context, notification)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (repo *NotificationRepository) GetNotificationByNotificationFLowId(context context.Context, notificationStringId string) (interface{}, error) {
+	result, err := repo.Collection.Find(context, map[string]string{"notificationflowid": notificationStringId})
 	if err != nil {
 		return nil, err
 	}

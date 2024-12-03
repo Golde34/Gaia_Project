@@ -7,30 +7,34 @@ const (
 )
 
 type Notification struct {
-	ID         string `json:"id" bson:"_id"`
-	MessageID  string `json:"message_id" bson:"message_id"`
-	Type       string `json:"type" bson:"type"`
-	Content    string `json:"content" bson:"content"`
-	ReceiverID string `json:"receiver_id" bson:"receiver_id"`
-	IsRead     bool   `json:"is_read" bson:"is_read"`
-	Status     string `json:"status" bson:"status"`
-	CreatedAt  int64  `json:"created_at" bson:"created_at"`
-	UpdatedAt  int64  `json:"updated_at" bson:"updated_at"`
-	UserId     string `json:"user_id" bson:"user_id"`
+	ID                 string `json:"id" bson:"_id"`
+	MessageID          string `json:"message_id" bson:"message_id"`
+	Type               string `json:"type" bson:"type"`
+	Content            string `json:"content" bson:"content"`
+	ReceiverID         string `json:"receiver_id" bson:"receiver_id"`
+	IsRead             bool   `json:"is_read" bson:"is_read"`
+	Status             string `json:"status" bson:"status"`
+	ErrorStatus        string `json:"error_status" bson:"error_status"`
+	CreatedAt          int64  `json:"created_at" bson:"created_at"`
+	UpdatedAt          int64  `json:"updated_at" bson:"updated_at"`
+	UserId             string `json:"user_id" bson:"user_id"`
+	NotificationFlowId string `json:"notification_flow_id" bson:"notification_flow_id"`
 }
 
-func NewNotification(id, messageID, notificationType, content, receiverID, status string, isRead bool, createdAt, updatedAt int64, userId string) *Notification {
+func NewNotification(id, messageID, notificationType, content, receiverID, status, errorStatus string, isRead bool, createdAt, updatedAt int64, userId, notificationFlowId string) *Notification {
 	return &Notification{
-		ID:         id,
-		MessageID:  messageID,
-		Type:       notificationType,
-		Content:    content,
-		ReceiverID: receiverID,
-		IsRead:     isRead,
-		Status:     status,
-		CreatedAt:  createdAt,
-		UpdatedAt:  updatedAt,
-		UserId:     userId,
+		ID:                 id,
+		MessageID:          messageID,
+		Type:               notificationType,
+		Content:            content,
+		ReceiverID:         receiverID,
+		IsRead:             isRead,
+		Status:             status,
+		ErrorStatus:        errorStatus,
+		CreatedAt:          createdAt,
+		UpdatedAt:          updatedAt,
+		UserId:             userId,
+		NotificationFlowId: notificationFlowId,
 	}
 }
 
@@ -62,6 +66,10 @@ func (n *Notification) SetStatus(status string) {
 	n.Status = status
 }
 
+func (n *Notification) SetErrorStatus(errorStatus string) {
+	n.ErrorStatus = errorStatus
+}
+
 func (n *Notification) SetCreatedAt(createdAt int64) {
 	n.CreatedAt = createdAt
 }
@@ -72,6 +80,10 @@ func (n *Notification) SetUpdatedAt(updatedAt int64) {
 
 func (n *Notification) SetUserId(userId string) {
 	n.UserId = userId
+}
+
+func (n *Notification) SetNotificationFlowId(notificationFlowId string) {
+	n.NotificationFlowId = notificationFlowId
 }
 
 func (n *Notification) GetID() string {
@@ -102,6 +114,10 @@ func (n *Notification) GetStatus() string {
 	return n.Status
 }
 
+func (n *Notification) GetErrorStatus() string {
+	return n.ErrorStatus
+}
+
 func (n *Notification) GetCreatedAt() int64 {
 	return n.CreatedAt
 }
@@ -112,4 +128,8 @@ func (n *Notification) GetUpdatedAt() int64 {
 
 func (n *Notification) GetUserId() string {
 	return n.UserId
+}
+
+func (n *Notification) GetNotificationFlowId() string {
+	return n.NotificationFlowId
 }

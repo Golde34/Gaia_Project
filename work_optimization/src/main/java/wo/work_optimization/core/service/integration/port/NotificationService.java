@@ -1,7 +1,5 @@
 package wo.work_optimization.core.service.integration.port;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import kafka.lib.java.adapter.producer.KafkaPublisher;
@@ -12,6 +10,7 @@ import wo.work_optimization.core.domain.constant.ErrorConstants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.kafka.OptimizeTaskNotiMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
+import wo.work_optimization.kernel.utils.ULID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +25,20 @@ public class NotificationService {
             OptimizeTaskNotiMessage data = OptimizeTaskNotiMessage.builder()
                     .userId(userId)
                     .optimizeStatus(optimizeStatus)
+                    .errorStatus(Constants.ErrorStatus.INIT)
+                    .notificationFLowId(ULID.nextULID())
                     .build();
 
             KafkaBaseDto<OptimizeTaskNotiMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS,
                     ErrorConstants.ErrorMessage.SUCCESS);
-            String messageId = UUID.randomUUID().toString();
+            String messageId = ULID.nextULID();
             kafkaPublisher.pushAsync(message, messageId, TopicConstants.NotificationCommand.TOPIC,
                     Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
+            return data.getNotificationFLowId();
         } catch (Exception e) {
             log.error("Error sending optimize notification to user: {}", userId);
             // Send notification by rest
-            return "Error sending optimize notification to user: " + userId;
+            return null;
         }
-        return "Notification sent";
     }
 }

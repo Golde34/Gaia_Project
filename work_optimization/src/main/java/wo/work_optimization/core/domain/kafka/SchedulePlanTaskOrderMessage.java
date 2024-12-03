@@ -1,11 +1,14 @@
 package wo.work_optimization.core.domain.kafka;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wo.work_optimization.core.domain.constant.TopicConstants;
+import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 
 @Getter
@@ -13,15 +16,14 @@ import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OptimizeTaskNotiMessage {
+public class SchedulePlanTaskOrderMessage {
     private long userId;
-    private String optimizeStatus;
-    private String errorStatus;
-    private String notificationFLowId;
+    private List<Task> tasks; 
+    private String notificationFlowId;
 
-    public KafkaBaseDto<OptimizeTaskNotiMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
-        return KafkaBaseDto.<OptimizeTaskNotiMessage>builder()
-                .cmd(TopicConstants.NotificationCommand.OPTIMIZE_TASK)
+    public KafkaBaseDto<SchedulePlanTaskOrderMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
+        return KafkaBaseDto.<SchedulePlanTaskOrderMessage>builder()
+                .cmd(TopicConstants.SchedulePlanCommand.OPTIMIZE_SCHEDULE_TASK)
                 .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .data(this)
