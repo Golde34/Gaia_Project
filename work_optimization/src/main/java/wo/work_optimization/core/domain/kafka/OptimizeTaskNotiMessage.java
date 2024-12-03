@@ -16,11 +16,12 @@ import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 public class OptimizeTaskNotiMessage {
     private long userId;
     private String optimizeStatus;
+    private String errorStatus;
     private String notificationFLowId;
 
     public KafkaBaseDto<OptimizeTaskNotiMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<OptimizeTaskNotiMessage>builder()
-                .cmd(TopicConstants.NotificationCommand.INIT_OPTIMIZE_TASK_NOTIFY_CMD)
+                .cmd(TopicConstants.NotificationCommand.OPTIMIZE_TASK)
                 .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .data(this)

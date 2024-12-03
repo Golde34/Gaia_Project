@@ -25,6 +25,7 @@ public class NotificationService {
             OptimizeTaskNotiMessage data = OptimizeTaskNotiMessage.builder()
                     .userId(userId)
                     .optimizeStatus(optimizeStatus)
+                    .errorStatus(Constants.ErrorStatus.INIT)
                     .notificationFLowId(ULID.nextULID())
                     .build();
 
