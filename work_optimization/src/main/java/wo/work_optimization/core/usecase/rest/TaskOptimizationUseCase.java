@@ -39,12 +39,20 @@ public class TaskOptimizationUseCase {
 
     private final GenericResponse<?> genericResponse;
 
+    /**
+     * Optimize Task By User
+     * Call Auth Service
+     * Get Task Strategy
+     * Optimize Task by Schedule Factory
+     * Push to Notification Service
+     * Push to Schedule Plan
+     * @param request
+     * @return
+     */
     public GeneralResponse<?> optimizeTaskByUser(OptimizeTaskRestRequestDTO request) {
         try {
-            // Call auth service to get user settings
             UserSettingResponseDTO userSettingResponseDTO = authService.getUserSetting(request.getUserId());
 
-            // Get Task Strategy
             String strategy = OptimizedTaskConfigEnum.of(userSettingResponseDTO.getOptimizedTaskConfig()).getMode();
             StrategyConnector strategyConnector = strategyFactory.get(strategy);
             List<Task> listTasks = strategyConnector.handleStrategy(request);
@@ -53,7 +61,6 @@ public class TaskOptimizationUseCase {
                         .matchingResponseMessage(new GenericResponse<>("No task found", ResponseMessage.msg400));
             }
 
-            // Optimize Task by Schedule Factory
             String method = TaskSortingAlgorithmEnum.of(userSettingResponseDTO.getTaskSortingAlgorithm()).getMethod();
             ScheduleConnector scheduleConnector = scheduleFactory.get(method);
             Map<Integer, String> result = scheduleConnector.schedule(listTasks, request.getUserId());
@@ -65,14 +72,11 @@ public class TaskOptimizationUseCase {
 
             String optimizeStatus = getFinalOptimizeTaskStatus(result);
 
-            // Push to notification service
-            String statusPush = notificationService.sendOptimizeNotification(request.getUserId(), optimizeStatus);
-            log.info(statusPush);
+            String notificationFlow = notificationService.sendOptimizeNotification(request.getUserId(), optimizeStatus);
 
             List<Task> savedTasks = strategyConnector.returnTasks(request);
 
-            // Push to schedule plan
-            schedulePlanService.pushOptimizeResult(request.getUserId(), savedTasks);
+            schedulePlanService.pushOptimizeResult(request.getUserId(), savedTasks, notificationFlow);
 
             return genericResponse.matchingResponseMessage(new GenericResponse<>(savedTasks, ResponseMessage.msg200));
         } catch (Exception e) {

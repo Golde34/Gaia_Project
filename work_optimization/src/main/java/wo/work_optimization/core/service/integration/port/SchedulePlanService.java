@@ -42,15 +42,23 @@ public class SchedulePlanService {
         log.info("Sent kafka to sync with schedule plan");
     }
 
-    public void pushOptimizeResult(long userId, List<Task> tasks) {
+    public void pushOptimizeResult(long userId, List<Task> tasks, String notificationFLowId) {
         log.info("Push optimize result to kafka: {}", tasks);
         SchedulePlanTaskOrderMessage data;
         if (tasks.isEmpty()) {
-            data = SchedulePlanTaskOrderMessage.builder().userId(userId).build();
+            data = SchedulePlanTaskOrderMessage.builder()
+                    .userId(userId)
+                    .notificationFlowId(notificationFLowId)
+                    .build();
         } else {
-            data = SchedulePlanTaskOrderMessage.builder().userId(userId).tasks(tasks).build();
+            data = SchedulePlanTaskOrderMessage.builder()
+                    .userId(userId)
+                    .tasks(tasks)
+                    .notificationFlowId(notificationFLowId)
+                    .build();
         }
-        KafkaBaseDto<SchedulePlanTaskOrderMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS, ErrorConstants.ErrorMessage.SUCCESS);
+        KafkaBaseDto<SchedulePlanTaskOrderMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS,
+                ErrorConstants.ErrorMessage.SUCCESS);
         kafkaPublisher.pushAsync(message, TopicConstants.SchedulePlanCommand.TOPIC,
                 Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
         log.info("Sent optimize result to kafka");

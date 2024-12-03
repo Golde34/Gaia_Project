@@ -19,6 +19,7 @@ import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
 public class SchedulePlanTaskOrderMessage {
     private long userId;
     private List<Task> tasks; 
+    private String notificationFlowId;
 
     public KafkaBaseDto<SchedulePlanTaskOrderMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<SchedulePlanTaskOrderMessage>builder()
