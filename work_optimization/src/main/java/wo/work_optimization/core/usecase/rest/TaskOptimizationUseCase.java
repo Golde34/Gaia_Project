@@ -74,6 +74,7 @@ public class TaskOptimizationUseCase {
 
             String notificationFlow = notificationService.sendOptimizeNotification(request.getUserId(), optimizeStatus);
 
+            //Result 
             List<Task> savedTasks = strategyConnector.returnTasks(request);
 
             schedulePlanService.pushOptimizeResult(request.getUserId(), savedTasks, notificationFlow);

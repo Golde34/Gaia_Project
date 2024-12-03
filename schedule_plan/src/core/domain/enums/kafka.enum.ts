@@ -3,7 +3,8 @@ export enum KafkaTopic {
     CREATE_SCHEDULE_TASK = "schedule-plan.create-schedule-task.topic",
     SYNC_SCHEDULE_TASK = "schedule-plan.sync-schedule-task.topic",
     OPTIMIZE_TASK = "work-optimization.optimize-task.topic",
-    OPTIMIZE_SCHEDULE_TASK = "schedule-plan.optimize-task.topic"
+    OPTIMIZE_SCHEDULE_TASK = "schedule-plan.optimize-task.topic",
+    OPTIMIZE_TASK_NOTIFY = "notify-agent.optimize-task-notify.topic"
 }
 
 export enum KafkaCommand {
@@ -12,7 +13,8 @@ export enum KafkaCommand {
     CREATE_SCHEDULE_TASK = "schedulePlanCreateTask",
     OPTIMIZE_CREATING_TASK = "optimizeCreatingTask",
     SYNC_SCHEDULE_TASK = "syncScheduleTask",
-    OPTIMIZE_SCHEDULE_TASK = "optimizeScheduleTask"
+    OPTIMIZE_SCHEDULE_TASK = "optimizeScheduleTask",
+    OPTIMIZE_TASK = "optimizeTask",
 }
 
 export class KafkaMessage {

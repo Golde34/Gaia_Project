@@ -49,10 +49,9 @@ class ScheduleTaskUsecase {
         try {
             const validateUser = await schedulePlanService.findSchedulePlanByUserId(schedulePlanOptimizeMessage.userId);
             if (!validateUser) {
-                console.log('PUsh this error to logging tracker, user validate fail need to check the whole account.')
+                console.log('Push this error to logging tracker, user validate fail need to check the whole account.')
             }
-            await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
-
+            const optimizedTask = await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
         } catch (error) {
             console.error("Error on optimizeScheduleTask: ", error);
         }
