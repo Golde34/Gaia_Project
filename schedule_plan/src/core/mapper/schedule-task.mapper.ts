@@ -33,5 +33,13 @@ export const scheduleTaskMapper = {
         message.workOptimTaskId = syncScheduleTaskRequest.workOptimTaskId
         message.isSync = isSync.toString()
         return message
+    },
+
+    buildOptimizeScheduleTaskMapper(optimizedTask: any, task: IScheduleTaskEntity): IScheduleTaskEntity {
+        task.taskOrder = optimizedTask.taskOrder
+        task.weight = optimizedTask.weight
+        task.stopTime = optimizedTask.stopTime
+        task.taskBatch = optimizedTask.taskBatch 
+        return task;
     }
 }

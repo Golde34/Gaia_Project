@@ -104,13 +104,25 @@ class ScheduleTaskService {
         }
 
         async function saveToDatabase(task: any): Promise<void> {
-            console.log("Saving task to database:", task);
+            listTasks.forEach(async (scheduleTask: any) => {
+                try {
+                    const task = await scheduleTaskRepository.findByScheduleTaskIdAndTaskId(scheduleTask.scheduleTaskId, scheduleTask.originalId); 
+                    if (task) {
+                        const newTask = scheduleTaskMapper.buildOptimizeScheduleTaskMapper(scheduleTask, task); 
+                        await scheduleTaskRepository.updateScheduleTask(scheduleTask.scheduleTaskId, newTask);
+                    }
+                } catch (error) {
+                    console.error("Error saving task to database:", error);
+                    throw new Error("Failed to save task to the database.");
+                }
+            })
         }
 
         try {
             for (const task of listTasks) {
                 await saveToDatabase(task);
             }
+            console.log("Save database successfully");
         } catch (error) {
             console.error("Error saving tasks to database:", error);
             throw new Error("Failed to save tasks to the database.");
