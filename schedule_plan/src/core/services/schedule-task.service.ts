@@ -98,7 +98,7 @@ class ScheduleTaskService {
         this.kafkaHandler.produce(KafkaTopic.OPTIMIZE_TASK, messages);
     }
 
-    async optimizeScheduleTask(listTasks: any): Promise<String> {
+    async optimizeScheduleTask(listTasks: any): Promise<string> {
         if (!Array.isArray(listTasks) || listTasks.length === 0) {
             throw new Error("Invalid input: listTasks must be a non-empty array.");
         }

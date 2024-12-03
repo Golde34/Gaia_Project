@@ -1,6 +1,7 @@
 import { IResponse, msg400 } from "../common/response";
 import { OptimizeScheduleTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
+import { notificationService } from "../services/notifi-agent.service";
 import { schedulePlanService } from "../services/schedule-plan.service";
 import { scheduleTaskService } from "../services/schedule-task.service";
 
@@ -52,6 +53,8 @@ class ScheduleTaskUsecase {
                 console.log('Push this error to logging tracker, user validate fail need to check the whole account.')
             }
             const optimizedTask = await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
+            // Push notification
+            await notificationService.pushNotification(schedulePlanOptimizeMessage.userId, optimizedTask, schedulePlanOptimizeMessage.notificationFlowId);
         } catch (error) {
             console.error("Error on optimizeScheduleTask: ", error);
         }

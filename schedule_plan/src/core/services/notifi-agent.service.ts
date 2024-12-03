@@ -6,10 +6,11 @@ class NotificationService {
     
     kafkaHandler: KafkaHandler = new KafkaHandler();
 
-    async pushNotification(userId: string, optimizeStatus: string, notificationFlowId: string): Promise<void> {
+    async pushNotification(userId: number, optimizeStatus: string, notificationFlowId: string): Promise<void> {
         const data = {
             "userId": userId,
             "optimizeStatus": optimizeStatus,
+            "errorStatus": optimizeStatus,
             "notificationFlowId": notificationFlowId
         } 
         const messages = [{

@@ -33,4 +33,5 @@ export class KafkaOptimizeTaskMessage {
 export class OptimizeScheduleTaskMessage {
     userId!: number
     tasks!: any
+    notificationFlowId!: string
 }
