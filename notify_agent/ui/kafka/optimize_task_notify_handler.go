@@ -58,10 +58,15 @@ func InitOptimizeTaskCmd(key []byte, data map[string]interface{}, db database_mo
 		fmt.Println("Error casting optimizeStatus")
 		return
 	}
+	notificationFlowId, ok := data["notificationFlowId"].(string)
+	if !ok {
+		fmt.Println("Error casting notificationFlowId")
+		return
+	}
 	userIdStr := fmt.Sprintf("%d", int(userId))	
 	notifyStore := store.NewNotificationStore(db)
 	optimNotify := services.NewOptimizeTaskNotifyService(notifyStore)
-	result, err := optimNotify.InitOptimizeTask(messageId, userIdStr, optimizeStatus)
+	result, err := optimNotify.InitOptimizeTask(messageId, userIdStr, optimizeStatus, notificationFlowId)
 	if err != nil {
 		fmt.Println("Error initializing optimize task")
 		return

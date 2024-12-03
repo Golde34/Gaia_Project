@@ -19,12 +19,12 @@ func NewOptimizeTaskNotifyService(store *store.NotificationStore) *OptimizeTaskN
 	}
 }
 
-func (service *OptimizeTaskNotifyService) InitOptimizeTask(messageId, userId string, optimizeStatus string) (bool, error) {
+func (service *OptimizeTaskNotifyService) InitOptimizeTask(messageId, userId, optimizedStatus, notificationIdFlow string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	log.Println("InitOptimizeTask ", ctx)
 
-	request := mapper.InsertOptimizeTaskRequestMapper(messageId, userId, optimizeStatus) 
+	request := mapper.InsertOptimizeTaskRequestMapper(messageId, userId, optimizedStatus, notificationIdFlow) 
 
 	savedTask, err := service.Store.CreateNotification(ctx, request)
 	if err != nil {

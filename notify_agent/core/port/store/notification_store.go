@@ -24,9 +24,11 @@ func NewNotificationStore(db database_mongo.Database) *NotificationStore {
 func (store *NotificationStore) CreateNotification(context context.Context, request request_dtos.InsertNotificationRequestDTO) (interface{}, error) {
 	collection := store.Database.Collection(store.Collection)
 	db := store.Database
+
+	notification := request_dtos.NewInsertNotificationRequestDTO().MapToEntity(request)
 	result, err := store_adapter.INotificationRepository(
 		&repository.NotificationRepository{Database: db, Collection: collection},
-	).CreateNotification(context, request) 
+	).CreateNotification(context, notification) 
 	if err != nil {
 		return nil, err
 	}

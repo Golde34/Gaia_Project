@@ -2,9 +2,9 @@ package store_adapter
 
 import (
 	"context"
-	request_dtos "notify_agent/core/domain/dtos/request"
+	"notify_agent/core/domain/entity"
 )
 
 type INotificationRepository interface {
-	CreateNotification(context context.Context, notification request_dtos.InsertNotificationRequestDTO) (interface{}, error)
+	CreateNotification(context context.Context, notification entity.Notification) (interface{}, error)
 }
