@@ -5,7 +5,7 @@ export const optimizeTasksHandler = (message: string) => {
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
         case KafkaCommand.OPTIMIZE_SCHEDULE_TASK:
-            console.log('Optimize Schedule Task');
+            schedulePlan
             break;
         default:
             console.warn("No handler for command: ", cmd)

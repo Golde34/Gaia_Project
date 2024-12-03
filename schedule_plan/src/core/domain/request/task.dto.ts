@@ -29,3 +29,8 @@ export class KafkaOptimizeTaskMessage {
     @IsString()
     isSync!: string;
 }
+
+export class OptimizeScheduleTaskMessage {
+    userId!: number
+    tasks!: any
+}

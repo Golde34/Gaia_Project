@@ -97,6 +97,25 @@ class ScheduleTaskService {
         console.log("Push Kafka Message: ", messages);
         this.kafkaHandler.produce(KafkaTopic.OPTIMIZE_TASK, messages);
     }
+
+    async optimizeScheduleTask(listTasks: any): Promise<void> {
+        if (!Array.isArray(listTasks) || listTasks.length === 0) {
+            throw new Error("Invalid input: listTasks must be a non-empty array.");
+        }
+
+        async function saveToDatabase(task: any): Promise<void> {
+            console.log("Saving task to database:", task);
+        }
+
+        try {
+            for (const task of listTasks) {
+                await saveToDatabase(task);
+            }
+        } catch (error) {
+            console.error("Error saving tasks to database:", error);
+            throw new Error("Failed to save tasks to the database.");
+        }
+    }
 }
 
-export const scheduleTaskService = new ScheduleTaskService();
+export const scheduleTaskService = new ScheduleTaskService();   

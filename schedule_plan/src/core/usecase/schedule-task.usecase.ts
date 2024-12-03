@@ -1,6 +1,7 @@
 import { IResponse, msg400 } from "../common/response";
-import { SyncScheduleTaskRequest } from "../domain/request/task.dto";
+import { OptimizeScheduleTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
+import { schedulePlanService } from "../services/schedule-plan.service";
 import { scheduleTaskService } from "../services/schedule-task.service";
 
 class ScheduleTaskUsecase {
@@ -42,6 +43,19 @@ class ScheduleTaskUsecase {
         } catch (error) {
             console.error("Error on syncScheduleTask: ", error);
         } 
+    }
+
+    async optimizeScheduleTask(schedulePlanOptimizeMessage: OptimizeScheduleTaskMessage): Promise<void> {
+        try {
+            const validateUser = await schedulePlanService.findSchedulePlanByUserId(schedulePlanOptimizeMessage.userId);
+            if (!validateUser) {
+                console.log('PUsh this error to logging tracker, user validate fail need to check the whole account.')
+            }
+            await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
+
+        } catch (error) {
+            console.error("Error on optimizeScheduleTask: ", error);
+        }
     }
 }
 

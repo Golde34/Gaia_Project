@@ -56,14 +56,13 @@ class SchedulePlanService {
             if (typeof existedUser === 'number') {
                 return returnInternalServiceErrorResponse(existedUser, "Call auth service failed: ")
             }
-            
+
             const schedulePlans = await schedulePlanRepository.findSchedulePlanByUserId(userId);
-            let isScheduleExist: boolean;
+            let isScheduleExist: boolean = true;
             if (schedulePlans.length === 0) {
                 isScheduleExist = false;
-            } else {
-                isScheduleExist = true;
-            } return msg200({
+            }
+            return msg200({
                 isScheduleExist
             });
         } catch (error: any) {
