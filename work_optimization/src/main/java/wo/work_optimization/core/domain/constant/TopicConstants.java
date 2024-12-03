@@ -9,7 +9,7 @@ public class TopicConstants {
     public class SchedulePlanCommand {
         public static final String TOPIC = "schedule-plan.optimize-task.topic";
 
-        public static final String OPTIMIZE_TASK = "optimizeTask";
+        public static final String OPTIMIZE_SCHEDULE_TASK = "optimizeScheduleTask";
     }
 
     @UtilityClass

@@ -22,7 +22,7 @@ public class SchedulePlanTaskOrderMessage {
 
     public KafkaBaseDto<SchedulePlanTaskOrderMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<SchedulePlanTaskOrderMessage>builder()
-                .cmd(TopicConstants.SchedulePlanCommand.OPTIMIZE_TASK)
+                .cmd(TopicConstants.SchedulePlanCommand.OPTIMIZE_SCHEDULE_TASK)
                 .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .data(this)

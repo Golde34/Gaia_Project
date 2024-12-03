@@ -1,5 +1,6 @@
 import { KafkaTopic } from "../../core/domain/enums/kafka.enum";
 import { handlerCreateTaskMessage } from "../../ui/kafka/create-task.consumer";
+import { optimizeTasksHandler } from "../../ui/kafka/optimize-task.consumer";
 import { handlerSyncTaskMessage } from "../../ui/kafka/sync-task.consumer";
 import { KafkaHandler } from "./kafka-handler";
 import * as dotenv from "dotenv";
@@ -15,7 +16,6 @@ export const kafkaController = async (kafkaHandler: KafkaHandler) => {
     console.log("Topics: ", topics);
 
     try {
-        // Tiêu thụ message cho từng topic với handler tương ứng
         for (const topic of topics) {
             const handler = kafkaTopicHandlers[topic];
             if (handler) {
@@ -40,4 +40,5 @@ const getKafkaTopicsFromEnv = (): string[] => {
 const kafkaTopicHandlers: Record<string, (message: string) => void> = {
     [KafkaTopic.CREATE_TASK]: (message: string) => handlerCreateTaskMessage(message),
     [KafkaTopic.SYNC_SCHEDULE_TASK]: (message: string) => handlerSyncTaskMessage(message),
+    [KafkaTopic.OPTIMIZE_SCHEDULE_TASK]: (message: string) => optimizeTasksHandler(message),
 };
