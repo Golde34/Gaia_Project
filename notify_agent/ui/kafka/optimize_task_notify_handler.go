@@ -6,6 +6,7 @@ import (
 	"log"
 	"notify_agent/core/domain/constants"
 	base_dtos "notify_agent/core/domain/dtos/base"
+	"notify_agent/core/port/mapper"
 	"notify_agent/core/port/store"
 	services "notify_agent/core/services/work_optimization"
 	database_mongo "notify_agent/kernel/database/mongo"
@@ -37,36 +38,24 @@ func (handler *OptimizeTaskNotifyHandler) HandleMessage(topic string, key, value
 	}
 
 	switch message.Cmd {
-	case constants.InitOptimizeTaskCmd:
-		InitOptimizeTaskCmd(key, data, handler.Database)
-	case constants.FinalizeOptimizeTaskCmd:
-		fmt.Printf("Optimize task finalization notification received: %v\n", data)
+	case constants.OptimizeTaskCmd:
+		OptimizeTaskCmd(key, data, handler.Database)
 	default:
 		log.Println("Message handled successfully, but the cmd does not match to consumer to process")
 	}
 }
 
-func InitOptimizeTaskCmd(key []byte, data map[string]interface{}, db database_mongo.Database) {
+func OptimizeTaskCmd(key []byte, data map[string]interface{}, db database_mongo.Database) {
 	messageId := string(key)
-	userId, ok := data["userId"].(float64)
-	if !ok {
-		fmt.Println("Error casting userId")
+	userId, optimizeStatus, errorStatus, notificationFlowId := mapper.KafkaOptimizeTaskRequestMapper(data)
+	if userId == "" || optimizeStatus == "" || errorStatus == "" || notificationFlowId == "" {
+		fmt.Println("Error mapping optimize task request")
 		return
 	}
-	optimizeStatus, ok := data["optimizeStatus"].(string)
-	if !ok {
-		fmt.Println("Error casting optimizeStatus")
-		return
-	}
-	notificationFlowId, ok := data["notificationFlowId"].(string)
-	if !ok {
-		fmt.Println("Error casting notificationFlowId")
-		return
-	}
-	userIdStr := fmt.Sprintf("%d", int(userId))	
+		
 	notifyStore := store.NewNotificationStore(db)
 	optimNotify := services.NewOptimizeTaskNotifyService(notifyStore)
-	result, err := optimNotify.InitOptimizeTask(messageId, userIdStr, optimizeStatus, notificationFlowId)
+	result, err := optimNotify.OptimizeTaskNoti(messageId, userId, optimizeStatus, errorStatus, notificationFlowId)
 	if err != nil {
 		fmt.Println("Error initializing optimize task")
 		return

@@ -26,3 +26,12 @@ func (repo *NotificationRepository) CreateNotification(context context.Context, 
 
 	return result, nil
 }
+
+func (repo *NotificationRepository) GetNotificationByNotificationFLowId(context context.Context, notificationStringId string) (interface{}, error) {
+	result, err := repo.Collection.Find(context, map[string]string{"notificationflowid": notificationStringId})
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

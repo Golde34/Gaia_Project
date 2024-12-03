@@ -7,6 +7,7 @@ type InsertNotificationRequestDTO struct {
 	Type               string `json:"type"`
 	Content            string `json:"content"`
 	Status             string `json:"status"`
+	ErrorStatus        string `json:"error_status"`
 	IsRead             bool   `json:"is_read"`
 	UserId             string `json:"user_id"`
 	NotificationFlowId string `json:"notification_flow_id"`
@@ -22,6 +23,7 @@ func (r *InsertNotificationRequestDTO) MapToEntity(request InsertNotificationReq
 		Type:               r.Type,
 		Content:            r.Content,
 		Status:             r.Status,
+		ErrorStatus:        r.ErrorStatus,
 		IsRead:             r.IsRead,
 		UserId:             r.UserId,
 		NotificationFlowId: r.NotificationFlowId,

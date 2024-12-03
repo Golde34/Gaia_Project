@@ -14,24 +14,26 @@ type Notification struct {
 	ReceiverID         string `json:"receiver_id" bson:"receiver_id"`
 	IsRead             bool   `json:"is_read" bson:"is_read"`
 	Status             string `json:"status" bson:"status"`
+	ErrorStatus        string `json:"error_status" bson:"error_status"`
 	CreatedAt          int64  `json:"created_at" bson:"created_at"`
 	UpdatedAt          int64  `json:"updated_at" bson:"updated_at"`
 	UserId             string `json:"user_id" bson:"user_id"`
 	NotificationFlowId string `json:"notification_flow_id" bson:"notification_flow_id"`
 }
 
-func NewNotification(id, messageID, notificationType, content, receiverID, status string, isRead bool, createdAt, updatedAt int64, userId, notificationFlowId string) *Notification {
+func NewNotification(id, messageID, notificationType, content, receiverID, status, errorStatus string, isRead bool, createdAt, updatedAt int64, userId, notificationFlowId string) *Notification {
 	return &Notification{
-		ID:         id,
-		MessageID:  messageID,
-		Type:       notificationType,
-		Content:    content,
-		ReceiverID: receiverID,
-		IsRead:     isRead,
-		Status:     status,
-		CreatedAt:  createdAt,
-		UpdatedAt:  updatedAt,
-		UserId:     userId,
+		ID:                 id,
+		MessageID:          messageID,
+		Type:               notificationType,
+		Content:            content,
+		ReceiverID:         receiverID,
+		IsRead:             isRead,
+		Status:             status,
+		ErrorStatus:        errorStatus,
+		CreatedAt:          createdAt,
+		UpdatedAt:          updatedAt,
+		UserId:             userId,
 		NotificationFlowId: notificationFlowId,
 	}
 }
@@ -62,6 +64,10 @@ func (n *Notification) SetIsRead(isRead bool) {
 
 func (n *Notification) SetStatus(status string) {
 	n.Status = status
+}
+
+func (n *Notification) SetErrorStatus(errorStatus string) {
+	n.ErrorStatus = errorStatus
 }
 
 func (n *Notification) SetCreatedAt(createdAt int64) {
@@ -106,6 +112,10 @@ func (n *Notification) GetIsRead() bool {
 
 func (n *Notification) GetStatus() string {
 	return n.Status
+}
+
+func (n *Notification) GetErrorStatus() string {
+	return n.ErrorStatus
 }
 
 func (n *Notification) GetCreatedAt() int64 {
