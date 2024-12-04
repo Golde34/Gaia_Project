@@ -18,6 +18,7 @@ public class TopicConstants {
 
         public static final String CREATE_TASK = "taskManagerCreateTask";
         public static final String GAIA_CREATE_TASK = "gaiaCreateTask";
+        public static final String REGISTER_SCHEDULE_PLAN = "registerSchedulePlan";
     }
 
     @UtilityClass
