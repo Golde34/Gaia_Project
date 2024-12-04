@@ -11,6 +11,7 @@ import wo.work_optimization.core.domain.constant.Constants;
 import wo.work_optimization.core.domain.constant.ErrorConstants;
 import wo.work_optimization.core.domain.constant.TopicConstants;
 import wo.work_optimization.core.domain.entity.Task;
+import wo.work_optimization.core.domain.kafka.RegisterSchedulePlanMessage;
 import wo.work_optimization.core.domain.kafka.SchedulePlanSyncronizedMessage;
 import wo.work_optimization.core.domain.kafka.SchedulePlanTaskOrderMessage;
 import wo.work_optimization.core.domain.kafka.base.KafkaBaseDto;
@@ -62,6 +63,15 @@ public class SchedulePlanService {
         kafkaPublisher.pushAsync(message, TopicConstants.SchedulePlanCommand.TOPIC,
                 Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
         log.info("Sent optimize result to kafka");
+    }
 
+    public void pushRegiserSchedulePlan(long userId) {
+        log.info("Push register schedule plan to userId: {}", userId);
+        RegisterSchedulePlanMessage data = RegisterSchedulePlanMessage.builder().userId(userId).build();
+        KafkaBaseDto<RegisterSchedulePlanMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS,
+                ErrorConstants.ErrorCode.SUCCESS);
+        kafkaPublisher.pushAsync(message, TopicConstants.CreateTaskCommand.REGISTER_SCHEDULE_PLAN,
+                Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
+        log.info("Sent register schedule plan command to kafka");
     }
 }

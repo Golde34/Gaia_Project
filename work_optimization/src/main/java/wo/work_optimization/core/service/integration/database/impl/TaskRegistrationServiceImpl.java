@@ -1,5 +1,6 @@
 package wo.work_optimization.core.service.integration.database.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -13,22 +14,25 @@ import wo.work_optimization.core.domain.entity.TaskRegistration;
 import wo.work_optimization.core.port.client.AuthServiceClient;
 import wo.work_optimization.core.port.store.TaskRegistrationStore;
 import wo.work_optimization.core.service.integration.database.TaskRegistrationService;
+import wo.work_optimization.core.service.integration.port.SchedulePlanService;
 import wo.work_optimization.kernel.utils.DataUtils;
 
 import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TaskRegistrationServiceImpl implements TaskRegistrationService {
 
-    @Autowired
-    private AuthServiceClient authServiceClient;
-    @Autowired
-    private TaskRegistrationStore taskRegistrationStore;
+    private final SchedulePlanService schedulePlanService;
+    private final AuthServiceClient authServiceClient;
+    private final TaskRegistrationStore taskRegistrationStore;
 
     public TaskRegistration registerWorkOptimization(TaskRegistrationRequestDTO request) {
         TaskRegistration taskRegistration = createRequest(request);
         taskRegistrationStore.userRegisterTaskOperation(taskRegistration);
+        // Push Kafka to task registration
+        schedulePlanService.pushRegiserSchedulePlan(request.getUserId());
         return taskRegistration;
     }
 
