@@ -15,7 +15,6 @@ export enum KafkaCommand {
     SYNC_SCHEDULE_TASK = "syncScheduleTask",
     OPTIMIZE_SCHEDULE_TASK = "optimizeScheduleTask",
     OPTIMIZE_TASK = "optimizeTask",
-    REGISTER_SCHEDULE_PLAN = "registerSchedulePlan",
 }
 
 export class KafkaMessage {
