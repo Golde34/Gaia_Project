@@ -26,7 +26,8 @@ func RegisterTaskConfig(w http.ResponseWriter, r *http.Request, taskRegisterServ
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerTaskConfig", QueryInput: registerTaskInput, QueryOutput: model.RegisterTaskConfig{}})
 	// Check if task and schedule existed for introduction purpose
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isTaskExisted", QueryInput: userInput, QueryOutput: model.IsTaskExisted{}})
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isScheduleExisted", QueryInput: userInput, QueryOutput: model.IsScheduleExisted{}})
+	// graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "isScheduleExisted", QueryInput: userInput, QueryOutput: model.IsScheduleExisted{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "registerSchedulePlan", QueryInput: userInput, QueryOutput: model.RegisterSchedulePlan{}})
 	graphQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphQuery)

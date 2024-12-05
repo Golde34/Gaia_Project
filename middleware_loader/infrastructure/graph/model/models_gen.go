@@ -200,6 +200,10 @@ type ProjectGroupTaskIDInput struct {
 type Query struct {
 }
 
+type RegisterSchedulePlan struct {
+	IsScheduleExist bool `json:"isScheduleExist"`
+}
+
 type RegisterTaskConfig struct {
 	UserID           float64 `json:"userId"`
 	WorkTime         float64 `json:"workTime"`

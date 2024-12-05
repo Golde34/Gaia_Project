@@ -26,3 +26,7 @@ input RegisterTaskInput {
     travelTime: Float!
     workTime: Float! 
 }
+
+type RegisterSchedulePlan {
+    isScheduleExist: Boolean!
+}

@@ -51,3 +51,12 @@ func (s *TaskRegisterService) QueryTaskConfig(ctx context.Context, input model.U
 	taskRegisterModel := response_dtos.NewIsTaskConfigExistedResponseDTO().MapperToGraphQLModel(response)
 	return taskRegisterModel, nil
 }
+
+func (s *TaskRegisterService) RegisterSchedulePlan(ctx context.Context, input model.UserIDInput) (model.RegisterSchedulePlan, error) {
+	response, err := client.ITaskRegisterAdapter(&adapter.TaskRegisterAdapter{}).RegisterSchedulePlan(input)
+	if err != nil {
+		return model.RegisterSchedulePlan{}, err
+	}
+	taskRegisterModel := response_dtos.NewRegisterSchedulePlanResponseDTO().MapperToGraphQLModel(response)
+	return taskRegisterModel, nil
+}

@@ -17,3 +17,14 @@ dashboardRouter.get("/check-existed-schedules",
         }
     }
 )
+
+dashboardRouter.post("/register-schedule-plan",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const result = await scheduleControllerImpl.registerSchedulePlan(req, next);
+            returnResult(result, SCHEDULE_PLAN_SERVICE_ERROR, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+)
