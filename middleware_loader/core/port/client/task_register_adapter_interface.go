@@ -10,4 +10,5 @@ type ITaskRegisterAdapter interface {
 	IsTaskExisted(input model.UserIDInput) (response_dtos.IsTaskExistedResponseDTO, error)
 	IsScheduleExisted(input model.UserIDInput) (response_dtos.IsScheduleExistedResponseDTO, error)
 	QueryTaskConfig(input model.UserIDInput) (response_dtos.IsTaskConfigExistedResponseDTO, error)
+	RegisterSchedulePlan(input model.UserIDInput) (response_dtos.RegisterSchedulePlanResponseDTO, error)
 }

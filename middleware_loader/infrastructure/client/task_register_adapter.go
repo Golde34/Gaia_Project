@@ -64,3 +64,14 @@ func (adapter *TaskRegisterAdapter) QueryTaskConfig(input model.UserIDInput) (re
 	}
 	return response, nil
 }
+
+func (adapter *TaskRegisterAdapter) RegisterSchedulePlan(input model.UserIDInput) (response_dtos.RegisterSchedulePlanResponseDTO, error) {
+	registerSchedulePlanURL := base.SchedulePlanServiceURL + task_register_SP_domain + "/dashboard/register-schedule-plan"
+	var response response_dtos.RegisterSchedulePlanResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	_, err := utils.BaseAPIV2(registerSchedulePlanURL, enums.POST, input, &response, headers)
+	if err != nil {
+		return response_dtos.RegisterSchedulePlanResponseDTO{}, err
+	}
+	return response, nil
+}

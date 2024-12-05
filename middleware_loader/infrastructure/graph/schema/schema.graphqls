@@ -28,6 +28,7 @@ type Query {
 type Mutation {
 	# Gaia Major Function
 	registerTaskConfig(input:RegisterTaskInput!): RegisterTaskConfig!
+	registerSchedulePlan(input:UserIdInput!): RegisterSchedulePlan!
 	isTaskExisted(input:UserIdInput!): IsTaskExisted!
 	isScheduleExisted(input:UserIdInput!): IsScheduleExisted!
 	queryTaskConfig(input:UserIdInput!): IsTaskConfigExisted!

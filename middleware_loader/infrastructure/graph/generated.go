@@ -150,6 +150,7 @@ type ComplexityRoot struct {
 		LockNote                     func(childComplexity int, input model.LockNoteInput) int
 		MoveTask                     func(childComplexity int, input model.MoveTaskInput) int
 		QueryTaskConfig              func(childComplexity int, input model.UserIDInput) int
+		RegisterSchedulePlan         func(childComplexity int, input model.UserIDInput) int
 		RegisterTaskConfig           func(childComplexity int, input model.RegisterTaskInput) int
 		Signin                       func(childComplexity int, input model.SigninInput) int
 		UnlockNote                   func(childComplexity int, input model.UnlockNoteInput) int
@@ -219,6 +220,10 @@ type ComplexityRoot struct {
 		ListAllProjects           func(childComplexity int) int
 		ListAllTasks              func(childComplexity int) int
 		ListAllUsers              func(childComplexity int) int
+	}
+
+	RegisterSchedulePlan struct {
+		IsScheduleExist func(childComplexity int) int
 	}
 
 	RegisterTaskConfig struct {
@@ -334,6 +339,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error)
+	RegisterSchedulePlan(ctx context.Context, input model.UserIDInput) (*model.RegisterSchedulePlan, error)
 	IsTaskExisted(ctx context.Context, input model.UserIDInput) (*model.IsTaskExisted, error)
 	IsScheduleExisted(ctx context.Context, input model.UserIDInput) (*model.IsScheduleExisted, error)
 	QueryTaskConfig(ctx context.Context, input model.UserIDInput) (*model.IsTaskConfigExisted, error)
@@ -1086,6 +1092,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.QueryTaskConfig(childComplexity, args["input"].(model.UserIDInput)), true
 
+	case "Mutation.registerSchedulePlan":
+		if e.complexity.Mutation.RegisterSchedulePlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerSchedulePlan_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterSchedulePlan(childComplexity, args["input"].(model.UserIDInput)), true
+
 	case "Mutation.registerTaskConfig":
 		if e.complexity.Mutation.RegisterTaskConfig == nil {
 			break
@@ -1614,6 +1632,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListAllUsers(childComplexity), true
+
+	case "RegisterSchedulePlan.isScheduleExist":
+		if e.complexity.RegisterSchedulePlan.IsScheduleExist == nil {
+			break
+		}
+
+		return e.complexity.RegisterSchedulePlan.IsScheduleExist(childComplexity), true
 
 	case "RegisterTaskConfig.taskConfigStatus":
 		if e.complexity.RegisterTaskConfig.TaskConfigStatus == nil {
@@ -2717,6 +2742,21 @@ func (ec *executionContext) field_Mutation_moveTask_args(ctx context.Context, ra
 }
 
 func (ec *executionContext) field_Mutation_queryTaskConfig_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UserIDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUserIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐUserIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerSchedulePlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.UserIDInput
@@ -5273,6 +5313,65 @@ func (ec *executionContext) fieldContext_Mutation_registerTaskConfig(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_registerTaskConfig_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_registerSchedulePlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_registerSchedulePlan(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RegisterSchedulePlan(rctx, fc.Args["input"].(model.UserIDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.RegisterSchedulePlan)
+	fc.Result = res
+	return ec.marshalNRegisterSchedulePlan2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterSchedulePlan(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_registerSchedulePlan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "isScheduleExist":
+				return ec.fieldContext_RegisterSchedulePlan_isScheduleExist(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RegisterSchedulePlan", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_registerSchedulePlan_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -10959,6 +11058,50 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RegisterSchedulePlan_isScheduleExist(ctx context.Context, field graphql.CollectedField, obj *model.RegisterSchedulePlan) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RegisterSchedulePlan_isScheduleExist(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsScheduleExist, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RegisterSchedulePlan_isScheduleExist(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RegisterSchedulePlan",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -18080,6 +18223,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "registerSchedulePlan":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_registerSchedulePlan(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "isTaskExisted":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_isTaskExisted(ctx, field)
@@ -19003,6 +19153,45 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var registerSchedulePlanImplementors = []string{"RegisterSchedulePlan"}
+
+func (ec *executionContext) _RegisterSchedulePlan(ctx context.Context, sel ast.SelectionSet, obj *model.RegisterSchedulePlan) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, registerSchedulePlanImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RegisterSchedulePlan")
+		case "isScheduleExist":
+			out.Values[i] = ec._RegisterSchedulePlan_isScheduleExist(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -20568,6 +20757,20 @@ func (ec *executionContext) marshalNProject2ᚖmiddleware_loaderᚋinfrastructur
 func (ec *executionContext) unmarshalNProjectGroupTaskIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectGroupTaskIDInput(ctx context.Context, v interface{}) (model.ProjectGroupTaskIDInput, error) {
 	res, err := ec.unmarshalInputProjectGroupTaskIdInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRegisterSchedulePlan2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterSchedulePlan(ctx context.Context, sel ast.SelectionSet, v model.RegisterSchedulePlan) graphql.Marshaler {
+	return ec._RegisterSchedulePlan(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRegisterSchedulePlan2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterSchedulePlan(ctx context.Context, sel ast.SelectionSet, v *model.RegisterSchedulePlan) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RegisterSchedulePlan(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNRegisterTaskConfig2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRegisterTaskConfig(ctx context.Context, sel ast.SelectionSet, v model.RegisterTaskConfig) graphql.Marshaler {

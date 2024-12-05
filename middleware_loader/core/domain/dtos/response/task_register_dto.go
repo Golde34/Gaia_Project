@@ -63,3 +63,17 @@ func (in *IsTaskConfigExistedResponseDTO) MapperToGraphQLModel(input IsTaskConfi
 	mapper.AutoMapper(&input, &out)
 	return out
 }
+
+type RegisterSchedulePlanResponseDTO struct {
+	IsScheduleexist bool `json:"isScheduleExist"`
+}
+
+func NewRegisterSchedulePlanResponseDTO() *RegisterSchedulePlanResponseDTO {
+	return &RegisterSchedulePlanResponseDTO{}
+}
+
+func (in *RegisterSchedulePlanResponseDTO) MapperToGraphQLModel(input RegisterSchedulePlanResponseDTO) model.RegisterSchedulePlan {
+	var out model.RegisterSchedulePlan
+	mapper.AutoMapper(&input, &out)
+	return out
+}
