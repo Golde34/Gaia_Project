@@ -56,7 +56,7 @@ export const DeleteDialog = ({ open, handleClose, handleDelete }) => {
                             type="submit"
                             className="mt-4 w-full whitespace-nowrap rounded-tremor-default bg-red-500 px-4 py-2 text-center text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-red-600 dark:bg-red-500 dark:text-tremor-brand-inverted dark:shadow-dark-tremor-input hover:dark:bg-red-600"
                             onClick={() => {
-                                handleDelete(task.id);
+                                handleDelete();
                                 handleClose();
                             }}
                         >
