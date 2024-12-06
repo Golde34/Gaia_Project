@@ -1,3 +1,4 @@
+import { IScheduleTaskEntity } from "../../infrastructure/entities/schedule-task.entity";
 import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaHandler } from "../../infrastructure/kafka/kafka-handler";
 import { scheduleTaskRepository } from "../../infrastructure/repository/schedule-task.repository";
@@ -128,6 +129,14 @@ class ScheduleTaskService {
             console.error("Error saving tasks to database:", error);
             return "FAILED";
         }
+    }
+
+    async findScheduleTaskByTaskId(taskId: string): Promise<IScheduleTaskEntity> {
+        const scheduleTask = await scheduleTaskRepository.findScheduleTaskByTaskId(taskId);
+        if (scheduleTask === null) {
+            throw new Error("Task not found");
+        }
+        return scheduleTask;
     }
 }
 

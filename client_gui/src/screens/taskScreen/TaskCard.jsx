@@ -1,12 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, DialogPanel, Flex, Grid, Subtitle, Text, TextInput, Title } from "@tremor/react";
+import { Dialog as TremorDialog } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate } from "../../kernels/utils/date-picker";
 import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../kernels/utils/dialog-api-requests";
 import { MoveTask } from "./MoveTask";
+import { DeleteDialog } from "../../components/subComponents/DeleteDialog";
 
 export const TaskCard = (props) => {
     const task = props.task;
@@ -16,6 +18,7 @@ export const TaskCard = (props) => {
     const navigate = useNavigate();
 
     let [isOpen, setIsOpen] = useState(false);
+    let [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     function closeModal() {
         setIsOpen(false)
@@ -77,7 +80,7 @@ export const TaskCard = (props) => {
     const deleteTaskApi = useDeleteComponentDispatch();
     const deleteTask = (taskId) => {
         deleteTaskApi(taskId, "Task");
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (
@@ -148,7 +151,7 @@ export const TaskCard = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-3xl transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
@@ -159,14 +162,14 @@ export const TaskCard = (props) => {
                                                     type="text"
                                                     className="border-2 border-gray-200 p-2 rounded-md w-full"
                                                     value={title}
-                                                    onChange={(e) => {setTitle(e.target.value)}}
-                                                    onBlur={() => {setIsEditingTitle(!isEditingTitle)}}
+                                                    onChange={(e) => { setTitle(e.target.value) }}
+                                                    onBlur={() => { setIsEditingTitle(!isEditingTitle) }}
                                                     autoFocus
                                                 />
                                             ) : (
                                                 <h1
                                                     className="text-lg cursor-pointer"
-                                                    onClick={() => {setIsEditingTitle(!isEditingTitle)}}
+                                                    onClick={() => { setIsEditingTitle(!isEditingTitle) }}
                                                 >
                                                     {title}
                                                 </h1>
@@ -179,25 +182,30 @@ export const TaskCard = (props) => {
                                     </Dialog.Title>
                                     <div className="mt-4">
                                         <label htmlFor="description" className="block text-md font-medium text-gray-700 mb-2">Description</label>
-                                            <Textarea
-                                                type="text"
-                                                className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-32"
-                                                value={description}
-                                                onChange={(e) => {setDescription(e.target.value)}}
-                                                onBlur={() => {setIsEditingDescription(!isEditingDescription)}}
-                                            />
+                                        <Textarea
+                                            type="text"
+                                            className="mt-3 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-32"
+                                            value={description}
+                                            onChange={(e) => { setDescription(e.target.value) }}
+                                            onBlur={() => { setIsEditingDescription(!isEditingDescription) }}
+                                        />
                                     </div>
 
                                     <div className="mt-6">
                                         <p className="block text-md font-medium text-gray-700 mb-3">Deadline</p>
                                         <div className="grid grid-cols-1 m-2">
-                                            <Flex>
-                                                <Subtitle>{convertTimestampToDate(task.deadline)}</Subtitle>
-                                                <Subtitle>Duration: {task.duration}h</Subtitle>
-                                                <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task.id}/update-deadline`)}>
-                                                    Update Deadline
-                                                </Button>
+                                            <Flex justifyContent="start">
+                                                <Flex justifyContent="start">
+                                                    <p className="text-md font-medium text-gray-700 mb-3 me-10">{convertTimestampToDate(task.deadline)}</p>
+                                                    <p className="text-md font-medium text-gray-700 mb-3">Duration: {task.duration}h</p>
+                                                </Flex>
+                                                <Flex justifyContent="end">
+                                                    <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task.id}/update-deadline`)}>
+                                                        Update Deadline
+                                                    </Button>
+                                                </Flex>
                                             </Flex>
+
                                         </div>
                                     </div>
 
@@ -284,7 +292,7 @@ export const TaskCard = (props) => {
                                     </div>
 
                                     <div className="mt-3">
-                                       <MoveTask taskId={task.id} projectId={projectId} groupTaskId={groupTaskId}/> 
+                                        <MoveTask taskId={task.id} projectId={projectId} groupTaskId={groupTaskId} />
                                     </div>
 
                                     <div className="mt-6">
@@ -292,21 +300,12 @@ export const TaskCard = (props) => {
                                     </div>
 
                                     <div className="mt-6">
-                                        <p className="block text-md font-medium text-gray-700 mb-3">Comment(Do it later)</p>
+                                        <p className="block text-md font-medium text-gray-700 mb-3">Comment (Do it later)</p>
                                     </div>
 
                                     <div className="mt-4 justify-end">
-                                        <Flex>
-                                            <button
-                                                type="button"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                                onClick={() => {
-                                                    deleteTask(task.id);
-                                                    closeModal();
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
+                                        <Flex justifyContent="end">
+                                            <DeleteDialog open={isDeleteModalOpen} handleClose={() => setIsDeleteModalOpen(false)} handleDelete={() => deleteTask(task.id)} />
                                             <button
                                                 type="button"
                                                 className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:bg-yellow-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2"

@@ -132,4 +132,9 @@ public class TaskStoreAdapter implements TaskStore {
         task.get().setTaskBatch(batchIndex + 1);
         taskRepository.save(task.get());
     }
+
+    @Override
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
 }

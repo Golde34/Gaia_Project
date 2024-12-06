@@ -1,4 +1,4 @@
-import { IResponse, msg400 } from "../common/response";
+import { IResponse, msg200, msg400 } from "../common/response";
 import { OptimizeScheduleTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 import { notificationService } from "../services/notifi-agent.service";
@@ -57,6 +57,34 @@ class ScheduleTaskUsecase {
             await notificationService.pushNotification(schedulePlanOptimizeMessage.userId, optimizedTask, schedulePlanOptimizeMessage.notificationFlowId);
         } catch (error) {
             console.error("Error on optimizeScheduleTask: ", error);
+        }
+    }
+
+    async updateScheduleTask(scheduleTask: any): Promise<void> {
+        try {
+            console.log("Update this function later");
+        } catch (error) {
+            console.error("Error on updateScheduleTask: ", error);
+        }
+    }
+
+    async deleteScheduleTaskByKafka(taskId: any): Promise<void> {
+        try {
+            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+            const result = await scheduleTaskService.deleteScheduleTask(scheduleTask._id);
+            console.log('Result: ', result);
+        } catch (error) {
+            console.error("Error on deleteScheduleTask: ", error);
+        }
+    }
+
+    async deleteTask(taskId: any): Promise<IResponse> {
+        try {
+            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+            return await scheduleTaskService.deleteScheduleTask(scheduleTask._id);
+        } catch (error) {
+            console.error("Error on deleteScheduleTask: ", error);
+            return msg400("Cannot delete schedule task!");
         }
     }
 }

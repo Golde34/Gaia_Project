@@ -23,4 +23,5 @@ public interface TaskStore {
     List<Task> findAllByParentId(Long parentId);
     List<Task> findAllByParentIdAndStartDate(Long parentId, String startedDate) throws ParseException;
     List<Task> findAllByParentIdAndEndDate(Long parentId, String endDate) throws ParseException;
+    void deleteTask(Task task);
 }
