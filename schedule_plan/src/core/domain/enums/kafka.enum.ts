@@ -4,7 +4,9 @@ export enum KafkaTopic {
     SYNC_SCHEDULE_TASK = "schedule-plan.sync-schedule-task.topic",
     OPTIMIZE_TASK = "work-optimization.optimize-task.topic",
     OPTIMIZE_SCHEDULE_TASK = "schedule-plan.optimize-task.topic",
-    OPTIMIZE_TASK_NOTIFY = "notify-agent.optimize-task-notify.topic"
+    OPTIMIZE_TASK_NOTIFY = "notify-agent.optimize-task-notify.topic",
+    DELETE_TASK = "task-manager.delete-task.topic",
+    UPDATE_TASK = "task-manager.update-task.topic",
 }
 
 export enum KafkaCommand {
@@ -15,6 +17,8 @@ export enum KafkaCommand {
     SYNC_SCHEDULE_TASK = "syncScheduleTask",
     OPTIMIZE_SCHEDULE_TASK = "optimizeScheduleTask",
     OPTIMIZE_TASK = "optimizeTask",
+    UPDATE_TASK = "updateTask",
+    DELETE_TASK = "deleteTask",
 }
 
 export class KafkaMessage {

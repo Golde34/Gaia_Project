@@ -59,6 +59,23 @@ class ScheduleTaskUsecase {
             console.error("Error on optimizeScheduleTask: ", error);
         }
     }
+
+    async updateScheduleTask(scheduleTask: any): Promise<void> {
+        try {
+            console.log("Update this function later");
+        } catch (error) {
+            console.error("Error on updateScheduleTask: ", error);
+        }
+    }
+
+    async deleteScheduleTask(taskId: any): Promise<void> {
+        try {
+            // const scheduleTask = await scheduleTaskService.findScheduleTaskById(taskId);
+            // const result = await scheduleTaskService.deleteScheduleTask(scheduleTask);
+        } catch (error) {
+            console.error("Error on deleteScheduleTask: ", error);
+        }
+    }
 }
 
 export const scheduleTaskUsecase = new ScheduleTaskUsecase();

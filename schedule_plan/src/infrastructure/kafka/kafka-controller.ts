@@ -1,7 +1,9 @@
 import { KafkaTopic } from "../../core/domain/enums/kafka.enum";
 import { handlerCreateTaskMessage } from "../../ui/kafka/create-task.consumer";
+import { handleDeleteTaksmessage } from "../../ui/kafka/delete-task.consumer";
 import { optimizeTasksHandler } from "../../ui/kafka/optimize-task.consumer";
 import { handlerSyncTaskMessage } from "../../ui/kafka/sync-task.consumer";
+import { handleUpdatetaskMessage } from "../../ui/kafka/update-task.consumer";
 import { KafkaHandler } from "./kafka-handler";
 import * as dotenv from "dotenv";
 
@@ -41,4 +43,6 @@ const kafkaTopicHandlers: Record<string, (message: string) => void> = {
     [KafkaTopic.CREATE_TASK]: (message: string) => handlerCreateTaskMessage(message),
     [KafkaTopic.SYNC_SCHEDULE_TASK]: (message: string) => handlerSyncTaskMessage(message),
     [KafkaTopic.OPTIMIZE_SCHEDULE_TASK]: (message: string) => optimizeTasksHandler(message),
+    [KafkaTopic.DELETE_TASK]: (message: string) => handleDeleteTaksmessage(message),
+    [KafkaTopic.UPDATE_TASK]: (message: string) => handleUpdatetaskMessage(message),
 };
