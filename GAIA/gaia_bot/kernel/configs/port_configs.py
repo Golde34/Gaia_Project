@@ -42,6 +42,16 @@ PORTS = {
         "database_name": "gaia",
         "shell_path": "gaia_bot/microservices/bash_shell/gaia_connector.sh"
     }, 
+    "notify_agent": {
+        "name": "Notify Agent",
+        "port": 4003,
+        "programming_language": "Python",
+        "description": "Notify Agent API",
+        "router": "notify-agent",
+        "database": "MongoDB",
+        "database_name": "notify_agent",
+        "shell_path": "gaia_bot/microservices/bash_shell/notify_agent.sh"
+    },
 
     ## BACKEND MICROSERVICES
     # User Services
@@ -142,11 +152,13 @@ PORT_COMPONENTS = [
     "task_manager",
     "client_gui",
     "middleware_loader",
-    "kafka_server",
     # "camera_cv",
     "schedule_plan",
     "work_optimization",
+    "notify_agent",
+    # 3rd Party + Pipeline
     "sor_data_transfer",
+    "kafka_server",
 ]
 
 DOMAIN = "localhost"
