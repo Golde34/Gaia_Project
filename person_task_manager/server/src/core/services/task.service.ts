@@ -113,6 +113,13 @@ class TaskService {
                 const deleteTask = await taskStore.deleteTask(taskId);
                 this.taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);
 
+                // push kafka message
+                const messages = [{
+                    value: JSON.stringify(createMessage(
+                        KafkaCommand.DELETE_TASK, '00', 'Successful', taskId 
+                    ))
+                }]
+                this.kafkaConfig.produce(KafkaTopic.DELETE_TASK, messages);
                 return msg200({
                     message: (deleteTask as any)
                 });
