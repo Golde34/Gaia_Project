@@ -12,7 +12,7 @@ import wo.work_optimization.kernel.utils.ExtractKafkaMessage;
 @RequiredArgsConstructor
 public class DeleteTaskConsumer extends KafkaMessageHandler {
     
-    private CommandFactory commandHandleFactory;
+    private final CommandFactory commandHandleFactory;
 
     @Override
     public String getTopic() {
