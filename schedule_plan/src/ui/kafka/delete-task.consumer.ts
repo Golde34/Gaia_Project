@@ -6,7 +6,7 @@ export const handleDeleteTaksmessage = (message: string) => {
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
         case KafkaCommand.DELETE_TASK:
-            scheduleTaskUsecase.deleteScheduleTask(kafkaMessage.data)
+            scheduleTaskUsecase.deleteScheduleTaskByKafka(kafkaMessage.data)
             break;
         default:
             console.warn("No handler for command: ", cmd);
