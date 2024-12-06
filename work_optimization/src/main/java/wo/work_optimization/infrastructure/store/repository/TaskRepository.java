@@ -11,10 +11,7 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, String> {
     
     Task findByOriginalId(String originalId);
-    
-    @Override
     void deleteById(String id);
-    @Override
     void delete(Task entity);
     Task findByTitle(String title);
     Optional<Task> findById(String id);

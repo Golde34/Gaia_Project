@@ -74,5 +74,9 @@ public class TaskMapper {
         CreateTaskRequestDTO createTaskRequestDTO = modelMapper().map(originalTask, CreateTaskRequestDTO.class);
         return toEntity(createTaskRequestDTO);
     }
+
+    public String mapDeleteTask(Object request) {
+        return modelMapper().map(request, String.class);
+    }
 }
  
