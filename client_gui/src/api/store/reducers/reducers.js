@@ -22,7 +22,7 @@ import { privilegeListReducer } from "./auth_service/privilege.reducer";
 import { queryTaskConfigReducer, registerTaskConfigReducer } from "./work_optimization/task-registration.reducers";
 import { noteCreateReducer, noteDeleteReducer, noteDetailReducer, noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer } from "./task_manager/note.reducers"; 
 import { optimizeTaskByUserReducer } from "./work_optimization/optimize-task.reducers";
-import { scheduleTaskListReducer } from "./schedule_task/schedule-task.reducers";
+import { scheduleTaskListReducer } from "./schedule_plan/schedule-task.reducers";
 
 export const reducer = combineReducers({
     // auth service

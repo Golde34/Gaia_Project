@@ -10,7 +10,7 @@ import { Card, Metric } from '@tremor/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { getScheduleTaskList } from '../../api/store/actions/schedule_task/schedule-task.action';
+import { getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
 
 const task = {
     title: 'Meeting 1 is very long text that\'s good',
