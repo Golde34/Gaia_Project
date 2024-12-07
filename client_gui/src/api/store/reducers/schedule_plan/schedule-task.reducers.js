@@ -1,4 +1,4 @@
-import { SCHEDULE_TASK_LIST_FAILURE, SCHEDULE_TASK_LIST_REQUEST, SCHEDULE_TASK_LIST_SUCCESS } from "../../constants/schedule_task/schedule-task.constants";
+import { SCHEDULE_TASK_LIST_FAILURE, SCHEDULE_TASK_LIST_REQUEST, SCHEDULE_TASK_LIST_SUCCESS } from "../../constants/schedule_plan/schedule-task.constants";
 
 export const scheduleTaskListReducer = (
     state = { loading: true }, action) => {
