@@ -1,4 +1,5 @@
-import { IResponse, msg200, msg400 } from "../common/response";
+import { ISchedulePlanEntity } from "../../infrastructure/entities/schedule-plan.entity";
+import { IResponse, msg200 } from "../common/response";
 import { ActiveStatus } from "../domain/enums/enums";
 import { schedulePlanService } from "../services/schedule-plan.service";
 
@@ -8,14 +9,7 @@ class SchedulePlanUsercase {
     async registerSchedulePlan(userId: number): Promise<IResponse> {
         var isScheduleExist = false;
         try {
-            const schedulePlan = {
-                userId: userId,
-                startDate: new Date(),
-                activeStatus: ActiveStatus.active,
-                activeTaskBatch: 0,
-                isTashBatchActive: false
-            }
-            const result = await schedulePlanService.createSchedulePlan(schedulePlan);
+            const result = await schedulePlanService.createSchedulePlan(userId);
             console.log('Result: ', result);
             isScheduleExist = true;
             return msg200({
@@ -26,6 +20,17 @@ class SchedulePlanUsercase {
             return msg200({
                 isScheduleExist
             });
+        }
+    }
+
+    async createSchedulePlan(userId: number): Promise<ISchedulePlanEntity | null> {
+        try {
+            const result = await schedulePlanService.createSchedulePlan(userId);
+            console.log('Result: ', result);
+            return result;
+        } catch (error) {
+            console.error("Error on create Schedule plan: ", error);
+            return null;
         }
     }
 }

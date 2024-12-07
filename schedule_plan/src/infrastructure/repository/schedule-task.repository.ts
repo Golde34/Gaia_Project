@@ -37,6 +37,14 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     async findScheduleTaskByTaskId(taskId: string): Promise<IScheduleTaskEntity | null> {
         return await ScheduleTaskEntity.findOne({ taskId: taskId });
     }
+
+    async findTop10NewestTask(schedulePlanId: number): Promise<IScheduleTaskEntity[]> {
+        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId }).sort({ createdAt: -1 }).limit(10);
+    }
+
+    async findByTaskBatch(schedulePlanId: number, taskBatch: number): Promise<IScheduleTaskEntity[]> {
+        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, taskBatch: taskBatch });
+    }
 }
 
 export const scheduleTaskRepository = new ScheduleTaskRepository();

@@ -1,20 +1,22 @@
 import { authServiceAdapter } from "../../infrastructure/client/auth-service.adapter";
+import { ISchedulePlanEntity } from "../../infrastructure/entities/schedule-plan.entity";
 import { schedulePlanRepository } from "../../infrastructure/repository/schedule-plan.repository";
 import { returnInternalServiceErrorResponse } from "../../kernel/utils/return-result";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
+import { ActiveStatus } from "../domain/enums/enums";
 
 class SchedulePlanService {
     constructor() { }
 
-    async createSchedulePlan(schedulePlan: any): Promise<IResponse> {
-        try {
-            const createSchedulePlan = await schedulePlanRepository.createSchedulePlan(schedulePlan);
-            return msg200({
-                message: (createSchedulePlan as any)
-            });
-        } catch (error: any) {
-            return msg500(error.message.toString());
+    async createSchedulePlan(userId: number): Promise<any> {
+        const schedulePlan = {
+            userId: userId,
+            startDate: new Date(),
+            activeStatus: ActiveStatus.active,
+            activeTaskBatch: 0,
+            isTashBatchActive: false
         }
+        return await schedulePlanRepository.createSchedulePlan(schedulePlan);
     }
 
     async updateSchedulePlan(schedulePlanId: string, schedulePlan: any): Promise<IResponse> {
@@ -50,16 +52,16 @@ class SchedulePlanService {
         }
     }
 
-    async findSchedulePlanByUserId(userId: number): Promise<IResponse> {
+    async returnSchedulePlanByUserId(userId: number): Promise<IResponse> {
         try {
             const existedUser = await authServiceAdapter.checkExistedUser(userId);
             if (typeof existedUser === 'number') {
                 return returnInternalServiceErrorResponse(existedUser, "Call auth service failed: ")
             }
 
-            const schedulePlans = await schedulePlanRepository.findSchedulePlanByUserId(userId);
+            const schedulePlan = await schedulePlanRepository.findSchedulePlanByUserId(userId);
             let isScheduleExist: boolean = true;
-            if (schedulePlans.length === 0) {
+            if (schedulePlan === null) {
                 isScheduleExist = false;
             }
             return msg200({
@@ -68,12 +70,24 @@ class SchedulePlanService {
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
 
+    async findSchedulePlanByUserId(userId: number): Promise<ISchedulePlanEntity | null> {
+        try {
+            const existedUser = await authServiceAdapter.checkExistedUser(userId);
+            if (typeof existedUser === 'number') {
+                return null;
+            }
+            return await schedulePlanRepository.findSchedulePlanByUserId(userId);
+        } catch (error: any) {
+            console.error("Error on findSchedulePlanByUserId: ", error);
+            return null;
+        }
     }
 
     async updateTaskBatch(): Promise<void> {
         try {
-            
+
         } catch (error: any) {
             console.error("Error on updateTaskBatch: ", error);
         }

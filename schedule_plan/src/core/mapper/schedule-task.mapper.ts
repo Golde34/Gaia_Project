@@ -4,7 +4,7 @@ import { KafkaCreateTaskMessage, KafkaOptimizeTaskMessage, SyncScheduleTaskReque
 
 export const scheduleTaskMapper = {
 
-    kafkaCreateTaskMapper(data: any): IScheduleTaskEntity {
+    kafkaCreateTaskMapper(data: any, schedulePlanId: Number): IScheduleTaskEntity {
         return new ScheduleTaskEntity({
             taskId: data.task.id,
             title: data.task.title,
@@ -15,6 +15,7 @@ export const scheduleTaskMapper = {
             duration: data.task.duration,
             activeStatus: data.task.activeStatus,
             preferenceLevel: data.task.preferenceLevel ? data.task.preferenceLevel : 0,
+            schedulePlanId: schedulePlanId,
         });
     },
 

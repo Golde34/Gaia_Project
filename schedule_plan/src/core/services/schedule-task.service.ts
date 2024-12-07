@@ -1,3 +1,4 @@
+import { ISchedulePlanEntity } from "../../infrastructure/entities/schedule-plan.entity";
 import { IScheduleTaskEntity } from "../../infrastructure/entities/schedule-task.entity";
 import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaHandler } from "../../infrastructure/kafka/kafka-handler";
@@ -137,6 +138,14 @@ class ScheduleTaskService {
             throw new Error("Task not found");
         }
         return scheduleTask;
+    }
+
+    async findTop10NewestTask(schedulePlanId: number): Promise<IScheduleTaskEntity[]> {
+        return  await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
+    }
+
+    async findByTaskBatch(schedulePlanId: number, taskBatch: number): Promise<IScheduleTaskEntity[]> {
+        return await scheduleTaskRepository.findByTaskBatch(schedulePlanId, taskBatch);
     }
 }
 

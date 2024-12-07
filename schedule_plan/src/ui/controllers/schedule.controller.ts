@@ -9,7 +9,7 @@ class ScheduleController {
     async checkExistedSchedules(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const userId = req.body.userId;
-            return await schedulePlanService.findSchedulePlanByUserId(userId);
+            return await schedulePlanService.returnSchedulePlanByUserId(userId);
         } catch (error) {
             next(error);
         }
