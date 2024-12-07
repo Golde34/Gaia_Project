@@ -22,7 +22,7 @@ const CardItem = (props) => {
     }
 
     return (
-        <button onClick={() => { redirectToTaskDetail() }} className="mt-2 me-2">
+        <button onClick={() => { redirectToTaskDetail() }} className="me-2">
             <Card className="w-full" decoration="top" decorationColor="indigo" style={{ maxWidth: '325px', maxHeight: '200px' }}>
                 <Metric>{shortenTitle(task.title)}</Metric>
                 <Grid numItems={2}>

@@ -40,7 +40,7 @@ const dataFormatter = (number) => {
 
 const AreaChartComponent = () => {
   return (
-    <Card className="mt-4">
+    <Card>
       <Title>Newsletter revenue over time (USD)</Title>
       <AreaChart
         className="h-72 mt-4"
