@@ -12,6 +12,8 @@ class SchedulePlanUsercase {
                 userId: userId,
                 startDate: new Date(),
                 activeStatus: ActiveStatus.active,
+                activeTaskBatch: 0,
+                isTashBatchActive: false
             }
             const result = await schedulePlanService.createSchedulePlan(schedulePlan);
             console.log('Result: ', result);

@@ -70,6 +70,14 @@ class SchedulePlanService {
         }
 
     }
+
+    async updateTaskBatch(): Promise<void> {
+        try {
+            
+        } catch (error: any) {
+            console.error("Error on updateTaskBatch: ", error);
+        }
+    }
 }
 
 export const schedulePlanService = new SchedulePlanService();

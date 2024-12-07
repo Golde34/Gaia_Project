@@ -1,4 +1,4 @@
-import { IResponse, msg200, msg400 } from "../common/response";
+import { IResponse, msg400 } from "../common/response";
 import { OptimizeScheduleTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 import { notificationService } from "../services/notifi-agent.service";

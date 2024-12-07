@@ -11,6 +11,8 @@ export interface ISchedulePlanEntity extends Document {
     endDate: Date;
     activeStatus: ActiveStatus; 
     tasks: IScheduleTaskEntity["_id"][];
+    activeTaskBatch: number;
+    isTaskBatchActive: boolean;
 }
 
 export const schedulePlanSchema = new mongoose.Schema(
@@ -45,6 +47,10 @@ export const schedulePlanSchema = new mongoose.Schema(
             ref: "ScheduleTask",
             required: false,
         },
+        activeTaskBatch: {
+            type: Number,
+            required: false,
+        }
     }, 
     {
         toJSON: { virtuals: true },
