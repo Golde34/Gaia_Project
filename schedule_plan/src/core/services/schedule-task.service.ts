@@ -140,11 +140,11 @@ class ScheduleTaskService {
         return scheduleTask;
     }
 
-    async findTop10NewestTask(schedulePlanId: number): Promise<IScheduleTaskEntity[]> {
+    async findTop10NewestTask(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {
         return  await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
     }
 
-    async findByTaskBatch(schedulePlanId: number, taskBatch: number): Promise<IScheduleTaskEntity[]> {
+    async findByTaskBatch(schedulePlanId: string, taskBatch: number): Promise<IScheduleTaskEntity[]> {
         return await scheduleTaskRepository.findByTaskBatch(schedulePlanId, taskBatch);
     }
 }

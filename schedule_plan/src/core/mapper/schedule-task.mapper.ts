@@ -4,7 +4,7 @@ import { KafkaCreateTaskMessage, KafkaOptimizeTaskMessage, SyncScheduleTaskReque
 
 export const scheduleTaskMapper = {
 
-    kafkaCreateTaskMapper(data: any, schedulePlanId: Number): IScheduleTaskEntity {
+    kafkaCreateTaskMapper(data: any, schedulePlanId: string): IScheduleTaskEntity {
         return new ScheduleTaskEntity({
             taskId: data.task.id,
             title: data.task.title,

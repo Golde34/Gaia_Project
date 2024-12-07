@@ -16,7 +16,7 @@ export interface IScheduleTaskEntity extends Document {
     weight: Number;
     stopTime: Number;
     taskBatch: Number;
-    schedulePlanId: Number;
+    schedulePlanId: string;
 }
 
 export const scheduleTaskSchema = new mongoose.Schema(
@@ -78,7 +78,7 @@ export const scheduleTaskSchema = new mongoose.Schema(
             required: false,
         },
         schedulePlanId: {
-            type: Number,
+            type: String,
             required: true,
         }
     }, 

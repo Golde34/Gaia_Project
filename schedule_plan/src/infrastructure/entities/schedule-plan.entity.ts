@@ -3,7 +3,7 @@ import { ActiveStatus } from "../../core/domain/enums/enums";
 import { IScheduleTaskEntity } from "./schedule-task.entity";
 
 export interface ISchedulePlanEntity extends Document {
-    _id: number;
+    _id: string;
     userId: number;
     name: string;
     description: string;
@@ -23,7 +23,7 @@ export const schedulePlanSchema = new mongoose.Schema(
         },
         name: {
             type: String,
-            required: true,
+            required: false,
         },
         description: {
             type: String,
@@ -35,7 +35,7 @@ export const schedulePlanSchema = new mongoose.Schema(
         },
         endDate: {
             type: Date,
-            required: true,
+            required: false,
         },
         activeStatus: {
             type: Object.values(ActiveStatus),
