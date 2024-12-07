@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Template from '../../components/template/Template';
-import dayjs from 'dayjs';
 import { generateDate, months } from "../../kernels/utils/calendar";
-import cn from "../../kernels/utils/cn";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { Button, Card, Metric, Title } from '@tremor/react';
 import CardItem from '../../components/subComponents/CardItem';
-import { useNavigate } from 'react-router-dom';
 import ListCenterButton from '../../components/subComponents/ListCenterButton';
-import { useDispatch } from 'react-redux';
 import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
-import { useWebSocket } from '../../kernels/context/WebSocketContext';
+import dayjs from 'dayjs';
+import cn from '../../kernels/utils/cn';
+import { Card, Metric } from '@tremor/react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { getScheduleTaskList } from '../../api/store/actions/schedule_task/schedule-task.action';
 
 const task = {
     title: 'Meeting 1 is very long text that\'s good',
@@ -20,8 +20,25 @@ const task = {
 }
 
 function ContentArea() {
+    const userId = "1";
+    const dispatch = useDispatch();
     const currentDate = dayjs();
     const [selectDate, setSelectDate] = useState(currentDate);
+
+    const listScheduleTasks = useSelector(state => state.scheduleTaskList);
+    const { loading, error, tasks } = listScheduleTasks;
+
+    const getListScheduleTasks = useCallback(() => {
+        dispatch(getScheduleTaskList(userId));
+    }, [dispatch, userId]);
+
+    const debounceRef = useRef(null);
+    useEffect(() => {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            getListScheduleTasks();
+        }, 200);
+    }, [])
 
     return (
         <>

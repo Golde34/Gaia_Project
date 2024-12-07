@@ -1,4 +1,4 @@
-import { OPTIMZE_TASK_BY_USER_FAILURE, OPTIMZE_TASK_BY_USER_REQUEST, OPTIMZE_TASK_BY_USER_SUCCESS } from "../../constants/work_optimization/optimize-task.option";
+import { OPTIMZE_TASK_BY_USER_FAILURE, OPTIMZE_TASK_BY_USER_REQUEST, OPTIMZE_TASK_BY_USER_SUCCESS } from "../../constants/work_optimization/optimize-task.constants";
 
 export const optimizeTaskByUserReducer = (
     state = {}, action) => {
