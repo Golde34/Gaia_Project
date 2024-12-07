@@ -2,6 +2,7 @@ import { UpdateWriteOpResult } from "mongoose";
 import { DeleteResult } from "mongodb";
 import { IScheduleTaskEntity, ScheduleTaskEntity } from "../entities/schedule-task.entity";
 import { ScheduleTaskStore } from "./store/shcedule-task.store";
+import { ActiveStatus } from "../../core/domain/enums/enums";
 
 class ScheduleTaskRepository implements ScheduleTaskStore {
     constructor() {}
@@ -39,11 +40,11 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     }
 
     async findTop10NewestTask(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {
-        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId }).sort({ createdAt: -1 }).limit(10);
+        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, status: { $ne: 'DONE' }, activeStatus: ActiveStatus.active }).sort({ createdAt: -1 }).limit(10);
     }
 
     async findByTaskBatch(schedulePlanId: string, taskBatch: number): Promise<IScheduleTaskEntity[]> {
-        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, taskBatch: taskBatch });
+        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, taskBatch: taskBatch, status: { $ne: 'DONE' }, activeStatus: ActiveStatus.active });
     }
 }
 

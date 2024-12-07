@@ -85,9 +85,11 @@ class SchedulePlanService {
         }
     }
 
-    async updateTaskBatch(): Promise<void> {
+    async updateTaskBatch(schedulePlan: ISchedulePlanEntity, activeBatch: number, isBatchActive: boolean): Promise<void> {
         try {
-
+            schedulePlan.activeTaskBatch = activeBatch;
+            schedulePlan.isTaskBatchActive = isBatchActive;
+            await schedulePlanRepository.updateSchedulePlan(schedulePlan._id, schedulePlan);
         } catch (error: any) {
             console.error("Error on updateTaskBatch: ", error);
         }

@@ -60,10 +60,12 @@ class ScheduleTaskUsecase {
             const validateUser = await schedulePlanService.findSchedulePlanByUserId(schedulePlanOptimizeMessage.userId);
             if (!validateUser) {
                 console.log('Push this error to logging tracker, user validate fail need to check the whole account.')
+            } else {
+                const optimizedTask = await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
+                await schedulePlanService.updateTaskBatch(validateUser, 0, true);
+                // Push notification
+                await notificationService.pushNotification(schedulePlanOptimizeMessage.userId, optimizedTask, schedulePlanOptimizeMessage.notificationFlowId);
             }
-            const optimizedTask = await scheduleTaskService.optimizeScheduleTask(schedulePlanOptimizeMessage.tasks)
-            // Push notification
-            await notificationService.pushNotification(schedulePlanOptimizeMessage.userId, optimizedTask, schedulePlanOptimizeMessage.notificationFlowId);
         } catch (error) {
             console.error("Error on optimizeScheduleTask: ", error);
         }
@@ -101,14 +103,26 @@ class ScheduleTaskUsecase {
         try {
             const schedulePlan = await schedulePlanService.findSchedulePlanByUserId(userId);
             if (!schedulePlan) {
-                console.error("Cannot find schedule plan by user id: ", userId);
-                throw new Error("Cannot find schedule plan by user id: " + userId);
+                console.error(`Cannot find schedule plan by user id: ${userId}`);
+                throw new Error(`Cannot find schedule plan by user id: ${userId}`);
             }
-            if (schedulePlan.activeTaskBatch === 0) {
-                return await scheduleTaskService.findTop10NewestTask(schedulePlan._id);
-            } else if (schedulePlan.isTaskBatchActive) {
-                return scheduleTaskService.findByTaskBatch(schedulePlan._id, schedulePlan.activeTaskBatch);
+
+            const { _id: schedulePlanId, activeTaskBatch, isTaskBatchActive } = schedulePlan;
+
+            if (activeTaskBatch === 0) {
+                return scheduleTaskService.findTop10NewestTask(schedulePlanId);
             }
+
+            if (isTaskBatchActive) {
+                const scheduleTaskList = await scheduleTaskService.findByTaskBatch(schedulePlanId, activeTaskBatch);
+                if (scheduleTaskList.length > 0) {
+                    return scheduleTaskList;
+                }
+
+                await schedulePlanService.updateTaskBatch(schedulePlan, 0, false);
+                return scheduleTaskService.findTop10NewestTask(schedulePlanId);
+            }
+
             return [];
         } catch (error) {
             console.error("Error on getListScheduleTaskByUserId: ", error);
