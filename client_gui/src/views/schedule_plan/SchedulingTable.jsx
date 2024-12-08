@@ -61,7 +61,7 @@ function ContentArea() {
                                 </h1>
 
                                 {scheduleTasks.map((task, index) => (
-                                    <CardItem key={index} task={task} type = {"SP"}/>
+                                    <CardItem key={index} task={task}/>
                                 ))}
 
                             </div>
