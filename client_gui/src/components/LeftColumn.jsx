@@ -33,7 +33,7 @@ const LeftColumn = () => {
                             // <div><MessageBox message="No tasks found"/></div>
                             <div></div>
                         ) :
-                        <Grid numItems={3} className="mb-4">
+                        <Grid numItems={3}>
                         {topTasks.map((topTask) => (
                             <CardItem key={topTask.task._id} task={topTask.task} 
                                 groupTaskId={topTask.groupTaskId} projectId={topTask.projectId} />
