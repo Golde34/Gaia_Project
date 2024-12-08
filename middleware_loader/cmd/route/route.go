@@ -5,6 +5,7 @@ import (
 	auth_services "middleware_loader/core/services/auth_services"
 	task_manager "middleware_loader/core/services/task_manager"
 	work_optim "middleware_loader/core/services/work_optimization"
+	schedule_plan "middleware_loader/core/services/schedule_plan"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	auth_router "middleware_loader/ui/routers/auth_service"
@@ -12,6 +13,7 @@ import (
 	middleware_router "middleware_loader/ui/routers/middleware_service"
 	task_router "middleware_loader/ui/routers/task_manager"
 	work_optim_router "middleware_loader/ui/routers/work_optimization"
+	schedule_plan_router "middleware_loader/ui/routers/schedule_plan"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -32,6 +34,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	taskRegisterService := work_optim.NewTaskRegisterService()
 	noteService := task_manager.NewNoteService()
 	taskOptimizationService := work_optim.NewTaskOptimizationService()
+	scheduleTaskService := schedule_plan.NewScheduleTaskService()
 
 	// GRAPHQL FEDERATION
 	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
@@ -78,5 +81,9 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	router.Group(func(r chi.Router) {
 		work_optim_router.NewTaskRegistrationRouter(taskRegisterService, db, router)
 		work_optim_router.NewTaskOptimizationRouter(taskOptimizationService, db, router)
+	})
+
+	router.Group(func(r chi.Router) {
+		schedule_plan_router.NewScheduleTaskRouter(scheduleTaskService, router)
 	})
 }
