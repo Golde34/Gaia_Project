@@ -19,3 +19,11 @@ func (s *ScheduleTaskService) GetScheduleTaskListByUserId(userId string) ([]resp
 	}
 	return scheduleTasks, nil
 }
+
+func (s *ScheduleTaskService) GetTaskBatchListByUserId(userId string) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
+	taskBatches, err := client.IScheduleTaskAdapter(&adapter.ScheduleTaskAdapter{}).GetTaskBatchListByUserId(userId)
+	if err != nil {
+		return response_dtos.ScheduleTaskBatchListResponseDTO{}, err
+	}
+	return taskBatches, nil
+}
