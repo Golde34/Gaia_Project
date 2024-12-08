@@ -1,5 +1,5 @@
 import { IScheduleTaskEntity } from "../../infrastructure/entities/schedule-task.entity";
-import { IResponse, msg400 } from "../common/response";
+import { IResponse, msg200, msg400 } from "../common/response";
 import { OptimizeScheduleTaskMessage, SyncScheduleTaskRequest } from "../domain/request/task.dto";
 import { scheduleTaskMapper } from "../mapper/schedule-task.mapper";
 import { notificationService } from "../services/notifi-agent.service";
@@ -126,6 +126,22 @@ class ScheduleTaskUsecase {
         } catch (error) {
             console.error("Error on getListScheduleTaskByUserId: ", error);
             return [];
+        }
+    }
+
+    async getScheduleBatchTask(userId: number): Promise<any | undefined> {
+        try {
+            const schedulePlan = await schedulePlanService.findSchedulePlanByUserId(userId);
+            if (!schedulePlan) {
+                console.error(`Cannot find schedule plan by user id: ${userId}`);
+                throw new Error(`Cannot find schedule plan by user id: ${userId}`);
+            }
+
+            const scheduleTaskList = scheduleTaskService.getScheduleBatchTask(schedulePlan._id);
+            return scheduleTaskList;
+        } catch (error) {
+            console.error("Error on getScheduleBatchTask: ", error);
+            return undefined;
         }
     }
 }

@@ -36,6 +36,23 @@ class ScheduleController {
             next(error);
         }
     }
+
+    async getScheduleBatchTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const userId = parseInt(req.params.userId, 10);
+            const scheduleBatchTask = await scheduleTaskUsecase.getScheduleBatchTask(userId);
+            if (!scheduleBatchTask) {
+                return msg200({
+                    message: "No schedule batch task found!"
+                })
+            }
+            return msg200({
+                scheduleBatchTask
+            })
+        } catch (error) {
+            next(error);
+        }
+    } 
 }
 
 export const scheduleController = new ScheduleController();
