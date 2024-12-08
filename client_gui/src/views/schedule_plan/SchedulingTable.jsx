@@ -6,11 +6,12 @@ import ListCenterButton from '../../components/subComponents/ListCenterButton';
 import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 import dayjs from 'dayjs';
 import cn from '../../kernels/utils/cn';
-import { Card, Metric } from '@tremor/react';
+import { Card, Metric, Text } from '@tremor/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
+import MessageBox from '../../components/subComponents/MessageBox';
 
 const task = {
     title: 'Meeting 1 is very long text that\'s good',
@@ -26,7 +27,7 @@ function ContentArea() {
     const [selectDate, setSelectDate] = useState(currentDate);
 
     const listScheduleTasks = useSelector(state => state.scheduleTaskList);
-    const { loading, error, tasks } = listScheduleTasks;
+    const { loading, error, scheduleTasks } = listScheduleTasks;
 
     const getListScheduleTasks = useCallback(() => {
         dispatch(getScheduleTaskList(userId));
@@ -42,30 +43,36 @@ function ContentArea() {
 
     return (
         <>
-            <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
-                className="text-2xl font-bold text-gray-800"> Schedule Calendar
-            </Metric>
-            <Card>
-                <div className="flex gap-10 sm:divide-x justify-center mt-10">
-                    <CalendarChart currentDate={currentDate} selectDate={selectDate} />
-                    <div className="w-full sm:px-5">
-                        <h1 className=" font-semibold text-white mb-10">
-                            Schedule for {selectDate.toDate().toDateString()}
-                        </h1>
+            {loading ? (
+                <Text>Loading...</Text>
+            ) : error ? (
+                <MessageBox message={error} />
+            ) : (
+                <>
+                    <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
+                        className="text-2xl font-bold text-gray-800"> Schedule Calendar
+                    </Metric>
+                    <Card>
+                        <div className="flex gap-10 sm:divide-x justify-center mt-10">
+                            <CalendarChart currentDate={currentDate} selectDate={selectDate} />
+                            <div className="w-full sm:px-5">
+                                <h1 className=" font-semibold text-white mb-10">
+                                    Schedule for {selectDate.toDate().toDateString()}
+                                </h1>
 
-                        <CardItem task={task} ></CardItem>
-                        <CardItem task={task} ></CardItem>
-                        <CardItem task={task} ></CardItem>
-                        <CardItem task={task} ></CardItem>
-                        <CardItem task={task} ></CardItem>
+                                {scheduleTasks.map((task, index) => (
+                                    <CardItem key={index} task={task} type = {"SP"}/>
+                                ))}
 
-                    </div>
-                </div>
-            </Card>
+                            </div>
+                        </div>
+                    </Card>
 
-            <Card className='mt-10'>
+                    <Card className='mt-10'>
 
-            </Card>
+                    </Card>
+                </>
+            )}
         </>
     );
 };

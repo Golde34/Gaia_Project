@@ -9,7 +9,7 @@ export const getScheduleTaskList = (userId) => async (dispatch) => {
     dispatch({ type: SCHEDULE_TASK_LIST_REQUEST, payload: userId });
     try {
         const { data } = await serverRequest(`/schedule-task/${userId}`, HttpMethods.GET, portName.middleware);
-        dispatch({ type: SCHEDULE_TASK_LIST_SUCCESS, payload: data.data });
+        dispatch({ type: SCHEDULE_TASK_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
             type: SCHEDULE_TASK_LIST_FAILURE,

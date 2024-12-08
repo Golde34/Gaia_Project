@@ -6,7 +6,7 @@ export const scheduleTaskListReducer = (
         case SCHEDULE_TASK_LIST_REQUEST:
             return { loading: true };
         case SCHEDULE_TASK_LIST_SUCCESS:
-            return { loading: false, scheduleTasks: action.payload.scheduleTasks };
+            return { loading: false, scheduleTasks: action.payload.scheduleTaskList };
         case SCHEDULE_TASK_LIST_FAILURE:
             return { loading: false, error: action.payload };
         default:
