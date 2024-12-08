@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import wo.work_optimization.core.domain.dto.request.OptimizeTaskRequestDTO;
+import wo.work_optimization.core.domain.dto.request.TaskObjRequestDTO;
 import wo.work_optimization.core.domain.dto.response.OriginalTaskResponseDTO;
 import wo.work_optimization.core.domain.entity.Task;
 import wo.work_optimization.core.domain.enums.TaskPriorityEnum;
@@ -78,5 +79,19 @@ public class TaskMapper {
     public String mapDeleteTask(Object request) {
         return modelMapper().map(request, String.class);
     }
+
+    public TaskObjRequestDTO mapUpdateTask(Object kafkaObjectDTO) {
+        return modelMapper().map(kafkaObjectDTO, TaskObjRequestDTO.class);
+    }
+
+    public Task toEntity(TaskObjRequestDTO request, Task task) throws ParseException {
+        task.setActiveStatus(request.getActiveStatus());
+        task.setDuration(request.getDuration());
+        task.setEndDate(DateTimeUtils.convertStringDateTime(request.getDeadline()));
+        task.setPriority(calculateTaskWeight(request.getPriority()));
+        task.setStartDate(DateTimeUtils.convertStringDateTime(request.getStartDate()));
+        task.setStatus(request.getStatus());
+        task.setTitle(request.getTitle());
+        return task;
+   }
 }
- 

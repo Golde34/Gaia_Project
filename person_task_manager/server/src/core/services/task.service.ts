@@ -92,6 +92,14 @@ class TaskService {
             if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const updateTask = await taskStore.updateTask(taskId, task);
 
+                // push kafka message
+                const messages = [{
+                    value: JSON.stringify(createMessage(
+                        KafkaCommand.UPDATE_TASK, '00', 'Successful', updateTask
+                    ))
+                }]
+                this.kafkaConfig.produce(KafkaTopic.UPDATE_TASK, messages);
+
                 return msg200({
                     message: (updateTask as any)
                 });
@@ -116,7 +124,7 @@ class TaskService {
                 // push kafka message
                 const messages = [{
                     value: JSON.stringify(createMessage(
-                        KafkaCommand.DELETE_TASK, '00', 'Successful', taskId 
+                        KafkaCommand.DELETE_TASK, '00', 'Successful', taskId
                     ))
                 }]
                 this.kafkaConfig.produce(KafkaTopic.DELETE_TASK, messages);
@@ -187,6 +195,14 @@ class TaskService {
                 taskUpdate.status = task.status;
 
                 const updateTask = await taskStore.updateTask(taskId, taskUpdate);
+
+                // push kafka message
+                const messages = [{
+                    value: JSON.stringify(createMessage(
+                        KafkaCommand.UPDATE_TASK, '00', 'Successful', updateTask
+                    ))
+                }]
+                this.kafkaConfig.produce(KafkaTopic.UPDATE_TASK, messages);
 
                 return msg200({
                     message: (updateTask as any)

@@ -42,5 +42,17 @@ export const scheduleTaskMapper = {
         task.stopTime = optimizedTask.stopTime
         task.taskBatch = optimizedTask.taskBatch 
         return task;
-    }
+    },
+
+    kafkaUpdateTaskMapper(data: any, scheduleTask: IScheduleTaskEntity): IScheduleTaskEntity {
+        scheduleTask.activeStatus = data.activeStatus
+        scheduleTask.deadline = data.deadline
+        scheduleTask.duration = data.duration
+        scheduleTask.preferenceLevel = convertPriority(data.priority)
+        scheduleTask.priority = data.priority
+        scheduleTask.startDate = data.startDate
+        scheduleTask.status = data.status
+        scheduleTask.title = data.title
+        return scheduleTask
+    } 
 }
