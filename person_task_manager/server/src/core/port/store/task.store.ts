@@ -10,8 +10,9 @@ class TaskStore {
         return await taskRepository.createTask(task);
     }
 
-    async updateTask(taskId: string, task: any): Promise<UpdateWriteOpResult> {
-        return await taskRepository.updateTask(taskId, task);
+    async updateTask(taskId: string, task: any): Promise<ITaskEntity | null> {
+        await taskRepository.updateTask(taskId, task);
+        return this.findTaskById(taskId);
     }
 
     async deleteTask(taskId: string): Promise<DeleteResult> {

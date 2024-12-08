@@ -70,9 +70,12 @@ class ScheduleTaskUsecase {
         }
     }
 
-    async updateScheduleTask(scheduleTask: any): Promise<void> {
+    async updateScheduleTask(task: any): Promise<void> {
         try {
-            console.log("Update this function later");
+            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(task.id);
+            const updateScheduletask = scheduleTaskMapper.kafkaUpdateTaskMapper(task, scheduleTask);
+            console.log('Update schedule task: ', updateScheduletask);
+            scheduleTaskService.updateScheduleTask(updateScheduletask._id, updateScheduletask);
         } catch (error) {
             console.error("Error on updateScheduleTask: ", error);
         }
