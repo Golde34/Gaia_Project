@@ -6,19 +6,12 @@ import ListCenterButton from '../../components/subComponents/ListCenterButton';
 import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 import dayjs from 'dayjs';
 import cn from '../../kernels/utils/cn';
-import { Card, Metric, Text } from '@tremor/react';
+import { Button, Card, Col, Dialog, DialogPanel, Flex, Grid, Metric, Text, TextInput } from '@tremor/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
+import { getScheduleTaskBatchList, getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
 import MessageBox from '../../components/subComponents/MessageBox';
-
-const task = {
-    title: 'Meeting 1 is very long text that\'s good',
-    description: '10:00 AM - 11:00 AM',
-    location: 'Zoom',
-    priority: ['Low'],
-}
 
 function ContentArea() {
     const userId = "1";
@@ -41,6 +34,29 @@ function ContentArea() {
         }, 200);
     }, [])
 
+    let [isOpen, setIsOpen] = useState(false);
+    function closeModal() {
+        setIsOpen(false);
+    }
+    function openModal() {
+        setIsOpen(true);
+    }
+
+    const [taskBatchList, setTaskBatchList] = useState({});
+
+    const chooseTaskBatch = () => {
+        return () => {
+            openModal();
+            dispatch(getScheduleTaskBatchList(userId))
+                .then((batchList) => {
+                    setTaskBatchList(batchList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
+
     return (
         <>
             {loading ? (
@@ -56,10 +72,23 @@ function ContentArea() {
                         <div className="flex gap-10 sm:divide-x justify-center mt-10">
                             <CalendarChart currentDate={currentDate} selectDate={selectDate} />
                             <div className="w-full sm:px-5">
-                                <h1 className=" font-semibold text-white mb-10">
-                                    Schedule for {selectDate.toDate().toDateString()}
-                                </h1>
-
+                                <Grid numItems={2}>
+                                    <Col numColSpan={1}>
+                                        <Flex justifyContent="start">
+                                            <h1 className=" font-semibold text-white mt-2 mb-10">
+                                                Schedule for {selectDate.toDate().toDateString()}
+                                            </h1>
+                                        </Flex>
+                                    </Col>
+                                    <Col numColSpan={1}>
+                                        <Flex justifyContent='end'>
+                                            <Button type='button' className="col-span-5 mb-10"
+                                                color='indigo' onClick={chooseTaskBatch()}>
+                                                Choose the Task Batch
+                                            </Button>
+                                        </Flex>
+                                    </Col>
+                                </Grid>
                                 {scheduleTasks.map((task, index) => (
                                     <CardItem key={index} task={task} />
                                 ))}
@@ -67,6 +96,66 @@ function ContentArea() {
                             </div>
                         </div>
                     </Card>
+
+                    <Dialog
+                        open={isOpen}
+                        onClose={() => closeModal()}
+                        static={true}
+                        className="z-[100]"
+                    >
+                        <DialogPanel className="w-full max-w-5xl">
+                            <div className="absolute right-0 top-0 pr-3 pt-3">
+                                <button
+                                    type="button"
+                                    className="rounded-tremor-small p-2 text-tremor-content-subtle hover:bg-tremor-background-subtle hover:text-tremor-content dark:text-dark-tremor-content-subtle hover:dark:bg-dark-tremor-background-subtle hover:dark:text-tremor-content"
+                                    onClick={() => closeModal()}
+                                    aria-label="Close"
+                                >
+                                </button>
+                            </div>
+                            <form>
+                                <h4 className="font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong mb-4">
+                                    Your task batch
+                                </h4>
+                                <div>
+                                    {(() => {
+                                        const batchNumbers = Object.keys(taskBatchList);
+                                        const batchCount = batchNumbers.length;
+
+                                        if (batchCount === 0) {
+                                            return <p>No task batch available</p>;
+                                        }
+
+                                        // Xác định cách căn chỉnh theo số lượng batch
+                                        let justifyContentClass = '';
+                                        if (batchCount === 1) {
+                                            justifyContentClass = 'justify-center';
+                                        } else if (batchCount === 2) {
+                                            justifyContentClass = 'justify-evenly';
+                                        } else if (batchCount === 3) {
+                                            justifyContentClass = 'justify-between';
+                                        }
+
+                                        return (
+                                            <div className={`flex ${justifyContentClass} gap-8`}>
+                                                {batchNumbers.map((batchNumber) => {
+                                                    const tasks = taskBatchList[batchNumber] || [];
+                                                    return (
+                                                        <div key={batchNumber} className="flex flex-col gap-4">
+                                                            <h2 className="font-semibold mb-2 text-center">Batch {batchNumber}</h2>
+                                                            {tasks.map((task, i) => (
+                                                                <CardItem key={i} task={task} />
+                                                            ))}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            </form>
+                        </DialogPanel>
+                    </Dialog>
                 </>
             )}
         </>

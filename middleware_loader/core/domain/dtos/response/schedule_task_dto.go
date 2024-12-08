@@ -22,3 +22,12 @@ type ScheduleTaskResponseDTO struct {
 func NewScheduleTaskResponseDTO() *ScheduleTaskResponseDTO {
 	return &ScheduleTaskResponseDTO{}
 }
+
+
+type ScheduleTaskBatchListResponseDTO struct {
+	ScheduleBatchTask map[string][]ScheduleTaskResponseDTO `json:"scheduleBatchTask"`
+}
+
+func NewScheduleTaskBatchListResponseDTO() *ScheduleTaskBatchListResponseDTO {
+	return &ScheduleTaskBatchListResponseDTO{}
+}

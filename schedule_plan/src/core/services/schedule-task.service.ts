@@ -140,12 +140,38 @@ class ScheduleTaskService {
     }
 
     async findTop10NewestTask(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {
-        const scheduleTaskList = await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
-        return  await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
+        return await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
     }
 
     async findByTaskBatch(schedulePlanId: string, taskBatch: number): Promise<IScheduleTaskEntity[]> {
         return await scheduleTaskRepository.findByTaskBatch(schedulePlanId, taskBatch);
+    }
+
+    async findAllBySchedulePlanId(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {
+        try {
+            const scheduleTaskList = await scheduleTaskRepository.findAll(schedulePlanId);
+            return scheduleTaskList;
+        } catch (error) {
+            console.error("Error on getScheduleBatchTask: ", error);
+            return [];
+        }
+    }
+
+    async getScheduleBatchTask(schedulePlanId: string): Promise<any> {
+        try {
+            const taskBatchList = await scheduleTaskRepository.findDistinctTaskBatch(schedulePlanId);
+            console.log("Task Batch List: ", taskBatchList);
+            const result: { [key: string]: IScheduleTaskEntity[] } = {};
+            await Promise.all(taskBatchList.map(async (taskBatch: number) => {
+                const taskList = await scheduleTaskRepository.findByTaskBatch(schedulePlanId, taskBatch);
+                console.log("Task List: ", taskList);
+                result[taskBatch] = taskList;
+            }))
+            return result;
+        } catch (error) {
+            console.error("Error on getScheduleBatchTask: ", error);
+            return [];
+        }
     }
 }
 
