@@ -4,7 +4,7 @@ export interface IScheduleTaskEntity extends Document {
     _id: string;
     taskId: string;
     title: string;
-    priority: Number;
+    priority: string[];
     status: string;
     startDate: Date;
     deadline: Date;
@@ -16,6 +16,7 @@ export interface IScheduleTaskEntity extends Document {
     weight: Number;
     stopTime: Number;
     taskBatch: Number;
+    schedulePlanId: string;
 }
 
 export const scheduleTaskSchema = new mongoose.Schema(
@@ -25,7 +26,7 @@ export const scheduleTaskSchema = new mongoose.Schema(
             required: true,
         },
         priority: {
-            type: Number,
+            type: [String],
             required: true,
         },
         status: {
@@ -76,6 +77,10 @@ export const scheduleTaskSchema = new mongoose.Schema(
             type: Number,
             required: false,
         },
+        schedulePlanId: {
+            type: String,
+            required: true,
+        }
     }, 
     {
         toJSON: { virtuals: true },

@@ -30,7 +30,8 @@ const LeftColumn = () => {
                         <div><MessageBox message={error}/></div>
                     ) : (
                         topTasks.length === 0 ? (
-                            <div><MessageBox message="No tasks found"/></div>
+                            // <div><MessageBox message="No tasks found"/></div>
+                            <div></div>
                         ) :
                         <Grid numItems={3}>
                         {topTasks.map((topTask) => (

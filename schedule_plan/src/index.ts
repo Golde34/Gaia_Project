@@ -11,6 +11,7 @@ import { dashboardRouter } from "./ui/routers/dashboard.router";
 import { userRouter } from "./ui/routers/user.router";
 import { KafkaHandler } from "./infrastructure/kafka/kafka-handler";
 import { kafkaController } from "./infrastructure/kafka/kafka-controller";
+import { scheduleTaskRouter } from "./ui/routers/schedule-task.consumer";
 
 async function main(): Promise<void> {
     validateEnvironmentVars();
@@ -48,6 +49,7 @@ async function main(): Promise<void> {
 
     app.use(applicationContext + "/dashboard", dashboardRouter);
     app.use(applicationContext + "/user", userRouter);
+    app.use(applicationContext + "/schedule", scheduleTaskRouter);
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         sendResponse(msg404(MSG404), res, next);

@@ -2,7 +2,7 @@ import { IScheduleTaskEntity } from "../../infrastructure/entities/schedule-task
 import { createMessage } from "../../infrastructure/kafka/create-message";
 import { KafkaHandler } from "../../infrastructure/kafka/kafka-handler";
 import { scheduleTaskRepository } from "../../infrastructure/repository/schedule-task.repository";
-import { convertErrorCodeToBoolean } from "../../kernel/utils/convert-fields";
+import { convertErrorCodeToBoolean, revertPriority } from "../../kernel/utils/convert-fields";
 import { IResponse, msg200, msg400, msg500 } from "../common/response";
 import { ErrorStatus } from "../domain/enums/enums";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enum";
@@ -137,6 +137,15 @@ class ScheduleTaskService {
             throw new Error("Task not found");
         }
         return scheduleTask;
+    }
+
+    async findTop10NewestTask(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {
+        const scheduleTaskList = await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
+        return  await scheduleTaskRepository.findTop10NewestTask(schedulePlanId);
+    }
+
+    async findByTaskBatch(schedulePlanId: string, taskBatch: number): Promise<IScheduleTaskEntity[]> {
+        return await scheduleTaskRepository.findByTaskBatch(schedulePlanId, taskBatch);
     }
 }
 
