@@ -5,24 +5,37 @@ import {
     bossSigninReducer,
 } from './auth_service/auth.reducer'
 
-import { projectCreateReducer, projectDeleteReducer, projectDetailReducer,
-    projectListReducer, projectUpdateReducer } from './task_manager/project.reducers'
-import { groupTaskCreateReducer, groupTaskDeleteReducer, groupTaskDetailReducer,
-    groupTaskListReducer, groupTaskUpdateReducer } from './task_manager/group-task.reducers'
-import { moveTaskReducer, taskCompletedReducer, taskCreateReducer, taskDeleteReducer, taskDetailReducer, 
-    taskListReducer, taskTableReducer, taskUpdateReducer, topTaskReducer } from './task_manager/task.reducers'
-import { subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer, 
-    subTaskListReducer, subTaskUpdateReducer } from './task_manager/sub-task.reducers'
-import { commentCreateReducer, commentDeleteReducer, commentDetailReducer, 
-    commentListReducer, commentUpdateReducer } from './task_manager/comment.reducers'
+import {
+    projectCreateReducer, projectDeleteReducer, projectDetailReducer,
+    projectListReducer, projectUpdateReducer
+} from './task_manager/project.reducers'
+import {
+    groupTaskCreateReducer, groupTaskDeleteReducer, groupTaskDetailReducer,
+    groupTaskListReducer, groupTaskUpdateReducer
+} from './task_manager/group-task.reducers'
+import {
+    moveTaskReducer, taskCompletedReducer, taskCreateReducer, taskDeleteReducer, taskDetailReducer,
+    taskListReducer, taskTableReducer, taskUpdateReducer, topTaskReducer
+} from './task_manager/task.reducers'
+import {
+    subTaskCreateReducer, subTaskDeleteReducer, subTaskDetailReducer,
+    subTaskListReducer, subTaskUpdateReducer
+} from './task_manager/sub-task.reducers'
+import {
+    commentCreateReducer, commentDeleteReducer, commentDetailReducer,
+    commentListReducer, commentUpdateReducer
+} from './task_manager/comment.reducers'
 import { microserviceListReducer } from "./middleware_loader/microservices.reducer";
 import { userDetailReducer, userListReducer, userSettingUpdateReducer, userUpdateReducer } from "./auth_service/user.reducer";
 import { roleCreateReducer, roleListReducer } from "./auth_service/role.reducer";
 import { privilegeListReducer } from "./auth_service/privilege.reducer";
 import { queryTaskConfigReducer, registerTaskConfigReducer } from "./work_optimization/task-registration.reducers";
-import { noteCreateReducer, noteDeleteReducer, noteDetailReducer, noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer } from "./task_manager/note.reducers"; 
+import {
+    noteCreateReducer, noteDeleteReducer, noteDetailReducer,
+    noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer
+} from "./task_manager/note.reducers";
 import { optimizeTaskByUserReducer } from "./work_optimization/optimize-task.reducers";
-import { scheduleTaskListReducer } from "./schedule_plan/schedule-task.reducers";
+import { scheduleTaskListReducer, taskBatchListReducer } from "./schedule_plan/schedule-task.reducers";
 
 export const reducer = combineReducers({
     // auth service
@@ -72,10 +85,11 @@ export const reducer = combineReducers({
     noteUpdate: noteUpdateReducer,
     noteLock: noteLockReducer,
     noteUnlock: noteUnlockReducer,
-    noteDetail: noteDetailReducer,  
+    noteDetail: noteDetailReducer,
     noteDelete: noteDeleteReducer,
     // schedule task
     scheduleTaskList: scheduleTaskListReducer,
+    taskBatchList: taskBatchListReducer,
     // middleware loader
     microserviceList: microserviceListReducer,
     // work optimization 

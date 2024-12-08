@@ -1,7 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Input, Textarea } from "@material-tailwind/react";
-import { Badge, BadgeDelta, Button, Card, Col, DialogPanel, Flex, Grid, Subtitle, Text, TextInput, Title } from "@tremor/react";
-import { Dialog as TremorDialog } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import { useNavigate } from "react-router-dom";
