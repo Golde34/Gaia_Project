@@ -4,7 +4,7 @@ export interface IScheduleTaskEntity extends Document {
     _id: string;
     taskId: string;
     title: string;
-    priority: Number;
+    priority: string[];
     status: string;
     startDate: Date;
     deadline: Date;
@@ -26,7 +26,7 @@ export const scheduleTaskSchema = new mongoose.Schema(
             required: true,
         },
         priority: {
-            type: Number,
+            type: [String],
             required: true,
         },
         status: {

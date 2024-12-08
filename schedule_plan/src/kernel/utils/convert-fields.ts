@@ -23,9 +23,30 @@ export const convertErrorCodeToBoolean = (error: string): boolean => {
         case ErrorStatus.FAIL:
             return false;
         case ErrorStatus.TIMEOUT:
-            return false; 
+            return false;
         default:
             console.log('Error code not found: ', error);
             return false;
     }
 }
+
+export const revertPriority = (priority: number): string[] => {
+    switch (priority) {
+        case 1:
+            return ["Low"];
+        case 2:
+            return ["Medium"];
+        case 3:
+            return ["High"];
+        case 5:
+            return ["Star"];
+        case 6:
+            return ["Low", "Star"];
+        case 7:
+            return ["Medium", "Star"];
+        case 8:
+            return ["High", "Star"];
+        default:
+            return ["Medium"]; 
+    }
+} 

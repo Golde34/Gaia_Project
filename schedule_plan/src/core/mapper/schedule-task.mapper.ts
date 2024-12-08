@@ -8,13 +8,13 @@ export const scheduleTaskMapper = {
         return new ScheduleTaskEntity({
             taskId: data.task.id,
             title: data.task.title,
-            priority: convertPriority(data.task.priority),
+            priority: data.task.priority,
             status: data.task.status,
             startDate: data.task.startDate,
             deadline: data.task.deadline,
             duration: data.task.duration,
             activeStatus: data.task.activeStatus,
-            preferenceLevel: data.task.preferenceLevel ? data.task.preferenceLevel : 0,
+            preferenceLevel: convertPriority(data.task.priority),
             schedulePlanId: schedulePlanId,
         });
     },

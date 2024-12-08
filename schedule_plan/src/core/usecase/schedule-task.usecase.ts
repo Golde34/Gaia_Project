@@ -20,7 +20,6 @@ class ScheduleTaskUsecase {
                     throw new Error("Failed to create schedule plan");
                 }
             }
-            console.log('Schedule Plan: ', schedulePlan);
 
             const task = scheduleTaskMapper.kafkaCreateTaskMapper(scheduleTask, schedulePlan._id);
             const result = await scheduleTaskService.createScheduleTask(task);
