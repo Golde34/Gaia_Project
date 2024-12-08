@@ -50,7 +50,11 @@ export const schedulePlanSchema = new mongoose.Schema(
         activeTaskBatch: {
             type: Number,
             required: false,
-        }
+        },
+        isTaskBatchActive: {
+            type: Boolean,
+            required: false,
+        },
     }, 
     {
         toJSON: { virtuals: true },
