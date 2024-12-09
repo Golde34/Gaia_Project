@@ -7,7 +7,7 @@ import (
 	"notify_agent/core/domain/entity"
 	"notify_agent/core/port/mapper"
 	"notify_agent/core/port/store"
-	services "notify_agent/core/services/websocket"
+	// services "notify_agent/core/services/websocket"
 	"time"
 )
 
@@ -24,65 +24,80 @@ func NewOptimizeTaskNotifyService(store *store.NotificationStore) *OptimizeTaskN
 func (service *OptimizeTaskNotifyService) OptimizeTaskNoti(messageId, userId, optimizedStatus, errorStatus, notificationFlowId string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	log.Println("InitOptimizeTask ", ctx)
+	log.Println("InitOptimizeTask ", ctx, messageId)
 
-	var notification entity.Notification
 	if errorStatus == "INIT" {
-		request := mapper.InsertOptimizeTaskRequestMapper(messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
-		notification = request_dtos.NewInsertNotificationRequestDTO().MapToEntity(request)
+		return service.initOptimizeTaskNoti(ctx, messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
 	} else {
-		validation := service.validateUpdateOptimizeTaskNoti(ctx, messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
-		if !validation {
-			return false, nil
-		}
-		request := mapper.UpdateOptimizeTaskRequestMapper(messageId, optimizedStatus, errorStatus)
-		notification = request_dtos.NewInsertNotificationRequestDTO().MapToEntity(request)
+		return service.finalizeOptimizeTaskNoti(ctx, messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
 	}
+}
+
+func (service *OptimizeTaskNotifyService) initOptimizeTaskNoti(ctx context.Context, messageId, userId, optimizedStatus, errorStatus, notificationFlowId string) (bool, error) {
+	request := mapper.InsertOptimizeTaskRequestMapper(messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
+	notification := request_dtos.NewInsertNotificationRequestDTO().MapToEntity(request)
 	savedTask, err := service.Store.CreateNotification(ctx, notification)
 	if err != nil {
+		log.Println("Error saving notification: ", err)
 		return false, err
 	}
+
 	log.Println("Optimize task saved successfully: ", savedTask)
+	return true, nil
+}
 
-	var notiMessage []byte
-	notiMessage = append(notiMessage, []byte("Optimize task saved successfully")...)
-	services.SendToUser(userId, notiMessage)
+func (service *OptimizeTaskNotifyService) finalizeOptimizeTaskNoti(ctx context.Context, messageId, userId, optimizedStatus, errorStatus, notificationFlowId string) (bool, error) {
+	noti := service.validateUpdateOptimizeTaskNoti(ctx, messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
+	if (entity.Notification{}) == noti {
+		log.Println("Notification not found")
+		return false, nil
+	}
+	notification := mapper.UpdateOptimizeTaskRequestMapper(messageId, optimizedStatus, errorStatus, noti)
+	log.Println("Mapped Notification for update case: ", notification)
 
+	savedTask, err := service.Store.UpdateNotification(ctx, notification.ID, notification)
+	if err != nil {
+		log.Println("Error updating notification: ", err)
+		return false, err
+	}
+
+	log.Println("Optimize task saved successfully: ", savedTask)
 	return true, nil
 }
 
 func (service *OptimizeTaskNotifyService) validateUpdateOptimizeTaskNoti(ctx context.Context,
-	messageId, userId, optimizedStatus, errorStatus, notificationFlowId string) bool {
+	messageId, userId, optimizedStatus, errorStatus, notificationFlowId string) entity.Notification {
+
 	if messageId == "" || userId == "" || optimizedStatus == "" || errorStatus == "" || notificationFlowId == "" {
 		log.Println("Error mapping optimize task request")
-		return false
+		return entity.Notification{}
 	}
 
 	savedNoti, err := service.Store.GetNotificationByNotificationFLowId(ctx, notificationFlowId)
 	if err != nil {
-		log.Println("Error getting optimize task")
-		return false
+		log.Println("Error retrieving notification: ", err)
+		return entity.Notification{}
 	}
 
-	if savedNoti == nil {
-		log.Println("Optimize task not found")
-		return false
+	if (entity.Notification{}) == savedNoti {
+		log.Println("Notification not found")
+		return entity.Notification{}
 	}
 
-	if savedNoti.(entity.Notification).NotificationFlowId != notificationFlowId {
-		log.Println("Optimize task not found because of wrong notification flow id")
-		return false
+	if savedNoti.NotificationFlowId != notificationFlowId {
+		log.Println("Invalid notification flow ID")
+		return entity.Notification{}
 	}
 
-	if savedNoti.(entity.Notification).Status != "INIT" {
-		log.Println("Optimize task already processed")
-		return false
+	if savedNoti.ErrorStatus != "INIT" {
+		log.Println("Notification already processed")
+		return entity.Notification{}
 	}
 
-	if savedNoti.(entity.Notification).UserId != userId {
-		log.Println("Optimize task not found because of wrong user id")
-		return false
+	if savedNoti.UserId != userId {
+		log.Println("User ID mismatch")
+		return entity.Notification{}
 	}
 
-	return true
+	return savedNoti
 }

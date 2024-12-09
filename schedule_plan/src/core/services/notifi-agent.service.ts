@@ -1,3 +1,4 @@
+import { ulid } from "ulid";
 import { createMessage } from "../../infrastructure/kafka/create-message"
 import KafkaHandler from "../../infrastructure/kafka/kafka-handler";
 import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enum"
@@ -14,6 +15,7 @@ class NotificationService {
             "notificationFlowId": notificationFlowId
         } 
         const messages = [{
+            key: ulid().toLowerCase(),
             value: JSON.stringify(createMessage(
                 KafkaCommand.OPTIMIZE_TASK, '00', 'Successful', data
             ))

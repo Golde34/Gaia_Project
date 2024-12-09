@@ -3,6 +3,8 @@ package mapper
 import (
 	"fmt"
 	request_dtos "notify_agent/core/domain/dtos/request"
+	"notify_agent/core/domain/entity"
+	"time"
 )
 
 func KafkaOptimizeTaskRequestMapper(data map[string]interface{}) (string, string, string, string){
@@ -43,12 +45,12 @@ func InsertOptimizeTaskRequestMapper(messageId, userId, optimizeStatus, errorSta
 	return input
 }
 
-func UpdateOptimizeTaskRequestMapper(messageId, optimizeStatus, errorStatus string) request_dtos.InsertNotificationRequestDTO {
-	var input request_dtos.InsertNotificationRequestDTO
-	input.Status = optimizeStatus
-	input.ErrorStatus = errorStatus
-	input.Content =  "Optimize Task " + optimizeStatus
-	input.IsRead = false
-	input.MessageID = messageId
-	return input
+func UpdateOptimizeTaskRequestMapper(messageId, optimizeStatus, errorStatus string, notification entity.Notification) entity.Notification {
+	notification.Status = optimizeStatus
+	notification.ErrorStatus = errorStatus
+	notification.Content = "Optimize Task " + optimizeStatus
+	notification.IsRead = false
+	notification.MessageID = messageId
+	notification.UpdatedAt = time.Now().Unix()
+	return notification
 }
