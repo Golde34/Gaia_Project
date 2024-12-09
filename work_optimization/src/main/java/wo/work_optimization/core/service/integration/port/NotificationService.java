@@ -26,7 +26,7 @@ public class NotificationService {
                     .userId(userId)
                     .optimizeStatus(optimizeStatus)
                     .errorStatus(Constants.ErrorStatus.INIT)
-                    .notificationFLowId(ULID.nextULID())
+                    .notificationFlowId(ULID.nextULID())
                     .build();
 
             KafkaBaseDto<OptimizeTaskNotiMessage> message = data.toKafkaBaseDto(ErrorConstants.ErrorCode.SUCCESS,
@@ -34,7 +34,7 @@ public class NotificationService {
             String messageId = ULID.nextULID();
             kafkaPublisher.pushAsync(message, messageId, TopicConstants.NotificationCommand.TOPIC,
                     Constants.WOConfiguration.KAFKA_CONTAINER_NAME, null);
-            return data.getNotificationFLowId();
+            return data.getNotificationFlowId();
         } catch (Exception e) {
             log.error("Error sending optimize notification to user: {}", userId);
             // Send notification by rest

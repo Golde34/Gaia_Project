@@ -17,7 +17,7 @@ public class OptimizeTaskNotiMessage {
     private long userId;
     private String optimizeStatus;
     private String errorStatus;
-    private String notificationFLowId;
+    private String notificationFlowId;
 
     public KafkaBaseDto<OptimizeTaskNotiMessage> toKafkaBaseDto(String errorCode, String errorMessage) {
         return KafkaBaseDto.<OptimizeTaskNotiMessage>builder()
