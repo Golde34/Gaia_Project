@@ -1,6 +1,9 @@
 package request_dtos
 
-import "notify_agent/core/domain/entity"
+import (
+	"github.com/google/uuid"
+	"notify_agent/core/domain/entity"
+)
 
 type InsertNotificationRequestDTO struct {
 	MessageID          string `json:"message_id"`
@@ -19,13 +22,14 @@ func NewInsertNotificationRequestDTO() *InsertNotificationRequestDTO {
 
 func (r *InsertNotificationRequestDTO) MapToEntity(request InsertNotificationRequestDTO) entity.Notification {
 	return entity.Notification{
-		MessageID:          r.MessageID,
-		Type:               r.Type,
-		Content:            r.Content,
-		Status:             r.Status,
-		ErrorStatus:        r.ErrorStatus,
-		IsRead:             r.IsRead,
-		UserId:             r.UserId,
-		NotificationFlowId: r.NotificationFlowId,
+		ID:                 uuid.NewString(),
+		MessageID:          request.MessageID,
+		Type:               request.Type,
+		Content:            request.Content,
+		Status:             request.Status,
+		ErrorStatus:        request.ErrorStatus,
+		IsRead:             request.IsRead,
+		UserId:             request.UserId,
+		NotificationFlowId: request.NotificationFlowId,
 	}
 }

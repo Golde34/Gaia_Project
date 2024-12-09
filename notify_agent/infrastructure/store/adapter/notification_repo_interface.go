@@ -7,5 +7,5 @@ import (
 
 type INotificationRepository interface {
 	CreateNotification(context context.Context, notification entity.Notification) (interface{}, error)
-	GetNotificationByNotificationFLowId(context context.Context, notificationStringId string) (interface{}, error)
+	GetNotificationByNotificationFLowId(context context.Context, notificationStringId string) (entity.Notification, error)
 }
