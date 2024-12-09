@@ -36,8 +36,6 @@ func (repo *NotificationRepository) CreateNotification(context context.Context, 
 }
 
 func (repo *NotificationRepository) GetNotificationByNotificationFLowId(ctx context.Context, notificationFlowId string) (entity.Notification, error) {
-	log.Println("GetNotificationByNotificationFLowId ", notificationFlowId)
-
 	filter := bson.M{"notification_flow_id": notificationFlowId} 
 	result := repo.Collection.FindOne(ctx, filter)
 
@@ -48,5 +46,17 @@ func (repo *NotificationRepository) GetNotificationByNotificationFLowId(ctx cont
 	}
 
 	log.Println("Notification retrieved: ", notification)
+	return notification, nil
+}
+
+func (repo *NotificationRepository) UpdateNotification(context context.Context, notificationId string, notification entity.Notification) (entity.Notification, error) {
+	filter := bson.M{"_id": notificationId}
+	update := bson.M{"$set": notification}
+	_, err := repo.Collection.UpdateOne(context, filter, update)
+	if err != nil {
+		log.Println("Error updating notification: ", err)
+		return entity.Notification{}, err
+	}
+
 	return notification, nil
 }

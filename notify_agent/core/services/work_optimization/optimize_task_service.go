@@ -55,9 +55,9 @@ func (service *OptimizeTaskNotifyService) finalizeOptimizeTaskNoti(ctx context.C
 	notification := mapper.UpdateOptimizeTaskRequestMapper(messageId, optimizedStatus, errorStatus, noti)
 	log.Println("Mapped Notification for update case: ", notification)
 
-	savedTask, err := service.Store.CreateNotification(ctx, notification)
+	savedTask, err := service.Store.UpdateNotification(ctx, notification.ID, notification)
 	if err != nil {
-		log.Println("Error saving notification: ", err)
+		log.Println("Error updating notification: ", err)
 		return false, err
 	}
 

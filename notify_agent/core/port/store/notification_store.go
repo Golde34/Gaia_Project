@@ -47,3 +47,17 @@ func (store *NotificationStore) GetNotificationByNotificationFLowId(context cont
 
 	return result, nil
 }
+
+func (store *NotificationStore) UpdateNotification(context context.Context, notificationId string, notification entity.Notification) (entity.Notification, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+
+	result, err := store_adapter.INotificationRepository(
+		&repository.NotificationRepository{Database: db, Collection: collection},
+	).UpdateNotification(context, notificationId, notification)
+	if err != nil {
+		return entity.Notification{}, err
+	}
+
+	return result, nil
+}

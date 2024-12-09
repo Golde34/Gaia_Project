@@ -1,8 +1,10 @@
 package request_dtos
 
 import (
-	"github.com/google/uuid"
 	"notify_agent/core/domain/entity"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type InsertNotificationRequestDTO struct {
@@ -31,5 +33,7 @@ func (r *InsertNotificationRequestDTO) MapToEntity(request InsertNotificationReq
 		IsRead:             request.IsRead,
 		UserId:             request.UserId,
 		NotificationFlowId: request.NotificationFlowId,
+		CreatedAt:          time.Now().Unix(),
+		UpdatedAt:          time.Now().Unix(),
 	}
 }

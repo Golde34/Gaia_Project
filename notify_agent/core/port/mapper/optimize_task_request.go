@@ -4,8 +4,7 @@ import (
 	"fmt"
 	request_dtos "notify_agent/core/domain/dtos/request"
 	"notify_agent/core/domain/entity"
-
-	"github.com/google/uuid"
+	"time"
 )
 
 func KafkaOptimizeTaskRequestMapper(data map[string]interface{}) (string, string, string, string){
@@ -47,11 +46,11 @@ func InsertOptimizeTaskRequestMapper(messageId, userId, optimizeStatus, errorSta
 }
 
 func UpdateOptimizeTaskRequestMapper(messageId, optimizeStatus, errorStatus string, notification entity.Notification) entity.Notification {
-	notification.ID  = uuid.NewString()
 	notification.Status = optimizeStatus
 	notification.ErrorStatus = errorStatus
 	notification.Content = "Optimize Task " + optimizeStatus
 	notification.IsRead = false
 	notification.MessageID = messageId
+	notification.UpdatedAt = time.Now().Unix()
 	return notification
 }
