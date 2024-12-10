@@ -7,7 +7,7 @@ import (
 	"notify_agent/core/domain/entity"
 	"notify_agent/core/port/mapper"
 	"notify_agent/core/port/store"
-	// services "notify_agent/core/services/websocket"
+	websocket "notify_agent/core/services/websocket"
 	"time"
 )
 
@@ -50,6 +50,7 @@ func (service *OptimizeTaskNotifyService) finalizeOptimizeTaskNoti(ctx context.C
 	noti := service.validateUpdateOptimizeTaskNoti(ctx, messageId, userId, optimizedStatus, errorStatus, notificationFlowId)
 	if (entity.Notification{}) == noti {
 		log.Println("Notification not found")
+		websocket.NewWebSocketService().HandleOptimizeTask(userId, false)
 		return false, nil
 	}
 	notification := mapper.UpdateOptimizeTaskRequestMapper(messageId, optimizedStatus, errorStatus, noti)
@@ -58,10 +59,13 @@ func (service *OptimizeTaskNotifyService) finalizeOptimizeTaskNoti(ctx context.C
 	savedTask, err := service.Store.UpdateNotification(ctx, notification.ID, notification)
 	if err != nil {
 		log.Println("Error updating notification: ", err)
+		websocket.NewWebSocketService().HandleOptimizeTask(userId, false)
 		return false, err
 	}
 
 	log.Println("Optimize task saved successfully: ", savedTask)
+
+	websocket.NewWebSocketService().HandleOptimizeTask(userId, true)
 	return true, nil
 }
 
