@@ -77,18 +77,22 @@ func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request
 }
 
 func SendToUser(userId string, message []byte) {
-	log.Println("Send message to user:", userId)
+	log.Println("Attempting to send message to user:", userId)
 	userConnections.Lock()
 	defer userConnections.Unlock()
 
 	if conn, ok := userConnections.connections[userId]; ok {
-		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
-		log.Println("Send message to user:", userId)
+		log.Println("Connection found for user:", userId)
+		err := conn.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
-			log.Println("Error sending message to user:", err)
+			log.Println("Error sending message to user:", userId, "Error:", err)
 			conn.Close()
 			delete(userConnections.connections, userId)
+		} else {
+			log.Println("Message sent successfully to user:", userId)
 		}
+	} else {
+		log.Println("No active connection found for user:", userId)
 	}
 }
 

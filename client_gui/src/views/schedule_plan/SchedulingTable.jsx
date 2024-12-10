@@ -45,11 +45,25 @@ function ContentArea() {
     const checkEmptyTaskListAndOpenModal = () => {
         if (scheduleTasks.length === 0) {
             setIsOpen(true);
+            dispatch(getScheduleTaskBatchList(userId))
+                .then((batchList) => {
+                    setTaskBatchList(batchList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
     useEffect(() => {
         if (!loading && !error && scheduleTasks.length === 0) {
             setIsOpen(true);
+            dispatch(getScheduleTaskBatchList(userId))
+                .then((batchList) => {
+                    setTaskBatchList(batchList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     }, [loading, error, scheduleTasks]);
 
@@ -81,9 +95,9 @@ function ContentArea() {
                     </Metric>
                     <Card>
                         <div className="flex gap-10 sm:divide-x justify-center mt-10">
-                            <CalendarChart currentDate={currentDate} selectDate={selectDate} 
+                            <CalendarChart currentDate={currentDate} selectDate={selectDate}
                                 checkEmptyScheduleTaskList={checkEmptyTaskListAndOpenModal}
-                                />
+                            />
                             <div className="w-full sm:px-5">
                                 <Grid numItems={2}>
                                     <Col numColSpan={1}>
