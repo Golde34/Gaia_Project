@@ -88,12 +88,12 @@ public class TaskOptimizationUseCase {
     }
 
     private String getFinalOptimizeTaskStatus(Map<Integer, String> results) {
-        String optimizeStatus = Constants.ErrorStatus.SUCCESS;
+        String optimizeStatus = Constants.ErrorStatus.FAIL;
         for (Map.Entry<Integer, String> entry : results.entrySet()) {
-            if (Constants.ErrorStatus.FAIL.equals(entry.getValue())) {
+            if (Constants.ErrorStatus.SUCCESS.equals(entry.getValue())) {
                 log.error("Error when execute tasks batch {}, convert taskOrder equals -1. Optimize the next time!",
                         entry.getKey());
-                optimizeStatus = Constants.ErrorStatus.FAIL;
+                optimizeStatus = Constants.ErrorStatus.SUCCESS;
                 break;
             }
         }

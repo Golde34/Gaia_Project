@@ -1,6 +1,7 @@
 package services
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"sync"
@@ -49,7 +50,7 @@ func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request
 
 	for {
 		// Nhận tin nhắn từ client
-		messageType, message, err := conn.ReadMessage()
+		_, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("User disconnected:", userId)
 			userConnections.Lock()
@@ -61,26 +62,58 @@ func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request
 		log.Printf("Received: %s of user %s", message, userId)
 
 		// Gửi phản hồi lại client
-		err = conn.WriteMessage(messageType, append([]byte("Server: "), message...))
-		if err != nil {
-			log.Println("Write error:", err)
-			break
+		// err = conn.WriteMessage(messageType, append([]byte("Server: "), message...))
+		// if err != nil {
+		// 	log.Println("Write error:", err)
+		// 	break
+		// }
+		
+		var request map[string]interface{}
+		if err := json.Unmarshal(message, &request); err != nil {
+			log.Println("Invalid message format:", err)
+			continue
 		}
 	}
 }
 
 func SendToUser(userId string, message []byte) {
+	log.Println("Attempting to send message to user:", userId)
 	userConnections.Lock()
 	defer userConnections.Unlock()
 
 	if conn, ok := userConnections.connections[userId]; ok {
-		err := conn.WriteMessage(websocket.TextMessage, []byte(message))
+		log.Println("Connection found for user:", userId)
+		err := conn.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
-			log.Println("Error sending message to user:", err)
+			log.Println("Error sending message to user:", userId, "Error:", err)
 			conn.Close()
 			delete(userConnections.connections, userId)
+		} else {
+			log.Println("Message sent successfully to user:", userId)
 		}
 	} else {
-		log.Println("No active connection for userId:", userId)
+		log.Println("No active connection found for user:", userId)
 	}
+}
+
+func (s *WebSocketService) HandleOptimizeTask(userId string, status bool) {
+	log.Printf("Starting optimization task for user %s...", userId)
+
+	response := map[string]interface{}{
+		"type":   "task_optimized",
+		"userId": userId,
+		"status": "success",
+	}
+	if !status{
+		response["status"] = "failed"
+		response["type"] = "task_failed"
+	}
+
+	responseBytes, err := json.Marshal(response)
+	if err != nil {
+		log.Println("Error marshaling response:", err)
+		return
+	}
+	log.Println("Response:", string(responseBytes))
+	SendToUser(userId, responseBytes)
 }

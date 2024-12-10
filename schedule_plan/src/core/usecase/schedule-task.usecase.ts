@@ -101,7 +101,7 @@ class ScheduleTaskUsecase {
         }
     }
 
-    async getListScheduleTaskByUserId(userId: number): Promise<IScheduleTaskEntity[]> {
+    async getListScheduleTaskByUserId(userId: number): Promise<IScheduleTaskEntity[] | undefined> {
         try {
             const schedulePlan = await schedulePlanService.findSchedulePlanByUserId(userId);
             if (!schedulePlan) {
@@ -111,11 +111,7 @@ class ScheduleTaskUsecase {
 
             const { _id: schedulePlanId, activeTaskBatch, isTaskBatchActive } = schedulePlan;
 
-            if (activeTaskBatch === 0) {
-                return scheduleTaskService.findTop10NewestTask(schedulePlanId);
-            }
-
-            if (isTaskBatchActive) {
+            if (isTaskBatchActive && activeTaskBatch > 0) {
                 const scheduleTaskList = await scheduleTaskService.findByTaskBatch(schedulePlanId, activeTaskBatch);
                 if (scheduleTaskList.length > 0) {
                     return scheduleTaskList;
@@ -125,10 +121,18 @@ class ScheduleTaskUsecase {
                 return scheduleTaskService.findTop10NewestTask(schedulePlanId);
             }
 
-            return [];
+            if (isTaskBatchActive && activeTaskBatch === 0) {
+                return [];
+            }
+
+            if (activeTaskBatch === 0) {
+                return scheduleTaskService.findTop10NewestTask(schedulePlanId);
+            }
+
+            return undefined;
         } catch (error) {
             console.error("Error on getListScheduleTaskByUserId: ", error);
-            return [];
+            return undefined
         }
     }
 

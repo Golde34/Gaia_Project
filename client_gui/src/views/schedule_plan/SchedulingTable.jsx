@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { getScheduleTaskBatchList, getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
 import MessageBox from '../../components/subComponents/MessageBox';
+import { useWebSocket } from '../../kernels/context/WebSocketContext';
 
 function ContentArea() {
     const userId = "1";
@@ -41,6 +42,30 @@ function ContentArea() {
     function openModal() {
         setIsOpen(true);
     }
+    const checkEmptyTaskListAndOpenModal = () => {
+        if (scheduleTasks.length === 0) {
+            setIsOpen(true);
+            dispatch(getScheduleTaskBatchList(userId))
+                .then((batchList) => {
+                    setTaskBatchList(batchList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
+    useEffect(() => {
+        if (!loading && !error && scheduleTasks.length === 0) {
+            setIsOpen(true);
+            dispatch(getScheduleTaskBatchList(userId))
+                .then((batchList) => {
+                    setTaskBatchList(batchList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [loading, error, scheduleTasks]);
 
     const [taskBatchList, setTaskBatchList] = useState({});
 
@@ -70,7 +95,9 @@ function ContentArea() {
                     </Metric>
                     <Card>
                         <div className="flex gap-10 sm:divide-x justify-center mt-10">
-                            <CalendarChart currentDate={currentDate} selectDate={selectDate} />
+                            <CalendarChart currentDate={currentDate} selectDate={selectDate}
+                                checkEmptyScheduleTaskList={checkEmptyTaskListAndOpenModal}
+                            />
                             <div className="w-full sm:px-5">
                                 <Grid numItems={2}>
                                     <Col numColSpan={1}>
@@ -89,6 +116,11 @@ function ContentArea() {
                                         </Flex>
                                     </Col>
                                 </Grid>
+                                {
+                                    scheduleTasks.length === 0 && (
+                                        <Text className="text-center text-white">No task found</Text>
+                                    )
+                                }
                                 {scheduleTasks.map((task, index) => (
                                     <CardItem key={index} task={task} />
                                 ))}
@@ -174,16 +206,38 @@ const CalendarChart = (props) => {
     const userId = "1";
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const { sendMessage } = useWebSocket();
 
     const days = ["S", "M", "T", "W", "T", "F", "S"];
     const [today, setToday] = useState(props.currentDate);
     const [selectDate, setSelectDate] = useState(props.selectDate);
 
+    const { sendMessage, messages, isConnected } = useWebSocket();
+    const [isLoading, setIsLoading] = useState(false);
+    const [result, setResult] = useState(null);
+    const checkEmptyTaskList = props.checkEmptyScheduleTaskList;
+
+    useEffect(() => {
+        const handleMessage = (message) => {
+            const data = JSON.parse(message);
+            if (data.type === 'task_optimized' && data.userId === userId) {
+                setIsLoading(false);
+                setResult('success');
+                checkEmptyTaskList();
+            } else if (data.type === 'task_failed' && data.userId === userId) {
+                setIsLoading(false);
+                setResult('failed');
+            }
+        };
+
+        messages.forEach(handleMessage);
+    }, [messages, userId]);
+
     const handleOptimizeClick = (userId) => {
-        // dispatch(optimizeTaskByUserId(userId, sendMessage))
+        setIsLoading(true);
+        setResult(null);
         dispatch(optimizeTaskByUserId(userId))
-    }
+        sendMessage(JSON.stringify({ type: 'optimize_task', userId }));
+    };
 
     const listCenterButton = [
         { name: 'Add Event', color: 'rose' },
@@ -192,83 +246,96 @@ const CalendarChart = (props) => {
     ]
 
     return (
-        <div className="w-full sm:px-5">
-            <div className="flex justify-between items-center">
-                <h1 className="select-none font-semibold text-white">
-                    {months[today.month()]}, {today.year()}
-                </h1>
-                <div className="flex gap-10 items-center ">
-                    <ChevronLeftIcon
-                        className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                        color='indigo'
-                        onClick={() => {
-                            setToday(today.month(today.month() - 1));
-                        }}
-                    />
-                    <h1
-                        className=" cursor-pointer hover:scale-105 transition-all text-white"
-                        onClick={() => {
-                            setToday(currentDate);
-                        }}
-                    >
-                        Today
-                    </h1>
-                    <ChevronRightIcon
-                        className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                        color='indigo'
-                        onClick={() => {
-                            setToday(today.month(today.month() + 1));
-                        }}
-                    />
-                </div>
-            </div>
-            <div className="grid grid-cols-7 mt-5">
-                {days.map((day, index) => {
-                    return (
-                        <h1
-                            key={index}
-                            className="text-center h-14 grid place-content-center text-white select-none"
-                        >
-                            {day}
-                        </h1>
-                    );
-                })}
-            </div>
-
-            <div className=" grid grid-cols-7 ">
-                {generateDate(today.month(), today.year()).map(
-                    ({ date, currentMonth, today }, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className="p-2 text-center h-14 grid place-content-center border-t text-indigo-600">
-                                <h1
-                                    className={cn(
-                                        currentMonth ? "" : "text-gray-400",
-                                        today
-                                            ? "bg-red-600 text-white"
-                                            : "",
-                                        selectDate
-                                            .toDate()
-                                            .toDateString() ===
-                                            date.toDate().toDateString()
-                                            ? "bg-black text-white"
-                                            : "",
-                                        "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-indigo transition-all cursor-pointer select-none"
-                                    )}
-                                    onClick={() => {
-                                        setSelectDate(date);
-                                    }}>
-                                    {date.date()}
-                                </h1>
-                            </div>
-                        );
-                    }
+        <>
+            <div>
+                {isLoading ? (
+                    <Text>Loading... Optimizing tasks, please wait.</Text>
+                ) : (
+                    <p>
+                        {result === 'success' && <Text>Optimize tasks successfully</Text>}
+                        {result === 'failed' && <Text>Optimize tasks failed</Text>}
+                        {!result && <Text>Optimize tasks</Text>}
+                    </p>
                 )}
             </div>
+            <div className="w-full sm:px-5">
+                <div className="flex justify-between items-center">
+                    <h1 className="select-none font-semibold text-white">
+                        {months[today.month()]}, {today.year()}
+                    </h1>
+                    <div className="flex gap-10 items-center ">
+                        <ChevronLeftIcon
+                            className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                            color='indigo'
+                            onClick={() => {
+                                setToday(today.month(today.month() - 1));
+                            }}
+                        />
+                        <h1
+                            className=" cursor-pointer hover:scale-105 transition-all text-white"
+                            onClick={() => {
+                                setToday(currentDate);
+                            }}
+                        >
+                            Today
+                        </h1>
+                        <ChevronRightIcon
+                            className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                            color='indigo'
+                            onClick={() => {
+                                setToday(today.month(today.month() + 1));
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className="grid grid-cols-7 mt-5">
+                    {days.map((day, index) => {
+                        return (
+                            <h1
+                                key={index}
+                                className="text-center h-14 grid place-content-center text-white select-none"
+                            >
+                                {day}
+                            </h1>
+                        );
+                    })}
+                </div>
 
-            <ListCenterButton listNameButton={listCenterButton} />
-        </div>
+                <div className=" grid grid-cols-7 ">
+                    {generateDate(today.month(), today.year()).map(
+                        ({ date, currentMonth, today }, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className="p-2 text-center h-14 grid place-content-center border-t text-indigo-600">
+                                    <h1
+                                        className={cn(
+                                            currentMonth ? "" : "text-gray-400",
+                                            today
+                                                ? "bg-red-600 text-white"
+                                                : "",
+                                            selectDate
+                                                .toDate()
+                                                .toDateString() ===
+                                                date.toDate().toDateString()
+                                                ? "bg-black text-white"
+                                                : "",
+                                            "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-indigo transition-all cursor-pointer select-none"
+                                        )}
+                                        onClick={() => {
+                                            setSelectDate(date);
+                                        }}>
+                                        {date.date()}
+                                    </h1>
+                                </div>
+                            );
+                        }
+                    )}
+                </div>
+
+                <ListCenterButton listNameButton={listCenterButton} />
+            </div>
+        </>
     )
 }
 

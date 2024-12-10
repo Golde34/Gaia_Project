@@ -107,9 +107,9 @@ class ScheduleTaskService {
         async function saveToDatabase(task: any): Promise<void> {
             listTasks.forEach(async (scheduleTask: any) => {
                 try {
-                    const task = await scheduleTaskRepository.findByScheduleTaskIdAndTaskId(scheduleTask.scheduleTaskId, scheduleTask.originalId); 
+                    const task = await scheduleTaskRepository.findByScheduleTaskIdAndTaskId(scheduleTask.scheduleTaskId, scheduleTask.originalId);
                     if (task) {
-                        const newTask = scheduleTaskMapper.buildOptimizeScheduleTaskMapper(scheduleTask, task); 
+                        const newTask = scheduleTaskMapper.buildOptimizeScheduleTaskMapper(scheduleTask, task);
                         await scheduleTaskRepository.updateScheduleTask(scheduleTask.scheduleTaskId, newTask);
                     }
                 } catch (error) {
@@ -159,7 +159,8 @@ class ScheduleTaskService {
 
     async getScheduleBatchTask(schedulePlanId: string): Promise<any> {
         try {
-            const taskBatchList = await scheduleTaskRepository.findDistinctTaskBatch(schedulePlanId);
+            const taskBatchList = (await scheduleTaskRepository.findDistinctTaskBatch(schedulePlanId))
+                .filter((taskBatch: number) => taskBatch > 0);
             console.log("Task Batch List: ", taskBatchList);
             const result: { [key: string]: IScheduleTaskEntity[] } = {};
             await Promise.all(taskBatchList.map(async (taskBatch: number) => {
