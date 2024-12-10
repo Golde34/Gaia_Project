@@ -12,6 +12,13 @@ export const getScheduleTaskList = (userId) => async (dispatch) => {
     dispatch({ type: SCHEDULE_TASK_LIST_REQUEST, payload: userId });
     try {
         const { data } = await serverRequest(`/schedule-task/${userId}`, HttpMethods.GET, portName.middleware);
+        if (data == null) {
+            dispatch({
+                type: SCHEDULE_TASK_LIST_FAILURE,
+                payload: 'No schedule task found',
+            });
+            return
+        }
         dispatch({ type: SCHEDULE_TASK_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({

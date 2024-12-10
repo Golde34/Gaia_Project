@@ -132,7 +132,7 @@ class ScheduleTaskUsecase {
             return undefined;
         } catch (error) {
             console.error("Error on getListScheduleTaskByUserId: ", error);
-            return undefined;
+            return undefined
         }
     }
 

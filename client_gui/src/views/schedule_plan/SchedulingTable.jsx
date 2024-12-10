@@ -42,6 +42,16 @@ function ContentArea() {
     function openModal() {
         setIsOpen(true);
     }
+    const checkEmptyTaskListAndOpenModal = () => {
+        if (scheduleTasks.length === 0) {
+            setIsOpen(true);
+        }
+    };
+    useEffect(() => {
+        if (!loading && !error && scheduleTasks.length === 0) {
+            setIsOpen(true);
+        }
+    }, [loading, error, scheduleTasks]);
 
     const [taskBatchList, setTaskBatchList] = useState({});
 
@@ -71,7 +81,9 @@ function ContentArea() {
                     </Metric>
                     <Card>
                         <div className="flex gap-10 sm:divide-x justify-center mt-10">
-                            <CalendarChart currentDate={currentDate} selectDate={selectDate} />
+                            <CalendarChart currentDate={currentDate} selectDate={selectDate} 
+                                checkEmptyScheduleTaskList={checkEmptyTaskListAndOpenModal}
+                                />
                             <div className="w-full sm:px-5">
                                 <Grid numItems={2}>
                                     <Col numColSpan={1}>
@@ -90,6 +102,11 @@ function ContentArea() {
                                         </Flex>
                                     </Col>
                                 </Grid>
+                                {
+                                    scheduleTasks.length === 0 && (
+                                        <Text className="text-center text-white">No task found</Text>
+                                    )
+                                }
                                 {scheduleTasks.map((task, index) => (
                                     <CardItem key={index} task={task} />
                                 ))}
@@ -183,6 +200,7 @@ const CalendarChart = (props) => {
     const { sendMessage, messages, isConnected } = useWebSocket();
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState(null);
+    const checkEmptyTaskList = props.checkEmptyScheduleTaskList;
 
     useEffect(() => {
         const handleMessage = (message) => {
@@ -190,6 +208,7 @@ const CalendarChart = (props) => {
             if (data.type === 'task_optimized' && data.userId === userId) {
                 setIsLoading(false);
                 setResult('success');
+                checkEmptyTaskList();
             } else if (data.type === 'task_failed' && data.userId === userId) {
                 setIsLoading(false);
                 setResult('failed');
@@ -214,7 +233,7 @@ const CalendarChart = (props) => {
 
     return (
         <>
-            {/* <div>
+            <div>
                 {isLoading ? (
                     <Text>Loading... Optimizing tasks, please wait.</Text>
                 ) : (
@@ -224,7 +243,7 @@ const CalendarChart = (props) => {
                         {!result && <Text>Optimize tasks</Text>}
                     </p>
                 )}
-            </div> */}
+            </div>
             <div className="w-full sm:px-5">
                 <div className="flex justify-between items-center">
                     <h1 className="select-none font-semibold text-white">

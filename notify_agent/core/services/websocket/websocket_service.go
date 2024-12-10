@@ -77,6 +77,7 @@ func(s *WebSocketService) HandleWebSocket(w http.ResponseWriter, r *http.Request
 }
 
 func SendToUser(userId string, message []byte) {
+	log.Println("Send message to user:", userId)
 	userConnections.Lock()
 	defer userConnections.Unlock()
 
@@ -109,6 +110,6 @@ func (s *WebSocketService) HandleOptimizeTask(userId string, status bool) {
 		log.Println("Error marshaling response:", err)
 		return
 	}
-	
+	log.Println("Response:", string(responseBytes))
 	SendToUser(userId, responseBytes)
 }

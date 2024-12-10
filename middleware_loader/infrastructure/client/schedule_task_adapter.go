@@ -27,6 +27,14 @@ func (adapter *ScheduleTaskAdapter) GetScheduleTaskListByUserId(userId string) (
 	if !ok {
 		return []response_dtos.ScheduleTaskResponseDTO{}, nil
 	}
+	scheduleTaskList, exists := bodyResultMap["scheduleTaskList"]
+    if !exists || scheduleTaskList == nil {
+        return nil, nil
+    }
+	if taskList, ok := scheduleTaskList.([]interface{}); ok && len(taskList) == 0 {
+        return []response_dtos.ScheduleTaskResponseDTO{}, nil
+    }
+
 	for _, scheduleTaskElement := range bodyResultMap["scheduleTaskList"].([]interface{}) {
 		scheduleTask := mapper_response.ReturnScheduleTaskObjectMapper(scheduleTaskElement.(map[string]interface{}))
 		scheduleTasks = append(scheduleTasks, *scheduleTask)
