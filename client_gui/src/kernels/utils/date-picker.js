@@ -17,3 +17,14 @@ export const convertDateToString = (date) => {
     // Format date to string dd/MM/yyyy HH:mm:ss
     return date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 }
+
+export const convertISODateToString = (isoDate) => {
+
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0, nên cần +1
+    const day = date.getDate().toString().padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+}
