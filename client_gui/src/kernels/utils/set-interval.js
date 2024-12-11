@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export function checkLocalStorage(interval) {
     const lastAccessTime = localStorage.getItem('lastAccessTime');
 
