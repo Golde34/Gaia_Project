@@ -6,13 +6,15 @@ import ListCenterButton from '../../components/subComponents/ListCenterButton';
 import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
 import dayjs from 'dayjs';
 import cn from '../../kernels/utils/cn';
-import { Button, Card, Col, Dialog, DialogPanel, Flex, Grid, Metric, Text, TextInput } from '@tremor/react';
+import { Badge, BadgeDelta, Button, Card, Col, Dialog, DialogPanel, Flex, Grid, List, ListItem, Metric, Text, TextInput } from '@tremor/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { getScheduleTaskBatchList, getScheduleTaskList } from '../../api/store/actions/schedule_plan/schedule-task.action';
 import MessageBox from '../../components/subComponents/MessageBox';
 import { useWebSocket } from '../../kernels/context/WebSocketContext';
+import { priorityColor, statusColor } from '../../kernels/utils/field-utils';
+import { convertDateToString, convertISODateToString } from '../../kernels/utils/date-picker';
 
 function ContentArea() {
     const userId = "1";
@@ -135,7 +137,7 @@ function ContentArea() {
                         static={true}
                         className="z-[100]"
                     >
-                        <DialogPanel className="w-full max-w-5xl">
+                        <DialogPanel className="w-full max-w-7xl">
                             <div className="absolute right-0 top-0 pr-3 pt-3">
                                 <button
                                     type="button"
@@ -158,7 +160,6 @@ function ContentArea() {
                                             return <p>No task batch available</p>;
                                         }
 
-                                        // Xác định cách căn chỉnh theo số lượng batch
                                         let justifyContentClass = '';
                                         if (batchCount === 1) {
                                             justifyContentClass = 'justify-center';
@@ -169,19 +170,69 @@ function ContentArea() {
                                         }
 
                                         return (
-                                            <div className={`flex ${justifyContentClass} gap-8`}>
-                                                {batchNumbers.map((batchNumber) => {
-                                                    const tasks = taskBatchList[batchNumber] || [];
-                                                    return (
-                                                        <div key={batchNumber} className="flex flex-col gap-4">
-                                                            <h2 className="font-semibold mb-2 text-center">Batch {batchNumber}</h2>
-                                                            {tasks.map((task, i) => (
-                                                                <CardItem key={i} task={task} />
-                                                            ))}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
+                                            <>
+                                                <div>
+                                                    <p className="text-center text-gray-600 dark:text-gray-300 mt-2 mb-5 text-lg">
+                                                        Select a batch to perform the tasks you love first!
+                                                    </p>
+                                                </div>
+
+                                                <div className={`flex ${justifyContentClass} gap-8`}>
+                                                    {batchNumbers.map((batchNumber) => {
+                                                        const tasks = taskBatchList[batchNumber] || [];
+                                                        return (
+                                                            <>
+                                                                <div key={batchNumber} className="flex flex-col items-center gap-6 p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                                                    <h2 className="text-xl font-bold text-gray-800 dark:text-white text-center">
+                                                                        Batch {batchNumber}
+                                                                    </h2>
+                                                                    <p className="text-center text-gray-600 dark:text-gray-300 mt-2">
+                                                                        Select a batch to perform the tasks you love first!
+                                                                    </p>
+                                                                    <div className="w-full bg-gray-50 dark:bg-gray-900 p-6 rounded-md border border-gray-300 dark:border-gray-700 h-64 flex flex-col justify-between overflow-y-auto">
+                                                                        <ul className="mt-4 space-y-3">
+                                                                            {tasks.map((task, i) => (
+                                                                                <li key={i} className="flex flex-col gap-2">
+                                                                                    <div className="flex items-center space-x-3">
+                                                                                        <CheckCircleIcon
+                                                                                            className="w-5 h-5 text-green-500 dark:text-green-400"
+                                                                                            aria-hidden="true"
+                                                                                        />
+                                                                                        <span className="text-gray-700 dark:text-gray-200 text-sm font-medium truncate w-full">
+                                                                                            {task.title}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                                                                                        <span className="flex items-center space-x-2">
+                                                                                            Priority:
+                                                                                            {task.priority.map((priority, index) => (
+                                                                                                <Badge key={`${task.id}-${priority}-${index}`} className="ms-4 me-1 mt-1" color={priorityColor(priority)}>
+                                                                                                    {priority}
+                                                                                                </Badge>
+                                                                                            ))}
+                                                                                        </span>
+                                                                                        <span className='flex items-center space-x-2'>
+                                                                                            <p>Deadline: {convertISODateToString(task.deadline)}</p>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <hr aria-hidden="true" className="my-2 border-t border-gray-300 dark:border-gray-700" />
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                    <button
+                                                                        className="mt-4 px-6 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
+                                                                        onClick={() => console.log(`Batch ${batchNumber} selected`)}
+                                                                    >
+                                                                        Select This Batch
+                                                                    </button>
+                                                                </div>
+
+                                                            </>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </>
                                         );
                                     })()}
                                 </div>
