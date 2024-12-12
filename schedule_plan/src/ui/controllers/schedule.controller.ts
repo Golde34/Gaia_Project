@@ -53,6 +53,16 @@ class ScheduleController {
             next(error);
         }
     } 
+
+    async chooseScheduleBatchTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const batchNumber = req.body.batchNumber;
+            const userId = req.body.userId;
+            return await scheduleTaskUsecase.chooseScheduleBatchTask(userId, batchNumber);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export const scheduleController = new ScheduleController();

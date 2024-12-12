@@ -28,8 +28,8 @@ func (s *ScheduleTaskService) GetTaskBatchListByUserId(userId string) (response_
 	return taskBatches, nil
 }
 
-func (s *ScheduleTaskService) ChooseTaskBatch(batchNumber float64) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
-	taskBatch, err := client.IScheduleTaskAdapter(&adapter.ScheduleTaskAdapter{}).ChooseTaskBatch(batchNumber)
+func (s *ScheduleTaskService) ChooseTaskBatch(userId, batchNumber float64) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
+	taskBatch, err := client.IScheduleTaskAdapter(&adapter.ScheduleTaskAdapter{}).ChooseTaskBatch(userId, batchNumber)
 	if err != nil {
 		return response_dtos.ScheduleTaskBatchListResponseDTO{}, err
 	}

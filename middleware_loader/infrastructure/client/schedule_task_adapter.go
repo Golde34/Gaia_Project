@@ -65,10 +65,11 @@ func (adapter *ScheduleTaskAdapter) GetTaskBatchListByUserId(userId string) (res
 	return dto, nil
 }
 
-func (adapter *ScheduleTaskAdapter) ChooseTaskBatch(batchNumber float64) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
+func (adapter *ScheduleTaskAdapter) ChooseTaskBatch(userId, batchNumber float64) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
 	chooseTaskBatchURL := base.SchedulePlanServiceURL + "/schedule-plan/schedule/choose-schedule-batch-task"
 	headers := utils.BuildDefaultHeaders()
 	body := map[string]interface{}{
+		"userId": userId,
 		"batchNumber": batchNumber,
 	}
 

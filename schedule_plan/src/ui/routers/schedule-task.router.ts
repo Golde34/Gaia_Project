@@ -27,3 +27,14 @@ scheduleTaskRouter.get("/get-schedule-batch-task/:userId",
         }
     }
 )
+
+scheduleTaskRouter.post("/choose-schedule-batch-task", 
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const scheduleTaskResult = await scheduleTaskControllerImpl.chooseScheduleBatchTask(req, next);
+            return returnResult(scheduleTaskResult, "FAIL", res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+)

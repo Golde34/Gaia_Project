@@ -6,7 +6,7 @@ import { updateUser, updateUserSetting } from '../../api/store/actions/auth_serv
 import { createRole } from '../../api/store/actions/auth_service/role.actions';
 import { registerTaskConfig } from '../../api/store/actions/work_optimization/task-registration.actions';
 import { createNote } from '../../api/store/actions/task_manager/note.actions';
-import { optimizeTaskByUserId } from '../../api/store/actions/work_optimization/optimize-task.actions';
+import { chooseTaskBatch } from '../../api/store/actions/schedule_plan/schedule-task.action';
 
 export const useCreateGroupTaskDispatch = () => {
     const dispatch = useDispatch();
@@ -98,11 +98,11 @@ export const useUpdateUserSettingDispatch = () => {
     return updateUserSettingDispatch;
 }
 
-export const useChooseTaskBatch = () => {
+export const useChooseTaskBatchDispatch = () => {
     const dispatch = useDispatch();
 
-    const chooseTaskBatchDispatch = (batchNumber) => {
-        dispatch(optimizeTaskByUserId(batchNumber));
+    const chooseTaskBatchDispatch = (userId, batchNumber) => {
+        dispatch(chooseTaskBatch(userId, batchNumber));
     }
 
     return chooseTaskBatchDispatch;

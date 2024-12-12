@@ -47,7 +47,8 @@ func GetTaskBatchListByUserId(w http.ResponseWriter, r *http.Request, scheduleTa
 func ChooseTaskBatch(w http.ResponseWriter, r *http.Request, scheduleTaskService *services.ScheduleTaskService) {
 	var body map[string]interface{}
 	batchNumber := body["batchNumber"].(float64)
-	schduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(batchNumber)
+	userId := body["userId"].(float64)
+	schduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(userId, batchNumber)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

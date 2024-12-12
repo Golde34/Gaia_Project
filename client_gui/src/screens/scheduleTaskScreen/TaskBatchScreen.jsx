@@ -2,8 +2,10 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import { convertISODateToString } from "../../kernels/utils/date-picker";
 import { priorityColor } from "../../kernels/utils/field-utils";
 import { Badge, Col, Grid } from "@tremor/react";
+import { useChooseTaskBatchDispatch } from '../../kernels/utils/write-dialog-api-requests';
 
 const TaskBatchScreen = (props) => {
+    const userId = "1";
     const { taskBatchList } = props;
     const batchNumbers = Object.keys(taskBatchList);
     const batchCount = batchNumbers.length;
@@ -23,7 +25,7 @@ const TaskBatchScreen = (props) => {
 
     const chooseTaskBatch = useChooseTaskBatchDispatch();
     const setObjectTaskBatch = (batchNumber) => {
-        chooseTaskBatch(batchNumber);
+        chooseTaskBatch(userId, batchNumber);
         window.location.reload();
     }
 

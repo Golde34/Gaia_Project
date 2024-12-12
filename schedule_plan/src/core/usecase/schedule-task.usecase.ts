@@ -151,6 +151,26 @@ class ScheduleTaskUsecase {
             return undefined;
         }
     }
+
+    async chooseScheduleBatchTask(userId: number, batchNumber: number): Promise<IResponse | undefined> {
+        try {
+            const schedulePlan = await schedulePlanService.findSchedulePlanByUserId(userId);
+            if (!schedulePlan) {
+                console.error(`Cannot find schedule plan by user id: ${userId}`);
+                throw new Error(`Cannot find schedule plan by user id: ${userId}`);
+            }
+            schedulePlan.activeTaskBatch = batchNumber;
+            await schedulePlanService.updateSchedulePlan(schedulePlan._id, schedulePlan);
+
+            const taskBatch = await scheduleTaskService.getScheduleTaskByBatchNumber(schedulePlan._id, batchNumber);
+            return msg200({
+                scheduleTaskBatch: taskBatch
+            })
+        } catch (error) {
+            console.error("Error on chooseScheduleBatchTask: ", error);
+            return msg400("Cannot choose schedule batch task!");
+        }
+    }
 }
 
 export const scheduleTaskUsecase = new ScheduleTaskUsecase();

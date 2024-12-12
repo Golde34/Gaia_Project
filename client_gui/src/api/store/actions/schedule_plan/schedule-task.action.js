@@ -52,10 +52,11 @@ export const getScheduleTaskBatchList = (userId) => {
 }
 
 
-export const chooseTaskBatch = (batchNumber) => async (dispatch) => {
+export const chooseTaskBatch = (userId, batchNumber) => async (dispatch) => {
     dispatch({ type: CHOOSE_TASK_BATCH_REQUEST, payload: batchNumber });
     try {
         const body = {
+            userId: userId,
             batchNumber: batchNumber
         }
         const { data } = await serverRequest(`/schedule-task/choose-task-batch/`, HttpMethods.POST, portName.middleware, body);
