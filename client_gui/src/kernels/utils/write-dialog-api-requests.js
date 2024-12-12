@@ -97,3 +97,13 @@ export const useUpdateUserSettingDispatch = () => {
 
     return updateUserSettingDispatch;
 }
+
+export const useChooseTaskBatch = () => {
+    const dispatch = useDispatch();
+
+    const chooseTaskBatchDispatch = (batchNumber) => {
+        dispatch(optimizeTaskByUserId(batchNumber));
+    }
+
+    return chooseTaskBatchDispatch;
+}

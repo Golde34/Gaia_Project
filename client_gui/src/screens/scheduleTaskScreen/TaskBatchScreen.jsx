@@ -21,6 +21,12 @@ const TaskBatchScreen = (props) => {
         justifyContentClass = 'justify-between';
     }
 
+    const chooseTaskBatch = useChooseTaskBatchDispatch();
+    const setObjectTaskBatch = (batchNumber) => {
+        chooseTaskBatch(batchNumber);
+        window.location.reload();
+    }
+
     return (
         <>
             <form>
@@ -39,7 +45,7 @@ const TaskBatchScreen = (props) => {
                         return (
                             <>
 
-                                <div key={batchNumber} className="flex flex-col items-center gap-6 p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                <div key={"batch"+{batchNumber}} className="flex flex-col items-center gap-6 p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                                     <h2 className="text-xl font-bold text-gray-800 dark:text-white text-center">
                                         Batch {batchNumber}
                                     </h2>
@@ -87,7 +93,7 @@ const TaskBatchScreen = (props) => {
                                     </div>
                                     <button
                                         className="mt-4 px-6 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
-                                        onClick={() => console.log(`Batch ${batchNumber} selected`)}
+                                        onClick={() => setObjectTaskBatch(batchNumber)}
                                     >
                                         Select This Batch
                                     </button>
