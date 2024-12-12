@@ -1,5 +1,6 @@
 import { HttpMethods, serverRequest } from "../../../baseAPI";
 import {
+    CHOOSE_TASK_BATCH_FAILURE, CHOOSE_TASK_BATCH_REQUEST, CHOOSE_TASK_BATCH_SUCCESS,
     SCHEDULE_TASK_LIST_FAILURE, SCHEDULE_TASK_LIST_REQUEST, SCHEDULE_TASK_LIST_SUCCESS,
     TASK_BATCH_LIST_FAILURE, TASK_BATCH_LIST_REQUEST, TASK_BATCH_LIST_SUCCESS
 } from "../../constants/schedule_plan/schedule-task.constants"
@@ -48,4 +49,25 @@ export const getScheduleTaskBatchList = (userId) => {
             throw error;
         }
     }
+}
+
+
+export const chooseTaskBatch = (userId, batchNumber) => async (dispatch) => {
+    dispatch({ type: CHOOSE_TASK_BATCH_REQUEST, payload: batchNumber });
+    try {
+        const body = {
+            userId: userId,
+            batchNumber: batchNumber
+        }
+        const { data } = await serverRequest(`/schedule-task/choose-task-batch`, HttpMethods.POST, portName.middleware, body);
+        dispatch({ type: CHOOSE_TASK_BATCH_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({
+            type: CHOOSE_TASK_BATCH_FAILURE,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+
 }

@@ -35,7 +35,7 @@ import {
     noteListReducer, noteLockReducer, noteUnlockReducer, noteUpdateReducer
 } from "./task_manager/note.reducers";
 import { optimizeTaskByUserReducer } from "./work_optimization/optimize-task.reducers";
-import { scheduleTaskListReducer, taskBatchListReducer } from "./schedule_plan/schedule-task.reducers";
+import { chooseTaskBatchReducer, scheduleTaskListReducer, taskBatchListReducer } from "./schedule_plan/schedule-task.reducers";
 
 export const reducer = combineReducers({
     // auth service
@@ -90,6 +90,7 @@ export const reducer = combineReducers({
     // schedule task
     scheduleTaskList: scheduleTaskListReducer,
     taskBatchList: taskBatchListReducer,
+    chooseTaskBatch: chooseTaskBatchReducer,
     // middleware loader
     microserviceList: microserviceListReducer,
     // work optimization 

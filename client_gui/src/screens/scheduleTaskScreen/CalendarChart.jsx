@@ -58,11 +58,11 @@ const CalendarChart = (props) => {
                 {isLoading ? (
                     <Text>Loading... Optimizing tasks, please wait.</Text>
                 ) : (
-                    <p>
+                    <>
                         {result === 'success' && <Text>Optimize tasks successfully</Text>}
                         {result === 'failed' && <Text>Optimize tasks failed</Text>}
                         {!result && <Text>Optimize tasks</Text>}
-                    </p>
+                    </>
                 )}
             </div>
             <div className="w-full sm:px-5">

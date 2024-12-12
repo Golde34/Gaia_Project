@@ -3,7 +3,9 @@ package controller_services
 import (
 	"encoding/json"
 	"log"
+	mapper "middleware_loader/core/port/mapper/request"
 	services "middleware_loader/core/services/schedule_plan"
+	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -38,6 +40,30 @@ func GetTaskBatchListByUserId(w http.ResponseWriter, r *http.Request, scheduleTa
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(taskBatchList); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+}
+
+func ChooseTaskBatch(w http.ResponseWriter, r *http.Request, scheduleTaskService *services.ScheduleTaskService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	userId, batchNumber := mapper.ChooseTaskBatch(body)
+		
+	schduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(userId, batchNumber)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(schduleTaskBatch); err != nil {
 		log.Printf("Error encoding response: %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
