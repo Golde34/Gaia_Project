@@ -2,6 +2,7 @@ package client_adapter
 
 import (
 	"encoding/json"
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	mapper_response "middleware_loader/core/port/mapper/response"
 	"middleware_loader/infrastructure/client/base"
@@ -68,16 +69,10 @@ func (adapter *ScheduleTaskAdapter) GetTaskBatchListByUserId(userId string) (res
 func (adapter *ScheduleTaskAdapter) ChooseTaskBatch(userId, batchNumber float64) (response_dtos.ScheduleTaskBatchListResponseDTO, error) {
 	chooseTaskBatchURL := base.SchedulePlanServiceURL + "/schedule-plan/schedule/choose-schedule-batch-task"
 	headers := utils.BuildDefaultHeaders()
-	body := map[string]interface{}{
-		"userId": userId,
-		"batchNumber": batchNumber,
-	}
 
-	request, err := json.Marshal(body)
-	if err != nil {
-		return response_dtos.ScheduleTaskBatchListResponseDTO{}, err
-	}
-
+	request := request_dtos.NewChooseTaskBatchDTO()
+	request.MapperToModel(userId, batchNumber)
+	
 	bodyResult, err := utils.BaseAPI(chooseTaskBatchURL, "POST", request, headers)
 	if err != nil {
 		return response_dtos.ScheduleTaskBatchListResponseDTO{}, err
