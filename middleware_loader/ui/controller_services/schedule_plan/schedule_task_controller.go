@@ -43,3 +43,20 @@ func GetTaskBatchListByUserId(w http.ResponseWriter, r *http.Request, scheduleTa
 		return
 	}
 }
+
+func ChooseTaskBatch(w http.ResponseWriter, r *http.Request, scheduleTaskService *services.ScheduleTaskService) {
+	var body map[string]interface{}
+	batchNumber := body["batchNumber"].(float64)
+	schduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(batchNumber)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(schduleTaskBatch); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+}

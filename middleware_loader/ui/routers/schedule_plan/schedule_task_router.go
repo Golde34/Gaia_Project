@@ -20,6 +20,9 @@ func NewScheduleTaskRouter(scheduleTaskService *services.ScheduleTaskService, r 
 		r.Get("/task-batch-list/{userId}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetTaskBatchListByUserId(w, r, scheduleTaskService)
 		})
+		r.Post("/choose-task-batch", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.ChooseTaskBatch(w, r, scheduleTaskService)
+		})
 	})
 	return &ScheduleTaskRouter{
 		ScheduleTaskService: scheduleTaskService,
