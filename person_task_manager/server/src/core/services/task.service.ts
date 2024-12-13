@@ -19,6 +19,7 @@ import { projectStore } from "../port/store/project.store";
 import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
 import { ITaskEntity } from "../domain/entities/task.entity";
 import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
+import { schedulePlanAdapter } from "../../infrastructure/client/schedule-plan.adapter";
 
 class TaskService {
     constructor(
@@ -347,6 +348,20 @@ class TaskService {
                 message: taskTable as any,
             });
         }
+    }
+
+    async getTaskDetail(taskId: string | null, scheduleTaskId: string | null): Promise<any> {
+        if (taskId !== null) {
+            const task = await taskStore.findTaskById(taskId);
+            const scheduleTask = await schedulePlanAdapter.getScheduleTaskByTaskId(taskId, null);
+            return { task, scheduleTask };
+        }
+        if (scheduleTaskId !== null) {
+            const scheduleTask = await schedulePlanAdapter.getScheduleTaskByTaskId(null, scheduleTaskId);
+            const task = await taskStore.findTaskById(scheduleTask.taskId);
+            return { task, scheduleTask };
+        }
+        return null;
     }
 
     // add subTask

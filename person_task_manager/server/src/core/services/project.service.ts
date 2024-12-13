@@ -256,6 +256,17 @@ class ProjectService {
             return [];
         }
     }
+
+    async findProjectByGroupTaskId(groupTaskId: string): Promise<IProjectEntity | undefined> {
+        try {
+            const project = await projectStore.findOneProjectByGroupTaskId(groupTaskId);
+            if (project === null) return undefined;
+            return project;
+        } catch (err: any) {
+            console.log("Could not find project by group task id: ", err);
+            return undefined;
+        }
+    }
 }
 
 export const projectService = new ProjectService();

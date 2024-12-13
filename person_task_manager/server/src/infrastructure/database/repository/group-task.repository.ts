@@ -104,6 +104,10 @@ class GroupTaskRepository {
         const groupTask = await GroupTaskEntity.findOne({ _id: groupTaskId });
         return groupTask?.tasks.includes(taskId) ? true : false;
     }
+
+    async findGroupTaskByTaskId(taskId: string): Promise<IGroupTaskEntity | null> {
+        return await GroupTaskEntity.findOne({ tasks: taskId });
+    }
 }
 
 export const groupTaskRepository = new GroupTaskRepository();

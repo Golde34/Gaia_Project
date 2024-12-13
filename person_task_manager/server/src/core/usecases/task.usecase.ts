@@ -1,7 +1,7 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
-import { TaskRequestDto } from "../domain/dtos/task.dto";
-import { IsPrivateRoute } from "../domain/enums/enums";
+import { TaskDetailRequestDTO, TaskRequestDto } from "../domain/dtos/task.dto";
+import { IsPrivateRoute, TaskDetail } from "../domain/enums/enums";
 import { taskService } from "../services/task.service";
 import { buildCommonStringValue } from "../../kernel/util/string-utils";
 import { GetGroupTaskProject } from "../domain/dtos/request_dtos/get-group-task-project.dto";
@@ -46,7 +46,7 @@ class TaskUsecase {
                     groupTaskName: closestGroupTask.title,
                     projectId: closestProject._id,
                     projectName: closestProject.name
-                } 
+                }
                 return msg200(mapGetGroupTaskProject);
             }
             return msg400('Task not existed in group task');
@@ -65,14 +65,38 @@ class TaskUsecase {
         }
     }
 
-    // async getTaskDetail(request: any): Promise<IResponse> {
-    //     try {
-    //         const projects = await projectService.findProjectsByUserId(request.userId);
-    //         const groupTask
-    //     } catch (err: any) {
-    //         return msg400(err.message.toString());
-    //     }
-    // }
+    async getTaskDetail(request: TaskDetailRequestDTO): Promise<IResponse> {
+        try {
+            let taskDetail;
+            let groupTask;
+            let project;
+
+            if (request.taskDetailType === TaskDetail.TASK_MANGER) {
+                if (!request.taskId) return msg400('Task id is required');
+                taskDetail = await taskService.getTaskDetail(request.taskId, null);
+                if (!taskDetail) return msg400('Task detail not found');
+                groupTask = await groupTaskService.getGroupTaskObjectByTaskId(request.taskId);
+            } else if (request.taskDetailType === TaskDetail.SCHEDULE_TASK) {
+                if (!request.scheduleTaskId) return msg400('Schedule task id is required');
+                taskDetail = await taskService.getTaskDetail(null, request.scheduleTaskId);
+                if (!taskDetail) return msg400('Task detail not found');
+                groupTask = await groupTaskService.getGroupTaskObjectByTaskId(taskDetail.taskId);
+            } else {
+                return msg400('Invalid task detail type');
+            }
+
+            if (!groupTask) return msg400('Group task not found');
+            project = await projectService.findProjectByGroupTaskId(groupTask._id);
+            if (!project) return msg400('Project not found');
+            if (project.ownerId !== request.userId) return msg400('Unauthorized');
+
+            const response = { taskDetail, groupTask, project };
+            return msg200({ response });
+
+        } catch (err: any) {
+            return msg400(err.message.toString());
+        }
+    }
 }
 
 export const taskUsecase = new TaskUsecase();

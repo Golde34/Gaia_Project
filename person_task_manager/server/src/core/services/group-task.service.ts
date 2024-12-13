@@ -312,6 +312,19 @@ class GroupTaskService {
             return undefined;
         }
     }
+
+    async getGroupTaskObjectByTaskId(taskId: string): Promise<IGroupTaskEntity | undefined> {
+        try {
+            const groupTask = await groupTaskStore.findGroupTasksByTaskId(taskId);
+            if (groupTask === null || groupTask === undefined) {
+                return undefined;
+            }
+            return groupTask;
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return undefined;
+        }
+    }
 }
 
 export const groupTaskService = new GroupTaskService();
