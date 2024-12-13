@@ -67,13 +67,16 @@ class TaskRepository {
             .updateOne({ _id: taskId }, { activeStatus: ActiveStatus.active });
     }
 
-    // business logic - get top tasks which has the highest rank base on prority, status and activeStatus
     async getTopTasks(limit: number): Promise<ITaskEntity[] | null> {
         return await TaskEntity.find({ 
             priority: Priority.star,
             status: { $in: ['TODO', 'IN_PROGRESS', 'CUSTOM'] },
             activeStatus: ActiveStatus.active
         }).limit(limit);
+    }
+
+    async updateGroupTaskId(taskId: string, groupTaskId: string): Promise<UpdateWriteOpResult> {
+        return await TaskEntity.updateOne({ _id: taskId }, { groupTaskId: groupTaskId });
     }
 }
 

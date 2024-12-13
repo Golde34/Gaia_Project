@@ -171,6 +171,16 @@ class ScheduleTaskUsecase {
             return msg400("Cannot choose schedule batch task!");
         }
     }
+
+    async getScheduleTask(id: string): Promise<IResponse | undefined> {
+        try {
+            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(id);
+            return msg200({ scheduleTask });
+        } catch (error) {
+            console.error("Error on getScheduleTask: ", error);
+            return msg400("Cannot get schedule task!");
+        }
+    }
 }
 
 export const scheduleTaskUsecase = new ScheduleTaskUsecase();

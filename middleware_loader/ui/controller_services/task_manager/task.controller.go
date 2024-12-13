@@ -1,6 +1,7 @@
 package controller_services
 
 import (
+	"encoding/json"
 	"log"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	mapper "middleware_loader/core/port/mapper/request"
@@ -156,4 +157,28 @@ func Enable(w http.ResponseWriter, r *http.Request, taskService *services.TaskSe
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("mutation", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
+}
+
+func GetTaskDetail(w http.ResponseWriter, r *http.Request, taskService *services.TaskService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	input := mapper.GetTaskDetailRequestDTOMapper(body)
+
+	taskDetail, err := services.NewTaskService().GetTaskDetail(input)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(taskDetail); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 }

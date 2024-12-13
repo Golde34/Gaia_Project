@@ -66,3 +66,21 @@ func NewGetProjectGroupTaskIdInputDTO() *GetProjectGroupTaskIdInputDTO {
 func (in *GetProjectGroupTaskIdInputDTO) MapperToModel(input model.ProjectGroupTaskIDInput) {
 	mapper.AutoMapper(&input, in)
 }
+
+type GetTaskDetailInputDTO struct {
+	UserId         float64 `json:"userId"`
+	TaskId         string  `json:"taskId"`
+	ScheduleTaskId string  `json:"scheduleTaskId"`
+	TaskDetailType string `json:"taskDetailType"`
+}
+
+func NewGetTaskDetailInputDTO() *GetTaskDetailInputDTO {
+	return &GetTaskDetailInputDTO{}
+}
+
+func (in *GetTaskDetailInputDTO) MapperToModel(taskId, scheduleTaskId, taskDetailType string, userId float64) {
+	in.UserId = userId
+	in.TaskId = taskId
+	in.ScheduleTaskId = scheduleTaskId
+	in.TaskDetailType = taskDetailType
+}

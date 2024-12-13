@@ -26,6 +26,7 @@ class GroupTaskService {
     async createGroupTaskToProject(groupTask: any, projectId: string): Promise<IResponse> {
         try {
             groupTask = await this.checkDefaultGroupTask(groupTask);
+            groupTask.projectId = projectId;
 
             const createGroupTask = await groupTaskStore.createGroupTask(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
@@ -58,6 +59,7 @@ class GroupTaskService {
     async createGroupTaskFromTask(groupTask: any, projectId: string): Promise<string | undefined> {
         try {
             groupTask = await this.checkDefaultGroupTask(groupTask);
+            groupTask.projectId = projectId;
 
             const createGroupTask = await groupTaskStore.createGroupTask(groupTask);
             const groupTaskId = (createGroupTask as any)._id;
@@ -307,6 +309,19 @@ class GroupTaskService {
 
             return foundedGroupTask;
         } catch (error: any) {
+            return undefined;
+        }
+    }
+
+    async getGroupTaskObjectByTaskId(taskId: string): Promise<IGroupTaskEntity | undefined> {
+        try {
+            const groupTask = await groupTaskStore.findGroupTasksByTaskId(taskId);
+            if (groupTask === null || groupTask === undefined) {
+                return undefined;
+            }
+            return groupTask;
+        } catch (error: any) {
+            console.log(error.message.toString());
             return undefined;
         }
     }

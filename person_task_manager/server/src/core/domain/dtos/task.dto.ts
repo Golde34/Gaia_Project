@@ -72,3 +72,15 @@ export class UpdateTaskInDialogDTO {
     @IsString()
     status!: string;
 }
+
+export class TaskDetailRequestDTO {
+    userId!: number;
+    @IsOptional()
+    @IsString()
+    taskId?: string;
+    @IsOptional()
+    @IsString()
+    scheduleTaskId?: string;
+    @IsString()
+    taskDetailType!: string;
+}

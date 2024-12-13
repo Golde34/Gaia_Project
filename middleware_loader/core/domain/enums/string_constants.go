@@ -22,3 +22,8 @@ var (
 	OPTIONS = "OPTIONS"
 	HEAD = "HEAD"
 )
+
+var (
+	TaskManagerDetail = "Task Manager"
+	SchedulePlanDetail = "Schedule Plan"
+)

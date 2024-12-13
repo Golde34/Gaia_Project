@@ -3,9 +3,9 @@ package routers
 import (
 	"middleware_loader/core/domain/enums"
 	"middleware_loader/core/middleware"
-	"middleware_loader/core/services/task_manager"
+	services "middleware_loader/core/services/task_manager"
 	database_mongo "middleware_loader/kernel/database/mongo"
-	"middleware_loader/ui/controller_services/task_manager"
+	controller_services "middleware_loader/ui/controller_services/task_manager"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -53,6 +53,9 @@ func NewTaskRouter(taskService *services.TaskService, db database_mongo.Database
 		})
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.Enable(w, r, taskService)
+		})
+		r.Post("/{id}/detail", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetTaskDetail(w, r, taskService)
 		})
 	})
 	return &TaskRouter{

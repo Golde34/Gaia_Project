@@ -27,7 +27,7 @@ class ScheduleController {
 
     async getScheduleTaskList(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const userId = parseInt(req.params.id, 10);
+            const userId = parseInt(req.params.userId, 10);
             const scheduleTaskList = await scheduleTaskUsecase.getListScheduleTaskByUserId(userId);
             return msg200({
                 scheduleTaskList
@@ -59,6 +59,15 @@ class ScheduleController {
             const batchNumber = req.body.batchNumber;
             const userId = req.body.userId;
             return await scheduleTaskUsecase.chooseScheduleBatchTask(userId, batchNumber);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getScheduleTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const id = req.params.id;
+            return await scheduleTaskUsecase.getScheduleTask(id);
         } catch (error) {
             next(error);
         }

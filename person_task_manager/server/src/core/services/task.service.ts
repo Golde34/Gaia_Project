@@ -19,6 +19,7 @@ import { projectStore } from "../port/store/project.store";
 import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
 import { ITaskEntity } from "../domain/entities/task.entity";
 import { IGroupTaskEntity } from "../domain/entities/group-task.entity";
+import { schedulePlanAdapter } from "../../infrastructure/client/schedule-plan.adapter";
 
 class TaskService {
     constructor(
@@ -27,7 +28,7 @@ class TaskService {
         public taskCache = CacheSingleton.getInstance().getCache()
     ) { }
 
-    async createTaskInGroupTask(task: any): Promise<ITaskEntity> {
+    async createTaskInGroupTask(task: any, groupTaskId: string): Promise<ITaskEntity> {
         // check existed user tag
         const userTag = await userTagStore.findTagByTagId(task.tag);
         if (userTag === null) {
@@ -38,6 +39,7 @@ class TaskService {
         // create new task
         task.createdAt = new Date();
         task.updatedAt = new Date();
+        task.groupTaskId = groupTaskId;
         if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
         const createTask = await taskStore.createTask(task);
         this.clearTaskCache(task.groupTaskId);
@@ -262,7 +264,7 @@ class TaskService {
         try {
             await groupTaskStore.pullTaskFromSpecifiedGroupTask(oldGroupTaskId, taskId);
             await groupTaskStore.pushTaskToGroupTask(newGroupTaskId, taskId);
-
+            await taskStore.updateGroupTaskId(taskId, newGroupTaskId);
             return msg200({
                 message: 'Move task successfully'
             });
@@ -346,6 +348,20 @@ class TaskService {
                 message: taskTable as any,
             });
         }
+    }
+
+    async getTaskDetail(taskId: string | null, scheduleTaskId: string | null): Promise<any> {
+        if (taskId !== null) {
+            const task = await taskStore.findTaskById(taskId);
+            const scheduleTask = await schedulePlanAdapter.getScheduleTaskByTaskId(taskId, null);
+            return { task, scheduleTask };
+        }
+        if (scheduleTaskId !== null) {
+            const scheduleTask = await schedulePlanAdapter.getScheduleTaskByTaskId(null, scheduleTaskId);
+            const task = await taskStore.findTaskById(scheduleTask.taskId);
+            return { task, scheduleTask };
+        }
+        return null;
     }
 
     // add subTask

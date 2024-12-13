@@ -16,5 +16,6 @@ export interface IGroupTaskEntity extends Document {
     updatedAt: Date;
     activeStatus: ActiveStatus;
     isDefault: BooleanStatus;
+    projectId: string;
     tag: IUserTagEntity;
 }
