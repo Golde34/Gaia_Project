@@ -160,12 +160,11 @@ func (s *TaskService) EnableTask(ctx context.Context, input model.IDInput) (mode
 	}
 }
 
-func (s *TaskService) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (model.Task, error) {
+func (s *TaskService) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (interface{}, error) {
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetTaskDetail(input)
 	if err != nil {
-		return model.Task{}, err
+		return nil, err
 	} else {
-		taskModel := taskResponse.MapperToGraphQLModel(task)
-		return taskModel, nil
-	}
+		return task, nil
+	}	
 }

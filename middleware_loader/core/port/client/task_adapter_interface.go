@@ -1,6 +1,7 @@
-package client 
+package client
 
 import (
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/infrastructure/graph/model"
 )
@@ -18,5 +19,5 @@ type ITaskAdapter interface {
 	MoveTask(input model.MoveTaskInput, id string) (response_dtos.TaskResponseDTO, error)
 	ArchiveTask(id string) (response_dtos.TaskResponseDTO, error)
 	EnableTask(id string) (response_dtos.TaskResponseDTO, error)
-
+	GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (interface{}, error)
 }

@@ -50,12 +50,11 @@ func GetProjectGroupTaskId(body map[string]interface{}, groupTaskId string) *req
 }
 
 
-func GetTaskDetailRequestDTOMapper(body map[string]interface{}) *request_dtos.GetTaskDetailInputDTO {
+func GetTaskDetailRequestDTOMapper(body map[string]interface{}) request_dtos.GetTaskDetailInputDTO {
 	var input request_dtos.GetTaskDetailInputDTO
 	bodyMap := body["body"].(map[string]interface{})
 	input.UserId = bodyMap["userId"].(float64)
 	input.TaskId = bodyMap["taskId"].(string)
 	input.ScheduleTaskId = bodyMap["scheduleTaskId"].(string)
-	input.TaskConfigId = bodyMap["taskConfigId"].(string)
-	return &input
+	return input
 }

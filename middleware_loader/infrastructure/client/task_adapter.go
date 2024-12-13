@@ -250,3 +250,24 @@ func (adapter *TaskAdapter) EnableTask(id string) (response_dtos.TaskResponseDTO
 
 	return task, nil
 }
+
+func (adapter *TaskAdapter) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (interface{}, error) {
+	getTaskDetailURL := base.TaskManagerServiceURL + "/task/get-task-detail"
+	var taskDetail interface{}
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getTaskDetailURL, "POST", input, headers)
+	if err != nil {
+		return nil, err
+	}
+
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(dataBytes, &taskDetail)
+	if err != nil {
+		return nil, err
+	}
+
+	return taskDetail, nil
+}
