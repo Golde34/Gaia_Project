@@ -56,14 +56,14 @@ func ChooseTaskBatch(w http.ResponseWriter, r *http.Request, scheduleTaskService
 
 	userId, batchNumber := mapper.ChooseTaskBatch(body)
 		
-	schduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(userId, batchNumber)
+	scheduleTaskBatch, err := services.NewScheduleTaskService().ChooseTaskBatch(userId, batchNumber)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(schduleTaskBatch); err != nil {
+	if err := json.NewEncoder(w).Encode(scheduleTaskBatch); err != nil {
 		log.Printf("Error encoding response: %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

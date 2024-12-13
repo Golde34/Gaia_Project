@@ -54,6 +54,9 @@ func NewTaskRouter(taskService *services.TaskService, db database_mongo.Database
 		r.Put("/{id}/enable", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.Enable(w, r, taskService)
 		})
+		r.Post("/{id}/detail", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetTaskDetail(w, r, taskService)
+		})
 	})
 	return &TaskRouter{
 		TaskService: taskService,

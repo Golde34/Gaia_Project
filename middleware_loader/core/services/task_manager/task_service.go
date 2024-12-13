@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	request_dtos "middleware_loader/core/domain/dtos/request"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/core/port/client"
 	"middleware_loader/core/validator"
@@ -151,6 +152,16 @@ func (s *TaskService) ArchiveTask(ctx context.Context, input model.IDInput) (mod
 
 func (s *TaskService) EnableTask(ctx context.Context, input model.IDInput) (model.Task, error) {
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).EnableTask(input.ID)
+	if err != nil {
+		return model.Task{}, err
+	} else {
+		taskModel := taskResponse.MapperToGraphQLModel(task)
+		return taskModel, nil
+	}
+}
+
+func (s *TaskService) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (model.Task, error) {
+	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetTaskDetail(input)
 	if err != nil {
 		return model.Task{}, err
 	} else {
