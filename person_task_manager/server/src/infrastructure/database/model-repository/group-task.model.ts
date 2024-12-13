@@ -56,6 +56,10 @@ export const groupTaskSchema = new mongoose.Schema(
             default: BooleanStatus.false,
             required: false,
         },
+        projectId: {
+            type: String,
+            required: false,
+        },
         tag: {
             type: [Schema.Types.ObjectId],
             ref: 'Tag',

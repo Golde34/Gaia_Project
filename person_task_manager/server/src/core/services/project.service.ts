@@ -246,6 +246,16 @@ class ProjectService {
             return undefined;
         }
     }
+
+    async findProjectsByUserId(userId: number): Promise<IProjectEntity[]> {
+        try {
+            const projects = await projectStore.findAllProjectsByOwnerId(userId);
+            return projects;
+        } catch (err: any) {
+            console.log("Could not find projects by user id: ", err);
+            return [];
+        }
+    }
 }
 
 export const projectService = new ProjectService();

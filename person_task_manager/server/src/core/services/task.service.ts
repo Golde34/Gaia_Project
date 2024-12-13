@@ -27,7 +27,7 @@ class TaskService {
         public taskCache = CacheSingleton.getInstance().getCache()
     ) { }
 
-    async createTaskInGroupTask(task: any): Promise<ITaskEntity> {
+    async createTaskInGroupTask(task: any, groupTaskId: string): Promise<ITaskEntity> {
         // check existed user tag
         const userTag = await userTagStore.findTagByTagId(task.tag);
         if (userTag === null) {
@@ -38,6 +38,7 @@ class TaskService {
         // create new task
         task.createdAt = new Date();
         task.updatedAt = new Date();
+        task.groupTaskId = groupTaskId;
         if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
         const createTask = await taskStore.createTask(task);
         this.clearTaskCache(task.groupTaskId);
@@ -262,7 +263,7 @@ class TaskService {
         try {
             await groupTaskStore.pullTaskFromSpecifiedGroupTask(oldGroupTaskId, taskId);
             await groupTaskStore.pushTaskToGroupTask(newGroupTaskId, taskId);
-
+            await taskStore.updateGroupTaskId(taskId, newGroupTaskId);
             return msg200({
                 message: 'Move task successfully'
             });

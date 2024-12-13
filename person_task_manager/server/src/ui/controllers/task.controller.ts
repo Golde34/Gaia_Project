@@ -134,6 +134,7 @@ class TaskController {
                 description: task.description,
                 status: task.status,
                 ordinalNumber: 1,
+                projectId: projectId
             }
 
             let groupTaskCreated;
@@ -226,7 +227,15 @@ class TaskController {
         }
     }
 
-
+    async getTaskDetail(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const request = req.body;
+            const taskResult = await taskUsecase.getTaskDetail(request);
+            return taskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const taskController = new TaskController();

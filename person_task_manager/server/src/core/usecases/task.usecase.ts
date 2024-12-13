@@ -19,7 +19,7 @@ class TaskUsecase {
             if (task.priority) {
                 task.priority = task.priority.map((item) => buildCommonStringValue(item.toString()));
             }
-            const createdTask = await taskService.createTaskInGroupTask(task);
+            const createdTask = await taskService.createTaskInGroupTask(task, groupTaskId);
             const taskResult = await taskService.handleAfterCreateTask(createdTask, groupTaskId);
             if (isPrivate === IsPrivateRoute.PUBLIC) {
                 await taskService.pushKafkaToCreateTask(createdTask, groupTaskId);
@@ -64,6 +64,15 @@ class TaskUsecase {
             return msg400(err.message.toString());
         }
     }
+
+    // async getTaskDetail(request: any): Promise<IResponse> {
+    //     try {
+    //         const projects = await projectService.findProjectsByUserId(request.userId);
+    //         const groupTask
+    //     } catch (err: any) {
+    //         return msg400(err.message.toString());
+    //     }
+    // }
 }
 
 export const taskUsecase = new TaskUsecase();

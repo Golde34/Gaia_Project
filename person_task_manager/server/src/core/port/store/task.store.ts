@@ -62,6 +62,10 @@ class TaskStore {
     async getTopTasks(limit: number): Promise<ITaskEntity[] | null> {
         return await taskRepository.getTopTasks(limit);
     }
+    
+    async updateGroupTaskId(taskId: string, newGroupTaskId: string): Promise<UpdateWriteOpResult> {
+        return await taskRepository.updateGroupTaskId(taskId, newGroupTaskId);
+    }
 }
 
 export const taskStore = new TaskStore();

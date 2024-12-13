@@ -55,6 +55,10 @@ export const taskSchema = new mongoose.Schema(
             enum: Object.values(ActiveStatus),
             default: ActiveStatus.active,
         },
+        groupTaskId: {
+            type: String,
+            required: false,
+        },
         tag: {
             type: [Schema.Types.ObjectId],
             ref: 'Tag',
