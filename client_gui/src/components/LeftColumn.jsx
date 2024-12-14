@@ -36,7 +36,8 @@ const LeftColumn = () => {
                         <Grid numItems={3}>
                         {topTasks.map((topTask) => (
                             <CardItem key={topTask.task._id} task={topTask.task} 
-                                groupTaskId={topTask.groupTaskId} projectId={topTask.projectId} />
+                                groupTaskId={topTask.groupTaskId} projectId={topTask.projectId} 
+                                taskId={topTask.task._id}/>
                         ))}
                         </Grid>
                     )

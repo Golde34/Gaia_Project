@@ -6,11 +6,11 @@ const CardItem = (props) => {
     const navigate = useNavigate();
 
     const groupTaskId = props.groupTaskId;
-    const projectId = props.projectId;
     const task = props.task;
+    const taskId = props.taskId;
 
     const redirectToTaskDetail = () => {
-        navigate(`/project/${projectId}`);
+        navigate(`/task/detail/${taskId}`);
         localStorage.setItem("activeTab", groupTaskId);
     }
 

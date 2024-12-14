@@ -20,6 +20,7 @@ import NoteDetail from '../../screens/noteScreen/NoteDetail';
 import ChatComponent from '../../views/user_gui/TestChat';
 import TaskIntroduction from '../../views/introduction/TaskIntroduction';
 import TaskRegistration from '../../views/task_manager/TaskRegistration';
+import TaskDetail from '../../views/task_manager/TaskDetail';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -129,6 +130,11 @@ const routeList = [
         path: '/chat',
         key: 'chat',
         element: <ChatComponent />,
+    },
+    {
+        path: '/task/detail/:id',
+        key: 'task-detail',
+        element: <TaskDetail />,
     }
 ]
 
