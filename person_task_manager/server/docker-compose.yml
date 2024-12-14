@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  task-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - LISTEN_PORT=3000
+      - DATABASE_HOST=mongodb
+      - DATABASE_PORT=27017
+      - DATABASE_NAME=task_manager_db
+      - DATABASE_USERNAME=golde
+      - DATABASE_PASSWORD=483777
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: golde
+      MONGO_INITDB_ROOT_PASSWORD: 483777 
