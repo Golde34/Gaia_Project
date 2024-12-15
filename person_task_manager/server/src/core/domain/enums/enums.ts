@@ -80,5 +80,5 @@ export enum EventStatus {
 
 export enum TaskDetail {
     TASK_MANGER = "TASK_MANAGER",
-    SCHEDULE_TASK = "SCHEDULE_TASK",
+    SCHEDULE_PLAN = "SCHEDULE_PLAN",
 }

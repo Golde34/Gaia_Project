@@ -23,3 +23,42 @@ export const priorityColor = (priority) => {
         return ColorConstants.YELLOW 
     }
 } 
+
+export const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
+    let priority = []
+    if (isHighPriority) {
+        priority.push(TaskPriority.HIGH)
+    }
+    if (isMediumPriority) {
+        priority.push(TaskPriority.MEDIUM)
+    }
+    if (isLowPriority) {
+        priority.push(TaskPriority.LOW)
+    }
+    if (isStarPriority) {
+        priority.push(TaskPriority.STAR)
+    }
+    return priority
+}
+
+export const pullPriority = (priorities) => {
+    let isHighPriority = false
+    let isMediumPriority = false
+    let isLowPriority = false
+    let isStarPriority = false
+    if (priorities === undefined || priorities === null) {
+        return [isHighPriority, isMediumPriority, isLowPriority, isStarPriority]
+    }
+    for (let priority of priorities) {
+        if (priority === TaskPriority.HIGH) {
+            isHighPriority = true
+        } else if (priority === TaskPriority.MEDIUM) {
+            isMediumPriority = true
+        } else if (priority === TaskPriority.LOW) {
+            isLowPriority = true
+        } else if (priority === TaskPriority.STAR) {
+            isStarPriority = true
+        }
+    }
+    return [isHighPriority, isMediumPriority, isLowPriority, isStarPriority]
+}

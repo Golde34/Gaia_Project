@@ -39,7 +39,7 @@ scheduleTaskRouter.post("/choose-schedule-batch-task",
     }
 )
 
-scheduleTaskRouter.get("/get-schedule-task/:id",
+scheduleTaskRouter.post("/get-schedule-task",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const sheduleTaskResult = await scheduleTaskControllerImpl.getScheduleTask(req, next);

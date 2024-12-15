@@ -109,14 +109,16 @@ class ScheduleTaskUsecase {
                 throw new Error(`Cannot find schedule plan by user id: ${userId}`);
             }
 
+            console.log('Get List schedule task by schedule plan: ', schedulePlan._id);
             const { _id: schedulePlanId, activeTaskBatch, isTaskBatchActive } = schedulePlan;
 
             if (isTaskBatchActive && activeTaskBatch > 0) {
                 const scheduleTaskList = await scheduleTaskService.findByTaskBatch(schedulePlanId, activeTaskBatch);
+                console.log("Get task list by active task batch: ", scheduleTaskList);
                 if (scheduleTaskList.length > 0) {
                     return scheduleTaskList;
                 }
-
+                console.log("No task found in active task batch, update task batch to 0");
                 await schedulePlanService.updateTaskBatch(schedulePlan, 0, false);
                 return scheduleTaskService.findTop10NewestTask(schedulePlanId);
             }
@@ -172,10 +174,26 @@ class ScheduleTaskUsecase {
         }
     }
 
-    async getScheduleTask(id: string): Promise<IResponse | undefined> {
+    async getScheduleTask(taskId: string | undefined, scheduleTaskId: string | undefined): Promise<IResponse | undefined> {
         try {
-            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(id);
-            return msg200({ scheduleTask });
+            if (taskId === undefined && scheduleTaskId === undefined) {
+                return msg400("Task id or schedule task id is required!");
+            }
+            if (taskId === undefined || taskId == null || taskId == "null") {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskById(scheduleTaskId as string);
+                return msg200({ scheduleTask });
+            }
+            if (scheduleTaskId === undefined || scheduleTaskId == null || scheduleTaskId == "null") {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+                return msg200({ scheduleTask });
+            }
+            if (scheduleTaskId !== undefined && taskId !== undefined) {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+                if (scheduleTask._id !== scheduleTaskId) {
+                    return msg400("Task id and schedule task id are not matched!");
+                }
+                return msg200({ scheduleTask });
+            }
         } catch (error) {
             console.error("Error on getScheduleTask: ", error);
             return msg400("Cannot get schedule task!");

@@ -117,7 +117,7 @@ function ContentArea() {
                                     )
                                 }
                                 {scheduleTasks.map((task, index) => (
-                                    <CardItem key={index} task={task} />
+                                    <CardItem key={index} task={task} taskId={task.taskId}/>
                                 ))}
 
                             </div>

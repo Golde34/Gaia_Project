@@ -5,6 +5,7 @@ import { Button, Col, DatePicker, Grid, TextInput } from "@tremor/react";
 import { Fragment, useState } from "react";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import { pushPriority } from "../../kernels/utils/field-utils";
 
 export const CreateTaskDialog = (props) => {
     const projectId = props.projectId;
@@ -34,23 +35,6 @@ export const CreateTaskDialog = (props) => {
     const [isMediumPriority, setIsMediumPriority] = useState(false);
     const [isLowPriority, setIsLowPriority] = useState(false);
     const [isStarPriority, setIsStarPriority] = useState(false);
-
-    const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
-        let priority = [];
-        if (isHighPriority) {
-            priority.push('High');
-        }
-        if (isMediumPriority) {
-            priority.push('Medium');
-        }
-        if (isLowPriority) {
-            priority.push('Low');
-        }
-        if (isStarPriority) {
-            priority.push('Star');
-        }
-        return priority;
-    }
 
     const generateTaskFromScratch = useGenerateTaskFromScratchDispatch();
     const createTask = useCreateTaskDispatch();

@@ -5,13 +5,19 @@ import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
 const CardItem = (props) => {
     const navigate = useNavigate();
 
-    const groupTaskId = props.groupTaskId;
+    const navigateWord = props.navigateWord;
     const projectId = props.projectId;
+    const groupTaskId = props.groupTaskId;
     const task = props.task;
+    const taskId = props.taskId;
 
     const redirectToTaskDetail = () => {
-        navigate(`/project/${projectId}`);
-        localStorage.setItem("activeTab", groupTaskId);
+        if (navigateWord === "project") {
+            navigate(`/project/${projectId}`);
+            localStorage.setItem("activeTab", groupTaskId);
+        } else {
+            navigate(`/task/detail/${taskId}`);
+        }
     }
 
     const shortenTitle = (title) => {

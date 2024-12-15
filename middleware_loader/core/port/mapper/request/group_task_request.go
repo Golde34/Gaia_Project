@@ -54,7 +54,12 @@ func GetTaskDetailRequestDTOMapper(body map[string]interface{}) request_dtos.Get
 	var input request_dtos.GetTaskDetailInputDTO
 	bodyMap := body["body"].(map[string]interface{})
 	input.UserId = bodyMap["userId"].(float64)
-	input.TaskId = bodyMap["taskId"].(string)
-	input.ScheduleTaskId = bodyMap["scheduleTaskId"].(string)
+	if bodyMap["taskId"] != nil {
+		input.TaskId = bodyMap["taskId"].(string)
+	}
+	if bodyMap["scheduleTaskId"] != nil {
+		input.ScheduleTaskId = bodyMap["scheduleTaskId"].(string)
+	}
+	input.TaskDetailType = bodyMap["taskDetailType"].(string)
 	return input
 }

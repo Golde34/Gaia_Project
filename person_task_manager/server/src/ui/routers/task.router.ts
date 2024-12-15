@@ -36,6 +36,17 @@ taskRouter.get("/:id", async (req: Request, res: Response, next: NextFunction): 
     }
 });
 
+// get task detail
+taskRouter.post("/:taskId/get-task-detail", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const result = await taskControllerImpl.getTaskDetail(req, next);
+        return returnResult(result, TASK_NOT_FOUND, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 // create task
 taskRouter.post("/create",
     RequestValidator.validateV2(TaskRequestDto),
@@ -168,16 +179,6 @@ taskRouter.post("/:id/get-grouptask-project", async (req: Request, res: Response
     try {
         const result = await taskControllerImpl.getGroupTaskAndProject(req, next);
         return returnResult(result, GROUPTASK_AND_PROJECT_NOT_FOUND, res, next);
-    } catch (err) {
-        next(err);
-    }
-});
-
-// get task detail
-taskRouter.post("/get-task-detail", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const result = await taskControllerImpl.getTaskDetail(req, next);
-        return returnResult(result, TASK_NOT_FOUND, res, next);
     } catch (err) {
         next(err);
     }

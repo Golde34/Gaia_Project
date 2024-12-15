@@ -31,11 +31,12 @@ export const getTaskList = (groupTaskId) => async (dispatch) => {
     }
 }
 
-export const getDetailTask = (taskId) => async (dispatch) => {
-    dispatch({ type: TASK_DETAIL_REQUEST, payload: taskId });
+export const getDetailTask = (body) => async (dispatch) => {
+    dispatch({ type: TASK_DETAIL_REQUEST, payload: body });
     try {
-        const { data } = await serverRequest(`/task/${taskId}`, HttpMethods.GET, portName.middleware);
-        dispatch({ type: TASK_DETAIL_SUCCESS, payload: data.data });
+        const { data } = await serverRequest(`/task/${body.taskId}/detail`, HttpMethods.POST, portName.middleware, body);
+        console.log(data);
+        dispatch({ type: TASK_DETAIL_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
             type: TASK_DETAIL_FAIL,

@@ -16,11 +16,16 @@ class SchedulePlanAdapter {
         try {
             const header = {};
             const headers = buildDefaultHeaders(header);
-            const uri = this.getSchedulePlanByTaskId+`${taskId}&scheduleTaskId=${scheduleTaskId}`;
+            const body = {
+                taskId: taskId,
+                scheduleTaskId: scheduleTaskId
+            }
+            const uri = `${this.getSchedulePlanByTaskId}`;
             console.log(`Calling api to schedule plan service: ${uri}`);
             const response = await fetch(uri, {
                 headers,
-                method: HttpMethod.GET, 
+                method: HttpMethod.POST, 
+                body: JSON.stringify(body)
             });
             
             if (response.status !== 200) {
