@@ -66,8 +66,9 @@ class ScheduleController {
 
     async getScheduleTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const id = req.params.id;
-            return await scheduleTaskUsecase.getScheduleTask(id);
+            const taskId = req.body.taskId;
+            const scheduleTaskId = req.body.scheduleTaskId;
+            return await scheduleTaskUsecase.getScheduleTask(taskId, scheduleTaskId);
         } catch (error) {
             next(error);
         }

@@ -172,10 +172,26 @@ class ScheduleTaskUsecase {
         }
     }
 
-    async getScheduleTask(id: string): Promise<IResponse | undefined> {
+    async getScheduleTask(taskId: string | undefined, scheduleTaskId: string | undefined): Promise<IResponse | undefined> {
         try {
-            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(id);
-            return msg200({ scheduleTask });
+            if (taskId === undefined && scheduleTaskId === undefined) {
+                return msg400("Task id or schedule task id is required!");
+            }
+            if (taskId === undefined || taskId == null || taskId == "null") {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskById(scheduleTaskId as string);
+                return msg200({ scheduleTask });
+            }
+            if (scheduleTaskId === undefined || scheduleTaskId == null || scheduleTaskId == "null") {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+                return msg200({ scheduleTask });
+            }
+            if (scheduleTaskId !== undefined && taskId !== undefined) {
+                const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(taskId);
+                if (scheduleTask._id !== scheduleTaskId) {
+                    return msg400("Task id and schedule task id are not matched!");
+                }
+                return msg200({ scheduleTask });
+            }
         } catch (error) {
             console.error("Error on getScheduleTask: ", error);
             return msg400("Cannot get schedule task!");
