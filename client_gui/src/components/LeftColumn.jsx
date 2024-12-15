@@ -37,7 +37,7 @@ const LeftColumn = () => {
                         {topTasks.map((topTask) => (
                             <CardItem key={topTask.task._id} task={topTask.task} 
                                 groupTaskId={topTask.groupTaskId} projectId={topTask.projectId} 
-                                taskId={topTask.task._id}/>
+                                taskId={topTask.task._id} navigateWord={"project"}/>
                         ))}
                         </Grid>
                     )
