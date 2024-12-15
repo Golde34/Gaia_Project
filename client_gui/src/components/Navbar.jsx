@@ -21,7 +21,7 @@ const Navbar = () => {
             className="relative w-full sm:flex justify-between item-center p-2"
         >
             <h1 className="font-bold text-gray-300 flex items-center space-x-2">
-                <img src="../public/gaia_logo.png" alt="logo" className="h-10 w-10 inline-block" />
+                <img src="/public/gaia_logo.png" alt="logo" className="h-10 w-10 inline-block" />
                 <span>Dashboard</span>
             </h1>
             <Flex justifyContent="end">
