@@ -67,6 +67,7 @@ class TaskUsecase {
 
     async getTaskDetail(request: TaskDetailRequestDTO): Promise<IResponse> {
         try {
+            console.log("Request: ", request);
             let taskDetail;
             let groupTask;
             let project;
@@ -76,7 +77,7 @@ class TaskUsecase {
                 taskDetail = await taskService.getTaskDetail(request.taskId, null);
                 if (!taskDetail) return msg400('Task detail not found');
                 groupTask = await groupTaskService.getGroupTaskObjectByTaskId(request.taskId);
-            } else if (request.taskDetailType === TaskDetail.SCHEDULE_TASK) {
+            } else if (request.taskDetailType === TaskDetail.SCHEDULE_PLAN) {
                 if (!request.scheduleTaskId) return msg400('Schedule task id is required');
                 taskDetail = await taskService.getTaskDetail(null, request.scheduleTaskId);
                 if (!taskDetail) return msg400('Task detail not found');
@@ -88,6 +89,7 @@ class TaskUsecase {
             if (!groupTask) return msg400('Group task not found');
             project = await projectService.findProjectByGroupTaskId(groupTask._id);
             if (!project) return msg400('Project not found');
+            console.log("Project: ", project.ownerId, "UserId: ", request.userId);
             if (project.ownerId !== request.userId) return msg400('Unauthorized');
 
             const response = { taskDetail, groupTask, project };
