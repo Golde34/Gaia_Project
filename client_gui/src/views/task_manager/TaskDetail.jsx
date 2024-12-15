@@ -7,18 +7,24 @@ import { Card, Col, DatePicker, Grid, Metric, Text, Textarea, TextInput } from "
 import MessageBox from "../../components/subComponents/MessageBox";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import { pullPriority } from "../../kernels/utils/field-utils";
 
 function ContentArea() {
-    const userId = "1";
+    const userId = 1;
     const dispatch = useDispatch();
     const taskId = useParams().id;
 
     const taskDetail = useSelector((state) => state.taskDetail);
-    const { loading, error, task } = taskDetail;
+    const { loading, error, response } = taskDetail;
     const didTaskDetailRef = useRef();
 
     const getTaskDetail = useCallback(() => {
-        dispatch(getDetailTask(taskId));
+        const body = {
+            userId: userId,
+            taskId: taskId,
+            taskDetailType: 'TASK_MANAGER'
+        }
+        dispatch(getDetailTask(body));
     }, [dispatch, taskId]);
 
     useEffect(() => {
@@ -27,32 +33,22 @@ function ContentArea() {
         didTaskDetailRef.current = true;
     }, [taskId]);
 
-    const [title, setTitle] = useState(task?.title || '');
-    const [description, setDescription] = useState(task?.description || '');
-    const [startDate, setStartDate] = useState(task?.startDate || new Date());
-    const [deadline, setDeadline] = useState(task?.deadline || new Date());
-    const [duration, setDuration] = useState(task?.duration || 0);
-    const [status, setStatus] = useState(task?.status || 'TODO');
-    const [isHighPriority, setIsHighPriority] = useState(task?.isHighPriority || false);
-    const [isMediumPriority, setIsMediumPriority] = useState(task?.isMediumPriority || false);
-    const [isLowPriority, setIsLowPriority] = useState(task?.isLowPriority || false);
-    const [isStarPriority, setIsStarPriority] = useState(task?.isStarPriority || false);
-
-    const handleSave = () => {
-        const updatedTask = {
-            title,
-            description,
-            startDate,
-            deadline,
-            duration,
-            status,
-            isHighPriority,
-            isMediumPriority,
-            isLowPriority,
-            isStarPriority
-        };
-        onUpdate(updatedTask);
-    };
+    const defaultDuration = 2;
+    const [title, setTitle] = useState(response?.taskDetail.task.title || '');
+    const [description, setDescription] = useState(response?.taskDetail.task.description || '');
+    const [startDate, setStartDate] = useState(response?.taskDetail.task.startDate || new Date());
+    const [deadline, setDeadline] = useState(response?.taskDetail.task.deadline || new Date());
+    const [duration, setDuration] = useState(response?.taskDetail.task.duration || defaultDuration);
+    const [status, setStatus] = useState(response?.taskDetail.task.status || 'TODO');
+    const priorities = pullPriority(response?.taskDetail.task.priority);
+    const [isHighPriority, setIsHighPriority] = useState(priorities[0] || false);
+    const [isMediumPriority, setIsMediumPriority] = useState(priorities[1] || false);
+    const [isLowPriority, setIsLowPriority] = useState(priorities[2] || false);
+    const [isStarPriority, setIsStarPriority] = useState(priorities[3] || false);
+    const [projectName, setProjectName] = useState(response?.project.name || '');
+    const [taskBatch, setTaskBatch] = useState(response?.taskDetail.scheduleTask.data.scheduleTask.taskBatch || 0);
+    const [taskOrder, setTaskOrder] = useState(response?.taskDetail.scheduleTask.data.scheduleTask.taskOrder || 0);
+    const [stopTime, setStopTime] = useState(response?.taskDetail.scheduleTask.data.scheduleTask.stopTime || 0);
 
     return (
         <>
@@ -94,7 +90,7 @@ function ContentArea() {
 
                                 <div className="mt-6">
                                     <Grid numItems={6}>
-                                        <Col numColSpan={3}>
+                                        <Col numColSpan={2}>
                                             <p className="block text-md font-medium text-gray-200 mb-3">Start Date</p>
                                             <div className="grid grid-cols-1 m-1">
                                                 <div className="inline-flex items-center ">
@@ -108,7 +104,7 @@ function ContentArea() {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col numColSpan={3}>
+                                        <Col numColSpan={2}>
                                             <p className="block text-md font-medium text-gray-200 mb-3">Due Date</p>
                                             <div className="grid grid-cols-1 m-1">
                                                 <div className="inline-flex items-center ">
@@ -122,25 +118,65 @@ function ContentArea() {
                                                 </div>
                                             </div>
                                         </Col>
+                                        <Col numColSpan={2}>
+                                            <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
+                                            <TextInput
+                                                type="number"
+                                                value={duration === 0 ? defaultDuration : duration}
+                                                onChange={(event) => {
+                                                    setDuration(event.target.value);
+                                                }}
+                                                className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                                placeholder="Input working hours"
+                                                error={(duration < 1 || duration > 16) && defaultDuration !== 2}
+                                                errorMessage="Duration must be between 1 and 16 hours"
+                                            />
+                                        </Col>
                                     </Grid>
                                 </div>
 
                                 <div className="mt-2">
-                                    <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
-                                    <TextInput
-                                        type="number"
-                                        value={duration === 0 ? defaultDuration : duration}
-                                        onChange={(event) => {
-                                            setDuration(event.target.value);
-                                        }}
-                                        className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
-                                        placeholder="Input working hours"
-                                        error={(duration < 1 || duration > 16) && defaultDuration !== 2}
-                                        errorMessage="Duration must be between 1 and 16 hours"
-                                    />
+                                    <Grid numItems={6}>
+                                        <Col numColSpan={2}>
+                                            <p className="block text-md font-medium text-gray-200 mb-3">Task Batch</p>
+                                            <TextInput
+                                                type="number"
+                                                value={taskBatch}
+                                                onChange={(event) => {
+                                                    setTaskBatch(event.target.value);
+                                                }}
+                                                className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                                placeholder="Input working hours"
+                                            />
+                                        </Col>
+                                        <Col numColSpan={2}>
+                                            <p className="block text-md font-medium text-gray-200 mb-3">Task Order</p>
+                                            <TextInput
+                                                type="number"
+                                                value={taskOrder}
+                                                onChange={(event) => {
+                                                    setTaskOrder(event.target.value);
+                                                }}
+                                                className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                                placeholder="Input working hours"
+                                            />
+                                        </Col>
+                                        <Col numColSpan={2}>
+                                            <p className="block text-md font-medium text-gray-200 mb-3">Stop Time</p>
+                                            <TextInput
+                                                type="number"
+                                                value={stopTime}
+                                                onChange={(event) => {
+                                                    setStopTime(event.target.value);
+                                                }}
+                                                className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                                placeholder="Input working hours"
+                                            />
+                                        </Col>
+                                    </Grid>
                                 </div>
 
-                                <div className="mt-8">
+                                <div className="mt-6">
                                     <p className="block text-md font-medium text-gray-200 mb-1">Priority</p>
                                     <div className="grid grid-cols-4 m-1">
                                         <div className="inline-flex items-center">
@@ -280,7 +316,7 @@ function ContentArea() {
                                 <div className="mt-5">
                                     <label htmlFor="project" className="block text-md font-medium text-gray-200 mb-3">Project</label>
                                     <Card className="mb-5">
-                                        projectName
+                                        <p>{projectName}</p>
                                         projectDescription
                                         projectStatus
                                     </Card>
