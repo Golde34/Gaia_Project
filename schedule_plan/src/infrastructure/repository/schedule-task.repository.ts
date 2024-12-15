@@ -52,7 +52,7 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     }
 
     async findDistinctTaskBatch(schedulePlanId: string): Promise<number[]> {
-        return await ScheduleTaskEntity.distinct('taskBatch', { schedulePlanId: schedulePlanId });
+        return await ScheduleTaskEntity.distinct('taskBatch', { schedulePlanId: schedulePlanId, status: { $ne: 'DONE'} });
     }
 }
 

@@ -109,14 +109,16 @@ class ScheduleTaskUsecase {
                 throw new Error(`Cannot find schedule plan by user id: ${userId}`);
             }
 
+            console.log('Get List schedule task by schedule plan: ', schedulePlan._id);
             const { _id: schedulePlanId, activeTaskBatch, isTaskBatchActive } = schedulePlan;
 
             if (isTaskBatchActive && activeTaskBatch > 0) {
                 const scheduleTaskList = await scheduleTaskService.findByTaskBatch(schedulePlanId, activeTaskBatch);
+                console.log("Get task list by active task batch: ", scheduleTaskList);
                 if (scheduleTaskList.length > 0) {
                     return scheduleTaskList;
                 }
-
+                console.log("No task found in active task batch, update task batch to 0");
                 await schedulePlanService.updateTaskBatch(schedulePlan, 0, false);
                 return scheduleTaskService.findTop10NewestTask(schedulePlanId);
             }
