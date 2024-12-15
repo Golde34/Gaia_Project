@@ -252,7 +252,7 @@ func (adapter *TaskAdapter) EnableTask(id string) (response_dtos.TaskResponseDTO
 }
 
 func (adapter *TaskAdapter) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (interface{}, error) {
-	getTaskDetailURL := base.TaskManagerServiceURL + "/task/get-task-detail"
+	getTaskDetailURL := base.TaskManagerServiceURL + "/task/" + input.TaskId + "/get-task-detail"
 	var taskDetail interface{}
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(getTaskDetailURL, "POST", input, headers)
