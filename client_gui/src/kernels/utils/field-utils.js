@@ -13,13 +13,13 @@ export const statusColor = (status) => {
 }
 
 export const priorityColor = (priority) => {
-    if (priority === TaskPriority.LOW) {
+    if (priority.toLowerCase() === TaskPriority.LOW) {
         return ColorConstants.GREEN 
-    } else if (priority === TaskPriority.MEDIUM) {
+    } else if (priority.toLowerCase() === TaskPriority.MEDIUM) {
         return ColorConstants.BLUE 
-    } else if (priority === TaskPriority.HIGH) {
+    } else if (priority.toLowerCase() === TaskPriority.HIGH) {
         return ColorConstants.RED 
-    } else if (priority === TaskPriority.STAR) {
+    } else if (priority.toLowerCase() === TaskPriority.STAR) {
         return ColorConstants.YELLOW 
     }
 } 
@@ -50,13 +50,13 @@ export const pullPriority = (priorities) => {
         return [isHighPriority, isMediumPriority, isLowPriority, isStarPriority]
     }
     for (let priority of priorities) {
-        if (priority === TaskPriority.HIGH) {
+        if (priority.toLowerCase() === TaskPriority.HIGH) {
             isHighPriority = true
-        } else if (priority === TaskPriority.MEDIUM) {
+        } else if (priority.toLowerCase() === TaskPriority.MEDIUM) {
             isMediumPriority = true
-        } else if (priority === TaskPriority.LOW) {
+        } else if (priority.toLowerCase() === TaskPriority.LOW) {
             isLowPriority = true
-        } else if (priority === TaskPriority.STAR) {
+        } else if (priority.toLowerCase() === TaskPriority.STAR) {
             isStarPriority = true
         }
     }

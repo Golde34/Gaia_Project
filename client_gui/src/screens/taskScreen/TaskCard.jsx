@@ -8,6 +8,7 @@ import { convertTimestampToDate } from "../../kernels/utils/date-picker";
 import { useDeleteComponentDispatch, useUpdateTaskInDialogDispatch } from "../../kernels/utils/dialog-api-requests";
 import { MoveTask } from "./MoveTask";
 import { DeleteDialog } from "../../components/subComponents/DeleteDialog";
+import { priorityColor, statusColor } from "../../kernels/utils/field-utils";
 
 export const TaskCard = (props) => {
     const task = props.task;
@@ -24,35 +25,6 @@ export const TaskCard = (props) => {
     }
     function openModal() {
         setIsOpen(true)
-    }
-
-    const priorityColor = (priority) => {
-        if (priority === "Low") {
-            return "green";
-        }
-        else if (priority === "Medium") {
-            return "blue";
-        }
-        else if (priority === "High") {
-            return "red";
-        }
-        else if (priority === "Star") {
-            return "yellow";
-        }
-    }
-
-    const statusColor = (status) => {
-        if (status === "TODO") {
-            return "moderateDecrease";
-        }
-        else if (status === "IN_PROGRESS") {
-            return "unchanged";
-        }
-        else if (status === "DONE") {
-            return "increase";
-        } else if (status === "PENDING") {
-            return "decrease";
-        }
     }
 
     const [title, setTitle] = useState(task.title);
@@ -173,7 +145,7 @@ export const TaskCard = (props) => {
                                                     {title}
                                                 </h1>
                                             )}
-                                            <Button className="ms-2" color="indigo" onClick={() => navigate(`/project/${task.id}/details`)}>
+                                            <Button className="ms-2" color="indigo" onClick={() => navigate(`/task/detail/${task.id}`)}>
                                                 Details
                                             </Button>
                                         </Flex>
