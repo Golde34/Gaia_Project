@@ -23,6 +23,7 @@ func NewTaskService() *TaskService {
 
 var taskValidator = validator.NewTaskDTOValidator()
 var taskResponse = response_dtos.NewTaskResponseDTO()
+var taskDetailResponse = response_dtos.NewTaskDetailResponseDTO()
 
 func (s *TaskService) ListAllTasks(ctx context.Context) ([]model.Task, error) {
 	tasks, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetAllTasks()
@@ -160,11 +161,12 @@ func (s *TaskService) EnableTask(ctx context.Context, input model.IDInput) (mode
 	}
 }
 
-func (s *TaskService) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (interface{}, error) {
+func (s *TaskService) GetTaskDetail(input request_dtos.GetTaskDetailInputDTO) (response_dtos.TaskDetailResponseDTO, error) {
 	task, err := client.ITaskAdapter(&adapter.TaskAdapter{}).GetTaskDetail(input)
 	if err != nil {
-		return nil, err
+		return response_dtos.TaskDetailResponseDTO{}, err
 	} else {
-		return task, nil
+		response := taskDetailResponse.MapperTaskDetail(task)
+		return response, nil
 	}	
 }
