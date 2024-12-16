@@ -175,8 +175,12 @@ func GetTaskDetail(w http.ResponseWriter, r *http.Request, taskService *services
 		return
 	}
 
+	response := map[string]interface{}{
+		"data": taskDetail,
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(taskDetail); err != nil {
+	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error encoding response: %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

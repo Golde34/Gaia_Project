@@ -33,7 +33,7 @@ export const taskDetailReducer = (
         case TASK_DETAIL_REQUEST:
             return { loading: true };
         case TASK_DETAIL_SUCCESS:
-            return { loading: false, response: action.payload.response };
+            return { loading: false, detail: action.payload.data };
         case TASK_DETAIL_FAIL:
             return { loading: false, error: action.payload };
         default:
