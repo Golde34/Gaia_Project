@@ -7,7 +7,7 @@ from gaia_bot.abilities.microservice_connections import MicroserviceConnection
 
 
 port = PORTS['client_gui']['port']
-url = f"http://{DOMAIN}:{port}/"
+url = f"http://{DOMAIN}:{port}/newest-task"
 
 class OpenClientGUI:
 
