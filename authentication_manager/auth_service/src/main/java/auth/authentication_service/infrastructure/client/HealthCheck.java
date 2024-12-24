@@ -17,12 +17,16 @@ public class HealthCheck {
 
     @Bean(name = "statusChecking")
     public void healthCheck() {
-        ServiceStatusRequest request = ServiceStatusRequest.builder()
-            .microserviceName(ServiceEnum.AS.getServiceName())
-            .status(true)
-            .port("4001")
-            .build();
-        String statusResponse = middlewareServiceClient.insertStatus(request);
-        log.info("Health check response: {}", statusResponse);
+        try {
+            ServiceStatusRequest request = ServiceStatusRequest.builder()
+                .microserviceName(ServiceEnum.AS.getServiceName())
+                .status(true)
+                .port("4001")
+                .build();
+            String statusResponse = middlewareServiceClient.insertStatus(request);
+            log.info("Health check response: {}", statusResponse);
+        } catch (Exception e) {
+            log.error("Error when calling health check: {}", e.getMessage());
+        }
     }
 }
