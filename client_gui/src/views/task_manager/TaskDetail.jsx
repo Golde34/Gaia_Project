@@ -52,7 +52,7 @@ function ContentArea() {
     const [stopTime, setStopTime] = useState(detail?.stopTime || 0);
 
     const navigateProjectScreen = (projectId, groupTaskId) => {
-        navigate(`/groupTask/${projectId}`);
+        navigate(`/project/${projectId}`);
         localStorage.setItem("activeTab", groupTaskId);
     }
 
