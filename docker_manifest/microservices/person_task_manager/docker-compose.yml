@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  task-manager:
+    build:
+      context: .
+      dockerfile: task_manager.dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on: []
+    environment:
+      DATABASE_HOST: 172.17.0.1
+      DATABASE_PORT: 27017
+      DATABASE_NAME: task_manager
+      DATABASE_USERNAME: golde
+      DATABASE_PASSWORD: 483777
