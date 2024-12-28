@@ -4,11 +4,11 @@ services:
   task-manager:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: task_manager.dockerfile
     ports:
       - "3000:3000"
     env_file:
-      - ./src/.env
+      - .env
     depends_on: []
     environment:
       DATABASE_HOST: 172.17.0.1
