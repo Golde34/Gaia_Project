@@ -19,12 +19,12 @@ function ContentArea() {
     const { loading, error, detail } = taskDetail;
     const didTaskDetailRef = useRef();
 
+    const body = {
+        userId: userId,
+        taskId: taskId,
+        taskDetailType: 'TASK_MANAGER'
+    }
     const getTaskDetail = useCallback(() => {
-        const body = {
-            userId: userId,
-            taskId: taskId,
-            taskDetailType: 'TASK_MANAGER'
-        }
         dispatch(getDetailTask(body));
     }, [dispatch, taskId]);
 
@@ -35,25 +35,29 @@ function ContentArea() {
     }, [taskId]);
 
     const defaultDuration = 2;
-    const [title, setTitle] = useState(detail?.title || '');
-    const [description, setDescription] = useState(detail?.description || '');
-    const [startDate, setStartDate] = useState(detail?.startDate || new Date());
-    const [deadline, setDeadline] = useState(detail?.deadline || new Date());
-    const [duration, setDuration] = useState(detail?.duration || defaultDuration);
-    const [status, setStatus] = useState(detail?.status || 'TODO');
+    const [title, setTitle] = useState(null);
+    const [description, setDescription] = useState(null);
+    const [startDate, setStartDate] = useState(null);
+    const [deadline, setDeadline] = useState(null);
+    const [duration, setDuration] = useState(defaultDuration);
+    const [status, setStatus] = useState(null);
     const priorities = pullPriority(detail?.priority);
-    const [isHighPriority, setIsHighPriority] = useState(priorities[0] || false);
-    const [isMediumPriority, setIsMediumPriority] = useState(priorities[1] || false);
-    const [isLowPriority, setIsLowPriority] = useState(priorities[2] || false);
-    const [isStarPriority, setIsStarPriority] = useState(priorities[3] || false);
-    const [projectName, setProjectName] = useState(detail?.projectName || '');
-    const [taskBatch, setTaskBatch] = useState(detail?.taskBatch || 0);
-    const [taskOrder, setTaskOrder] = useState(detail?.taskOrder || 0);
-    const [stopTime, setStopTime] = useState(detail?.stopTime || 0);
+    const [isHighPriority, setIsHighPriority] = useState(null);
+    const [isMediumPriority, setIsMediumPriority] = useState(null);
+    const [isLowPriority, setIsLowPriority] = useState(null);
+    const [isStarPriority, setIsStarPriority] = useState(null);
+    const [projectName, setProjectName] = useState();
+    const [taskBatch, setTaskBatch] = useState(null);
+    const [taskOrder, setTaskOrder] = useState(null);
+    const [stopTime, setStopTime] = useState(null);
 
     const navigateProjectScreen = (projectId, groupTaskId) => {
         navigate(`/project/${projectId}`);
         localStorage.setItem("activeTab", groupTaskId);
+    }
+
+    const handleChanges = (e) => {
+        setTitle(e.target.value);
     }
 
     return (
@@ -67,7 +71,6 @@ function ContentArea() {
                     <Metric style={{ marginBottom: '30px', marginTop: '30px' }}
                         className="text-2xl font-bold text-gray-800"> Task Detail
                     </Metric>
-
                     <div className="grid md:grid-cols-3 grid-cols-1 w-full">
                         <div className="col-span-2">
                             <Card className="bg-indigo-100 shadow-lg">
@@ -76,7 +79,7 @@ function ContentArea() {
                                     <TextInput
                                         id="task-title"
                                         type="text"
-                                        value={detail?.title || ''}
+                                        value={title == null ? detail?.title : title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         placeholder="Task Title"
@@ -87,7 +90,7 @@ function ContentArea() {
                                     <label htmlFor="task-description" className="block text-md font-medium text-gray-200 mb-3">Description</label>
                                     <Textarea
                                         id="task-description"
-                                        value={detail?.description}
+                                        value={description == null ? detail?.description : description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         placeholder="Task Description"
@@ -104,7 +107,7 @@ function ContentArea() {
                                                         className="max-w-md mx-auto"
                                                         onValueChange={setStartDate}
                                                         minDate={new Date()}
-                                                        value={detail?.startDate}
+                                                        value={startDate == null ? detail?.startDate : startDate}
                                                         displayFormat="dd/MM/yyyy"
                                                     ></DatePicker>
                                                 </div>
@@ -118,7 +121,7 @@ function ContentArea() {
                                                         className="max-w-md mx-auto"
                                                         onValueChange={setDeadline}
                                                         minDate={new Date()}
-                                                        value={detail?.deadline}
+                                                        value={deadline == null ? detail?.deadline : deadline}
                                                         displayFormat="dd/MM/yyyy"
                                                     ></DatePicker>
                                                 </div>
@@ -128,13 +131,13 @@ function ContentArea() {
                                             <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
                                             <TextInput
                                                 type="number"
-                                                value={detail?.duration === 0 ? defaultDuration : detail?.duration}
+                                                value={duration == null ? detail?.duration : duration}
                                                 onChange={(event) => {
                                                     setDuration(event.target.value);
                                                 }}
                                                 className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                                 placeholder="Input working hours"
-                                                error={(detail?.duration < 1 || detail?.duration > 16) && defaultDuration !== 2}
+                                                error={(detail?.duration < 1 || detail?.duration > 16)}
                                                 errorMessage="Duration must be between 1 and 16 hours"
                                             />
                                         </Col>
@@ -143,11 +146,11 @@ function ContentArea() {
 
                                 <div className="mt-2">
                                     <Grid numItems={6}>
-                                        <Col numColSpan={2}>
+                                        <Col numColSpan={2} className="me-1">
                                             <p className="block text-md font-medium text-gray-200 mb-3">Task Batch</p>
                                             <TextInput
                                                 type="number"
-                                                value={detail?.taskBatch}
+                                                value={taskBatch == null ? detail?.taskBatch : taskBatch}
                                                 onChange={(event) => {
                                                     setTaskBatch(event.target.value);
                                                 }}
@@ -155,11 +158,11 @@ function ContentArea() {
                                                 placeholder="Input working hours"
                                             />
                                         </Col>
-                                        <Col numColSpan={2}>
+                                        <Col numColSpan={2} className="ms-1 me-1">
                                             <p className="block text-md font-medium text-gray-200 mb-3">Task Order</p>
                                             <TextInput
                                                 type="number"
-                                                value={detail?.taskOrder}
+                                                value={taskOrder == null ? detail?.taskOrder : taskOrder}
                                                 onChange={(event) => {
                                                     setTaskOrder(event.target.value);
                                                 }}
@@ -167,11 +170,11 @@ function ContentArea() {
                                                 placeholder="Input working hours"
                                             />
                                         </Col>
-                                        <Col numColSpan={2}>
+                                        <Col numColSpan={2} className="ms-1">
                                             <p className="block text-md font-medium text-gray-200 mb-3">Stop Time</p>
                                             <TextInput
                                                 type="number"
-                                                value={detail?.stopTime}
+                                                value={stopTime == null ? detail?.stopTime : stopTime}
                                                 onChange={(event) => {
                                                     setStopTime(event.target.value);
                                                 }}
@@ -191,8 +194,8 @@ function ContentArea() {
                                                 <input
                                                     id="priority-checkbox-high"
                                                     type="checkbox"
-                                                    checked={priorities[0] || false}
-                                                    onChange={() => setIsHighPriority(!priorities[0])}
+                                                    checked={isHighPriority == null ? priorities[0] : isHighPriority}
+                                                    onChange={() => setIsHighPriority(!isHighPriority)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-red-500 checked:bg-red-500 checked:before:bg-red-500 hover:before:opacity-10"
                                                 />
                                                 <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
@@ -207,8 +210,8 @@ function ContentArea() {
                                                 <input
                                                     id="priority-checkbox-medium"
                                                     type="checkbox"
-                                                    checked={priorities[1] || false}
-                                                    onChange={() => setIsMediumPriority(!priorities[1])}
+                                                    checked={isMediumPriority == null ? priorities[1] : isMediumPriority}
+                                                    onChange={() => setIsMediumPriority(!isMediumPriority)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
                                                 />
                                                 <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
@@ -223,8 +226,8 @@ function ContentArea() {
                                                 <input
                                                     id="priority-checkbox-low"
                                                     type="checkbox"
-                                                    checked={priorities[2] || false}
-                                                    onChange={() => setIsLowPriority(!priorities[2])}
+                                                    checked={isLowPriority == null ? priorities[2] : isLowPriority}
+                                                    onChange={() => setIsLowPriority(!isLowPriority)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:bg-green-500 checked:before:bg-green-500 hover:before:opacity-10"
                                                 />
                                                 <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
@@ -239,8 +242,8 @@ function ContentArea() {
                                                 <input
                                                     id="priority-checkbox-star"
                                                     type="checkbox"
-                                                    checked={priorities[3] || false}
-                                                    onChange={() => setIsStarPriority(!priorities[3])}
+                                                    checked={isStarPriority == null ? priorities[3] : isStarPriority}
+                                                    onChange={() => setIsStarPriority(!isStarPriority)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-yellow-500 checked:bg-yellow-500 checked:before:bg-yellow-500 hover:before:opacity-10"
                                                 />
                                                 <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
@@ -262,7 +265,7 @@ function ContentArea() {
                                                     id="status-radio-todo"
                                                     type="radio"
                                                     value="TODO"
-                                                    checked={detail?.status === 'TODO'}
+                                                    checked={status == null ? detail?.status === 'TODO' : status === 'TODO'}
                                                     onChange={(e) => setStatus(e.target.value)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                 />
@@ -281,7 +284,7 @@ function ContentArea() {
                                                     id="status-radio-doing"
                                                     type="radio"
                                                     value="IN_PROGRESS"
-                                                    checked={detail?.status === 'IN_PROGRESS'}
+                                                    checked={status == null ? detail?.status === 'IN_PROGRESS' : status === 'IN_PROGRESS'}
                                                     onChange={(e) => setStatus(e.target.value)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                 />
@@ -300,7 +303,7 @@ function ContentArea() {
                                                     id="status-radio-done"
                                                     type="radio"
                                                     value="DONE"
-                                                    checked={detail?.status === 'DONE'}
+                                                    checked={status == null ? detail?.status === 'DONE' : status === 'DONE'}
                                                     onChange={(e) => setStatus(e.target.value)}
                                                     className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-pink-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                                                 />
