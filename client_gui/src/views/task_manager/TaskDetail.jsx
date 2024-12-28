@@ -3,7 +3,7 @@ import Template from "../../components/template/Template"
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getDetailTask } from "../../api/store/actions/task_manager/task.actions";
-import { Badge, BadgeDelta, Card, Col, DatePicker, Flex, Grid, Metric, Text, Textarea, TextInput } from "@tremor/react";
+import { Badge, BadgeDelta, Button, Card, Col, DatePicker, Flex, Grid, Metric, Text, Textarea, TextInput } from "@tremor/react";
 import MessageBox from "../../components/subComponents/MessageBox";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
@@ -56,8 +56,21 @@ function ContentArea() {
         localStorage.setItem("activeTab", groupTaskId);
     }
 
-    const handleChanges = (e) => {
-        setTitle(e.target.value);
+    const updateTask = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+        const body = {
+            userId: userId,
+            taskId: taskId,
+            title: title,
+            description: description,
+            startDate: startDate,
+            deadline: deadline,
+            duration: duration,
+            status: status,
+            priority: [isHighPriority, isMediumPriority, isLowPriority, isStarPriority],
+            taskOrder: taskOrder,
+            stopTime: stopTime
+        }
+        console.log(body);
     }
 
     return (
@@ -101,7 +114,7 @@ function ContentArea() {
                                     <Grid numItems={6}>
                                         <Col numColSpan={2}>
                                             <p className="block text-md font-medium text-gray-200 mb-3">Start Date</p>
-                                            <div className="grid grid-cols-1 m-1">
+                                            <div className="grid grid-cols-1 me-1">
                                                 <div className="inline-flex items-center ">
                                                     <DatePicker
                                                         className="max-w-md mx-auto"
@@ -115,7 +128,7 @@ function ContentArea() {
                                         </Col>
                                         <Col numColSpan={2}>
                                             <p className="block text-md font-medium text-gray-200 mb-3">Due Date</p>
-                                            <div className="grid grid-cols-1 m-1">
+                                            <div className="grid grid-cols-1 ms-1 me-1">
                                                 <div className="inline-flex items-center ">
                                                     <DatePicker
                                                         className="max-w-md mx-auto"
@@ -135,7 +148,7 @@ function ContentArea() {
                                                 onChange={(event) => {
                                                     setDuration(event.target.value);
                                                 }}
-                                                className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
+                                                className="mt-1 ms-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                                 placeholder="Input working hours"
                                                 error={(detail?.duration < 1 || detail?.duration > 16)}
                                                 errorMessage="Duration must be between 1 and 16 hours"
@@ -156,6 +169,7 @@ function ContentArea() {
                                                 }}
                                                 className="mt-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                                 placeholder="Input working hours"
+                                                readOnly
                                             />
                                         </Col>
                                         <Col numColSpan={2} className="ms-1 me-1">
@@ -317,6 +331,19 @@ function ContentArea() {
                                         </div>
                                     </div>
                                 </div>
+
+                                <Flex justifyContent="end">
+                                    <Button className="mt-4"
+                                        variant="primary" color="indigo"
+                                        onClick={() => {
+                                            updateTask(title, description, startDate, deadline, duration, status,
+                                                isHighPriority, isMediumPriority, isLowPriority, isStarPriority,
+                                                taskOrder, stopTime);
+                                        }
+                                        }>
+                                        Update Task
+                                    </Button>
+                                </Flex>
                             </Card >
 
                         </div>
