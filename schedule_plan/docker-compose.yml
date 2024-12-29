@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  schedule-plan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./src/.env
+    depends_on: []
+    environment:
+      DATABASE_HOST: 172.17.0.1
+      DATABASE_PORT: 27017
+      DATABASE_NAME: schedule_plan
+      DATABASE_USERNAME: golde
+      DATABASE_PASSWORD: 483777
