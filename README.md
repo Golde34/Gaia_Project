@@ -43,7 +43,8 @@ The Gaia system is built as a collection of interconnected microservices:
 - **Notify Agent**: Sends timely notifications and reminders for tasks.
 - **Logging Tracker**: Manages logs and ensures the system's backend processes are transparent and auditable.
 
-![Screenshot from 2024-12-17 22-28-41](https://github.com/user-attachments/assets/867e7e04-9935-4c2e-8b7a-7464755c648f)
+![image](https://github.com/user-attachments/assets/77bc3dfd-dbd1-49c1-95b4-5d4567e3cdaa)
+
 
 ## Getting Started
 
