@@ -18,8 +18,9 @@ Gaia is a comprehensive **User Task Management System** designed to optimize and
 2. **Interactive Recommendations**: Gaia will proactively recommend tasks, reminders, and actions to users through notifications and real-time conversations.
 3. **Enhanced Chatbot Integrations**: Expanded functionalities to seamlessly integrate the chatbot with other systems, enabling smoother workflows and enhanced productivity.
 
-![image](https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973)
-
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973" alt="image">
+</div>
 
 ## How Gaia Works
 Gaia operates as an interconnected microservices system, combining AI-powered insights with effective task management workflows:
@@ -43,7 +44,8 @@ The Gaia system is built as a collection of interconnected microservices:
 - **Notify Agent**: Sends timely notifications and reminders for tasks.
 - **Logging Tracker**: Manages logs and ensures the system's backend processes are transparent and auditable.
 
-![Screenshot from 2024-12-17 22-28-41](https://github.com/user-attachments/assets/867e7e04-9935-4c2e-8b7a-7464755c648f)
+![image](https://github.com/user-attachments/assets/77bc3dfd-dbd1-49c1-95b4-5d4567e3cdaa)
+
 
 ## Getting Started
 
