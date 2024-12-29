@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   schedule-plan:
+    image: server-schedule-plan
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,6 +11,7 @@ services:
     env_file:
       - ./src/.env
     depends_on: []
+    network_mode: host  #Allow the container to access the host network
     environment:
       DATABASE_HOST: 172.17.0.1
       DATABASE_PORT: 27017
