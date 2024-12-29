@@ -4,7 +4,8 @@ services:
   client-gui:
     build:
       context: .
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    depends_on: []
+    environment:
+      - NODE_ENV=development
