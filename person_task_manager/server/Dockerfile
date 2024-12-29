@@ -1,23 +1,26 @@
-# Base image with Node.js
-FROM node:18
+# Stage 1: Build stage
+FROM node:18-slim AS builder
 
-# Set working directory in the container
 WORKDIR /backend/person_task_manager/
 
-# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
 COPY . .
 
-# Copy .env file into the container
+# Stage 2: Production stage
+FROM node:18-alpine
+
+WORKDIR /backend/person_task_manager/
+
+COPY --from=builder /backend/person_task_manager/node_modules ./node_modules
+COPY --from=builder /backend/person_task_manager/package*.json ./
+COPY --from=builder /backend/person_task_manager/src ./src
+COPY --from=builder /backend/person_task_manager/tsconfig.json ./
+
 COPY ./src/.env.docker ./src/.env
 
-# Expose the port your service listens on
 EXPOSE 3000
 
-# Start the application
 CMD ["npm", "run", "dev"]
