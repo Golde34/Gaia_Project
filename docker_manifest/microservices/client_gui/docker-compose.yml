@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  client-gui:
+    build:
+      context: .
+      dockerfile: client_gui.docerfile 
+    ports:
+      - "5173:5173"
+    depends_on: []
