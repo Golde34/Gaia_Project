@@ -1,18 +1,20 @@
 version: '3.8'
 
 services:
-  task-manager:
+  schedule-plan:
+    image: server-schedule-plan
     build:
       context: .
-      dockerfile: task_manager.dockerfile
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3002:3002"
     env_file:
-      - .env
+      - ./src/.env
     depends_on: []
+    network_mode: host  #Allow the container to access the host network
     environment:
       DATABASE_HOST: 172.17.0.1
       DATABASE_PORT: 27017
-      DATABASE_NAME: task_manager
+      DATABASE_NAME: schedule_plan
       DATABASE_USERNAME: 
       DATABASE_PASSWORD: 

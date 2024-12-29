@@ -10,7 +10,7 @@ export class KafkaConfig {
         this.kafka = new Kafka({
             clientId: config.kafka.groupId,
             // brokers: getArrayBrokers(config.kafka.bootstrapServers)
-            brokers: ['localhost:9094']
+            brokers: config.kafka.bootstrapServers
         })
         this.consumer = this.kafka.consumer({ groupId: config.kafka.groupId });
         this.producer = this.kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner});

@@ -1,17 +1,26 @@
-FROM node:18
+# Stage 1: Build stage
+FROM node:18-slim AS builder
 
-WORKDIR /backend/person_task_manager/task_manager/
+WORKDIR /backend/person_task_manager/
 
-COPY ../../../person_task_manager/server/package*.json ./
+COPY package*.json ./
+
 RUN npm install
 
-# Copy the rest of the application code
-COPY ../../../person_task_manager/server/src /backend/person_task_manager/task_manager/src
-# COPY ../../../person_task_manager/server/tsconfig.json /backend/person_task_manager/task_manager/tsconfig.json
-COPY /.env /backend/person_task_manager/task_manager/src/.env
+COPY . .
 
-# Expose the port your service listens on
+# Stage 2: Production stage
+FROM node:18-alpine
+
+WORKDIR /backend/person_task_manager/
+
+COPY --from=builder /backend/person_task_manager/node_modules ./node_modules
+COPY --from=builder /backend/person_task_manager/package*.json ./
+COPY --from=builder /backend/person_task_manager/src ./src
+COPY --from=builder /backend/person_task_manager/tsconfig.json ./
+
+COPY ./src/.env.docker ./src/.env
+
 EXPOSE 3000
 
-# Start the application
 CMD ["npm", "run", "dev"]

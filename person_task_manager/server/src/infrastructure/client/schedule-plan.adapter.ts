@@ -4,12 +4,16 @@ import { HttpCodeMessage, HttpMethod } from '../../core/domain/enums/enums';
 import { buildDefaultHeaders } from '../../kernel/util/build-headers';
 
 dotenv.config({ path: './src/.env'});
+const schedulePlanDomain = process.env.SCHEDULE_PLAN_DOMAIN;
 
 class SchedulePlanAdapter {
     private getSchedulePlanByTaskId: string | undefined;
 
     constructor() {
-        this.getSchedulePlanByTaskId = process.env.SCHEDULE_PLAN_GET_SCHEDULE_TASK_BY_TASK_ID
+        if (!schedulePlanDomain) {
+            throw new Error("SCHEDULE_PLAN_DOMAIN is not defined");
+        }
+        this.getSchedulePlanByTaskId = schedulePlanDomain + process.env.SCHEDULE_PLAN_GET_SCHEDULE_TASK_BY_TASK_ID
     }
 
     async getScheduleTaskByTaskId(taskId: string | null, scheduleTaskId: string | null) {
