@@ -25,6 +25,7 @@
 *\tmp
 
 .env
+.env.docker
 *.sqlite3
 
 # gitignore json

@@ -2,7 +2,7 @@
 FROM node:18
 
 # Set working directory in the container
-WORKDIR /app
+WORKDIR /backend/person_task_manager/
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Copy .env file into the container
-COPY ./src/.env ./src/.env
+COPY ./src/.env.docker ./src/.env
 
 # Expose the port your service listens on
 EXPOSE 3000
