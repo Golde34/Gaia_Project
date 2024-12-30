@@ -4,12 +4,16 @@ import { getInternalServiceErrorResponse } from "../../kernel/util/return-result
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: './src/.env'});
+const authServiceDomain = process.env.AUTH_SERVICE_DOMAIN;
 
 class AuthServiceAdapter {
     private getUserByUserId: string | undefined;
 
     constructor() {
-        this.getUserByUserId = process.env.AUTH_SERVICE_GET_USER_BY_ID
+        if (!authServiceDomain) {
+            throw new Error("AUTH_SERVICE_DOMAIN is not defined");
+        }
+        this.getUserByUserId = authServiceDomain + process.env.AUTH_SERVICE_GET_USER_BY_ID;
     }
 
     async checkExistedUser(userId: number) {

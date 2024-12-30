@@ -1,9 +1,13 @@
-FROM node:slim
+FROM node:18-alpine
 
-WORKDIR /frontend/client_gui
+WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
+
 RUN npm install
 
 COPY . .
-CMD ["npm", "run", "dev"]
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host"]
