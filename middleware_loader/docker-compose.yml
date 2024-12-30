@@ -1,0 +1,14 @@
+# Docker Compose configuration for Personal Task Manager using .env file
+version: '3.8'
+
+services:
+  task-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on: []
+
