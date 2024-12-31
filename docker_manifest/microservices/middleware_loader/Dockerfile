@@ -14,3 +14,5 @@ COPY .env.docker .env
 EXPOSE 4000
 
 CMD ["go", "run", "cmd/main.go"]
+
+

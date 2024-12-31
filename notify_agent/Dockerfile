@@ -9,8 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-COPY .env.docker .env
 
-EXPOSE 4000
+EXPOSE 4003
 
 CMD ["go", "run", "cmd/main.go"]

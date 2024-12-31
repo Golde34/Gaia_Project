@@ -5,7 +5,7 @@ services:
     image: server-schedule-plan
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: schedule_plan.dockerfile 
     ports:
       - "3002:3002"
     env_file:
