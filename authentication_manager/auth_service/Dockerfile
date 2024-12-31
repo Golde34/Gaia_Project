@@ -1,11 +1,10 @@
-FROM openjdk:17-slim
+FROM openjdk:17-jdk-slim
 
-WORKDIR /backend/authentication_manager
+WORKDIR /backend/auth_service/
 
-COPY /auth_service /backend/authentication_manager/auth_service
+COPY target/auth_service-0.0.1.jar auth_service.jar
+COPY src/main/resources/application-docker.properties backend/auth_service/application.properties
 
-RUN mvn clean install -f /backend/authentication_manager/auth_service/pom.xml
+EXPOSE 4001 
 
-EXPOSE 4001
-
-CMD ["java", "-jar", "/backend/authentication_manager/auth_service/target/0.0.1.jar"]
+ENTRYPOINT ["java", "-jar", "auth_service.jar", "--spring.config.location=classpath:/application.properties"]
