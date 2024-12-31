@@ -21,6 +21,7 @@ __config__.py
 *\tmp
 
 .env
+.env.docker
 
 # gitignore json
 token.json
