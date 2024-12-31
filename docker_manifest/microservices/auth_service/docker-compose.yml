@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   auth_service:
+    image: server-authnetication-service
     build:
       context: .
       dockerfile: Dockerfile
