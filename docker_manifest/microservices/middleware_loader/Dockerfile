@@ -1,28 +1,18 @@
-# Stage 1: Build stage
-FROM golang:1.22-alpine AS builder
+FROM golang:1.22-alpine
 
-ENV GO111MODULE=on \
-    CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
+ENV GO111MODULE=on
 
-WORKDIR /backend/
+WORKDIR /app
 
 COPY go.mod go.sum ./
 
 RUN go mod download
 
 COPY . .
+COPY .env.docker .env
 
-RUN go build -o middleware_loader .
+EXPOSE 4000
 
-# Stage 2: Production stage
-FROM alpine:latest
+CMD ["go", "run", "cmd/main.go"]
 
-WORKDIR /backend/
 
-COPY --from=builder /backend/middleware_loader .
-
-EXPOSE 4000 
-
-CMD ["./middleware_loader"]
