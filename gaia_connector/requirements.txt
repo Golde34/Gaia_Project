@@ -1,0 +1,12 @@
+chromadb==0.5.1
+Flask==3.1.0
+Flask_Cors==4.0.1
+flask_kafka==0.1.0
+mysqlclient
+Flask_MySQLdb
+langchain_text_splitters==0.3.4
+python-dotenv==1.0.1
+Requests==2.32.3
+sentence_transformers==3.0.1
+transformers==4.38.2
+Werkzeug==3.1.3
