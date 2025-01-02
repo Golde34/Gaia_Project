@@ -8,9 +8,18 @@ Gaia is a comprehensive **User Task Management System** designed to optimize and
 ## Key Features
 ### **Core Features**
 1. **Virtual AI Assistant**: The system leverages state-of-the-art LLM models to understand user queries, provide insights, and offer seamless task-related assistance in both text and voice formats.
-2. **Task Management**: Gaia helps users create, manage, and optimize their tasks efficiently with automation and scheduling capabilities.
-3. **Named Entity Recognition (NER)**: Enhances user input processing by extracting meaningful entities like names, dates, locations, and task-specific details.
+2. **Named Entity Recognition (NER)**: Enhances user input processing by extracting meaningful entities like names, dates, locations, and task-specific details.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5133e1a1-86d8-4a67-a914-c8922a15c635" width="600px">
+</div>
+3. **Task Management**: Gaia helps users create, manage, and optimize their tasks efficiently with automation and scheduling capabilities.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/689e4e7b-54bb-4dea-89da-c9b3576ac7b1" width="600px">
+</div>
 4. **Work Optimization**: Automates task prioritization and schedule planning to ensure maximum productivity.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973" width="600px">
+</div>
 5. **Integration & Notifications**: Gaia seamlessly integrates with user calendars, sends timely notifications, and helps manage deadlines.
 6. **Logging and Tracking**: Comprehensive logging and tracking ensure transparency and allow users to monitor their tasks and progress.
 
@@ -18,21 +27,6 @@ Gaia is a comprehensive **User Task Management System** designed to optimize and
 1. **Automatic Task Recognition**: Gaia will automatically identify tasks users need to perform through natural conversations, even when users do not explicitly state their requirements.
 2. **Interactive Recommendations**: Gaia will proactively recommend tasks, reminders, and actions to users through notifications and real-time conversations.
 3. **Enhanced Chatbot Integrations**: Expanded functionalities to seamlessly integrate the chatbot with other systems, enabling smoother workflows and enhanced productivity.
-
-### Slide 1
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973" alt="image">
-</div>
-<p align="center">Caption for Slide 1: This is the first slide!</p>
-
----
-
-### Slide 2
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/5133e1a1-86d8-4a67-a914-c8922a15c635" alt="Slide 2" width="600px">
-</div>
-<p align="center">Caption for Slide 2: Another amazing slide!</p>
-
 
 ## How Gaia Works
 Gaia operates as an interconnected microservices system, combining AI-powered insights with effective task management workflows:
