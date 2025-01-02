@@ -1,8 +1,9 @@
 # Gaia Project - User Task Management System with AI Assistant
-![image](https://github.com/user-attachments/assets/fe2dc3d9-dd4e-4c70-9dae-254cdc995f94)
 
 ## Overview
 Gaia is a comprehensive **User Task Management System** designed to optimize and manage tasks effectively. The system integrates an advanced virtual assistant powered by **Large Language Models (LLM)** and **Named Entity Recognition (NER)** to provide an intelligent, responsive, and personalized task management experience for users.
+
+![image](https://github.com/user-attachments/assets/fe2dc3d9-dd4e-4c70-9dae-254cdc995f94)
 
 ## Key Features
 ### **Core Features**
@@ -18,9 +19,20 @@ Gaia is a comprehensive **User Task Management System** designed to optimize and
 2. **Interactive Recommendations**: Gaia will proactively recommend tasks, reminders, and actions to users through notifications and real-time conversations.
 3. **Enhanced Chatbot Integrations**: Expanded functionalities to seamlessly integrate the chatbot with other systems, enabling smoother workflows and enhanced productivity.
 
+### Slide 1
 <div align="center">
   <img src="https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973" alt="image">
 </div>
+<p align="center">Caption for Slide 1: This is the first slide!</p>
+
+---
+
+### Slide 2
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5133e1a1-86d8-4a67-a914-c8922a15c635" alt="Slide 2" width="600px">
+</div>
+<p align="center">Caption for Slide 2: Another amazing slide!</p>
+
 
 ## How Gaia Works
 Gaia operates as an interconnected microservices system, combining AI-powered insights with effective task management workflows:
@@ -44,8 +56,9 @@ The Gaia system is built as a collection of interconnected microservices:
 - **Notify Agent**: Sends timely notifications and reminders for tasks.
 - **Logging Tracker**: Manages logs and ensures the system's backend processes are transparent and auditable.
 
-![image](https://github.com/user-attachments/assets/77bc3dfd-dbd1-49c1-95b4-5d4567e3cdaa)
-
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/77bc3dfd-dbd1-49c1-95b4-5d4567e3cdaa" alt="image">
+</div>
 
 ## Getting Started
 
