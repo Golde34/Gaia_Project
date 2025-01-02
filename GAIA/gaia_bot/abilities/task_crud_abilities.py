@@ -33,7 +33,7 @@ class TaskCRUDSkill():
     
     @classmethod
     def _send_request(cls, task, method):
-        ConsoleManager().console_log(info_log=f"Executing {method} request to Task Manager: {task}")
+        cls.console_manager.console_log(info_log=f"Executing {method} request to Task Manager: {task}")
         return TaskManagerConnector().execute_task_command(task, method)
     
     @classmethod
@@ -80,17 +80,17 @@ class TaskCRUDSkill():
     @classmethod
     def _handle_null_fields(cls, result):
         if result['project'] is None or result['project'] == "":
-            print("Project is empty, what is project you want to add task to?")
+            cls.console_manager.gaia_output("You haven't define project, what is project you want to add task to?")
             project = str(input("Enter project: "))
             result['project'] = project
 
         if result['group_task'] is None or result['group_task'] == "":
-            print("Group task is empty, what is group task you want to add task to?")
+            cls.console_manager.gaia_output("Group task is empty, what is group task I should use for?")
             group_task = str(input("Enter group task: "))
             result['group_task'] = group_task
         
         if result['task']['title'] is None or result['task']['title'] == "":
-            print("Title is empty, what is title you want to add task to?")
+            cls.console_manager.gaia_output("That's weird if the title is not defined, shall I add a default or you will do it yourself?")
             title = str(input("Enter title: "))
             result['task']['title'] = title 
         
