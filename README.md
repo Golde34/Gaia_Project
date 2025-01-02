@@ -12,14 +12,17 @@ Gaia is a comprehensive **User Task Management System** designed to optimize and
 <div align="center">
   <img src="https://github.com/user-attachments/assets/5133e1a1-86d8-4a67-a914-c8922a15c635">
 </div>
+
 3. **Task Management**: Gaia helps users create, manage, and optimize their tasks efficiently with automation and scheduling capabilities.
 <div align="center">
   <img src="https://github.com/user-attachments/assets/689e4e7b-54bb-4dea-89da-c9b3576ac7b1">
 </div>
+
 4. **Work Optimization**: Automates task prioritization and schedule planning to ensure maximum productivity.
 <div align="center">
   <img src="https://github.com/user-attachments/assets/39ecbf5b-5a05-4dc2-8332-d688b3a2b973">
 </div>
+
 5. **Integration & Notifications**: Gaia seamlessly integrates with user calendars, sends timely notifications, and helps manage deadlines.
 6. **Logging and Tracking**: Comprehensive logging and tracking ensure transparency and allow users to monitor their tasks and progress.
 
