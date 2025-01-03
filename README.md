@@ -42,16 +42,17 @@ Gaia operates as an interconnected microservices system, combining AI-powered in
 
 ## System Architecture
 The Gaia system is built as a collection of interconnected microservices:
-- **Gaia - System CLI**: Allows users to interact with Gaia directly through a local console using text or voice commands.
-- **Gaia Connector**: A service enabling Gaia to interact with backend systems.
-- **Client GUI**: A user-friendly web interface for task management.
-- **Middleware Loader**: A public-facing service that bridges the Client GUI with the backend systems.
-- **Authentication Service**: Manages user authorization and authentication securely.
-- **Personal Task Manager**: Core service responsible for task creation, updates, and management.
-- **Schedule Plan**: Handles calendar integrations and automated scheduling.
-- **Work Optimization**: Optimizes tasks and schedules based on user priorities.
-- **Notify Agent**: Sends timely notifications and reminders for tasks.
-- **Logging Tracker**: Manages logs and ensures the system's backend processes are transparent and auditable.
+- **[Gaia - System CLI](https://github.com/Golde34/Gaia-Project/tree/main/GAIA)**: Allows users to interact with Gaia directly through a local console using text or voice commands.  
+- **[Gaia Connector](https://github.com/Golde34/Gaia-Project/tree/main/gaia_connector)**: A service enabling Gaia to interact with backend systems.  
+- **[Client GUI](https://github.com/Golde34/Gaia-Project/tree/main/client_gui)**: A user-friendly web interface for task management.  
+- **[Middleware Loader](https://github.com/Golde34/Gaia-Project/tree/main/Middleware-Loader)**: A public-facing service that bridges the Client GUI with the backend systems.  
+- **[Authentication Service](https://github.com/Golde34/Gaia-Project/tree/main/Authentication-Service)**: Manages user authorization and authentication securely.  
+- **[Personal Task Manager](https://github.com/Golde34/Gaia-Project/tree/main/Personal-Task-Manager)**: Core service responsible for task creation, updates, and management.  
+- **[Schedule Plan](https://github.com/Golde34/Gaia-Project/tree/main/Schedule-Plan)**: Handles calendar integrations and automated scheduling.  
+- **[Work Optimization](https://github.com/Golde34/Gaia-Project/tree/main/Work-Optimization)**: Optimizes tasks and schedules based on user priorities.  
+- **[Notify Agent](https://github.com/Golde34/Gaia-Project/tree/main/Notify-Agent)**: Sends timely notifications and reminders for tasks.  
+- **[Logging Tracker](https://github.com/Golde34/Gaia-Project/tree/main/Logging-Tracker)**: Manages logs and ensures the system's backend processes are transparent and auditable. 
+
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/77bc3dfd-dbd1-49c1-95b4-5d4567e3cdaa" alt="image">
@@ -74,3 +75,5 @@ This project is licensed under the MIT License.
 
 ---
 Gaia is your smart virtual assistant for streamlined task management and work optimization.
+
+
