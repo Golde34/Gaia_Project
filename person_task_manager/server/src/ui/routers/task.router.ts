@@ -74,7 +74,7 @@ taskRouter.post("/private-create",
 
 // update task
 taskRouter.put("/:id",
-    RequestValidator.validate(UpdateTaskRequestDto),
+    RequestValidator.validateV2(UpdateTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const taskResult = await taskControllerImpl.updateTask(req, next);

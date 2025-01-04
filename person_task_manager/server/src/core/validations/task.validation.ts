@@ -1,4 +1,5 @@
 import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
+import { UpdateTaskRequestDto } from "../domain/dtos/task.dto";
 
 export const taskValidation = {
     async checkExistedTaskByTaskId(taskId: string): Promise<boolean> {

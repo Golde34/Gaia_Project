@@ -34,27 +34,20 @@ export class TaskRequestDto {
 }
 
 export class UpdateTaskRequestDto {
-    @IsString()
-    userId!: string;
+    userId!: number;
     @IsString()
     taskId!: string;
     @IsString()
     title!: string;
     @IsString()
     description!: string;
-    @IsString()
-    startDate!: string;
-    @IsString()
-    deadline!: string;
-    @IsString()
-    duration!: string;
+    startDate!: Date;
+    deadline!: Date;
+    duration!: number;
     @IsString()
     status!: string;
-    @IsString()
     priority!: string[];
-    @IsString()
     taskOrder!: number;
-    @IsString()
     stopTime!: number;
     @IsString()
     scheduleTaskId!: string;
