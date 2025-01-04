@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { createGroupTask } from '../../api/store/actions/task_manager/group-task.actions';
 import { createProject } from '../../api/store/actions/task_manager/project.actions';
-import { createTask, generateTaskFromScratch } from '../../api/store/actions/task_manager/task.actions';
+import { createTask, generateTaskFromScratch, updateTask } from '../../api/store/actions/task_manager/task.actions';
 import { updateUser, updateUserSetting } from '../../api/store/actions/auth_service/user.actions';
 import { createRole } from '../../api/store/actions/auth_service/role.actions';
 import { registerTaskConfig } from '../../api/store/actions/work_optimization/task-registration.actions';
@@ -106,4 +106,14 @@ export const useChooseTaskBatchDispatch = () => {
     }
 
     return chooseTaskBatchDispatch;
+}
+
+export const useUpdateTaskDispatch = () => {
+    const dispatch = useDispatch();
+
+    const updateTaskDispatch = (task) => {
+        dispatch(updateTask(task));
+    }
+
+    return updateTaskDispatch;
 }

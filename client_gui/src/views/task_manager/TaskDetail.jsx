@@ -8,6 +8,7 @@ import MessageBox from "../../components/subComponents/MessageBox";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
 import { priorityColor, pullPriority, statusColor } from "../../kernels/utils/field-utils";
+import { useUpdateTaskDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 function ContentArea() {
     const userId = 1;
@@ -46,7 +47,6 @@ function ContentArea() {
     const [isMediumPriority, setIsMediumPriority] = useState(null);
     const [isLowPriority, setIsLowPriority] = useState(null);
     const [isStarPriority, setIsStarPriority] = useState(null);
-    const [projectName, setProjectName] = useState();
     const [taskBatch, setTaskBatch] = useState(null);
     const [taskOrder, setTaskOrder] = useState(null);
     const [stopTime, setStopTime] = useState(null);
@@ -56,7 +56,8 @@ function ContentArea() {
         localStorage.setItem("activeTab", groupTaskId);
     }
 
-    const updateTask = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+    const updateTask = useUpdateTaskDispatch();
+    const setTaskObject = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
         const body = {
             userId: userId,
             taskId: taskId,
@@ -68,9 +69,11 @@ function ContentArea() {
             status: status,
             priority: [isHighPriority, isMediumPriority, isLowPriority, isStarPriority],
             taskOrder: taskOrder,
-            stopTime: stopTime
+            stopTime: stopTime,
+            scheduleTaskId: detail?.scheduleTaskId,
         }
-        console.log(body);
+        updateTask(body);
+        window.location.reload();
     }
 
     return (
@@ -144,7 +147,7 @@ function ContentArea() {
                                             <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
                                             <TextInput
                                                 type="number"
-                                                value={duration == null ? detail?.duration : duration}
+                                                value={duration == null ? detail?.duration : defaultDuration}
                                                 onChange={(event) => {
                                                     setDuration(event.target.value);
                                                 }}
@@ -336,7 +339,7 @@ function ContentArea() {
                                     <Button className="mt-4"
                                         variant="primary" color="indigo"
                                         onClick={() => {
-                                            updateTask(title, description, startDate, deadline, duration, status,
+                                            setTaskObject(title, description, startDate, deadline, duration, status,
                                                 isHighPriority, isMediumPriority, isLowPriority, isStarPriority,
                                                 taskOrder, stopTime);
                                         }
