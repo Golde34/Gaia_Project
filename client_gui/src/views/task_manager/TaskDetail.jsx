@@ -39,7 +39,7 @@ function ContentArea() {
     const [description, setDescription] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [deadline, setDeadline] = useState(null);
-    const [duration, setDuration] = useState(defaultDuration);
+    const [duration, setDuration] = useState(null);
     const [status, setStatus] = useState(null);
     const priorities = pullPriority(detail?.priority);
     const [isHighPriority, setIsHighPriority] = useState(null);
@@ -150,7 +150,7 @@ function ContentArea() {
                                                 }}
                                                 className="mt-1 ms-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                                 placeholder="Input working hours"
-                                                error={(detail?.duration < 1 || detail?.duration > 16)}
+                                                error={(detail?.duration < 1)}
                                                 errorMessage="Duration must be between 1 and 16 hours"
                                             />
                                         </Col>
