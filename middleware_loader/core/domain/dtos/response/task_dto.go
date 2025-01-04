@@ -86,9 +86,11 @@ type TaskDetailResponseDTO struct {
 	Duration    float64  `json:"duration"`
 	StartDate   string   `json:"startDate"`
 	Deadline    string   `json:"deadline"`
-	TaskBatch   int64    `json:"taskBatch"`
-	TaskOrder   int64    `json:"taskOrder"`
-	StopTime    float64  `json:"stopTime"`
+
+	ScheduleTaskId string  `json:"scheduleTaskId"`
+	TaskBatch      int64   `json:"taskBatch"`
+	TaskOrder      int64   `json:"taskOrder"`
+	StopTime       float64 `json:"stopTime"`
 
 	ProjectId          string `json:"projectId"`
 	ProjectName        string `json:"projectName"`
@@ -128,6 +130,8 @@ func (in *TaskDetailResponseDTO) MapperTaskDetail(response interface{}) TaskDeta
 	out.Duration = task["duration"].(float64)
 	out.StartDate = task["startDate"].(string)
 	out.Deadline = task["deadline"].(string)
+
+	out.ScheduleTaskId = scheduleTask["_id"].(string)
 	out.TaskBatch = int64(scheduleTask["taskBatch"].(float64))
 	out.TaskOrder = int64(scheduleTask["taskOrder"].(float64))
 	out.StopTime = scheduleTask["stopTime"].(float64)
