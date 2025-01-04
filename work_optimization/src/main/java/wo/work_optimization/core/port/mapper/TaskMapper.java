@@ -92,6 +92,8 @@ public class TaskMapper {
         task.setStartDate(DateTimeUtils.convertStringDateTime(request.getStartDate()));
         task.setStatus(request.getStatus());
         task.setTitle(request.getTitle());
+        task.setStopTime(request.getStopTime());
+        task.setTaskOrder(request.getTaskOrder());
         return task;
    }
 }

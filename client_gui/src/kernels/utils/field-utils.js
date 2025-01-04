@@ -27,16 +27,16 @@ export const priorityColor = (priority) => {
 export const pushPriority = (isHighPriority, isMediumPriority, isLowPriority, isStarPriority) => {
     let priority = []
     if (isHighPriority) {
-        priority.push(TaskPriority.HIGH)
+        priority.push(TaskPriority.HIGH_CAMEL)
     }
     if (isMediumPriority) {
-        priority.push(TaskPriority.MEDIUM)
+        priority.push(TaskPriority.MEDIUM_CAMEL)
     }
     if (isLowPriority) {
-        priority.push(TaskPriority.LOW)
+        priority.push(TaskPriority.LOW_CAMEL)
     }
     if (isStarPriority) {
-        priority.push(TaskPriority.STAR)
+        priority.push(TaskPriority.STAR_CAMEL)
     }
     return priority
 }

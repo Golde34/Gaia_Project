@@ -19,15 +19,18 @@ type CreateTaskRequestDTO struct {
 }
 
 type UpdateTaskRequestDTO struct {
-	Title        string   `json:"title"`
-	Description  string   `json:"description"`
-	Priority     []string `json:"priority"`
-	Status       string   `json:"status"`
-	StartDate    string   `json:"startDate"`
-	Deadline     string   `json:"deadline"`
-	Duration     string   `json:"duration"`
-	ActiveStatus string   `json:"activeStatus"`
-	TaskId       string   `json:"taskId"`
+	UserId         float64  `json:"userId"`
+	TaskId         string   `json:"taskId"`
+	Title          string   `json:"title"`
+	Description    string   `json:"description"`
+	StartDate      string   `json:"startDate"`
+	Deadline       string   `json:"deadline"`
+	Duration       float64  `json:"duration"`
+	Status         string   `json:"status"`
+	Priority       []string `json:"priority"`
+	TaskOrder      float64  `json:"taskOrder"`
+	StopTime       float64  `json:"stopTime"`
+	ScheduleTaskId string   `json:"scheduleTaskId"`
 }
 
 type GenerateTaskRequestDTO struct {

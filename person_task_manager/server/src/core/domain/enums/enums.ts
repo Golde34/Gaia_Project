@@ -82,3 +82,8 @@ export enum TaskDetail {
     TASK_MANGER = "TASK_MANAGER",
     SCHEDULE_PLAN = "SCHEDULE_PLAN",
 }
+
+export enum CRUDType {
+    UPDATE_TYPE = "UPDATE",
+    UPDATE_DIALOG_TYPE = "UPDATE_DIALOG"
+}

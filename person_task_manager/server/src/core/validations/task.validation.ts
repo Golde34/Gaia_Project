@@ -1,4 +1,5 @@
 import { TaskEntity } from "../../infrastructure/database/model-repository/task.model";
+import { UpdateTaskRequestDto } from "../domain/dtos/task.dto";
 
 export const taskValidation = {
     async checkExistedTaskByTaskId(taskId: string): Promise<boolean> {
@@ -30,4 +31,13 @@ export const taskValidation = {
             return false;
         }
     },
+
+    async compareTaskId(taskIdUrl: string, taskIdBody: string): Promise<boolean> {
+        try {
+            return taskIdUrl === taskIdBody;
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return false;
+        }
+    }
 }

@@ -33,6 +33,36 @@ export class TaskRequestDto {
     tag?: string;
 }
 
+export class UpdateTaskRequestDto {
+    userId!: number;
+    @IsString()
+    taskId!: string;
+    @IsString()
+    title!: string;
+    @IsString()
+    description!: string;
+    startDate!: Date;
+    deadline!: Date;
+    duration!: number;
+    @IsString()
+    status!: string;
+    priority!: string[];
+    taskOrder!: number;
+    stopTime!: number;
+    @IsString()
+    scheduleTaskId!: string;
+    @IsOptional()
+    subTasks?: string[];
+    @IsOptional()
+    comments?: string[];
+    @IsString()
+    @IsOptional()
+    activeStatus?: string;
+    @IsString()
+    @IsOptional()
+    tag?: string;
+}
+
 export class GenerateTaskFromScratchRequestDTO {
     @IsString()
     title!: string;

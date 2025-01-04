@@ -7,7 +7,8 @@ import { Badge, BadgeDelta, Button, Card, Col, DatePicker, Flex, Grid, Metric, T
 import MessageBox from "../../components/subComponents/MessageBox";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
-import { priorityColor, pullPriority, statusColor } from "../../kernels/utils/field-utils";
+import { priorityColor, pullPriority, pushPriority, statusColor } from "../../kernels/utils/field-utils";
+import { useUpdateTaskDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 function ContentArea() {
     const userId = 1;
@@ -39,14 +40,13 @@ function ContentArea() {
     const [description, setDescription] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [deadline, setDeadline] = useState(null);
-    const [duration, setDuration] = useState(defaultDuration);
+    const [duration, setDuration] = useState(null);
     const [status, setStatus] = useState(null);
     const priorities = pullPriority(detail?.priority);
     const [isHighPriority, setIsHighPriority] = useState(null);
     const [isMediumPriority, setIsMediumPriority] = useState(null);
     const [isLowPriority, setIsLowPriority] = useState(null);
     const [isStarPriority, setIsStarPriority] = useState(null);
-    const [projectName, setProjectName] = useState();
     const [taskBatch, setTaskBatch] = useState(null);
     const [taskOrder, setTaskOrder] = useState(null);
     const [stopTime, setStopTime] = useState(null);
@@ -56,21 +56,37 @@ function ContentArea() {
         localStorage.setItem("activeTab", groupTaskId);
     }
 
-    const updateTask = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+    const updateTask = useUpdateTaskDispatch();
+    const setTaskObject = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+        if (title === null && description === null && startDate === null && deadline === null && duration === null 
+            && status === null && isHighPriority === null && isMediumPriority === null && isLowPriority === null && isStarPriority === null 
+            && taskOrder === null && stopTime === null) {
+                alert("Please update at least one field");
+                return;
+        }
+        if (isHighPriority === null && isMediumPriority === null && isLowPriority === null && isStarPriority === null) {
+            isHighPriority = priorities[0];
+            isMediumPriority = priorities[1];
+            isLowPriority = priorities[2];
+            isStarPriority = priorities[3];
+        }
+        const priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         const body = {
             userId: userId,
             taskId: taskId,
-            title: title,
-            description: description,
-            startDate: startDate,
-            deadline: deadline,
-            duration: duration,
-            status: status,
-            priority: [isHighPriority, isMediumPriority, isLowPriority, isStarPriority],
-            taskOrder: taskOrder,
-            stopTime: stopTime
+            title: title === null ? detail?.title : title,
+            description: description === null ? detail?.description : description,
+            startDate: startDate === null ? detail?.startDate : startDate,
+            deadline: deadline === null ? detail?.deadline : deadline,
+            duration: duration === null ? detail?.duration : duration,
+            status: status === null ? detail?.status : status,
+            priority: priority,
+            taskOrder: taskOrder === null ? detail?.taskOrder : taskOrder,
+            stopTime: stopTime === null ? detail?.stopTime : stopTime,
+            scheduleTaskId: detail?.scheduleTaskId === null ? 0 : detail?.scheduleTaskId,
         }
-        console.log(body);
+        updateTask(body);
+        window.location.reload();
     }
 
     return (
@@ -144,13 +160,13 @@ function ContentArea() {
                                             <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
                                             <TextInput
                                                 type="number"
-                                                value={duration == null ? detail?.duration : duration}
+                                                value={duration == null ? detail?.duration : defaultDuration}
                                                 onChange={(event) => {
                                                     setDuration(event.target.value);
                                                 }}
                                                 className="mt-1 ms-1 rounded-md shadow-sm focus:border-blue-500 sm:text-sm"
                                                 placeholder="Input working hours"
-                                                error={(detail?.duration < 1 || detail?.duration > 16)}
+                                                error={(detail?.duration < 1)}
                                                 errorMessage="Duration must be between 1 and 16 hours"
                                             />
                                         </Col>
@@ -336,7 +352,7 @@ function ContentArea() {
                                     <Button className="mt-4"
                                         variant="primary" color="indigo"
                                         onClick={() => {
-                                            updateTask(title, description, startDate, deadline, duration, status,
+                                            setTaskObject(title, description, startDate, deadline, duration, status,
                                                 isHighPriority, isMediumPriority, isLowPriority, isStarPriority,
                                                 taskOrder, stopTime);
                                         }

@@ -21,4 +21,7 @@ public class TaskObjRequestDTO {
     private String updatedAt;
     private String activeStatus;
     private String id;
+    private String taskId;
+    private int taskOrder;
+    private double stopTime;
 }

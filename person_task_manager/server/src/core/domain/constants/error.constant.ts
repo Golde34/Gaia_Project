@@ -41,6 +41,7 @@ export const UPDATE_TASK_FAILED = "Update task failed";
 export const DELETE_TASK_FAILED = "Delete task failed";
 export const ARCHIVE_TASK_FAILED = "Archive task failed";
 export const ENABLE_TASK_FAILED = "Enable task failed";
+export const TASKID_COMPARE_FAILED = "TaskId compare failed";
 
 export const CREATE_SUB_TASK_FAILED = "Create sub task failed";
 export const UPDATE_SUB_TASK_FAILED = "Update sub task failed";

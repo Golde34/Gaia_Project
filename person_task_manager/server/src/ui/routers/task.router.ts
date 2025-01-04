@@ -2,7 +2,7 @@ import { type Request, type Response, Router, NextFunction } from "express";
 import { checkPermission, checkToken } from "./user_authentication/auth.middleware";
 import { Permission } from "../../core/domain/enums/enums";
 import { RequestValidator } from "../../core/common/error-handler";
-import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/task.dto";
+import { GenerateTaskFromScratchRequestDTO, TaskRequestDto, UpdateTaskInDialogDTO, UpdateTaskRequestDto } from "../../core/domain/dtos/task.dto";
 import { taskController } from "../controllers/task.controller";
 import { ARCHIVE_TASK_FAILED, COMMENT_NOT_FOUND, CREATE_TASK_FAILED, DELETE_TASK_FAILED, ENABLE_TASK_FAILED, GROUPTASK_AND_PROJECT_NOT_FOUND, SUB_TASK_NOT_FOUND, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../../core/domain/constants/error.constant";
 import { returnResult } from "../../kernel/util/return-result";
@@ -74,7 +74,7 @@ taskRouter.post("/private-create",
 
 // update task
 taskRouter.put("/:id",
-    RequestValidator.validate(TaskRequestDto),
+    RequestValidator.validateV2(UpdateTaskRequestDto),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const taskResult = await taskControllerImpl.updateTask(req, next);
