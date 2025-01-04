@@ -40,7 +40,9 @@ GaiaBot follows a modular architecture, organized into the following packages:
 - **package resources**: Stores static files, audio, and pre-trained AI models.
 - **package process**: Core of GaiaBot, handling business logic and user queries.
 
-![image](https://github.com/user-attachments/assets/a2c359a8-d308-415c-bd81-e83122ad5815)
+<p align="center">
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/a2c359a8-d308-415c-bd81-e83122ad5815">    
+</p>
 
 ## Setup and Installation
 ```bash
