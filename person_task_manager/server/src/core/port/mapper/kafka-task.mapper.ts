@@ -28,8 +28,7 @@ export const kafkaCreateTaskMapper = async (data: ITaskEntity, projectName: stri
 };
 
 export class KafkaUpdateTaskMessage {
-    @IsString()
-    userId!: string;
+    userId!: number;
     @IsString()
     taskId!: string;
     @IsString()

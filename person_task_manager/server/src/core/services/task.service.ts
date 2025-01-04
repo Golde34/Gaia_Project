@@ -104,8 +104,8 @@ class TaskService {
 
             this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
 
-            // const updateTaskMessage = await kafkaUpdateTaskMapper(updateTask, task);
-            // this.pushUpdateTaskMessage(updateTaskMessage);
+            const updateTaskMessage = await kafkaUpdateTaskMapper(updateTask, task);
+            this.pushUpdateTaskMessage(updateTaskMessage);
 
             return msg200({
                 message: (updateTask as any)
