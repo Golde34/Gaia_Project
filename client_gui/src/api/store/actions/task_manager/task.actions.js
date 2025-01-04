@@ -77,7 +77,7 @@ export const updateTask = (task) => async (dispatch) => {
         //     'Content-Type': 'multipart/form-data',
         //     'Authorization': `Bearer ${userInfo.token}`
         // }
-        const { data } = await serverRequest(`/task/${task.id}`, HttpMethods.PUT, portName.middleware, task);
+        const { data } = await serverRequest(`/task/${task.taskId}`, HttpMethods.PUT, portName.middleware, task);
         dispatch({ type: TASK_UPDATE_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

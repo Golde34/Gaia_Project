@@ -7,7 +7,7 @@ import { Badge, BadgeDelta, Button, Card, Col, DatePicker, Flex, Grid, Metric, T
 import MessageBox from "../../components/subComponents/MessageBox";
 import RadioButtonIcon from "../../components/icons/RadioButtonIcon";
 import CheckBoxIcon from "../../components/icons/CheckboxIcon";
-import { priorityColor, pullPriority, statusColor } from "../../kernels/utils/field-utils";
+import { priorityColor, pullPriority, pushPriority, statusColor } from "../../kernels/utils/field-utils";
 import { useUpdateTaskDispatch } from "../../kernels/utils/write-dialog-api-requests";
 
 function ContentArea() {
@@ -58,22 +58,29 @@ function ContentArea() {
 
     const updateTask = useUpdateTaskDispatch();
     const setTaskObject = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+        if (isHighPriority === null && isMediumPriority === null && isLowPriority === null && isStarPriority === null) {
+            isHighPriority = priorities[0];
+            isMediumPriority = priorities[1];
+            isLowPriority = priorities[2];
+            isStarPriority = priorities[3];
+        }
+        const priority = pushPriority(isHighPriority, isMediumPriority, isLowPriority, isStarPriority);
         const body = {
             userId: userId,
             taskId: taskId,
-            title: title,
-            description: description,
-            startDate: startDate,
-            deadline: deadline,
-            duration: duration,
-            status: status,
-            priority: [isHighPriority, isMediumPriority, isLowPriority, isStarPriority],
-            taskOrder: taskOrder,
-            stopTime: stopTime,
-            scheduleTaskId: detail?.scheduleTaskId,
+            title: title === null ? detail?.title : title,
+            description: description === null ? detail?.description : description,
+            startDate: startDate === null ? detail?.startDate : startDate,
+            deadline: deadline === null ? detail?.deadline : deadline,
+            duration: duration === null ? detail?.duration : duration,
+            status: status === null ? detail?.status : status,
+            priority: priority,
+            taskOrder: taskOrder === null ? detail?.taskOrder : taskOrder,
+            stopTime: stopTime === null ? detail?.stopTime : stopTime,
+            scheduleTaskId: detail?.scheduleTaskId === null ? 0 : detail?.scheduleTaskId,
         }
         updateTask(body);
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (
