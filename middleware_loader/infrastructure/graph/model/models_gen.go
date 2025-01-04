@@ -351,13 +351,13 @@ type UpdateTaskInDialogInput struct {
 }
 
 type UpdateTaskInput struct {
-	UserID         string   `json:"userId"`
+	UserID         float64  `json:"userId"`
 	TaskID         string   `json:"taskId"`
 	Title          string   `json:"title"`
 	Description    string   `json:"description"`
 	StartDate      string   `json:"startDate"`
 	Deadline       string   `json:"deadline"`
-	Duration       string   `json:"duration"`
+	Duration       float64  `json:"duration"`
 	Status         string   `json:"status"`
 	Priority       []string `json:"priority"`
 	TaskOrder      float64  `json:"taskOrder"`

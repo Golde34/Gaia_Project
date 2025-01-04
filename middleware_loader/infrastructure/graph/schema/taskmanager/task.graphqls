@@ -30,13 +30,13 @@ input CreateTaskInput {
 }
 
 input UpdateTaskInput {
-	userId: String!
+	userId: Float!
 	taskId: String!
 	title: String!
 	description: String!
 	startDate: String!
 	deadline: String!
-	duration: String!
+	duration: Float!
 	status: String!
 	priority: [String!]!
 	taskOrder: Float!

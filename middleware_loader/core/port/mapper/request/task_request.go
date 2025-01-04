@@ -30,13 +30,13 @@ func CreateTaskRequestDTOMapper(body map[string]interface{}) request_dtos.Create
 func UpdateTaskRequestDTOMapper(body map[string]interface{}, taskId string) request_dtos.UpdateTaskRequestDTO {
 	var input request_dtos.UpdateTaskRequestDTO
 	bodyMap := body["body"].(map[string]interface{})
-	input.UserId = bodyMap["userId"].(string)
+	input.UserId = bodyMap["userId"].(float64)
 	input.TaskId = taskId
 	input.Title = utils.ConvertStringWithPunctuation(bodyMap["title"].(string))
 	input.Description = utils.ConvertStringWithPunctuation(bodyMap["description"].(string))
 	input.StartDate = bodyMap["startDate"].(string)
 	input.Deadline = bodyMap["deadline"].(string)
-	input.Duration = bodyMap["duration"].(string)
+	input.Duration = bodyMap["duration"].(float64)
 	input.Status = bodyMap["status"].(string)
 	input.Priority = utils.ConvertStringToStringArray(bodyMap["priority"].([]interface{}))
 	input.TaskOrder = bodyMap["taskOrder"].(float64)

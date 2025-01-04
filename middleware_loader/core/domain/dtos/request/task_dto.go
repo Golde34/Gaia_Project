@@ -19,17 +19,17 @@ type CreateTaskRequestDTO struct {
 }
 
 type UpdateTaskRequestDTO struct {
-	UserId         string   `json:"userId"`
+	UserId         float64  `json:"userId"`
 	TaskId         string   `json:"taskId"`
 	Title          string   `json:"title"`
 	Description    string   `json:"description"`
 	StartDate      string   `json:"startDate"`
 	Deadline       string   `json:"deadline"`
-	Duration       string   `json:"duration"`
+	Duration       float64  `json:"duration"`
 	Status         string   `json:"status"`
 	Priority       []string `json:"priority"`
 	TaskOrder      float64  `json:"taskOrder"`
-	StopTime       float64   `json:"stopTime"`
+	StopTime       float64  `json:"stopTime"`
 	ScheduleTaskId string   `json:"scheduleTaskId"`
 }
 
