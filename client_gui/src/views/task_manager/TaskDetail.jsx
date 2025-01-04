@@ -58,6 +58,12 @@ function ContentArea() {
 
     const updateTask = useUpdateTaskDispatch();
     const setTaskObject = (title, description, startDate, deadline, duration, status, isHighPriority, isMediumPriority, isLowPriority, isStarPriority, taskOrder, stopTime) => {
+        if (title === null && description === null && startDate === null && deadline === null && duration === null 
+            && status === null && isHighPriority === null && isMediumPriority === null && isLowPriority === null && isStarPriority === null 
+            && taskOrder === null && stopTime === null) {
+                alert("Please update at least one field");
+                return;
+        }
         if (isHighPriority === null && isMediumPriority === null && isLowPriority === null && isStarPriority === null) {
             isHighPriority = priorities[0];
             isMediumPriority = priorities[1];
