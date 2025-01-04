@@ -2,7 +2,7 @@ import { Request, NextFunction } from "express";
 import { IResponse } from "../../core/common/response";
 import { taskService } from "../../core/services/task.service";
 import { plainToInstance } from "class-transformer";
-import { TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/task.dto";
+import { TaskRequestDto, UpdateTaskInDialogDTO, UpdateTaskRequestDto } from "../../core/domain/dtos/task.dto";
 import { groupTaskService } from "../../core/services/group-task.service";
 import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
 import { taskUsecase } from "../../core/usecases/task.usecase";
@@ -108,7 +108,7 @@ class TaskController {
             const bodyJson = req.body;
             const taskId = req.params.id;
 
-            const updateTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
+            const updateTaskObjectDto = plainToInstance(UpdateTaskRequestDto, bodyJson);
             const taskResult = await taskUsecase.updateTask(taskId, updateTaskObjectDto, CRUDType.UPDATE_TYPE);
 
             return taskResult;

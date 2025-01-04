@@ -6,7 +6,7 @@ import { groupTaskService } from "./group-task.service";
 import { projectService } from "./project.service";
 import { groupTaskServiceUtils } from "./service_utils/group-task.service-utils";
 import { taskServiceUtils } from "./service_utils/task.service-utils";
-import { CREATE_TASK_FAILED, TASK_NOT_FOUND, UPDATE_TASK_FAILED } from "../domain/constants/error.constant";
+import { CREATE_TASK_FAILED, TASK_NOT_FOUND, TASKID_COMPARE_FAILED, UPDATE_TASK_FAILED } from "../domain/constants/error.constant";
 import { taskStore } from "../port/store/task.store";
 import { groupTaskStore } from "../port/store/group-task.store";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
@@ -14,7 +14,7 @@ import { KafkaCommand, KafkaTopic } from "../domain/enums/kafka.enums";
 import { createMessage } from "../../infrastructure/kafka/create-message";
 import { InternalCacheConstants, NOT_EXISTED } from "../domain/constants/constants";
 import { userTagStore } from "../port/store/user-tag.store";
-import { kafkaCreateTaskMapper, KafkaCreateTaskMessage } from "../port/mapper/kafka-create-task.mapper";
+import { kafkaCreateTaskMapper, KafkaCreateTaskMessage, kafkaUpdateTaskMapper } from "../port/mapper/kafka-task.mapper";
 import { projectStore } from "../port/store/project.store";
 import CacheSingleton from "../../infrastructure/internal-cache/cache-singleton";
 import { ITaskEntity } from "../domain/entities/task.entity";
@@ -89,17 +89,28 @@ class TaskService {
     /** UPDATE */
     async updateTask(taskId: string, task: any): Promise<IResponse> {
         try {
-            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                const updateTask = await taskStore.updateTask(taskId, task);
-                this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
-                this.pushUpdateTaskMessage(updateTask);
+            if (await this.taskValidationImpl.compareTaskId(taskId, task.taskId) === false) {
+                return msg400(TASKID_COMPARE_FAILED);
+            }
 
-                return msg200({
-                    message: (updateTask as any)
-                });
-            } else {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === false) {
                 return msg400(TASK_NOT_FOUND);
             }
+
+            const updateTask = await taskStore.updateTask(taskId, task);
+            if (updateTask === null) {
+                return msg400(UPDATE_TASK_FAILED);
+            }
+
+            this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
+
+            // const updateTaskMessage = await kafkaUpdateTaskMapper(updateTask, task);
+            // this.pushUpdateTaskMessage(updateTaskMessage);
+
+            return msg200({
+                message: (updateTask as any)
+            });
+
         } catch (error: any) {
             return msg400(error.message.toString());
         }

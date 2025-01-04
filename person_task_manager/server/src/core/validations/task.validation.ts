@@ -30,4 +30,13 @@ export const taskValidation = {
             return false;
         }
     },
+
+    async compareTaskId(taskIdUrl: string, taskIdBody: string): Promise<boolean> {
+        try {
+            return taskIdUrl === taskIdBody;
+        } catch (error: any) {
+            console.log(error.message.toString());
+            return false;
+        }
+    }
 }
