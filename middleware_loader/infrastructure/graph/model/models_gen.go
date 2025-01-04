@@ -351,15 +351,18 @@ type UpdateTaskInDialogInput struct {
 }
 
 type UpdateTaskInput struct {
-	Title        string   `json:"title"`
-	Description  string   `json:"description"`
-	Priority     []string `json:"priority"`
-	Status       string   `json:"status"`
-	StartDate    string   `json:"startDate"`
-	Deadline     string   `json:"deadline"`
-	Duration     string   `json:"duration"`
-	ActiveStatus string   `json:"activeStatus"`
-	TaskID       string   `json:"taskId"`
+	UserID         string   `json:"userId"`
+	TaskID         string   `json:"taskId"`
+	Title          string   `json:"title"`
+	Description    string   `json:"description"`
+	StartDate      string   `json:"startDate"`
+	Deadline       string   `json:"deadline"`
+	Duration       string   `json:"duration"`
+	Status         string   `json:"status"`
+	Priority       []string `json:"priority"`
+	TaskOrder      float64  `json:"taskOrder"`
+	StopTime       float64  `json:"stopTime"`
+	ScheduleTaskID string   `json:"scheduleTaskId"`
 }
 
 type UpdateUser struct {
