@@ -42,7 +42,7 @@ Gaia operates as an interconnected microservices system, combining AI-powered in
 
 ## System Architecture
 The Gaia system is built as a collection of interconnected microservices:
-- **[Gaia - System CLI](https://github.com/Golde34/Gaia-Project/tree/main/GAIA)**: Allows users to interact with Gaia directly through a local console using text or voice commands.  
+- **[Gaia - System CLI](https://github.com/Golde34/Gaia-Project/blob/dev/GAIA/README.md)**: Allows users to interact with Gaia directly through a local console using text or voice commands.  
 - **[Gaia Connector](https://github.com/Golde34/Gaia-Project/tree/main/gaia_connector)**: A service enabling Gaia to interact with backend systems.  
 - **[Client GUI](https://github.com/Golde34/Gaia-Project/tree/main/client_gui)**: A user-friendly web interface for task management.  
 - **[Middleware Loader](https://github.com/Golde34/Gaia-Project/tree/main/Middleware-Loader)**: A public-facing service that bridges the Client GUI with the backend systems.  
