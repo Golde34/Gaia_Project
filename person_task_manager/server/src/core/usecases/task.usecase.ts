@@ -1,7 +1,7 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { TaskDetailRequestDTO, TaskRequestDto } from "../domain/dtos/task.dto";
-import { IsPrivateRoute, TaskDetail } from "../domain/enums/enums";
+import { CRUDType, IsPrivateRoute, TaskDetail } from "../domain/enums/enums";
 import { taskService } from "../services/task.service";
 import { buildCommonStringValue } from "../../kernel/util/string-utils";
 import { GetGroupTaskProject } from "../domain/dtos/request_dtos/get-group-task-project.dto";
@@ -27,6 +27,22 @@ class TaskUsecase {
             return taskResult;
         } catch (err: any) {
             return msg400(err.message.toString());
+        }
+    }
+
+    async updateTask(taskId: string, updateTaskObjectDto: any, type: CRUDType): Promise<IResponse | undefined> {
+        try {
+            if (type === CRUDType.UPDATE_TYPE) {
+                const taskResult = await taskService.updateTask(taskId, updateTaskObjectDto);
+                return taskResult;
+            }
+            if (type === CRUDType.UPDATE_DIALOG_TYPE) {
+                const taskResult = await taskService.updateTaskInDialog(taskId, updateTaskObjectDto);
+                return taskResult;
+            }
+            return msg400('Invalid update type');
+        } catch (err: any) {
+            return msg400(err.message.toString()); 
         }
     }
 

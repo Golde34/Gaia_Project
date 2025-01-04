@@ -6,7 +6,7 @@ import { TaskRequestDto, UpdateTaskInDialogDTO } from "../../core/domain/dtos/ta
 import { groupTaskService } from "../../core/services/group-task.service";
 import { EXCEPTION_PREFIX, GROUP_TASK_EXCEPTION, GROUP_TASK_NOT_FOUND, PROJECT_NOT_FOUND } from "../../core/domain/constants/error.constant";
 import { taskUsecase } from "../../core/usecases/task.usecase";
-import { IsPrivateRoute } from "../../core/domain/enums/enums";
+import { CRUDType, IsPrivateRoute } from "../../core/domain/enums/enums";
 import { GetGroupTaskProject } from "../../core/domain/dtos/request_dtos/get-group-task-project.dto";
 
 class TaskController {
@@ -71,14 +71,59 @@ class TaskController {
         }
     }
 
+    async generateTaskWithoutGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const bodyJson = req.body;
+            const projectId = bodyJson.projectId;
+            const task = plainToInstance(TaskRequestDto, bodyJson)
+            
+            // generate new group task contains created task
+            let groupTask = {
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                ordinalNumber: 1,
+                projectId: projectId
+            }
+
+            let groupTaskCreated;
+            if (projectId) {
+                groupTaskCreated = await groupTaskService.createGroupTaskFromTask(groupTask, projectId);
+            } else {
+                next(new Error(PROJECT_NOT_FOUND));
+            }
+            
+            if (groupTaskCreated !== undefined) {
+                const taskResult = await taskUsecase.createTaskInGroupTask(task, groupTaskCreated, IsPrivateRoute.PUBLIC);
+                return taskResult;
+            }
+            return undefined;
+        } catch (err) {
+            next(err);
+        }
+    }
+
     async updateTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
             const bodyJson = req.body;
             const taskId = req.params.id;
 
             const updateTaskObjectDto = plainToInstance(TaskRequestDto, bodyJson);
-            const taskResult = await taskService.updateTask(taskId, updateTaskObjectDto);
+            const taskResult = await taskUsecase.updateTask(taskId, updateTaskObjectDto, CRUDType.UPDATE_TYPE);
 
+            return taskResult;
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async updateTaskInDialog(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const bodyJson = req.body;
+            const taskId = req.params.id;
+            const task = plainToInstance(UpdateTaskInDialogDTO, bodyJson);
+            
+            const taskResult = await taskUsecase.updateTask(taskId, task, CRUDType.UPDATE_DIALOG_TYPE);
             return taskResult;
         } catch (err) {
             next(err);
@@ -120,52 +165,7 @@ class TaskController {
         } catch (err) {
             next(err);
         }
-    }
-
-    async generateTaskWithoutGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
-        try {
-            const bodyJson = req.body;
-            const projectId = bodyJson.projectId;
-            const task = plainToInstance(TaskRequestDto, bodyJson)
-            
-            // generate new group task contains created task
-            let groupTask = {
-                title: task.title,
-                description: task.description,
-                status: task.status,
-                ordinalNumber: 1,
-                projectId: projectId
-            }
-
-            let groupTaskCreated;
-            if (projectId) {
-                groupTaskCreated = await groupTaskService.createGroupTaskFromTask(groupTask, projectId);
-            } else {
-                next(new Error(PROJECT_NOT_FOUND));
-            }
-            
-            if (groupTaskCreated !== undefined) {
-                const taskResult = await taskUsecase.createTaskInGroupTask(task, groupTaskCreated, IsPrivateRoute.PUBLIC);
-                return taskResult;
-            }
-            return undefined;
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    async updateTaskInDialog(req: Request, next: NextFunction): Promise<IResponse | undefined> {
-        try {
-            const bodyJson = req.body;
-            const taskId = req.params.id;
-            const task = plainToInstance(UpdateTaskInDialogDTO, bodyJson);
-
-            const taskResult = await taskService.updateTaskInDialog(taskId, task);
-            return taskResult;
-        } catch (err) {
-            next(err);
-        }
-    }
+    } 
 
     async moveTaskToAnotherGroupTask(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {

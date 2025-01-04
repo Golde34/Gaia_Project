@@ -1,4 +1,6 @@
+import InternalCache from "../../../infrastructure/internal-cache/internal-cache";
 import { priorityOrder } from "../../../kernel/util/order-enums";
+import { InternalCacheConstants } from "../../domain/constants/constants";
 import { ITaskEntity } from "../../domain/entities/task.entity";
 import { groupTaskStore } from "../../port/store/group-task.store";
 import { taskStore } from "../../port/store/task.store";
@@ -81,6 +83,11 @@ class TaskServiceUtils {
             taskArray.push(tasks[i]);
         }
         return taskArray;
+    }
+
+    clearTaskCache(taskCache: InternalCache<any>, groupTaskId: string): void {
+       taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
+       taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);  
     }
 }
 

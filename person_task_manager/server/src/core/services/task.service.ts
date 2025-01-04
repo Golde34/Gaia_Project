@@ -25,9 +25,11 @@ class TaskService {
     constructor(
         public kafkaConfig = new KafkaConfig(),
         public taskValidationImpl = taskValidation,
-        public taskCache = CacheSingleton.getInstance().getCache()
+        public taskCache = CacheSingleton.getInstance().getCache(),
+        public taskServiceUtilsImpl = taskServiceUtils,
     ) { }
 
+    /** CREATE */
     async createTaskInGroupTask(task: any, groupTaskId: string): Promise<ITaskEntity> {
         // check existed user tag
         const userTag = await userTagStore.findTagByTagId(task.tag);
@@ -42,7 +44,7 @@ class TaskService {
         task.groupTaskId = groupTaskId;
         if (task.duration === 0 || task.duration === undefined || task.duration === null) task.duration = 2;
         const createTask = await taskStore.createTask(task);
-        this.clearTaskCache(task.groupTaskId);
+        this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
         return createTask;
     }
 
@@ -67,14 +69,14 @@ class TaskService {
         this.pushCreateTaskMessage(data);
     }
 
-    async buildCreateTaskMessage(createdTask: ITaskEntity, groupTaskId: string): Promise<KafkaCreateTaskMessage> {
+    private async buildCreateTaskMessage(createdTask: ITaskEntity, groupTaskId: string): Promise<KafkaCreateTaskMessage> {
         const projectName = await projectStore.findOneProjectByGroupTaskId(groupTaskId).then((result) => result?.name).catch(null);
         const groupTaskName = await groupTaskStore.findGroupTaskById(groupTaskId).then((result) => result?.title).catch(null);
         const userId = await projectStore.findOneProjectByGroupTaskId(groupTaskId).then((result) => result?.ownerId ?? 0).catch(() => 0);
         return kafkaCreateTaskMapper(createdTask, projectName, groupTaskName, userId);
     }
 
-    pushCreateTaskMessage(data: KafkaCreateTaskMessage): void {
+    private pushCreateTaskMessage(data: KafkaCreateTaskMessage): void {
         const messages = [{
             value: JSON.stringify(createMessage(
                 KafkaCommand.CREATE_TASK, '00', 'Successful', data
@@ -84,23 +86,13 @@ class TaskService {
         this.kafkaConfig.produce(KafkaTopic.CREATE_TASK, messages);
     }
 
-    clearTaskCache(groupTaskId: string): void {
-        this.taskCache.clear(InternalCacheConstants.TASK_TABLE + groupTaskId);
-        this.taskCache.clear(InternalCacheConstants.TASK_COMPLETED + groupTaskId);
-    }
-
+    /** UPDATE */
     async updateTask(taskId: string, task: any): Promise<IResponse> {
         try {
             if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
                 const updateTask = await taskStore.updateTask(taskId, task);
-
-                // push kafka message
-                const messages = [{
-                    value: JSON.stringify(createMessage(
-                        KafkaCommand.UPDATE_TASK, '00', 'Successful', updateTask
-                    ))
-                }]
-                this.kafkaConfig.produce(KafkaTopic.UPDATE_TASK, messages);
+                this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
+                this.pushUpdateTaskMessage(updateTask);
 
                 return msg200({
                     message: (updateTask as any)
@@ -113,6 +105,43 @@ class TaskService {
         }
     }
 
+    async updateTaskInDialog(taskId: string, task: UpdateTaskInDialogDTO): Promise<IResponse> {
+        try {
+            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
+                const taskUpdate = await taskStore.findTaskById(taskId);
+
+                if (taskUpdate === null) return msg400(TASK_NOT_FOUND);
+
+                taskUpdate.title = task.title;
+                taskUpdate.description = task.description ?? ''; // Use optional chaining operator and provide a default value
+                taskUpdate.status = task.status;
+
+                const updateTask = await taskStore.updateTask(taskId, taskUpdate);
+                this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, taskUpdate.groupTaskId);
+                this.pushUpdateTaskMessage(updateTask);
+
+                return msg200({
+                    message: (updateTask as any)
+                });
+            } else {
+                return msg400(TASK_NOT_FOUND);
+            }
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
+
+    private pushUpdateTaskMessage(updateTask: any): void {
+        // push kafka message
+        const messages = [{
+            value: JSON.stringify(createMessage(
+                KafkaCommand.UPDATE_TASK, '00', 'Successful', updateTask
+            ))
+        }]
+        this.kafkaConfig.produce(KafkaTopic.UPDATE_TASK, messages);
+    }
+
+    /** DELETE */
     async deleteTask(taskId: string, groupTaskId: string): Promise<IResponse> {
         try {
             if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
@@ -141,6 +170,7 @@ class TaskService {
         }
     }
 
+    /** GET */
     async getTask(taskId: string): Promise<IResponse> {
         const task = await taskStore.findTaskById(taskId);
         return msg200({
@@ -183,38 +213,6 @@ class TaskService {
         return msg200({
             message: (updateManyTasks as any)
         });
-    }
-
-    async updateTaskInDialog(taskId: string, task: UpdateTaskInDialogDTO): Promise<IResponse> {
-        try {
-            if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === true) {
-                const taskUpdate = await taskStore.findTaskById(taskId);
-
-                if (taskUpdate === null) return msg400(TASK_NOT_FOUND);
-
-                taskUpdate.title = task.title;
-                taskUpdate.description = task.description ?? ''; // Use optional chaining operator and provide a default value
-                taskUpdate.status = task.status;
-
-                const updateTask = await taskStore.updateTask(taskId, taskUpdate);
-
-                // push kafka message
-                const messages = [{
-                    value: JSON.stringify(createMessage(
-                        KafkaCommand.UPDATE_TASK, '00', 'Successful', updateTask
-                    ))
-                }]
-                this.kafkaConfig.produce(KafkaTopic.UPDATE_TASK, messages);
-
-                return msg200({
-                    message: (updateTask as any)
-                });
-            } else {
-                return msg400(UPDATE_TASK_FAILED);
-            }
-        } catch (error: any) {
-            return msg400(error.message.toString());
-        }
     }
 
     // get top task 
