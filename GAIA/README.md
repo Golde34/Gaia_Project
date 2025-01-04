@@ -49,7 +49,7 @@ GaiaBot follows a modular architecture, organized into the following packages:
 # setup env
 conda create -n gaia_bot python=3.10.14
 conda activate gaia_bot
-conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+conda install pytorch torchvision torchaudio pytorch-cuda=12.2 -c pytorch -c nvidia
 pip install -r requirements.txt
 # All of instruction would be in Makefile
 make run
