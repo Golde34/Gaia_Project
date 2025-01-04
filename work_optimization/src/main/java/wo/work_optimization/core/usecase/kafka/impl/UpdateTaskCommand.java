@@ -41,9 +41,9 @@ public class UpdateTaskCommand extends CommandService<TaskObjRequestDTO, String>
     @Override
     public String doCommand(TaskObjRequestDTO request) {
         try {
-            Task task = taskStore.findTaskByOriginalId(request.getId());
+            Task task = taskStore.findTaskByOriginalId(request.getTaskId());
             task = taskMapper.toEntity(request, task);
-            log.info("Update task with originalId {}", request.getId());
+            log.info("Update task with originalId {}", request.getTaskId());
             taskStore.save(task);
             return "Update task successfully";
         } catch (Exception e)  {
