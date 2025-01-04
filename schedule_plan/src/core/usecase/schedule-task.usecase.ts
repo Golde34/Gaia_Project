@@ -72,7 +72,7 @@ class ScheduleTaskUsecase {
 
     async updateScheduleTask(task: any): Promise<void> {
         try {
-            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(task.id);
+            const scheduleTask = await scheduleTaskService.findScheduleTaskByTaskId(task.taskId);
             const updateScheduletask = scheduleTaskMapper.kafkaUpdateTaskMapper(task, scheduleTask);
             console.log('Update schedule task: ', updateScheduletask);
             scheduleTaskService.updateScheduleTask(updateScheduletask._id, updateScheduletask);

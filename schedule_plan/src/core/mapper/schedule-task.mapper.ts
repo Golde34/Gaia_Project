@@ -53,6 +53,8 @@ export const scheduleTaskMapper = {
         scheduleTask.startDate = data.startDate
         scheduleTask.status = data.status
         scheduleTask.title = data.title
+        scheduleTask.taskOrder = data.taskOrder
+        scheduleTask.stopTime = data.stopTime
         return scheduleTask
     } 
 }
