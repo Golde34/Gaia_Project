@@ -9,10 +9,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-mysql = MySQL(app)
-
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-CORS(app)
 
 app.config["KAFKA_CONFIG"] = {'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9094"),
                                'group.id': os.getenv("KAFKA_GROUP_ID", "gaia-connector"),
@@ -23,11 +19,16 @@ app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "root")
 app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "root")
 app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "gaia_connector")
 
-bus = FlaskKafka(app)
+mysql = MySQL(app)
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
+
+bus = FlaskKafka()
 bus.init_app(app)
 
 ## Controllers
 from ui.rest import chat_controller
 ## Kafka
-
+from ui.kafka import open_camera_space_consumer
 ## CLI
