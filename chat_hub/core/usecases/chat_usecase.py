@@ -1,12 +1,9 @@
 from flask import jsonify
-from infrastructure.rag.semantic_router.router import SemanticRouter
-from core.usecases import SERVICE_FACTORY
+from core.usecases import SERVICE_FACTORY, semantic_router
 
-
-semanticRouter = SemanticRouter(routes=[]) 
 
 def chat(session_id, query):
-    guided_route = semanticRouter.guide(query=query)[1]
+    guided_route = semantic_router.guide(query=query)[1]
     print(f"Semamtic route: {guided_route}")
 
     response = _handle_route(guided_route, session_id, query)
