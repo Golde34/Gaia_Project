@@ -19,5 +19,5 @@ def _handle_route(route, session_id, query):
     if not service_class:
         return f"Route {route} not found or not implemented"
     
-    service_instance = service_class()
+    service_instance = service_class.service()
     return service_instance.handle(session_id, query)
