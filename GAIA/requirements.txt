@@ -1,8 +1,8 @@
-chromadb==0.5.1
+chromadb==0.6.1
 colorama==0.4.6
 datasets==2.19.1
 fastparquet==2024.5.0
-googletrans==4.0.0rc1
+googletrans==4.0.2
 imutils==0.5.4
 joblib==1.4.2
 langchain_text_splitters==0.3.4
