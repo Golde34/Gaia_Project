@@ -5,11 +5,19 @@
 *\dist
 *\.bin
 *\.pt
+*\.pth
 *\.safetensors
+*\.log
+*\.metals
+*\.bloop
+*\.yaml
+*\.db
+*\.json
 *\.config
 
 *\.csv
 *\.zip
+*.gz
 
 *\.vite
 
@@ -18,13 +26,22 @@
 *\bin
 
 .ipynb_checkpoints
-__config__.py
 *\.parquet
 *\tmp
-data/
+
 .env
-*\.pth
+.env.docker
+*.sqlite3
+*.pickle
 
 # gitignore json
 token.json
 commits.json
+spacy_dataset.json
+application.conf
+*.xml
+!pom.xml
+*\auth_service.log
+*\middleware_loader\resources
+*\data_lake
+*\chroma_db
