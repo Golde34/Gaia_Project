@@ -27,16 +27,16 @@ interface Configuration {
 export const config: Configuration = {
     server: {
         listenPort: Number(String(process.env.LISTEN_PORT)) ?? 3008,
-        githubDomain: process.env.GITHUB_DOMAIN ?? null,
-        githubUrl: process.env.GITHUB_URL ?? null,
+        githubDomain: process.env.GITHUB_DOMAIN ?? 'github.com',
+        githubUrl: process.env.GITHUB_URL ?? 'https://api.github.com',
     },
     taskManagerServer: {
         host: process.env.TASK_MANAGER_HOST ?? 'localhost',
-        port: process.env.TASK_MANAGER_PORT ?? '3000',
+        port: Number(String(process.env.TASK_MANAGER_PORT)) ?? 3000, 
     },
     schedulePlanServer: {
         host: process.env.SCHEDULE_PLAN_HOST ?? 'localhost',
-        port: process.env.SCHEDULE_PLAN_PORT ?? '3002',
+        port: Number(String(process.env.SCHEDULE_PLAN_PORT)) ?? 3002, 
     }
 }
 

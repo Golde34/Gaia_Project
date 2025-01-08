@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: './src/.env' })
 
-const REQUIRED_ENV_DB_VARS = [
+const REQUIRED_DB_ENV_VARS = [
     'DATABASE_HOST',
     'DATABASE_NAME',
     'DATABASE_PORT',
@@ -10,7 +10,7 @@ const REQUIRED_ENV_DB_VARS = [
     'DATABASE_PASSWORD',
 ];
 
-interface Configuration {
+interface DatabaseConfiguration {
     database: {
         host: string;
         port: number;
@@ -20,7 +20,7 @@ interface Configuration {
     };
 }
 
-export const config: Configuration = {
+export const dbConfig: DatabaseConfiguration = {
     database: {
         host: process.env.DATABASE_HOST ?? 'localhost',
         port: Number(String(process.env.DATABASE_PORT)) ?? 27017,
@@ -30,9 +30,9 @@ export const config: Configuration = {
     },
 };
 
-export const validateEnvironmentVars = (): void => {
+export const validateDBEnvironmentVars= (): void => {
     const missingRequirements: string[] = [];
-    REQUIRED_ENV_DB_VARS.forEach((envVar) => {
+    REQUIRED_DB_ENV_VARS.forEach((envVar) => {
         if (!(envVar in process.env)) {
             missingRequirements.push(envVar);
         }
