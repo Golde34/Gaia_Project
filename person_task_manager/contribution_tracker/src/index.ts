@@ -7,7 +7,7 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import morgan from "morgan";
 import { msg200, msg405, sendResponse } from "./core/common/response-helpers";
-import { commitRouter } from "./ui/rest/commit.rouer";
+import { commitRouter } from "./ui/rest/router/commit.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
