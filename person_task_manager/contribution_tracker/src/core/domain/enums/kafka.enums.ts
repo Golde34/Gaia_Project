@@ -1,17 +1,10 @@
 export enum KafkaTopic {
-    OPTIMIZE_TASK = 'task-manager.optimize-task.topic',
-    CREATE_TASK = 'task-manager.create-task.topic',
-    UPLOAD_FILE = 'task-manager.upload-note-file.topic',
-    DELETE_TASK = 'task-manager.delete-task.topic',
-    UPDATE_TASK = 'task-manager.update-task.topic',
+    CREATE_COMMIT = 'task-manager.create-commit.topic'
 }
 
 export enum KafkaCommand {
-    CREATE_TASK = 'taskManagerCreateTask',
-    UPLOAD_FILE = 'uploadFile',
-    UPLOAD_UPDATED_FILE = 'uploadUpdatedFile',
-    UPDATE_TASK = 'updateTask',
-    DELETE_TASK = 'deleteTask',
+    TM_CREATE_COMMIT = 'taskManagerCreateCommit',
+    SP_CREATE_COMMIT = 'schedulePlanCreateCommit'
 }
 
 export class KafkaMessage {

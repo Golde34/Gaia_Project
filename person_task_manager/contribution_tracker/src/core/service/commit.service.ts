@@ -13,6 +13,10 @@ class CommitService {
     async getProjectCommits(userId: number, projectId: string): Promise<ICommitEntity[] | null> {
         return null;
     }
+
+    async createCommit(commitObject: any): Promise<ICommitEntity | null> {
+        return null;
+    }
 } 
 
 export const commitService = new CommitService();

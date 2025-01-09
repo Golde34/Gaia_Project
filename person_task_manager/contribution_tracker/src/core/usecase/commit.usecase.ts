@@ -28,6 +28,17 @@ class CommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async createCommit(data: any): Promise<IResponse> {
+        try {
+            const commit = this.commitServiceImpl.createCommit(data);
+            return msg200({
+                commit
+            })
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const commitUsecase = new CommitUsecase();
