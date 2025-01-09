@@ -7,7 +7,7 @@ class CommitController {
 
     async getUserCommits(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const userId = req.params.userId;
+            const userId = Number(req.params.userId);
             const userCommits = await commitUsecase.getUserCommits(userId);
             return userCommits; 
         } catch (err) {
@@ -17,7 +17,7 @@ class CommitController {
 
     async getProjectCommits(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const userId = req.params.userId;
+            const userId = Number(req.params.userId);
             const projectId = req.params.projectId;
             const commits = await commitUsecase.getProjectCommits(userId, projectId);
             return commits;

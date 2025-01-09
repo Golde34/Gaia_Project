@@ -5,7 +5,7 @@ import { commitController } from "../controller/commit.controller";
 
 export const commitRouter = Router();
 
-const commitControllerImpl = commitController();
+const commitControllerImpl = commitController;
 
 commitRouter.get("/:userId", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -18,7 +18,7 @@ commitRouter.get("/:userId", async (req: Request, res: Response, next: NextFunct
 
 commitRouter.get("/:userId/:projectId", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const userCommits = await commitControllerImpl.getUserProjectCommits(req, next);
+        const userCommits = await commitControllerImpl.getProjectCommits(req, next);
         returnResult(userCommits, PROJECT_NOT_FOUND, res, next);
     } catch (err) {
         next(err);

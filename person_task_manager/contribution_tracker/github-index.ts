@@ -1,6 +1,6 @@
 import express, { Application, Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { fetchCommits, getCommits } from './get-total-commit.service';
+import { fetchCommits, getCommits } from './src/infrastructure/get-total-commit.service';
 import { read } from 'fs';
 
 dotenv.config();

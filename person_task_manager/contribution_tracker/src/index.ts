@@ -23,7 +23,7 @@ async function main(): Promise<void> {
     mysqlHelper.connect()
 
     const app: Application = express()
-    const port = process.env.PORT || 3000
+    const port = process.env.LISTEN_PORT || 3003
 
     app.use(
         bodyParser.urlencoded({

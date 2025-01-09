@@ -23,8 +23,8 @@ interface DatabaseConfiguration {
 export const dbConfig: DatabaseConfiguration = {
     database: {
         host: process.env.DATABASE_HOST ?? 'localhost',
-        port: Number(String(process.env.DATABASE_PORT)) ?? 27017,
-        name: process.env.DATABASE_NAME ?? 'task_database',
+        port: Number(String(process.env.DATABASE_PORT)) ?? 3306,
+        name: process.env.DATABASE_NAME ?? 'contribution_tracker',
         username: process.env.DATABASE_USERNAME ?? 'root',
         password: process.env.DATABASE_PASSWORD ?? 'root',
     },

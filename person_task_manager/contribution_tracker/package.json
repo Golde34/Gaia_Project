@@ -1,11 +1,14 @@
 {
-  "name": "github_api",
+  "name": "contribution_tracker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.ts"
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "codegen:buf": "cd proto; buf generate; cd .."
   },
   "keywords": [],
   "author": "",
