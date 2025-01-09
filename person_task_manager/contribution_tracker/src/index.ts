@@ -1,7 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./kernel/config/general.configuration";
 import { dbConfig, validateDBEnvironmentVars } from "./kernel/config/database.configuration";
-import { MongoHelper } from "./infrastructure/database/mongodb.db";
+import { MySQLHelper } from "./infrastructure/database/mysql.db";
 import cors from "cors";
 import bodyParser from "body-parser";
 import helmet from "helmet";
@@ -13,14 +13,14 @@ async function main(): Promise<void> {
     validateEnvironmentVars()
     validateDBEnvironmentVars()
 
-    const mongoHelper = new MongoHelper(
+    const mysqlHelper = new MySQLHelper (
         dbConfig.database.host,
         dbConfig.database.port,
         dbConfig.database.name,
         dbConfig.database.username,
         dbConfig.database.password,
     )
-    await mongoHelper.connect()
+    mysqlHelper.connect()
 
     const app: Application = express()
     const port = process.env.PORT || 3000

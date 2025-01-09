@@ -1,3 +1,5 @@
+import CacheSingleton from "../../infrastructure/cache/cache-singleton";
+import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { ICommitEntity } from "../domain/entities/commit.entity";
 
 class CommitService {

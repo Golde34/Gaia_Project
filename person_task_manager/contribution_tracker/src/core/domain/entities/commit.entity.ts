@@ -4,4 +4,10 @@ export interface ICommitEntity extends Document {
     commitTime: Date;
     userId: number;
     projectId: string;
+    type: string;
+    taskId: string;
+    subTaskId: string;
+    githubCommit: string;
+    scheduleTaskId: string;
+    
 }
