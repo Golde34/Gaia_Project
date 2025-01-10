@@ -44,7 +44,8 @@ class ScheduleTaskRepository implements ScheduleTaskStore {
     }
 
     async findByTaskBatch(schedulePlanId: string, taskBatch: number): Promise<IScheduleTaskEntity[]> {
-        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, taskBatch: taskBatch, status: { $ne: 'DONE' }, activeStatus: ActiveStatus.active });
+        return await ScheduleTaskEntity.find({ schedulePlanId: schedulePlanId, taskBatch: taskBatch, 
+            status: { $ne: 'DONE' }, activeStatus: ActiveStatus.active }).sort({ taskOrder: 1 });
     }
 
     async findAll(schedulePlanId: string): Promise<IScheduleTaskEntity[]> {

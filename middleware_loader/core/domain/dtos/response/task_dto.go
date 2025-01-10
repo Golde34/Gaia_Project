@@ -132,9 +132,15 @@ func (in *TaskDetailResponseDTO) MapperTaskDetail(response interface{}) TaskDeta
 	out.Deadline = task["deadline"].(string)
 
 	out.ScheduleTaskId = scheduleTask["_id"].(string)
-	out.TaskBatch = int64(scheduleTask["taskBatch"].(float64))
-	out.TaskOrder = int64(scheduleTask["taskOrder"].(float64))
-	out.StopTime = scheduleTask["stopTime"].(float64)
+	if scheduleTask["taskBatch"] != nil {
+		out.TaskBatch = int64(scheduleTask["taskBatch"].(float64))
+	}
+	if scheduleTask["taskOrder"] != nil {
+		out.TaskOrder = int64(scheduleTask["taskOrder"].(float64))
+	}
+	if scheduleTask["stopTime"] != nil {
+		out.StopTime = scheduleTask["stopTime"].(float64)
+	}
 
 	out.ProjectId = project["_id"].(string)
 	out.ProjectName = project["name"].(string)

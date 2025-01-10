@@ -35,7 +35,6 @@ function ContentArea() {
         didTaskDetailRef.current = true;
     }, [taskId]);
 
-    const defaultDuration = 2;
     const [title, setTitle] = useState(null);
     const [description, setDescription] = useState(null);
     const [startDate, setStartDate] = useState(null);
@@ -78,15 +77,15 @@ function ContentArea() {
             description: description === null ? detail?.description : description,
             startDate: startDate === null ? detail?.startDate : startDate,
             deadline: deadline === null ? detail?.deadline : deadline,
-            duration: duration === null ? detail?.duration : duration,
+            duration: duration === null ? detail?.duration : Number(duration),
             status: status === null ? detail?.status : status,
             priority: priority,
-            taskOrder: taskOrder === null ? detail?.taskOrder : taskOrder,
-            stopTime: stopTime === null ? detail?.stopTime : stopTime,
+            taskOrder: taskOrder === null ? detail?.taskOrder : Number(taskOrder),
+            stopTime: stopTime === null ? detail?.stopTime : Number(stopTime),
             scheduleTaskId: detail?.scheduleTaskId === null ? 0 : detail?.scheduleTaskId,
         }
         updateTask(body);
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (
@@ -160,7 +159,7 @@ function ContentArea() {
                                             <p className="block text-md font-medium text-gray-200 mb-3">Duration</p>
                                             <TextInput
                                                 type="number"
-                                                value={duration == null ? detail?.duration : defaultDuration}
+                                                value={duration == null ? detail?.duration : duration}
                                                 onChange={(event) => {
                                                     setDuration(event.target.value);
                                                 }}
