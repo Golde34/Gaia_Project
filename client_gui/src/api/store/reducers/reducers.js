@@ -36,6 +36,7 @@ import {
 } from "./task_manager/note.reducers";
 import { optimizeTaskByUserReducer } from "./work_optimization/optimize-task.reducers";
 import { chooseTaskBatchReducer, scheduleTaskListReducer, taskBatchListReducer } from "./schedule_plan/schedule-task.reducers";
+import { getUserGithubInfoReducer } from "./contribution_tracker/user-commit.reducer";
 
 export const reducer = combineReducers({
     // auth service
@@ -49,6 +50,7 @@ export const reducer = combineReducers({
     roleCreate: roleCreateReducer,
     privilegeList: privilegeListReducer,
     userSettingUpdate: userSettingUpdateReducer,
+    userGithubInfo: getUserGithubInfoReducer,
     // task manager
     projectList: projectListReducer,
     projectDetail: projectDetailReducer,
