@@ -8,6 +8,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { msg200, msg405, sendResponse } from "./core/common/response-helpers";
 import { commitRouter } from "./ui/rest/router/commit.router";
+import { userCommitRouter } from "./ui/rest/router/user-commit.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
@@ -40,7 +41,8 @@ async function main(): Promise<void> {
     app.get("/status", (req: Request, res: Response) => {
         res.status(200).send(msg200("3003"))
     })
-    app.use("/commit", commitRouter);
+    app.use("/contribution-tracker/commit", commitRouter)
+    app.use("/contribution-tracker/user-commit", userCommitRouter)
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         sendResponse(msg405("MEthod Not Allowed"), res, next);

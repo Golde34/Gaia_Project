@@ -1,3 +1,5 @@
+export const INTERNAL_SERVER_ERROR = "Internal server error";
+
 export const USER_NOT_FOUND = "User not found";
 export const PROJECT_NOT_FOUND = "Project not found";
 export const GROUP_TASK_NOT_FOUND = "Group Task not found";
