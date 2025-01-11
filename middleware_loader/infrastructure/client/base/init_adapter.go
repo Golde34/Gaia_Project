@@ -10,3 +10,4 @@ var GaiaServiceURL = env.Url + env.GaiaPort
 var ClientURL = env.ClientCORSAllowedUrl
 var WorkOptimizationServiceURL = env.Url + env.WorkOptimServicePort
 var SchedulePlanServiceURL = env.Url + env.SchedulePlanServicePort
+var ContributionTrackerURL = env.Url + env.ContributionTrackerServicePort

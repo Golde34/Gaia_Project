@@ -8,17 +8,18 @@ import (
 )
 
 type Config struct {
-	Url                     string
-	Port                    string
-	GaiaPort                string
-	AuthServicePort         string
-	TaskManagerPort         string
-	ClientCORSAllowedUrl    string
-	WorkOptimServicePort    string
-	SchedulePlanServicePort string
-	
-	FileDisplayWord         string 
-	Datalake 			    string
+	Url                            string
+	Port                           string
+	GaiaPort                       string
+	AuthServicePort                string
+	TaskManagerPort                string
+	ClientCORSAllowedUrl           string
+	WorkOptimServicePort           string
+	SchedulePlanServicePort        string
+	ContributionTrackerServicePort string
+
+	FileDisplayWord string
+	Datalake        string
 }
 
 func (in *Config) LoadEnv() (Config, error) {
@@ -35,20 +36,22 @@ func (in *Config) LoadEnv() (Config, error) {
 	clientCORSAllowedUrl := os.Getenv("CLIENT_CORS_ALLOWED_URL")
 	workOptimServicePort := os.Getenv("WORK_OPTIM_SERVICE_PORT")
 	schedulePlanServicePort := os.Getenv("SCHEDULE_PLAN_SERVICE_PORT")
+	contributionTrackerServicePort := os.Getenv("CONTRIBUTION_TRACKER_SERVICE_PORT")
 	fileDisplayWord := os.Getenv("FILE_DISPLAY_WORD")
 	dataLake := os.Getenv("DATALAKE")
 
 	config := Config{
-		Url:                  url,
-		Port:                 port,
-		GaiaPort:             gaiaPort,
-		AuthServicePort:      authServicePort,
-		TaskManagerPort:      taskManagerPort,
-		ClientCORSAllowedUrl: clientCORSAllowedUrl,
-		WorkOptimServicePort: workOptimServicePort,
-		SchedulePlanServicePort: schedulePlanServicePort,
-		FileDisplayWord: fileDisplayWord,
-		Datalake: dataLake,
+		Url:                            url,
+		Port:                           port,
+		GaiaPort:                       gaiaPort,
+		AuthServicePort:                authServicePort,
+		TaskManagerPort:                taskManagerPort,
+		ClientCORSAllowedUrl:           clientCORSAllowedUrl,
+		WorkOptimServicePort:           workOptimServicePort,
+		SchedulePlanServicePort:        schedulePlanServicePort,
+		ContributionTrackerServicePort: contributionTrackerServicePort,
+		FileDisplayWord:                fileDisplayWord,
+		Datalake:                       dataLake,
 	}
 	return config, nil
 }
