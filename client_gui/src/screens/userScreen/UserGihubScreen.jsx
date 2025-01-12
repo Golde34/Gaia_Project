@@ -20,6 +20,7 @@ const UserGithubScreen = (props) => {
         debounceRef.current = setTimeout(() => {
             findUserGithubInfo();
         }, 200);
+        console.log("userGithubInfo: ", userGithubInfo);
     }, []);
 
     return (
@@ -28,8 +29,13 @@ const UserGithubScreen = (props) => {
                 <p>Loading...</p>
             ) : error ? (
                 <MessageBox message={error}></MessageBox>
+            ) : userGithubInfo && userGithubInfo.userConsent == 0 ? (
+                <MessageBox message="User has not given consent to access Github"></MessageBox>
             ) : (
-                <Card></Card>
+                <Card>
+                    <p>Username: {user.username}</p>
+                    <p>UserGithubInfo: {userGithubInfo.githubUrl}</p>
+                </Card>
             )}
         </div >
     )

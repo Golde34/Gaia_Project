@@ -8,7 +8,7 @@ export const getUserGithubInfoReducer = (
         case GET_USER_GITHUB_INFO_REQUEST:
             return { loading: true };
         case GET_USER_GITHUB_INFO_SUCCESS:
-            return { loading: false, users: action.payload.listAllUsers };
+            return { loading: false, userGithubInfo: action.payload.userGithubInfo };
         case GET_USER_GITHUB_INFO_FAILURE:
             return { loading: false, error: action.payload };
         default:
