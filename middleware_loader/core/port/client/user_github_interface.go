@@ -1,5 +1,7 @@
 package client
 
+import response_dtos "middleware_loader/core/domain/dtos/response"
+
 type IUserGithubAdapter interface {
-	GetUserGithubInfo(userId string) (string, error)
+	GetUserGithubInfo(userId string) (response_dtos.UserCommitDTO, error)
 }

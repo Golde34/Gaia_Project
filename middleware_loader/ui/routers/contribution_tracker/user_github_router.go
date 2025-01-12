@@ -13,8 +13,8 @@ type UserGithubRouter struct {
 }
 
 func NewUserGithubRouter(userGithubService *services.UserGithubService, r *chi.Mux) *UserGithubRouter {
-	r.Route("/user-github", func(r chi.Router) {
-		r.Get("/{userId}", func(w http.ResponseWriter, r *http.Request) {
+	r.Route("/user-commit", func(r chi.Router) {
+		r.Get("/user-github/{userId}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetUserGithubInfo(w, r, userGithubService)
 		})
 	})

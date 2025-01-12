@@ -2,6 +2,7 @@ package client_adapter
 
 import (
 	"encoding/json"
+	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/kernel/utils"
 )
@@ -12,23 +13,28 @@ func NewUserGithubAdapter() *UserGithubAdapter {
 	return &UserGithubAdapter{}
 }
 
-func (adapter *UserGithubAdapter) GetUserGithubInfo(userId string) (string, error) {
+func (adapter *UserGithubAdapter) GetUserGithubInfo(userId string) (response_dtos.UserCommitDTO, error) {
 	userGithubInfoURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/get-user-github-info/" + userId
-	var userGithubInfo string
+	var userGithubInfo response_dtos.UserCommitDTO 
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(userGithubInfoURL, "GET", nil, headers)
 	if err != nil {
-		return "", err
+		return response_dtos.UserCommitDTO{}, err
 	}
 
-	data, err := json.Marshal(bodyResult)
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return response_dtos.UserCommitDTO{}, nil
+	}
+
+	data, err := json.Marshal(bodyResultMap["userGithubInfo"])
 	if err != nil {
-		return "", err
+		return response_dtos.UserCommitDTO{}, err
 	}
 
 	err = json.Unmarshal(data, &userGithubInfo)
 	if err != nil {
-		return "", err
+		return response_dtos.UserCommitDTO{}, err
 	}
 
 	return userGithubInfo, nil
