@@ -1,37 +1,43 @@
-import { DBHelper } from "./interfaces/db.interface";
-import mysql from "mysql2";
+import { dbConfig } from "../../kernel/config/database.configuration";
+import mysql from 'mysql2/promise';
 
-export class MySQLHelper implements DBHelper {
-    constructor(
-        public host: string,
-        public port: number,
-        public database: string,
-        public username: string,
-        public password: string
-    ) { }
+class MySQLHelper {
+    private static instance: MySQLHelper | null = null;
+    private pool: mysql.Pool | null = null;
 
-    connect(): void {
-        try {
-            mysql.createConnection({
-                host: this.host,
-                user: this.username,
-                password: this.password,
-                database: this.database
-            });  
-        } catch (error) {
-            console.log(error);
-        }
+    private constructor() {
+        this.pool = mysql.createPool({
+            host: dbConfig.database.host,
+            port: dbConfig.database.port,
+            user: dbConfig.database.username,
+            password: dbConfig.database.password,
+            database: dbConfig.database.name,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0,
+        });
     }
 
-    disconnect(): void {
-        throw new Error("Method not implemented.");
+    public static getInstance(): MySQLHelper {
+        if (!MySQLHelper.instance) {
+            MySQLHelper.instance = new MySQLHelper();
+        }
+        return MySQLHelper.instance;
+    }
+
+    public getPool(): mysql.Pool {
+        if (!this.pool) {
+            throw new Error('Database pool is not initialized');
+        }
+        return this.pool;
+    }
+
+    public async closePool(): Promise<void> {
+        if (this.pool) {
+            await this.pool.end();
+            console.log('MySQL pool closed');
+        }
     }
 }
 
-
-// export default mysql.createConnection({
-//   host: dbConfig.HOST,
-//   user: dbConfig.USER,
-//   password: dbConfig.PASSWORD,
-//   database: dbConfig.DB
-// });
+export default MySQLHelper;

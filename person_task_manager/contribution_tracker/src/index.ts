@@ -1,7 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./kernel/config/general.configuration";
-import { dbConfig, validateDBEnvironmentVars } from "./kernel/config/database.configuration";
-import { MySQLHelper } from "./infrastructure/database/mysql.db";
+import { validateDBEnvironmentVars } from "./kernel/config/database.configuration";
 import cors from "cors";
 import bodyParser from "body-parser";
 import helmet from "helmet";
@@ -13,15 +12,6 @@ import { userCommitRouter } from "./ui/rest/router/user-commit.router";
 async function main(): Promise<void> {
     validateEnvironmentVars()
     validateDBEnvironmentVars()
-
-    const mysqlHelper = new MySQLHelper (
-        dbConfig.database.host,
-        dbConfig.database.port,
-        dbConfig.database.name,
-        dbConfig.database.username,
-        dbConfig.database.password,
-    )
-    mysqlHelper.connect()
 
     const app: Application = express()
     const port = process.env.LISTEN_PORT || 3003
