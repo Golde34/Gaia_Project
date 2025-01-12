@@ -6,17 +6,21 @@ class UserCommitService {
     constructor(
         private userCommitRepository: UserCommitRepository = UserCommitRepository.getInstance(),
         private userCommitCache = CacheSingleton.getInstance().getCache()
-    ) {}
+    ) { }
 
     async getUserGithubInfo(userId: number): Promise<any> {
         try {
+            console.log("Getting user info: " + userId);
             const cachedUserGithubInfo = this.userCommitCache.get(InternalCacheConstants.USER_INFO_CACHE_KEY + userId);
             if (cachedUserGithubInfo) {
+                console.log("Returning cached user info");
                 return cachedUserGithubInfo;
             }
+            console.log("Returning user info from db");
             const userGithubInfo = await this.userCommitRepository.findByUserId(userId);
+            console.log("User info: ", userGithubInfo);
             this.userCommitCache.set(InternalCacheConstants.USER_INFO_CACHE_KEY + userId, userGithubInfo);
-            return userGithubInfo; 
+            return userGithubInfo;
         } catch (error) {
             console.error("Error on getUserGithubInfo: ", error);
             return null;

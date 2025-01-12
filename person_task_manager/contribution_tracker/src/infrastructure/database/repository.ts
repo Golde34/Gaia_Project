@@ -8,6 +8,19 @@ class Repository {
         this.tableName = tableName;
     }
 
+    private toCamelCase(obj: Record<string, any>): Record<string, any> {
+        const result: Record<string, any> = {};
+        for (const key in obj) {
+            const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+            result[camelKey] = obj[key];
+        }
+        return result;
+    }
+
+    private mapRows(rows: any[]): any[] {
+        return rows.map((row) => this.toCamelCase(row));
+    }
+
     async findAll(): Promise<any[]> {
         const query = `SELECT * FROM ${this.tableName}`;
         const [rows] = await this.pool.query(query);
@@ -37,6 +50,13 @@ class Repository {
         const query = `DELETE FROM ${this.tableName} WHERE _id = ?`;
         const [result]: any = await this.pool.query(query, [id]);
         return result.affectedRows > 0;
+    }
+
+    async findByCondition(condition: string, values: any[]): Promise<any[]> {
+        const query = `SELECT * FROM ${this.tableName} WHERE ${condition}`;
+        const [rows] = await this.pool.query(query, values);
+        console.log("Rows: ", rows);
+        return this.mapRows(rows as any[]);
     }
 }
 

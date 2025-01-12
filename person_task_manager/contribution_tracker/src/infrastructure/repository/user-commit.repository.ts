@@ -15,10 +15,9 @@ export class UserCommitRepository extends Repository {
         super('user_commit');
     }
 
-    async findByUserId(userId: number): Promise<UserCommitEntity[]> {
-        const query = `SELECT * FROM ${this.tableName} WHERE userId = ?`;
-        const [rows] = await this.pool.query(query, [userId]);
-        return rows as UserCommitEntity[];
+    async findByUserId(userId: number): Promise<UserCommitEntity> {
+        const user = await this.findByCondition('user_id = ?', [userId]);
+        return user[0];
     }
 }
 

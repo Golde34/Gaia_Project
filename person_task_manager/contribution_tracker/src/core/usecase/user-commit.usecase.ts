@@ -9,9 +9,9 @@ class UserCommitUsecase {
 
     async getUserGithubInfo(userId: number): Promise<IResponse> {
         try {
-            const userGithubInfo = this.userCommitServiceImpl.getUserGithubInfo(userId);
+            const userGithubInfo = await this.userCommitServiceImpl.getUserGithubInfo(userId);
             return msg200({
-                userGithubInfo
+                userGithubInfo: userGithubInfo
             })
         } catch (error: any) {
             return msg400(error.message.toString());
