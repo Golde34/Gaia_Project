@@ -59,7 +59,10 @@ const UserGithubScreen = (props) => {
                             className="flex justify-end"
                             variant="primary"
                             color="indigo"
-                            onClick={openModal}
+                            // onClick={openModal}
+                            onClick={() => {
+                                window.location.href=`https://github.com/login/oauth/authorize?client_id=Ov23li5tHLpNbQ6Ep4kZ&redirect_uri=http://localhost:3000/client-gui/profile&scope=user,repo&state=RANDOM_STRING`;
+                            }}
                         > Integrate</Button>
                     </Flex>
 
@@ -194,7 +197,7 @@ const UserGithubScreen = (props) => {
                                                 <button
                                                     type="button"
                                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                                    onClick={() => {}}
+                                                    onClick={() => { }}
                                                 >
                                                     OK
                                                 </button>
