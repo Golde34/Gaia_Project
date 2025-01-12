@@ -41,6 +41,16 @@ async function main(): Promise<void> {
     app.listen(config.server.listenPort, () => {
         console.log(`Server is running on port ${port}`)
     });
+
+    process.on('SIGNINT', () => {
+        console.log('Server is shutting down')
+        process.exit(0)
+    });
+
+    process.on('SIGTERM', () => {
+        console.log('Server is shutting down')
+        process.exit(0)
+    })
 }
 
 main();
