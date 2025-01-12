@@ -1,26 +1,17 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { config, validateEnvironmentVars } from "./kernel/config/general.configuration";
-import { dbConfig, validateDBEnvironmentVars } from "./kernel/config/database.configuration";
-import { MySQLHelper } from "./infrastructure/database/mysql.db";
+import { validateDBEnvironmentVars } from "./kernel/config/database.configuration";
 import cors from "cors";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import morgan from "morgan";
 import { msg200, msg405, sendResponse } from "./core/common/response-helpers";
 import { commitRouter } from "./ui/rest/router/commit.router";
+import { userCommitRouter } from "./ui/rest/router/user-commit.router";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
     validateDBEnvironmentVars()
-
-    const mysqlHelper = new MySQLHelper (
-        dbConfig.database.host,
-        dbConfig.database.port,
-        dbConfig.database.name,
-        dbConfig.database.username,
-        dbConfig.database.password,
-    )
-    mysqlHelper.connect()
 
     const app: Application = express()
     const port = process.env.LISTEN_PORT || 3003
@@ -40,7 +31,8 @@ async function main(): Promise<void> {
     app.get("/status", (req: Request, res: Response) => {
         res.status(200).send(msg200("3003"))
     })
-    app.use("/commit", commitRouter);
+    app.use("/contribution-tracker/commit", commitRouter)
+    app.use("/contribution-tracker/user-commit", userCommitRouter)
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         sendResponse(msg405("MEthod Not Allowed"), res, next);
@@ -49,6 +41,16 @@ async function main(): Promise<void> {
     app.listen(config.server.listenPort, () => {
         console.log(`Server is running on port ${port}`)
     });
+
+    process.on('SIGNINT', () => {
+        console.log('Server is shutting down')
+        process.exit(0)
+    });
+
+    process.on('SIGTERM', () => {
+        console.log('Server is shutting down')
+        process.exit(0)
+    })
 }
 
 main();
