@@ -11,7 +11,7 @@ import (
 
 func GetUserGithubInfo(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
 	userId := chi.URLParam(r, "userId")
-	userGithubInfo, err := services.NewUserGithubService().GetUserGithubInfo(userId)
+	userGithubInfo, err := userGithubService.GetUserGithubInfo(userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
