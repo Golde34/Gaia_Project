@@ -17,6 +17,10 @@ class Repository {
         return result;
     }
 
+    private toSnakeCase(key: string): string {
+        return key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+    }
+
     private mapRows(rows: any[]): any[] {
         return rows.map((row) => this.toCamelCase(row));
     }
@@ -28,7 +32,10 @@ class Repository {
     }
 
     async insert(data: Record<string, any>): Promise<number> {
-        const fields = Object.keys(data).join(', ');
+        const fields = Object.keys(data).map((key) => {
+            key = this.toSnakeCase(key);
+            return key;
+        }).join(', ');
         const placeholders = Object.keys(data).map(() => '?').join(', ');
         const values = Object.values(data);
 
@@ -38,16 +45,19 @@ class Repository {
     }
 
     async update(id: string, data: Record<string, any>): Promise<boolean> {
-        const fields = Object.keys(data).map((key) => `${key} = ?`).join(', ');
+        const fields = Object.keys(data).map((key) => {
+            key = this.toSnakeCase(key);
+            return key;
+        }).join(', ');
         const values = Object.values(data);
 
-        const query = `UPDATE ${this.tableName} SET ${fields} WHERE _id = ?`;
+        const query = `UPDATE ${this.tableName} SET ${fields} = ? WHERE id = ?`;
         const [result]: any = await this.pool.query(query, [...values, id]);
         return result.affectedRows > 0;
     }
 
     async delete(id: string): Promise<boolean> {
-        const query = `DELETE FROM ${this.tableName} WHERE _id = ?`;
+        const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
         const [result]: any = await this.pool.query(query, [id]);
         return result.affectedRows > 0;
     }

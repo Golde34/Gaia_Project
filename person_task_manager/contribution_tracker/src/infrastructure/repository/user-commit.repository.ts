@@ -1,3 +1,4 @@
+import { ulid } from "ulid";
 import { UserCommitEntity } from "../../core/domain/entities/user-commit.entity";
 import Repository from "../database/repository";
 
@@ -16,8 +17,27 @@ export class UserCommitRepository extends Repository {
     }
 
     async findByUserId(userId: number): Promise<UserCommitEntity> {
-        const user = await this.findByCondition('user_id = ?', [userId]);
-        return user[0];
+        const users = await this.findByCondition('user_id = ?', [userId]);
+        let user = users[0];
+        const state = ulid(); 
+
+        if (!user) {
+            user = {
+                userId: Number(userId),
+                githubUrl: '',
+                githubSha: '',
+                userConsent: false,
+                userState: state,
+            };
+            const insertId = await this.insert(user);
+            user.id = insertId; 
+        } else {
+            await this.update(user.id, { userState: state });
+            user.userState = state; 
+        }
+
+        console.log('User processed: ', user);
+        return user;
     }
 }
 
