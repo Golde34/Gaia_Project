@@ -27,7 +27,7 @@ func (s *UserGithubService) GetUserGithubInfo(userId string) (base_dtos.ErrorRes
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	gaiaConfigurations, err := s.Store.GetAllGaiaConfiguration(ctx, "github_config")
+	gaiaConfigurations, err := s.Store.GetConfigAndReturnParamValue(ctx, "github_config")
 	if err != nil {
 		return utils.ReturnErrorResponse(400, "Cannot get all gaia configuration"), err
 	}
