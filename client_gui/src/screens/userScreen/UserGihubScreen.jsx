@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserGithubInfo } from "../../api/store/actions/contribution_tracker/user-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { Dialog, Transition } from "@headlessui/react";
+import { generateUUID } from "../../kernels/utils/generate-uuid";
 
 const UserGithubScreen = (props) => {
     const user = props.user;
@@ -40,15 +41,13 @@ const UserGithubScreen = (props) => {
         setIsDeletedOpen(true)
     }
 
-    const githubAuthorizedUrl = `https://github.com/login/oauth/authorize?client_id=Ov23li5tHLpNbQ6Ep4kZ&redirect_uri=http://localhost:3000/client-gui/profile&scope=user,repo&state=RANDOM_STRING`; 
-
     return (
         <div>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <MessageBox message={error}></MessageBox>
-            ) : userGithubInfo && userGithubInfo.userConsent == 0 ? (
+            ) : userGithubInfo.userGithubInfo && userGithubInfo.userGithubInfo.userConsent == 0 ? (
                 <Card>
                     <Flex justifyContent="center" alignItems="center" className="mb-4">
                         <Title className="text-white text-xl font-bold">Your Github Information</Title>
@@ -63,7 +62,11 @@ const UserGithubScreen = (props) => {
                             color="indigo"
                             // onClick={openModal}
                             onClick={() => {
-                                window.location.href=githubAuthorizedUrl;
+                                const clientId = userGithubInfo.gaiaConfigurations.clientId;
+                                const redirectUrl = userGithubInfo.gaiaConfigurations.redirectUrl;
+                                const state = userGithubInfo.userGithubInfo.userState();
+                                const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=user,repo&state=${state}`;
+                                window.location.href = url;
                             }}
                         > Integrate</Button>
                     </Flex>
@@ -86,8 +89,8 @@ const UserGithubScreen = (props) => {
                             </Col>
                             <Col numColSpan={4}>
                                 <Text className="text-blue-400 text-md font-semibold hover:underline">
-                                    <a href={userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">
-                                        {userGithubInfo.githubUrl || "N/A"}
+                                    <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">
+                                        {userGithubInfo.userGithubInfo.githubUrl || "N/A"}
                                     </a>
                                 </Text>
                             </Col>
