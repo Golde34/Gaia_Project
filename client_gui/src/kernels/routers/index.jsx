@@ -21,6 +21,7 @@ import ChatComponent from '../../views/user_gui/TestChat';
 import TaskIntroduction from '../../views/introduction/TaskIntroduction';
 import TaskRegistration from '../../views/task_manager/TaskRegistration';
 import TaskDetail from '../../views/task_manager/TaskDetail';
+import GitHubCallback from '../context/GithubCallback';
 
 // Guest is public
 // User is protected, only logged in when the Role higher than User
@@ -135,6 +136,11 @@ const routeList = [
         path: '/task/detail/:id',
         key: 'task-detail',
         element: <TaskDetail />,
+    },
+    {
+        path: '/github-callback',
+        key: 'callback',
+        element: <GitHubCallback />,
     }
 ]
 

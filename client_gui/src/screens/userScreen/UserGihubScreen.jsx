@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserGithubInfo } from "../../api/store/actions/contribution_tracker/user-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { Dialog, Transition } from "@headlessui/react";
-import { generateUUID } from "../../kernels/utils/generate-uuid";
 
 const UserGithubScreen = (props) => {
     const user = props.user;
@@ -33,14 +32,6 @@ const UserGithubScreen = (props) => {
         setIsOpen(true)
     }
 
-    let [isDeletedOpen, setIsDeletedOpen] = useState(false);
-    function closeDeletedModal() {
-        setIsDeletedOpen(false)
-    }
-    function openDeletedModal() {
-        setIsDeletedOpen(true)
-    }
-
     return (
         <div>
             {loading ? (
@@ -64,7 +55,7 @@ const UserGithubScreen = (props) => {
                             onClick={() => {
                                 const clientId = userGithubInfo.gaiaConfigurations.clientId;
                                 const redirectUrl = userGithubInfo.gaiaConfigurations.redirectUrl;
-                                const state = userGithubInfo.userGithubInfo.userState();
+                                const state = userGithubInfo.userGithubInfo.userState;
                                 const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=user,repo&state=${state}`;
                                 window.location.href = url;
                             }}
@@ -96,8 +87,8 @@ const UserGithubScreen = (props) => {
                             </Col>
                         </Grid>
                     </Card>
-                    <Transition appear show={isDeletedOpen} as={Fragment}>
-                        <Dialog as="div" className="relative z-10" onClose={closeDeletedModal}>
+                    <Transition appear show={isOpen} as={Fragment}>
+                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -145,7 +136,7 @@ const UserGithubScreen = (props) => {
                                                 <button
                                                     type="button"
                                                     className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
-                                                    onClick={closeDeletedModal}
+                                                    onClick={closeModal}
                                                 >
                                                     Cancel
                                                 </button>
