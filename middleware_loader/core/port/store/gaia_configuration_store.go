@@ -43,3 +43,22 @@ func (store *GaiaConfigurationStore) GetAllGaiaConfiguration(context context.Con
 	}
 	return results, nil
 }
+
+func (store *GaiaConfigurationStore) GetConfigAndReturnParamValue(context context.Context, paramType string) (map[string]interface{}, error) {
+	collection := store.Database.Collection(store.Collection)
+	db := store.Database
+
+	gaiaConfigurations, err := store_adapter.IGaiaConfigurationRepository(
+		&repository.GaiaConfigurationRepository{Database: db, Collection: collection},
+	).GetAllGaiaConfiguration(context, paramType)
+	if err != nil {
+		return nil, err
+	}
+
+	var results = make(map[string]interface{})
+	for _, gaiaConfiguration := range gaiaConfigurations {
+		results[gaiaConfiguration.ParamName] = gaiaConfiguration.ParamValue
+	}
+
+	return results, nil
+}

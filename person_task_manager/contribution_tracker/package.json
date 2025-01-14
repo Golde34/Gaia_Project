@@ -33,7 +33,8 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "nodemon": "^3.0.2",
-    "protoc-gen-js": "^3.21.2"
+    "protoc-gen-js": "^3.21.2",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

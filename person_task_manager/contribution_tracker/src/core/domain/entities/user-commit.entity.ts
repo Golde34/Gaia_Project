@@ -1,7 +1,8 @@
-export interface UserCommitEntity extends Document {
-    id: string;
+export interface UserCommitEntity {
+    id?: string;
     userId: number;
-    githubUrl: string;
-    githubSha: string;
+    githubUrl?: string;
+    githubSha?: string;
     userConsent: boolean;
+    userState: string;
 }

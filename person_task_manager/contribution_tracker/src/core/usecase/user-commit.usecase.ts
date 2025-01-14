@@ -17,6 +17,17 @@ class UserCommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async verifyGithubAuthorization(code: string, state: string): Promise<IResponse> {
+        try {
+            const userGithubInfo = await this.userCommitServiceImpl.verifyGithubAuthorization(code, state);
+            return msg200({
+                userGithubInfo: userGithubInfo
+            })
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const userCommitUsecase = new UserCommitUsecase();

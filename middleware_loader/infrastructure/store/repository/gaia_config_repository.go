@@ -18,7 +18,7 @@ func NewGaiaConfigurationRepository(db database_mongo.Database, collection datab
 }
 
 func (repo *GaiaConfigurationRepository) GetAllGaiaConfiguration(context context.Context, paramType string) ([]entity.GaiaConfiguration, error) {
-	filter := bson.M{"paramType": paramType}
+	filter := bson.M{"paramType": paramType, "status": true}
 	results, err := repo.Collection.Find(context, filter)
 	if err != nil {
 		return nil, err

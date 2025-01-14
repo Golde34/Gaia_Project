@@ -32,23 +32,13 @@ const UserGithubScreen = (props) => {
         setIsOpen(true)
     }
 
-    let [isDeletedOpen, setIsDeletedOpen] = useState(false);
-    function closeDeletedModal() {
-        setIsDeletedOpen(false)
-    }
-    function openDeletedModal() {
-        setIsDeletedOpen(true)
-    }
-
-    const githubAuthorizedUrl = `https://github.com/login/oauth/authorize?client_id=Ov23li5tHLpNbQ6Ep4kZ&redirect_uri=http://localhost:3000/client-gui/profile&scope=user,repo&state=RANDOM_STRING`; 
-
     return (
         <div>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <MessageBox message={error}></MessageBox>
-            ) : userGithubInfo && userGithubInfo.userConsent == 0 ? (
+            ) : userGithubInfo.userGithubInfo && userGithubInfo.userGithubInfo.userConsent == 0 ? (
                 <Card>
                     <Flex justifyContent="center" alignItems="center" className="mb-4">
                         <Title className="text-white text-xl font-bold">Your Github Information</Title>
@@ -63,7 +53,11 @@ const UserGithubScreen = (props) => {
                             color="indigo"
                             // onClick={openModal}
                             onClick={() => {
-                                window.location.href=githubAuthorizedUrl;
+                                const clientId = userGithubInfo.gaiaConfigurations.clientId;
+                                const redirectUrl = userGithubInfo.gaiaConfigurations.redirectUrl;
+                                const state = userGithubInfo.userGithubInfo.userState;
+                                const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=user,repo&state=${state}`;
+                                window.location.href = url;
                             }}
                         > Integrate</Button>
                     </Flex>
@@ -86,15 +80,15 @@ const UserGithubScreen = (props) => {
                             </Col>
                             <Col numColSpan={4}>
                                 <Text className="text-blue-400 text-md font-semibold hover:underline">
-                                    <a href={userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">
-                                        {userGithubInfo.githubUrl || "N/A"}
+                                    <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">
+                                        {userGithubInfo.userGithubInfo.githubUrl || "N/A"}
                                     </a>
                                 </Text>
                             </Col>
                         </Grid>
                     </Card>
-                    <Transition appear show={isDeletedOpen} as={Fragment}>
-                        <Dialog as="div" className="relative z-10" onClose={closeDeletedModal}>
+                    <Transition appear show={isOpen} as={Fragment}>
+                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -142,7 +136,7 @@ const UserGithubScreen = (props) => {
                                                 <button
                                                     type="button"
                                                     className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
-                                                    onClick={closeDeletedModal}
+                                                    onClick={closeModal}
                                                 >
                                                     Cancel
                                                 </button>
