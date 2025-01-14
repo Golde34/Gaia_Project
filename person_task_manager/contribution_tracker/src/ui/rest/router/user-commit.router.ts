@@ -15,3 +15,12 @@ userCommitRouter.get("/get-user-github-info/:userId", async (req: Request, res: 
         next(err);
     }
 })
+
+userCommitRouter.post("/authorize", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const userGithubInfo = await userCommitControllerImpl.verifyGithubAuthorization(req, next);
+        returnResult(userGithubInfo, INTERNAL_SERVER_ERROR, res, next);
+    } catch (err) {
+        next(err);
+    }
+})

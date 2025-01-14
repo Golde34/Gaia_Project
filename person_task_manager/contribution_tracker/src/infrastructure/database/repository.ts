@@ -46,12 +46,12 @@ class Repository {
 
     async update(id: string, data: Record<string, any>): Promise<boolean> {
         const fields = Object.keys(data).map((key) => {
-            key = this.toSnakeCase(key);
-            return key;
+            const snakeKey = this.toSnakeCase(key);
+            return `${snakeKey} = ?`;  
         }).join(', ');
         const values = Object.values(data);
-
-        const query = `UPDATE ${this.tableName} SET ${fields} = ? WHERE id = ?`;
+        const query = `UPDATE ${this.tableName} SET ${fields} WHERE id = ?`;
+        console.log("Query: ", query);
         const [result]: any = await this.pool.query(query, [...values, id]);
         return result.affectedRows > 0;
     }

@@ -30,6 +30,19 @@ class UserCommitService {
     async clearUserCache(userId: number): Promise<void> {
         this.userCommitCache.clear(InternalCacheConstants.USER_INFO_CACHE_KEY + userId);
     }
+
+    async verifyGithubAuthorization(code: string, state: string): Promise<any> {
+        try {
+            console.log("Verifying github authorization");
+            const userGithubInfo = await this.userCommitRepository.verifyGithubAuthorization(code, state);
+            this.clearUserCache(userGithubInfo.userId);
+            console.log("User info: ", userGithubInfo);
+            return userGithubInfo;
+        } catch (error) {
+            console.error("Error on verifyGithubAuthorization: ", error);
+            return null;
+        }
+    }
 }
 
 export const userCommitService = new UserCommitService();

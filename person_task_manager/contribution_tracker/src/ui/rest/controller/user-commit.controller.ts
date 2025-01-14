@@ -14,6 +14,17 @@ class UserCommitController {
             next(err);
         }
     }
+
+    async verifyGithubAuthorization(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const code = req.body.code;
+            const state = req.body.state;
+            const userGithubInfo = await userCommitUsecase.verifyGithubAuthorization(code, state);
+            return userGithubInfo;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const userCommitController = new UserCommitController();
