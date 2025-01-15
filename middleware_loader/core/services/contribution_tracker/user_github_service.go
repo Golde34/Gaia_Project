@@ -32,3 +32,13 @@ func (s *UserGithubService) GithubAuthorize(code string, state string) (base_dto
 	response := utils.ReturnSuccessResponse("Authorize github success", userGithubInfo)
 	return response, nil
 }
+
+func (s *UserGithubService) SynchronizeUserGithub(userId string) (base_dtos.ErrorResponse, error) {
+	userGithubInfo, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).SynchronizeUserGithub(userId)
+	if err != nil {
+		return utils.ReturnErrorResponse(400, "Cannot synchronize user github from Contribution Tracker"), err
+	}
+
+	response := utils.ReturnSuccessResponse("Synchronize user github success", userGithubInfo)
+	return response, nil
+}

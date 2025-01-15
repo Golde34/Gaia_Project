@@ -50,3 +50,19 @@ func GithubAuthorize(w http.ResponseWriter, r *http.Request, userGithubService *
 		return
 	}
 }
+
+func SynchronizeUserGithub(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
+	userId := chi.URLParam(r, "userId")
+	userGithubInfo, err := userGithubService.SynchronizeUserGithub(userId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(userGithubInfo); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+}
