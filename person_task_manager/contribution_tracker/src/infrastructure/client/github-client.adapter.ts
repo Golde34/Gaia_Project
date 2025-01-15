@@ -11,6 +11,7 @@ class GithubClientAdapter {
 
     async getGithubAccessToken(body: any): Promise<string | null> {
         try {
+            console.log('Github token url: ', this.githubTokenUrl);
             const response = await fetch(this.githubTokenUrl, {
                 method: "POST",
                 headers: {

@@ -9,7 +9,7 @@ class CTConfigurationService {
     async getConfigByParamType(paramType: string): Promise<any> {
         try {
             console.log("Getting config by param type: " + paramType);
-            const config: CTServiceConfigurationEntity[] = await this.ctServiceConfigurationRepository.findConfigByParamType(paramType);
+            const config: CTServiceConfigurationEntity[] = await this.ctServiceConfigurationRepository.findActiveConfigByParamType(paramType);
             const result: { [key: string]: any } = {}
             for (const conf of config) {
                 result[conf.paramName] = conf.paramValue;

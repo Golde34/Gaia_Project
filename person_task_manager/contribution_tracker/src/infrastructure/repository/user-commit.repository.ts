@@ -26,7 +26,7 @@ export class UserCommitRepository extends Repository {
                 userId: Number(userId),
                 githubUrl: '',
                 githubSha: '',
-                userConsent: false,
+                userConsent: 0,
                 userState: state,
             };
             const insertId = await this.insert(user);

@@ -1,11 +1,13 @@
 import CacheSingleton from "../../infrastructure/cache/cache-singleton";
 import GithubClientAdapter from "../../infrastructure/client/github-client.adapter";
+import { CTServiceConfigRepository } from "../../infrastructure/repository/ct-service-config.repository";
 import UserCommitRepository from "../../infrastructure/repository/user-commit.repository";
 import { InternalCacheConstants } from "../domain/constants/constants";
 
 class UserCommitService {
     constructor(
         private userCommitRepository: UserCommitRepository = UserCommitRepository.getInstance(),
+        private ctServiceConfigRepo: CTServiceConfigRepository = CTServiceConfigRepository.getInstance(),
         private userCommitCache = CacheSingleton.getInstance().getCache(),
         private githubClient = new GithubClientAdapter(),
     ) { }
@@ -41,11 +43,17 @@ class UserCommitService {
                 return null;
             }
 
+            const configs = await this.ctServiceConfigRepo.findConfigByParamType("github_config");
+            const githubSystemConfigs: { [key: string]: any } = {}
+            for (const conf of configs) {
+                githubSystemConfigs[conf.paramName] = conf.paramValue;
+            }
             const body = {
-                client_id: 'githubClientID',
-                client_secret: 'githubClientSecret',
+                client_id: githubSystemConfigs.clientId,
+                client_secret: githubSystemConfigs.clientSecret,
                 code: code
             }
+
             const authorizedGithub = await this.githubClient.getGithubAccessToken(body);
             if (authorizedGithub !== null) {
                 const updatedUser = await this.userCommitRepository.updateUserConsent(userGithubInfo, code, authorizedGithub);

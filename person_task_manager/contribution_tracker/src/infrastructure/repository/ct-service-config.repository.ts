@@ -15,7 +15,11 @@ export class CTServiceConfigRepository extends Repository {
         super('ct_service_configuration');
     }
 
-    async findConfigByParamType(paramType: string): Promise<CTServiceConfigurationEntity[]> {
+    async findActiveConfigByParamType(paramType: string): Promise<CTServiceConfigurationEntity[]> {
         return await this.findByCondition('param_type = ? and status = ?', [paramType, true]);
+    }
+
+    async findConfigByParamType(paramType: string): Promise<CTServiceConfigurationEntity[]> {
+        return await this.findByCondition('param_type = ?', [paramType]);
     }
 }
