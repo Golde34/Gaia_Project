@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -6,24 +6,32 @@ function GitHubCallback() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const debounceRef = useRef(null);
+
+    const sendAuthorizationCode = useCallback(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get("code");
         const state = params.get("state");
 
         if (code) {
-            // Gửi authorization code tới backend để xử lý
             axios
                 .post("http://localhost:3003/contribution-tracker/user-commit/authorize", { code, state })
                 .then((response) => {
                     console.log("GitHub Integration Success:", response.data);
-                    navigate("/profile"); // Redirect về trang chính hoặc profile
+                    navigate("/profile");
                 })
                 .catch((error) => {
                     console.error("GitHub Integration Failed:", error);
                 });
         }
-    }, [location, navigate]);
+    }, [location.search, navigate]);
+
+    useEffect(() => {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            sendAuthorizationCode();
+        }, 200);
+    }, [sendAuthorizationCode]);
 
     return (
         <div className="text-center">
