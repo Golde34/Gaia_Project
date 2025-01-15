@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { config } from "../configs/configuration";
 
 function GitHubCallback() {
     const location = useLocation();
     const navigate = useNavigate();
+
+    const middlewarePort = config.middlewarePort;
+    const url = `http://${config.serverHost}:${middlewarePort}/user-commit/user-github/authorize`;
 
     const debounceRef = useRef(null);
 
@@ -15,9 +19,8 @@ function GitHubCallback() {
 
         if (code) {
             axios
-                .post("http://localhost:3003/contribution-tracker/user-commit/authorize", { code, state })
+                .post(url, { code, state })
                 .then((response) => {
-                    console.log("GitHub Integration Success:", response.data);
                     navigate("/profile");
                 })
                 .catch((error) => {
