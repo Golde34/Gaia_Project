@@ -22,3 +22,13 @@ func (s *UserGithubService) GetUserGithubInfo(userId string) (base_dtos.ErrorRes
 	response := utils.ReturnSuccessResponse("Get user github info success", userGithubInfo)
 	return response, nil
 }
+
+func (s *UserGithubService) GithubAuthorize(code string, state string) (base_dtos.ErrorResponse, error) {
+	userGithubInfo, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).GithubAuthorize(code, state)
+	if err != nil {
+		return utils.ReturnErrorResponse(400, "Cannot authorize github from Contribution Tracker"), err
+	}
+
+	response := utils.ReturnSuccessResponse("Authorize github success", userGithubInfo)
+	return response, nil
+}

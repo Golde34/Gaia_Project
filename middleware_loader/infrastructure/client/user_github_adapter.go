@@ -34,3 +34,31 @@ func (adapter *UserGithubAdapter) GetUserGithubInfo(userId string) (response_dto
 
 	return userGithubInfo, nil
 }
+
+func (adapter *UserGithubAdapter) GithubAuthorize(code string, state string) (response_dtos.UserGithubDTO, error) {
+	githubAuthorizeURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/authorize"
+
+	headers := utils.BuildDefaultHeaders()
+	body := map[string]interface{} {
+		"code": code,
+		"state": state,
+	}
+	
+	bodyResult, err := utils.BaseAPI(githubAuthorizeURL, "POST", body, headers)
+	if err != nil {
+		return response_dtos.UserGithubDTO{}, err
+	}
+
+	var userGithubInfo response_dtos.UserGithubDTO
+	data, err := json.Marshal(bodyResult)
+	if err != nil {
+		return response_dtos.UserGithubDTO{}, err
+	}
+
+	err = json.Unmarshal(data, &userGithubInfo)
+	if err != nil {
+		return response_dtos.UserGithubDTO{}, err
+	}
+
+	return userGithubInfo, nil
+}

@@ -17,6 +17,9 @@ func NewUserGithubRouter(userGithubService *services.UserGithubService, r *chi.M
 		r.Get("/user-github/{userId}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.GetUserGithubInfo(w, r, userGithubService)
 		})
+		r.Post("/user-github/authorize", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GithubAuthorize(w, r, userGithubService)
+		})
 	})
 	return &UserGithubRouter{
 		UserGithubService: userGithubService,
