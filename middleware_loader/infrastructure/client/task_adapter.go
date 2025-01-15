@@ -43,7 +43,7 @@ func (adapter *TaskAdapter) GetAllTasks() ([]response_dtos.TaskResponseDTO, erro
 func (adapter *TaskAdapter) GetTaskById(id string) (response_dtos.TaskResponseDTO, error) {
 	getTaskByIdURL := base.TaskManagerServiceURL + "/task/" + id
 	var task response_dtos.TaskResponseDTO
-	headers := utils.BuildDefaultHeaders()	
+	headers := utils.BuildDefaultHeaders()
 	result, err := utils.BaseAPIV2(getTaskByIdURL, "GET", nil, &task, headers)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
@@ -73,18 +73,28 @@ func (adapter *TaskAdapter) CreateTask(input model.CreateTaskInput) (response_dt
 }
 
 func (adapter *TaskAdapter) UpdateTask(input model.UpdateTaskInput, id string) (response_dtos.TaskResponseDTO, error) {
-	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id 
+	updateTaskURL := base.TaskManagerServiceURL + "/task/" + id
 	var task response_dtos.TaskResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	result, err := utils.BaseAPIV2(updateTaskURL, "PUT", input, &task, headers)
+	bodyResult, err := utils.BaseAPI(updateTaskURL, "PUT", input, headers)
 	if err != nil {
 		return response_dtos.TaskResponseDTO{}, err
 	}
-	return result.(response_dtos.TaskResponseDTO), nil
+
+	dataBytes, err := utils.ConvertResponseToMap(bodyResult)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
+	}
+	err = json.Unmarshal(dataBytes, &task)
+	if err != nil {
+		return response_dtos.TaskResponseDTO{}, err
+	}
+
+	return task, nil
 }
 
 func (adapter *TaskAdapter) DeleteTask(id string) (response_dtos.TaskResponseDTO, error) {
-	deleteTaskURL := base.TaskManagerServiceURL + "/task/" + id 
+	deleteTaskURL := base.TaskManagerServiceURL + "/task/" + id
 	var task response_dtos.TaskResponseDTO
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(deleteTaskURL, "DELETE", nil, headers)

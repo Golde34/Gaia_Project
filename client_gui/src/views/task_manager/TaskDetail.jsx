@@ -85,7 +85,7 @@ function ContentArea() {
             scheduleTaskId: detail?.scheduleTaskId === null ? 0 : detail?.scheduleTaskId,
         }
         updateTask(body);
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (
