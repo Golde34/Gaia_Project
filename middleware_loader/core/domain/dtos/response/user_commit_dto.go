@@ -11,3 +11,21 @@ type UserCommitDTO struct {
 func NewUserCommitDTO() *UserCommitDTO {
 	return &UserCommitDTO{}
 }
+
+type GithubConfigurationDTO struct {
+	ClientId    string `json:"clientId"`
+	RedirectUrl string `json:"redirectUrl"`
+}
+
+func NewGithubConfigurationDTO() *GithubConfigurationDTO {
+	return &GithubConfigurationDTO{}
+}
+
+type UserGithubDTO struct {
+	UserGithubInfo      UserCommitDTO          `json:"userGithubInfo"`
+	GithubConfiguration GithubConfigurationDTO `json:"githubConfiguration"`
+}
+
+func NewUserGithubDTO() *UserGithubDTO {
+	return &UserGithubDTO{}
+}
