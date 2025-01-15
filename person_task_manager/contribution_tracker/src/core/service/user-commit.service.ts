@@ -46,8 +46,8 @@ class UserCommitService {
                 client_secret: 'githubClientSecret',
                 code: code
             }
-            const authorizedGithub = this.githubClient.getGithubAccessToken(body);
-            if (authorizedGithub != null) {
+            const authorizedGithub = await this.githubClient.getGithubAccessToken(body);
+            if (authorizedGithub !== null) {
                 const updatedUser = await this.userCommitRepository.updateUserConsent(userGithubInfo, code, authorizedGithub);
                 if (updatedUser === null) {
                     console.log('Something happened when authorized user in Github')
