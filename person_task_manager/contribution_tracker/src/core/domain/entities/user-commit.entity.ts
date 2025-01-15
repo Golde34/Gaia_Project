@@ -3,6 +3,7 @@ export interface UserCommitEntity {
     userId: number;
     githubUrl?: string;
     githubSha?: string;
+    githubAccessToken?: string;
     userConsent: boolean;
     userState: string;
 }

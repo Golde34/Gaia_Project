@@ -21,6 +21,9 @@ class UserCommitUsecase {
     async verifyGithubAuthorization(code: string, state: string): Promise<IResponse> {
         try {
             const userGithubInfo = await this.userCommitServiceImpl.verifyGithubAuthorization(code, state);
+            if (userGithubInfo === null) {
+                return msg400("Error on verifyGithubAuthorization");
+            }
             return msg200({
                 userGithubInfo: userGithubInfo
             })
