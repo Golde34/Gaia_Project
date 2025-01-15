@@ -6,6 +6,7 @@ import (
 	task_manager "middleware_loader/core/services/task_manager"
 	work_optim "middleware_loader/core/services/work_optimization"
 	schedule_plan "middleware_loader/core/services/schedule_plan"
+	contribution_tracker "middleware_loader/core/services/contribution_tracker"
 	"middleware_loader/infrastructure/graph"
 	database_mongo "middleware_loader/kernel/database/mongo"
 	auth_router "middleware_loader/ui/routers/auth_service"
@@ -36,6 +37,7 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	noteService := task_manager.NewNoteService()
 	taskOptimizationService := work_optim.NewTaskOptimizationService()
 	scheduleTaskService := schedule_plan.NewScheduleTaskService()
+	userGithubService := contribution_tracker.NewUserGithubService()
 
 	// GRAPHQL FEDERATION
 	router.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
@@ -61,7 +63,6 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	router.Group(func(r chi.Router) {
 		middleware_router.NewMicroserviceRouter(db, router)
 		middleware_router.NewURLPermissionRouter(db, router)
-		middleware_router.NewGaiaConfigurationRouter(db, router)
 	})
 
 	router.Group(func(r chi.Router) {
@@ -90,6 +91,6 @@ func Setup(router *chi.Mux, db database_mongo.Database) {
 	})
 
 	router.Group(func (r chi.Router) {
-		contribution_tracker_router.NewUserGithubRouter(db, router)
+		contribution_tracker_router.NewUserGithubRouter(userGithubService, router)
 	})
 }

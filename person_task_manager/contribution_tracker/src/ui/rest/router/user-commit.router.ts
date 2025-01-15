@@ -24,3 +24,12 @@ userCommitRouter.post("/authorize", async (req: Request, res: Response, next: Ne
         next(err);
     }
 })
+
+userCommitRouter.get("/synchronize-user-github/:userId", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const userGithubInfo = await userCommitControllerImpl.synchronizeUserGithub(req, next);
+        returnResult(userGithubInfo, INTERNAL_SERVER_ERROR, res, next);
+    } catch (err) {
+        next(err);
+    }
+})

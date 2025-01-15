@@ -1,21 +1,16 @@
 package services
 
 import (
-	"context"
 	base_dtos "middleware_loader/core/domain/dtos/base"
 	"middleware_loader/core/port/client"
-	"middleware_loader/core/port/store"
 	adapter "middleware_loader/infrastructure/client"
 	"middleware_loader/kernel/utils"
-	"time"
 )
 
-type UserGithubService struct {
-	Store store.GaiaConfigurationStore
-}
+type UserGithubService struct {}
 
-func NewUserGithubService(store store.GaiaConfigurationStore) *UserGithubService {
-	return &UserGithubService{store}
+func NewUserGithubService() *UserGithubService {
+	return &UserGithubService{}
 }
 
 func (s *UserGithubService) GetUserGithubInfo(userId string) (base_dtos.ErrorResponse, error) {
@@ -24,19 +19,26 @@ func (s *UserGithubService) GetUserGithubInfo(userId string) (base_dtos.ErrorRes
 		return utils.ReturnErrorResponse(400, "Cannot get user github info from Contribution Tracker"), err 
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	response := utils.ReturnSuccessResponse("Get user github info success", userGithubInfo)
+	return response, nil
+}
 
-	gaiaConfigurations, err := s.Store.GetConfigAndReturnParamValue(ctx, "github_config")
+func (s *UserGithubService) GithubAuthorize(code string, state string) (base_dtos.ErrorResponse, error) {
+	userGithubInfo, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).GithubAuthorize(code, state)
 	if err != nil {
-		return utils.ReturnErrorResponse(400, "Cannot get all gaia configuration"), err
+		return utils.ReturnErrorResponse(400, "Cannot authorize github from Contribution Tracker"), err
 	}
 
-	data := map[string]interface{}{
-		"userGithubInfo": userGithubInfo,
-		"gaiaConfigurations": gaiaConfigurations,
+	response := utils.ReturnSuccessResponse("Authorize github success", userGithubInfo)
+	return response, nil
+}
+
+func (s *UserGithubService) SynchronizeUserGithub(userId string) (base_dtos.ErrorResponse, error) {
+	userGithubInfo, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).SynchronizeUserGithub(userId)
+	if err != nil {
+		return utils.ReturnErrorResponse(400, "Cannot synchronize user github from Contribution Tracker"), err
 	}
 
-	response := utils.ReturnSuccessResponse("Get user github info success", data)
+	response := utils.ReturnSuccessResponse("Synchronize user github success", userGithubInfo)
 	return response, nil
 }

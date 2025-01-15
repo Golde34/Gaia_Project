@@ -19,40 +19,46 @@ export class UserCommitRepository extends Repository {
     async findByUserId(userId: number): Promise<UserCommitEntity> {
         const users = await this.findByCondition('user_id = ?', [userId]);
         let user = users[0];
-        const state = ulid(); 
+        const state = ulid();
 
         if (!user) {
             user = {
                 userId: Number(userId),
                 githubUrl: '',
                 githubSha: '',
-                userConsent: false,
+                userConsent: 0,
                 userState: state,
             };
             const insertId = await this.insert(user);
-            user.id = insertId; 
+            user.id = insertId;
         } else {
             await this.update(user.id, { userState: state });
-            user.userState = state; 
+            user.userState = state;
         }
 
-        const {githubSha, ...result } = user;
+        const { githubSha, ...result } = user;
         return result;
     }
 
-    async verifyGithubAuthorization(code: string, state: string): Promise<UserCommitEntity> {
+    async verifyGithubAuthorization(state: string): Promise<UserCommitEntity | undefined> {
         const users = await this.findByCondition('user_state = ?', [state]);
         const user = users[0];
         if (!user) {
-            throw new Error('User not found');
+            console.error('User not found');
+            return undefined;
         }
-        await this.update(user.id, { userConsent: true, githubSha: code });
-        console.log('User consented');
-        // const githubInfo = await this.getGithubInfo(code);
-        // await this.update(user.id, { githubUrl: githubInfo.html_url, githubSha: githubInfo.sha });
-        // user.githubUrl = githubInfo.html_url;
-        // user.githubSha = githubInfo.sha;
+        return user;
+    }
 
+    async updateUserConsent(user: UserCommitEntity, code: string, accessToken: string): Promise<UserCommitEntity | null> {
+        if (user.id === undefined) return null; 
+        await this.update(user.id, { userConsent: true, githubSha: code, githubAccessToken: accessToken });
+        return user;
+    }
+
+    async updateUser(user: UserCommitEntity): Promise<UserCommitEntity | null> {
+        if (user.id === undefined) return null;
+        await this.update(user.id, user);
         return user;
     }
 }
