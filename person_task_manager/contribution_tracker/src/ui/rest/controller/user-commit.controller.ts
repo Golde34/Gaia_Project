@@ -25,6 +25,16 @@ class UserCommitController {
             next(err);
         }
     }
+
+    async synchronizeUserGithub(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const userId = Number(req.params.userId);
+            const userGithubInfo = await userCommitUsecase.synchronizeUserGithub(userId);
+            return userGithubInfo;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const userCommitController = new UserCommitController();

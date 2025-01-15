@@ -55,6 +55,12 @@ export class UserCommitRepository extends Repository {
         await this.update(user.id, { userConsent: true, githubSha: code, githubAccessToken: accessToken });
         return user;
     }
+
+    async updateUser(user: UserCommitEntity): Promise<UserCommitEntity | null> {
+        if (user.id === undefined) return null;
+        await this.update(user.id, user);
+        return user;
+    }
 }
 
 export default UserCommitRepository;

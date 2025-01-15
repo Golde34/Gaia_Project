@@ -41,6 +41,20 @@ class UserCommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async synchronizeUserGithub(userId: number): Promise<IResponse> {
+        try {
+            const userGithubInfo = await this.userCommitServiceImpl.synchronizeUserGithub(userId);
+            if (userGithubInfo === null) {
+                return msg400("Error on synchronizeUserGithub");
+            }
+            return msg200({
+                userGithubInfo: userGithubInfo
+            })
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const userCommitUsecase = new UserCommitUsecase();

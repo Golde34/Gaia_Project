@@ -71,6 +71,36 @@ class UserCommitService {
             return null;
         }
     }
+
+    async synchronizeUserGithub(userId: number): Promise<any> {
+        try {
+            console.log("Synchronizing user github");
+            const userGithubInfo = await this.userCommitRepository.findByUserId(userId);
+            if (userGithubInfo === null) {
+                return null;
+            }
+            if (userGithubInfo.githubAccessToken === undefined) {
+                return null;
+            }
+
+            const githubCommits = await this.githubClient.getGithubUserInfo(userGithubInfo.githubAccessToken);
+            if (githubCommits !== null) {
+                userGithubInfo.githubUrl = githubCommits.html_url;
+                const updatedUser = await this.userCommitRepository.updateUser(userGithubInfo);
+                if (updatedUser === null) {
+                    console.log('Something happened when synchronizing user in Github')
+                    return null;
+                }
+                this.clearUserCache(updatedUser.userId);
+                console.log("User info: ", updatedUser);
+                return updatedUser;
+            }
+            return null;
+        } catch (error) {
+            console.error("Error on synchronizeUserGithub: ", error);
+            return null;
+        }
+    }
 }
 
 export const userCommitService = new UserCommitService();
