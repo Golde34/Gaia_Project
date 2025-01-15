@@ -96,24 +96,27 @@ class TaskService {
             if (await this.taskValidationImpl.checkExistedTaskByTaskId(taskId) === false) {
                 return msg400(TASK_NOT_FOUND);
             }
-
-            const updateTask = await taskStore.updateTask(taskId, task);
-            if (updateTask === null) {
-                return msg400(UPDATE_TASK_FAILED);
-            }
-
-            this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
-
-            const updateTaskMessage = await kafkaUpdateTaskMapper(updateTask, task);
-            this.pushUpdateTaskMessage(updateTaskMessage);
-
-            return msg200({
-                message: (updateTask as any)
-            });
+            return await this.updatetaskAndPushKafka(taskId, task);
 
         } catch (error: any) {
             return msg400(error.message.toString());
         }
+    }
+
+    private async updatetaskAndPushKafka(taskId: string, task: any): Promise<IResponse> {
+        const updateTask = await taskStore.updateTask(taskId, task);
+        if (updateTask === null) {
+            return msg400(UPDATE_TASK_FAILED);
+        }
+
+        this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, task.groupTaskId);
+
+        const updateTaskMessage = await kafkaUpdateTaskMapper(updateTask, task);
+        this.pushUpdateTaskMessage(updateTaskMessage);
+
+        return msg200({
+            message: (updateTask as any)
+        });
     }
 
     async updateTaskInDialog(taskId: string, task: UpdateTaskInDialogDTO): Promise<IResponse> {
@@ -127,13 +130,7 @@ class TaskService {
                 taskUpdate.description = task.description ?? ''; // Use optional chaining operator and provide a default value
                 taskUpdate.status = task.status;
 
-                const updateTask = await taskStore.updateTask(taskId, taskUpdate);
-                this.taskServiceUtilsImpl.clearTaskCache(this.taskCache, taskUpdate.groupTaskId);
-                this.pushUpdateTaskMessage(updateTask);
-
-                return msg200({
-                    message: (updateTask as any)
-                });
+                return await this.updatetaskAndPushKafka(taskId, taskUpdate); 
             } else {
                 return msg400(TASK_NOT_FOUND);
             }
