@@ -53,8 +53,8 @@ const UserGithubScreen = (props) => {
                             color="indigo"
                             // onClick={openModal}
                             onClick={() => {
-                                const clientId = userGithubInfo.gaiaConfigurations.clientId;
-                                const redirectUrl = userGithubInfo.gaiaConfigurations.redirectUrl;
+                                const clientId = userGithubInfo.githubConfiguration.clientId;
+                                const redirectUrl = userGithubInfo.githubConfiguration.redirectUrl;
                                 const state = userGithubInfo.userGithubInfo.userState;
                                 const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=user,repo&state=${state}`;
                                 window.location.href = url;
