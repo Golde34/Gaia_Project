@@ -28,7 +28,7 @@ class Repository {
     async findAll(): Promise<any[]> {
         const query = `SELECT * FROM ${this.tableName}`;
         const [rows] = await this.pool.query(query);
-        return rows as any[];
+        return this.mapRows(rows as any[]);
     }
 
     async insert(data: Record<string, any>): Promise<number> {
@@ -65,7 +65,6 @@ class Repository {
     async findByCondition(condition: string, values: any[]): Promise<any[]> {
         const query = `SELECT * FROM ${this.tableName} WHERE ${condition}`;
         const [rows] = await this.pool.query(query, values);
-        console.log("Rows: ", rows);
         return this.mapRows(rows as any[]);
     }
 }

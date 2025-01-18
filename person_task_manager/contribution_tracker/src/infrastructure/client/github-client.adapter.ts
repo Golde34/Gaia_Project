@@ -60,6 +60,54 @@ class GithubClientAdapter {
             return null;
         }
     }
+
+    async getGithubRepositories(accessToken: string): Promise<any> {
+        try {
+            const response = await fetch("https://api.github.com/user/repos", {
+                headers: {
+                    Authorization: `token ${accessToken}`,
+                },
+            });
+            if (response.status) {
+                console.error(`Github API returned status: ${response.status}`);
+                return null;
+            }
+
+            const data = await response.json();
+            if (data.error) {
+                console.error(`Error from Github API: ${data.error}`);
+                return null;
+            }
+            return data;
+        } catch (error: any) {
+            console.error("Exception when calling github API", error);
+            return null;
+        }
+    }
+
+    async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
+        try {
+            const response = await fetch(`https://api.github.com/repos/${repoName}/commits`, {
+                headers: {
+                    Authorization: `token ${accessToken}`,
+                },
+            });
+            if (response.status !== 200) {
+                console.error(`Github API returned status: ${response.status}`);
+                return null;
+            }
+
+            const data = await response.json();
+            if (data.error) {
+                console.error(`Error from Github API: ${data.error}`);
+                return null;
+            }
+            return data;
+        } catch (error: any) {
+            console.error("Exception when calling Github API", error);
+            return null;
+        }
+    }
 }
 
 export default GithubClientAdapter;
