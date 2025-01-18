@@ -1,6 +1,6 @@
 package main
 
-import "golang_kafka/group"
+import "golang_kafka/consumer/group"
 
 func main() {
 	// 测试: 该topics创建时只指定两个分区，然后启动3个消费者进行消费，

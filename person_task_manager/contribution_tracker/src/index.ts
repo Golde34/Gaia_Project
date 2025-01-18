@@ -8,10 +8,13 @@ import morgan from "morgan";
 import { msg200, msg405, sendResponse } from "./core/common/response-helpers";
 import { commitRouter } from "./ui/rest/router/commit.router";
 import { userCommitRouter } from "./ui/rest/router/user-commit.router";
+import { KafkaConfig } from "./infrastructure/kafka/kafka-config";
+import { kafkaController } from "./infrastructure/kafka/kafka-controller";
 
 async function main(): Promise<void> {
     validateEnvironmentVars()
     validateDBEnvironmentVars()
+    const kafkaConfig = new KafkaConfig();
 
     const app: Application = express()
     const port = process.env.LISTEN_PORT || 3003
@@ -51,6 +54,8 @@ async function main(): Promise<void> {
         console.log('Server is shutting down')
         process.exit(0)
     })
+
+    kafkaController(kafkaConfig);
 }
 
 main();

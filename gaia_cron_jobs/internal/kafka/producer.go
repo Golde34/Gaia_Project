@@ -2,45 +2,66 @@ package kafka
 
 import (
 	"context"
-	"fmt"
+	"gaia_cron_jobs/domain"
 	"log"
+	"sync"
 	"time"
+
+	"github.com/IBM/sarama"
+	"github.com/google/uuid"
 )
 
-// KafkaProducer represents the Kafka writer
-type KafkaProducer struct {
-	// writer *kafka.Writer
+func Producer(bootstrapServer, topic string, message *domain.KafkaMessage, limit int) {
+	config := sarama.NewConfig()
+
+	config.Producer.Return.Errors = true
+	config.Producer.Return.Successes = true
+	producer, err := sarama.NewAsyncProducer([]string{bootstrapServer}, config)
+	if err != nil {
+		log.Fatal("Failed to create producer:", err)
+	}
+	defer producer.AsyncClose() 
+
+	var wg sync.WaitGroup
+	var enqueued, timeout, successed, errors int
+
+	// Success handler
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for range producer.Successes() {
+			successed++
+		}
+	}()
+
+	// Error handler
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for err := range producer.Errors() {
+			log.Println("Failed to write access log entry:", err)
+			errors++
+		}
+	}()
+
+	// Send message
+	msg := &sarama.ProducerMessage{
+		Topic: topic,
+		Key:   sarama.StringEncoder(uuid.New().String()),
+		Value: sarama.StringEncoder(message.String()),
+	}
+	log.Printf("Enqueueing message to topic '%s': %s", topic, message)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5) 
+	defer cancel()
+
+	select {
+	case producer.Input() <- msg:
+		enqueued++
+	case <-ctx.Done():
+		timeout++
+		log.Printf("Timeout while enqueueing message to topic '%s': %s", topic, message)
+	}
+
+	wg.Wait() 
 }
-
-// NewProducer creates a new Kafka producer
-// func NewProducer(broker, topic string) *KafkaProducer {
-// 	return &KafkaProducer{
-// 		writer: &kafka.Writer{
-// 			Addr:         kafka.TCP(broker),
-// 			Topic:        topic,
-// 			Balancer:     &kafka.LeastBytes{},
-// 			RequiredAcks: kafka.RequireAll,
-// 		},
-// 	}
-// }
-
-// Publish sends a message to Kafka
-// func (kp *KafkaProducer) Publish(message string) error {
-// 	err := kp.writer.WriteMessages(context.Background(),
-// 		kafka.Message{
-// 			Key:   []byte(fmt.Sprintf("Key-%d", time.Now().UnixNano())),
-// 			Value: []byte(message),
-// 		},
-// 	)
-// 	if err != nil {
-// 		log.Printf("Failed to publish message: %v", err)
-// 		return err
-// 	}
-// 	log.Printf("Message published to Kafka: %s", message)
-// 	return nil
-// }
-
-// // Close closes the Kafka writer
-// func (kp *KafkaProducer) Close() {
-// 	kp.writer.Close()
-// }
