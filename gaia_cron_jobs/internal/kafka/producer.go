@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"gaia_cron_jobs/domain"
 	"log"
 	"sync"
 	"time"
@@ -10,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func Producer(bootstrapServer, topic, message string, limit int) {
+func Producer(bootstrapServer, topic string, message *domain.KafkaMessage, limit int) {
 	config := sarama.NewConfig()
 
 	config.Producer.Return.Errors = true
@@ -47,7 +48,7 @@ func Producer(bootstrapServer, topic, message string, limit int) {
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
 		Key:   sarama.StringEncoder(uuid.New().String()),
-		Value: sarama.StringEncoder(message),
+		Value: sarama.StringEncoder(message.String()),
 	}
 	log.Printf("Enqueueing message to topic '%s': %s", topic, message)
 

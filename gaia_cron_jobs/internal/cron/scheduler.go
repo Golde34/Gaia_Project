@@ -27,12 +27,37 @@ func ExecuteJob() {
 			continue
 		}
 
-		scheduler.Every(job.JobTime).Seconds().Do(func(name, topic, bootstrapServers string) {
-			message := uuid.New().String()
-			log.Printf("Executing job '%s' and sending message to topic '%s'", name, topic)
-			kafka.Producer(bootstrapServers, topic, message, 100_000)
-		}, job.JobName, job.Topic, job.BootstrapServers)
+		runJobByTimeUnit(scheduler, job, uuid.New().String())
 	}
 
 	scheduler.StartBlocking()
+}
+
+func runJobByTimeUnit(scheduler *gocron.Scheduler, job config.JobConfig, message string) {
+	switch job.JobTimeUnit {
+		case "SECONDS":
+			scheduler.Every(job.JobTime).Seconds().Do(func(name, topic, bootstrapServers string) {
+				executeKafkaJob(message, name, topic, bootstrapServers)
+			}, job.JobName, job.Topic, job.BootstrapServers)
+		case "MINUTES":
+			scheduler.Every(job.JobTime).Minutes().Do(func(name, topic, bootstrapServers string) {
+				executeKafkaJob(message, name, topic, bootstrapServers)
+			}, job.JobName, job.Topic, job.BootstrapServers)
+		case "HOURS":
+			scheduler.Every(job.JobTime).Hours().Do(func(name, topic, bootstrapServers string) {
+				executeKafkaJob(message, name, topic, bootstrapServers)
+			}, job.JobName, job.Topic, job.BootstrapServers)
+		case "DAYS":
+			scheduler.Every(job.JobTime).Days().Do(func(name, topic, bootstrapServers string) {
+				executeKafkaJob(message, name, topic, bootstrapServers)
+			}, job.JobName, job.Topic, job.BootstrapServers)
+		default:
+			log.Printf("Invalid time unit '%s' for job '%s'. Skipping...", job.JobTimeUnit, job.JobName)
+		}
+}
+
+func executeKafkaJob(message, name, topic, bootstrapServers string) {
+	kafkaMessage := kafka.CreateKafkaMessage(name, message)
+	log.Printf("Executing job '%s' and sending message to topic '%s'", name, topic)
+	kafka.Producer(bootstrapServers, topic, kafkaMessage, 100_000)
 }
