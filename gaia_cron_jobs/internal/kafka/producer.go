@@ -2,45 +2,82 @@ package kafka
 
 import (
 	"context"
-	"fmt"
+	kafka_config "gaia_cron_jobs/config"
 	"log"
+	"sync"
 	"time"
+
+	"github.com/IBM/sarama"
 )
 
 // KafkaProducer represents the Kafka writer
 type KafkaProducer struct {
-	// writer *kafka.Writer
+	kafka_config.JobConfig
 }
 
-// NewProducer creates a new Kafka producer
-// func NewProducer(broker, topic string) *KafkaProducer {
-// 	return &KafkaProducer{
-// 		writer: &kafka.Writer{
-// 			Addr:         kafka.TCP(broker),
-// 			Topic:        topic,
-// 			Balancer:     &kafka.LeastBytes{},
-// 			RequiredAcks: kafka.RequireAll,
-// 		},
-// 	}
-// }
+func Producer(jobName, message string, limit int) {
+	config := sarama.NewConfig()
+	kafkaConfig, err := kafka_config.LoadProducerEnv()
+	if err != nil {
+		log.Fatal("Failed to load producer config:", err)
+	}
+	var producerConfig kafka_config.JobConfig
+	for _, config := range kafkaConfig {
+		if config.JobName == jobName {
+			producerConfig = config
+		}
+	}
 
-// Publish sends a message to Kafka
-// func (kp *KafkaProducer) Publish(message string) error {
-// 	err := kp.writer.WriteMessages(context.Background(),
-// 		kafka.Message{
-// 			Key:   []byte(fmt.Sprintf("Key-%d", time.Now().UnixNano())),
-// 			Value: []byte(message),
-// 		},
-// 	)
-// 	if err != nil {
-// 		log.Printf("Failed to publish message: %v", err)
-// 		return err
-// 	}
-// 	log.Printf("Message published to Kafka: %s", message)
-// 	return nil
-// }
+	config.Producer.Return.Errors = true
+	config.Producer.Return.Successes = true
+	producer, err := sarama.NewAsyncProducer([]string{producerConfig.BootstrapServers}, config)
+	if err != nil {
+		log.Fatal("NewSyncProducer err:", err)
+	}
+	var (
+		wg                                   sync.WaitGroup
+		enqueued, timeout, successed, errors int
+	)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for range producer.Successes() {
+			successed++
+			if successed >= limit {
+				break
+			}
+		}
+	}()
 
-// // Close closes the Kafka writer
-// func (kp *KafkaProducer) Close() {
-// 	kp.writer.Close()
-// }
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for err := range producer.Errors() {
+			log.Println("Failed to write access log entry:", err)
+			errors++
+			if errors >= limit {
+				break
+			}
+		}
+	}()
+
+	msg := &sarama.ProducerMessage{
+		Topic: producerConfig.Topic,
+		Key:   nil,
+		Value: sarama.StringEncoder(message),
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*10)
+	select {
+	case producer.Input() <- msg:
+		enqueued++
+	case <-ctx.Done():
+		timeout++
+	}
+	cancel()
+	if enqueued%10000 == 0 && enqueued != 0 {
+		log.Printf("Enqueued messages: %d, timeout: %d\n", enqueued, timeout)
+	}
+
+	producer.AsyncClose()
+	wg.Wait()
+}
