@@ -20,7 +20,6 @@ type JobConfig struct {
 	JobName          string
 	JobTime          int
 	JobTimeUnit      string
-	JobCron          string
 }
 
 func LoadProducerEnv() ([]JobConfig, error) {
@@ -29,19 +28,18 @@ func LoadProducerEnv() ([]JobConfig, error) {
 		fmt.Println("Error loading .env file: ", err)
 	}
 
-	servers := GetServersConfig()
+	producers := GetProducersConfig()
 
-	configs := make([]JobConfig, len(servers))
+	configs := make([]JobConfig, len(producers))
 
-	for _, server := range servers {
-		prefix := "KAFKA_PRODUCER"
+	for _, server := range producers {
+		prefix := "KAFKA_PRODUCER_"
 		kafkaServerConfig := JobConfig{
 			BootstrapServers: os.Getenv(prefix + server + "_BOOTSTRAP_SERVERS"),
 			Topic:            os.Getenv(prefix + server + "_TOPIC"),
 			JobName:          os.Getenv(prefix + server + "_JOB_NAME"),
 			JobTime:          ConvertInt(os.Getenv(prefix + server + "_JOB_TIME")),
 			JobTimeUnit:      os.Getenv(prefix + server + "_JOB_TIME_UNIT"),
-			JobCron:          os.Getenv(prefix + server + "_JOB_CRON"),
 		}
 		configs = append(configs, kafkaServerConfig)
 	}	
@@ -49,10 +47,10 @@ func LoadProducerEnv() ([]JobConfig, error) {
 	return configs, nil
 }
 
-func GetServersConfig() []string {
-	servers := os.Getenv("SERVERS")
-	serversName := strings.Split(servers, ",")
-	return serversName
+func GetProducersConfig() []string {
+	producers := os.Getenv("PRODUCERS")
+	producersName := strings.Split(producers, ",")
+	return producersName
 }
 
 func ConvertInt(s string) int {

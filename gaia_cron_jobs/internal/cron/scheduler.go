@@ -12,7 +12,6 @@ import (
 )
 
 func ExecuteJob() {
-	log.Println("Dynamic cron job service started...")
 	kafkaConfig, err := config.LoadProducerEnv()
 	if err != nil {
 		log.Fatal("Failed to load producer config:", err)

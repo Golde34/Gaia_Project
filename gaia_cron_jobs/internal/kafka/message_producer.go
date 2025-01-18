@@ -10,7 +10,7 @@ func CreateKafkaMessage(cronType, message string) *domain.KafkaMessage {
 		Cmd:         cronType,
 		ErrorCode:   "00",
 		ErrorMessage: "Success",
-		DisplayTime: time.Now().Format("2025-01-18 00:00:00"),
+		DisplayTime: time.Now().String(),
 		Data:        message,
 	}
 }
