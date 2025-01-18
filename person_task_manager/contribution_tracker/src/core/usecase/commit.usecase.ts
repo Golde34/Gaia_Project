@@ -39,6 +39,14 @@ class CommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async syncGithubCommit(data: any): Promise<void> {
+        try {
+            console.log("Syncing github commit: ", data);
+        } catch (error: any) {
+            console.error("Failed to sync github commit: ", error);
+        }
+    }
 }
 
 export const commitUsecase = new CommitUsecase();

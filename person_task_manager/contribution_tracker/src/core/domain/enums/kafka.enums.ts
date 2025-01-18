@@ -1,10 +1,12 @@
 export enum KafkaTopic {
-    CREATE_COMMIT = 'task-manager.create-commit.topic'
+    CREATE_COMMIT = 'task-manager.create-commit.topic',
+    SYNC_GITHUB_COMMIT= "contribution-tracker.github-commit.topic"
 }
 
 export enum KafkaCommand {
     TM_CREATE_COMMIT = 'taskManagerCreateCommit',
-    SP_CREATE_COMMIT = 'schedulePlanCreateCommit'
+    SP_CREATE_COMMIT = 'schedulePlanCreateCommit',
+    SYNC_GITHUB_COMMIT = 'githubCommit'
 }
 
 export class KafkaMessage {
