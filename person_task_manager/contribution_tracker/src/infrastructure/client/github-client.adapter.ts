@@ -68,7 +68,7 @@ class GithubClientAdapter {
                     Authorization: `token ${accessToken}`,
                 },
             });
-            if (response.status) {
+            if (response.status !== 200) {
                 console.error(`Github API returned status: ${response.status}`);
                 return null;
             }
@@ -80,14 +80,17 @@ class GithubClientAdapter {
             }
             return data;
         } catch (error: any) {
-            console.error("Exception when calling github API", error);
+            console.error("Exception when calling Github API", error);
             return null;
         }
     }
 
     async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
         try {
-            const response = await fetch(`https://api.github.com/repos/${repoName}/commits`, {
+            console.log("Getting github commits: ", repoName);
+            console.log("Access token: ", accessToken);
+            console.log("Github API: ", `https://api.github.com/repos/golde34/${repoName}/commits`);
+            const response = await fetch(`https://api.github.com/repos/golde34/${repoName}/commits`, {
                 headers: {
                     Authorization: `token ${accessToken}`,
                 },
