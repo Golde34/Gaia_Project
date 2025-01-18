@@ -4,8 +4,8 @@ const UserProfileInfoScreen = (props) => {
     const user = props.user;
     return (
         <Card>
-            <Flex>
-                <Title>Your profile</Title>
+            <Flex justifyContent="center" alignItems="center" className="mb-4">
+                <Title className="text-white text-xl font-bold">Your profile</Title>
             </Flex>
             <Grid className="mt-4" numItems={5}>
                 <Col numColSpan={1}>
