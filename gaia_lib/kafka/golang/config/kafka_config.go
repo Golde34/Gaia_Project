@@ -45,7 +45,7 @@ func (in *Config) DynamicConsumerLoadEnv() ([]Config, error) {
 			Assignor:         os.Getenv(prefix + server + "_ASSIGNOR"),
 			Oldest:           os.Getenv(prefix+server+"_OLDEST") == "true",
 			Verbose:          os.Getenv(prefix+server+"_VERBOSE") == "true",
-			Producers:        convertInt(os.Getenv(prefix + server + "_PRODUCERS")),
+			Producers:        ConvertInt(os.Getenv(prefix + server + "_PRODUCERS")),
 		}
 		configs = append(configs, kafkaServerConfig)
 	}
@@ -72,7 +72,7 @@ func (in *Config) ProducerLoadEnv() (Config, error) {
 	assignor := os.Getenv(prefix+"ASSIGNOR")
 	oldest := os.Getenv(prefix+"OLDEST")
 	verbose := os.Getenv(prefix+"VERBOSE")
-	producers := convertInt(os.Getenv(prefix+"PRODUCERS"))
+	producers := ConvertInt(os.Getenv(prefix+"PRODUCERS"))
 	if err != nil {
 		log.Fatal("Failed to convert PRODUCERS to integer:", err)
 	}
@@ -90,7 +90,7 @@ func (in *Config) ProducerLoadEnv() (Config, error) {
 	return config, nil
 }
 
-func convertInt(value string) int {
+func ConvertInt(value string) int {
 	intValue, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal("Failed to convert value to integer:", err)
