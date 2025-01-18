@@ -17,53 +17,50 @@ func Producer(bootstrapServer, topic, message string, limit int) {
 	config.Producer.Return.Successes = true
 	producer, err := sarama.NewAsyncProducer([]string{bootstrapServer}, config)
 	if err != nil {
-		log.Fatal("NewSyncProducer err:", err)
+		log.Fatal("Failed to create producer:", err)
 	}
-	var (
-		wg                                   sync.WaitGroup
-		enqueued, timeout, successed, errors int
-	)
+	defer producer.AsyncClose() 
+
+	var wg sync.WaitGroup
+	var enqueued, timeout, successed, errors int
+
+	// Success handler
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		for range producer.Successes() {
 			successed++
-			if successed >= limit {
-				break
-			}
 		}
 	}()
 
+	// Error handler
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		for err := range producer.Errors() {
 			log.Println("Failed to write access log entry:", err)
 			errors++
-			if errors >= limit {
-				break
-			}
 		}
 	}()
 
+	// Send message
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
 		Key:   sarama.StringEncoder(uuid.New().String()),
 		Value: sarama.StringEncoder(message),
 	}
-	log.Printf("Message: %s\n", message)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*10)
+	log.Printf("Enqueueing message to topic '%s': %s", topic, message)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5) 
+	defer cancel()
+
 	select {
 	case producer.Input() <- msg:
 		enqueued++
 	case <-ctx.Done():
 		timeout++
-	}
-	cancel()
-	if enqueued%10000 == 0 && enqueued != 0 {
-		log.Printf("Enqueued messages: %d, timeout: %d\n", enqueued, timeout)
+		log.Printf("Timeout while enqueueing message to topic '%s': %s", topic, message)
 	}
 
-	producer.AsyncClose()
-	wg.Wait()
+	wg.Wait() 
 }

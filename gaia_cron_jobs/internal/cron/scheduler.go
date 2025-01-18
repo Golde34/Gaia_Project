@@ -17,19 +17,21 @@ func ExecuteJob() {
 	if err != nil {
 		log.Fatal("Failed to load producer config:", err)
 	}
-	log.Println("Kafka producer initialized: {}", kafkaConfig)
+	log.Println("Kafka producer initialized")
+
 	scheduler := gocron.NewScheduler(time.UTC)
 
-	var cronJob config.JobConfig
 	for _, job := range kafkaConfig {
-		log.Println("Job: ", job)
-		if err != nil {
-			log.Fatalf("Invalid time configuration for cron '%s': %v", job.JobName, err)
+		if job.JobTime <= 0 {
+			log.Printf("Invalid job time for '%s'. Skipping...", job.JobName)
+			continue
 		}
-		go scheduler.Every(job.JobTime).Seconds().Do(func(name, topic, p string) {
-				message := uuid.New().String()
-			go kafka.Producer(cronJob.BootstrapServers, cronJob.Topic, message, 100_000)
-		}, cronJob.JobName, cronJob.Topic, cronJob.BootstrapServers)
+
+		scheduler.Every(job.JobTime).Seconds().Do(func(name, topic, bootstrapServers string) {
+			message := uuid.New().String()
+			log.Printf("Executing job '%s' and sending message to topic '%s'", name, topic)
+			kafka.Producer(bootstrapServers, topic, message, 100_000)
+		}, job.JobName, job.Topic, job.BootstrapServers)
 	}
 
 	scheduler.StartBlocking()
