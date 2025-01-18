@@ -2,35 +2,20 @@ package kafka
 
 import (
 	"context"
-	kafka_config "gaia_cron_jobs/config"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/IBM/sarama"
+	"github.com/google/uuid"
 )
 
-// KafkaProducer represents the Kafka writer
-type KafkaProducer struct {
-	kafka_config.JobConfig
-}
-
-func Producer(jobName, message string, limit int) {
+func Producer(bootstrapServer, topic, message string, limit int) {
 	config := sarama.NewConfig()
-	kafkaConfig, err := kafka_config.LoadProducerEnv()
-	if err != nil {
-		log.Fatal("Failed to load producer config:", err)
-	}
-	var producerConfig kafka_config.JobConfig
-	for _, config := range kafkaConfig {
-		if config.JobName == jobName {
-			producerConfig = config
-		}
-	}
 
 	config.Producer.Return.Errors = true
 	config.Producer.Return.Successes = true
-	producer, err := sarama.NewAsyncProducer([]string{producerConfig.BootstrapServers}, config)
+	producer, err := sarama.NewAsyncProducer([]string{bootstrapServer}, config)
 	if err != nil {
 		log.Fatal("NewSyncProducer err:", err)
 	}
@@ -62,10 +47,11 @@ func Producer(jobName, message string, limit int) {
 	}()
 
 	msg := &sarama.ProducerMessage{
-		Topic: producerConfig.Topic,
-		Key:   nil,
+		Topic: topic,
+		Key:   sarama.StringEncoder(uuid.New().String()),
 		Value: sarama.StringEncoder(message),
 	}
+	log.Printf("Message: %s\n", message)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*10)
 	select {
 	case producer.Input() <- msg:

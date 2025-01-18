@@ -1,19 +1,36 @@
 package cron
 
 import (
-	"fmt"
+	"log"
 	"time"
 
+	"gaia_cron_jobs/config"
 	"gaia_cron_jobs/internal/kafka"
+
+	"github.com/go-co-op/gocron"
+	"github.com/google/uuid"
 )
 
-// ExecuteJob is a generic job handler
-func ExecuteJob(name, topic string, producer *kafka.KafkaProducer) {
-	message := fmt.Sprintf("Cron '%s' executed at %s", name, time.Now().Format(time.RFC3339))
-	err := producer.Publish(message)
+func ExecuteJob() {
+	log.Println("Dynamic cron job service started...")
+	kafkaConfig, err := config.LoadProducerEnv()
 	if err != nil {
-		fmt.Printf("Error publishing message for cron '%s': %v\n", name, err)
-	} else {
-		fmt.Printf("Cron '%s' successfully pushed message to Kafka topic '%s'.\n", name, topic)
+		log.Fatal("Failed to load producer config:", err)
 	}
+	log.Println("Kafka producer initialized: {}", kafkaConfig)
+	scheduler := gocron.NewScheduler(time.UTC)
+
+	var cronJob config.JobConfig
+	for _, job := range kafkaConfig {
+		log.Println("Job: ", job)
+		if err != nil {
+			log.Fatalf("Invalid time configuration for cron '%s': %v", job.JobName, err)
+		}
+		go scheduler.Every(job.JobTime).Seconds().Do(func(name, topic, p string) {
+				message := uuid.New().String()
+			go kafka.Producer(cronJob.BootstrapServers, cronJob.Topic, message, 100_000)
+		}, cronJob.JobName, cronJob.Topic, cronJob.BootstrapServers)
+	}
+
+	scheduler.StartBlocking()
 }
