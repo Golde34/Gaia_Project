@@ -1,13 +1,18 @@
-export interface ICommitEntity extends Document {
-    _id: string;
+export interface ICommitEntity {
+    id: number;
     content: string;
     commitTime: Date;
     userId: number;
-    projectId: string;
+    projectId?: string;
     type: string;
     taskId: string;
     subTaskId: string;
-    githubCommit: string;
     scheduleTaskId: string;
-    
+    githubCommitId: string;
+    commitAuthor: string;
+    committerName: string;
+    committerEmail: string;
+    githubCommitDate: string;
+    commitMessage: string;
+    commitUrl: string;
 }

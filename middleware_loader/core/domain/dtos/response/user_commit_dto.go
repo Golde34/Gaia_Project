@@ -1,11 +1,12 @@
 package response_dtos
 
 type UserCommitDTO struct {
-	Id          float64 `json:"id"`
-	UserId      float64 `json:"userId"`
-	GithubUrl   string  `json:"githubUrl"`
-	UserConsent float64 `json:"userConsent"`
-	UserState   string  `json:"userState"`
+	Id              float64 `json:"id"`
+	UserId          float64 `json:"userId"`
+	GithubUrl       string  `json:"githubUrl"`
+	GithubLoginName string  `json:"githubLoginName"`
+	UserConsent     float64 `json:"userConsent"`
+	UserState       string  `json:"userState"`
 }
 
 func NewUserCommitDTO() *UserCommitDTO {

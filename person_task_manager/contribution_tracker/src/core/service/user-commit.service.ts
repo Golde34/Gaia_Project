@@ -3,6 +3,7 @@ import GithubClientAdapter from "../../infrastructure/client/github-client.adapt
 import { CTServiceConfigRepository } from "../../infrastructure/repository/ct-service-config.repository";
 import UserCommitRepository from "../../infrastructure/repository/user-commit.repository";
 import { InternalCacheConstants } from "../domain/constants/constants";
+import { UserCommitEntity } from "../domain/entities/user-commit.entity";
 
 class UserCommitService {
     constructor(
@@ -86,6 +87,7 @@ class UserCommitService {
             const githubCommits = await this.githubClient.getGithubUserInfo(userGithubInfo.githubAccessToken);
             if (githubCommits !== null) {
                 userGithubInfo.githubUrl = githubCommits.html_url;
+                userGithubInfo.githubLoginName = githubCommits.login;
                 const updatedUser = await this.userCommitRepository.updateUser(userGithubInfo);
                 if (updatedUser === null) {
                     console.log('Something happened when synchronizing user in Github')
@@ -98,6 +100,42 @@ class UserCommitService {
             return null;
         } catch (error) {
             console.error("Error on synchronizeUserGithub: ", error);
+            return null;
+        }
+    }
+
+    async getUsers(): Promise<any> {
+        try {
+            const users = await this.userCommitRepository.findAll();
+            console.log("Users: ", users);
+            return users;
+        } catch (error) {
+            console.error("Error on getUsers: ", error);
+            return null;
+        }
+    }
+
+    async getUserGithubRepo(user: UserCommitEntity): Promise<any> {
+        try {
+            console.log("Getting user github repo: " + user.userId);
+            if (user.githubAccessToken === undefined) {
+                console.error("User has not authorized github");
+                return null;
+            } 
+            return await this.githubClient.getGithubRepositories(user.githubAccessToken);
+        } catch (error) {
+            console.error("Error on getUserGithubRepo: ", error);
+            return null;
+        }
+
+    }
+
+    async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
+        try {
+            console.log("Getting github commits");
+            return await this.githubClient.getGithubCommits(accessToken, repoName);
+        } catch (error) {
+            console.error("Error on getGithubCommits: ", error);
             return null;
         }
     }

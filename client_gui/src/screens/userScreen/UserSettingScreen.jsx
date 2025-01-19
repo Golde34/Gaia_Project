@@ -58,8 +58,8 @@ const UserSettingScreen = (props) => {
     }
     return (
         <Card className='max-w-full mx-auto'>
-            <Flex>
-                <Title>User Setting</Title>
+            <Flex justifyContent="center" alignItems="center" className="mb-4">
+                <Title className="text-white text-xl font-bold">User Setting</Title>
             </Flex>
             <Grid numItems={1} className="mt-4">
                 <Col numColSpan={1}>

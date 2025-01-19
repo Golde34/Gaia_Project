@@ -4,6 +4,7 @@ export interface UserCommitEntity {
     githubUrl?: string;
     githubSha?: string;
     githubAccessToken?: string;
+    githubLoginName?: string;
     userConsent: boolean;
     userState: string;
 }

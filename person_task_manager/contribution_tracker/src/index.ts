@@ -38,7 +38,7 @@ async function main(): Promise<void> {
     app.use("/contribution-tracker/user-commit", userCommitRouter)
 
     app.use((req: Request, res: Response, next: NextFunction) => {
-        sendResponse(msg405("MEthod Not Allowed"), res, next);
+        sendResponse(msg405("Method Not Allowed"), res, next);
     });
 
     app.listen(config.server.listenPort, () => {
