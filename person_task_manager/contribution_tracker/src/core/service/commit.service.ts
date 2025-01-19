@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import CacheSingleton from "../../infrastructure/cache/cache-singleton";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { CommitRepository } from "../../infrastructure/repository/commit.repository";
@@ -27,7 +28,7 @@ class CommitService {
                 commitAuthor: commit.commit.author.name,
                 committerName: commit.commit.committer.name,
                 committerEmail: commit.commit.committer.email,
-                githubCommitDate: commit.commit.committer.date,
+                githubCommitDate: format(new Date(commit.commit.committer.date), 'yyyy-MM-dd HH:mm:ss'),
                 commitMessage: commit.commit.message,
                 commitUrl: commit.html_url,
             }

@@ -51,15 +51,13 @@ class CommitUsecase {
             // get list project commits
             for (const user of users) {
                 const githubRepos = await userCommitService.getUserGithubRepo(user);
-                const loginName = "Golde34"
                 for (const repo of githubRepos) {
-                    if (repo.owner.login !== loginName) {
+                    if (repo.owner.login !== user.githubLoginName) {
                         continue;
                     }
                     const commits = await userCommitService.getGithubCommits(user.githubAccessToken, repo.name);
-                    console.log("Commits: ", commits);
                     for (const commit of commits) {
-                        if (commit.commit.committer.name !== loginName) {
+                        if (commit.commit.committer.name !== user.githubLoginName) {
                             continue;
                         }
                         this.commitServiceImpl.syncGithubCommit(user.userId, commit);
