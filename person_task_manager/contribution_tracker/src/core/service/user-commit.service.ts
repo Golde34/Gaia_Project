@@ -87,6 +87,7 @@ class UserCommitService {
             const githubCommits = await this.githubClient.getGithubUserInfo(userGithubInfo.githubAccessToken);
             if (githubCommits !== null) {
                 userGithubInfo.githubUrl = githubCommits.html_url;
+                userGithubInfo.githubLoginName = githubCommits.login;
                 const updatedUser = await this.userCommitRepository.updateUser(userGithubInfo);
                 if (updatedUser === null) {
                     console.log('Something happened when synchronizing user in Github')

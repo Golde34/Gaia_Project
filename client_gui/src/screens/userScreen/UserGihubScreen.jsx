@@ -65,20 +65,20 @@ const UserGithubScreen = (props) => {
                             <Title className="text-white text-xl font-bold">Your Github Information</Title>
                         </Flex>
                         <Grid className="mt-4 gap-y-4" numItems={5}>
-                            <Col numColSpan={1}>
+                            <Col numColSpan={2}>
                                 <Subtitle className="text-gray-400 font-medium">Username</Subtitle>
                             </Col>
-                            <Col numColSpan={4}>
-                                <Text className="text-white text-md font-semibold">{user.username || "N/A"}</Text>
+                            <Col numColSpan={3}>
+                                <p className="text-md text-gray-500 font-semibold">{user.username || "N/A"}</p>
                             </Col>
-                            <Col numColSpan={1}>
-                                <Subtitle className="text-gray-400 font-medium">Github URL</Subtitle>
+                            <Col numColSpan={2}>
+                                <Subtitle className="text-gray-400 font-medium">Github Login Name</Subtitle>
                             </Col>
-                            <Col numColSpan={4}>
-                                <Text className="text-blue-400 text-md font-semibold hover:underline">
+                            <Col numColSpan={3}>
+                                <p className="text-gray-500 text-md font-semibold hover:underline">
                                     {
                                         userGithubInfo.userGithubInfo.githubUrl ? (
-                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubUrl}</a>
+                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubLoginName}</a>
                                         ) : (
                                             <Button
                                                 className="flex justify-end"
@@ -88,7 +88,7 @@ const UserGithubScreen = (props) => {
                                             >Synchronize Github Information with GAIA</Button>
                                         )
                                     }
-                                </Text>
+                                </p>
                             </Col>
                         </Grid>
                     </Card>
