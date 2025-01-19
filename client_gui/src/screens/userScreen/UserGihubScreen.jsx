@@ -1,8 +1,9 @@
-import { Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
-import { useCallback, useEffect, useRef } from "react";
+import { Button, Card, Col, Flex, Grid, Subtitle, Table, TableBody, TableCell, TableHead, TableHeaderCell, Text, Title } from "@tremor/react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGithubInfo, synchronizeUserGithubInfo } from "../../api/store/actions/contribution_tracker/user-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
+import { Dialog, Transition } from "@headlessui/react";
 
 const UserGithubScreen = (props) => {
     const user = props.user;
@@ -26,6 +27,14 @@ const UserGithubScreen = (props) => {
     const syncUserGithubInfo = () => {
         dispatch(synchronizeUserGithubInfo(user.id));
         window.location.reload();
+    }
+
+    let [isOpen, setIsOpen] = useState(false);
+    function closeModal() {
+        setIsOpen(false)
+    }
+    function openModal() {
+        setIsOpen(true)
     }
 
     return (
@@ -60,38 +69,135 @@ const UserGithubScreen = (props) => {
                 </Card>
             ) : (
                 <>
-                    <Card>
-                        <Flex justifyContent="center" alignItems="center" className="mb-4">
-                            <Title className="text-white text-xl font-bold">Your Github Information</Title>
-                        </Flex>
-                        <Grid className="mt-4 gap-y-4" numItems={5}>
-                            <Col numColSpan={2}>
-                                <Subtitle className="text-gray-400 font-medium">Username</Subtitle>
-                            </Col>
-                            <Col numColSpan={3}>
-                                <p className="text-md text-gray-500 font-semibold">{user.username || "N/A"}</p>
-                            </Col>
-                            <Col numColSpan={2}>
-                                <Subtitle className="text-gray-400 font-medium">Github Login Name</Subtitle>
-                            </Col>
-                            <Col numColSpan={3}>
-                                <p className="text-gray-500 text-md font-semibold hover:underline">
-                                    {
-                                        userGithubInfo.userGithubInfo.githubUrl ? (
-                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubLoginName}</a>
-                                        ) : (
-                                            <Button
-                                                className="flex justify-end"
-                                                variant="primary"
-                                                color="indigo"
-                                                onClick={syncUserGithubInfo}
-                                            >Synchronize Github Information with GAIA</Button>
-                                        )
-                                    }
-                                </p>
-                            </Col>
-                        </Grid>
-                    </Card>
+                    <div className="grid md:grid-cols-5 grid-cols-1 w-full">
+                        <div className="col-span-2">
+                            <div className="w-full flex flex-col justify-between p-2">
+                                <div className="flex-auto w-full">
+                                    <Card>
+                                        <Flex justifyContent="center" alignItems="center" className="mb-4">
+                                            <Title className="text-white text-xl font-bold">Your Github Information</Title>
+                                        </Flex>
+                                        <Grid className="mt-4 gap-y-4" numItems={5}>
+                                            <Col numColSpan={2}>
+                                                <Subtitle className="text-gray-400 font-medium">Username</Subtitle>
+                                            </Col>
+                                            <Col numColSpan={3}>
+                                                <p className="text-md text-gray-500 font-semibold">{user.username || "N/A"}</p>
+                                            </Col>
+                                            <Col numColSpan={2}>
+                                                <Subtitle className="text-gray-400 font-medium">Github Login Name</Subtitle>
+                                            </Col>
+                                            <Col numColSpan={3}>
+                                                <p className="text-gray-500 text-md font-semibold hover:underline">
+                                                    {
+                                                        userGithubInfo.userGithubInfo.githubUrl ? (
+                                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubLoginName}</a>
+                                                        ) : (
+                                                            <Button
+                                                                className="flex justify-end"
+                                                                variant="primary"
+                                                                color="indigo"
+                                                                onClick={syncUserGithubInfo}
+                                                            >Synchronize Github Information with GAIA</Button>
+                                                        )
+                                                    }
+                                                </p>
+                                            </Col>
+                                        </Grid>
+                                    </Card>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-span-3 w-full">
+                            <div className='w-full p-2'>
+                                <Card className="w-full">
+                                    <Flex justifyContent="center" alignItems="center" className="mb-4">
+                                        <Title className="text-white text-xl font-bold">Github Project Synchronization</Title>
+                                    </Flex>
+                                    <Table>
+                                        <TableHead>
+                                            <TableHeaderCell>Project</TableHeaderCell>
+                                            <TableHeaderCell>Repository</TableHeaderCell>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableCell>Project</TableCell>
+                                            <TableCell>
+                                                <Button className="text-black px-6 py-3"
+                                                    type="button"
+                                                    onClick={openModal}>Add Project</Button>
+                                            </TableCell>
+                                        </TableBody>
+                                    </Table>
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <Transition appear show={isOpen} as={Fragment}>
+                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <div className="fixed inset-0 bg-black/25" />
+                            </Transition.Child>
+
+                            <div className="fixed inset-0 overflow-y-auto">
+                                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-out duration-300"
+                                        enterFrom="opacity-0 scale-95"
+                                        enterTo="opacity-100 scale-100"
+                                        leave="ease-in duration-200"
+                                        leaveFrom="opacity-100 scale-100"
+                                        leaveTo="opacity-0 scale-95"
+                                    >
+                                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                            <Dialog.Title
+                                                as="h3"
+                                                className="text-lg font-medium leading-6 text-gray-900"
+                                            >
+                                                {props.component}
+                                            </Dialog.Title>
+                                            <div className="mt-2">
+                                                <p className="text-sm text-gray-500">
+                                                    Are you sure you want to {props.action} this {props.elementName}?
+                                                </p>
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                    onClick={() => {
+                                                        actionComponent(props.action, props.elementName);
+                                                        closeModal();
+                                                    }}
+                                                >
+                                                    OK
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
+                                                    onClick={closeModal}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </Dialog.Panel>
+                                    </Transition.Child>
+                                </div>
+                            </div>
+                        </Dialog>
+                    </Transition>
+
                 </>
             )
             }

@@ -53,16 +53,19 @@ function ContentArea() {
                                     <UserProfileInfoScreen user={user} />
                                 </div>
                             </div>
-                            <div className="w-full flex flex-col justify-between p-2">
-                                <div className="flex-auto w-full">
-                                    <UserGithubScreen user={user}/>
-                                </div>
-                            </div>
-                        </div>
 
+                        </div>
                         <div className="col-span-3 w-full">
                             <div className='w-full p-2'>
                                 <UserSettingScreen user={user} />
+                            </div>
+                        </div>
+
+                        <div className="col-span-5">
+                            <div className="w-full flex flex-col justify-between p-2">
+                                <div className="flex-auto w-full">
+                                    <UserGithubScreen user={user} />
+                                </div>
                             </div>
                         </div>
                     </div>
