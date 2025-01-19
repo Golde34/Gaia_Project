@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getUsers } from "../../api/store/actions/auth_service/user.actions";
+import { getUsers } from "../../../api/store/actions/auth_service/user.actions";
 import { Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import UpdateUserModal from "./UpdateUserModal";
+import UpdateUserModal from "../UpdateUserModal";
 
 const UserListScreen = (props) => {
     const dispatch = useDispatch();
