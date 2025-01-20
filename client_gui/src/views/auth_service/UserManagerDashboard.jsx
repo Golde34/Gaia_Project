@@ -1,9 +1,8 @@
-import Template from "../../components/template/Template";
-import UserRolesScreen from "../../screens/userScreen/UserRolesScreen";
-import UserListScreen from "../../screens/userScreen/UserListScreen";
-import UserSearchScreen from "../../screens/userScreen/UserSearchScreen";
 import { useState } from "react";
 import ManagerTemplate from "../../components/template/ManagerTemplate";
+import UserListScreen from "../../screens/userScreen/admin/UserListScreen";
+import UserSearchScreen from "../../screens/userScreen/admin/UserSearchScreen";
+import UserRolesScreen from "../../screens/userScreen/admin/UserRolesScreen";
 
 function ContentArea() {
     const [searchText, setSearchText] = useState("");

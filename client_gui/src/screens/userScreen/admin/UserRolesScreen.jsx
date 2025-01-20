@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Bold, Button, Card, Col, Divider, DonutChart, Flex, Grid, Legend, Metric, Tab, TabGroup, TabList, Table, TableBody, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
-import { getRoles } from "../../api/store/actions/auth_service/role.actions";
+import { getRoles } from "../../../api/store/actions/auth_service/role.actions";
 import { ChartPieIcon, ViewListIcon } from "@heroicons/react/solid";
 import { useNavigate } from "react-router-dom";
 

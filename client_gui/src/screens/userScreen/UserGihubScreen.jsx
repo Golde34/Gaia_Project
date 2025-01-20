@@ -1,8 +1,10 @@
-import { Button, Card, Col, Flex, Grid, Subtitle, Text, Title } from "@tremor/react";
-import { useCallback, useEffect, useRef } from "react";
+import { Button, Card, Col, Flex, Grid, Subtitle, Table, TableBody, TableCell, TableHead, TableHeaderCell, Text, Title } from "@tremor/react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGithubInfo, synchronizeUserGithubInfo } from "../../api/store/actions/contribution_tracker/user-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
+import { Dialog, Transition } from "@headlessui/react";
+import GithubSyncProjectScreen from "../projectScreen/GithubSyncProjectScreen";
 
 const UserGithubScreen = (props) => {
     const user = props.user;
@@ -60,38 +62,51 @@ const UserGithubScreen = (props) => {
                 </Card>
             ) : (
                 <>
-                    <Card>
-                        <Flex justifyContent="center" alignItems="center" className="mb-4">
-                            <Title className="text-white text-xl font-bold">Your Github Information</Title>
-                        </Flex>
-                        <Grid className="mt-4 gap-y-4" numItems={5}>
-                            <Col numColSpan={2}>
-                                <Subtitle className="text-gray-400 font-medium">Username</Subtitle>
-                            </Col>
-                            <Col numColSpan={3}>
-                                <p className="text-md text-gray-500 font-semibold">{user.username || "N/A"}</p>
-                            </Col>
-                            <Col numColSpan={2}>
-                                <Subtitle className="text-gray-400 font-medium">Github Login Name</Subtitle>
-                            </Col>
-                            <Col numColSpan={3}>
-                                <p className="text-gray-500 text-md font-semibold hover:underline">
-                                    {
-                                        userGithubInfo.userGithubInfo.githubUrl ? (
-                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubLoginName}</a>
-                                        ) : (
-                                            <Button
-                                                className="flex justify-end"
-                                                variant="primary"
-                                                color="indigo"
-                                                onClick={syncUserGithubInfo}
-                                            >Synchronize Github Information with GAIA</Button>
-                                        )
-                                    }
-                                </p>
-                            </Col>
-                        </Grid>
-                    </Card>
+                    <div className="grid md:grid-cols-5 grid-cols-1 w-full">
+                        <div className="col-span-2">
+                            <div className="w-full flex flex-col justify-between p-2">
+                                <div className="flex-auto w-full">
+                                    <Card>
+                                        <Flex justifyContent="center" alignItems="center" className="mb-4">
+                                            <Title className="text-white text-xl font-bold">Your Github Information</Title>
+                                        </Flex>
+                                        <Grid className="mt-4 gap-y-4" numItems={5}>
+                                            <Col numColSpan={2}>
+                                                <Subtitle className="text-gray-400 font-medium">Username</Subtitle>
+                                            </Col>
+                                            <Col numColSpan={3}>
+                                                <p className="text-md text-gray-500 font-semibold">{user.username || "N/A"}</p>
+                                            </Col>
+                                            <Col numColSpan={2}>
+                                                <Subtitle className="text-gray-400 font-medium">Github Login Name</Subtitle>
+                                            </Col>
+                                            <Col numColSpan={3}>
+                                                <p className="text-gray-500 text-md font-semibold hover:underline">
+                                                    {
+                                                        userGithubInfo.userGithubInfo.githubUrl ? (
+                                                            <a href={userGithubInfo.userGithubInfo.githubUrl} target="_blank" rel="noopener noreferrer">{userGithubInfo.userGithubInfo.githubLoginName}</a>
+                                                        ) : (
+                                                            <Button
+                                                                className="flex justify-end"
+                                                                variant="primary"
+                                                                color="indigo"
+                                                                onClick={syncUserGithubInfo}
+                                                            >Synchronize Github Information with GAIA</Button>
+                                                        )
+                                                    }
+                                                </p>
+                                            </Col>
+                                        </Grid>
+                                    </Card>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-span-3 w-full">
+                            <div className='w-full p-2'>
+                                <GithubSyncProjectScreen user={user} />
+                            </div>
+                        </div>
+                    </div>
                 </>
             )
             }
