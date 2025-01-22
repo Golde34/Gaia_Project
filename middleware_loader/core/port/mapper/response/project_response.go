@@ -24,8 +24,16 @@ func ReturnGithubRepoObjectMapper(body map[string]interface{}) *response_dtos.Gi
 	var input response_dtos.GithubRepoResponseDTO
 	input.Name = body["name"].(string)
 	input.HtmlUrl = body["htmlUrl"].(string)
-	input.Description = body["description"].(string)
+	if body["description"] != nil {
+		input.Description = body["description"].(string)
+	} else {
+		input.Description = ""
+	}
 	input.Owner = body["owner"].(string)
-	input.Language = body["language"].(string)
+	if body["language"] != nil {
+		input.Language = body["language"].(string)
+	} else {
+		input.Language = ""
+	}
 	return &input
 }

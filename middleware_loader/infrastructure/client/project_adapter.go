@@ -231,7 +231,7 @@ func (adapter *ProjectAdapter) EnableProject(id string) (response_dtos.ProjectRe
 }
 
 func (adapter *ProjectAdapter) GetGithubRepos(userId string) ([]response_dtos.GithubRepoResponseDTO, error) {
-	getGithubReposURL := base.ContributionTrackerURL + "contribution-tracker/project-commit/get-github-repos/" + userId 
+	getGithubReposURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/get-github-repos/" + userId 
 	var githubRepos []response_dtos.GithubRepoResponseDTO
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(getGithubReposURL, "GET", nil, headers)
