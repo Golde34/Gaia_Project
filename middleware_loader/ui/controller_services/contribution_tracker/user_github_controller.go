@@ -3,7 +3,10 @@ package controller_services
 import (
 	"encoding/json"
 	"log"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	services "middleware_loader/core/services/contribution_tracker"
+	"middleware_loader/infrastructure/graph/model"
+	"middleware_loader/kernel/utils"
 	"middleware_loader/ui/controller_services/controller_utils"
 	"net/http"
 
@@ -65,4 +68,15 @@ func SynchronizeUserGithub(w http.ResponseWriter, r *http.Request, userGithubSer
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+}
+
+func GetProjectsAndRepos(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
+	userId := chi.URLParam(r, "userId")
+	graphqlQueryModel := []base_dtos.GraphQLQuery{}
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getAllGithubRepos", QueryInput: model.IDInput{ID: userId}, QueryOutput: model.GithubRepo{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
+
+	utils.ConnectToGraphQLServer(w, graphqlQuery)
+
 }

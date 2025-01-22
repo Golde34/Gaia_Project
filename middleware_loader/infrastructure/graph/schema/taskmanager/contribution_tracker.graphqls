@@ -1,0 +1,7 @@
+type GithubRepo {
+    name: String!
+    htmlUrl: String!
+    description: String!
+    owner: String!
+    language: String!
+}

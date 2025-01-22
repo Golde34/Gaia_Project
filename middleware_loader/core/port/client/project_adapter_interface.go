@@ -17,4 +17,5 @@ type IProjectAdapter interface {
 	UpdateProjectColor(input converter_dtos.UpdateColorConverterDTO, id string) (response_dtos.ProjectResponseDTO, error)
 	ArchiveProject(id string) (response_dtos.ProjectResponseDTO, error)
 	EnableProject(id string) (response_dtos.ProjectResponseDTO, error)
+	GetGithubRepos(userId string) ([]response_dtos.GithubRepoResponseDTO, error) 
 }

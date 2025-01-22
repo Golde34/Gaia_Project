@@ -19,3 +19,13 @@ func ReturnProjectObjectMapper(body map[string]interface{}) *response_dtos.Proje
 	input.UpdatedAt = body["updatedAt"].(string)
 	return &input
 }
+
+func ReturnGithubRepoObjectMapper(body map[string]interface{}) *response_dtos.GithubRepoResponseDTO {
+	var input response_dtos.GithubRepoResponseDTO
+	input.Name = body["name"].(string)
+	input.HtmlUrl = body["htmlUrl"].(string)
+	input.Description = body["description"].(string)
+	input.Owner = body["owner"].(string)
+	input.Language = body["language"].(string)
+	return &input
+}

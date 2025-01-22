@@ -76,6 +76,14 @@ type ComplexityRoot struct {
 		UpdatedAt    func(childComplexity int) int
 	}
 
+	GithubRepo struct {
+		Description func(childComplexity int) int
+		HTMLURL     func(childComplexity int) int
+		Language    func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Owner       func(childComplexity int) int
+	}
+
 	GroupTask struct {
 		ActiveStatus   func(childComplexity int) int
 		CompletedTasks func(childComplexity int) int
@@ -204,6 +212,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetAllGithubRepos         func(childComplexity int, input model.IDInput) int
 		GetAllNotes               func(childComplexity int, input model.IDInput) int
 		GetAllPrivileges          func(childComplexity int) int
 		GetAllRoles               func(childComplexity int) int
@@ -401,6 +410,7 @@ type QueryResolver interface {
 	GetTaskByID(ctx context.Context, input model.IDInput) (*model.Task, error)
 	GetTaskTableByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskTable, error)
 	GetAllNotes(ctx context.Context, input model.IDInput) ([]*model.Note, error)
+	GetAllGithubRepos(ctx context.Context, input model.IDInput) ([]*model.GithubRepo, error)
 }
 
 type executableSchema struct {
@@ -561,6 +571,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Comment.UpdatedAt(childComplexity), true
+
+	case "GithubRepo.description":
+		if e.complexity.GithubRepo.Description == nil {
+			break
+		}
+
+		return e.complexity.GithubRepo.Description(childComplexity), true
+
+	case "GithubRepo.htmlUrl":
+		if e.complexity.GithubRepo.HTMLURL == nil {
+			break
+		}
+
+		return e.complexity.GithubRepo.HTMLURL(childComplexity), true
+
+	case "GithubRepo.language":
+		if e.complexity.GithubRepo.Language == nil {
+			break
+		}
+
+		return e.complexity.GithubRepo.Language(childComplexity), true
+
+	case "GithubRepo.name":
+		if e.complexity.GithubRepo.Name == nil {
+			break
+		}
+
+		return e.complexity.GithubRepo.Name(childComplexity), true
+
+	case "GithubRepo.owner":
+		if e.complexity.GithubRepo.Owner == nil {
+			break
+		}
+
+		return e.complexity.GithubRepo.Owner(childComplexity), true
 
 	case "GroupTask.activeStatus":
 		if e.complexity.GroupTask.ActiveStatus == nil {
@@ -1466,6 +1511,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.UpdatedAt(childComplexity), true
 
+	case "Query.getAllGithubRepos":
+		if e.complexity.Query.GetAllGithubRepos == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getAllGithubRepos_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllGithubRepos(childComplexity, args["input"].(model.IDInput)), true
+
 	case "Query.getAllNotes":
 		if e.complexity.Query.GetAllNotes == nil {
 			break
@@ -2290,7 +2347,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema/authservice/auth_token.graphqls" "schema/authservice/privilege.graphqls" "schema/authservice/role.graphqls" "schema/authservice/user.graphqls" "schema/taskmanager/comment.graphqls" "schema/taskmanager/group_task.graphqls" "schema/taskmanager/note.graphqls" "schema/taskmanager/project.graphqls" "schema/taskmanager/sub_task.graphqls" "schema/taskmanager/task.graphqls" "schema/workoptim/task_register.graphqls" "schema/schema.graphqls"
+//go:embed "schema/authservice/auth_token.graphqls" "schema/authservice/privilege.graphqls" "schema/authservice/role.graphqls" "schema/authservice/user.graphqls" "schema/taskmanager/comment.graphqls" "schema/taskmanager/contribution_tracker.graphqls" "schema/taskmanager/group_task.graphqls" "schema/taskmanager/note.graphqls" "schema/taskmanager/project.graphqls" "schema/taskmanager/sub_task.graphqls" "schema/taskmanager/task.graphqls" "schema/workoptim/task_register.graphqls" "schema/schema.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -2307,6 +2364,7 @@ var sources = []*ast.Source{
 	{Name: "schema/authservice/role.graphqls", Input: sourceData("schema/authservice/role.graphqls"), BuiltIn: false},
 	{Name: "schema/authservice/user.graphqls", Input: sourceData("schema/authservice/user.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/comment.graphqls", Input: sourceData("schema/taskmanager/comment.graphqls"), BuiltIn: false},
+	{Name: "schema/taskmanager/contribution_tracker.graphqls", Input: sourceData("schema/taskmanager/contribution_tracker.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/group_task.graphqls", Input: sourceData("schema/taskmanager/group_task.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/note.graphqls", Input: sourceData("schema/taskmanager/note.graphqls"), BuiltIn: false},
 	{Name: "schema/taskmanager/project.graphqls", Input: sourceData("schema/taskmanager/project.graphqls"), BuiltIn: false},
@@ -3008,6 +3066,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAllGithubRepos_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -4106,6 +4179,226 @@ func (ec *executionContext) _Comment_task(ctx context.Context, field graphql.Col
 func (ec *executionContext) fieldContext_Comment_task(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Comment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GithubRepo_name(ctx context.Context, field graphql.CollectedField, obj *model.GithubRepo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GithubRepo_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GithubRepo_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GithubRepo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GithubRepo_htmlUrl(ctx context.Context, field graphql.CollectedField, obj *model.GithubRepo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GithubRepo_htmlUrl(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HTMLURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GithubRepo_htmlUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GithubRepo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GithubRepo_description(ctx context.Context, field graphql.CollectedField, obj *model.GithubRepo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GithubRepo_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GithubRepo_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GithubRepo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GithubRepo_owner(ctx context.Context, field graphql.CollectedField, obj *model.GithubRepo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GithubRepo_owner(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Owner, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GithubRepo_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GithubRepo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GithubRepo_language(ctx context.Context, field graphql.CollectedField, obj *model.GithubRepo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GithubRepo_language(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Language, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GithubRepo_language(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GithubRepo",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -10928,6 +11221,73 @@ func (ec *executionContext) fieldContext_Query_getAllNotes(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getAllNotes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getAllGithubRepos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAllGithubRepos(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAllGithubRepos(rctx, fc.Args["input"].(model.IDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.GithubRepo)
+	fc.Result = res
+	return ec.marshalNGithubRepo2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGithubRepo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getAllGithubRepos(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_GithubRepo_name(ctx, field)
+			case "htmlUrl":
+				return ec.fieldContext_GithubRepo_htmlUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_GithubRepo_description(ctx, field)
+			case "owner":
+				return ec.fieldContext_GithubRepo_owner(ctx, field)
+			case "language":
+				return ec.fieldContext_GithubRepo_language(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GithubRepo", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAllGithubRepos_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -17896,6 +18256,65 @@ func (ec *executionContext) _Comment(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
+var githubRepoImplementors = []string{"GithubRepo"}
+
+func (ec *executionContext) _GithubRepo(ctx context.Context, sel ast.SelectionSet, obj *model.GithubRepo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, githubRepoImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GithubRepo")
+		case "name":
+			out.Values[i] = ec._GithubRepo_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "htmlUrl":
+			out.Values[i] = ec._GithubRepo_htmlUrl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._GithubRepo_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "owner":
+			out.Values[i] = ec._GithubRepo_owner(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "language":
+			out.Values[i] = ec._GithubRepo_language(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var groupTaskImplementors = []string{"GroupTask"}
 
 func (ec *executionContext) _GroupTask(ctx context.Context, sel ast.SelectionSet, obj *model.GroupTask) graphql.Marshaler {
@@ -19166,6 +19585,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getAllGithubRepos":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getAllGithubRepos(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -20408,6 +20849,44 @@ func (ec *executionContext) unmarshalNGenerateTaskWithoutGroupTaskInput2middlewa
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNGithubRepo2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGithubRepo(ctx context.Context, sel ast.SelectionSet, v []*model.GithubRepo) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOGithubRepo2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGithubRepo(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalNGroupTask2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v model.GroupTask) graphql.Marshaler {
 	return ec._GroupTask(ctx, sel, &v)
 }
@@ -21512,6 +21991,13 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	}
 	res := graphql.MarshalFloatContext(*v)
 	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) marshalOGithubRepo2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGithubRepo(ctx context.Context, sel ast.SelectionSet, v *model.GithubRepo) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._GithubRepo(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOGroupTask2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐGroupTask(ctx context.Context, sel ast.SelectionSet, v *model.GroupTask) graphql.Marshaler {
