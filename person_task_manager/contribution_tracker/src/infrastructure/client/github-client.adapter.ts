@@ -87,9 +87,6 @@ class GithubClientAdapter {
 
     async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
         try {
-            console.log("Getting github commits: ", repoName);
-            console.log("Access token: ", accessToken);
-            console.log("Github API: ", `https://api.github.com/repos/golde34/${repoName}/commits`);
             const response = await fetch(`https://api.github.com/repos/golde34/${repoName}/commits`, {
                 headers: {
                     Authorization: `token ${accessToken}`,
@@ -113,4 +110,4 @@ class GithubClientAdapter {
     }
 }
 
-export default GithubClientAdapter;
+export const githubClientAdapter = new GithubClientAdapter();
