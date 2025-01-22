@@ -23,6 +23,8 @@ type Query {
 	getTaskTableByGroupTaskId(input: IdInput!): TaskTable!
 
 	getAllNotes(input: IdInput!): [Note]!
+
+	getAllGithubRepos(input: IdInput!): [GithubRepo]!
 }
 
 type Mutation {

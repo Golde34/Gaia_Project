@@ -23,6 +23,9 @@ func NewUserGithubRouter(userGithubService *services.UserGithubService, r *chi.M
 		r.Get("/synchronize-user-github/{userId}", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.SynchronizeUserGithub(w, r, userGithubService)
 		})
+		r.Get("/user-github/get-project-repo/{userId}", func(w http.ResponseWriter, r *http.Request) {
+			controller_services.GetProjectsAndRepos(w, r, userGithubService)
+		})
 	})
 	return &UserGithubRouter{
 		UserGithubService: userGithubService,

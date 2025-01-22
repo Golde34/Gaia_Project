@@ -1,5 +1,5 @@
 import CacheSingleton from "../../infrastructure/cache/cache-singleton";
-import GithubClientAdapter from "../../infrastructure/client/github-client.adapter";
+import { githubClientAdapter } from "../../infrastructure/client/github-client.adapter";
 import { CTServiceConfigRepository } from "../../infrastructure/repository/ct-service-config.repository";
 import UserCommitRepository from "../../infrastructure/repository/user-commit.repository";
 import { InternalCacheConstants } from "../domain/constants/constants";
@@ -10,7 +10,7 @@ class UserCommitService {
         private userCommitRepository: UserCommitRepository = UserCommitRepository.getInstance(),
         private ctServiceConfigRepo: CTServiceConfigRepository = CTServiceConfigRepository.getInstance(),
         private userCommitCache = CacheSingleton.getInstance().getCache(),
-        private githubClient = new GithubClientAdapter(),
+        private githubClient = githubClientAdapter, 
     ) { }
 
     async getUserGithubInfo(userId: number): Promise<any> {

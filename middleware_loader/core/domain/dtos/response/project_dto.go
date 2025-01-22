@@ -37,3 +37,30 @@ func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDT
 	}
 	return out
 }
+
+
+type GithubRepoResponseDTO struct {
+	Name string `json:"name"`
+	HtmlUrl string `json:"htmlUrl"`
+	Description string `json:"description"`
+	Owner string `json:"owner"`
+	Language string `json:"language"`
+}
+
+func NewGithubRepoResponseDTO() *GithubRepoResponseDTO {
+	return &GithubRepoResponseDTO{}
+}
+
+func (in *GithubRepoResponseDTO) MapperToGraphQLModel(input GithubRepoResponseDTO) model.GithubRepo {
+	var out model.GithubRepo
+	mapper.AutoMapper(&input, &out)
+	return out
+}
+
+func (in *GithubRepoResponseDTO) MapperListToGraphQLModel(input []GithubRepoResponseDTO) []model.GithubRepo {
+	var out []model.GithubRepo
+	for _, item := range input {
+		out = append(out, in.MapperToGraphQLModel(item))
+	}
+	return out
+}

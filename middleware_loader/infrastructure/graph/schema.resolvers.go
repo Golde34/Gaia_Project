@@ -10,6 +10,7 @@ import (
 	auth_services "middleware_loader/core/services/auth_services"
 	task_manager "middleware_loader/core/services/task_manager"
 	work_optim "middleware_loader/core/services/work_optimization"
+	contribution_tracker "middleware_loader/core/services/contribution_tracker"
 	"middleware_loader/infrastructure/graph/model"
 )
 
@@ -22,6 +23,7 @@ var roleService = auth_services.NewRoleService()
 var privilegeService = auth_services.NewPrivilegeService()
 var taskRegisterService = work_optim.NewTaskRegisterService()
 var noteService = task_manager.NewNoteService()
+var projectCommitService = contribution_tracker.NewProjectCommitService()
 
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
@@ -407,6 +409,17 @@ func (r *queryResolver) GetAllNotes(ctx context.Context, input model.IDInput) ([
 		modelNote = append(modelNote, &noteCopy)
 	}
 	return modelNote, err
+}
+
+// GetAllGithubRepos is the resolver for the getAllGithubRepos field.
+func (r *queryResolver) GetAllGithubRepos(ctx context.Context, input model.IDInput) ([]*model.GithubRepo, error) {
+	repos, err := projectCommitService.GetGithubRepos(ctx, input) 
+	modelRepo := []*model.GithubRepo{}
+	for _, repo := range repos {
+		repoCopy := repo
+		modelRepo = append(modelRepo, &repoCopy)
+	}
+	return modelRepo, err
 }
 
 // Mutation returns MutationResolver implementation.

@@ -1,9 +1,8 @@
-import { Button, Card, Col, Flex, Grid, Subtitle, Table, TableBody, TableCell, TableHead, TableHeaderCell, Text, Title } from "@tremor/react";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Button, Card, Col, Flex, Grid, Subtitle, Title } from "@tremor/react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGithubInfo, synchronizeUserGithubInfo } from "../../api/store/actions/contribution_tracker/user-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
-import { Dialog, Transition } from "@headlessui/react";
 import GithubSyncProjectScreen from "../projectScreen/GithubSyncProjectScreen";
 
 const UserGithubScreen = (props) => {

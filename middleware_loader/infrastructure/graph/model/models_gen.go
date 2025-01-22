@@ -89,6 +89,14 @@ type GenerateTaskWithoutGroupTaskInput struct {
 	ProjectID    string   `json:"projectId"`
 }
 
+type GithubRepo struct {
+	Name        string `json:"name"`
+	HTMLURL     string `json:"htmlUrl"`
+	Description string `json:"description"`
+	Owner       string `json:"owner"`
+	Language    string `json:"language"`
+}
+
 type GroupTask struct {
 	ID             string   `json:"id"`
 	Title          string   `json:"title"`

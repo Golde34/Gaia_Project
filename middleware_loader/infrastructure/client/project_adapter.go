@@ -229,3 +229,24 @@ func (adapter *ProjectAdapter) EnableProject(id string) (response_dtos.ProjectRe
 
 	return project, nil
 }
+
+func (adapter *ProjectAdapter) GetGithubRepos(userId string) ([]response_dtos.GithubRepoResponseDTO, error) {
+	getGithubReposURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/get-github-repos/" + userId 
+	var githubRepos []response_dtos.GithubRepoResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getGithubReposURL, "GET", nil, headers)
+	if err != nil {
+		return []response_dtos.GithubRepoResponseDTO{}, err
+	}
+
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return []response_dtos.GithubRepoResponseDTO{}, err
+	}
+	for _, githubRepoElement := range bodyResultMap["githubRepos"].([]interface{}) {
+		githubRepo := mapper_response.ReturnGithubRepoObjectMapper(githubRepoElement.(map[string]interface{}))
+		githubRepos = append(githubRepos, *githubRepo)
+	}
+
+	return githubRepos, nil 
+}
