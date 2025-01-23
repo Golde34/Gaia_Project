@@ -13,12 +13,12 @@ const portName = {
     middlewarePort: 'middlewarePort'
 }
 
-export const getProjects = () => async (dispatch) => {
+export const getProjects = (userId) => async (dispatch) => {
     dispatch({ type: PROJECT_LIST_REQUEST });
     try {
         // const headers = addAuthHeaders();
         // const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.middlewarePort, null, headers);  
-        const { data } = await serverRequest('/project/all', HttpMethods.GET, portName.middlewarePort, null);    
+        const { data } = await serverRequest(`/project/all/${userId}`, HttpMethods.GET, portName.middlewarePort, null);    
         dispatch({ type: PROJECT_LIST_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
