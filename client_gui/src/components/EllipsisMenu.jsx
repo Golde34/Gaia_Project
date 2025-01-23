@@ -21,6 +21,7 @@ const EllipsisMenu = (props) => {
     } else {
         lockTag = "Lock " + elementName;
     }
+    const syncProjectWithGithub = "Sync Project with Github";
 
     return (
         <div className="flex gap-3">
@@ -54,6 +55,14 @@ const EllipsisMenu = (props) => {
                                 className="col-span-1" component={lockTag} elementName={elementName}
                                 elementId={elementId} isLock={isLock} suggestion={props.suggestion}>
                             </LockDialog>
+                        ) : (<></>)
+                    }
+                    {elementName === "Project" ?
+                        (
+                            <AlertDialog
+                                className="col-span-1" component={syncProjectWithGithub} elementName={elementName}
+                                action="sync" elementId={elementId}>
+                            </AlertDialog> 
                         ) : (<></>)
                     }
                     <AlertDialog
