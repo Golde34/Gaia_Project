@@ -86,8 +86,8 @@ class ProjectService {
         });
     }
 
-    async getAllProjects(): Promise<IResponse> {
-        const projects = await projectStore.findAllProjectsByOwnerId(1);
+    async getAllProjects(userId: number): Promise<IResponse> {
+        const projects = await projectStore.findAllProjectsByOwnerId(userId);
 
         return msg200({
             projects
