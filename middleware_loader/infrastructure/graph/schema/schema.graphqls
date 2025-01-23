@@ -12,6 +12,7 @@ type Query {
 
 	# Task Manager
 	listAllProjects: [Project]!
+	listAllProjectsByUserId(input: IdInput!): [Project]!
 	getProjectById(input: IdInput!): Project! 
 	
 	getGroupTasksInProject(input: IdInput!): [GroupTask]!

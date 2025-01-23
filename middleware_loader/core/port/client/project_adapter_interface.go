@@ -8,6 +8,7 @@ import (
 
 type IProjectAdapter interface {
 	ListAll() ([]response_dtos.ProjectResponseDTO, error)
+	ListAllByUserID(userId string) ([]response_dtos.ProjectResponseDTO, error)
 	GetById(id string) (response_dtos.ProjectResponseDTO, error)
 	CreateProject(input model.CreateProjectInput) (response_dtos.ProjectResponseDTO, error)
 	UpdateProject(input model.UpdateProjectInput, id string) (response_dtos.ProjectResponseDTO, error)
