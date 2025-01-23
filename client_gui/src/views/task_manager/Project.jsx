@@ -9,6 +9,7 @@ import { isAccessTokenCookieValid } from "../../kernels/utils/cookie-utils";
 import { useNavigate } from "react-router-dom";
 
 function ContentArea() {
+    const userId = "1";
     const dispatch = useDispatch();
     const navigate = useNavigate()
     
@@ -23,8 +24,8 @@ function ContentArea() {
     const { loading, error, projects } = listProjects;
 
     const getListProjects = useCallback(() => {
-        dispatch(getProjects());
-    }, [dispatch]);
+        dispatch(getProjects(userId));
+    }, [dispatch, userId]);
 
     const debounceRef = useRef(null);
 

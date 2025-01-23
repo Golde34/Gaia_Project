@@ -1,8 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useDeleteComponentDispatch, useLockNoteDispatch, useUpdateOrdinalNumberDispatch } from "../../kernels/utils/dialog-api-requests";
+import { useNavigate } from "react-router-dom";
 
 export const AlertDialog = (props) => {
+    const navigate = useNavigate();
+
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -16,20 +19,34 @@ export const AlertDialog = (props) => {
     const deleteComponentDispatch = useDeleteComponentDispatch();
     const updateOrdinalDispatch = useUpdateOrdinalNumberDispatch();
     const lockDispatch = useLockNoteDispatch();
-    const actionComponent = (action, elementName) => {
-        if (action === "Delete") {
+
+    const actionsMap = {
+        "Delete": () => {
             deleteComponentDispatch(props.elementId, elementName);
             localStorage.setItem('activeTab', 'none');
-        } else if (action === "Archive") {
+        },
+        "Archive": () => {
             console.log("This Archive function is not implemented yet.");
-        } else if (action === "push" ) {
+        },
+        "push": () => {
             updateOrdinalDispatch(props.elementId, props.projectId);
-        } else if (action === "Lock" ) {
+        },
+        "Lock": () => {
             lockDispatch(props.elementId);
-        } 
-        
-        window.location.reload();
-    }
+        },
+        "sync": () => {
+            navigate("/profile");
+        }
+    };
+
+    const actionComponent = (action, elementName) => {
+        if (actionsMap[action]) {
+            actionsMap[action]();
+            window.location.reload();
+        } else {
+            console.warn(`Action "${action}" is not recognized.`);
+        }
+    };
 
     return (
         <>
@@ -85,7 +102,8 @@ export const AlertDialog = (props) => {
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
                                                 actionComponent(props.action, props.elementName);
-                                                closeModal(); }}
+                                                closeModal();
+                                            }}
                                         >
                                             OK
                                         </button>

@@ -13,10 +13,12 @@ import (
 )
 
 func ListAll(w http.ResponseWriter, r *http.Request, projectService *services.ProjectService) {
+	userId := chi.URLParam(r, "userId")
+	input := mapper.GetId(userId)
 
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjects", QueryInput: nil, QueryOutput: model.Project{}})
-	graphqlQuery := utils.GenerateGraphQLMultipleFunctionNoInput("query", graphqlQueryModel)
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjectsByUserId", QueryInput: input, QueryOutput: model.Project{}})
+	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 

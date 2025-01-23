@@ -73,7 +73,7 @@ func SynchronizeUserGithub(w http.ResponseWriter, r *http.Request, userGithubSer
 func GetProjectsAndRepos(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
 	userId := chi.URLParam(r, "userId")
 	graphqlQueryModel := []base_dtos.GraphQLQuery{}
-	// graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjects", QueryInput: model.IDInput{ID: userId}, QueryOutput: model.Project{}})
+	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "listAllProjectsByUserId", QueryInput: model.IDInput{ID: userId}, QueryOutput: model.Project{}})
 	graphqlQueryModel = append(graphqlQueryModel, base_dtos.GraphQLQuery{FunctionName: "getAllGithubRepos", QueryInput: model.IDInput{ID: userId}, QueryOutput: model.GithubRepo{}})
 	graphqlQuery := utils.GenerateGraphQLQueryWithMultipleFunction("query", graphqlQueryModel)
 

@@ -37,6 +37,7 @@ import {
 import { optimizeTaskByUserReducer } from "./work_optimization/optimize-task.reducers";
 import { chooseTaskBatchReducer, scheduleTaskListReducer, taskBatchListReducer } from "./schedule_plan/schedule-task.reducers";
 import { getUserGithubInfoReducer } from "./contribution_tracker/user-commit.reducer";
+import { getProjectAndRepoRequestReducer } from "./contribution_tracker/project-commit.reducer";
 
 export const reducer = combineReducers({
     // auth service
@@ -57,6 +58,7 @@ export const reducer = combineReducers({
     projectCreate: projectCreateReducer,
     projectUpdate: projectUpdateReducer,
     projectDelete: projectDeleteReducer,
+    projectsAndRepos: getProjectAndRepoRequestReducer,
     groupTaskList: groupTaskListReducer,
     groupTaskDetail: groupTaskDetailReducer,
     groupTaskCreate: groupTaskCreateReducer,

@@ -11,7 +11,7 @@ export const projectRouter = Router();
 const projectControllerImpl = projectController;
 
 // list all projects of the user
-projectRouter.get("/all", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+projectRouter.get("/all/:userId", async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const projectResult = await projectControllerImpl.listAllProjects(req, next);
         return returnResult(projectResult, PROJECT_NO_RECORDS, res, next);

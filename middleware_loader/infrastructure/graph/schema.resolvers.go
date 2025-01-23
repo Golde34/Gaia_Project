@@ -349,6 +349,17 @@ func (r *queryResolver) ListAllProjects(ctx context.Context) ([]*model.Project, 
 	return modelProject, err
 }
 
+// ListAllProjectsByUserID is the resolver for the listAllProjectsByUserId field.
+func (r *queryResolver) ListAllProjectsByUserID(ctx context.Context, input model.IDInput) ([]*model.Project, error) {
+	projects, err := projectService.ListAllByUserID(ctx, input)
+	modelProject := []*model.Project{}
+	for _, project := range projects {
+		projectCopy := project
+		modelProject = append(modelProject, &projectCopy)
+	}
+	return modelProject, err
+}
+
 // GetProjectByID is the resolver for the getProjectById field.
 func (r *queryResolver) GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error) {
 	project, err := projectService.GetById(ctx, input.ID)

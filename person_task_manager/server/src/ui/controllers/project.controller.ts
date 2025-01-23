@@ -10,7 +10,8 @@ class ProjectController {
     
     async listAllProjects(req: Request, next: NextFunction): Promise<IResponse | undefined> {
         try {
-            const projectResult = await projectService.getAllProjects();
+            const userId = Number(req.params.userId);
+            const projectResult = await projectService.getAllProjects(userId);
 
             return projectResult;
         } catch (err) {

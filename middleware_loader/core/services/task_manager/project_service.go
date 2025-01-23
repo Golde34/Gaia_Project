@@ -32,6 +32,16 @@ func (s *ProjectService) ListAll(ctx context.Context) ([]model.Project, error) {
 	return projectsModel, nil
 }
 
+func (s *ProjectService) ListAllByUserID(ctx context.Context, input model.IDInput) ([]model.Project, error) {
+	projects, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).ListAllByUserID(input.ID)
+	if err != nil {
+		return nil, err
+	}
+	projectsModel := projectResponse.MapperListToGraphQLModel(projects)
+
+	return projectsModel, nil
+}
+
 func (s *ProjectService) GetById(ctx context.Context, id string) (model.Project, error) {
 	project, err := client.IProjectAdapter(&adapter.ProjectAdapter{}).GetById(id)
 	if err != nil {

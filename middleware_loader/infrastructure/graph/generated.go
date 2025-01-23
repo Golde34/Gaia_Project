@@ -227,6 +227,7 @@ type ComplexityRoot struct {
 		GetUserByUsername         func(childComplexity int, input model.UserInput) int
 		GetUserDetail             func(childComplexity int, input model.IDInput) int
 		ListAllProjects           func(childComplexity int) int
+		ListAllProjectsByUserID   func(childComplexity int, input model.IDInput) int
 		ListAllTasks              func(childComplexity int) int
 		ListAllUsers              func(childComplexity int) int
 	}
@@ -402,6 +403,7 @@ type QueryResolver interface {
 	GetAllPrivileges(ctx context.Context) ([]*model.ListPrivilegeResponse, error)
 	GetPrivilegeByName(ctx context.Context, input model.PrivilegeInput) (*model.Privilege, error)
 	ListAllProjects(ctx context.Context) ([]*model.Project, error)
+	ListAllProjectsByUserID(ctx context.Context, input model.IDInput) ([]*model.Project, error)
 	GetProjectByID(ctx context.Context, input model.IDInput) (*model.Project, error)
 	GetGroupTasksInProject(ctx context.Context, input model.IDInput) ([]*model.GroupTask, error)
 	GetGroupTaskByID(ctx context.Context, input model.IDInput) (*model.GroupTask, error)
@@ -1675,6 +1677,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListAllProjects(childComplexity), true
+
+	case "Query.listAllProjectsByUserId":
+		if e.complexity.Query.ListAllProjectsByUserID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_listAllProjectsByUserId_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ListAllProjectsByUserID(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Query.listAllTasks":
 		if e.complexity.Query.ListAllTasks == nil {
@@ -3235,6 +3249,21 @@ func (ec *executionContext) field_Query_getUserByUsername_args(ctx context.Conte
 }
 
 func (ec *executionContext) field_Query_getUserDetail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_listAllProjectsByUserId_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.IDInput
@@ -10610,6 +10639,83 @@ func (ec *executionContext) fieldContext_Query_listAllProjects(_ context.Context
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Project", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_listAllProjectsByUserId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_listAllProjectsByUserId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ListAllProjectsByUserID(rctx, fc.Args["input"].(model.IDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Project)
+	fc.Result = res
+	return ec.marshalNProject2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProject(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_listAllProjectsByUserId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Project_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Project_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Project_description(ctx, field)
+			case "status":
+				return ec.fieldContext_Project_status(ctx, field)
+			case "color":
+				return ec.fieldContext_Project_color(ctx, field)
+			case "activeStatus":
+				return ec.fieldContext_Project_activeStatus(ctx, field)
+			case "groupTasks":
+				return ec.fieldContext_Project_groupTasks(ctx, field)
+			case "ownerId":
+				return ec.fieldContext_Project_ownerId(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Project_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Project_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Project", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_listAllProjectsByUserId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -19397,6 +19503,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_listAllProjects(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "listAllProjectsByUserId":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_listAllProjectsByUserId(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

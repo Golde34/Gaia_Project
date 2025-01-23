@@ -22,9 +22,18 @@ func NewProjectAdapter(adapter *ProjectAdapter) *ProjectAdapter {
 
 func (adapter *ProjectAdapter) ListAll() ([]response_dtos.ProjectResponseDTO, error) {
 	listAllProjectURL := base.TaskManagerServiceURL + "/project/all"
+	return adapter.listAll(listAllProjectURL)
+}
+
+func (adapter *ProjectAdapter) ListAllByUserID(userId string) ([]response_dtos.ProjectResponseDTO, error) {
+	listAllProjectByUserIDURL := base.TaskManagerServiceURL + "/project/all/" + userId
+	return adapter.listAll(listAllProjectByUserIDURL)
+}
+
+func (adapter *ProjectAdapter) listAll(url string) ([]response_dtos.ProjectResponseDTO, error) {
 	var projects []response_dtos.ProjectResponseDTO
 	headers := utils.BuildDefaultHeaders()
-	bodyResult, err := utils.BaseAPI(listAllProjectURL, "GET", nil, headers)
+	bodyResult, err := utils.BaseAPI(url, "GET", nil, headers)
 	if err != nil {
 		return []response_dtos.ProjectResponseDTO{}, err
 	}
