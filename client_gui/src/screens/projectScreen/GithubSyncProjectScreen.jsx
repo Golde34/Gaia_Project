@@ -1,12 +1,11 @@
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, Transition } from "@headlessui/react";
-import { Button, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectsAndRepos } from "../../api/store/actions/contribution_tracker/project-commit.actions";
+import { getProjectsAndRepos, syncProjectAndRepo } from "../../api/store/actions/contribution_tracker/project-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
-import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import { Button, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react";
 import clsx from "clsx";
-import { ArrowDownIcon } from "@heroicons/react/solid";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
 
 const GithubSyncProjectScreen = (props) => {
     const user = props.user;
@@ -39,7 +38,7 @@ const GithubSyncProjectScreen = (props) => {
         : projectAndRepo?.getAllGithubRepos.filter((repo) => repo.name.toLowerCase().includes(queryRepo.toLowerCase()));
 
     const synchorizeProjectAndRepo = () => {
-        console.log(selectedProject, selectedRepo);
+        dispatch(syncProjectAndRepo(selectedProject, selectedRepo));
     }
     return (
         <div>
@@ -60,7 +59,7 @@ const GithubSyncProjectScreen = (props) => {
                                         Project
                                     </TableHeaderCell>
                                     <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                        Repository
+                                        Github Repository
                                     </TableHeaderCell>
                                     <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                         Action
@@ -99,7 +98,7 @@ const GithubSyncProjectScreen = (props) => {
                                                     onChange={(event) => setQueryProject(event.target.value)}
                                                 />
                                                 <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
-                                                    <ArrowDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                                                    <ChevronDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
                                                 </ComboboxButton>
                                             </div>
                                             <ComboboxOptions
@@ -116,7 +115,7 @@ const GithubSyncProjectScreen = (props) => {
                                                         value={project}
                                                         className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
                                                     >
-                                                        <CheckBoxIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                                                        <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
                                                         {project.name}
                                                     </ComboboxOption>
                                                 ))}
@@ -135,7 +134,7 @@ const GithubSyncProjectScreen = (props) => {
                                                     onChange={(event) => setQueryRepo(event.target.value)}
                                                 />
                                                 <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
-                                                    <ArrowDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                                                    <ChevronDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
                                                 </ComboboxButton>
                                             </div>
                                             <ComboboxOptions
@@ -152,7 +151,7 @@ const GithubSyncProjectScreen = (props) => {
                                                         value={project}
                                                         className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
                                                     >
-                                                        <CheckBoxIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                                                        <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
                                                         {project.name}
                                                     </ComboboxOption>
                                                 ))}
