@@ -12,4 +12,5 @@ export class InternalCacheConstants {
     public static readonly CACHE_POSTFIX = ".cache";
 
     public static USER_INFO_CACHE_KEY = "user-info";
+    public static GITHUB_REPOS_CACHE_KEY = "github-repos";
 }

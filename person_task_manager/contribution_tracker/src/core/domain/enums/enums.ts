@@ -20,3 +20,13 @@ export enum HttpCodeMessage {
     NOT_FOUND = 404,
     INTERNAL_SERVER_ERROR = 500
 }
+
+export enum TimeUnit {
+    SECOND = "seconds",
+    MINUTE = "minutes",
+    HOUR = "hours",
+    DAY = "days",
+    WEEK = "weeks",
+    MONTH = "months",
+    YEAR = "years",
+}

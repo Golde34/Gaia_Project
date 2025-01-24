@@ -4,13 +4,14 @@ import { CTServiceConfigRepository } from "../../infrastructure/repository/ct-se
 import UserCommitRepository from "../../infrastructure/repository/user-commit.repository";
 import { InternalCacheConstants } from "../domain/constants/constants";
 import { UserCommitEntity } from "../domain/entities/user-commit.entity";
+import { TimeUnit } from "../domain/enums/enums";
 
 class UserCommitService {
     constructor(
         private userCommitRepository: UserCommitRepository = UserCommitRepository.getInstance(),
         private ctServiceConfigRepo: CTServiceConfigRepository = CTServiceConfigRepository.getInstance(),
         private userCommitCache = CacheSingleton.getInstance().getCache(),
-        private githubClient = githubClientAdapter, 
+        private githubClient = githubClientAdapter,
     ) { }
 
     async getUserGithubInfo(userId: number): Promise<any> {
@@ -117,12 +118,18 @@ class UserCommitService {
 
     async getUserGithubRepo(user: UserCommitEntity): Promise<any> {
         try {
-            console.log("Getting user github repo: " + user.userId);
+            const cachedRepos = this.userCommitCache.get(InternalCacheConstants.GITHUB_REPOS_CACHE_KEY + user.userId);
+            if (cachedRepos !== undefined) {
+                console.log("Returning cached user repos");
+                return cachedRepos;
+            }
             if (user.githubAccessToken === undefined) {
                 console.error("User has not authorized github");
                 return null;
-            } 
-            return await this.githubClient.getGithubRepositories(user.githubAccessToken);
+            }
+            const repos = await this.githubClient.getGithubRepositories(user.githubAccessToken);
+            this.userCommitCache.setKeyWithExpiry(InternalCacheConstants.GITHUB_REPOS_CACHE_KEY + user.userId, repos, 5, TimeUnit.MINUTE);
+            return repos;
         } catch (error) {
             console.error("Error on getUserGithubRepo: ", error);
             return null;

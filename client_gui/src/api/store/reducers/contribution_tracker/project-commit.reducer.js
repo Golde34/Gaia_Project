@@ -8,7 +8,6 @@ export const getProjectAndRepoRequestReducer = (
         case GET_PROJECT_AND_REPO_REQUEST:
             return { loading: true };
         case GET_PROJECT_AND_REPO_SUCCESS:
-            console.log(action.payload);
             return { loading: false, projectAndRepo: action.payload }
         case GET_PROJECT_AND_REPO_FAILURE:
             return { loading: false, error: action.payload };
