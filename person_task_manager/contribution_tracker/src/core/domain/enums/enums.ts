@@ -22,6 +22,7 @@ export enum HttpCodeMessage {
 }
 
 export enum TimeUnit {
+    SECOND = "seconds",
     MINUTE = "minutes",
     HOUR = "hours",
     DAY = "days",

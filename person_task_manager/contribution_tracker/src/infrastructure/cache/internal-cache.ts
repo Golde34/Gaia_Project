@@ -61,20 +61,20 @@ class InternalCache<T> {
      * @param duration The duration after which the key should expire
      * @param timeUnit The unit of time (e.g., 'seconds', 'minutes', 'hours')
      */
-    public setKeyWithExpiry(key: string, value: T, duration: number, timeUnit: TimeUnit): void {
+    public setKeyWithExpiry(key: string, value: T, duration: number, timeUnit: 'seconds' | 'minutes' | 'hours'): void {
         if (duration <= 0) {
             console.warn(`Attempted to set cache key '${key}' with non-positive duration.`);
             return;
         }
         let expiryTime = Date.now();
         switch (timeUnit) {
-            case TimeUnit.DAY: 
+            case 'seconds': 
                 expiryTime += duration * 1000;
                 break;
-            case TimeUnit.MINUTE:
+            case 'minutes':
                 expiryTime += duration * 60 * 1000;
                 break;
-            case TimeUnit.HOUR:
+            case 'hours':
                 expiryTime += duration * 60 * 60 * 1000;
                 break;
             default:
@@ -111,15 +111,6 @@ class InternalCache<T> {
     public generateInternalCacheKey(key: string): string {
         return `${InternalCacheConstants.CACHE_PREFIX}${key}${InternalCacheConstants.CACHE_POSTFIX}`;
     }
-}
-
-enum TimeUnit {
-    MINUTE = "minutes",
-    HOUR = "hours",
-    DAY = "days",
-    WEEK = "weeks",
-    MONTH = "months",
-    YEAR = "years",
 }
 
 export default InternalCache;

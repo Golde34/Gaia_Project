@@ -119,7 +119,7 @@ class UserCommitService {
     async getUserGithubRepo(user: UserCommitEntity): Promise<any> {
         try {
             const cachedRepos = this.userCommitCache.get(InternalCacheConstants.GITHUB_REPOS_CACHE_KEY + user.userId);
-            if (cachedRepos) {
+            if (cachedRepos !== undefined) {
                 console.log("Returning cached user repos");
                 return cachedRepos;
             }
@@ -128,7 +128,8 @@ class UserCommitService {
                 return null;
             }
             const repos = await this.githubClient.getGithubRepositories(user.githubAccessToken);
-            this.userCommitCache.setKeyWithExpiry(InternalCacheConstants.GITHUB_REPOS_CACHE_KEY + user.userId, repos, 1, TimeUnit.MINUTE); 
+            this.userCommitCache.setKeyWithExpiry(InternalCacheConstants.GITHUB_REPOS_CACHE_KEY + user.userId, repos, 5, TimeUnit.MINUTE);
+            return repos;
         } catch (error) {
             console.error("Error on getUserGithubRepo: ", error);
             return null;
