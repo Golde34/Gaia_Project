@@ -1,22 +1,17 @@
-import { Dialog, Transition } from "@headlessui/react";
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, Transition } from "@headlessui/react";
 import { Button, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectsAndRepos } from "../../api/store/actions/contribution_tracker/project-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
+import CheckBoxIcon from "../../components/icons/CheckboxIcon";
+import clsx from "clsx";
+import { ArrowDownIcon } from "@heroicons/react/solid";
 
 const GithubSyncProjectScreen = (props) => {
     const user = props.user;
 
     const dispatch = useDispatch();
-
-    let [isOpen, setIsOpen] = useState(false);
-    function closeModal() {
-        setIsOpen(false)
-    }
-    function openModal() {
-        setIsOpen(true)
-    }
 
     const projectsAndRepos = useSelector(state => state.projectsAndRepos);
     const { loading, error, projectAndRepo } = projectsAndRepos;
@@ -31,11 +26,21 @@ const GithubSyncProjectScreen = (props) => {
         }, 200);
     }, []);
 
-    const [projects, setProjects] = useState([]);
-    const [repos, setRepos] = useState([]);
     const [selectedProject, setSelectedProject] = useState('');
+    const [queryProject, setQueryProject] = useState('');
     const [selectedRepo, setSelectedRepo] = useState('');
+    const [queryRepo, setQueryRepo] = useState('');
 
+    const filterProjects = queryProject === ''
+        ? projectAndRepo?.listAllProjectsByUserId
+        : projectAndRepo?.listAllProjectsByUserId.filter((project) => project.name.toLowerCase().includes(queryProject.toLowerCase()));
+    const filteredRepos = queryRepo === ''
+        ? projectAndRepo?.getAllGithubRepos
+        : projectAndRepo?.getAllGithubRepos.filter((repo) => repo.name.toLowerCase().includes(queryRepo.toLowerCase()));
+
+    const synchorizeProjectAndRepo = () => {
+        console.log(selectedProject, selectedRepo);
+    }
     return (
         <div>
             {loading ? (
@@ -77,138 +82,95 @@ const GithubSyncProjectScreen = (props) => {
                                             className="flex justify-end"
                                             variant="primary"
                                             color="indigo"
-                                            onClick={openModal}
+                                            onClick={() => console.log('Delete action')}
                                         >Delete Synchronize</Button>
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                        
+                                        <Combobox value={selectedProject} onChange={(value) => setSelectedProject(value)} onClose={() => setQueryProject('')}>
+                                            <div className="relative">
+                                                <ComboboxInput
+                                                    className={clsx(
+                                                        'w-full rounded-lg border-none bg-white/5 py-1.5 pl-3 text-sm/6 text-white',
+                                                        'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                                                    )}
+                                                    displayValue={(project) => project?.name}
+                                                    onChange={(event) => setQueryProject(event.target.value)}
+                                                />
+                                                <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
+                                                    <ArrowDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                                                </ComboboxButton>
+                                            </div>
+                                            <ComboboxOptions
+                                                anchor="bottom"
+                                                transition
+                                                className={clsx(
+                                                    'w-[var(--input-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
+                                                    'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
+                                                )}
+                                            >
+                                                {filterProjects.map((project) => (
+                                                    <ComboboxOption
+                                                        key={project.id}
+                                                        value={project}
+                                                        className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+                                                    >
+                                                        <CheckBoxIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                                                        {project.name}
+                                                    </ComboboxOption>
+                                                ))}
+                                            </ComboboxOptions>
+                                        </Combobox>
                                     </TableCell>
                                     <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                        <Combobox value={selectedRepo} onChange={(value) => setSelectedRepo(value)} onClose={() => setQueryRepo('')}>
+                                            <div className="relative">
+                                                <ComboboxInput
+                                                    className={clsx(
+                                                        'w-full rounded-lg border-none bg-white/5 py-1.5 pl-3 text-sm/6 text-white',
+                                                        'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                                                    )}
+                                                    displayValue={(repo) => repo?.name}
+                                                    onChange={(event) => setQueryRepo(event.target.value)}
+                                                />
+                                                <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
+                                                    <ArrowDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                                                </ComboboxButton>
+                                            </div>
+                                            <ComboboxOptions
+                                                anchor="bottom"
+                                                transition
+                                                className={clsx(
+                                                    'w-[var(--input-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
+                                                    'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
+                                                )}
+                                            >
+                                                {filteredRepos.map((project) => (
+                                                    <ComboboxOption
+                                                        key={project.id}
+                                                        value={project}
+                                                        className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+                                                    >
+                                                        <CheckBoxIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                                                        {project.name}
+                                                    </ComboboxOption>
+                                                ))}
+                                            </ComboboxOptions>
+                                        </Combobox>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                        <Button
+                                            className="flex justify-end"
+                                            variant="primary"
+                                            color="indigo"
+                                            onClick={synchorizeProjectAndRepo}
+                                        >Synchronize</Button>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </Card>
-
-                    <Transition appear show={isOpen} as={Fragment}>
-                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <div className="fixed inset-0 bg-black/25" />
-                            </Transition.Child>
-
-                            <div className="fixed inset-0 overflow-y-auto">
-                                <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                    <Transition appear show={isOpen} as={Fragment}>
-                                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                                            <Transition.Child
-                                                as={Fragment}
-                                                enter="ease-out duration-300"
-                                                enterFrom="opacity-0"
-                                                enterTo="opacity-100"
-                                                leave="ease-in duration-200"
-                                                leaveFrom="opacity-100"
-                                                leaveTo="opacity-0"
-                                            >
-                                                <div className="fixed inset-0 bg-black/25" />
-                                            </Transition.Child>
-
-                                            <div className="fixed inset-0 overflow-y-auto">
-                                                <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                                    <Transition.Child
-                                                        as={Fragment}
-                                                        enter="ease-out duration-300"
-                                                        enterFrom="opacity-0 scale-95"
-                                                        enterTo="opacity-100 scale-100"
-                                                        leave="ease-in duration-200"
-                                                        leaveFrom="opacity-100 scale-100"
-                                                        leaveTo="opacity-0 scale-95"
-                                                    >
-                                                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                                            <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                                                                {props.component}
-                                                            </Dialog.Title>
-                                                            <div className="mt-2">
-                                                                <p className="text-sm text-gray-500">
-                                                                    Are you sure you want to {props.action} this {props.elementName}?
-                                                                </p>
-                                                            </div>
-
-                                                            {/* Dropdown for Projects */}
-                                                            <div className="mt-4">
-                                                                <label className="block text-sm font-medium text-gray-700">Select Project:</label>
-                                                                <select
-                                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                                                    value={selectedProject}
-                                                                    onChange={(e) => setSelectedProject(e.target.value)}
-                                                                >
-                                                                    <option value="">-- Select Project --</option>
-                                                                    {projectAndRepo.listAllProjectsByUserId.map((project) => (
-                                                                        <option key={project.id} value={project.id}>
-                                                                            {project.name}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-
-                                                            {/* Dropdown for GitHub Repos */}
-                                                            <div className="mt-4">
-                                                                <label className="block text-sm font-medium text-gray-700">Select GitHub Repo:</label>
-                                                                <select
-                                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                                                    value={selectedRepo}
-                                                                    onChange={(e) => setSelectedRepo(e.target.value)}
-                                                                >
-                                                                    <option value="">-- Select Repo --</option>
-                                                                    {projectAndRepo.getAllGithubRepos.map((repo) => (
-                                                                        <option key={repo.htmlUrl} value={repo.htmlUrl}>
-                                                                            {repo.name}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-
-                                                            <div className="mt-4">
-                                                                <button
-                                                                    type="button"
-                                                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                                                    onClick={() => {
-                                                                        console.log('Selected Project:', selectedProject);
-                                                                        console.log('Selected Repo:', selectedRepo);
-                                                                        closeModal();
-                                                                    }}
-                                                                >
-                                                                    OK
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-                                                                    onClick={closeModal}
-                                                                >
-                                                                    Cancel
-                                                                </button>
-                                                            </div>
-                                                        </Dialog.Panel>
-                                                    </Transition.Child>
-                                                </div>
-                                            </div>
-                                        </Dialog>
-                                    </Transition>
-                                </div>
-                            </div>
-                        </Dialog>
-                    </Transition>
                 </>
             ) : (
                 <></>
