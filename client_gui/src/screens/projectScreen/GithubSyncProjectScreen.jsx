@@ -35,13 +35,6 @@ const GithubSyncProjectScreen = (props) => {
     const [repos, setRepos] = useState([]);
     const [selectedProject, setSelectedProject] = useState('');
     const [selectedRepo, setSelectedRepo] = useState('');
-    // useEffect(() => {
-    //     console.log('Selected Project:', selectedProject);
-    //     console.log('Selected Repo:', selectedRepo);
-    //     console.log('Projects:', projectAndRepo);
-    //     setProjects(projectAndRepo.listAllProjectsByUserId);
-    //     setRepos(projectAndRepo.getAllGithubRepos);
-    // });
 
     return (
         <div>
@@ -64,6 +57,9 @@ const GithubSyncProjectScreen = (props) => {
                                     <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                         Repository
                                     </TableHeaderCell>
+                                    <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                        Action
+                                    </TableHeaderCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -73,13 +69,25 @@ const GithubSyncProjectScreen = (props) => {
                                     <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                         Gaia
                                     </TableCell>
+                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                        Gaia Project
+                                    </TableCell>
                                     <TableCell>
                                         <Button
                                             className="flex justify-end"
                                             variant="primary"
                                             color="indigo"
                                             onClick={openModal}
-                                        >Add Project</Button>
+                                        >Delete Synchronize</Button>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                        
+                                    </TableCell>
+                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                    </TableCell>
+                                    <TableCell>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
