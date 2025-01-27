@@ -2,12 +2,13 @@ package client_adapter
 
 import (
 	"encoding/json"
+	base_dtos "middleware_loader/core/domain/dtos/base"
 	response_dtos "middleware_loader/core/domain/dtos/response"
 	"middleware_loader/infrastructure/client/base"
 	"middleware_loader/kernel/utils"
 )
 
-type UserGithubAdapter struct { }
+type UserGithubAdapter struct{}
 
 func NewUserGithubAdapter() *UserGithubAdapter {
 	return &UserGithubAdapter{}
@@ -15,7 +16,7 @@ func NewUserGithubAdapter() *UserGithubAdapter {
 
 func (adapter *UserGithubAdapter) GetUserGithubInfo(userId string) (response_dtos.UserGithubDTO, error) {
 	userGithubInfoURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/get-user-github-info/" + userId
-	var userGithubInfo response_dtos.UserGithubDTO 
+	var userGithubInfo response_dtos.UserGithubDTO
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(userGithubInfoURL, "GET", nil, headers)
 	if err != nil {
@@ -39,11 +40,11 @@ func (adapter *UserGithubAdapter) GithubAuthorize(code string, state string) (re
 	githubAuthorizeURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/authorize"
 
 	headers := utils.BuildDefaultHeaders()
-	body := map[string]interface{} {
-		"code": code,
+	body := map[string]interface{}{
+		"code":  code,
 		"state": state,
 	}
-	
+
 	bodyResult, err := utils.BaseAPI(githubAuthorizeURL, "POST", body, headers)
 	if err != nil {
 		return response_dtos.UserGithubDTO{}, err
@@ -85,19 +86,19 @@ func (adapter *UserGithubAdapter) SynchronizeUserGithub(userId string) (response
 	return userGithubInfo, nil
 }
 
-func (adapter *UserGithubAdapter) SyncProjectRepo(userId string, project, repo map[string]interface{}) (string, error) {
-	syncProjectRepoURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/synchronize-project-repo" 
+func (adapter *UserGithubAdapter) SyncProjectRepo(userId string, project, repo map[string]interface{}) (base_dtos.ErrorResponse, error) {
+	syncProjectRepoURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/synchronize-project-repo"
 	var syncResult string
 	headers := utils.BuildDefaultHeaders()
-	body := map[string]interface{} {
-	"userId": userId
+	body := map[string]interface{}{
+		"userId":  userId,
 		"project": project,
-		"repo": repo,
+		"repo":    repo,
 	}
 	bodyResult, err := utils.BaseAPIV2(syncProjectRepoURL, "POST", body, &syncResult, headers)
 	if err != nil {
-		return "", err
+		return utils.ReturnErrorResponse(400, "Cannot sync project repo from Contribution Tracker"), err
 	}
 
-	return bodyResult.(string), nil
+	return bodyResult.(base_dtos.ErrorResponse), nil
 }
