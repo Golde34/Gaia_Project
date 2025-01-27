@@ -23,7 +23,12 @@ export const getProjectsAndRepos = (userId) => async (dispatch) => {
 export const syncProjectAndRepo = (userId, project, repo) => async (dispatch) => {
     dispatch({ type: SYNC_PROJECT_AND_REPO_REQUEST, payload: userId });
     try {
-        const { data } = await serverRequest(`/project-commit/user-github/sync-project-repo/${userId}/${project}/${repo}`, HttpMethods.POST, portName.middlewarePort);
+        const body = {
+            userId,
+            project,
+            repo
+        }
+        const { data } = await serverRequest(`/project-commit/sync-project-repo`, HttpMethods.POST, portName.middlewarePort, body);
         dispatch({ type: SYNC_PROJECT_AND_REPO_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
