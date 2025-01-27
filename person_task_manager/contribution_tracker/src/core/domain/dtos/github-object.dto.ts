@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 export class GithubRepoDto {
     @IsString()
@@ -11,4 +11,18 @@ export class GithubRepoDto {
     owner!: string;
     @IsString()
     language!: string;
+}
+
+export class SyncProjectRepoDto {
+    @IsString()
+    userId!: string;
+    @IsString()
+    projectId!: string;
+    @IsString()
+    @IsOptional()
+    projectName?: string;
+    @IsString()
+    repoName!: string;
+    @IsString()
+    repoUrl!: string;
 }
