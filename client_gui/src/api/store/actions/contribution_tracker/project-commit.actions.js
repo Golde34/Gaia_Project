@@ -39,3 +39,22 @@ export const syncProjectAndRepo = (userId, project, repo) => async (dispatch) =>
         });
     }
 }
+
+export const deleteProjectCommit = (userId, projectId) => async (dispatch) => {
+    dispatch({ type: SYNC_PROJECT_AND_REPO_REQUEST, payload: userId });
+    try {
+        const body = {
+            userId,
+            projectId
+        }
+        const { data } = await serverRequest(`/project-commit/delete-project`, HttpMethods.DELETE, portName.middlewarePort, body);
+        dispatch({ type: SYNC_PROJECT_AND_REPO_SUCCESS, payload: data.data });
+    } catch (error) {
+        dispatch({
+            type: SYNC_PROJECT_AND_REPO_FAILURE,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
+    }
+}
