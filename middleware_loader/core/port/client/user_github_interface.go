@@ -6,4 +6,5 @@ type IUserGithubAdapter interface {
 	GetUserGithubInfo(userId string) (response_dtos.UserGithubDTO, error)
 	GithubAuthorize(code string, state string) (response_dtos.UserGithubDTO, error)
 	SynchronizeUserGithub(userId string) (response_dtos.UserGithubDTO, error) 
+	SyncProjectRepo(userId string, project, repo map[string]interface{}) (string, error)
 }

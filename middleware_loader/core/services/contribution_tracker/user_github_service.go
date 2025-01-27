@@ -42,3 +42,13 @@ func (s *UserGithubService) SynchronizeUserGithub(userId string) (base_dtos.Erro
 	response := utils.ReturnSuccessResponse("Synchronize user github success", userGithubInfo)
 	return response, nil
 }
+
+func (s *UserGithubService) SyncProjectRepo(userId string, project, repo map[string]interface{}) (base_dtos.ErrorResponse, error) {
+	syncResult, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).SyncProjectRepo(userId, project, repo)	
+	if err != nil {
+		return utils.ReturnErrorResponse(400, "Cannot sync project repo from Contribution Tracker"), err
+	}
+
+	response := utils.ReturnSuccessResponse("Sync project repo success", syncResult)
+	return response, nil
+}

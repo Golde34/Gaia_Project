@@ -80,3 +80,19 @@ func GetProjectsAndRepos(w http.ResponseWriter, r *http.Request, userGithubServi
 	utils.ConnectToGraphQLServer(w, graphqlQuery)
 
 }
+
+func SyncProjectRepo(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	userId := body["userId"].(string)
+	project := body["project"].(map[string]interface{})
+	repo := body["repo"].(map[string]interface{})
+
+	syncResult, err := userGithubService.SyncProjectRepo(userId, project, repo)
+	
+}

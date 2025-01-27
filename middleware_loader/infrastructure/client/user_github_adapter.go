@@ -84,3 +84,20 @@ func (adapter *UserGithubAdapter) SynchronizeUserGithub(userId string) (response
 
 	return userGithubInfo, nil
 }
+
+func (adapter *UserGithubAdapter) SyncProjectRepo(userId string, project, repo map[string]interface{}) (string, error) {
+	syncProjectRepoURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/synchronize-project-repo" 
+	var syncResult string
+	headers := utils.BuildDefaultHeaders()
+	body := map[string]interface{} {
+	"userId": userId
+		"project": project,
+		"repo": repo,
+	}
+	bodyResult, err := utils.BaseAPIV2(syncProjectRepoURL, "POST", body, &syncResult, headers)
+	if err != nil {
+		return "", err
+	}
+
+	return bodyResult.(string), nil
+}
