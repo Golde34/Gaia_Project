@@ -38,13 +38,12 @@ func (in *ProjectResponseDTO) MapperListToGraphQLModel(input []ProjectResponseDT
 	return out
 }
 
-
 type GithubRepoResponseDTO struct {
-	Name string `json:"name"`
-	HtmlUrl string `json:"htmlUrl"`
+	Name        string `json:"name"`
+	HtmlUrl     string `json:"htmlUrl"`
 	Description string `json:"description"`
-	Owner string `json:"owner"`
-	Language string `json:"language"`
+	Owner       string `json:"owner"`
+	Language    string `json:"language"`
 }
 
 func NewGithubRepoResponseDTO() *GithubRepoResponseDTO {
@@ -59,6 +58,33 @@ func (in *GithubRepoResponseDTO) MapperToGraphQLModel(input GithubRepoResponseDT
 
 func (in *GithubRepoResponseDTO) MapperListToGraphQLModel(input []GithubRepoResponseDTO) []model.GithubRepo {
 	var out []model.GithubRepo
+	for _, item := range input {
+		out = append(out, in.MapperToGraphQLModel(item))
+	}
+	return out
+}
+
+type ProjectCommitResponseDTO struct {
+	Id            string `json:"id"`
+	ProjectId     string `json:"projectId"`
+	ProjectName   string `json:"projectName"`
+	GithubRepo    string `json:"githubRepo"`
+	GithubRepoUrl string `json:"githubRepoUrl"`
+	UserCommitId  int    `json:"userCommitId"`
+}
+
+func NewProjectCommitResponseDTO() *ProjectCommitResponseDTO {
+	return &ProjectCommitResponseDTO{}
+}
+
+func (in *ProjectCommitResponseDTO) MapperToGraphQLModel(input ProjectCommitResponseDTO) model.ProjectCommit {
+	var out model.ProjectCommit
+	mapper.AutoMapper(&input, &out)
+	return out
+}
+
+func (in *ProjectCommitResponseDTO) MapperListToGraphQLModel(input []ProjectCommitResponseDTO) []model.ProjectCommit {
+	var out []model.ProjectCommit
 	for _, item := range input {
 		out = append(out, in.MapperToGraphQLModel(item))
 	}

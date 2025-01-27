@@ -259,3 +259,25 @@ func (adapter *ProjectAdapter) GetGithubRepos(userId string) ([]response_dtos.Gi
 
 	return githubRepos, nil 
 }
+
+
+func (adapter *ProjectAdapter) GetProjectCommits(userId string) ([]response_dtos.ProjectCommitResponseDTO, error) {
+	getProjectCommitsURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/get-project-commits/" + userId
+	var projectCommits []response_dtos.ProjectCommitResponseDTO
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPI(getProjectCommitsURL, "GET", nil, headers)
+	if err != nil {
+		return []response_dtos.ProjectCommitResponseDTO{}, err
+	}
+
+	bodyResultMap, ok := bodyResult.(map[string]interface{})
+	if !ok {
+		return []response_dtos.ProjectCommitResponseDTO{}, err
+	}
+	for _, projectCommitElement := range bodyResultMap["projectCommits"].([]interface{}) {
+		projectCommit := mapper_response.ReturnProjectCommitObjectMapper(projectCommitElement.(map[string]interface{}))
+		projectCommits = append(projectCommits, *projectCommit)
+	}
+
+	return projectCommits, nil
+}

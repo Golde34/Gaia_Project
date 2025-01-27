@@ -37,3 +37,18 @@ func ReturnGithubRepoObjectMapper(body map[string]interface{}) *response_dtos.Gi
 	}
 	return &input
 }
+
+func ReturnProjectCommitObjectMapper(body map[string]interface{}) *response_dtos.ProjectCommitResponseDTO {
+	var input response_dtos.ProjectCommitResponseDTO
+	input.Id = body["id"].(string)
+	input.ProjectId = body["projectId"].(string)
+	if body["projectName"] != nil {
+		input.ProjectName = body["projectName"].(string)
+	}
+	input.GithubRepo = body["githubRepo"].(string)
+	input.GithubRepoUrl = body["githubRepoUrl"].(string)
+	if body["userCommitId"] != nil {
+		input.UserCommitId = int(body["userCommitId"].(float64))
+	}
+	return &input
+}

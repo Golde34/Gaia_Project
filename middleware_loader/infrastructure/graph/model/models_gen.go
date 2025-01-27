@@ -200,6 +200,15 @@ type Project struct {
 	UpdatedAt    string   `json:"updatedAt"`
 }
 
+type ProjectCommit struct {
+	ID            string  `json:"id"`
+	ProjectID     string  `json:"projectId"`
+	ProjectName   string  `json:"projectName"`
+	GithubRepo    string  `json:"githubRepo"`
+	GithubRepoURL string  `json:"githubRepoUrl"`
+	UserCommitID  float64 `json:"userCommitId"`
+}
+
 type ProjectGroupTaskIDInput struct {
 	ProjectID   string `json:"projectId"`
 	GroupTaskID string `json:"groupTaskId"`

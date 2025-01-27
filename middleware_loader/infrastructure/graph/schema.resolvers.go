@@ -25,6 +25,7 @@ var taskRegisterService = work_optim.NewTaskRegisterService()
 var noteService = task_manager.NewNoteService()
 var projectCommitService = contribution_tracker.NewProjectCommitService()
 
+
 // RegisterTaskConfig is the resolver for the registerTaskConfig field.
 func (r *mutationResolver) RegisterTaskConfig(ctx context.Context, input model.RegisterTaskInput) (*model.RegisterTaskConfig, error) {
 	result, err := taskRegisterService.RegisterTaskConfig(ctx, input)
@@ -424,13 +425,24 @@ func (r *queryResolver) GetAllNotes(ctx context.Context, input model.IDInput) ([
 
 // GetAllGithubRepos is the resolver for the getAllGithubRepos field.
 func (r *queryResolver) GetAllGithubRepos(ctx context.Context, input model.IDInput) ([]*model.GithubRepo, error) {
-	repos, err := projectCommitService.GetGithubRepos(ctx, input) 
+	repos, err := projectCommitService.GetGithubRepos(ctx, input)
 	modelRepo := []*model.GithubRepo{}
 	for _, repo := range repos {
 		repoCopy := repo
 		modelRepo = append(modelRepo, &repoCopy)
 	}
 	return modelRepo, err
+}
+
+// GetProjectCommitList is the resolver for the getProjectCommitList field.
+func (r *queryResolver) GetProjectCommitList(ctx context.Context, input model.IDInput) ([]*model.ProjectCommit, error) {
+	projectCommits, err := projectCommitService.GetProjectCommits(ctx, input)
+	modelProjectCommit := []*model.ProjectCommit{}
+	for _, projectCommit := range projectCommits {
+		projectCommitCopy := projectCommit
+		modelProjectCommit = append(modelProjectCommit, &projectCommitCopy)
+	}
+	return modelProjectCommit, err
 }
 
 // Mutation returns MutationResolver implementation.

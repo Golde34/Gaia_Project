@@ -26,6 +26,7 @@ type Query {
 	getAllNotes(input: IdInput!): [Note]!
 
 	getAllGithubRepos(input: IdInput!): [GithubRepo]!
+	getProjectCommitList(input: IdInput!): [ProjectCommit]!
 }
 
 type Mutation {
