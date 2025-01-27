@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectsAndRepos, syncProjectAndRepo } from "../../api/store/actions/contribution_tracker/project-commit.actions";
+import { deleteProjectCommit, getProjectsAndRepos, syncProjectAndRepo } from "../../api/store/actions/contribution_tracker/project-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { Button, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react";
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
 
@@ -40,6 +40,21 @@ const GithubSyncProjectScreen = (props) => {
     const synchorizeProjectAndRepo = () => {
         dispatch(syncProjectAndRepo(selectedProject, selectedRepo));
     }
+
+    const [viewedProject, setViewedProject] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const closeModal = () => {
+        setIsOpen(false);
+    }
+    const openModal = (projectId) => {
+        setIsOpen(true);
+        setViewedProject(projectId);
+    }
+
+    const deleteProjectAndRepo = (userId, projectId) => {
+        dispatch(deleteProjectCommit(userId, projectId));
+    }
+
     return (
         <div>
             {loading ? (
@@ -70,20 +85,33 @@ const GithubSyncProjectScreen = (props) => {
                                 <TableRow
                                     className="even:bg-tremor-background-muted even:dark:bg-dark-tremor-background-muted"
                                 >
-                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                        Gaia
-                                    </TableCell>
-                                    <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                        Gaia Project
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            className="flex justify-end"
-                                            variant="primary"
-                                            color="indigo"
-                                            onClick={() => console.log('Delete action')}
-                                        >Delete Synchronize</Button>
-                                    </TableCell>
+                                    {projects.map((project) => (
+                                        <div key={project.id} className="m-3">
+                                            <CardButton name={project.name} description={project.description} color={project.color}
+                                                url={`/project/${project.id}`} buttonText="View Project" elementId={project.id}
+                                            />
+                                        </div>
+                                    ))}
+                                    {
+                                        projectAndRepo.getProjectCommitList.map((project) => (
+                                            <>
+                                                <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                                    {project.projectName}
+                                                </TableCell>
+                                                <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                                    {project.githubRepo}
+                                                </TableCell>
+                                                <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                                    <Button
+                                                        className="flex justify-end"
+                                                        variant="primary"
+                                                        color="indigo"
+                                                        onClick={openModal(project.id)}
+                                                    >Delete Synchronize</Button>
+                                                </TableCell>
+                                            </>
+                                        ))
+                                    }
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
@@ -170,6 +198,71 @@ const GithubSyncProjectScreen = (props) => {
                             </TableBody>
                         </Table>
                     </Card>
+
+                    <Transition appear show={isOpen} as={Fragment}>
+                        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <div className="fixed inset-0 bg-black/25" />
+                            </Transition.Child>
+
+                            <div className="fixed inset-0 overflow-y-auto">
+                                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-out duration-300"
+                                        enterFrom="opacity-0 scale-95"
+                                        enterTo="opacity-100 scale-100"
+                                        leave="ease-in duration-200"
+                                        leaveFrom="opacity-100 scale-100"
+                                        leaveTo="opacity-0 scale-95"
+                                    >
+                                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                            <Dialog.Title
+                                                as="h3"
+                                                className="text-lg font-medium leading-6 text-gray-900"
+                                            >
+                                                {props.component}
+                                            </Dialog.Title>
+                                            <div className="mt-2">
+                                                <p className="text-sm text-gray-500">
+                                                    Do you really want to delete this project?
+                                                </p>
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                    onClick={() => {
+                                                        deleteProjectAndRepo(viewedProject);
+                                                        closeModal();
+                                                    }}
+                                                >
+                                                    OK
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className='ml-2 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2'
+                                                    onClick={closeModal}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </Dialog.Panel>
+                                    </Transition.Child>
+                                </div>
+                            </div>
+                        </Dialog>
+                    </Transition>
+
                 </>
             ) : (
                 <></>

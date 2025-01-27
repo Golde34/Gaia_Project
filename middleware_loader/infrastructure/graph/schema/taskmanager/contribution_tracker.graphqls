@@ -5,3 +5,12 @@ type GithubRepo {
     owner: String!
     language: String!
 }
+
+type ProjectCommit {
+    id: ID!
+    projectId: String!
+    projectName: String!
+    githubRepo: String!
+    githubRepoUrl: String!
+    userCommitId: Float!
+}

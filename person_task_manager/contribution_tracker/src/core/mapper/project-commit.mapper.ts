@@ -1,4 +1,4 @@
-import { GithubRepoDto } from "../domain/dtos/github-object.dto";
+import { GithubRepoDto, SyncProjectRepoDto } from "../domain/dtos/github-object.dto";
 
 export const githubRepoMapper = (githubRepo: any): GithubRepoDto => {
     return {
@@ -7,5 +7,15 @@ export const githubRepoMapper = (githubRepo: any): GithubRepoDto => {
         description: githubRepo.description,
         owner: githubRepo.owner.login,
         language: githubRepo.language
+    }
+} 
+
+export const syncProjectRepoMapper = (body: any): SyncProjectRepoDto => {
+    return {
+        userId: body.userId,
+        projectId: body.project.id,
+        projectName: body.project.name,
+        repoName: body.repo.name,
+        repoUrl: body.repo.htmlUrl
     }
 } 

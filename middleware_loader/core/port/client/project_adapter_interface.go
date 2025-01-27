@@ -19,4 +19,5 @@ type IProjectAdapter interface {
 	ArchiveProject(id string) (response_dtos.ProjectResponseDTO, error)
 	EnableProject(id string) (response_dtos.ProjectResponseDTO, error)
 	GetGithubRepos(userId string) ([]response_dtos.GithubRepoResponseDTO, error) 
+	GetProjectCommits(userId string) ([]response_dtos.ProjectCommitResponseDTO, error)
 }

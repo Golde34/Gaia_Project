@@ -211,6 +211,15 @@ type ComplexityRoot struct {
 		UpdatedAt    func(childComplexity int) int
 	}
 
+	ProjectCommit struct {
+		GithubRepo    func(childComplexity int) int
+		GithubRepoURL func(childComplexity int) int
+		ID            func(childComplexity int) int
+		ProjectID     func(childComplexity int) int
+		ProjectName   func(childComplexity int) int
+		UserCommitID  func(childComplexity int) int
+	}
+
 	Query struct {
 		GetAllGithubRepos         func(childComplexity int, input model.IDInput) int
 		GetAllNotes               func(childComplexity int, input model.IDInput) int
@@ -220,6 +229,7 @@ type ComplexityRoot struct {
 		GetGroupTasksInProject    func(childComplexity int, input model.IDInput) int
 		GetPrivilegeByName        func(childComplexity int, input model.PrivilegeInput) int
 		GetProjectByID            func(childComplexity int, input model.IDInput) int
+		GetProjectCommitList      func(childComplexity int, input model.IDInput) int
 		GetRoleByName             func(childComplexity int, input model.RoleInput) int
 		GetTaskByID               func(childComplexity int, input model.IDInput) int
 		GetTaskTableByGroupTaskID func(childComplexity int, input model.IDInput) int
@@ -413,6 +423,7 @@ type QueryResolver interface {
 	GetTaskTableByGroupTaskID(ctx context.Context, input model.IDInput) (*model.TaskTable, error)
 	GetAllNotes(ctx context.Context, input model.IDInput) ([]*model.Note, error)
 	GetAllGithubRepos(ctx context.Context, input model.IDInput) ([]*model.GithubRepo, error)
+	GetProjectCommitList(ctx context.Context, input model.IDInput) ([]*model.ProjectCommit, error)
 }
 
 type executableSchema struct {
@@ -1513,6 +1524,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.UpdatedAt(childComplexity), true
 
+	case "ProjectCommit.githubRepo":
+		if e.complexity.ProjectCommit.GithubRepo == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.GithubRepo(childComplexity), true
+
+	case "ProjectCommit.githubRepoUrl":
+		if e.complexity.ProjectCommit.GithubRepoURL == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.GithubRepoURL(childComplexity), true
+
+	case "ProjectCommit.id":
+		if e.complexity.ProjectCommit.ID == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.ID(childComplexity), true
+
+	case "ProjectCommit.projectId":
+		if e.complexity.ProjectCommit.ProjectID == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.ProjectID(childComplexity), true
+
+	case "ProjectCommit.projectName":
+		if e.complexity.ProjectCommit.ProjectName == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.ProjectName(childComplexity), true
+
+	case "ProjectCommit.userCommitId":
+		if e.complexity.ProjectCommit.UserCommitID == nil {
+			break
+		}
+
+		return e.complexity.ProjectCommit.UserCommitID(childComplexity), true
+
 	case "Query.getAllGithubRepos":
 		if e.complexity.Query.GetAllGithubRepos == nil {
 			break
@@ -1598,6 +1651,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetProjectByID(childComplexity, args["input"].(model.IDInput)), true
+
+	case "Query.getProjectCommitList":
+		if e.complexity.Query.GetProjectCommitList == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getProjectCommitList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetProjectCommitList(childComplexity, args["input"].(model.IDInput)), true
 
 	case "Query.getRoleByName":
 		if e.complexity.Query.GetRoleByName == nil {
@@ -3159,6 +3224,21 @@ func (ec *executionContext) field_Query_getPrivilegeByName_args(ctx context.Cont
 }
 
 func (ec *executionContext) field_Query_getProjectById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.IDInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐIDInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getProjectCommitList_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.IDInput
@@ -10117,6 +10197,270 @@ func (ec *executionContext) fieldContext_Project_updatedAt(_ context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _ProjectCommit_id(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectCommit_projectId(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_projectId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProjectID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_projectId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectCommit_projectName(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_projectName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProjectName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_projectName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectCommit_githubRepo(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_githubRepo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GithubRepo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_githubRepo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectCommit_githubRepoUrl(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_githubRepoUrl(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GithubRepoURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_githubRepoUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectCommit_userCommitId(ctx context.Context, field graphql.CollectedField, obj *model.ProjectCommit) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectCommit_userCommitId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UserCommitID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectCommit_userCommitId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectCommit",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_listAllUsers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_listAllUsers(ctx, field)
 	if err != nil {
@@ -11394,6 +11738,75 @@ func (ec *executionContext) fieldContext_Query_getAllGithubRepos(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getAllGithubRepos_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getProjectCommitList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getProjectCommitList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetProjectCommitList(rctx, fc.Args["input"].(model.IDInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ProjectCommit)
+	fc.Result = res
+	return ec.marshalNProjectCommit2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectCommit(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getProjectCommitList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProjectCommit_id(ctx, field)
+			case "projectId":
+				return ec.fieldContext_ProjectCommit_projectId(ctx, field)
+			case "projectName":
+				return ec.fieldContext_ProjectCommit_projectName(ctx, field)
+			case "githubRepo":
+				return ec.fieldContext_ProjectCommit_githubRepo(ctx, field)
+			case "githubRepoUrl":
+				return ec.fieldContext_ProjectCommit_githubRepoUrl(ctx, field)
+			case "userCommitId":
+				return ec.fieldContext_ProjectCommit_userCommitId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProjectCommit", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getProjectCommitList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -19320,6 +19733,70 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
+var projectCommitImplementors = []string{"ProjectCommit"}
+
+func (ec *executionContext) _ProjectCommit(ctx context.Context, sel ast.SelectionSet, obj *model.ProjectCommit) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, projectCommitImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProjectCommit")
+		case "id":
+			out.Values[i] = ec._ProjectCommit_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "projectId":
+			out.Values[i] = ec._ProjectCommit_projectId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "projectName":
+			out.Values[i] = ec._ProjectCommit_projectName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "githubRepo":
+			out.Values[i] = ec._ProjectCommit_githubRepo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "githubRepoUrl":
+			out.Values[i] = ec._ProjectCommit_githubRepoUrl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userCommitId":
+			out.Values[i] = ec._ProjectCommit_userCommitId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -19723,6 +20200,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getAllGithubRepos(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getProjectCommitList":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getProjectCommitList(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -21382,6 +21881,44 @@ func (ec *executionContext) marshalNProject2ᚖmiddleware_loaderᚋinfrastructur
 	return ec._Project(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNProjectCommit2ᚕᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectCommit(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectCommit) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOProjectCommit2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectCommit(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalNProjectGroupTaskIdInput2middleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectGroupTaskIDInput(ctx context.Context, v interface{}) (model.ProjectGroupTaskIDInput, error) {
 	res, err := ec.unmarshalInputProjectGroupTaskIdInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -22177,6 +22714,13 @@ func (ec *executionContext) marshalOProject2ᚖmiddleware_loaderᚋinfrastructur
 		return graphql.Null
 	}
 	return ec._Project(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProjectCommit2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐProjectCommit(ctx context.Context, sel ast.SelectionSet, v *model.ProjectCommit) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ProjectCommit(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalORole2ᚖmiddleware_loaderᚋinfrastructureᚋgraphᚋmodelᚐRole(ctx context.Context, sel ast.SelectionSet, v *model.Role) graphql.Marshaler {
