@@ -25,6 +25,16 @@ class ProjectCommitService {
             return "Error on syncProjectRepo";
         }
     }
+
+    async getProjectCommits(userId: number): Promise<ProjectCommitEntity[]> {
+        try {
+            console.log("Getting project commits for user: ", userId);
+            return await this.projectCommitRepository.findByCondition("user_commit_id = ?", [userId]);
+        } catch (error) {
+            console.error("Error on getProjectCommits: ", error);
+            return [];
+        }
+    }
 }
 
 export const projectCommitService = new ProjectCommitService();

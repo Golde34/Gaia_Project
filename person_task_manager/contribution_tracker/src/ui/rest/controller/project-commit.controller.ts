@@ -24,6 +24,16 @@ class ProjectCommitController {
             next(err);
         }
     }
+
+    async getProjectCommits(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const userId = Number(req.params.userId);
+            const projectCommits = await projectCommitUsecase.getProjectCommits(userId);
+            return projectCommits;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const projectCommitController = new ProjectCommitController();

@@ -24,3 +24,12 @@ projectCommitRouter.post("/synchronize-project-repo", async (req: Request, res:R
         next(err);
     }
 })
+
+projectCommitRouter.get("/get-project-commits/:userId", async (req: Request, res:Response, next: NextFunction): Promise<void> => {
+    try {
+        const projectCommits = await projectCommitControllerImpl.getProjectCommits(req, next);
+        res.json(projectCommits);
+    } catch (err) {
+        next(err);
+    }
+})

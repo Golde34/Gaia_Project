@@ -31,6 +31,17 @@ class ProjectCommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async getProjectCommits(userId: number): Promise<any> {
+        try {
+            const projectCommits = await this.projectCommitServiceImpl.getProjectCommits(userId);
+            return msg200({
+                projectCommits: projectCommits
+            });
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const projectCommitUsecase = new ProjectCommitUsecase();
