@@ -15,7 +15,7 @@ export class GithubRepoDto {
 
 export class SyncProjectRepoDto {
     @IsString()
-    userId!: string;
+    userId!: number;
     @IsString()
     projectId!: string;
     @IsString()

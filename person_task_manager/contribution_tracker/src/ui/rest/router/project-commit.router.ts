@@ -16,7 +16,7 @@ projectCommitRouter.get("/get-github-repos/:userId", async (req: Request, res:Re
     }
 })
 
-projectCommitRouter.post("/synchronize-project-repo/:userId", async (req: Request, res:Response, next: NextFunction): Promise<void> => {
+projectCommitRouter.post("/synchronize-project-repo", async (req: Request, res:Response, next: NextFunction): Promise<void> => {
     try {
         const syncResult = await projectCommitControllerImpl.syncProjectRepo(req, next);
         returnResult(syncResult, INTERNAL_SERVER_ERROR, res, next);

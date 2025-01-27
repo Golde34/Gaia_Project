@@ -1,6 +1,8 @@
-export interface ProjectCommitEntity extends Document {
-    _id: string;
+export interface ProjectCommitEntity {
+    id?: string;
     projectId: string;
-    projectName: string;
+    projectName?: string;
     githubRepo: string;
+    githubRepoUrl: string;
+    userCommitId?: number;
 }
