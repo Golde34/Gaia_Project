@@ -103,7 +103,7 @@ const _fetchData = async (url, method, body, headers) => {
             try {
                 const deleteResponse = await Axios.delete(url, {
                     headers: headers,
-                    body: body,
+                    data: body,
                 })
                 return deleteResponse;
             } catch (error) {
