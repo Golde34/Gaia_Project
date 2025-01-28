@@ -34,6 +34,17 @@ class ProjectCommitController {
             next(err);
         }
     }
+
+    async deleteProjectCommit(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const userId = Number(req.body.userId);
+            const projectId = req.body.projectId;
+            const deleteResult = await projectCommitUsecase.deleteProjectCommit(userId, projectId);
+            return deleteResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const projectCommitController = new ProjectCommitController();

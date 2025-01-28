@@ -33,3 +33,12 @@ projectCommitRouter.get("/get-project-commits/:userId", async (req: Request, res
         next(err);
     }
 })
+
+projectCommitRouter.delete("/delete-project-commit", async (req: Request, res:Response, next: NextFunction): Promise<void> => {
+    try {
+        const deleteResult = await projectCommitControllerImpl.deleteProjectCommit(req, next);
+        returnResult(deleteResult, INTERNAL_SERVER_ERROR, res, next);
+    } catch (err) {
+        next(err);
+    }
+})

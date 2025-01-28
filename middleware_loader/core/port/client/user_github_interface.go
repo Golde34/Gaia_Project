@@ -10,4 +10,5 @@ type IUserGithubAdapter interface {
 	GithubAuthorize(code string, state string) (response_dtos.UserGithubDTO, error)
 	SynchronizeUserGithub(userId string) (response_dtos.UserGithubDTO, error) 
 	SyncProjectRepo(userId string, project, repo map[string]interface{}) (base_dtos.ErrorResponse, error)
+	DeleteProjectRepo(userId, projectId string) (response_dtos.ProjectCommitResponseDTO, error)
 }

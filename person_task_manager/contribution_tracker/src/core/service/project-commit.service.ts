@@ -35,6 +35,23 @@ class ProjectCommitService {
             return [];
         }
     }
+
+    async deleteProjectCommit(userId: number, projectId: string): Promise<ProjectCommitEntity | undefined> {
+        try {
+            const projectCommits: ProjectCommitEntity[] = await this.projectCommitRepository.findByCondition("user_commit_id = ? AND project_id = ?", [userId, projectId]);
+            const projectCommit: ProjectCommitEntity | undefined = projectCommits[0];
+            if (!projectCommit || !projectCommit.id) {
+                console.error("Project commit not found for user: ", userId, " and project: ", projectId);
+                return undefined;
+            }
+            console.log("Deleting project commit for user: ", userId, " and project: ", projectId);
+            await this.projectCommitRepository.delete(projectCommit.id);
+            return projectCommit;
+        } catch (error) {
+            console.error("Error on deleteProjectCommit: ", error);
+            return undefined;
+        }
+    }
 }
 
 export const projectCommitService = new ProjectCommitService();

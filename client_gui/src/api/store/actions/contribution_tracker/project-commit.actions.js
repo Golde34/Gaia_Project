@@ -1,5 +1,8 @@
 import { HttpMethods, serverRequest } from "../../../baseAPI";
-import { GET_PROJECT_AND_REPO_FAILURE, GET_PROJECT_AND_REPO_REQUEST, GET_PROJECT_AND_REPO_SUCCESS, SYNC_PROJECT_AND_REPO_FAILURE, SYNC_PROJECT_AND_REPO_REQUEST, SYNC_PROJECT_AND_REPO_SUCCESS } from "../../constants/contribution_tracker/user-project.constants";
+import { DELETE_PROJECT_COMMIT_FAILURE, DELETE_PROJECT_COMMIT_REQUEST, DELETE_PROJECT_COMMIT_SUCCESS, 
+    GET_PROJECT_AND_REPO_FAILURE, GET_PROJECT_AND_REPO_REQUEST, GET_PROJECT_AND_REPO_SUCCESS, 
+    SYNC_PROJECT_AND_REPO_FAILURE, SYNC_PROJECT_AND_REPO_REQUEST, SYNC_PROJECT_AND_REPO_SUCCESS 
+} from "../../constants/contribution_tracker/user-project.constants";
 
 const portName = {
     middlewarePort: 'middlewarePort'
@@ -41,17 +44,17 @@ export const syncProjectAndRepo = (userId, project, repo) => async (dispatch) =>
 }
 
 export const deleteProjectCommit = (userId, projectId) => async (dispatch) => {
-    dispatch({ type: SYNC_PROJECT_AND_REPO_REQUEST, payload: userId });
+    dispatch({ type: DELETE_PROJECT_COMMIT_REQUEST, payload: userId });
     try {
         const body = {
             userId,
             projectId
         }
-        const { data } = await serverRequest(`/project-commit/delete-project`, HttpMethods.DELETE, portName.middlewarePort, body);
-        dispatch({ type: SYNC_PROJECT_AND_REPO_SUCCESS, payload: data.data });
+        const { data } = await serverRequest(`/project-commit/delete-project-repo/`, HttpMethods.DELETE, portName.middlewarePort, body);
+        dispatch({ type: DELETE_PROJECT_COMMIT_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
-            type: SYNC_PROJECT_AND_REPO_FAILURE,
+            type: DELETE_PROJECT_COMMIT_FAILURE,
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,

@@ -51,8 +51,9 @@ const GithubSyncProjectScreen = (props) => {
         setViewedProject(projectId);
     }
 
-    const deleteProjectAndRepo = (userId, projectId) => {
-        dispatch(deleteProjectCommit(userId, projectId));
+    const deleteProjectAndRepo = (viewedProject) => {
+        dispatch(deleteProjectCommit(user.id, viewedProject));
+        window.location.reload();
     }
 
     return (
@@ -229,11 +230,11 @@ const GithubSyncProjectScreen = (props) => {
                                                 as="h3"
                                                 className="text-lg font-medium leading-6 text-gray-900"
                                             >
-                                                {props.component}
+                                                Remove Synchronized Project and Repository
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
-                                                    Do you really want to delete this project?
+                                                    Do you really want to delete this item?
                                                 </p>
                                             </div>
 
