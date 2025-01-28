@@ -52,3 +52,13 @@ func (s *UserGithubService) SyncProjectRepo(userId string, project, repo map[str
 	response := utils.ReturnSuccessResponse("Sync project repo success", syncResult)
 	return response, nil
 }
+
+func (s *UserGithubService) DeleteProjectRepo(userId, projectId string) (base_dtos.ErrorResponse, error) {
+	deleteResult, err := client.IUserGithubAdapter(&adapter.UserGithubAdapter{}).DeleteProjectRepo(userId, projectId)
+	if err != nil {
+		return utils.ReturnErrorResponse(400, "Cannot delete project repo from Contribution Tracker"), err
+	}
+
+	response := utils.ReturnSuccessResponse("Delete project repo success", deleteResult)
+	return response, nil
+}

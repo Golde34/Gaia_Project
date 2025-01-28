@@ -107,3 +107,28 @@ func SyncProjectRepo(w http.ResponseWriter, r *http.Request, userGithubService *
 		return
 	}
 }
+
+func DeleteProjectRepo(w http.ResponseWriter, r *http.Request, userGithubService *services.UserGithubService) {
+	var body map[string]interface{}
+	body, err := controller_utils.MappingBody(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	userId := body["userId"].(string)
+	projectId := body["projectId"].(string)
+
+	deleteResult, err := userGithubService.DeleteProjectRepo(userId, projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(deleteResult); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+}

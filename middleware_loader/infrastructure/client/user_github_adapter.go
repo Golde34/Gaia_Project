@@ -102,3 +102,20 @@ func (adapter *UserGithubAdapter) SyncProjectRepo(userId string, project, repo m
 
 	return bodyResult.(base_dtos.ErrorResponse), nil
 }
+
+
+func (adapter *UserGithubAdapter) DeleteProjectRepo(userId, projectId string) (response_dtos.ProjectCommitResponseDTO, error) {
+	deleteProjectRepoURL := base.ContributionTrackerURL + "/contribution-tracker/project-commit/delete-project-commit"
+	var deleteResult response_dtos.ProjectCommitResponseDTO
+	request := map[string]interface{}{
+		"userId":    userId,
+		"projectId": projectId,
+	}
+	headers := utils.BuildDefaultHeaders()
+	bodyResult, err := utils.BaseAPIV2(deleteProjectRepoURL, "DELETE", request, &deleteResult, headers)
+	if err != nil {
+		return response_dtos.ProjectCommitResponseDTO{}, err
+	}
+	
+	return bodyResult.(response_dtos.ProjectCommitResponseDTO), nil
+}
