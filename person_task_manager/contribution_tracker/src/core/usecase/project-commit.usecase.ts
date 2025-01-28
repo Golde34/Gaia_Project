@@ -42,6 +42,17 @@ class ProjectCommitUsecase {
             return msg400(error.message.toString());
         }
     }
+
+    async deleteProjectCommit(userId: number, projectId: string): Promise<any> {
+        try {
+            const projectCommit = await this.projectCommitServiceImpl.deleteProjectCommit(userId, projectId);
+            return msg200({
+                projectCommit: projectCommit
+            })
+        } catch (error: any) {
+            return msg400(error.message.toString());
+        }
+    }
 }
 
 export const projectCommitUsecase = new ProjectCommitUsecase();
