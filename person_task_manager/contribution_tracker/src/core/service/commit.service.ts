@@ -3,19 +3,82 @@ import CacheSingleton from "../../infrastructure/cache/cache-singleton";
 import { KafkaConfig } from "../../infrastructure/kafka/kafka-config";
 import { CommitRepository } from "../../infrastructure/repository/commit.repository";
 import { ICommitEntity } from "../domain/entities/commit.entity";
+import { ProjectCommitEntity } from "../domain/entities/project-commit.entity";
+import { UserCommitEntity } from "../domain/entities/user-commit.entity";
+import { githubClientAdapter } from "../../infrastructure/client/github-client.adapter";
 
 class CommitService {
     constructor(
         private kafkaConfig = new KafkaConfig(),
         private commitCache = CacheSingleton.getInstance().getCache(),
         private commitRepository: CommitRepository = CommitRepository.getInstance(),
+        private githubClient = githubClientAdapter,
     ) { }
 
-    async syncGithubCommit(userId: number, commit: any): Promise<void> {
+    async syncGithubCommit(user: UserCommitEntity, project: ProjectCommitEntity): Promise<Date | null> {
+        try {
+            if (!user.githubAccessToken || !user.githubLoginName) {
+                return null;
+            }
+
+            const commits = await this.githubClient.getGithubCommits(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+            if (!commits) {
+                console.error("Failed to get github commits for user: ", user.githubLoginName);
+                return null;
+            }
+
+            const isProjectNeedSync = await this.isProjectNeedSync(commits[0], project, user.githubLoginName, user.githubAccessToken);
+            if (!isProjectNeedSync) {
+                return null;
+            }
+
+            for (const commit of commits) {
+                if (commit.commit.committer.name !== user.githubLoginName) {
+                    continue;
+                }
+                this.addGithubCommit(user.userId, commit);
+            }
+            return commits[0].commit.committer.date;
+        } catch (error) {
+            console.error("Error on syncGithubCommit: ", error);
+            return null;
+        }
+    }
+
+    private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity, githubLoginName: string, githubAccessToken: string): Promise<boolean> {
+        try {
+            if (!projectCommit || !projectCommit.id) {
+                console.error("Project commit not found for project: ", projectCommit.id);
+                return false;
+            }
+
+            const lastTimeSynced = projectCommit.lastTimeSynced;
+            if (!lastTimeSynced) {
+                console.log("User have never synced the project: ", projectCommit.id);
+                return true;
+            }
+            if (!lastGithubCommit) {
+                console.error("Last github commit not found for project: ", projectCommit.id);
+                return false;
+            }
+            if (lastGithubCommit.commit.committer.date > lastTimeSynced) {
+                console.log("Project needs to be synced: ", projectCommit.id);
+                return true;
+            }
+
+            console.log("Project does not need to be synced: ", projectCommit.id);
+            return false;
+        } catch (error) {
+            console.error("Error on isProjectNeedSync: ", error);
+            return false;
+        }
+    }
+
+    async addGithubCommit(userId: number, commit: any): Promise<void> {
         try {
             console.log("Syncing github commit: ", commit);
             const commitEntity: ICommitEntity = {
-                id : 0,
+                id: 0,
                 content: commit.commit.message,
                 commitTime: new Date(),
                 userId: userId,
@@ -40,7 +103,7 @@ class CommitService {
 
     async getUserCommits(userId: number): Promise<ICommitEntity[] | null> {
         return null;
-    } 
+    }
 
     async getProjectCommits(userId: number, projectId: string): Promise<ICommitEntity[] | null> {
         return null;
@@ -49,6 +112,6 @@ class CommitService {
     async createCommit(commitObject: any): Promise<ICommitEntity | null> {
         return null;
     }
-} 
+}
 
 export const commitService = new CommitService();

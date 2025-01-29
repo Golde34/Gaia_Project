@@ -34,7 +34,7 @@ class ProjectCommitUsecase {
 
     async getProjectCommits(userId: number): Promise<any> {
         try {
-            const projectCommits = await this.projectCommitServiceImpl.getProjectCommits(userId);
+            const projectCommits = await this.projectCommitServiceImpl.getProjectCommitsByUserId(userId);
             return msg200({
                 projectCommits: projectCommits
             });

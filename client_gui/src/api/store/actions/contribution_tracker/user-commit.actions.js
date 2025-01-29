@@ -23,7 +23,7 @@ export const getUserGithubInfo = (userId) => async (dispatch) => {
 export const synchronizeUserGithubInfo = (userId) => async (dispatch) => {
     dispatch({ type: SYNC_USER_GITHUB_INFO_REQUEST, payload: userId });
     try {
-        const { data } = await serverRequest(`/user-commit/synchronize-user-github/${userId}`, HttpMethods.GET, portName.middlewarePort);
+        const { data } = await serverRequest(`/user-commit/user-github/synchronize/${userId}`, HttpMethods.GET, portName.middlewarePort);
         dispatch({ type: SYNC_USER_GITHUB_INFO_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({

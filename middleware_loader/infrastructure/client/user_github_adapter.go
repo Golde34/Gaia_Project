@@ -65,7 +65,7 @@ func (adapter *UserGithubAdapter) GithubAuthorize(code string, state string) (re
 }
 
 func (adapter *UserGithubAdapter) SynchronizeUserGithub(userId string) (response_dtos.UserGithubDTO, error) {
-	synchronizeUserGithubURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/synchronize-user-github/" + userId
+	synchronizeUserGithubURL := base.ContributionTrackerURL + "/contribution-tracker/user-commit/synchronize/" + userId
 	var userGithubInfo response_dtos.UserGithubDTO
 	headers := utils.BuildDefaultHeaders()
 	bodyResult, err := utils.BaseAPI(synchronizeUserGithubURL, "GET", nil, headers)
