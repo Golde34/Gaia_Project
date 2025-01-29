@@ -47,6 +47,11 @@ class CommitUsecase {
         }
     }
 
+    /**
+     * Process to reset synced github commits number 
+     * @param data
+     * @returns void
+     */
     async resetSyncedNumber(data: any): Promise<void> {
         try {
             const projects = await this.projectCommitServiceImpl.getProjectCommitsByTime();
@@ -62,19 +67,30 @@ class CommitUsecase {
         }
     }
 
+    /**
+     * Process to sync github commits
+     * 1. Sync all commits for each unsynced project
+     * 2. Check if project needs to be synced or not
+     * 3. Get all github commits for the user
+     * 4. Add github commit to the database
+     * 5. Update project commits synced time
+     * @param data 
+     * @returns void
+     */
     async syncGithubCommits(data: any): Promise<void> {
         try {
             console.log("Syncing github commit by project: ", data);
-            const projects = await this.projectCommitServiceImpl.getUnsyncedProjects();
+            const projects = await this.projectCommitServiceImpl.getAllProjectCommits();
 
             for (const project of projects) {
                 if (!project.id || !project.userCommitId) {
                     continue;
                 }
                 const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
-                const syncedProjectCommits = await this.commitServiceImpl.syncGithubCommit(user, project);
-                if (syncedProjectCommits) {
-                    // await this.projectCommitServiceImpl.updateProjectCommitsSyncedTime(project.id);
+                const syncedProjectCommitTime = await this.commitServiceImpl.syncGithubCommit(user, project);
+                if (syncedProjectCommitTime !== null) {
+                    await this.projectCommitServiceImpl.updateProjectCommitSynced(
+                        project.id, project.userNumberSynced, syncedProjectCommitTime, true);
                 }
             }
         } catch (error: any) {

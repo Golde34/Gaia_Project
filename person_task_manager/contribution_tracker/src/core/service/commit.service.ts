@@ -15,21 +15,61 @@ class CommitService {
         private githubClient = githubClientAdapter,
     ) { }
 
-    async syncGithubCommit(user: UserCommitEntity, project: ProjectCommitEntity): Promise<boolean> {
+    async syncGithubCommit(user: UserCommitEntity, project: ProjectCommitEntity): Promise<Date | null> {
         try {
-            if (!user.githubAccessToken) {
-                return false;
+            if (!user.githubAccessToken || !user.githubLoginName) {
+                return null;
             }
-            const commits = await this.githubClient.getGithubCommits(user.githubAccessToken, project.githubRepo);
+
+            const commits = await this.githubClient.getGithubCommits(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+            if (!commits) {
+                console.error("Failed to get github commits for user: ", user.githubLoginName);
+                return null;
+            }
+
+            const isProjectNeedSync = await this.isProjectNeedSync(commits[0], project, user.githubLoginName, user.githubAccessToken);
+            if (!isProjectNeedSync) {
+                return null;
+            }
+
             for (const commit of commits) {
                 if (commit.commit.committer.name !== user.githubLoginName) {
                     continue;
                 }
                 this.addGithubCommit(user.userId, commit);
             }
-            return true;
+            return commits[0].commit.committer.date;
         } catch (error) {
             console.error("Error on syncGithubCommit: ", error);
+            return null;
+        }
+    }
+
+    private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity, githubLoginName: string, githubAccessToken: string): Promise<boolean> {
+        try {
+            if (!projectCommit || !projectCommit.id) {
+                console.error("Project commit not found for project: ", projectCommit.id);
+                return false;
+            }
+
+            const lastTimeSynced = projectCommit.lastTimeSynced;
+            if (!lastTimeSynced) {
+                console.log("User have never synced the project: ", projectCommit.id);
+                return true;
+            }
+            if (!lastGithubCommit) {
+                console.error("Last github commit not found for project: ", projectCommit.id);
+                return false;
+            }
+            if (lastGithubCommit.commit.committer.date > lastTimeSynced) {
+                console.log("Project needs to be synced: ", projectCommit.id);
+                return true;
+            }
+
+            console.log("Project does not need to be synced: ", projectCommit.id);
+            return false;
+        } catch (error) {
+            console.error("Error on isProjectNeedSync: ", error);
             return false;
         }
     }

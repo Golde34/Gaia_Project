@@ -18,6 +18,8 @@ class ProjectCommitService {
                 projectName: request.projectName,
                 createdAt: new Date(),
                 updatedAt: new Date(),
+                userSynced: false,
+                userNumberSynced: 0,
             }
             await this.projectCommitRepository.insert(projectEntity);
             return "Project repo synced";
@@ -73,13 +75,30 @@ class ProjectCommitService {
         }
     }
 
-    async getUnsyncedProjects(): Promise<ProjectCommitEntity[]> {
+    async getAllProjectCommits(): Promise<ProjectCommitEntity[]> {
         try {
-            console.log("Getting unsynced projects");
-            return await this.projectCommitRepository.findByCondition("user_synced = ?", [false]);
-        } catch (error) {
-            console.error("Error on getUnsyncedProjects: ", error);
+            return await this.projectCommitRepository.findAll();
+        } catch(error) {
+            console.error("Error on getProjectsForProcess: ", error);
             return [];
+        }
+    }
+
+    async updateProjectCommitSynced(projectId: string, syncedNumber: number, lastSyncedTime: Date, isProcess: boolean): Promise<void> {
+        try {
+            console.log("Updating project commit synced: ", projectId);
+            let userSynced = false;
+            // TODO: Config of the number of synced time each user
+            if (syncedNumber >= 5) {
+                userSynced = true;
+            }
+            await this.projectCommitRepository.update(projectId, {
+                lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
+                userSynced: isProcess ? false : userSynced,
+                userNumberSynced:isProcess ? syncedNumber : syncedNumber + 1,
+            });
+        } catch (error) {
+            console.error("Error on updateProjectCommitSynced: ", error);
         }
     }
 }
