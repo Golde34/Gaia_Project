@@ -10,6 +10,7 @@ class CommitUsecase {
 
     ) { }
 
+    // TODO
     async getUserCommits(userId: number): Promise<IResponse> {
         try {
             const userCommits = this.commitServiceImpl.getUserCommits(userId);
@@ -21,6 +22,7 @@ class CommitUsecase {
         }
     }
 
+    // TODO
     async getProjectCommits(userId: number, projectId: string): Promise<IResponse> {
         try {
             const commits = this.commitServiceImpl.getProjectCommits(userId, projectId);
@@ -32,6 +34,7 @@ class CommitUsecase {
         }
     }
 
+    // TODO
     async createCommit(data: any): Promise<IResponse> {
         try {
             const commit = this.commitServiceImpl.createCommit(data);
