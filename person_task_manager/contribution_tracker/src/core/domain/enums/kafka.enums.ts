@@ -6,7 +6,8 @@ export enum KafkaTopic {
 export enum KafkaCommand {
     TM_CREATE_COMMIT = 'taskManagerCreateCommit',
     SP_CREATE_COMMIT = 'schedulePlanCreateCommit',
-    SYNC_GITHUB_COMMIT = 'githubCommit'
+    SYNC_GITHUB_COMMIT = 'githubCommit',
+    RESET_SYNCED_NUMBER = 'resetSyncedNumber'
 }
 
 export class KafkaMessage {

@@ -136,16 +136,6 @@ class UserCommitService {
         }
 
     }
-
-    async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
-        try {
-            console.log("Getting github commits");
-            return await this.githubClient.getGithubCommits(accessToken, repoName);
-        } catch (error) {
-            console.error("Error on getGithubCommits: ", error);
-            return null;
-        }
-    }
 }
 
 export const userCommitService = new UserCommitService();

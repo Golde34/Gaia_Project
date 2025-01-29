@@ -1,7 +1,6 @@
-import { ProjectCommitRepository } from "../../infrastructure/repository/project.repository";
+import { ProjectCommitRepository } from "../../infrastructure/repository/project-commit.repository";
 import { SyncProjectRepoDto } from "../domain/dtos/github-object.dto";
 import { ProjectCommitEntity } from "../domain/entities/project-commit.entity";
-import { UserCommitEntity } from "../domain/entities/user-commit.entity";
 
 class ProjectCommitService {
     constructor(
@@ -17,6 +16,8 @@ class ProjectCommitService {
                 githubRepoUrl: request.repoUrl,
                 projectId: request.projectId,
                 projectName: request.projectName,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             }
             await this.projectCommitRepository.insert(projectEntity);
             return "Project repo synced";
@@ -26,7 +27,7 @@ class ProjectCommitService {
         }
     }
 
-    async getProjectCommits(userId: number): Promise<ProjectCommitEntity[]> {
+    async getProjectCommitsByUserId(userId: number): Promise<ProjectCommitEntity[]> {
         try {
             console.log("Getting project commits for user: ", userId);
             return await this.projectCommitRepository.findByCondition("user_commit_id = ?", [userId]);
@@ -50,6 +51,35 @@ class ProjectCommitService {
         } catch (error) {
             console.error("Error on deleteProjectCommit: ", error);
             return undefined;
+        }
+    }
+
+    async getProjectCommitsByTime(): Promise<ProjectCommitEntity[]> {
+        try {
+            console.log("Getting project commits by time");
+            return await this.projectCommitRepository.findByCondition("last_time_synced < ?", [new Date()]);
+        } catch (error) {
+            console.error("Error on getProjectCommitsByTime: ", error);
+            return [];
+        }
+    }
+
+    async resetProjectCommitsSyncedTime(projectId: string): Promise<void> {
+        try {
+            console.log("Updating project commits synced time");
+            await this.projectCommitRepository.updateSyncedTime(projectId);
+        } catch (error) {
+            console.error("Error on updateProjectCommitsSyncedTime: ", error);
+        }
+    }
+
+    async getUnsyncedProjects(): Promise<ProjectCommitEntity[]> {
+        try {
+            console.log("Getting unsynced projects");
+            return await this.projectCommitRepository.findByCondition("user_synced = ?", [false]);
+        } catch (error) {
+            console.error("Error on getUnsyncedProjects: ", error);
+            return [];
         }
     }
 }

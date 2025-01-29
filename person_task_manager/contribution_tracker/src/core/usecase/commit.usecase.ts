@@ -1,13 +1,14 @@
 import { IResponse } from "../common/response";
 import { msg200, msg400 } from "../common/response-helpers";
 import { commitService } from "../service/commit.service";
+import { projectCommitService } from "../service/project-commit.service";
 import { userCommitService } from "../service/user-commit.service";
 
 class CommitUsecase {
     constructor(
         public commitServiceImpl = commitService,
         public userCommitServiceImpl = userCommitService,
-
+        public projectCommitServiceImpl = projectCommitService,
     ) { }
 
     // TODO
@@ -46,31 +47,38 @@ class CommitUsecase {
         }
     }
 
-    async syncGithubCommit(data: any): Promise<void> {
+    async resetSyncedNumber(data: any): Promise<void> {
         try {
-            console.log("Syncing github commit message id: ", data);
-            // get list user commits
-            const users = await userCommitService.getUsers();
-            // get list project commits
-            for (const user of users) {
-                const githubRepos = await userCommitService.getUserGithubRepo(user);
-                for (const repo of githubRepos) {
-                    if (repo.owner.login !== user.githubLoginName) {
-                        continue;
-                    }
-                    const commits = await userCommitService.getGithubCommits(user.githubAccessToken, repo.name);
-                    for (const commit of commits) {
-                        if (commit.commit.committer.name !== user.githubLoginName) {
-                            continue;
-                        }
-                        this.commitServiceImpl.syncGithubCommit(user.userId, commit);
-                    }
+            const projects = await this.projectCommitServiceImpl.getProjectCommitsByTime();
+            console.log("Number of projects: ", projects.length);
+            for (const project of projects) {
+                if (!project.id) {
+                    continue;
+                }
+                await this.projectCommitServiceImpl.resetProjectCommitsSyncedTime(project.id);
+            }
+        } catch (error: any) {
+            console.error("Failed to reset synced number: ", error);
+        }
+    }
+
+    async syncGithubCommits(data: any): Promise<void> {
+        try {
+            console.log("Syncing github commit by project: ", data);
+            const projects = await this.projectCommitServiceImpl.getUnsyncedProjects();
+
+            for (const project of projects) {
+                if (!project.id || !project.userCommitId) {
+                    continue;
+                }
+                const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
+                const syncedProjectCommits = await this.commitServiceImpl.syncGithubCommit(user, project);
+                if (syncedProjectCommits) {
+                    // await this.projectCommitServiceImpl.updateProjectCommitsSyncedTime(project.id);
                 }
             }
-            // call github api to get commit details
-            // create commit
         } catch (error: any) {
-            console.error("Failed to sync github commit: ", error);
+            console.error("Failed to sync github commit by project: ", error);
         }
     }
 }

@@ -6,8 +6,10 @@ export const githubCommitConsumerMessageHandler = (message: string) => {
     const cmd = kafkaMessage.cmd;
     switch (cmd) {
         case KafkaCommand.SYNC_GITHUB_COMMIT:
-            commitUsecase.syncGithubCommit(kafkaMessage.data);
+            commitUsecase.syncGithubCommits(kafkaMessage.data);
             break;
+        case KafkaCommand.RESET_SYNCED_NUMBER:
+            commitUsecase.resetSyncedNumber(kafkaMessage.data);
         default:
             console.warn("No handler for command: ", cmd);
     }
