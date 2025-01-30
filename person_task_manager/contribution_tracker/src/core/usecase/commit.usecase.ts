@@ -71,7 +71,7 @@ class CommitUsecase {
      * Process to sync github commits
      * 1. Sync all commits for each unsynced project
      * 2. Check if project needs to be synced or not
-     * 3. Get all github commits for the user
+     * 3. Get all github commits for the user or these latest if the project is already synced
      * 4. Add github commit to the database
      * 5. Update project commits synced time
      * @param data 
@@ -80,7 +80,7 @@ class CommitUsecase {
     async syncGithubCommits(data: any): Promise<void> {
         try {
             console.log("Syncing github commit by project: ", data);
-            const projects = await this.projectCommitServiceImpl.getAllProjectCommits();
+            const projects = await this.projectCommitServiceImpl.getBatchProjectCommits(5);
 
             for (const project of projects) {
                 if (!project.id || !project.userCommitId) {
@@ -90,7 +90,7 @@ class CommitUsecase {
                 const syncedProjectCommitTime = await this.commitServiceImpl.syncGithubCommit(user, project);
                 if (syncedProjectCommitTime !== null) {
                     await this.projectCommitServiceImpl.updateProjectCommitSynced(
-                        project.id, project.userNumberSynced, syncedProjectCommitTime, true);
+                        project.id, project.userNumberSynced, syncedProjectCommitTime, true, project.firstTimeSynced);
                 }
             }
         } catch (error: any) {

@@ -7,6 +7,7 @@ export interface ProjectCommitEntity {
     userCommitId?: number;
     userSynced: boolean;
     userNumberSynced: number;
+    firstTimeSynced?: Date;
     lastTimeSynced?: Date;
     createdAt?: Date;
     updatedAt?: Date;

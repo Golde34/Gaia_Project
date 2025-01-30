@@ -6,13 +6,11 @@ class GithubClientAdapter {
     private githubTokenUrl: string;
     private githubUserInfoUrl: string;
     private githubRepositoriesUrl: string;
-    private githubCommitsUrl: string 
 
     constructor() {
         this.githubTokenUrl = process.env.GITHUB_TOKEN_URL ?? "https://github.com/login/oauth/access_token",
         this.githubUserInfoUrl = process.env.GITHUB_USER_INFO_URL ?? "https://api.github.com/user",
-        this.githubRepositoriesUrl = process.env.GITHUB_REPOSITORIES_URL ?? "https://api.github.com/user/repos",
-        this.githubCommitsUrl = process.env.GITHUB_COMMITS_URL ?? "https://api.github.com/repos/{githubLoginName}/{repoName}/commits"
+        this.githubRepositoriesUrl = process.env.GITHUB_REPOSITORIES_URL ?? "https://api.github.com/user/repos"
     }
 
     private async callGithubApi(url: string, method: string, body: any, accessToken: string | null): Promise<any> {
@@ -76,21 +74,9 @@ class GithubClientAdapter {
         }
     }
 
-    async getGithubCommits(githubLoginName: string, accessToken: string, repoName: string): Promise<any> {
+    async getGithubCommits(url: string, accessToken: string): Promise<any> {
         try {
-            const url = this.githubCommitsUrl.replace("{githubLoginName}", githubLoginName).replace("{repoName}", repoName);
             return await this.callGithubApi(url, 'GET', null, accessToken);
-        } catch (error: any) {
-            console.error("Exception when calling Github API", error);
-            return null;
-        }
-    }
-
-    async getLastGithuCommit(githubLoginName: string, accessToken: string, repoName: string): Promise<any> {
-        try {
-            const url = this.githubCommitsUrl.replace("{githubLoginName}", githubLoginName).replace("{repoName}", repoName);
-            const commits = await this.callGithubApi(url, 'GET', null, accessToken);
-            return commits[0];
         } catch (error: any) {
             console.error("Exception when calling Github API", error);
             return null;

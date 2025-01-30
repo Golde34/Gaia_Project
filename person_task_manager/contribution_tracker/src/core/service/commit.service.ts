@@ -20,8 +20,17 @@ class CommitService {
             if (!user.githubAccessToken || !user.githubLoginName) {
                 return null;
             }
+            let commits: any[] = [];
+            if (!project.firstTimeSynced) {
+                commits = await this.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+            } else {
+                if (!project.lastTimeSynced) {
+                    throw new Error("lastTimeSynced is undefined");
+                }
+                const lastTimeSynced: string = format(new Date(project.lastTimeSynced), 'yyyy-MM-ddTHH:mm:ssZ');
+                commits = await this.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
+            }
 
-            const commits = await this.githubClient.getGithubCommits(user.githubLoginName, user.githubAccessToken, project.githubRepo);
             if (!commits) {
                 console.error("Failed to get github commits for user: ", user.githubLoginName);
                 return null;
@@ -43,6 +52,49 @@ class CommitService {
             console.error("Error on syncGithubCommit: ", error);
             return null;
         }
+    }
+
+    private async getAllCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string,): Promise<any> {
+        let page = 1;
+        let perPage = 100;
+        let allCommits: any[] = [];
+        let hasMore = true;
+        while (hasMore) {
+            const url = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?page=${page}&per_page=${perPage}`;
+            const response = await this.githubClient.getGithubCommits(url, githubAccessToken);
+            const commits = response.data;
+
+            if (commits.length > 0) {
+                allCommits = allCommits.concat(commits);
+                page += 1;
+            } else {
+                hasMore = false;
+            }
+        }
+
+        return allCommits;
+    }
+
+    private async getLatestCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string, lastTimeSynced: string): Promise<any> {
+        let page = 1;
+        let perPage = 100;
+        let allCommits: any[] = [];
+        let hasMore = true;
+        const now = format(new Date(), 'yyyy-MM-ddTHH:mm:ssZ');
+        while (hasMore) {
+            const url = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?page=${page}&per_page=${perPage}&since=${lastTimeSynced}&until=${now}`
+            const response = await this.githubClient.getGithubCommits(url, githubAccessToken);
+            const commits = response.data;
+
+            if (commits.length > 0) {
+                allCommits = allCommits.concat(commits);
+                page += 1;
+            } else {
+                hasMore = false;
+            }
+        }
+
+        return allCommits;
     }
 
     private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity, githubLoginName: string, githubAccessToken: string): Promise<boolean> {

@@ -15,7 +15,7 @@ export class ProjectCommitRepository extends Repository {
         super('project_commit');
     }
 
-    async updateSyncedTime(projectId: string): Promise<void> {
+    async resetSyncedTime(projectId: string): Promise<void> {
         await this.update(projectId, {
             lastTimeSynced: new Date(),
             updateAt: new Date(),

@@ -69,22 +69,24 @@ class ProjectCommitService {
     async resetProjectCommitsSyncedTime(projectId: string): Promise<void> {
         try {
             console.log("Updating project commits synced time");
-            await this.projectCommitRepository.updateSyncedTime(projectId);
+            await this.projectCommitRepository.resetSyncedTime(projectId);
         } catch (error) {
             console.error("Error on updateProjectCommitsSyncedTime: ", error);
         }
     }
 
-    async getAllProjectCommits(): Promise<ProjectCommitEntity[]> {
+    async getBatchProjectCommits(limit: number): Promise<ProjectCommitEntity[]> {
         try {
-            return await this.projectCommitRepository.findAll();
-        } catch(error) {
-            console.error("Error on getProjectsForProcess: ", error);
+            console.log("Getting batch project commits");
+            return await this.projectCommitRepository.findBatch(limit, ["last_time_synced"], "ASC");
+        } catch (error) {
+            console.error("Error on getBatchProjectCommits: ", error);
             return [];
         }
     }
 
-    async updateProjectCommitSynced(projectId: string, syncedNumber: number, lastSyncedTime: Date, isProcess: boolean): Promise<void> {
+    async updateProjectCommitSynced(projectId: string, syncedNumber: number,
+        lastSyncedTime: Date, isProcess: boolean, firstTimeSynced: Date | undefined): Promise<void> {
         try {
             console.log("Updating project commit synced: ", projectId);
             let userSynced = false;
@@ -92,11 +94,20 @@ class ProjectCommitService {
             if (syncedNumber >= 5) {
                 userSynced = true;
             }
-            await this.projectCommitRepository.update(projectId, {
-                lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
-                userSynced: isProcess ? false : userSynced,
-                userNumberSynced:isProcess ? syncedNumber : syncedNumber + 1,
-            });
+            if (firstTimeSynced === undefined) {
+                await this.projectCommitRepository.update(projectId, {
+                    lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
+                    userSynced: isProcess ? false : userSynced,
+                    userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
+                    firstTimeSynced: new Date(),
+                });
+            } else {
+                await this.projectCommitRepository.update(projectId, {
+                    lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
+                    userSynced: isProcess ? false : userSynced,
+                    userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
+                });
+            }
         } catch (error) {
             console.error("Error on updateProjectCommitSynced: ", error);
         }
