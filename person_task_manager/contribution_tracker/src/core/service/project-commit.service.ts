@@ -56,20 +56,9 @@ class ProjectCommitService {
         }
     }
 
-    async getProjectCommitsByTime(): Promise<ProjectCommitEntity[]> {
+    async resetProjectCommitsSyncedTime(): Promise<void> {
         try {
-            console.log("Getting project commits by time");
-            return await this.projectCommitRepository.findByCondition("last_time_synced < ?", [new Date()]);
-        } catch (error) {
-            console.error("Error on getProjectCommitsByTime: ", error);
-            return [];
-        }
-    }
-
-    async resetProjectCommitsSyncedTime(projectId: string): Promise<void> {
-        try {
-            console.log("Updating project commits synced time");
-            await this.projectCommitRepository.resetSyncedTime(projectId);
+            await this.projectCommitRepository.resetSyncedTime();
         } catch (error) {
             console.error("Error on updateProjectCommitsSyncedTime: ", error);
         }

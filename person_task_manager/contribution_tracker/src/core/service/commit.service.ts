@@ -20,19 +20,21 @@ class CommitService {
             if (!user.githubAccessToken || !user.githubLoginName) {
                 return null;
             }
+
             let commits: any[] = [];
             if (!project.firstTimeSynced) {
-                commits = await this.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+                commits = await this.githubClient.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
             } else {
                 if (!project.lastTimeSynced) {
-                    throw new Error("lastTimeSynced is undefined");
+                    console.error("Project has firstTimeSynced=true but lastTimeSynced is missing");
+                    return null;
                 }
-                const lastTimeSynced: string = format(new Date(project.lastTimeSynced), 'yyyy-MM-ddTHH:mm:ssZ');
-                commits = await this.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
+                const lastTimeSynced = format(new Date(project.lastTimeSynced), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
+                commits = await this.githubClient.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
             }
 
-            if (!commits) {
-                console.error("Failed to get github commits for user: ", user.githubLoginName);
+            if (!commits || commits.length === 0) {
+                console.log("No new commits or failed to get commits for user:", user.githubLoginName);
                 return null;
             }
 
@@ -42,59 +44,21 @@ class CommitService {
             }
 
             for (const commit of commits) {
-                if (commit.commit.committer.name !== user.githubLoginName) {
+                if (!commit.commit || !commit.commit.committer) {
                     continue;
                 }
-                this.addGithubCommit(user.userId, commit);
+                const committerName = commit.commit.committer.name;
+                if (committerName !== user.githubLoginName) {
+                    continue;
+                }
+                await this.addGithubCommit(user.userId, commit);
             }
-            return commits[0].commit.committer.date;
+
+            return new Date(commits[0].commit.committer.date);
         } catch (error) {
-            console.error("Error on syncGithubCommit: ", error);
+            console.error("Error on syncGithubCommit:", error);
             return null;
         }
-    }
-
-    private async getAllCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string,): Promise<any> {
-        let page = 1;
-        let perPage = 100;
-        let allCommits: any[] = [];
-        let hasMore = true;
-        while (hasMore) {
-            const url = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?page=${page}&per_page=${perPage}`;
-            const response = await this.githubClient.getGithubCommits(url, githubAccessToken);
-            const commits = response.data;
-
-            if (commits.length > 0) {
-                allCommits = allCommits.concat(commits);
-                page += 1;
-            } else {
-                hasMore = false;
-            }
-        }
-
-        return allCommits;
-    }
-
-    private async getLatestCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string, lastTimeSynced: string): Promise<any> {
-        let page = 1;
-        let perPage = 100;
-        let allCommits: any[] = [];
-        let hasMore = true;
-        const now = format(new Date(), 'yyyy-MM-ddTHH:mm:ssZ');
-        while (hasMore) {
-            const url = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?page=${page}&per_page=${perPage}&since=${lastTimeSynced}&until=${now}`
-            const response = await this.githubClient.getGithubCommits(url, githubAccessToken);
-            const commits = response.data;
-
-            if (commits.length > 0) {
-                allCommits = allCommits.concat(commits);
-                page += 1;
-            } else {
-                hasMore = false;
-            }
-        }
-
-        return allCommits;
     }
 
     private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity, githubLoginName: string, githubAccessToken: string): Promise<boolean> {

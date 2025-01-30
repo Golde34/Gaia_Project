@@ -15,12 +15,9 @@ export class ProjectCommitRepository extends Repository {
         super('project_commit');
     }
 
-    async resetSyncedTime(projectId: string): Promise<void> {
-        await this.update(projectId, {
-            lastTimeSynced: new Date(),
-            updateAt: new Date(),
-            userSynced: false,
-            userNumberSynced: 0,
-        });
+    async resetSyncedTime(): Promise<void> {
+        const query = `UPDATE ${this.tableName} SET last_time_synced = ?, updated_at = ?, user_synced = ?, user_number_synced = ? where last_time_synced < ?`;
+        const [result] = await this.pool.query(query, [new Date(), new Date(), false, 0, new Date()]);
+        console.log("Reset synced time result: ", result);
     }
 }

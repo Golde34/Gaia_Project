@@ -3,6 +3,7 @@ import { msg200, msg400 } from "../common/response-helpers";
 import { commitService } from "../service/commit.service";
 import { projectCommitService } from "../service/project-commit.service";
 import { userCommitService } from "../service/user-commit.service";
+import { chunk } from "lodash";
 
 class CommitUsecase {
     constructor(
@@ -54,14 +55,9 @@ class CommitUsecase {
      */
     async resetSyncedNumber(data: any): Promise<void> {
         try {
-            const projects = await this.projectCommitServiceImpl.getProjectCommitsByTime();
-            console.log("Number of projects: ", projects.length);
-            for (const project of projects) {
-                if (!project.id) {
-                    continue;
-                }
-                await this.projectCommitServiceImpl.resetProjectCommitsSyncedTime(project.id);
-            }
+            console.log("Resetting synced number: ", data);
+            await this.projectCommitServiceImpl.resetProjectCommitsSyncedTime();
+            console.log("Reset synced number successfully");
         } catch (error: any) {
             console.error("Failed to reset synced number: ", error);
         }
@@ -78,24 +74,35 @@ class CommitUsecase {
      * @returns void
      */
     async syncGithubCommits(data: any): Promise<void> {
-        try {
-            console.log("Syncing github commit by project: ", data);
-            const projects = await this.projectCommitServiceImpl.getBatchProjectCommits(5);
+        console.log("Syncing github commit by project: ", data);
+        const projects = await this.projectCommitServiceImpl.getBatchProjectCommits(200);
+        const concurrency = 10; 
+        const chunkedProjects = chunk(projects, concurrency);
 
-            for (const project of projects) {
-                if (!project.id || !project.userCommitId) {
-                    continue;
-                }
-                const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
-                const syncedProjectCommitTime = await this.commitServiceImpl.syncGithubCommit(user, project);
-                if (syncedProjectCommitTime !== null) {
-                    await this.projectCommitServiceImpl.updateProjectCommitSynced(
-                        project.id, project.userNumberSynced, syncedProjectCommitTime, true, project.firstTimeSynced);
-                }
-            }
-        } catch (error: any) {
-            console.error("Failed to sync github commit by project: ", error);
+        for (const smallBatch of chunkedProjects) {
+            await Promise.all(
+                smallBatch.map(async (project) => {
+                    if (!project.id || !project.userCommitId) return;
+                    try {
+                        const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
+                        const syncedProjectCommitTime = await this.commitServiceImpl.syncGithubCommit(user, project);
+
+                        if (syncedProjectCommitTime !== null) {
+                            await this.projectCommitServiceImpl.updateProjectCommitSynced(
+                                project.id,
+                                project.userNumberSynced,
+                                syncedProjectCommitTime,
+                                true,
+                                project.firstTimeSynced
+                            );
+                        }
+                    } catch (err) {
+                        console.error(`Failed to sync project ${project.id}:`, err);
+                    }
+                })
+            );
         }
+        console.log("Finished syncing GitHub commits for batch:", data);
     }
 }
 
