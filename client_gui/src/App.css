@@ -42,3 +42,8 @@
     max-width: 1720px;
   }
 }
+
+.date {
+  margin-left: 1rem;
+  font-weight: 600;
+}
