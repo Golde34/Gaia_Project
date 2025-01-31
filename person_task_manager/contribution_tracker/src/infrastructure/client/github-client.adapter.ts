@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: './src/.env' })
@@ -6,13 +7,11 @@ class GithubClientAdapter {
     private githubTokenUrl: string;
     private githubUserInfoUrl: string;
     private githubRepositoriesUrl: string;
-    private githubCommitsUrl: string 
 
     constructor() {
         this.githubTokenUrl = process.env.GITHUB_TOKEN_URL ?? "https://github.com/login/oauth/access_token",
-        this.githubUserInfoUrl = process.env.GITHUB_USER_INFO_URL ?? "https://api.github.com/user",
-        this.githubRepositoriesUrl = process.env.GITHUB_REPOSITORIES_URL ?? "https://api.github.com/user/repos",
-        this.githubCommitsUrl = process.env.GITHUB_COMMITS_URL ?? "https://api.github.com/repos/{githubLoginName}/{repoName}/commits"
+            this.githubUserInfoUrl = process.env.GITHUB_USER_INFO_URL ?? "https://api.github.com/user",
+            this.githubRepositoriesUrl = process.env.GITHUB_REPOSITORIES_URL ?? "https://api.github.com/user/repos"
     }
 
     private async callGithubApi(url: string, method: string, body: any, accessToken: string | null): Promise<any> {
@@ -76,25 +75,93 @@ class GithubClientAdapter {
         }
     }
 
-    async getGithubCommits(githubLoginName: string, accessToken: string, repoName: string): Promise<any> {
+    async getAllCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string
+    ): Promise<any[]> {
+        let allCommits: any[] = [];
+        let nextPageUrl = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?per_page=100`;
+
         try {
-            const url = this.githubCommitsUrl.replace("{githubLoginName}", githubLoginName).replace("{repoName}", repoName);
-            return await this.callGithubApi(url, 'GET', null, accessToken);
-        } catch (error: any) {
-            console.error("Exception when calling Github API", error);
-            return null;
+            while (nextPageUrl) {
+                const response = await this.callGithubApi(nextPageUrl, 'GET', null, githubAccessToken);
+
+                if (!response || !response.data) {
+                    console.warn(`No valid response for URL: ${nextPageUrl}`);
+                    break;
+                }
+
+                const commits = response.data;
+                if (commits.length === 0) {
+                    break;
+                }
+
+                allCommits = allCommits.concat(commits);
+
+                const linkHeader = response.headers?.link || '';
+                const links = this.parseLinkHeader(linkHeader);
+                if (links['next']) {
+                    nextPageUrl = links['next'];
+                } else {
+                    nextPageUrl = '';
+                }
+            }
+        } catch (error) {
+            console.error(`Error fetching all commits from repo ${githubRepo}:`, error);
         }
+
+        return allCommits;
     }
 
-    async getLastGithuCommit(githubLoginName: string, accessToken: string, repoName: string): Promise<any> {
-        try {
-            const url = this.githubCommitsUrl.replace("{githubLoginName}", githubLoginName).replace("{repoName}", repoName);
-            const commits = await this.callGithubApi(url, 'GET', null, accessToken);
-            return commits[0];
-        } catch (error: any) {
-            console.error("Exception when calling Github API", error);
-            return null;
+    private parseLinkHeader(header: string): Record<string, string> {
+        const links: Record<string, string> = {};
+
+        const parts = header.split(',');
+        for (const part of parts) {
+            const section = part.split(';');
+            if (section.length !== 2) continue;
+
+            const url = section[0].trim().replace(/<(.*)>/, '$1');
+            const rel = section[1].trim().replace(/rel="(.*)"/, '$1');
+            links[rel] = url;
         }
+        return links;
+    }
+
+    async getLatestCommitsRepo(githubLoginName: string, githubAccessToken: string, githubRepo: string, lastTimeSynced: string): Promise<any[]> {
+
+        const allCommits: any[] = [];
+        const now = format(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
+
+        let nextPageUrl = `https://api.github.com/repos/${githubLoginName}/${githubRepo}/commits?per_page=100&since=${lastTimeSynced}&until=${now}`;
+
+        try {
+            while (nextPageUrl) {
+                const response = await this.callGithubApi(nextPageUrl, 'GET', null, githubAccessToken);
+                if (!response || !response.data) {
+                    console.warn(`No valid response for URL: ${nextPageUrl}`);
+                    break;
+                }
+
+                const commits = response.data;
+                if (!Array.isArray(commits) || commits.length === 0) {
+                    break;
+                }
+
+                allCommits.push(...commits);
+
+                const linkHeader = response.headers?.link || '';
+                const links = this.parseLinkHeader(linkHeader);
+
+                if (links['next']) {
+                    nextPageUrl = links['next'];
+                } else {
+                    nextPageUrl = '';
+                }
+            }
+        } catch (error) {
+            console.error(`Error fetching latest commits from ${githubRepo}:`, error);
+        }
+
+        return allCommits;
     }
 
     // async getGithubAccessToken(body: any): Promise<string | null> {

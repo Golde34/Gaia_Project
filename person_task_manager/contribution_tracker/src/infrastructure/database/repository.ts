@@ -31,6 +31,12 @@ class Repository {
         return this.mapRows(rows as any[]);
     }
 
+    async findBatch(limit: number, orderField: any[], order: 'ASC' | 'DESC'): Promise<any[]> {
+        const query = `SELECT * FROM ${this.tableName} ORDER BY ${orderField.join(', ')} ${order} LIMIT ?`;
+        const [rows] = await this.pool.query(query, [limit]);
+        return this.mapRows(rows as any[]);
+    }
+
     async insert(data: Record<string, any>): Promise<number> {
         const fields = Object.keys(data).map((key) => {
             key = this.toSnakeCase(key);

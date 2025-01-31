@@ -21,9 +21,20 @@ class CommitService {
                 return null;
             }
 
-            const commits = await this.githubClient.getGithubCommits(user.githubLoginName, user.githubAccessToken, project.githubRepo);
-            if (!commits) {
-                console.error("Failed to get github commits for user: ", user.githubLoginName);
+            let commits: any[] = [];
+            if (!project.firstTimeSynced) {
+                commits = await this.githubClient.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+            } else {
+                if (!project.lastTimeSynced) {
+                    console.error("Project has firstTimeSynced=true but lastTimeSynced is missing");
+                    return null;
+                }
+                const lastTimeSynced = format(new Date(project.lastTimeSynced), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
+                commits = await this.githubClient.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
+            }
+
+            if (!commits || commits.length === 0) {
+                console.log("No new commits or failed to get commits for user:", user.githubLoginName);
                 return null;
             }
 
@@ -33,14 +44,19 @@ class CommitService {
             }
 
             for (const commit of commits) {
-                if (commit.commit.committer.name !== user.githubLoginName) {
+                if (!commit.commit || !commit.commit.committer) {
                     continue;
                 }
-                this.addGithubCommit(user.userId, commit);
+                const committerName = commit.commit.committer.name;
+                if (committerName !== user.githubLoginName) {
+                    continue;
+                }
+                await this.addGithubCommit(user.userId, commit);
             }
-            return commits[0].commit.committer.date;
+
+            return new Date(commits[0].commit.committer.date);
         } catch (error) {
-            console.error("Error on syncGithubCommit: ", error);
+            console.error("Error on syncGithubCommit:", error);
             return null;
         }
     }
