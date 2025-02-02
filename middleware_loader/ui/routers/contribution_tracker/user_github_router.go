@@ -31,7 +31,7 @@ func NewUserGithubRouter(userGithubService *services.UserGithubService, r *chi.M
 		r.Post("/sync-project-repo", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.SyncProjectRepo(w, r, userGithubService)
 		})
-		r.Delete("/delete-project-repo/{projectId}", func(w http.ResponseWriter, r *http.Request) {
+		r.Post("/delete-project-repo", func(w http.ResponseWriter, r *http.Request) {
 			controller_services.DeleteProjectRepo(w, r, userGithubService)
 		})
 	})

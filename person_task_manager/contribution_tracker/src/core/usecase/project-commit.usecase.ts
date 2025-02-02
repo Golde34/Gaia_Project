@@ -45,10 +45,7 @@ class ProjectCommitUsecase {
 
     async deleteProjectCommit(userId: number, projectId: string): Promise<any> {
         try {
-            const projectCommit = await this.projectCommitServiceImpl.deleteProjectCommit(userId, projectId);
-            return msg200({
-                projectCommit: projectCommit
-            })
+            return await this.projectCommitServiceImpl.deleteProjectCommit(userId, projectId);
         } catch (error: any) {
             return msg400(error.message.toString());
         }

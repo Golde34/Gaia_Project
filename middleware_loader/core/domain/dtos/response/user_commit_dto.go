@@ -1,7 +1,7 @@
 package response_dtos
 
 type UserCommitDTO struct {
-	Id              float64 `json:"id"`
+	Id              string  `json:"id"`
 	UserId          float64 `json:"userId"`
 	GithubUrl       string  `json:"githubUrl"`
 	GithubLoginName string  `json:"githubLoginName"`

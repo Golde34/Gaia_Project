@@ -50,7 +50,7 @@ export const deleteProjectCommit = (userId, projectId) => async (dispatch) => {
             userId,
             projectId
         }
-        const { data } = await serverRequest(`/project-commit/delete-project-repo/`, HttpMethods.DELETE, portName.middlewarePort, body);
+        const { data } = await serverRequest(`/project-commit/delete-project-repo`, HttpMethods.POST, portName.middlewarePort, body);
         dispatch({ type: DELETE_PROJECT_COMMIT_SUCCESS, payload: data.data });
     } catch (error) {
         dispatch({
