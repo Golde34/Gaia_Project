@@ -6,6 +6,7 @@ import { ICommitEntity } from "../domain/entities/commit.entity";
 import { ProjectCommitEntity } from "../domain/entities/project-commit.entity";
 import { UserCommitEntity } from "../domain/entities/user-commit.entity";
 import { githubClientAdapter } from "../../infrastructure/client/github-client.adapter";
+import { ulid } from "ulid";
 
 class CommitService {
     constructor(
@@ -94,7 +95,7 @@ class CommitService {
         try {
             console.log("Syncing github commit: ", commit);
             const commitEntity: ICommitEntity = {
-                id: 0,
+                id: ulid(),
                 content: commit.commit.message,
                 commitTime: new Date(),
                 userId: userId,

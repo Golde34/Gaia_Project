@@ -1,5 +1,5 @@
 export interface CTServiceConfigurationEntity {
-    id: number;
+    id: string;
     paramType: string;
     paramName: string;
     paramValue: string;

@@ -23,14 +23,14 @@ export class UserCommitRepository extends Repository {
 
         if (!user) {
             user = {
+                id: ulid(),
                 userId: Number(userId),
                 githubUrl: '',
                 githubSha: '',
                 userConsent: 0,
                 userState: state,
             };
-            const insertId = await this.insert(user);
-            user.id = insertId;
+            await this.insert(user);
         } else {
             await this.update(user.id, { userState: state });
             user.userState = state;

@@ -1,3 +1,4 @@
+import { ulid } from "ulid";
 import { ProjectCommitRepository } from "../../infrastructure/repository/project-commit.repository";
 import { SyncProjectRepoDto } from "../domain/dtos/github-object.dto";
 import { ProjectCommitEntity } from "../domain/entities/project-commit.entity";
@@ -11,6 +12,7 @@ class ProjectCommitService {
         try {
             console.log("Syncing project repo: ", request);
             const projectEntity: ProjectCommitEntity = {
+                id: ulid(),
                 userCommitId: request.userId,
                 githubRepo: request.repoName,
                 githubRepoUrl: request.repoUrl,
@@ -41,7 +43,7 @@ class ProjectCommitService {
 
     async deleteProjectCommit(userId: number, projectId: string): Promise<ProjectCommitEntity | undefined> {
         try {
-            const projectCommits: ProjectCommitEntity[] = await this.projectCommitRepository.findByCondition("user_commit_id = ? AND project_id = ?", [userId, projectId]);
+            const projectCommits: ProjectCommitEntity[] = await this.projectCommitRepository.findByCondition("user_commit_id = ? AND id = ?", [userId, projectId]);
             const projectCommit: ProjectCommitEntity | undefined = projectCommits[0];
             if (!projectCommit || !projectCommit.id) {
                 console.error("Project commit not found for user: ", userId, " and project: ", projectId);

@@ -1,5 +1,5 @@
 export interface ICommitEntity {
-    id: number;
+    id: string;
     content: string;
     commitTime: Date;
     userId: number;
