@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteProjectCommit, getProjectsAndRepos, syncProjectAndRepo } from "../../api/store/actions/contribution_tracker/project-commit.actions";
 import MessageBox from "../../components/subComponents/MessageBox";
 import { Button, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, Transition } from "@headlessui/react";
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import clsx from "clsx";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import CardButton from "../../components/subComponents/CardButton";
 
 const GithubSyncProjectScreen = (props) => {
     const user = props.user;
@@ -36,9 +37,11 @@ const GithubSyncProjectScreen = (props) => {
     const filteredRepos = queryRepo === ''
         ? projectAndRepo?.getAllGithubRepos
         : projectAndRepo?.getAllGithubRepos.filter((repo) => repo.name.toLowerCase().includes(queryRepo.toLowerCase()));
+    const getProjectCommitList = projectAndRepo?.getProjectCommitList;
 
     const synchorizeProjectAndRepo = () => {
-        dispatch(syncProjectAndRepo(selectedProject, selectedRepo));
+        dispatch(syncProjectAndRepo(user.id.toString(), selectedProject, selectedRepo));
+        window.location.reload();
     }
 
     const [viewedProject, setViewedProject] = useState('');
@@ -51,8 +54,8 @@ const GithubSyncProjectScreen = (props) => {
         setViewedProject(projectId);
     }
 
-    const deleteProjectAndRepo = (viewedProject) => {
-        dispatch(deleteProjectCommit(user.id, viewedProject));
+    const deleteProjectAndRepo = () => {
+        dispatch(deleteProjectCommit(user.id.toString(), viewedProject));
         window.location.reload();
     }
 
@@ -83,19 +86,12 @@ const GithubSyncProjectScreen = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow
-                                    className="even:bg-tremor-background-muted even:dark:bg-dark-tremor-background-muted"
-                                >
-                                    {projects.map((project) => (
-                                        <div key={project.id} className="m-3">
-                                            <CardButton name={project.name} description={project.description} color={project.color}
-                                                url={`/project/${project.id}`} buttonText="View Project" elementId={project.id}
-                                            />
-                                        </div>
-                                    ))}
-                                    {
-                                        projectAndRepo.getProjectCommitList.map((project) => (
-                                            <>
+                                {
+                                    getProjectCommitList.length === 0 ? (
+                                        <></>
+                                    ) : (
+                                        getProjectCommitList.map((project) => (
+                                            <TableRow key={project.id} className="border-b border-tremor-border dark:border-dark-tremor-border">
                                                 <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                                     {project.projectName}
                                                 </TableCell>
@@ -104,16 +100,17 @@ const GithubSyncProjectScreen = (props) => {
                                                 </TableCell>
                                                 <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                                     <Button
+
                                                         className="flex justify-end"
                                                         variant="primary"
-                                                        color="indigo"
-                                                        onClick={openModal(project.id)}
-                                                    >Delete Synchronize</Button>
+                                                        color="red"
+                                                        onClick={() => openModal(project.id)}
+                                                    >Remove</Button>
                                                 </TableCell>
-                                            </>
+                                            </TableRow>
                                         ))
-                                    }
-                                </TableRow>
+                                    )
+                                }
                                 <TableRow>
                                     <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                         <Combobox value={selectedProject} onChange={(value) => setSelectedProject(value)} onClose={() => setQueryProject('')}>
@@ -202,7 +199,7 @@ const GithubSyncProjectScreen = (props) => {
 
                     <Transition appear show={isOpen} as={Fragment}>
                         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                            <Transition.Child
+                            <TransitionChild
                                 as={Fragment}
                                 enter="ease-out duration-300"
                                 enterFrom="opacity-0"
@@ -212,11 +209,11 @@ const GithubSyncProjectScreen = (props) => {
                                 leaveTo="opacity-0"
                             >
                                 <div className="fixed inset-0 bg-black/25" />
-                            </Transition.Child>
+                            </TransitionChild>
 
                             <div className="fixed inset-0 overflow-y-auto">
                                 <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                    <Transition.Child
+                                    <TransitionChild
                                         as={Fragment}
                                         enter="ease-out duration-300"
                                         enterFrom="opacity-0 scale-95"
@@ -225,13 +222,13 @@ const GithubSyncProjectScreen = (props) => {
                                         leaveFrom="opacity-100 scale-100"
                                         leaveTo="opacity-0 scale-95"
                                     >
-                                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                            <Dialog.Title
+                                        <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                            <DialogTitle
                                                 as="h3"
                                                 className="text-lg font-medium leading-6 text-gray-900"
                                             >
                                                 Remove Synchronized Project and Repository
-                                            </Dialog.Title>
+                                            </DialogTitle>
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
                                                     Do you really want to delete this item?
@@ -243,7 +240,7 @@ const GithubSyncProjectScreen = (props) => {
                                                     type="button"
                                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                                     onClick={() => {
-                                                        deleteProjectAndRepo(viewedProject);
+                                                        deleteProjectAndRepo();
                                                         closeModal();
                                                     }}
                                                 >
@@ -257,8 +254,8 @@ const GithubSyncProjectScreen = (props) => {
                                                     Cancel
                                                 </button>
                                             </div>
-                                        </Dialog.Panel>
-                                    </Transition.Child>
+                                        </DialogPanel>
+                                    </TransitionChild>
                                 </div>
                             </div>
                         </Dialog>
