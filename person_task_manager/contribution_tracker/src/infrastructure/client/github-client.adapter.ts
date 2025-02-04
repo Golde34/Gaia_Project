@@ -18,12 +18,16 @@ class GithubClientAdapter {
         try {
             const headers: Record<string, string> = accessToken ? {
                 Authorization: `token ${accessToken}`,
-                Accept: "application/json",
+                Accept: "*/*",
                 "Content-Type": "application/json",
             } : {
-                Accept: "application/json",
+                Accept: "*/*",
                 "Content-Type": "application/json",
             }
+            console.log('Github API URL: ', url);
+            console.log('Github API Method: ', method);
+            console.log('Github API Headers: ', headers);
+            console.log('Github API Body: ', body);
             const response = await fetch(url, {
                 headers: headers,
                 method: method,
@@ -108,6 +112,7 @@ class GithubClientAdapter {
             console.error(`Error fetching all commits from repo ${githubRepo}:`, error);
         }
 
+        console.log('All commits: ', allCommits.length);
         return allCommits;
     }
 

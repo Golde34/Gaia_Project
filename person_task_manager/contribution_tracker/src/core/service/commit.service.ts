@@ -24,12 +24,14 @@ class CommitService {
 
             let commits: any[] = [];
             if (!project.firstTimeSynced) {
+                console.log("Get all commits for user: ", user.githubLoginName);
                 commits = await this.githubClient.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
             } else {
                 if (!project.lastTimeSynced) {
                     console.error("Project has firstTimeSynced=true but lastTimeSynced is missing");
                     return null;
                 }
+                console.log("Get latest commits for user: ", user.githubLoginName);
                 const lastTimeSynced = format(new Date(project.lastTimeSynced), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
                 commits = await this.githubClient.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
             }
