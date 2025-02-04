@@ -76,7 +76,7 @@ class CommitUsecase {
     async syncGithubCommits(data: any): Promise<void> {
         console.log("Syncing github commit by project: ", data);
         const projects = await this.projectCommitServiceImpl.getBatchProjectCommits(200);
-        const concurrency = 10; 
+        const concurrency = 10;
         const chunkedProjects = chunk(projects, concurrency);
 
         for (const smallBatch of chunkedProjects) {
@@ -85,17 +85,23 @@ class CommitUsecase {
                     if (!project.id || !project.userCommitId) return;
                     try {
                         const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
-                        const syncedProjectCommitTime = await this.commitServiceImpl.syncGithubCommit(user, project);
-
-                        if (syncedProjectCommitTime !== null) {
-                            await this.projectCommitServiceImpl.updateProjectCommitSynced(
-                                project.id,
-                                project.userNumberSynced,
-                                syncedProjectCommitTime,
-                                true,
-                                project.firstTimeSynced
-                            );
+                        const result = await this.commitServiceImpl.syncGithubCommit(user, project);
+                        if (result === undefined) {
+                            throw new Error("Error on syncGithubCommit");
                         }
+                        if (result === null) {
+                            console.log("No new commits for project:", project.id);
+                            return;
+                        }
+                        const { lastTimeSynced, firstTimeSynced } = result;
+
+                        await this.projectCommitServiceImpl.updateProjectCommitSynced(
+                            project.id,
+                            project.userNumberSynced,
+                            lastTimeSynced,
+                            true,
+                            firstTimeSynced
+                        );
                     } catch (err) {
                         console.error(`Failed to sync project ${project.id}:`, err);
                     }

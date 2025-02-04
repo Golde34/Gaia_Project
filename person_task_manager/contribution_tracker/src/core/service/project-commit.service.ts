@@ -10,6 +10,7 @@ class ProjectCommitService {
 
     async syncProjectRepo(request: SyncProjectRepoDto): Promise<string> {
         try {
+            // find project commit by projectId and githubUrl, if it exists, return error
             console.log("Syncing project repo: ", request);
             const projectEntity: ProjectCommitEntity = {
                 id: ulid(),
@@ -77,7 +78,7 @@ class ProjectCommitService {
     }
 
     async updateProjectCommitSynced(projectId: string, syncedNumber: number,
-        lastSyncedTime: Date, isProcess: boolean, firstTimeSynced: Date | undefined): Promise<void> {
+        lastTimeSynced: string, isProcess: boolean, firstTimeSynced: boolean): Promise<void> {
         try {
             console.log("Updating project commit synced: ", projectId);
             let userSynced = false;
@@ -85,22 +86,34 @@ class ProjectCommitService {
             if (syncedNumber >= 5) {
                 userSynced = true;
             }
-            if (firstTimeSynced === undefined) {
+            if (firstTimeSynced) {
                 await this.projectCommitRepository.update(projectId, {
-                    lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
+                    lastTimeSynced: isProcess ? lastTimeSynced: new Date(),
                     userSynced: isProcess ? false : userSynced,
                     userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
                     firstTimeSynced: new Date(),
                 });
             } else {
                 await this.projectCommitRepository.update(projectId, {
-                    lastSyncedTime: isProcess ? lastSyncedTime : new Date(),
+                    lastTimeSynced: isProcess ? lastTimeSynced: new Date(),
                     userSynced: isProcess ? false : userSynced,
                     userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
                 });
             }
+            console.log("Updated project commit synced successfully: ", projectId);
         } catch (error) {
             console.error("Error on updateProjectCommitSynced: ", error);
+        }
+    }
+
+    async getProjectCommitsByProjectId(projectId: string): Promise<ProjectCommitEntity | undefined> {
+        try {
+            console.log("Getting project commits by project id: ", projectId);
+            const projectCommits: ProjectCommitEntity[] = await this.projectCommitRepository.findByCondition("id = ?", [projectId]);
+            return projectCommits[0];
+        } catch (error) {
+            console.error("Error on getProjectCommitsByProjectId: ", error);
+            return undefined;
         }
     }
 }

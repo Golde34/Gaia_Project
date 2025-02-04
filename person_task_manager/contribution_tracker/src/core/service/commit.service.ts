@@ -16,20 +16,23 @@ class CommitService {
         private githubClient = githubClientAdapter,
     ) { }
 
-    async syncGithubCommit(user: UserCommitEntity, project: ProjectCommitEntity): Promise<Date | null> {
+    async syncGithubCommit(user: UserCommitEntity, project: ProjectCommitEntity): Promise<any | null | undefined> {
         try {
             if (!user.githubAccessToken || !user.githubLoginName) {
                 return null;
             }
 
             let commits: any[] = [];
+            let firstTimeSynced: boolean = false;
             if (!project.firstTimeSynced) {
+                console.log("Get all commits for user: ", user.githubLoginName);
                 commits = await this.githubClient.getAllCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo);
+                firstTimeSynced = true;
             } else {
                 if (!project.lastTimeSynced) {
-                    console.error("Project has firstTimeSynced=true but lastTimeSynced is missing");
-                    return null;
+                    throw new Error("Project has firstTimeSynced=true but lastTimeSynced is missing");
                 }
+                console.log("Get latest commits for user: ", user.githubLoginName);
                 const lastTimeSynced = format(new Date(project.lastTimeSynced), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
                 commits = await this.githubClient.getLatestCommitsRepo(user.githubLoginName, user.githubAccessToken, project.githubRepo, lastTimeSynced);
             }
@@ -55,10 +58,14 @@ class CommitService {
                 await this.addGithubCommit(user.userId, commit);
             }
 
-            return new Date(commits[0].commit.committer.date);
+            return {
+                lastTimeSynced: format(new Date(commits[0].commit.committer.date), 'yyyy-MM-dd HH:mm:ss'),
+                firstTimeSynced: firstTimeSynced,
+            }
+
         } catch (error) {
             console.error("Error on syncGithubCommit:", error);
-            return null;
+            return undefined;
         }
     }
 
@@ -93,7 +100,6 @@ class CommitService {
 
     async addGithubCommit(userId: number, commit: any): Promise<void> {
         try {
-            console.log("Syncing github commit: ", commit);
             const commitEntity: ICommitEntity = {
                 id: ulid(),
                 content: commit.commit.message,

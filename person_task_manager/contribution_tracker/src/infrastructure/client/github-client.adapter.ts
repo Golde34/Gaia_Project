@@ -14,16 +14,27 @@ class GithubClientAdapter {
             this.githubRepositoriesUrl = process.env.GITHUB_REPOSITORIES_URL ?? "https://api.github.com/user/repos"
     }
 
+    private async getDataGithubApi(url: string, method: string, body: any, accessToken: string | null): Promise<any> {
+        try {
+            const response = await this.callGithubApi(url, method, body, accessToken);
+            return response.data;
+        } catch (error: any) {
+            console.error("Exception when calling Github API", error);
+            return null;
+        }
+    }
+
     private async callGithubApi(url: string, method: string, body: any, accessToken: string | null): Promise<any> {
         try {
             const headers: Record<string, string> = accessToken ? {
                 Authorization: `token ${accessToken}`,
-                Accept: "application/json",
+                Accept: "*/*",
                 "Content-Type": "application/json",
             } : {
-                Accept: "application/json",
+                Accept: "*/*",
                 "Content-Type": "application/json",
             }
+
             const response = await fetch(url, {
                 headers: headers,
                 method: method,
@@ -34,12 +45,16 @@ class GithubClientAdapter {
                 return null;
             }
 
+            const responseHeaders = response.headers;
             const data = await response.json();
             if (data.error) {
                 console.error(`Error from Github API: ${data.error}`);
                 return null;
             }
-            return data;
+            return {
+                data: data,
+                headers: responseHeaders
+            }
         } catch (error: any) {
             console.error("Exception when calling Github API", error);
             return null;
@@ -49,7 +64,7 @@ class GithubClientAdapter {
     async getGithubAccessToken(body: any): Promise<string | null> {
         try {
             console.log('Github token url: ', this.githubTokenUrl);
-            const data = await this.callGithubApi(this.githubTokenUrl, 'POST', body, null);
+            const data = await this.getDataGithubApi(this.githubTokenUrl, 'POST', body, null);
             return data.access_token;
         } catch (error: any) {
             console.error("Exception when calling Github API", error);
@@ -59,7 +74,7 @@ class GithubClientAdapter {
 
     async getGithubUserInfo(accessToken: string): Promise<any> {
         try {
-            return await this.callGithubApi(this.githubUserInfoUrl, 'GET', null, accessToken);
+            return await this.getDataGithubApi(this.githubUserInfoUrl, 'GET', null, accessToken);
         } catch (error: any) {
             console.error("Exception when calling Github API", error);
             return null;
@@ -68,7 +83,7 @@ class GithubClientAdapter {
 
     async getGithubRepositories(accessToken: string): Promise<any> {
         try {
-            return await this.callGithubApi(this.githubRepositoriesUrl, 'GET', null, accessToken);
+            return await this.getDataGithubApi(this.githubRepositoriesUrl, 'GET', null, accessToken);
         } catch (error: any) {
             console.error("Exception when calling Github API", error);
             return null;
@@ -83,7 +98,6 @@ class GithubClientAdapter {
         try {
             while (nextPageUrl) {
                 const response = await this.callGithubApi(nextPageUrl, 'GET', null, githubAccessToken);
-
                 if (!response || !response.data) {
                     console.warn(`No valid response for URL: ${nextPageUrl}`);
                     break;
@@ -96,18 +110,20 @@ class GithubClientAdapter {
 
                 allCommits = allCommits.concat(commits);
 
-                const linkHeader = response.headers?.link || '';
+                const linkHeader = response.headers.get('link') || ''; 
                 const links = this.parseLinkHeader(linkHeader);
                 if (links['next']) {
                     nextPageUrl = links['next'];
                 } else {
                     nextPageUrl = '';
                 }
+                console.log('Next page URL: ', nextPageUrl);
             }
         } catch (error) {
             console.error(`Error fetching all commits from repo ${githubRepo}:`, error);
         }
 
+        console.log('All commits: ', allCommits.length);
         return allCommits;
     }
 
@@ -163,107 +179,6 @@ class GithubClientAdapter {
 
         return allCommits;
     }
-
-    // async getGithubAccessToken(body: any): Promise<string | null> {
-    //     try {
-    //         console.log('Github token url: ', this.githubTokenUrl);
-    //         const response = await fetch(this.githubTokenUrl, {
-    //             method: "POST",
-    //             headers: {
-    //                 Accept: "application/json",
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify(body)
-    //         });
-    //         if (response.status !== 200) {
-    //             console.error(`Github API returned status: ${response.status}`);
-    //             return null;
-    //         }
-
-    //         const data = await response.json();
-    //         if (data.error) {
-    //             console.error(`Error from Github API: ${data.error}`);
-    //             return null;
-    //         }
-    //         return data.access_token;
-    //     } catch (error: any) {
-    //         console.error("Exception when calling Github API", error);
-    //         return null;
-    //     }
-    // }
-
-    // async getGithubUserInfo(accessToken: string): Promise<any> {
-    //     try {
-    //         const response = await fetch("https://api.github.com/user", {
-    //             headers: {
-    //                 Authorization: `token ${accessToken}`,
-    //             },
-    //         });
-    //         if (response.status !== 200) {
-    //             console.error(`Github API returned status: ${response.status}`);
-    //             return null;
-    //         }
-
-    //         const data = await response.json();
-    //         if (data.error) {
-    //             console.error(`Error from Github API: ${data.error}`);
-    //             return null;
-    //         }
-    //         return data;
-    //     } catch (error: any) {
-    //         console.error("Exception when calling Github API", error);
-    //         return null;
-    //     }
-    // }
-
-    // async getGithubRepositories(accessToken: string): Promise<any> {
-    //     try {
-    //         const response = await fetch("https://api.github.com/user/repos", {
-    //             headers: {
-    //                 Authorization: `token ${accessToken}`,
-    //             },
-    //         });
-    //         if (response.status !== 200) {
-    //             console.error(`Github API returned status: ${response.status}`);
-    //             return null;
-    //         }
-
-    //         const data = await response.json();
-    //         if (data.error) {
-    //             console.error(`Error from Github API: ${data.error}`);
-    //             return null;
-    //         }
-    //         return data;
-    //     } catch (error: any) {
-    //         console.error("Exception when calling Github API", error);
-    //         return null;
-    //     }
-    // }
-
-    // async getGithubCommits(accessToken: string, repoName: string): Promise<any> {
-    //     try {
-    //         const response = await fetch(`https://api.github.com/repos/golde34/${repoName}/commits`, {
-    //             headers: {
-    //                 Authorization: `token ${accessToken}`,
-    //             },
-    //         });
-    //         if (response.status !== 200) {
-    //             console.error(`Github API returned status: ${response.status}`);
-    //             return null;
-    //         }
-
-    //         const data = await response.json();
-    //         if (data.error) {
-    //             console.error(`Error from Github API: ${data.error}`);
-    //             return null;
-    //         }
-    //         return data;
-    //     } catch (error: any) {
-    //         console.error("Exception when calling Github API", error);
-    //         return null;
-    //     }
-    // }
-
 }
 
 export const githubClientAdapter = new GithubClientAdapter();
