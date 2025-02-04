@@ -88,14 +88,14 @@ class ProjectCommitService {
             }
             if (firstTimeSynced) {
                 await this.projectCommitRepository.update(projectId, {
-                    lastTimeSynced: isProcess ? lastTimeSynced: new Date(),
+                    lastTimeSynced: lastTimeSynced,
                     userSynced: isProcess ? false : userSynced,
                     userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
                     firstTimeSynced: new Date(),
                 });
             } else {
                 await this.projectCommitRepository.update(projectId, {
-                    lastTimeSynced: isProcess ? lastTimeSynced: new Date(),
+                    lastTimeSynced: lastTimeSynced,
                     userSynced: isProcess ? false : userSynced,
                     userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
                 });
