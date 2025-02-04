@@ -78,7 +78,7 @@ class ProjectCommitService {
     }
 
     async updateProjectCommitSynced(projectId: string, syncedNumber: number,
-        lastTimeSynced: Date, isProcess: boolean, firstTimeSynced: boolean): Promise<void> {
+        lastTimeSynced: string, isProcess: boolean, firstTimeSynced: boolean): Promise<void> {
         try {
             console.log("Updating project commit synced: ", projectId);
             let userSynced = false;
@@ -100,6 +100,7 @@ class ProjectCommitService {
                     userNumberSynced: isProcess ? syncedNumber : syncedNumber + 1,
                 });
             }
+            console.log("Updated project commit synced successfully: ", projectId);
         } catch (error) {
             console.error("Error on updateProjectCommitSynced: ", error);
         }

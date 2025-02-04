@@ -59,7 +59,7 @@ class CommitService {
             }
 
             return {
-                lastTimeSynced: commits[0].commit.committer.date,
+                lastTimeSynced: format(new Date(commits[0].commit.committer.date), 'yyyy-MM-dd HH:mm:ss'),
                 firstTimeSynced: firstTimeSynced,
             }
 

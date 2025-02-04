@@ -79,6 +79,9 @@ class ProjectCommitUsecase {
                 false,
                 firstTimeSynced
             );
+            return msg200({
+                message: "Project " + project.projectName + " of user " + user.githubLoginName + " synced successfully"
+            });
         } catch (error: any) {
             return msg400(error.message.toString());
         }
