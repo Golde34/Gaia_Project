@@ -1,5 +1,5 @@
 export interface ProjectCommitEntity {
-    id?: string;
+    id: string;
     projectId: string;
     projectName?: string;
     githubRepo: string;

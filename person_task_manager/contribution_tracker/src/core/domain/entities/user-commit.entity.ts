@@ -1,5 +1,5 @@
 export interface UserCommitEntity {
-    id?: string;
+    id: string;
     userId: number;
     githubUrl?: string;
     githubSha?: string;

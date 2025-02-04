@@ -42,3 +42,12 @@ projectCommitRouter.delete("/delete-project-commit", async (req: Request, res:Re
         next(err);
     }
 })
+
+projectCommitRouter.post("/refresh-project-commits", async (req: Request, res:Response, next: NextFunction): Promise<void> => {
+    try {
+        const refreshResult = await projectCommitControllerImpl.refreshProjectCommits(req, next);
+        returnResult(refreshResult, INTERNAL_SERVER_ERROR, res, next);
+    } catch (err) {
+        next(err);
+    }
+})

@@ -45,6 +45,18 @@ class ProjectCommitController {
             next(err);
         }
     }
+    
+    async refreshProjectCommits(req: Request, next: NextFunction): Promise<IResponse | undefined> {
+        try {
+            const userId = Number(req.body.userId);
+            const projectId = req.body.projectId;
+            const githubRepoUrl = req.body.githubRepoUrl;
+            const refreshResult = await projectCommitUsecase.refreshProjectCommits(userId, projectId, githubRepoUrl);
+            return refreshResult;
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const projectCommitController = new ProjectCommitController();
