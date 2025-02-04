@@ -30,8 +30,7 @@ class CommitService {
                 firstTimeSynced = true;
             } else {
                 if (!project.lastTimeSynced) {
-                    console.error("Project has firstTimeSynced=true but lastTimeSynced is missing");
-                    return null;
+                    throw new Error("Project has firstTimeSynced=true but lastTimeSynced is missing");
                 }
                 console.log("Get latest commits for user: ", user.githubLoginName);
                 const lastTimeSynced = format(new Date(project.lastTimeSynced), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');

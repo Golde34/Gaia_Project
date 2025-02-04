@@ -61,9 +61,15 @@ class ProjectCommitUsecase {
                 return msg400("Project not found");
             }
             const result = await this.commitServiceImpl.syncGithubCommit(user, project);
-            if (result === null) {
+            if (result === undefined) {
                 return msg400("Error on syncGithubCommit");
             }
+            if (result === null) {
+                return msg200({
+                    message: "No new commits in project" + project.projectName + " of user " + user.githubLoginName
+                });
+            }
+
             const { lastTimeSynced, firstTimeSynced } = result;
 
             await this.projectCommitServiceImpl.updateProjectCommitSynced(

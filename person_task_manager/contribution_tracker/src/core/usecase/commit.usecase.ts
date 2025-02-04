@@ -86,8 +86,12 @@ class CommitUsecase {
                     try {
                         const user = await this.userCommitServiceImpl.getUserGithubInfo(project.userCommitId);
                         const result = await this.commitServiceImpl.syncGithubCommit(user, project);
-                        if (result === null) {
+                        if (result === undefined) {
                             throw new Error("Error on syncGithubCommit");
+                        }
+                        if (result === null) {
+                            console.log("No new commits for project:", project.id);
+                            return;
                         }
                         const { lastTimeSynced, firstTimeSynced } = result;
 
