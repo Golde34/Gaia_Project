@@ -42,7 +42,7 @@ class CommitService {
                 return null;
             }
 
-            const isProjectNeedSync = await this.isProjectNeedSync(commits[0], project, user.githubLoginName, user.githubAccessToken);
+            const isProjectNeedSync = await this.isProjectNeedSync(commits[0], project);
             if (!isProjectNeedSync) {
                 return null;
             }
@@ -69,7 +69,7 @@ class CommitService {
         }
     }
 
-    private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity, githubLoginName: string, githubAccessToken: string): Promise<boolean> {
+    private async isProjectNeedSync(lastGithubCommit: any, projectCommit: ProjectCommitEntity): Promise<boolean> {
         try {
             if (!projectCommit || !projectCommit.id) {
                 console.error("Project commit not found for project: ", projectCommit.id);
@@ -85,7 +85,7 @@ class CommitService {
                 console.error("Last github commit not found for project: ", projectCommit.id);
                 return false;
             }
-            if (lastGithubCommit.commit.committer.date > lastTimeSynced) {
+            if (new Date(lastGithubCommit.commit.committer.date) > new Date(lastTimeSynced)) {
                 console.log("Project needs to be synced: ", projectCommit.id);
                 return true;
             }
