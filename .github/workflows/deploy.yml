@@ -1,0 +1,30 @@
+name: Deploy via Tailscale
+
+on:
+  push:
+    branches:
+      - dev 
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install & Connect to Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up --authkey=${{ secrets.TAILSCALE }}
+
+      - name: SSH vào PC và Deploy
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: "100.79.132.83" 
+          username: "golde34"
+          key: ${{ secrets.PC_SSH_KEY }}
+          script: 
+            cd /home/golde34/Code/PersonalProject/Golde_AI_Assistant_System
+            git pull origin main
+            .github/workflows/deploy.sh
