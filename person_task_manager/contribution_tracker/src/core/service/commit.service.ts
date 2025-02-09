@@ -100,6 +100,7 @@ class CommitService {
 
     async addGithubCommit(userId: number, commit: any): Promise<void> {
         try {
+            console.log("Github commmit date: ", format(new Date(commit.commit.committer.date), 'yyyy-MM-dd HH:mm:ss'));
             const commitEntity: ICommitEntity = {
                 id: ulid(),
                 content: commit.commit.message,
@@ -114,7 +115,7 @@ class CommitService {
                 commitAuthor: commit.commit.author.name,
                 committerName: commit.commit.committer.name,
                 committerEmail: commit.commit.committer.email,
-                githubCommitDate: format(new Date(commit.commit.committer.date), 'yyyy-MM-dd HH:mm:ss'),
+                githubCommitDate: new Date(format(new Date(commit.commit.committer.date), 'yyyy-MM-dd HH:mm:ss')),
                 commitMessage: commit.commit.message,
                 commitUrl: commit.html_url,
             }

@@ -12,7 +12,7 @@ export interface ICommitEntity {
     commitAuthor: string;
     committerName: string;
     committerEmail: string;
-    githubCommitDate: string;
+    githubCommitDate: Date;
     commitMessage: string;
     commitUrl: string;
 }
