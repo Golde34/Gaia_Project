@@ -106,6 +106,16 @@ PORTS = {
         "database_name": "work_optimization",
         "shell_path": "gaia_bot/microservices/bash_shell/work_optimization.sh"
     },
+    "contribution_tracker": {
+        "name": "Contribution Tracker",
+        "port": 3003,
+        "programming_language": "TypeScript",
+        "description": "Contribution Tracker API",
+        "router": "contribution-tracker",
+        "database": "MySQL",
+        "database_name": "contribution_tracker",
+        "shell_path": "gaia_bot/microservices/bash_shell/contribution_tracker.sh"
+    },
     
     ## AI MODELS MICROSERVICES
     "camera_cv": {
@@ -142,6 +152,17 @@ PORTS = {
         "shell_path": "gaia_bot/microservices/bash_shell/sor_data_transfer.sh",
         "process_name": "sor-data-transfer"
     },
+    "gaia_cron_job": {
+        "name": "GAIA Cron Job",
+        "port": None,
+        "programming_language": "Golang",
+        "description": "GAIA Cron Job",
+        "router": None,
+        "database": None,
+        "database_name": None,
+        "shell_path": "gaia_bot/microservices/bash_shell/gaia_cron_job.sh",
+        "process_name": "gaia-cron-job"
+    }
 }
 
 
@@ -156,9 +177,11 @@ PORT_COMPONENTS = [
     "schedule_plan",
     "work_optimization",
     "notify_agent",
+    "contribution_tracker",
     # 3rd Party + Pipeline
     "sor_data_transfer",
     "kafka_server",
+    "gaia_cron_job",
 ]
 
 DOMAIN = "localhost"
