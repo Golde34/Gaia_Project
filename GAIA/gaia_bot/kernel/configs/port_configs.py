@@ -106,6 +106,16 @@ PORTS = {
         "database_name": "work_optimization",
         "shell_path": "gaia_bot/microservices/bash_shell/work_optimization.sh"
     },
+    "contribution_tracker": {
+        "name": "Contribution Tracker",
+        "port": 3003,
+        "programming_language": "TypeScript",
+        "description": "Contribution Tracker API",
+        "router": "contribution-tracker",
+        "database": "MySQL",
+        "database_name": "contribution_tracker",
+        "shell_path": "gaia_bot/microservices/bash_shell/contribution_tracker.sh"
+    },
     
     ## AI MODELS MICROSERVICES
     "camera_cv": {
@@ -159,6 +169,7 @@ PORT_COMPONENTS = [
     # 3rd Party + Pipeline
     "sor_data_transfer",
     "kafka_server",
+    "contribution_tracker",
 ]
 
 DOMAIN = "localhost"
